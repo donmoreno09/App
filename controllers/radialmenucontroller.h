@@ -19,6 +19,7 @@
 #include <QVariantMap>
 #include <QVariantList>
 #include <QtQml/qqmlregistration.h>
+#include "../connections/apiendpoints.h"
 #include "../core/enums/econtrollers.h"
 #include "../core/enums/eservice.h"
 
@@ -90,7 +91,7 @@ private:
 
     /* -------- networking -------- */
     QNetworkAccessManager           nam_;
-    const QString                   url_  = QStringLiteral("http://127.0.0.1:5001/getMenu");
+    const QString                   url_  = ApiEndpoints::GetMenuManager;
     const QByteArray                body_ = R"({"jwt":"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQWRtaW4ifQ.TPl8GZ-e_1cpei-gKYxGFbKCkj8LRf5ZQaWarB_CLIk"})";
 
     void fetchMenu()
