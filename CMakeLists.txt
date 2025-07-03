@@ -57,6 +57,11 @@ qt_add_executable(Sanbdox
     connections/mqtt/mqttclientservice.h connections/mqtt/mqttclientservice.cpp
     connections/mqtt/parser/imessageparser.h
     connections/mqtt/parser/simpletrackparser.h
+    core/clock.h core/clock.cpp
+    core/registertemplate.h
+    controllers/radialmenucontroller.h
+    core/enums/econtrollers.h core/enums/econtrollers.cpp
+    core/enums/eservice.h core/enums/eservice.cpp
 )
 
 target_link_libraries(Sanbdox PRIVATE

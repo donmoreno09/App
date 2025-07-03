@@ -10,6 +10,7 @@ import "MapLayers"
 import "ui"
 import "SidePannel"
 import "ui/top-toolbar"
+import "ui/radial-menu"
 import "handlers"
 
 Item {
@@ -156,5 +157,14 @@ Item {
                 console.log("UNSELECTED SHAPE WITH ID:", previousSelectedId)
             }
         }
+    }
+
+    RadialMenu {
+        id: radialMenu
+        width: 350
+        height: 350
+
+        logoSrc: Qt.resolvedUrl("./ui/assets/fnxt_n.svg")
+        logoGlowPulse: true
     }
 }

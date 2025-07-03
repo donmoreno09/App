@@ -98,5 +98,28 @@
         <file>components/SidePannel/WebComponent/SidePannelWebViewContent.qml</file>
         <file>components/ui/shapes/PoiMarkerGreen.qml</file>
         <file>components/ui/shapes/AnnotationMarker.qml</file>
+        <file>components/ui/radial-menu/RadialMenu.qml</file>
+        <file>components/ui/radial-menu/RadialMenuArcButton.qml</file>
+        <file>components/ui/radial-menu/RadialMenuInnerBckg.qml</file>
+        <file>components/ui/radial-menu/basewidgets/BaseArcShape.qml</file>
+        <file>components/ui/radial-menu/basewidgets/BaseArcShapeWidget.qml</file>
+        <file>components/ui/radial-menu/basewidgets/BaseKinetic.qml</file>
+        <file>components/ui/radial-menu/basewidgets/BaseScatter.qml</file>
+        <file>components/ui/radial-menu/basewidgets/BaseScatterAnchor.qml</file>
+        <file>components/ui/radial-menu/basewidgets/BaseShapeButton.qml</file>
+        <file>components/ui/radial-menu/js/QmlComponentFactory.js</file>
+        <file>components/ui/radial-menu/assets/google.svg</file>
+        <file>components/ui/radial-menu/assets/map.svg</file>
+        <file>components/ui/radial-menu/assets/osm.svg</file>
+        <file>components/ui/radial-menu/assets/ownship.svg</file>
+        <file>components/ui/radial-menu/assets/settings.svg</file>
+        <file>components/ui/radial-menu/assets/smartport.svg</file>
+        <file>components/ui/radial-menu/assets/tirOnline.svg</file>
+        <file>components/ui/radial-menu/assets/tools.svg</file>
+        <file>components/ui/radial-menu/assets/tracks.svg</file>
+        <file>components/ui/radial-menu/assets/videoplayer.svg</file>
+        <file>components/ui/radial-menu/assets/wms.svg</file>
+        <file>components/ui/radial-menu/basewidgets/BasePanel.qml</file>
+        <file>components/ui/assets/fnxt_n.svg</file>
     </qresource>
 </RCC>

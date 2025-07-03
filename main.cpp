@@ -15,6 +15,7 @@
 #include "controllers/poicontroller.h"
 #include "controllers/poioptionscontroller.h"
 #include "controllers/shapecontroller.h"
+#include "controllers/radialmenucontroller.h"
 #include "core/variantlistmodel.h"
 #include "connections/mqtt/mqttclientservice.h"
 #include "connections/mqtt/parser/simpletrackparser.h"
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("raise.singleton.controllers", 1, 0, "PoiController", new PoiController());
     qmlRegisterSingletonInstance("raise.singleton.controllers", 1, 0, "PoiOptionsController", new PoiOptionsController());
     qmlRegisterSingletonInstance("raise.singleton.controllers", 1, 0, "ShapeController", new ShapeController());
+    qmlRegisterSingletonInstance("raise.singleton.radialmenucontroller", 1, 0, "RadialMenuController", new RadialMenuController());
 
     qmlRegisterSingletonInstance("raise.singleton.mqtt", 1, 0, "MqttClientService", MqttClientService::getInstance());
 
