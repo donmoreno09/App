@@ -29,7 +29,7 @@ Widgets.BaseScatter {
     isBboxOutX: false
     isBboxOutY: false
     isAnchorActive: false
-    visible: true
+    visible: false
 
 
     color: "transparent"
