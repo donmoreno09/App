@@ -1,0 +1,21 @@
+#ifndef APIENDPOINTS_H
+#define APIENDPOINTS_H
+
+#include <QString>
+
+namespace ApiEndpoints {
+
+    static const QString BaseUrl = "https://trusted-wahoo-smooth.ngrok-free.app";
+    static const QString BaseUrlPoi = BaseUrl + "/pointofinterest";
+
+    static const QString GetAllPoiSByLayerId = BaseUrlPoi + "/layer";
+    static const QString GetCategories = BaseUrlPoi + "/getCategories";
+    static const QString GetHealthStatuses = BaseUrlPoi + "/getHealthStatuses";
+    static const QString GetOperationalStates = BaseUrlPoi + "/getOperationalStates";
+    static const QString GetTypes = BaseUrlPoi + "/getTypes";
+
+    static const QString BaseUrlShapes = BaseUrl + "/shape";
+
+}
+
+#endif // APIENDPOINTS_H
