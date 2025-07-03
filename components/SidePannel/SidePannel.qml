@@ -6,6 +6,7 @@ import TrailersPredictionsController 1.0
 import "ShipArrivalContent"
 import "TrailersPredictionsContent"
 import "../ui/"
+import "WebComponent"
 
 Rectangle {
     id: sidePanel
@@ -76,7 +77,8 @@ Rectangle {
                 { icon: "📅", label: "Ship Arrivals D" },
                 { icon: "⚙️", label: "Ship Arrivals DT" },
                 { icon: "🧭", label: "Trailers Predictions" },
-                { icon: "S" , label: "Layer controll" }
+                { icon: "S" , label: "Layer controll" },
+                { icon: "🖥️", label: "Web Integration" }
             ]
             delegate: Item {
                 width: tabBar.width
@@ -168,25 +170,33 @@ Rectangle {
                 console.log("LayersList caricato con layerList:", LayerManager.layerList)
             }
         }
-    }
 
-    Text {
-        text: "✕"
-        font.pixelSize: 16
-        color: "#ffffff"
-        visible: sidePanel.expanded
-        anchors {
-            top: parent.top
-            right: parent.right
-            margins: 10
+        SidePannelWebViewContent{
+            visible: currentTab === 5
+            anchors.fill: parent
+            width: parent.width
         }
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                sidePanel.expanded = false
-                sidePanel.x = -sidePanel.width
+        Text {
+            text: "✕"
+            font.pixelSize: 16
+            color: "#ffffff"
+            visible: sidePanel.expanded
+            anchors {
+                top: parent.top
+                right: parent.right
+                margins: 10
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    sidePanel.expanded = false
+                    sidePanel.x = -sidePanel.width
+                }
             }
         }
     }
+
+
 }

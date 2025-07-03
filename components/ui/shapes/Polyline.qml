@@ -44,6 +44,7 @@ BaseShape {
                 const geometry = JSON.parse(JSON.stringify(modelData.geometry))
                 geometry.coordinates = ShapeModel.toBECoordinates(mapPolyline.path)
                 modelData.geometry = geometry
+                root.syncModelData()
 
                 // Update dragging points coords
                 for (let i = 0; i < mapPolyline.path.length; i++) {
@@ -120,6 +121,7 @@ BaseShape {
                         const geometry = JSON.parse(JSON.stringify(modelData.geometry))
                         geometry.coordinates = ShapeModel.toBECoordinates(path)
                         modelData.geometry = geometry
+                        root.syncModelData()
 
                         root.modified()
                     }

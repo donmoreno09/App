@@ -21,6 +21,18 @@ void AnnotationMapLayer::initialize() {
     loadData();
 }
 
+void AnnotationMapLayer::syncSelectedObject(const QVariant &object)
+{
+    for (int i = 0; i < m_selectedAnnotations.length(); i++) {
+        if (m_selectedAnnotations[i].toMap().value("id") == object.toMap().value("id")) {
+            m_selectedAnnotations[i] = object;
+            break;
+        }
+    }
+
+    emit selectedObjectsChanged();
+}
+
 void AnnotationMapLayer::handleSelectionBoxSelected(const QString &target, const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight, int mode)
 {
     if (target != layerName())

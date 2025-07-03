@@ -160,22 +160,6 @@ Item {
                     }
                 }
 
-                /*!
-                    \qmlmethod syncModelDataUI
-                    \brief Used to synchronize the mutated modelData with the UI.
-
-                    TODO: This is an ad hoc solution and must be changed to use C++ models.
-                */
-                function syncModelDataUI() {
-                    for (let is = 0; is < selectedObjects.length; is++) {
-                        if (selectedObjects[is].id === modelData.id) {
-                            selectedObjects[is] = modelData
-                            selectedObjects = selectedObjects
-                            break
-                        }
-                    }
-                }
-
                 PoiPopup {
                     id: poiPopup
                     title: `Update ${modelData.label}?`
@@ -184,29 +168,29 @@ Item {
 
                     onSaveClicked: function (details) {
                         // TODO: Update to use model instead of using "for" to manually update
-                        modelData.label = details.label
-                        modelData.typeId = details.type.key
-                        modelData.typeName = details.type.value
-                        modelData.healthStatusId = details.healthStatus.key
-                        modelData.healthStatusName = details.healthStatus.value
-                        modelData.operationalStateId = details.operationalState.key
-                        modelData.operationalStateName = details.operationalState.value
-                        modelData.details = { metadata: { note: details.note } }
-
                         const dataToSave = JSON.parse(JSON.stringify(modelData))
+                        dataToSave.label = details.label
+                        dataToSave.typeId = details.type.key
+                        dataToSave.typeName = details.type.value
+                        dataToSave.healthStatusId = details.healthStatus.key
+                        dataToSave.healthStatusName = details.healthStatus.value
+                        dataToSave.operationalStateId = details.operationalState.key
+                        dataToSave.operationalStateName = details.operationalState.value
+                        dataToSave.details = { metadata: { note: details.note } }
+
                         console.log("UPDATE POI:", JSON.stringify(dataToSave))
                         PoiController.updatePoiFromQml(dataToSave)
 
                         const poiModel = root.staticPoiLayerInstance.businessLogic.poiModel
                         for (let i = 0; i < poiModel.rowCount(); i++) {
                             const poi = poiModel.at(i)
-                            if (poi.id === modelData.id) {
-                                poiModel.setItemAt(i, modelData)
+                            if (poi.id === dataToSave.id) {
+                                poiModel.setItemAt(i, dataToSave)
                                 break
                             }
                         }
 
-                        syncModelDataUI()
+                        staticPoiLayerInstance.businessLogic.syncSelectedObject(dataToSave)
                     }
                 }
 
@@ -218,22 +202,22 @@ Item {
 
                     onSaveClicked: function (details) {
                         // TODO: Update to use model instead of using "for" to manually update
-                        modelData.label = details.label
-
                         const dataToSave = JSON.parse(JSON.stringify(modelData))
+                        dataToSave.label = details.label
+
                         console.log("UPDATE POI:", JSON.stringify(dataToSave))
                         ShapeController.updateShapeFromQml(dataToSave)
 
                         const shapeModel = root.annotationLayerInstance.businessLogic.annotationModel
                         for (let i = 0; i < shapeModel.rowCount(); i++) {
                             const shape = shapeModel.at(i)
-                            if (shape.id === modelData.id) {
-                                shapeModel.setItemAt(i, modelData)
+                            if (shape.id === dataToSave.id) {
+                                shapeModel.setItemAt(i, dataToSave)
                                 break
                             }
                         }
 
-                        syncModelDataUI()
+                        annotationLayerInstance.businessLogic.syncSelectedObject(dataToSave)
                     }
                 }
 

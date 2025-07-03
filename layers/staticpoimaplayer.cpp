@@ -21,6 +21,18 @@ void StaticPoiMapLayer::initialize() {
     loadData();
 }
 
+void StaticPoiMapLayer::syncSelectedObject(const QVariant &object)
+{
+    for (int i = 0; i < m_selectedPois.length(); i++) {
+        if (m_selectedPois[i].toMap().value("id") == object.toMap().value("id")) {
+            m_selectedPois[i] = object;
+            break;
+        }
+    }
+
+    emit selectedObjectsChanged();
+}
+
 void StaticPoiMapLayer::handleSelectionBoxSelected(const QString &target, const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight, int mode)
 {
     if (target != layerName())

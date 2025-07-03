@@ -47,6 +47,7 @@ BaseShape {
                 geometry.coordinate.x = mapItem.coordinate.longitude
                 geometry.coordinate.y = mapItem.coordinate.latitude
                 modelData.geometry = geometry
+                root.syncModelData()
             }
 
             onReleased: {

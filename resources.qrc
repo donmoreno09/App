@@ -92,6 +92,10 @@
         <file>components/ui/editors/PointEditor.qml</file>
         <file>components/handlers/PointPoiInsertHandler.qml</file>
         <file>components/handlers/BasePoiInsertHandler.qml</file>
+        <file>components/SidePannel/WebComponent/DraggableResizableContainer.qml</file>
+        <file>components/SidePannel/WebComponent/WebViewItem.qml</file>
+        <file>components/SidePannel/WebComponent/WebPageContainer.qml</file>
+        <file>components/SidePannel/WebComponent/SidePannelWebViewContent.qml</file>
         <file>components/ui/shapes/PoiMarkerGreen.qml</file>
         <file>components/ui/shapes/AnnotationMarker.qml</file>
     </qresource>

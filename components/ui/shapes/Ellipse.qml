@@ -124,6 +124,7 @@ BaseShape {
                     const geometry = JSON.parse(JSON.stringify(modelData.geometry))
                     geometry.coordinate = ShapeModel.toBECoordinate(root.center)
                     modelData.geometry = geometry
+                    root.syncModelData()
 
                     lastTranslation = Qt.vector2d(translation.x, translation.y)
                     updateDragHandlers()
@@ -250,6 +251,7 @@ BaseShape {
                         geometry.radiusA = root.radiusLon
                         geometry.radiusB = root.radiusLat
                         modelData.geometry = geometry
+                        root.syncModelData()
 
                         root.modified()
                     }
