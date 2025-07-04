@@ -6,6 +6,11 @@ Install everything first before opening the project.
 
 [[_TOC_]]
 
+> 📸 **This guide could use some helpful screenshots!**  
+>
+> If you’ve gone through the setup and want to make this easier for others, PRs with images are very welcome! 🙌
+
+
 ## 1 | Installing Visual Studio
 
 1. Download the Visual Studio installer (not Visual Studio Code) from their website: https://visualstudio.microsoft.com/
