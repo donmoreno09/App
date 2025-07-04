@@ -57,7 +57,6 @@
         <file>components/ui/top-toolbar/ToolbarItem.qml</file>
         <file>components/ui/top-toolbar/ToolbarSeparator.qml</file>
         <file>components/ui/top-toolbar/utils.js</file>
-        <file>components/ui/top-toolbar/menus.js</file>
         <file>components/ui/top-toolbar/ToolbarMenuItem.qml</file>
         <file>components/ui/top-toolbar/StyledMenuItem.qml</file>
         <file>components/ui/top-toolbar/MenuItemArrow.qml</file>

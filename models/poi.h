@@ -1,62 +1,14 @@
 #ifndef POI_H
 #define POI_H
 
-#include "../persistence/ipersistable.h"
-#include "geometry.h"
-
 #include <QString>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QMap>
 #include <QSharedPointer>
-
-class MetadataEntry {
-public:
-    virtual QJsonValue toJson() const = 0;
-    virtual void fromJson(const QJsonValue& obj) = 0;
-    virtual ~MetadataEntry() = default;
-};
-
-class NoteMetadataEntry : public MetadataEntry {
-public:
-    QString note;
-
-    QJsonValue toJson() const override {
-        return note;
-    }
-
-    void fromJson(const QJsonValue& obj) override {
-        note = obj.toString();
-    }
-};
-
-class Details : public IPersistable {
-public:
-    QMap<QString, QSharedPointer<MetadataEntry>> metadata;
-
-    QJsonObject toJson() const override {
-        QJsonObject metadataObj;
-        for (const auto& key : metadata.keys()) {
-            metadataObj[key] = metadata[key]->toJson();
-        }
-
-        QJsonObject detailsObj;
-        detailsObj["metadata"] = metadataObj;
-
-        return detailsObj;
-    }
-
-    void fromJson(const QJsonObject &json) override {
-        QJsonObject metadataObj = json["metadata"].toObject();
-        for (const QString& key : metadataObj.keys()) {
-            if (key == "note") {
-                auto entry = QSharedPointer<NoteMetadataEntry>::create();
-                entry->fromJson(metadataObj[key]);
-                metadata[key] = entry;
-            }
-        }
-    }
-};
+#include "../persistence/ipersistable.h"
+#include "geometry.h"
+#include "details.h"
 
 class Poi : public IPersistable
 {

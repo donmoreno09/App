@@ -10,15 +10,3 @@ function getToolIndex(toolsModel, tool) {
     }
     return count
 }
-
-function menuObjectToArray(menu) {
-    const items = []
-
-    for (const key of Object.keys(menu)) {
-        const value = menu[key]
-        value.key = key
-        items.push(value)
-    }
-
-    return items
-}

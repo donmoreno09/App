@@ -46,10 +46,7 @@ qt_add_executable(Sanbdox
     connections/apiendpoints.h
     models/poi.h
     models/shape.h
-    models/coordinates.h
     models/geometry.h
-    models/metadata.h
-    models/links.h
     controllers/poicontroller.h controllers/poicontroller.cpp
     controllers/poioptionscontroller.h controllers/poioptionscontroller.cpp
     events/selectionboxbus.h
@@ -62,6 +59,9 @@ qt_add_executable(Sanbdox
     controllers/radialmenucontroller.h
     core/legacy/enums/econtrollers.h core/legacy/enums/econtrollers.cpp
     core/legacy/enums/eservice.h core/legacy/enums/eservice.cpp
+    models/metadata/metadataentry.h
+    models/metadata/notemetadataentry.h
+    models/details.h
 )
 
 target_link_libraries(Sanbdox PRIVATE
