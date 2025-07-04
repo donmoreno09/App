@@ -1,6 +1,6 @@
-# IRIDESS Qt Frontend Wiki
-
 ![IRIDESS logo](.attachments/fnxt-logo.svg)
+
+# IRIDESS Qt Frontend Wiki
 
 Welcome to the IRIDESS Qt Frontend official documentation!  
 
