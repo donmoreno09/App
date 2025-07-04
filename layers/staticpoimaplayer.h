@@ -20,7 +20,7 @@ public:
 
     Q_INVOKABLE void initialize() override;
 
-    Q_INVOKABLE void syncSelectedObject(const QVariant& object);
+    Q_INVOKABLE void syncSelectedObject(const QVariant& object, bool isToRemove = false);
 
     void loadData() override;
     void handleLoadedObjects(const QList<IPersistable*>& objects) override;

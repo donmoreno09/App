@@ -4,8 +4,8 @@
 #include <QString>
 
 namespace ApiEndpoints {
-
     static const QString BaseUrl = "https://trusted-wahoo-smooth.ngrok-free.app";
+
     static const QString BaseUrlPoi = BaseUrl + "/pointofinterest";
 
     static const QString GetAllPoiSByLayerId = BaseUrlPoi + "/layer";
@@ -16,6 +16,8 @@ namespace ApiEndpoints {
 
     static const QString BaseUrlShapes = BaseUrl + "/shape";
 
+    static const QString BaseUrlMenuManager = BaseUrl + "/menumanager";
+    static const QString GetMenuManager = BaseUrlMenuManager + "/getMenu";
 }
 
 #endif // APIENDPOINTS_H

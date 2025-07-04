@@ -98,5 +98,28 @@
         <file>components/SidePannel/WebComponent/SidePannelWebViewContent.qml</file>
         <file>components/ui/shapes/PoiMarkerGreen.qml</file>
         <file>components/ui/shapes/AnnotationMarker.qml</file>
+        <file>components/ui/assets/fnxt_n.svg</file>
+        <file>components/ui/legacy/assets/google.svg</file>
+        <file>components/ui/legacy/assets/map.svg</file>
+        <file>components/ui/legacy/assets/osm.svg</file>
+        <file>components/ui/legacy/assets/ownship.svg</file>
+        <file>components/ui/legacy/assets/settings.svg</file>
+        <file>components/ui/legacy/assets/smartport.svg</file>
+        <file>components/ui/legacy/assets/tirOnline.svg</file>
+        <file>components/ui/legacy/assets/tools.svg</file>
+        <file>components/ui/legacy/assets/tracks.svg</file>
+        <file>components/ui/legacy/assets/videoplayer.svg</file>
+        <file>components/ui/legacy/assets/wms.svg</file>
+        <file>components/ui/legacy/basewidgets/BaseArcShape.qml</file>
+        <file>components/ui/legacy/basewidgets/BaseArcShapeWidget.qml</file>
+        <file>components/ui/legacy/basewidgets/BaseKinetic.qml</file>
+        <file>components/ui/legacy/basewidgets/BasePanel.qml</file>
+        <file>components/ui/legacy/basewidgets/BaseScatter.qml</file>
+        <file>components/ui/legacy/basewidgets/BaseScatterAnchor.qml</file>
+        <file>components/ui/legacy/basewidgets/BaseShapeButton.qml</file>
+        <file>components/ui/legacy/js/QmlComponentFactory.js</file>
+        <file>components/ui/legacy/radial-menu/RadialMenu.qml</file>
+        <file>components/ui/legacy/radial-menu/RadialMenuArcButton.qml</file>
+        <file>components/ui/legacy/radial-menu/RadialMenuInnerBckg.qml</file>
     </qresource>
 </RCC>
