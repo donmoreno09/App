@@ -337,5 +337,24 @@
         <file>components/ui/tracks/TrackHistory.qml</file>
         <file>components/ui/tracks/TrackHistoryPoint.qml</file>
         <file>config/mqtt_config.json</file>
+        <file>components/ui/legacy/panels/OwnPosition.qml</file>
+        <file>components/ui/legacy/panels/commons/BasePanel.qml</file>
+        <file>components/ui/legacy/panels/commons/PanelBorder.qml</file>
+        <file>components/ui/legacy/panels/commons/PanelComboBox.qml</file>
+        <file>components/ui/legacy/panels/commons/PanelListItem.qml</file>
+        <file>components/ui/legacy/panels/commons/PanelSwitch.qml</file>
+        <file>components/ui/legacy/panels/commons/PanelSwitchButton.qml</file>
+        <file>components/ui/legacy/panels/ownposition/OwnEquipmentSection.qml</file>
+        <file>components/ui/legacy/panels/ownposition/OwnNavigationSection.qml</file>
+        <file>components/ui/legacy/panels/ownposition/OwnPosition.qml</file>
+        <file>components/ui/legacy/panels/ownposition/OwnPositionItem.qml</file>
+        <file>components/ui/legacy/panels/ownposition/OwnShipSection.qml</file>
+        <file>components/ui/legacy/panels/track/BaseTrackPanel.qml</file>
+        <file>components/ui/legacy/panels/track/BaseTrackPanelLink.qml</file>
+        <file>components/ui/qtds/BorderItem.qml</file>
+        <file>components/ui/qtds/GroupItem.qml</file>
+        <file>components/ui/qtds/RectangleItem.qml</file>
+        <file>components/ui/legacy/commons/SwitchButton.qml</file>
+        <file>components/ui/legacy/basewidgets/BaseButton.qml</file>
     </qresource>
 </RCC>

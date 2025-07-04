@@ -1,0 +1,662 @@
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Shapes
+
+import "../../basewidgets" as Widgets
+import "../commons" as PanelsCommons
+import "../../../qtds" as QTDSComponents
+import "../../commons" as UiWidgets
+
+//import qml.controllers.trackspanelscontroller 1.0
+//import qml.controllers.trackdetailscontroller 1.0
+//import qml.controllers.wmsmapcontroller 1.0
+//import qml.etrack.definitions.identities 1.0
+//import qml.etrack.definitions.symbols 1.0
+
+PanelsCommons.BasePanel {
+    id: baseTrackPanel
+    objectName: "baseTrackPanel"
+    width: 330
+    height: 390
+    color: "transparent"
+    radius: 3
+    border.color: "#cfdff3"
+    border.width: 0
+    opacity: 1.0
+    visible: false
+    minimizable: true
+
+    doTranslation: true
+    doScale: false
+    doRotation: false
+    doPress: false
+
+    //onPressed: (evtHandler, w) => {console.log("onPressed", evtHandler, w.name)}
+    //onLongPressed: (evtHandler, w) => {console.log("onLongPressed", evtHandler, w.name)}
+    //onDoublePressed: (evtHandler, w) => {console.log("onDoublePressed", evtHandler, w.name)}
+    //onTransformScale: (evtHandler, w, delta) => {console.log("onTransformScale", evtHandler, w.name, delta)}
+    //onTransformRotation: (evtHandler, w, delta) => {console.log("onTransformRotation", evtHandler, w.name, delta)}
+
+    onMove: (evtHandler, w, delta) => {
+        if (baseTrackPanel.link)
+            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
+    }
+
+    onMinimized: val => {
+        if (baseTrackPanel.link)
+            baseTrackPanel.link.visible = !val
+
+        if (!val) {
+            let pos = baseTrackPanel.reposBboxIn(baseTrackPanel.marker)
+            baseTrackPanel.x = pos[0]
+            baseTrackPanel.y = pos[1]
+        }
+    }
+
+    onCenterXChanged: () => {
+        if (baseTrackPanel.link)
+            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
+    }
+
+    onCenterYChanged: () => {
+        if (baseTrackPanel.link)
+            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
+    }
+
+    clip: true
+
+    state: ""
+    headerTitleText: "Trace unknown"
+
+    property var link
+    property var marker
+    property string trackUid
+    property string trackChannel
+
+    property bool ownShipPovActive: false
+
+    name: "Track"
+
+    /*
+        qml: iridess_uid bdbbcb98-1742-43dc-8839-88b5665b13d6
+        qml: track_uid 0TU1TSTQwNDEwMDk0NQ==
+        qml: track_lid
+        qml: lid_scope_uid
+        qml: time 1718872063
+        qml: cs 0
+        qml: pos [40,11.1912,0]
+        qml: vel [-5.65843621399177,-1.0394378696466733e-15,0]
+        qml: acc []
+        qml: covarianceValue []
+        qml: covarianceType 3
+        qml: tableApp6 30
+        qml: entity SHIP
+        qml: entityType SHIP1
+        qml: entitySubtype SHIP2
+        qml: sector1Modifier MMSI404100945
+        qml: sector2Modifier SMOD2
+        qml: IFFValue
+        qml: IFFMode 0
+
+    property var trackData: [
+
+        {"key": "time", "value": 1718872063},
+        {"key": "pos", "value":  [40,11.1912,0]},
+        {"key": "vel", "value":  [-5.65843621399177,-1.0394378696466733e-15,0]},
+        {"key": "entity", "value":"SHIP"},
+        {"key": "entityType", "value":"SHIP1"},
+        {"key": "entitySubtype", "value":"SHIP2"},
+        {"key": "sector1Modifier", "value":"MMSI404100945"},
+        {"key": "sector2Modifier", "value":"SMOD2"},
+
+
+    ]
+    */
+    property var trackData
+
+    Connections {
+        target: baseTrackPanel.closeButton
+
+        function onClicked() {
+            TracksPanelsController.doClose(trackUid, marker, trackChannel)
+        }
+    }
+
+    Item {
+
+        id: info
+        parent: baseTrackPanel.bodySection
+        anchors.fill: parent
+        anchors.centerIn: parent
+        property bool editMode: false
+
+        onEditModeChanged: {
+
+            for (let index in infoListView.contentItem.children) {
+                infoListView.contentItem.children[index].editMode = info.editMode
+                //console.log("***saveChanges panel****", infoListView.contentItem.children[index], infoListView.contentItem.children[index].keyTxt, infoListView.contentItem.children[index].valueTxt)
+                //console.log(Object.keys(infoListView.contentItem.children[index]))
+            }
+        }
+
+        ListModel {
+            id: bodyItemModel
+        }
+
+        ScrollView {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: parent.width / 50
+            anchors.topMargin: parent.width / 50
+            anchors.leftMargin: parent.width / 25
+            anchors.rightMargin: parent.width / 25
+
+            ListView {
+                id: infoListView
+                //pressDelay: 1000
+                orientation: ListView.Vertical
+                flickableDirection: Flickable.VerticalFlick
+                interactive: true
+                spacing: 4
+                model: bodyItemModel
+                width: info.width
+                delegate: PanelsCommons.PanelListItem {
+                    objectName: qsTr(key.toLowerCase())
+                    height: 20
+                    keyTxt: qsTr(key.toLowerCase())
+                    valueTxt: qsTr(value.toLowerCase())
+                    editingModeType: editingMode
+                    editingModeValues: (editingMode === PanelsCommons.PanelListItem.EditModeType.ComboBox) ? baseTrackPanel.getValuesFromKey(key.toLowerCase()) : []
+                    keyColor: "#FFF0CB"
+                    valueColor: "#ffffff"
+                    width: info.width - ((info.width / 25) * 2)
+                }
+
+                Component.onCompleted: {
+                    currentIndex = -1
+                }
+            }
+        }
+    }
+
+    Item {
+        id: options
+        parent: baseTrackPanel.footerSection
+        anchors.fill: parent
+        anchors.centerIn: parent
+
+        UiWidgets.SwitchButton {
+            id: historyBtn
+            width: 200
+            height: 24
+            label: "track history"
+            labelFontPointSize: 9
+            image: "qrc:///assets/icons/panels/track/trackhistory.svg"
+            switchBackgroundColorOff: "#ed1c24"
+            switchBackgroundColorOn: "#68f25c"
+            switchButtonColorOff: "#edf7fa"
+            switchButtonColorOn: "#edf7fa"
+            switchButtonColorOnDown: "#e9e9e9"
+            switchButtonColorOffDown: "#e9e9e9"
+            switchBorderWidth: 0
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.leftMargin: parent.width / 1.9
+            anchors.right: parent.right
+            anchors.topMargin: parent.width / 25
+            anchors.rightMargin: parent.width / 25
+            switchHandleWidth: 32
+            circular: true
+
+            onSwitched: (checked, state) => {
+                            if (checked)
+                            marker.getHistory()
+                            else
+                            marker.closeHistory()
+                        }
+        }
+
+        Widgets.BaseButton {
+            id: centerViewBtn
+            width: 120
+            height: 30
+            image: "qrc:///assets/icons/panels/track/trackcenter.svg"
+            text: "center view"
+            anchors.left: parent.left
+            anchors.top: historyBtn.bottom
+            anchors.topMargin: parent.width / 25
+            anchors.leftMargin: parent.width / 25
+            enabled: !baseTrackPanel.ownShipPovActive
+            orientation: Widgets.BaseButton.LayoutOrientation.Horizontal
+            direction: Widgets.BaseButton.LayoutDirection.LeftToRight
+            labelHAlignment: Text.AlignLeft
+            backgroundColor: "#4a92cb"
+            backgroundColorDown: "#184b80"
+            labelColor: "#cfdff3"
+            labelColorDown: "#ffffff"
+            imageColor: "#cfdff3"
+            imageColorDown: "#ffffff"
+            labelBoldDown: true
+            imagePadding: 2
+
+            onClicked: {
+
+                WmsMapController.centerOn(baseTrackPanel.marker.coordinate)
+            }
+        }
+
+        Widgets.BaseButton {
+            id: editButton
+            width: 120
+            height: 30
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width / 25
+            anchors.top: parent.top
+            anchors.topMargin: parent.width / 25
+            text: "edit"
+            image: "qrc:///assets/icons/panels/track/edit.svg"
+            orientation: Widgets.BaseButton.LayoutOrientation.Horizontal
+            direction: Widgets.BaseButton.LayoutDirection.LeftToRight
+            labelHAlignment: Text.AlignLeft
+            backgroundColor: "#4a92cb"
+            backgroundColorDown: "#184b80"
+            labelColor: "#cfdff3"
+            labelColorDown: "#ffffff"
+            imageColor: "#cfdff3"
+            imageColorDown: "#ffffff"
+            labelBoldDown: true
+            imagePadding: 2
+
+            onClicked: {
+                baseTrackPanel.state = "editMode"
+            }
+        }
+
+        Widgets.BaseButton {
+            id: saveButton
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width / 25
+            width: centerViewBtn.width * .5 - backButton.anchors.leftMargin * .5
+            height: editButton.height
+            anchors.top: parent.top
+            anchors.topMargin: parent.width / 25
+            text: "save"
+            image: "qrc:///assets/icons/panels/track/save.svg"
+            orientation: Widgets.BaseButton.LayoutOrientation.Horizontal
+            direction: Widgets.BaseButton.LayoutDirection.LeftToRight
+            labelHAlignment: Text.AlignLeft
+            backgroundColor: "#4a92cb"
+            backgroundColorDown: "#184b80"
+            labelColor: "#cfdff3"
+            labelColorDown: "#ffffff"
+            imageColor: "#cfdff3"
+            imageColorDown: "#ffffff"
+            labelBoldDown: true
+            imagePadding: 2
+            visible: false
+
+            onClicked: {
+
+                baseTrackPanel.saveChanges()
+                baseTrackPanel.state = "baseMode"
+                console.log("*****edit panel state", baseTrackPanel.state)
+            }
+        }
+
+        Widgets.BaseButton {
+            id: backButton
+            image: "qrc:///assets/icons/panels/track/back.svg"
+            anchors.top: parent.top
+            anchors.topMargin: parent.width / 25
+            anchors.left: saveButton.right
+            anchors.leftMargin: 4
+            width: centerViewBtn.width * .5 - anchors.leftMargin * .5
+            height: editButton.height
+            text: "back"
+            orientation: Widgets.BaseButton.LayoutOrientation.Horizontal
+            direction: Widgets.BaseButton.LayoutDirection.LeftToRight
+            labelHAlignment: Text.AlignLeft
+            backgroundColor: "#4a92cb"
+            backgroundColorDown: "#184b80"
+            labelColor: "#cfdff3"
+            labelColorDown: "#ffffff"
+            imageColor: "#cfdff3"
+            imageColorDown: "#ffffff"
+            labelBoldDown: true
+            imagePadding: 2
+            visible: false
+
+            onClicked: {
+                baseTrackPanel.state = "baseMode"
+            }
+        }
+    }
+
+    states: [
+        State {
+            name: "editMode"
+
+            PropertyChanges {
+                target: editButton
+                visible: false
+            }
+
+            PropertyChanges {
+                target: backButton
+                visible: true
+            }
+
+            PropertyChanges {
+                target: saveButton
+                visible: true
+            }
+
+            PropertyChanges {
+                target: info
+                editMode: true
+            }
+        },
+        State {
+            name: "baseMode"
+
+            PropertyChanges {
+                target: editButton
+                visible: true
+            }
+
+            PropertyChanges {
+                target: backButton
+                visible: false
+            }
+
+            PropertyChanges {
+                target: saveButton
+                visible: false
+            }
+
+            PropertyChanges {
+                target: info
+                editMode: false
+            }
+        }
+    ]
+
+    Component.onCompleted: {
+
+    }
+
+    onLinkChanged: {
+        if (baseTrackPanel.link) {
+            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX,
+                                                       baseTrackPanel.centerY)
+            baseTrackPanel.link.visibleChanged.connect(
+                        baseTrackPanel.handleLinkVisibleChanged)
+        }
+    }
+
+    onTrackDataChanged: {
+
+        baseTrackPanel.updateData()
+        baseTrackPanel.visible = true
+    }
+
+    function saveChanges() {
+
+        let changes = {}
+        for (let index in infoListView.contentItem.children) {
+            //console.log("***saveChanges panel****", infoListView.contentItem.children[index], infoListView.contentItem.children[index].keyTxt, infoListView.contentItem.children[index].valueTxt)
+            //console.log(Object.keys(infoListView.contentItem.children[index]))
+            infoListView.contentItem.children[index].saveChanges()
+            changes[infoListView.contentItem.children[index].objectName]
+                    = infoListView.contentItem.children[index].valueTxt
+        }
+
+        TrackDetailsController.changeTrackDetails(trackUid, changes["symbol"],
+                                                  changes["identity"])
+    }
+
+    function getValuesFromKey(key) {
+        let res = []
+        if (key === "identity")
+            res = ETrackIdentities.getAllValues()
+        else if (key === "symbol")
+            res = ETrackSymbolSet.getAllValues()
+
+        return res
+    }
+
+    function reposBboxIn(marker) {
+
+        let marginX = 100
+        let marginY = 100
+
+        let posX = marker.screenPos.x + marker.realWidth / 2 + marginX
+        let posY = marker.screenPos.y - marker.realHeight / 2 - marginY
+
+        if (posX >= baseTrackPanel.xBboxRule.maximum
+                || (parent.width - posX) < baseTrackPanel.width) {
+            posX = marker.screenPos.x - baseTrackPanel.width - marginX
+        } else if (posX <= baseTrackPanel.xBboxRule.minimum || posX < 0) {
+            posX = marker.screenPos.x + marker.realWidth + marginX
+        }
+
+        if (posY >= baseTrackPanel.yBboxRule.maximum
+                || (parent.height - posY) < baseTrackPanel.height) {
+            posY = marker.screenPos.y - baseTrackPanel.height - marginY
+        } else if (posY <= baseTrackPanel.yBboxRule.minimum || posY < 0) {
+            posY = marker.screenPos.y + marginY
+        }
+
+        return [posX, posY]
+    }
+
+    function open(marker, link = null) {
+
+        baseTrackPanel.marker = marker
+        if (baseTrackPanel.anchor)
+            baseTrackPanel.unminimize(baseTrackPanel.reposBboxIn(
+                                          baseTrackPanel.marker))
+        else {
+
+            let pos = baseTrackPanel.reposBboxIn(baseTrackPanel.marker)
+            baseTrackPanel.link = link
+            baseTrackPanel.x = pos[0]
+            baseTrackPanel.y = pos[1]
+        }
+    }
+
+    function close() {
+
+        if (baseTrackPanel.link) {
+            baseTrackPanel.link.destroy()
+            baseTrackPanel.link = null
+        }
+
+        baseTrackPanel.marker = null
+        baseTrackPanel.destroy()
+    }
+
+    function handleLinkVisibleChanged() {
+        if (baseTrackPanel.link && baseTrackPanel.link.visible)
+            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX,
+                                                       baseTrackPanel.centerY)
+    }
+
+    function updateData() {
+        bodyItemModel.clear()
+
+        baseTrackPanel.headerTitleText = "T" + (baseTrackPanel.trackData.trackedObject.trackNumber) ? "T" + baseTrackPanel.trackData.trackedObject.trackNumber : "Trace unknown"
+
+        var keys = Object.keys(baseTrackPanel.trackData)
+
+        for (var i = 0; i < keys.length; i++) {
+            let val = baseTrackPanel.trackData[keys[i]]
+            let listModelVal = baseTrackPanel.parseValue(keys[i], val)
+            if (listModelVal) {
+                for (let i in listModelVal) {
+                    bodyItemModel.append(listModelVal[i])
+                }
+            }
+        }
+
+        var keys = Object.keys(baseTrackPanel.trackData.trackedObject)
+
+        for (var i = 0; i < keys.length; i++) {
+            let val = baseTrackPanel.trackData.trackedObject[keys[i]]
+            let listModelVal = baseTrackPanel.parseValue(keys[i], val)
+            if (listModelVal) {
+                for (let i in listModelVal) {
+                    bodyItemModel.append(listModelVal[i])
+                }
+            }
+        }
+    }
+
+    function parseValue(key, value) {
+
+        let res = []
+
+        switch (key) {
+        case "time":
+        {
+            let k = "timestamp"
+            let date = new Date(value * 1000)
+
+            let v = date.toLocaleString({
+                                            "day": "2-digit",
+                                            "month": "2-digit",
+                                            "year": "numeric",
+                                            "hour": "2-digit",
+                                            "minute": "2-digit",
+                                            "second": "2-digit"
+                                        })
+
+            res.push({
+                         "key": k,
+                         "value": v,
+                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
+                     })
+
+            break
+        }
+        case "pos":
+        {
+            let k1 = "latitude"
+            let k2 = "longitude"
+            let k3 = "altitude"
+            let v1 = (value.length >= 2 && value[0]) ? value[0].toFixed(
+                                                           5) + " °" : "unknown"
+            let v2 = (value.length >= 2 && value[1]) ? value[1].toFixed(
+                                                           5) + " °" : "unknown"
+            let v3 = (value.length >= 2
+                      && value[2]) ? ((value[2] * 3.281) / 100.0).toFixed(
+                                         2) + " hFt" : "unknown"
+
+            res.push({
+                         "key": k1,
+                         "value": v1,
+                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
+                     })
+            res.push({
+                         "key": k2,
+                         "value": v2,
+                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
+                     })
+            res.push({
+                         "key": k3,
+                         "value": v3,
+                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
+                     })
+
+            break
+        }
+        case "vel":
+        {
+            let k = "Velocity"
+            let v = value
+
+            let heading = (((Math.atan2(-v[1], v[0])) * (180 / Math.PI)) + 90.0)
+            res.push({
+                         "key": "Heading",
+                         "value": heading.toString() + "°",
+                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
+                     })
+            let vel = Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2))
+            res.push({
+                         "key": "Speed",
+                         "value": vel.toFixed(2) + " Km/h",
+                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
+                     })
+
+            break
+        }
+
+        /*
+
+            case "entity":
+            {
+                let k = "category"
+                let v = value
+
+                res.push({"key": k, "value": v, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                break
+            }
+
+
+           case "entityType":
+            {
+                let k = "type"
+                let v = value
+
+                res.push({"key": k, "value": v})
+
+                break
+            }
+
+
+           case "entitySubtype":
+            {
+                let k = "subtype"
+                let v = value
+
+                res.push({"key": k, "value": v})
+
+                break
+            }
+
+
+            case "trackSource":
+            {
+                res.push({"key":"trackers","value":value.num_trackers.toString(),"editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                res.push({"key":"products","value":value.num_products.toString(),"editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                res.push({"key":"sensors","value":value.num_sensors.toString(), "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                break;
+            }*/
+        case "identity":
+        {
+            res.push({
+                         "key": "identity",
+                         "value": value,
+                         "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox
+                     })
+            break
+        }
+        case "symbol_set":
+        {
+            res.push({
+                         "key": "Symbol",
+                         "value": value,
+                         "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox
+                     })
+            break
+        }
+        }
+
+        if (res.length > 0)
+            return res
+
+        return null
+    }
+}
