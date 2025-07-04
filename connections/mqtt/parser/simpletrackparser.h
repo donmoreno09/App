@@ -12,19 +12,12 @@ public:
     QVariantList parse(const QByteArray& message) override {
         QJsonParseError err;
         QJsonDocument doc = QJsonDocument::fromJson(message, &err);
-        if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-            return {};
-        }
-
-        QJsonObject rootObj = doc.object();
-        QJsonValue tracksVal = rootObj.value("tracks");
-
-        if (!tracksVal.isArray()) {
+        if (err.error != QJsonParseError::NoError || !doc.isArray()) {
             return {};
         }
 
         QVariantList parsedTracks;
-        QJsonArray tracksArray = tracksVal.toArray();
+        QJsonArray tracksArray = doc.array();
         for (const QJsonValue& trackVal : tracksArray) {
             if (trackVal.isObject()) {
                 parsedTracks.append(trackVal.toObject().toVariantMap());

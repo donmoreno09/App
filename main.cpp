@@ -58,9 +58,10 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("raise.singleton.mqtt", 1, 0, "MqttClientService", MqttClientService::getInstance());
 
     QString configPath = QDir(QCoreApplication::applicationDirPath()).filePath("config/mqtt_config.json");
-    MqttClientService::getInstance()->initialize(configPath);
 
-    MqttClientService::getInstance()->registerParser("operation/track1", new SimpleTrackParser());
+    MqttClientService::getInstance()->initialize(":/config/mqtt_config.json");
+    MqttClientService::getInstance()->registerParser("ais", new SimpleTrackParser());
+    MqttClientService::getInstance()->registerParser("doc-space", new SimpleTrackParser());
 
     QQmlApplicationEngine engine;
     qDebug() << "QML import paths:" << engine.importPathList();

@@ -4,6 +4,7 @@ import QtPositioning 6.8
 import raise.map.layers 1.0
 import raise.singleton.layermanager 1.0
 import raise.singleton.mqtt 1.0
+import "../ui/tracks"
 
 MapItemGroup {
     id: trackMapLayerComponent
@@ -16,48 +17,11 @@ MapItemGroup {
 
     visible: isVisible
 
-    Component {
-        id: trackDelegate
-
-        MapQuickItem {
-            id: item
-            coordinate: QtPositioning.coordinate(modelData.pos[0], modelData.pos[1])
-            anchorPoint.x: 40
-            anchorPoint.y: 40
-
-            sourceItem: Rectangle {
-                width: 40
-                height: 40
-                radius: 2
-                color: "blue"
-                border.color: "white"
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: modelData.name
-                    font.pixelSize: 12
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.Wrap
-                }
-            }
-
-            Component.onCompleted: {
-                mapView.addMapItem(item)
-            }
-
-            Component.onDestruction: {
-                mapView.removeMapItem(item)
-            }
-        }
-    }
 
     Repeater {
         id: repeaterTracks
         model: trackMapLayerBusinessLogic.tracks
-        delegate: trackDelegate
+        delegate: Track {}
     }
 
     Component.onCompleted: {
