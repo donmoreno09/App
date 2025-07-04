@@ -1,15 +1,10 @@
-# Windows Setup
+# 🪟 Windows Setup
 
 To start developing with the project on Windows, we need to install Visual Studio for C++, Qt6, QtCreator, and the Qt6Mqtt module.
 
 Install everything first before opening the project.
 
-## 0 | Table of Content <!-- omit from toc -->
-
-- [1 | Installing Visual Studio](#1--installing-visual-studio)
-- [2 | Installing Qt6 and QtCreator](#2--installing-qt6-and-qtcreator)
-- [3 | Installing and Setting Up Qt6Mqtt](#3--installing-and-setting-up-qt6mqtt)
-- [4 | Setting, Building, and Running the Project](#4--setting-building-and-running-the-project)
+[[_TOC_]]
 
 ## 1 | Installing Visual Studio
 
@@ -94,7 +89,7 @@ Here’s what each flag does:
 
 6. After configuring with the command above, build and install the two following configurations (I suggest running each command below separately):
 
-```
+```cmd
 cmake --build build --config RelWithDebInfo --target install
 cmake --build build --config Debug          --target install
 ```
