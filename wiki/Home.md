@@ -18,4 +18,4 @@ If you wish to edit or add new pages, follow the instructions below:
 4. Commit your changes prepending your commit message with `wiki`. E.g. `git commit -m "wiki: Update home page"`
 5. And finally create a PR!
 
-We appreciate your contributions!
+Your contributions are welcomed and appreciated!
