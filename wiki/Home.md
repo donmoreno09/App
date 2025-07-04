@@ -8,4 +8,11 @@ Welcome to the IRIDESS Qt Frontend official documentation!
 
 ## 🤝 Contributing
 
-If you wish to edit or add new pages, go to the [repository](https://dev.azure.com/Fincantieri-NexTech-Spa/NexTech.RaiseSpoke4/_git/Iridess_Frontend_QT), create a new branch, modify the contents of this wiki under the `wiki` folder, and finally create a PR!
+If you wish to edit or add new pages, follow the instructions below:
+
+1. Go to the [frontend repository](https://dev.azure.com/Fincantieri-NexTech-Spa/NexTech.RaiseSpoke4/_git/Iridess_Frontend_QT).
+2. Create a new branch. E.g. `chore/updating-wiki`, or call it however you want.
+3. Modify the contents of this wiki under the `wiki` folder of the repository.
+4. And finally create a PR!
+
+We appreciate your contributions!
