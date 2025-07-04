@@ -14,6 +14,6 @@ To get started with development, follow the full [Setup Guide 📚](https://dev.
 
 ## 📚 Documentation
 
-Full project documentation is hosted in the [IRIDESS Qt Frontend Wiki](https://dev.azure.com/Fincantieri-NexTech-Spa/NexTech.RaiseSpoke4/_wiki/wikis/IRIDESS%20Qt%20Frontend%20Wiki/50/Home).
+Full project documentation is hosted in the [IRIDESS Qt Frontend Wiki 📖](https://dev.azure.com/Fincantieri-NexTech-Spa/NexTech.RaiseSpoke4/_wiki/wikis/IRIDESS%20Qt%20Frontend%20Wiki/50/Home).
 
 You can find its sources files under the `wiki` folder.
