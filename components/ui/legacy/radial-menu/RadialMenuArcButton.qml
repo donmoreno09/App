@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
 
-import "basewidgets" as Widgets
+import "../basewidgets" as Widgets
 
 Widgets.BaseShapeButton {
     id: radialMenuArcButton
@@ -50,7 +50,7 @@ Widgets.BaseShapeButton {
         "arcWidth": arcWidth
     }
 
-    shapeSrc: Qt.resolvedUrl("./basewidgets/BaseArcShape.qml")
+    shapeSrc: Qt.resolvedUrl("../basewidgets/BaseArcShape.qml")
 
     property string nodeId: ""
     property string name: ""
@@ -115,7 +115,7 @@ Widgets.BaseShapeButton {
                         Image {
 
                             id: radialMenuArcButtonIcon
-                            source: Qt.resolvedUrl("./assets/" + name.toLowerCase() + ".svg")
+                            source: Qt.resolvedUrl("../assets/" + name.toLowerCase() + ".svg")
                             smooth: true
                             antialiasing: true
                             mipmap: true

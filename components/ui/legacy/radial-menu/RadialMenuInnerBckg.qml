@@ -2,7 +2,7 @@ import QtQuick
 import Qt5Compat.GraphicalEffects
 import QtQuick.Controls
 
-import "basewidgets" as Widgets
+import "../basewidgets" as Widgets
 
 
 Widgets.BaseArcShapeWidget {
@@ -227,7 +227,7 @@ Widgets.BaseArcShapeWidget {
         radialMenuInnerBckg.backParentId = nodeId
         radialMenuInnerBckg.backParentName = nodeName
 
-        radialMenuInnerBckg.navSrc= Qt.resolvedUrl((isRoot)? "" : "./assets/" + backParentName.toLowerCase() + ".svg")
+        radialMenuInnerBckg.navSrc= Qt.resolvedUrl((isRoot)? "" : "../assets/" + backParentName.toLowerCase() + ".svg")
     }
 
     function handleBackBtnClicked()

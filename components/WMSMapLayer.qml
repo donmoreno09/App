@@ -10,7 +10,7 @@ import "MapLayers"
 import "ui"
 import "SidePannel"
 import "ui/top-toolbar"
-import "ui/radial-menu"
+import "ui/legacy/radial-menu"
 import "handlers"
 
 Item {

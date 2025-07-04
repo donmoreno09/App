@@ -8,8 +8,8 @@ import qml.econtrollers 1.0
 import raise.singleton.radialmenucontroller 1.0
 
 import "../radial-menu" as RadialMenuWidget
-import "js/QmlComponentFactory.js" as ComponentFactory
-import "basewidgets" as Widgets
+import "../js/QmlComponentFactory.js" as ComponentFactory
+import "../basewidgets" as Widgets
 
 Widgets.BaseScatter {
     id: radialMenu

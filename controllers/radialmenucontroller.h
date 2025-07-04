@@ -20,8 +20,8 @@
 #include <QVariantList>
 #include <QtQml/qqmlregistration.h>
 #include "../connections/apiendpoints.h"
-#include "../core/enums/econtrollers.h"
-#include "../core/enums/eservice.h"
+#include "../core/legacy/enums/econtrollers.h"
+#include "../core/legacy/enums/eservice.h"
 
 /* --------------------------------------------------------------------------- */
 class RadialMenuNode : public QObject
