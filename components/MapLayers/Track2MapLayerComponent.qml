@@ -17,11 +17,44 @@ MapItemGroup {
 
     visible: isVisible
 
+    property Component trackPanelComponent: Qt.createComponent("../ui/legacy/panels/track/BaseTrackPanel.qml")
+    property var activePanel
+
+    function showTrackPanel(trackData, marker) {
+        console.log("[TrackPanel] sono arrivato qua")
+        if (activePanel)       // chiudi pannello precedente se esiste
+            activePanel.destroy()
+
+        activePanel = trackPanelComponent.createObject(
+            /* parent */ Qt.application.activeWindow || trackMapLayerComponent,
+            {
+              marker: marker,
+              trackData: trackData,
+              trackUid: trackData.iridess_uid || "unknown",
+              trackChannel: "smartport"
+            })
+        activePanel.open(marker, activePanel)   // posiziona e mostra
+    }
+
+    Component {
+        id: trackDelegate
+
+        Track {
+            id: marker  // 👈 nome importante!
+            onRequestPanel:  {
+                console.log("[TrackPanel] onRequestPanel arrivato!")
+                trackMapLayerComponent.showTrackPanel(trackData, markerInstance)
+            }
+            onTestSignal: {
+                console.log("[TrackPanel] test signal")
+            }
+        }
+    }
 
     Repeater {
         id: repeaterTracks
         model: trackMapLayerBusinessLogic.tracks
-        delegate: Track {}
+        delegate: trackDelegate
     }
 
     Component.onCompleted: {

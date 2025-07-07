@@ -110,7 +110,6 @@ Widgets.BaseKinetic {
        }
 
     Image {
-
         id: baseScatterBckgImage
         enabled: baseScatter.backgroundImage && baseScatter.backgroundImage.length !== 0
         source: baseScatter.backgroundImage

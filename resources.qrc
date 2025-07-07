@@ -356,5 +356,12 @@
         <file>components/ui/qtds/RectangleItem.qml</file>
         <file>components/ui/legacy/commons/SwitchButton.qml</file>
         <file>components/ui/legacy/basewidgets/BaseButton.qml</file>
+        <file>assets/icons/panels/track/back.svg</file>
+        <file>assets/icons/panels/track/comboBoxArrow.svg</file>
+        <file>assets/icons/panels/track/edit.svg</file>
+        <file>assets/icons/panels/track/save.svg</file>
+        <file>assets/icons/panels/track/trackcenter.svg</file>
+        <file>assets/icons/panels/track/trackhistory.svg</file>
+        <file>assets/icons/panels/close.svg</file>
     </qresource>
 </RCC>

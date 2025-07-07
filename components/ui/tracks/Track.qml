@@ -3,11 +3,16 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 MapQuickItem {
-    id: item
+    id: trackMapItem
+
+    signal requestPanel(var trackData, var marker)
+    signal testSignal()
 
     coordinate: QtPositioning.coordinate(modelData.pos[0], modelData.pos[1])
     anchorPoint.x: 40
     anchorPoint.y: 40
+
+    property point panelAnchor: Qt.point(0, 0)
 
     sourceItem: Item {
         id: trackRect
@@ -51,13 +56,29 @@ MapQuickItem {
             anchors.verticalCenter: parent.verticalCenter
             wrapMode: Text.Wrap
         }
+
+        TapHandler {
+            id: tapHandler
+            acceptedButtons: Qt.LeftButton
+            gesturePolicy: TapHandler.WithinBounds
+            grabPermissions: PointerHandler.CanTakeOverFromAnything
+            onTapped: {
+                console.log("[TrackPanel] TapHandler tapped on track!")
+                trackMapItem.requestPanel(modelData, trackMapItem)
+                trackMapItem.testSignal()
+                console.log("[TrackPanel] post")
+
+            }
+        }
     }
 
     Component.onCompleted: {
-        mapView.addMapItem(item)
+        console.log("[Track.qml] istanziato, tracknumber: " + modelData.tracknumber)
+        mapView.addMapItem(trackMapItem)
     }
 
     Component.onDestruction: {
-        mapView.removeMapItem(item)
+        console.log("[Track.qml] distrutto")
+        mapView.removeMapItem(trackMapItem)
     }
 }

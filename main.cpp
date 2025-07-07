@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
     MqttClientService::getInstance()->initialize(":/config/mqtt_config.json");
     MqttClientService::getInstance()->registerParser("ais", new SimpleTrackParser());
-    MqttClientService::getInstance()->registerParser("doc-space", new SimpleTrackParser());
+    // MqttClientService::getInstance()->registerParser("doc-space", new SimpleTrackParser());
 
     QQmlApplicationEngine engine;
     qDebug() << "QML import paths:" << engine.importPathList();

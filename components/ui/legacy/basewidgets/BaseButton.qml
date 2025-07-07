@@ -4,7 +4,7 @@ import QtQuick.Shapes
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
-import "../qtds" as QTDSComponents
+import "../../qtds" as QTDSComponents
 
 
 Button {

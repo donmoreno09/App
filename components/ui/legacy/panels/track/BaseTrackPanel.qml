@@ -54,13 +54,13 @@ PanelsCommons.BasePanel {
     }
 
     onCenterXChanged: () => {
-        if (baseTrackPanel.link)
-            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
+        // if (baseTrackPanel.link)
+            // baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
     }
 
     onCenterYChanged: () => {
-        if (baseTrackPanel.link)
-            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
+        // if (baseTrackPanel.link)
+            // baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
     }
 
     clip: true
@@ -118,7 +118,7 @@ PanelsCommons.BasePanel {
         target: baseTrackPanel.closeButton
 
         function onClicked() {
-            TracksPanelsController.doClose(trackUid, marker, trackChannel)
+            // TracksPanelsController.doClose(trackUid, marker, trackChannel)
         }
     }
 
@@ -243,7 +243,7 @@ PanelsCommons.BasePanel {
 
             onClicked: {
 
-                WmsMapController.centerOn(baseTrackPanel.marker.coordinate)
+                // WmsMapController.centerOn(baseTrackPanel.marker.coordinate)
             }
         }
 
@@ -388,12 +388,12 @@ PanelsCommons.BasePanel {
     }
 
     onLinkChanged: {
-        if (baseTrackPanel.link) {
-            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX,
-                                                       baseTrackPanel.centerY)
-            baseTrackPanel.link.visibleChanged.connect(
-                        baseTrackPanel.handleLinkVisibleChanged)
-        }
+        // if (baseTrackPanel.link) {
+        //     baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX,
+        //                                                baseTrackPanel.centerY)
+        //     baseTrackPanel.link.visibleChanged.connect(
+        //                 baseTrackPanel.handleLinkVisibleChanged)
+        // }
     }
 
     onTrackDataChanged: {
@@ -413,16 +413,16 @@ PanelsCommons.BasePanel {
                     = infoListView.contentItem.children[index].valueTxt
         }
 
-        TrackDetailsController.changeTrackDetails(trackUid, changes["symbol"],
-                                                  changes["identity"])
+        // TrackDetailsController.changeTrackDetails(trackUid, changes["symbol"],
+        //                                           changes["identity"])
     }
 
     function getValuesFromKey(key) {
         let res = []
         if (key === "identity")
-            res = ETrackIdentities.getAllValues()
+            res = ["LIVE", "STALE", "LOST"]
         else if (key === "symbol")
-            res = ETrackSymbolSet.getAllValues()
+            res = ["SYMBOL_A", "SYMBOL_B", "SYMBOL_C"]
 
         return res
     }
@@ -432,28 +432,28 @@ PanelsCommons.BasePanel {
         let marginX = 100
         let marginY = 100
 
-        let posX = marker.screenPos.x + marker.realWidth / 2 + marginX
-        let posY = marker.screenPos.y - marker.realHeight / 2 - marginY
+        let posX = marker.x + marker.width / 2 + marginX
+        let posY = marker.y - marker.height / 2 - marginY
 
         if (posX >= baseTrackPanel.xBboxRule.maximum
                 || (parent.width - posX) < baseTrackPanel.width) {
-            posX = marker.screenPos.x - baseTrackPanel.width - marginX
+            posX = marker.x - baseTrackPanel.width - marginX
         } else if (posX <= baseTrackPanel.xBboxRule.minimum || posX < 0) {
-            posX = marker.screenPos.x + marker.realWidth + marginX
+            posX = marker.x + marker.width + marginX
         }
 
         if (posY >= baseTrackPanel.yBboxRule.maximum
                 || (parent.height - posY) < baseTrackPanel.height) {
-            posY = marker.screenPos.y - baseTrackPanel.height - marginY
+            posY = marker.y - baseTrackPanel.height - marginY
         } else if (posY <= baseTrackPanel.yBboxRule.minimum || posY < 0) {
-            posY = marker.screenPos.y + marginY
+            posY = marker.y + marginY
         }
 
         return [posX, posY]
     }
 
     function open(marker, link = null) {
-
+        console.log("[TrackPanel] function open");
         baseTrackPanel.marker = marker
         if (baseTrackPanel.anchor)
             baseTrackPanel.unminimize(baseTrackPanel.reposBboxIn(
@@ -487,30 +487,29 @@ PanelsCommons.BasePanel {
     function updateData() {
         bodyItemModel.clear()
 
-        baseTrackPanel.headerTitleText = "T" + (baseTrackPanel.trackData.trackedObject.trackNumber) ? "T" + baseTrackPanel.trackData.trackedObject.trackNumber : "Trace unknown"
+        console.log("[TrackPanel] updateData()")
+        console.log(baseTrackPanel.trackData)
 
-        var keys = Object.keys(baseTrackPanel.trackData)
+        // ─────────────────────────────────────────────
+        // Titolo: se c’è trackNumber ⇒ "T<numero>", altrimenti "Trace unknown"
+        // ─────────────────────────────────────────────
+        let tn = baseTrackPanel.trackData.trackNumber
+        baseTrackPanel.headerTitleText = tn !== undefined && tn !== null
+                                          ? "T" + tn
+                                          : "Trace unknown"
 
-        for (var i = 0; i < keys.length; i++) {
-            let val = baseTrackPanel.trackData[keys[i]]
-            let listModelVal = baseTrackPanel.parseValue(keys[i], val)
-            if (listModelVal) {
-                for (let i in listModelVal) {
-                    bodyItemModel.append(listModelVal[i])
-                }
-            }
-        }
+        // ─────────────────────────────────────────────
+        // Un solo passaggio sulle chiavi di trackData
+        // ─────────────────────────────────────────────
+        const keys = Object.keys(baseTrackPanel.trackData)
+        for (let i = 0; i < keys.length; ++i) {
+            const key = keys[i]
+            const val = baseTrackPanel.trackData[key]
+            const listModelVal = baseTrackPanel.parseValue(key, val)
 
-        var keys = Object.keys(baseTrackPanel.trackData.trackedObject)
-
-        for (var i = 0; i < keys.length; i++) {
-            let val = baseTrackPanel.trackData.trackedObject[keys[i]]
-            let listModelVal = baseTrackPanel.parseValue(keys[i], val)
-            if (listModelVal) {
-                for (let i in listModelVal) {
-                    bodyItemModel.append(listModelVal[i])
-                }
-            }
+            if (listModelVal)               // parseValue può restituire array o null
+                for (let item of listModelVal)
+                    bodyItemModel.append(item)
         }
     }
 
