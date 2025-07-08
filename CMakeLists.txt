@@ -57,6 +57,7 @@ qt_add_executable(Sanbdox
     core/legacy/clock.h core/legacy/clock.cpp
     core/legacy/registertemplate.h
     controllers/radialmenucontroller.h
+    controllers/radialmenucontroller.cpp
     core/legacy/enums/econtrollers.h core/legacy/enums/econtrollers.cpp
     core/legacy/enums/eservice.h core/legacy/enums/eservice.cpp
     models/metadata/metadataentry.h

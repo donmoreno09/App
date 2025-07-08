@@ -52,20 +52,12 @@ Widgets.BaseScatter {
 
     property string buttonFont: "RobotoRegular"
 
-    // I think it should just be "ready", perhaps because
-    // of the legacy architecture it meant something but
-    // here it simply means that the radial menu is ready.
-    // Though honestly, I think it's not really needed
-    // anymore but I'll leave it here for now.
-    property bool ctrlReady: false
-
     Connections {
         target: RadialMenuController
 
-        function onReadyChanged(ctrl, ready){
-            if (ready !== ctrlReady && ready)
+        function onReady(ready){
+            if (ready)
             {
-                ctrlReady = ready
                 radialMenu.init()
                 radialMenu.show(ready)
             }
@@ -99,17 +91,10 @@ Widgets.BaseScatter {
 
     function init()
     {
-        ctrlReady = RadialMenuController.checkIsReady()
-
-        if (ctrlReady)
-        {
-            var rootId = RadialMenuController.getRoot().id
-            changeLevel(rootId)
-            radialMenu.x = parent.width/2 - radialMenu.width/2
-            radialMenu.y = parent.height/2 - radialMenu.height/2
-        }
-
-        return ctrlReady
+        var rootId = RadialMenuController.getRoot().id
+        changeLevel(rootId)
+        radialMenu.x = parent.width/2 - radialMenu.width/2
+        radialMenu.y = parent.height/2 - radialMenu.height/2
     }
 
     function createLevel(data)
