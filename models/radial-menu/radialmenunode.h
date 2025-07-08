@@ -58,7 +58,10 @@ private:
     QString m_displayName;
     int m_serviceStatus = 0;
     int m_moduleStatus = 0;
-    bool m_active = true; // TODO: Set to "true" for testing purposes for now
+
+    // It seems that this `active` property is for QML
+    // where the button becomes "highlighted" if true
+    bool m_active = false;
 };
 
 

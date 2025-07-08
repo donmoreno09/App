@@ -52,61 +52,22 @@ Widgets.BaseScatter {
 
     property string buttonFont: "RobotoRegular"
 
+    // I think it should just be "ready", perhaps because
+    // of the legacy architecture it meant something but
+    // here it simply means that the radial menu is ready.
+    // Though honestly, I think it's not really needed
+    // anymore but I'll leave it here for now.
     property bool ctrlReady: false
 
-    property var lay
-
-    Component.onCompleted: {}
-    onBboxOut: (x,y) => {}
-
-    // Code from legacy, it shows the connections to C++ (left here for reference but should be removed later)
     Connections {
         target: RadialMenuController
 
         function onReadyChanged(ctrl, ready){
-            if (ready!==ctrlReady && ready)
+            if (ready !== ctrlReady && ready)
             {
                 ctrlReady = ready
                 radialMenu.init()
                 radialMenu.show(ready)
-            }
-        }
-
-        // Part of legacy code but kept here for reference until otherwise either removed later or used
-        // function onChangeServiceStatus(ctrl, elementName, status)
-        // {
-        //     let node = RadialMenuController.getNodeByName(elementName)
-        //     updateButtonNotifyStatus(node, status)
-        // }
-
-        // function onChangeModuleStatus(ctrl, elementName, status)
-        // {
-        //     let node = RadialMenuController.getNodeByName(elementName)
-        //     updateButtonStatus(node, status)
-        // }
-
-        function updateButtonNotifyStatus(node, status)
-        {
-            let state = parseNotifyStatus(status)
-
-            if (node)
-            {
-                let btn  = currentButtons.filter((b) => b.nodeId === node.id);
-                if(btn.length>0)
-                    btn[0].btnStateNotify = state
-            }
-        }
-
-        function updateButtonStatus(node, status)
-        {
-            let state = parseStatus(status)
-            if (node)
-            {
-                let btn  = currentButtons.filter((b) => b.nodeId === node.id);
-                if(btn.length>0)
-                {
-                    btn[0].checked = (state === RadialMenuArcButton.ButtonState.Selected) ? true : false
-                }
             }
         }
     }
@@ -140,7 +101,7 @@ Widgets.BaseScatter {
     {
         ctrlReady = RadialMenuController.checkIsReady()
 
-        if(ctrlReady)
+        if (ctrlReady)
         {
             var rootId = RadialMenuController.getRoot().id
             changeLevel(rootId)
@@ -162,17 +123,18 @@ Widgets.BaseScatter {
         let angle = 0
         angles.push(0)
 
-        for (let i=0; i<parts; i++)
+        for (let i = 0; i < parts; i++)
         {
             angle += angleStep
             angles.push(angle)
         }
 
-        for (let i=0; i<angles.length-1; i++)
+        for (let i = 0; i < angles.length - 1; i++)
         {
             var autoExclusive = false
             var checkable = false
 
+            // REVIEW: I have no idea what's this for. What's autoExclusive?
             switch(data[i].ctrl) {
             case EControllers.WmsMapController:
             {
@@ -213,7 +175,6 @@ Widgets.BaseScatter {
             if (data[i].propertyTreeNode.isLeaf && checkable)
                 btn.checkedChanged.connect(function(){handleButtonCheckedChanged(currentButtons[i])})
             currentButtons[i].checked = data[i].active
-            //currentButtons[i].toggle()
         }
     }
 
