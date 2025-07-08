@@ -62,6 +62,10 @@ qt_add_executable(Sanbdox
     models/metadata/metadataentry.h
     models/metadata/notemetadataentry.h
     models/details.h
+    models/radial-menu/radialmenunode.h
+    models/radial-menu/propertytreenode.h
+    models/radial-menu/radialmenunode.cpp
+    models/radial-menu/propertytreenode.cpp
 )
 
 target_link_libraries(Sanbdox PRIVATE
