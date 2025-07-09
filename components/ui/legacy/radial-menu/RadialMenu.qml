@@ -116,23 +116,12 @@ Widgets.BaseScatter {
 
         for (let i = 0; i < angles.length - 1; i++)
         {
-            var autoExclusive = false
-            var checkable = false
+            // Auto-exclusivity means that only one button remains checked.
+            // If another button is checked, then the previous one will be unchecked.
+            const parentNode = RadialMenuController.getNode(data[i].parent)
+            const autoExclusive = (parentNode.propertyTreeNode.name === 'map')
 
-            // REVIEW: I have no idea what's this for. What's autoExclusive?
-            switch(data[i].ctrl) {
-            case EControllers.WmsMapController:
-            {
-                autoExclusive = true
-                checkable = true
-                break
-            }
-            default:
-            {
-                autoExclusive = false
-                checkable = true
-            }
-            }
+            let checkable = true
 
             var params = {
                 "name": data[i].propertyTreeNode.name,
@@ -199,8 +188,9 @@ Widgets.BaseScatter {
         }
         else
         {
-            RadialMenuController.doAction(node.ctrl, w.name, w.checkable?w.checked:w.clicked)
+            RadialMenuController.trigger(w.name, w.checkable?w.checked:w.clicked)
             RadialMenuController.setNodeActive(node.id, w.checkable?w.checked:false)
+            console.log("BUTTON", node.id, ":", w.checked)
         }
     }
 
@@ -208,9 +198,9 @@ Widgets.BaseScatter {
     // Toggle for leaf menu items.
     function handleButtonCheckedChanged(w)
     {
-        if (!w) return // for some reason this is undefined sometimes
         var node = RadialMenuController.getNode(w.nodeId)
         RadialMenuController.setNodeActive(node.id, w.checked)
+        console.log(node.id, ":", w.checked)
     }
 
     function handleBackButtonClicked(nodeId)
