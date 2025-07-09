@@ -67,6 +67,7 @@ qt_add_executable(Sanbdox
     models/radial-menu/propertytreenode.h
     models/radial-menu/radialmenunode.cpp
     models/radial-menu/propertytreenode.cpp
+    core/trackmanager.h core/trackmanager.cpp
 )
 
 target_link_libraries(Sanbdox PRIVATE
