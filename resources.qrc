@@ -103,7 +103,7 @@
         <file>components/ui/legacy/assets/osm.svg</file>
         <file>components/ui/legacy/assets/ownship.svg</file>
         <file>components/ui/legacy/assets/settings.svg</file>
-        <file>components/ui/legacy/assets/smartport.svg</file>
+        <file>components/ui/legacy/assets/ais.svg</file>
         <file>components/ui/legacy/assets/tirOnline.svg</file>
         <file>components/ui/legacy/assets/tools.svg</file>
         <file>components/ui/legacy/assets/tracks.svg</file>
@@ -120,5 +120,6 @@
         <file>components/ui/legacy/radial-menu/RadialMenu.qml</file>
         <file>components/ui/legacy/radial-menu/RadialMenuArcButton.qml</file>
         <file>components/ui/legacy/radial-menu/RadialMenuInnerBckg.qml</file>
+        <file>components/ui/legacy/assets/doc-space.svg</file>
     </qresource>
 </RCC>
