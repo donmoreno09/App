@@ -62,6 +62,8 @@ qt_add_executable(Sanbdox
     controllers/radialmenucontroller.h
     core/legacy/enums/econtrollers.h core/legacy/enums/econtrollers.cpp
     core/legacy/enums/eservice.h core/legacy/enums/eservice.cpp
+    enums/etrackstate.h enums/etrackstate.cpp
+    enums/etrackstate.h enums/etrackstate.cpp
 )
 
 target_link_libraries(Sanbdox PRIVATE

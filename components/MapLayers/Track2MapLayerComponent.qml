@@ -45,9 +45,6 @@ MapItemGroup {
                 console.log("[TrackPanel] onRequestPanel arrivato!")
                 trackMapLayerComponent.showTrackPanel(trackData, markerInstance)
             }
-            onTestSignal: {
-                console.log("[TrackPanel] test signal")
-            }
         }
     }
 

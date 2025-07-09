@@ -3,16 +3,45 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 MapQuickItem {
-    id: trackMapItem
+    id: traceMarker
 
     signal requestPanel(var trackData, var marker)
-    signal testSignal()
 
+    // Positioning in coordinates
     coordinate: QtPositioning.coordinate(modelData.pos[0], modelData.pos[1])
-    anchorPoint.x: 40
-    anchorPoint.y: 40
+    // anchorPoint x,y based on image center
+    anchorPoint.x: image.width / 2
+    anchorPoint.y: image.height / 2
 
-    property point panelAnchor: Qt.point(0, 0)
+    // Qui le proprietà core della traccia
+    property string channel         // TODO: for now is smartport but needs to be changed.
+    property point  screenPos       // Screen position used for showing panel on screen detached from map.
+    property var    link            // In pratica il pannello dei dettagli (o un altro overlay) che deve “seguire” il marker sulla mappa
+    property var    history         // La history della traccia, recuperata tramite chiamata od altro.
+    property var    historyPath     // Il path della history della traccia
+
+    // Qui proprietà in alias
+    property alias realWidth: trackRect.width   // La width / larghezza del sourceItem ossia della traccia
+    property alias realHeight: trackRect.height // La height / altezza del sourceItem ossia della traccia
+
+    // Qui le proprietà anatomiche della traccia
+    property var    heading             // NOT USING: Direzione di movimento della traccia, derivata dalla velocity
+    property var    angle               // NOT USING: Angolatura
+
+    // Qui le proprietà del pannello
+    property bool   opened: false   // Opened è relativo al pannello, se è linkato o meno
+    property color  backgroundColor: "transparent"
+    property real   backgroundOpacity: 0.5
+
+    // Qui altro...
+    property double correctionAngle:0   // NOT USING: correction angle
+    property bool   labelVisible: true
+    property bool   vectorVisible: true
+
+    // Qui i segnali
+    signal detailsReady (var obj, string channel)
+    signal detailsClose(var obj, string channel)
+
 
     sourceItem: Item {
         id: trackRect
@@ -34,6 +63,8 @@ MapQuickItem {
                 origin.y: cogLine.height       // ruota intorno al punto di origine in basso
                 angle: modelData.cog
             }
+
+            visible: vectorVisible
         }
 
         Image {
@@ -55,6 +86,7 @@ MapQuickItem {
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             wrapMode: Text.Wrap
+            visible: labelVisible
         }
 
         TapHandler {
@@ -64,8 +96,7 @@ MapQuickItem {
             grabPermissions: PointerHandler.CanTakeOverFromAnything
             onTapped: {
                 console.log("[TrackPanel] TapHandler tapped on track!")
-                trackMapItem.requestPanel(modelData, trackMapItem)
-                trackMapItem.testSignal()
+                traceMarker.requestPanel(modelData, traceMarker)
                 console.log("[TrackPanel] post")
 
             }
@@ -74,11 +105,79 @@ MapQuickItem {
 
     Component.onCompleted: {
         console.log("[Track.qml] istanziato, tracknumber: " + modelData.tracknumber)
-        mapView.addMapItem(trackMapItem)
+        mapView.addMapItem(traceMarker)
+        traceMarker.screenPos = mapView.fromCoordinate(traceMarker.coordinate)
+        // Se è Nan entrambi significa che è fuori schermo.
+        console.log("[Track.qml] screen position: ", traceMarker.screenPos.toString())
     }
 
     Component.onDestruction: {
         console.log("[Track.qml] distrutto")
-        mapView.removeMapItem(trackMapItem)
+        mapView.removeMapItem(traceMarker)
+    }
+
+    // -- LINK AREA ------------------ //
+
+    onLinkChanged: {
+        if (traceMarker.link) {
+             // Setto il punto di ancoraggio dalla screen position del marker
+            traceMarker.link.markerAnchor = traceMarker.screenPos
+             // Connetto dei segnali per il sync sulla visibilità
+            traceMarker.link.visibleChanged.connect(traceMarker.handleLinkVisibleChanged)
+        }
+    }
+
+    function handleLinkVisibleChanged()
+    {
+        // Se la traccia ha un pannello linkato ed è visibile
+        if (traceMarker.link && traceMarker.link.visible)
+            // setto il punto di ancoraggio dalla screen position del marker
+            traceMarker.link.markerAnchor = traceMarker.screenPos
+    }
+
+    function updateScreenPos() {
+        // Esegue l’aggiornamento solo se il marker è visibile e la sua proprietà coordinate è valida
+        if (visible && traceMarker.coordinate) {
+            // Il secondo argomento false disattiva il clipping:
+            // la funzione restituisce comunque un punto valido anche se la posizione è fuori dal viewport
+            traceMarker.screenPos = mapView.fromCoordinate(traceMarker.coordinate, false)
+
+            // Se esiste un oggetto collegato (link),
+            // per esempio una linea o un pannello che deve “agganciarsi” al marker,
+            // ne aggiorna la proprietà markerAnchor con le nuove coordinate-pixel.
+            if(traceMarker.link)
+                traceMarker.link.markerAnchor = traceMarker.screenPos
+        }
+    }
+
+    function linkToPanel(link) {
+        traceMarker.link = link
+        traceMarker.opened = true
+    }
+
+    function unlinkToPanel() {
+        traceMarker.link = null
+        traceMarker.opened = false
+        closeHistory()
+    }
+
+    // -- HISTORY AREA ------------------ //
+
+    function getHistory () {}
+    function loadHistory (path) {}
+    function closeHistory () {}
+    function relaodHistory () {}
+    function updateHistory () {}
+
+    // -- TRACK MOVEMENT AREA ----------- //
+
+    function updateHeading() {
+        heading = (track.vel && vectorVisible) ? (Math.atan2(-track.vel[1],track.vel[0]))* (180/Math.PI) : 0.0
+        angle = heading-correctionAngle
+    }
+
+    function adaptVelocity(b) {
+      traceMarker.angle= traceMarker.heading-b
+        correctionAngle=b;
     }
 }
