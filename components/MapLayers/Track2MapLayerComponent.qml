@@ -3,6 +3,7 @@ import QtLocation 6.8
 import QtPositioning 6.8
 import raise.map.layers 1.0
 import raise.singleton.layermanager 1.0
+import raise.singleton.trackmanager 1.0
 
 MapItemGroup {
     id: trackMapLayerComponent
@@ -66,6 +67,7 @@ MapItemGroup {
 
         trackMapLayerBusinessLogic.tracks = hardcodedTracks
         LayerManager.registerLayer(trackMapLayerBusinessLogic)
+        TrackManager.registerLayer("doc-space", trackMapLayerBusinessLogic)
         trackMapLayerBusinessLogic.initialize()
     }
 
@@ -77,8 +79,19 @@ MapItemGroup {
 
     Connections {
         target: trackMapLayerBusinessLogic
+
         function onLayerReady() {
             LayerManager.notifyLayerReady(trackMapLayerBusinessLogic)
+        }
+
+        function onActivated() {
+            console.log("DOC-SPACE ACTIVATED!")
+            trackMapLayerComponent.visible = true
+        }
+
+        function onDeactivated() {
+            console.log("DOC-SPACE DEACTIVATED!")
+            trackMapLayerComponent.visible = false
         }
     }
 }
