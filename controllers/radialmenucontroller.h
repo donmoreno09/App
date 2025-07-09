@@ -28,14 +28,18 @@ public:
     Q_INVOKABLE RadialMenuNode* getNode(const QString &id) const;
     Q_INVOKABLE RadialMenuNode* getNodeByName(const QString &name) const;
 
-    Q_INVOKABLE void doAction(int ctrl, const QString& service, bool active);
+    Q_INVOKABLE void trigger(const QString& name, bool active);
     Q_INVOKABLE void setNodeActive(const QString& id, bool active);
 
 signals:
     void ready(bool);
 
+protected:
+    void buildTriggerMap();
+
 private:
     QHash<QString, RadialMenuNode*> m_nodes;
+    QHash<QString, std::function<void(bool)>> m_triggerMap;
     QString m_rootId;
     bool m_ready = false;
 

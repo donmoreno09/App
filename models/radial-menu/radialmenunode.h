@@ -24,11 +24,11 @@ class RadialMenuNode : public QObject, public IPersistable
     // TODO: I have no idea what's serviceStatus is for but it
     //       seems safe to remove. Have to check the legacy code
     //       whether it's fundamental for the app.
-    Q_PROPERTY(int serviceStatus READ serviceStatus CONSTANT)
+    Q_PROPERTY(int serviceStatus READ serviceStatus WRITE setServiceStatus NOTIFY serviceStatusChanged)
     // TODO: Same as serviceStatus, it isn't in the JSON itself.
     //       Check in the legacy code if needed.
     Q_PROPERTY(int moduleStatus READ moduleStatus CONSTANT)
-    Q_PROPERTY(bool active READ active CONSTANT)
+    Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
 
 public:
     explicit RadialMenuNode(QObject *parent = nullptr);
@@ -47,6 +47,14 @@ public:
     // IPersistable interface
     virtual QJsonObject toJson() const override;
     virtual void fromJson(const QJsonObject &json) override;
+
+    void setServiceStatus(int newServiceStatus);
+
+    void setActive(bool newActive);
+
+signals:
+    void serviceStatusChanged();
+    void activeChanged();
 
 private:
     PropertyTreeNode* m_propertyTreeNode = nullptr;

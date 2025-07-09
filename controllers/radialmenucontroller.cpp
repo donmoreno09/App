@@ -4,6 +4,7 @@
 RadialMenuController::RadialMenuController(QObject *parent)
     : QObject(parent)
 {
+    buildTriggerMap();
     fetchMenu();
 }
 
@@ -44,15 +45,60 @@ RadialMenuNode* RadialMenuController::getNodeByName(const QString &name) const
     return nullptr;
 }
 
-void RadialMenuController::doAction(int ctrl, const QString& service, bool active)
+void RadialMenuController::trigger(const QString &name, bool active)
 {
-    qDebug() << "Ctrl:" << ctrl;
+    if (m_triggerMap.contains(name)) {
+        m_triggerMap[name](active);
+    } else {
+        qDebug() << "Triggered " << name << " but no associated handler is present.";
+    }
 }
 
 void RadialMenuController::setNodeActive(const QString& id, bool active)
 {
-    Q_UNUSED(id)
-    // Empty for now
+    // check if leaf node (no need as well, the QML handles it)
+    //   check if parent supports multi-checks
+    //   otherwise disable other nodes under the parent (no need, the QML handles it)
+    // else (parent node)
+    //   do nothing
+    auto* node = m_nodes.value(id, nullptr);
+    auto* parent = m_nodes.value(node->parent(), nullptr);
+    node->setActive(active);
+    qDebug() << "[SetNodeActive:" << node->propertyTreeNode()->name() << "] " << node->id() << ": " << active;
+}
+
+void RadialMenuController::buildTriggerMap()
+{
+    // Triggers for tracks' nodes
+    m_triggerMap.insert("doc-space", [](bool active) {
+        qDebug() << "doc-space triggered!";
+    });
+
+    m_triggerMap.insert("ais", [](bool active) {
+        qDebug() << "ais triggered!";
+    });
+
+    // Triggers for maps' nodes
+    m_triggerMap.insert("osm", [](bool active) {
+        qDebug() << "osm triggered!";
+    });
+
+    m_triggerMap.insert("google", [](bool active) {
+        qDebug() << "google triggered!";
+    });
+
+    m_triggerMap.insert("wms", [](bool active) {
+        qDebug() << "wms triggered!";
+    });
+
+    // Triggers for tools' nodes
+    m_triggerMap.insert("videoplayer", [](bool active) {
+        qDebug() << "videoplayer triggered!";
+    });
+
+    m_triggerMap.insert("ownship", [](bool active) {
+        qDebug() << "ownship triggered!";
+    });
 }
 
 void RadialMenuController::fetchMenu()

@@ -89,4 +89,25 @@ void RadialMenuNode::fromJson(const QJsonObject& json)
 
     m_propertyTreeNode->fromJson(json["propertyTreeNode"].toObject());
     m_displayName = m_propertyTreeNode->name();
+
+    // This should be set outside but for now force it to highlight wms since
+    // that's the default map. (Technically it's "osm" but for whatever reason
+    // it's called wms.)
+    m_active = m_propertyTreeNode->name() == "wms";
+}
+
+void RadialMenuNode::setServiceStatus(int newServiceStatus)
+{
+    if (m_serviceStatus == newServiceStatus)
+        return;
+    m_serviceStatus = newServiceStatus;
+    emit serviceStatusChanged();
+}
+
+void RadialMenuNode::setActive(bool newActive)
+{
+    if (m_active == newActive)
+        return;
+    m_active = newActive;
+    emit activeChanged();
 }
