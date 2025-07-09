@@ -3,7 +3,9 @@ import QtLocation 6.8
 import QtPositioning 6.8
 import raise.map.layers 1.0
 import raise.singleton.layermanager 1.0
+import raise.singleton.panelmanager 1.0
 import raise.singleton.mqtt 1.0
+
 import "../ui/tracks"
 
 MapItemGroup {
@@ -17,35 +19,9 @@ MapItemGroup {
 
     visible: isVisible
 
-    property Component trackPanelComponent: Qt.createComponent("../ui/legacy/panels/track/BaseTrackPanel.qml")
-    property var activePanel
-
-    function showTrackPanel(trackData, marker) {
-        console.log("[TrackPanel] sono arrivato qua")
-        if (activePanel)       // chiudi pannello precedente se esiste
-            activePanel.destroy()
-
-        activePanel = trackPanelComponent.createObject(
-            /* parent */ Qt.application.activeWindow || trackMapLayerComponent,
-            {
-              marker: marker,
-              trackData: trackData,
-              trackUid: trackData.iridess_uid || "unknown",
-              trackChannel: "smartport"
-            })
-        activePanel.open(marker, activePanel)   // posiziona e mostra
-    }
-
     Component {
         id: trackDelegate
-
-        Track {
-            id: marker  // 👈 nome importante!
-            onRequestPanel:  {
-                console.log("[TrackPanel] onRequestPanel arrivato!")
-                trackMapLayerComponent.showTrackPanel(trackData, markerInstance)
-            }
-        }
+        Track { }
     }
 
     Repeater {
@@ -71,6 +47,24 @@ MapItemGroup {
         target: trackMapLayerBusinessLogic
         function onLayerReady() {
             LayerManager.notifyLayerReady(trackMapLayerBusinessLogic)
+        }
+
+        function onTracksChanged() {
+            if (!PanelManager.activePanel)
+                return
+
+            const uid = PanelManager.currentUid
+            for (let i = 0; i < repeaterTracks.count; ++i) {
+                const m = repeaterTracks.itemAt(i)
+                if (m && m.trackData.iridess_uid === uid) {
+                    if (PanelManager.linkedMarker !== m) {
+                        PanelManager.linkedMarker = m
+                        m.linkToPanel(PanelManager.activePanel.link || PanelManager.activePanel)
+                    }
+                    PanelManager.activePanel.trackData = m.trackData   // refresh info
+                    break
+                }
+            }
         }
     }
 }

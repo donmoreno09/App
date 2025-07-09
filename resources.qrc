@@ -363,5 +363,6 @@
         <file>assets/icons/panels/track/trackcenter.svg</file>
         <file>assets/icons/panels/track/trackhistory.svg</file>
         <file>assets/icons/panels/close.svg</file>
+        <file>components/ui/legacy/panels/PanelManager.qml</file>
     </qresource>
 </RCC>

@@ -36,6 +36,9 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<PopupManager>("raise.singleton.popupmanager", 1, 0, "PopupManager", &PopupManager::singletonProvider);
     qmlRegisterSingletonType<SelectionBoxBus>("raise.singleton.selectionboxbus", 1, 0, "SelectionBoxBus", &SelectionBoxBus::singletonProvider);
 
+    qmlRegisterSingletonType(QUrl("qrc:/components/ui/legacy/panels/PanelManager.qml"), "raise.singleton.panelmanager", 1, 0, "PanelManager");
+
+
     qmlRegisterUncreatableType<BaseLayer>("raise.map.layers", 1, 0, "BaseLayer", "BaseLayer is abstract");
     qmlRegisterUncreatableType<BaseMapLayer>("raise.map.layers", 1, 0, "BaseMapLayer", "BaseMapLayer is abstract");
 

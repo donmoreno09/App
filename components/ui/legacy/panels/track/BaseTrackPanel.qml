@@ -38,15 +38,14 @@ PanelsCommons.BasePanel {
     //onTransformRotation: (evtHandler, w, delta) => {console.log("onTransformRotation", evtHandler, w.name, delta)}
 
     onMove: (evtHandler, w, delta) => {
-        if (baseTrackPanel.link)
+        if(baseTrackPanel.link)
             baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
     }
 
-    onMinimized: val => {
+    onMinimized: (val) => {
         if (baseTrackPanel.link)
-            baseTrackPanel.link.visible = !val
-
-        if (!val) {
+            baseTrackPanel.link.visible=!val
+        if(!val) {
             let pos = baseTrackPanel.reposBboxIn(baseTrackPanel.marker)
             baseTrackPanel.x = pos[0]
             baseTrackPanel.y = pos[1]
@@ -54,13 +53,13 @@ PanelsCommons.BasePanel {
     }
 
     onCenterXChanged: () => {
-        // if (baseTrackPanel.link)
-            // baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
+        if(baseTrackPanel.link)
+            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
     }
 
     onCenterYChanged: () => {
-        // if (baseTrackPanel.link)
-            // baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
+        if(baseTrackPanel.link)
+            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
     }
 
     clip: true
@@ -112,15 +111,17 @@ PanelsCommons.BasePanel {
 
     ]
     */
+
     property var trackData
 
     Connections {
         target: baseTrackPanel.closeButton
 
         function onClicked() {
-            // TracksPanelsController.doClose(trackUid, marker, trackChannel)
+            TracksPanelsController.doClose(trackUid, marker, trackChannel)
         }
     }
+
 
     Item {
 
@@ -131,8 +132,7 @@ PanelsCommons.BasePanel {
         property bool editMode: false
 
         onEditModeChanged: {
-
-            for (let index in infoListView.contentItem.children) {
+            for(let index in infoListView.contentItem.children) {
                 infoListView.contentItem.children[index].editMode = info.editMode
                 //console.log("***saveChanges panel****", infoListView.contentItem.children[index], infoListView.contentItem.children[index].keyTxt, infoListView.contentItem.children[index].valueTxt)
                 //console.log(Object.keys(infoListView.contentItem.children[index]))
@@ -158,10 +158,10 @@ PanelsCommons.BasePanel {
                 //pressDelay: 1000
                 orientation: ListView.Vertical
                 flickableDirection: Flickable.VerticalFlick
-                interactive: true
+                interactive :true
                 spacing: 4
                 model: bodyItemModel
-                width: info.width
+                width:info.width
                 delegate: PanelsCommons.PanelListItem {
                     objectName: qsTr(key.toLowerCase())
                     height: 20
@@ -171,7 +171,7 @@ PanelsCommons.BasePanel {
                     editingModeValues: (editingMode === PanelsCommons.PanelListItem.EditModeType.ComboBox) ? baseTrackPanel.getValuesFromKey(key.toLowerCase()) : []
                     keyColor: "#FFF0CB"
                     valueColor: "#ffffff"
-                    width: info.width - ((info.width / 25) * 2)
+                    width: info.width - ((info.width / 25) * 2 )
                 }
 
                 Component.onCompleted: {
@@ -196,8 +196,8 @@ PanelsCommons.BasePanel {
             image: "qrc:///assets/icons/panels/track/trackhistory.svg"
             switchBackgroundColorOff: "#ed1c24"
             switchBackgroundColorOn: "#68f25c"
-            switchButtonColorOff: "#edf7fa"
-            switchButtonColorOn: "#edf7fa"
+            switchButtonColorOff:"#edf7fa"
+            switchButtonColorOn:"#edf7fa"
             switchButtonColorOnDown: "#e9e9e9"
             switchButtonColorOffDown: "#e9e9e9"
             switchBorderWidth: 0
@@ -211,11 +211,11 @@ PanelsCommons.BasePanel {
             circular: true
 
             onSwitched: (checked, state) => {
-                            if (checked)
-                            marker.getHistory()
-                            else
-                            marker.closeHistory()
-                        }
+                    if(checked)
+                        marker.getHistory()
+                    else
+                        marker.closeHistory()
+            }
         }
 
         Widgets.BaseButton {
@@ -242,8 +242,7 @@ PanelsCommons.BasePanel {
             imagePadding: 2
 
             onClicked: {
-
-                // WmsMapController.centerOn(baseTrackPanel.marker.coordinate)
+                WmsMapController.centerOn(baseTrackPanel.marker.coordinate)
             }
         }
 
@@ -270,9 +269,10 @@ PanelsCommons.BasePanel {
             imagePadding: 2
 
             onClicked: {
-                baseTrackPanel.state = "editMode"
+                    baseTrackPanel.state = "editMode"
+                }
             }
-        }
+
 
         Widgets.BaseButton {
             id: saveButton
@@ -298,7 +298,6 @@ PanelsCommons.BasePanel {
             visible: false
 
             onClicked: {
-
                 baseTrackPanel.saveChanges()
                 baseTrackPanel.state = "baseMode"
                 console.log("*****edit panel state", baseTrackPanel.state)
@@ -357,6 +356,7 @@ PanelsCommons.BasePanel {
                 target: info
                 editMode: true
             }
+
         },
         State {
             name: "baseMode"
@@ -380,86 +380,81 @@ PanelsCommons.BasePanel {
                 target: info
                 editMode: false
             }
+
         }
     ]
 
-    Component.onCompleted: {
 
+    Component.onCompleted: {
+        console.log("BaseTrackPanel on completed...")
     }
 
     onLinkChanged: {
-        // if (baseTrackPanel.link) {
-        //     baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX,
-        //                                                baseTrackPanel.centerY)
-        //     baseTrackPanel.link.visibleChanged.connect(
-        //                 baseTrackPanel.handleLinkVisibleChanged)
-        // }
+        if(baseTrackPanel.link) {
+            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
+            baseTrackPanel.link.visibleChanged.connect(baseTrackPanel.handleLinkVisibleChanged)
+        }
     }
 
     onTrackDataChanged: {
-
         baseTrackPanel.updateData()
         baseTrackPanel.visible = true
     }
 
     function saveChanges() {
-
         let changes = {}
-        for (let index in infoListView.contentItem.children) {
+        for(let index in infoListView.contentItem.children) {
             //console.log("***saveChanges panel****", infoListView.contentItem.children[index], infoListView.contentItem.children[index].keyTxt, infoListView.contentItem.children[index].valueTxt)
             //console.log(Object.keys(infoListView.contentItem.children[index]))
             infoListView.contentItem.children[index].saveChanges()
-            changes[infoListView.contentItem.children[index].objectName]
-                    = infoListView.contentItem.children[index].valueTxt
+            changes[infoListView.contentItem.children[index].objectName] = infoListView.contentItem.children[index].valueTxt
         }
-
-        // TrackDetailsController.changeTrackDetails(trackUid, changes["symbol"],
-        //                                           changes["identity"])
+        TrackDetailsController.changeTrackDetails(trackUid,changes["symbol"],changes["identity"]);
     }
 
     function getValuesFromKey(key) {
         let res = []
-        if (key === "identity")
-            res = ["LIVE", "STALE", "LOST"]
-        else if (key === "symbol")
-            res = ["SYMBOL_A", "SYMBOL_B", "SYMBOL_C"]
-
+        if(key==="identity")
+            res = ETrackIdentities.getAllValues()
+        else if (key==="symbol")
+            res = ETrackSymbolSet.getAllValues()
         return res
     }
 
     function reposBboxIn(marker) {
-
         let marginX = 100
         let marginY = 100
 
-        let posX = marker.x + marker.width / 2 + marginX
-        let posY = marker.y - marker.height / 2 - marginY
+        let posX = marker.screenPos.x + marker.realWidth/2 + marginX
+        let posY = marker.screenPos.y - marker.realHeight/2 - marginY
 
-        if (posX >= baseTrackPanel.xBboxRule.maximum
-                || (parent.width - posX) < baseTrackPanel.width) {
-            posX = marker.x - baseTrackPanel.width - marginX
-        } else if (posX <= baseTrackPanel.xBboxRule.minimum || posX < 0) {
-            posX = marker.x + marker.width + marginX
+        if (posX >= baseTrackPanel.xBboxRule.maximum || (parent.width - posX) < baseTrackPanel.width)
+        {
+            posX = marker.screenPos.x - baseTrackPanel.width - marginX
+        }
+        else if (posX <= baseTrackPanel.xBboxRule.minimum || posX < 0)
+        {
+            posX = marker.screenPos.x + marker.realWidth + marginX
         }
 
-        if (posY >= baseTrackPanel.yBboxRule.maximum
-                || (parent.height - posY) < baseTrackPanel.height) {
-            posY = marker.y - baseTrackPanel.height - marginY
-        } else if (posY <= baseTrackPanel.yBboxRule.minimum || posY < 0) {
-            posY = marker.y + marginY
+        if (posY >= baseTrackPanel.yBboxRule.maximum || (parent.height - posY) < baseTrackPanel.height)
+        {
+            posY = marker.screenPos.y - baseTrackPanel.height - marginY
+        }
+        else if (posY <= baseTrackPanel.yBboxRule.minimum || posY < 0)
+        {
+            posY = marker.screenPos.y + marginY
         }
 
         return [posX, posY]
+
     }
 
     function open(marker, link = null) {
-        console.log("[TrackPanel] function open");
         baseTrackPanel.marker = marker
         if (baseTrackPanel.anchor)
-            baseTrackPanel.unminimize(baseTrackPanel.reposBboxIn(
-                                          baseTrackPanel.marker))
-        else {
-
+            baseTrackPanel.unminimize(baseTrackPanel.reposBboxIn(baseTrackPanel.marker))
+        else{
             let pos = baseTrackPanel.reposBboxIn(baseTrackPanel.marker)
             baseTrackPanel.link = link
             baseTrackPanel.x = pos[0]
@@ -468,189 +463,99 @@ PanelsCommons.BasePanel {
     }
 
     function close() {
-
-        if (baseTrackPanel.link) {
+        if(baseTrackPanel.link) {
             baseTrackPanel.link.destroy()
             baseTrackPanel.link = null
         }
-
         baseTrackPanel.marker = null
         baseTrackPanel.destroy()
     }
 
-    function handleLinkVisibleChanged() {
-        if (baseTrackPanel.link && baseTrackPanel.link.visible)
-            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX,
-                                                       baseTrackPanel.centerY)
+    function handleLinkVisibleChanged()
+    {
+        if ( baseTrackPanel.link && baseTrackPanel.link.visible)
+            baseTrackPanel.link.panelAnchor = Qt.point(baseTrackPanel.centerX, baseTrackPanel.centerY)
     }
 
     function updateData() {
         bodyItemModel.clear()
+        baseTrackPanel.headerTitleText = "T"+(baseTrackPanel.trackData.trackedObject.trackNumber) ? "T"+baseTrackPanel.trackData.trackedObject.trackNumber : "Trace unknown"
 
-        console.log("[TrackPanel] updateData()")
-        console.log(baseTrackPanel.trackData)
+        var keys = Object.keys(baseTrackPanel.trackData)
 
-        // ─────────────────────────────────────────────
-        // Titolo: se c’è trackNumber ⇒ "T<numero>", altrimenti "Trace unknown"
-        // ─────────────────────────────────────────────
-        let tn = baseTrackPanel.trackData.trackNumber
-        baseTrackPanel.headerTitleText = tn !== undefined && tn !== null
-                                          ? "T" + tn
-                                          : "Trace unknown"
+        for (var i = 0; i < keys.length; i++) {
+            let val = baseTrackPanel.trackData[keys[i]]
+            let listModelVal = baseTrackPanel.parseValue(keys[i], val)
+            if (listModelVal) {
+                for (let i in listModelVal) {
+                    bodyItemModel.append(listModelVal[i])
+                }
+            }
 
-        // ─────────────────────────────────────────────
-        // Un solo passaggio sulle chiavi di trackData
-        // ─────────────────────────────────────────────
-        const keys = Object.keys(baseTrackPanel.trackData)
-        for (let i = 0; i < keys.length; ++i) {
-            const key = keys[i]
-            const val = baseTrackPanel.trackData[key]
-            const listModelVal = baseTrackPanel.parseValue(key, val)
+        }
 
-            if (listModelVal)               // parseValue può restituire array o null
-                for (let item of listModelVal)
-                    bodyItemModel.append(item)
+        var keys = Object.keys(baseTrackPanel.trackData.trackedObject)
+
+        for (var i = 0; i < keys.length; i++) {
+            let val = baseTrackPanel.trackData.trackedObject[keys[i]]
+            let listModelVal = baseTrackPanel.parseValue(keys[i], val)
+            if (listModelVal) {
+                for (let i in listModelVal) {
+                    bodyItemModel.append(listModelVal[i])
+                }
+            }
         }
     }
 
     function parseValue(key, value) {
-
         let res = []
-
-        switch (key) {
-        case "time":
+        switch (key)
         {
-            let k = "timestamp"
-            let date = new Date(value * 1000)
+            case "time": {
+                let k = "timestamp"
+                let date = new Date(value*1000);
 
-            let v = date.toLocaleString({
-                                            "day": "2-digit",
-                                            "month": "2-digit",
-                                            "year": "numeric",
-                                            "hour": "2-digit",
-                                            "minute": "2-digit",
-                                            "second": "2-digit"
-                                        })
-
-            res.push({
-                         "key": k,
-                         "value": v,
-                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
-                     })
-
-            break
-        }
-        case "pos":
-        {
-            let k1 = "latitude"
-            let k2 = "longitude"
-            let k3 = "altitude"
-            let v1 = (value.length >= 2 && value[0]) ? value[0].toFixed(
-                                                           5) + " °" : "unknown"
-            let v2 = (value.length >= 2 && value[1]) ? value[1].toFixed(
-                                                           5) + " °" : "unknown"
-            let v3 = (value.length >= 2
-                      && value[2]) ? ((value[2] * 3.281) / 100.0).toFixed(
-                                         2) + " hFt" : "unknown"
-
-            res.push({
-                         "key": k1,
-                         "value": v1,
-                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
-                     })
-            res.push({
-                         "key": k2,
-                         "value": v2,
-                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
-                     })
-            res.push({
-                         "key": k3,
-                         "value": v3,
-                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
-                     })
-
-            break
-        }
-        case "vel":
-        {
-            let k = "Velocity"
-            let v = value
-
-            let heading = (((Math.atan2(-v[1], v[0])) * (180 / Math.PI)) + 90.0)
-            res.push({
-                         "key": "Heading",
-                         "value": heading.toString() + "°",
-                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
-                     })
-            let vel = Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2))
-            res.push({
-                         "key": "Speed",
-                         "value": vel.toFixed(2) + " Km/h",
-                         "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit
-                     })
-
-            break
-        }
-
-        /*
-
-            case "entity":
-            {
-                let k = "category"
-                let v = value
+                let v = date.toLocaleString({ "day": "2-digit", "month": "2-digit", "year": "numeric",
+                                          "hour": "2-digit", "minute": "2-digit", "second": "2-digit"});
 
                 res.push({"key": k, "value": v, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+
                 break
             }
 
+            case "pos": {
+                let k1 = "latitude"
+                let k2 = "longitude"
+                let k3 = "altitude"
+                let v1 = (value.length >= 2 && value[0]) ? value[0].toFixed(5) +" °" : "unknown"
+                let v2 = (value.length >= 2 && value[1]) ? value[1].toFixed(5)+" °" : "unknown"
+                let v3 = (value.length >= 2 && value[2]) ? ((value[2]*3.281)/100.0).toFixed(2)+ " hFt" : "unknown"
 
-           case "entityType":
-            {
-                let k = "type"
+                res.push({"key": k1, "value": v1, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                res.push({"key": k2, "value": v2, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                res.push({"key":k3,"value":v3, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit  })
+                break
+            }
+
+            case "vel": {
+                let k = "Velocity"
                 let v = value
 
-                res.push({"key": k, "value": v})
-
+                let heading=(((Math.atan2(-v[1],v[0]))* (180/Math.PI))+90.0)
+                res.push({"key": "Heading", "value": heading.toString()+"°","editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                let vel=Math.sqrt(Math.pow(v[0],2)+Math.pow(v[1],2))
+                res.push({"key": "Speed", "value": vel.toFixed(2)+" Km/h", "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
                 break
             }
 
-
-           case "entitySubtype":
-            {
-                let k = "subtype"
-                let v = value
-
-                res.push({"key": k, "value": v})
-
-                break
-            }
-
-
-            case "trackSource":
-            {
-                res.push({"key":"trackers","value":value.num_trackers.toString(),"editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
-                res.push({"key":"products","value":value.num_products.toString(),"editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
-                res.push({"key":"sensors","value":value.num_sensors.toString(), "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+            case "identity": {
+                res.push({"key":"identity","value":value, "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox})
                 break;
-            }*/
-        case "identity":
-        {
-            res.push({
-                         "key": "identity",
-                         "value": value,
-                         "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox
-                     })
-            break
-        }
-        case "symbol_set":
-        {
-            res.push({
-                         "key": "Symbol",
-                         "value": value,
-                         "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox
-                     })
-            break
-        }
+            }
+            case "symbol_set": {
+                res.push({"key":"Symbol","value":value, "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox})
+                break;
+            }
         }
 
         if (res.length > 0)

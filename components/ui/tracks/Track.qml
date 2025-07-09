@@ -2,16 +2,21 @@ import QtQuick 2.15
 import QtLocation 6.8
 import QtPositioning 6.8
 
+import raise.singleton.panelmanager 1.0
+
+
 MapQuickItem {
     id: traceMarker
 
-    signal requestPanel(var trackData, var marker)
+    // Qui la proprità di base che contiene il modello della traccia.
+    property var trackData: modelData
 
     // Positioning in coordinates
-    coordinate: QtPositioning.coordinate(modelData.pos[0], modelData.pos[1])
+    coordinate: QtPositioning.coordinate(trackData.pos[0], trackData.pos[1])
     // anchorPoint x,y based on image center
     anchorPoint.x: image.width / 2
     anchorPoint.y: image.height / 2
+
 
     // Qui le proprietà core della traccia
     property string channel         // TODO: for now is smartport but needs to be changed.
@@ -34,7 +39,7 @@ MapQuickItem {
     property real   backgroundOpacity: 0.5
 
     // Qui altro...
-    property double correctionAngle:0   // NOT USING: correction angle
+    property double correctionAngle: 0   // NOT USING: correction angle
     property bool   labelVisible: true
     property bool   vectorVisible: true
 
@@ -61,7 +66,7 @@ MapQuickItem {
             transform: Rotation {
                 origin.x: cogLine.width / 2
                 origin.y: cogLine.height       // ruota intorno al punto di origine in basso
-                angle: modelData.cog
+                angle: trackData.cog
             }
 
             visible: vectorVisible
@@ -71,15 +76,15 @@ MapQuickItem {
             id: image
             anchors.fill: parent
             anchors.centerIn: parent
-            source: "../../../assets/icons/track/smartport/"+modelData.code.substring(0,2)+"/"+modelData.code.substring(2,4)+"/"+modelData.code.substring(4,6)+"/"+modelData.code+".svg"
+            source: "../../../assets/icons/track/smartport/"+trackData.code.substring(0,2)+"/"+trackData.code.substring(2,4)+"/"+trackData.code.substring(4,6)+"/"+trackData.code+".svg"
             fillMode: Image.PreserveAspectFit
             smooth: true
-            opacity: modelData.state === 1 ? 0.5 : 1.0
+            opacity: trackData.state === 1 ? 0.5 : 1.0
         }
 
         Text {
             id: trackLabel
-            text: "T"+qsTr(modelData.tracknumber.toString())
+            text: "T"+qsTr(trackData.tracknumber.toString())
             font.pixelSize: 12
             color: "black"
             anchors.left: parent.right
@@ -96,15 +101,14 @@ MapQuickItem {
             grabPermissions: PointerHandler.CanTakeOverFromAnything
             onTapped: {
                 console.log("[TrackPanel] TapHandler tapped on track!")
-                traceMarker.requestPanel(modelData, traceMarker)
+                PanelManager.openPanel(trackData, traceMarker)
                 console.log("[TrackPanel] post")
-
             }
         }
     }
 
     Component.onCompleted: {
-        console.log("[Track.qml] istanziato, tracknumber: " + modelData.tracknumber)
+        console.log("[Track.qml] istanziato, tracknumber: " + trackData.tracknumber)
         mapView.addMapItem(traceMarker)
         traceMarker.screenPos = mapView.fromCoordinate(traceMarker.coordinate)
         // Se è Nan entrambi significa che è fuori schermo.
@@ -126,6 +130,28 @@ MapQuickItem {
             traceMarker.link.visibleChanged.connect(traceMarker.handleLinkVisibleChanged)
         }
     }
+
+    onVisibleChanged: {
+        if (visible)
+            traceMarker.screenPos = mapView.fromCoordinate(traceMarker.coordinate)
+    }
+
+    // Quando la coordinate cambia (es. nuovo burst MQTT)
+    onCoordinateChanged: updateScreenPos()
+
+    // Quando la mappa cambia centro o livello di zoom
+    Connections {
+        target: mapView
+
+        function onCenterChanged() {
+            updateScreenPos()
+        }
+
+        function onZoomLevelChanged() {
+            updateScreenPos()
+        }
+    }
+
 
     function handleLinkVisibleChanged()
     {
@@ -172,7 +198,7 @@ MapQuickItem {
     // -- TRACK MOVEMENT AREA ----------- //
 
     function updateHeading() {
-        heading = (track.vel && vectorVisible) ? (Math.atan2(-track.vel[1],track.vel[0]))* (180/Math.PI) : 0.0
+        heading = (trackData.vel && vectorVisible) ? (Math.atan2(-trackData.vel[1],trackData.vel[0]))* (180/Math.PI) : 0.0
         angle = heading-correctionAngle
     }
 
