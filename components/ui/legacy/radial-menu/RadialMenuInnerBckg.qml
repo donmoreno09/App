@@ -44,19 +44,15 @@ Widgets.BaseArcShapeWidget {
     begin: 0
     end: 360
 
-    onLongPressed: (evtHandler, w) => {
+    onLongPressed: function (evtHandler, w) {
+        handleGlowPulse();
+    }
 
-                        handleGlowPulse();
-
-                   }
-
-    onNavSrcChanged: () => {
-
-
-        if(navSrc.toString().length > 0)
-          state = "navigation"
+    onNavSrcChanged: function () {
+        if (navSrc.toString().length > 0)
+            state = "navigation"
         else
-          state = "default"
+            state = "default"
     }
 
 
@@ -84,68 +80,58 @@ Widgets.BaseArcShapeWidget {
                 visible: false
                 mipmap: true
                 antialiasing: true
-
-        //        scale: 0.8 // do not use with animation, gfx glich and lagging (Why?)
-
+                //        scale: 0.8 // do not use with animation, gfx glich and lagging (Why?)
             }
 
 
             Button {
-                   id: rmiBckgLogoLabel
-                   width: parent.width
-                   anchors.top: rmiBckgLogoImage.bottom
-                   visible: true
-                   smooth: true
-                   flat: true
-                   antialiasing: true
-                   contentItem: Text {
-                                        id:rmiBckgLogoLabelText
-                                        text: backParentName
-                                        horizontalAlignment : Text.AlignHCenter
-                                        font.weight: Font.Bold
-                                        font.pointSize: 14
-                                        font.capitalization: Font.AllUppercase
-                                        color: rmiBckgLogoLabel.down ? "#95c7ed" : "white"
-                                        smooth: true
-                                        antialiasing: true
-                                        font.family: radialMenuInnerBckg.fontFamily
+                id: rmiBckgLogoLabel
+                width: parent.width
+                anchors.top: rmiBckgLogoImage.bottom
+                visible: true
+                smooth: true
+                flat: true
+                antialiasing: true
+                contentItem: Text {
+                    id:rmiBckgLogoLabelText
+                    text: backParentName
+                    horizontalAlignment : Text.AlignHCenter
+                    font.weight: Font.Bold
+                    font.pointSize: 14
+                    font.capitalization: Font.AllUppercase
+                    color: rmiBckgLogoLabel.down ? "#95c7ed" : "white"
+                    smooth: true
+                    antialiasing: true
+                    font.family: radialMenuInnerBckg.fontFamily
+                }
 
+                background: Rectangle {
+                    border.color: rmiBckgLogoLabel.down ? "transparent" : "transparent"
+                    color: rmiBckgLogoLabel.down ? "transparent" : "transparent"
+                }
 
-
-                       }
-
-                   background: Rectangle {
-                           border.color: rmiBckgLogoLabel.down ? "transparent" : "transparent"
-                           color: rmiBckgLogoLabel.down ? "transparent" : "transparent"
-
-                       }
-
-
-
-
-
-                   onClicked: radialMenuInnerBckg.handleBackBtnClicked()
+                onClicked: radialMenuInnerBckg.handleBackBtnClicked()
             }
 
 
             Glow {
-                        id: rmiBckgLogoImageGlowEffect
-                        source: rmiBckgLogoImage
-                        anchors.fill: rmiBckgLogoImage
-                        color: "#5281c6f0"
-                        radius: 0
-                        scale: rmiBckgLogoImage.scale
+                id: rmiBckgLogoImageGlowEffect
+                source: rmiBckgLogoImage
+                anchors.fill: rmiBckgLogoImage
+                color: "#5281c6f0"
+                radius: 0
+                scale: rmiBckgLogoImage.scale
 
             }
 
             Glow {
-                        id: rmiBckgLogoLabelGlowEffect
-                        source: rmiBckgLogoLabel
-                        anchors.fill: rmiBckgLogoLabel
-                        color: "#5281c6f0"
-                        radius: 0
-                        scale: rmiBckgLogoLabel.scale
-                        visible: navTextVisible
+                id: rmiBckgLogoLabelGlowEffect
+                source: rmiBckgLogoLabel
+                anchors.fill: rmiBckgLogoLabel
+                color: "#5281c6f0"
+                radius: 0
+                scale: rmiBckgLogoLabel.scale
+                visible: navTextVisible
 
             }
 
@@ -159,7 +145,6 @@ Widgets.BaseArcShapeWidget {
                     loops: Animation.Infinite
                     alwaysRunToEnd: true
 
-
                     PropertyAnimation { target: rmiBckgLogoLabelGlowEffect; property:"radius"; to: 8; easing.type: Easing.OutQuad; duration: 2000}
                     PropertyAnimation { target: rmiBckgLogoLabelGlowEffect; property:"radius"; to: 0; easing.type: Easing.InQuad; duration: 2000}
 
@@ -171,39 +156,28 @@ Widgets.BaseArcShapeWidget {
 
                     PropertyAnimation { target: rmiBckgLogoImageGlowEffect; property:"radius"; to: 8; easing.type: Easing.OutQuad; duration: 2000}
                     PropertyAnimation { target: rmiBckgLogoImageGlowEffect; property:"radius"; to: 0; easing.type: Easing.InQuad; duration: 2000}
-
-                   }
-
-
+                }
             }
-
         }
-
-
-
     }
 
     states: [
-
         State {
-                name: "default"
-                PropertyChanges { target: radialMenuInnerBckg; imageSrc: radialMenuInnerBckg.logoSrc }
-                PropertyChanges { target: radialMenuInnerBckg; paddingImgLeft: 10 ; paddingImgRight: 10; paddingImgTop: 10 ;paddingImgBottom: 10}
-                PropertyChanges { target: radialMenuInnerBckg; navTextVisible: false }
+            name: "default"
+            PropertyChanges { target: radialMenuInnerBckg; imageSrc: radialMenuInnerBckg.logoSrc }
+            PropertyChanges { target: radialMenuInnerBckg; paddingImgLeft: 10 ; paddingImgRight: 10; paddingImgTop: 10 ;paddingImgBottom: 10}
+            PropertyChanges { target: radialMenuInnerBckg; navTextVisible: false }
         },
         State {
-                name: "navigation"
-                PropertyChanges { target: radialMenuInnerBckg; imageSrc: radialMenuInnerBckg.navSrc}
-                PropertyChanges { target: radialMenuInnerBckg; paddingImgLeft: 70 ; paddingImgRight: 70; paddingImgTop: 30 ;paddingImgBottom: 70}
-                PropertyChanges { target: radialMenuInnerBckg; navTextVisible: true }
+            name: "navigation"
+            PropertyChanges { target: radialMenuInnerBckg; imageSrc: radialMenuInnerBckg.navSrc}
+            PropertyChanges { target: radialMenuInnerBckg; paddingImgLeft: 70 ; paddingImgRight: 70; paddingImgTop: 30 ;paddingImgBottom: 70}
+            PropertyChanges { target: radialMenuInnerBckg; navTextVisible: true }
         }
-
-
     ]
 
 
     Component.onCompleted: {
-
         radialMenuInnerBckg.state = "default"
 
         if (radialMenuInnerBckg.imageSrc)
@@ -235,10 +209,5 @@ Widgets.BaseArcShapeWidget {
         backButtonClicked(radialMenuInnerBckg.backParentId)
 
     }
-
-
-
-
-
 }
 
