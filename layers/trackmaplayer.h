@@ -24,6 +24,8 @@ public:
 
 signals:
     void tracksChanged();
+    void activated();
+    void deactivated();
 
 protected slots:
     void handleSelectionBoxSelected(const QString& target,

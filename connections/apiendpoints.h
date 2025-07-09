@@ -18,6 +18,10 @@ namespace ApiEndpoints {
 
     static const QString BaseUrlMenuManager = BaseUrl + "/menumanager";
     static const QString GetMenuManager = BaseUrlMenuManager + "/getMenu";
+
+    static const QString BaseTrackSenderUrl = BaseUrl + "/tracksender";
+    static const QString TrackSenderStart(const QString& topic) { return BaseTrackSenderUrl + "/" + topic + "/start"; }
+    static const QString TrackSenderStop(const QString& topic) { return BaseTrackSenderUrl + "/" + topic + "/stop"; }
 }
 
 #endif // APIENDPOINTS_H

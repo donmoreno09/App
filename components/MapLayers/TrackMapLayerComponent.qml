@@ -3,6 +3,7 @@ import QtLocation 6.8
 import QtPositioning 6.8
 import raise.map.layers 1.0
 import raise.singleton.layermanager 1.0
+import raise.singleton.trackmanager 1.0
 import raise.singleton.mqtt 1.0
 
 MapItemGroup {
@@ -63,6 +64,7 @@ MapItemGroup {
     Component.onCompleted: {
         console.log("[TrackMapLayerComponent:Component.onCompleted] layer : " + trackMapLayerComponent.layerName + " notify layer ready...")
         LayerManager.registerLayer(trackMapLayerBusinessLogic)
+        TrackManager.registerLayer("ais", trackMapLayerBusinessLogic)
         MqttClientService.registerLayer("TrackLayer1", trackMapLayerBusinessLogic);
         trackMapLayerBusinessLogic.initialize()
     }
@@ -75,8 +77,19 @@ MapItemGroup {
 
     Connections {
         target: trackMapLayerBusinessLogic
+
         function onLayerReady() {
             LayerManager.notifyLayerReady(trackMapLayerBusinessLogic)
+        }
+
+        function onActivated() {
+            console.log("AIS ACTIVATED!")
+            trackMapLayerComponent.visible = true
+        }
+
+        function onDeactivated() {
+            console.log("AIS DEACTIVATED!")
+            trackMapLayerComponent.visible = false
         }
     }
 }

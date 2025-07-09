@@ -1,5 +1,6 @@
 #include "radialmenucontroller.h"
 #include <QDebug>
+#include "../core/trackmanager.h"
 
 RadialMenuController::RadialMenuController(QObject *parent)
     : QObject(parent)
@@ -64,7 +65,6 @@ void RadialMenuController::setNodeActive(const QString& id, bool active)
     auto* node = m_nodes.value(id, nullptr);
     auto* parent = m_nodes.value(node->parent(), nullptr);
     node->setActive(active);
-    qDebug() << "[SetNodeActive:" << node->propertyTreeNode()->name() << "] " << node->id() << ": " << active;
 }
 
 void RadialMenuController::buildTriggerMap()
@@ -72,10 +72,22 @@ void RadialMenuController::buildTriggerMap()
     // Triggers for tracks' nodes
     m_triggerMap.insert("doc-space", [](bool active) {
         qDebug() << "doc-space triggered!";
+
+        if (active) {
+            TrackManager::instance()->activate("doc-space");
+        } else {
+            TrackManager::instance()->deactivate("doc-space");
+        }
     });
 
     m_triggerMap.insert("ais", [](bool active) {
         qDebug() << "ais triggered!";
+
+        if (active) {
+            TrackManager::instance()->activate("ais");
+        } else {
+            TrackManager::instance()->deactivate("ais");
+        }
     });
 
     // Triggers for maps' nodes
