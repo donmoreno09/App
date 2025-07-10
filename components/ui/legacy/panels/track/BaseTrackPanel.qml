@@ -337,6 +337,21 @@ PanelsCommons.BasePanel {
         let res = []
         switch (key)
         {
+            case "name": {
+                if (trackData.tracktype === 'doc-space') res.push({ key: "Name", value: value ? value : "unknown" })
+                break
+            }
+
+            case "destination": {
+                if (value && trackData.tracktype === 'doc-space') res.push({ key: "Destination", value })
+                break
+            }
+
+            case "cargo_code": {
+                if (value && trackData.tracktype === 'doc-space') res.push({ key: "Cargo Code", value })
+                break
+            }
+
             case "time": {
                 let k = "timestamp"
                 let date = new Date(value*1000);

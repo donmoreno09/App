@@ -10,6 +10,7 @@ MapQuickItem {
 
     // Qui la proprità di base che contiene il modello della traccia.
     property var trackData: modelData
+    property string trackType: "" // also called as the MQTT topic
 
     // Positioning in coordinates
     coordinate: QtPositioning.coordinate(trackData.pos[0], trackData.pos[1])
@@ -101,6 +102,7 @@ MapQuickItem {
             grabPermissions: PointerHandler.CanTakeOverFromAnything
             onTapped: {
                 console.log("[TrackPanel] TapHandler tapped on track!")
+                trackData.tracktype = traceMarker.trackType
                 PanelManager.openPanel(trackData, traceMarker)
                 console.log("[TrackPanel] post")
             }

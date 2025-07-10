@@ -44,7 +44,9 @@ void MqttClientService::loadConfiguration(const QString& path) {
 
     QJsonObject topics = root["topics"].toObject();
     for (const QString &topic : topics.keys()) {
-        topicToLayer[topic] = topics[topic].toString();
+        QString layer = topics[topic].toString();
+        topicToLayer[topic] = layer;
+        layerToTopic[layer] = topic;
     }
 }
 
@@ -78,6 +80,11 @@ void MqttClientService::registerLayer(const QString& name, QObject* layer) {
 void MqttClientService::registerParser(const QString& topic, IMessageParser* parser) {
     topicToParser[topic] = parser;
     qDebug() << "[MQTT] Parser registrato per topic" << topic;
+}
+
+QString MqttClientService::getTopicFromLayer(const QString &layer)
+{
+    return layerToTopic.value(layer);
 }
 
 void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopicName& topicName) {

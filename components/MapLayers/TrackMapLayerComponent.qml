@@ -21,7 +21,10 @@ MapItemGroup {
 
     Component {
         id: trackDelegate
-        Track { }
+
+        Track {
+            trackType: MqttClientService.getTopicFromLayer("TrackLayer1")
+        }
     }
 
     Repeater {
