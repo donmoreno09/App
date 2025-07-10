@@ -15,6 +15,10 @@ import "../../commons" as UiWidgets
 
 PanelsCommons.BasePanel {
     id: baseTrackPanel
+
+    required property var trackData   // PORTING: dati live della traccia
+    required property var marker      // PORTING: riferimento al Track.qml
+
     objectName: "baseTrackPanel"
     width: 330
     height: 390
@@ -68,57 +72,18 @@ PanelsCommons.BasePanel {
     headerTitleText: "Trace unknown"
 
     property var link
-    property var marker
     property string trackUid
     property string trackChannel
-
     property bool ownShipPovActive: false
 
     name: "Track"
-
-    /*
-        qml: iridess_uid bdbbcb98-1742-43dc-8839-88b5665b13d6
-        qml: track_uid 0TU1TSTQwNDEwMDk0NQ==
-        qml: track_lid
-        qml: lid_scope_uid
-        qml: time 1718872063
-        qml: cs 0
-        qml: pos [40,11.1912,0]
-        qml: vel [-5.65843621399177,-1.0394378696466733e-15,0]
-        qml: acc []
-        qml: covarianceValue []
-        qml: covarianceType 3
-        qml: tableApp6 30
-        qml: entity SHIP
-        qml: entityType SHIP1
-        qml: entitySubtype SHIP2
-        qml: sector1Modifier MMSI404100945
-        qml: sector2Modifier SMOD2
-        qml: IFFValue
-        qml: IFFMode 0
-
-    property var trackData: [
-
-        {"key": "time", "value": 1718872063},
-        {"key": "pos", "value":  [40,11.1912,0]},
-        {"key": "vel", "value":  [-5.65843621399177,-1.0394378696466733e-15,0]},
-        {"key": "entity", "value":"SHIP"},
-        {"key": "entityType", "value":"SHIP1"},
-        {"key": "entitySubtype", "value":"SHIP2"},
-        {"key": "sector1Modifier", "value":"MMSI404100945"},
-        {"key": "sector2Modifier", "value":"SMOD2"},
-
-
-    ]
-    */
-
-    property var trackData
 
     Connections {
         target: baseTrackPanel.closeButton
 
         function onClicked() {
-            TracksPanelsController.doClose(trackUid, marker, trackChannel)
+            console.log("[WARNING][BaseTrackPanel] commentato per refactor")
+            //TracksPanelsController.doClose(trackUid, marker, trackChannel)
         }
     }
 
@@ -242,7 +207,8 @@ PanelsCommons.BasePanel {
             imagePadding: 2
 
             onClicked: {
-                WmsMapController.centerOn(baseTrackPanel.marker.coordinate)
+                console.log("[WARNING][BaseTrackPanel] commentato per refactor")
+                //WmsMapController.centerOn(baseTrackPanel.marker.coordinate)
             }
         }
 
@@ -409,7 +375,8 @@ PanelsCommons.BasePanel {
             infoListView.contentItem.children[index].saveChanges()
             changes[infoListView.contentItem.children[index].objectName] = infoListView.contentItem.children[index].valueTxt
         }
-        TrackDetailsController.changeTrackDetails(trackUid,changes["symbol"],changes["identity"]);
+        console.log("[WARNING][BaseTrackPanel] commentato per refactor")
+        // TrackDetailsController.changeTrackDetails(trackUid,changes["symbol"],changes["identity"]);
     }
 
     function getValuesFromKey(key) {
@@ -478,30 +445,36 @@ PanelsCommons.BasePanel {
     }
 
     function updateData() {
-        bodyItemModel.clear()
-        baseTrackPanel.headerTitleText = "T"+(baseTrackPanel.trackData.trackedObject.trackNumber) ? "T"+baseTrackPanel.trackData.trackedObject.trackNumber : "Trace unknown"
-
-        var keys = Object.keys(baseTrackPanel.trackData)
-
-        for (var i = 0; i < keys.length; i++) {
-            let val = baseTrackPanel.trackData[keys[i]]
-            let listModelVal = baseTrackPanel.parseValue(keys[i], val)
-            if (listModelVal) {
-                for (let i in listModelVal) {
-                    bodyItemModel.append(listModelVal[i])
-                }
-            }
-
+        console.log("[INFO][BaseTrackPanel] updateData for track: ", baseTrackPanel.trackData.trackNumber)
+        if (!baseTrackPanel.trackData) {
+            console.log("[WARNING][BaseTrackPanel] trackData is null ...")
+            return
         }
+        bodyItemModel.clear()
 
-        var keys = Object.keys(baseTrackPanel.trackData.trackedObject)
+        // Aggiorna il titolo
+        // OLD: baseTrackPanel.headerTitleText = "T"+(baseTrackPanel.trackData.trackedObject.trackNumber) ? "T"+baseTrackPanel.trackData.trackedObject.trackNumber : "Trace unknown"
+        if (baseTrackPanel.trackData.trackNumber !== undefined)
+            baseTrackPanel.headerTitleText = "T" + trackData.trackNumber
+        else
+            baseTrackPanel.headerTitleText = qsTr("Trace unknown")
 
-        for (var i = 0; i < keys.length; i++) {
-            let val = baseTrackPanel.trackData.trackedObject[keys[i]]
-            let listModelVal = baseTrackPanel.parseValue(keys[i], val)
-            if (listModelVal) {
-                for (let i in listModelVal) {
-                    bodyItemModel.append(listModelVal[i])
+
+        /* Scorro tutte le proprietà di trackData */
+        for (const key of Object.keys(trackData)) {
+
+            const value = trackData[key]
+
+            console.log("[INFO][BaseTrackPanel] updateData → key:", key, "value:", JSON.stringify(value))
+
+            /* 4a. Converto la coppia (key,value) in righe “pronte” per la view */
+            const rows = parseValue(key, value)   // rows è un array o null
+
+            /* 4b. Se parseValue() ha restituito qualcosa, lo aggiungo al modello */
+            if (rows) {
+                for (const row of rows) {
+                    bodyItemModel.append(row)
+                    console.log("[INFO][BaseTrackPanel] updateData append row:", row)
                 }
             }
         }
@@ -548,14 +521,14 @@ PanelsCommons.BasePanel {
                 break
             }
 
-            case "identity": {
-                res.push({"key":"identity","value":value, "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox})
-                break;
-            }
-            case "symbol_set": {
-                res.push({"key":"Symbol","value":value, "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox})
-                break;
-            }
+            // case "identity": {
+            //     res.push({"key":"identity","value":value, "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox})
+            //     break;
+            // }
+            // case "symbol_set": {
+            //     res.push({"key":"Symbol","value":value, "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox})
+            //     break;
+            // }
         }
 
         if (res.length > 0)

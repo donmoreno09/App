@@ -16,4 +16,14 @@ Window {
     WMSMapLayer {
         id: wmsmaplayer
     }
+
+    // uiOverlay per pannelli ed altro
+    Item {
+        id: uiOverlay
+        anchors.fill: parent
+        z: 1000
+    }
+
+    property alias uiOverlay: uiOverlay
+
 }

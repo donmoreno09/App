@@ -25,22 +25,47 @@ QtObject {
         const comp = Qt.createComponent(
             Qt.resolvedUrl("./track/BaseTrackPanel.qml"))
 
-        activePanel = comp.createObject(Qt.application.activeWindow, {
+        if (comp.status === Component.Error) {
+            console.error("[PanelManager] load panel error: ", comp.errorString())
+            return
+        }
+
+        const parentObj = marker
+
+        activePanel = comp.createObject(parentObj, {
             trackData    : trackData,
             marker       : marker,
             trackUid     : trackData.iridess_uid,
             trackChannel : marker.channel || "smartport"
         })
 
-        /* Collega graficamente marker ↔ pannello */
-        if (activePanel && marker && marker.linkToPanel) {
-            /* BaseTrackPanel spesso crea internamente la “link” e la espone
-               con una property   link: TrackPanelLink { … }                */
-            if (activePanel.link)           // ↙︎ fallback per versioni legacy
-                marker.linkToPanel(activePanel.link)
-            else
-                marker.linkToPanel(activePanel)   // se la link coincide col panel
+        if (!activePanel) {
+            console.error("[PanelManager] createObject panel failed:", panelComp.errorString())
+            return
         }
+
+        /* Carica link */
+        const linkComp = Qt.createComponent(Qt.resolvedUrl("./track/BaseTrackPanelLink.qml"))
+        if (linkComp.status === Component.Error) {
+            console.warn("[PanelManager] link load error:", linkComp.errorString())
+        }
+
+        let linkObj = null
+        if (linkComp.status === Component.Ready) {
+            linkObj = linkComp.createObject(parentObj, {
+                panelAnchor : Qt.point(0, 0),          // valori iniziali, verranno aggiornati
+                markerAnchor: Qt.point(0, 0),
+                color       : activePanel.bodyGradientColorEnd || "yellow"
+            })
+        }
+
+        /* Avvisa pannello e marker */
+        if (activePanel.open)               // metodo già presente in legacy
+            activePanel.open(marker, linkObj)
+
+        if (marker.linkToPanel && linkObj)
+            marker.linkToPanel(linkObj)
+
 
         linkedMarker = marker
         currentUid   = trackData.iridess_uid
