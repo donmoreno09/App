@@ -445,7 +445,7 @@ PanelsCommons.BasePanel {
     }
 
     function updateData() {
-        console.log("[INFO][BaseTrackPanel] updateData for track: ", baseTrackPanel.trackData.trackNumber)
+        console.log("[INFO][BaseTrackPanel] updateData for track: ", baseTrackPanel.trackData.tracknumber)
         if (!baseTrackPanel.trackData) {
             console.log("[WARNING][BaseTrackPanel] trackData is null ...")
             return
@@ -453,9 +453,9 @@ PanelsCommons.BasePanel {
         bodyItemModel.clear()
 
         // Aggiorna il titolo
-        // OLD: baseTrackPanel.headerTitleText = "T"+(baseTrackPanel.trackData.trackedObject.trackNumber) ? "T"+baseTrackPanel.trackData.trackedObject.trackNumber : "Trace unknown"
-        if (baseTrackPanel.trackData.trackNumber !== undefined)
-            baseTrackPanel.headerTitleText = "T" + trackData.trackNumber
+        // OLD: baseTrackPanel.headerTitleText = "T"+(baseTrackPanel.trackData.trackedObject.tracknumber) ? "T"+baseTrackPanel.trackData.trackedObject.tracknumber : "Trace unknown"
+        if (baseTrackPanel.trackData.tracknumber !== undefined)
+            baseTrackPanel.headerTitleText = "T" + trackData.tracknumber
         else
             baseTrackPanel.headerTitleText = qsTr("Trace unknown")
 
