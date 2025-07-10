@@ -64,6 +64,7 @@ MapItemGroup {
                         PanelManager.linkedMarker = m
                         m.linkToPanel(PanelManager.activePanel.link || PanelManager.activePanel)
                     }
+                    m.trackData.tracktype = MqttClientService.getTopicFromLayer("TrackLayer2")
                     PanelManager.activePanel.trackData = m.trackData   // refresh info
                     break
                 }
