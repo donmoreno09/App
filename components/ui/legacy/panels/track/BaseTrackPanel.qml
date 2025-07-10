@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Shapes
+import QtPositioning
 
 import "../../basewidgets" as Widgets
 import "../commons" as PanelsCommons
@@ -79,6 +80,7 @@ PanelsCommons.BasePanel {
     name: "Track"
 
     signal closed()
+    signal centerViewRequested(var coordinate)
 
     Connections {
         target: baseTrackPanel.closeButton
@@ -198,7 +200,7 @@ PanelsCommons.BasePanel {
 
             onClicked: {
                 console.log("[WARNING][BaseTrackPanel] commentato per refactor")
-                //WmsMapController.centerOn(baseTrackPanel.marker.coordinate)
+                baseTrackPanel.centerViewRequested(QtPositioning.coordinate(trackData.pos[0], trackData.pos[1]))
             }
         }
     }

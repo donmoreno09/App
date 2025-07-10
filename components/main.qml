@@ -29,4 +29,11 @@ Window {
         PanelManager.uiOverlay = uiOverlay
     }
 
+    Connections {
+        target: PanelManager
+
+        function onCenterViewRequested(coordinate) {
+            wmsmaplayer.map.center = coordinate
+        }
+    }
 }

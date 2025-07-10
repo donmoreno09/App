@@ -9,6 +9,8 @@ QtObject {
 
     property var uiOverlay : null
 
+    signal centerViewRequested(var coordinate)
+
     /**
      * Apre (o chiude) il pannello per la traccia richiesta.
      *   @param trackData  QVariantMap arrivato via MQTT (modelData del marker)
@@ -72,6 +74,8 @@ QtObject {
             linkedMarker = null
             currentUid   = ""
         })
+
+        activePanel.centerViewRequested.connect(centerViewRequested)
 
         /* Avvisa pannello e marker */
         if (activePanel.open)               // metodo già presente in legacy
