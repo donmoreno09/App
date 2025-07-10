@@ -92,6 +92,7 @@ Widgets.BaseScatter {
                 font.family: baseFont
                 anchors.leftMargin: parent.width / 25
             }
+
             Widgets.BaseButton {
                 id: closeBtn
                 width: header.height

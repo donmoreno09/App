@@ -78,12 +78,13 @@ PanelsCommons.BasePanel {
 
     name: "Track"
 
+    signal closed()
+
     Connections {
         target: baseTrackPanel.closeButton
 
         function onClicked() {
-            console.log("[WARNING][BaseTrackPanel] commentato per refactor")
-            //TracksPanelsController.doClose(trackUid, marker, trackChannel)
+            baseTrackPanel.close()
         }
     }
 
@@ -436,6 +437,7 @@ PanelsCommons.BasePanel {
         }
         baseTrackPanel.marker = null
         baseTrackPanel.destroy()
+        baseTrackPanel.closed()
     }
 
     function handleLinkVisibleChanged()

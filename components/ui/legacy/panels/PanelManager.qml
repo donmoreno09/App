@@ -61,6 +61,18 @@ QtObject {
             })
         }
 
+        activePanel.closed.connect(function () {
+            // After closing BaseTrackPanel (activePanel in this case)
+            // This function will be called to handle cleanups associated
+            // with this PanelManager.
+            if (linkedMarker && linkedMarker.unlinkToPanel)
+                linkedMarker.unlinkToPanel()
+
+            activePanel  = null
+            linkedMarker = null
+            currentUid   = ""
+        })
+
         /* Avvisa pannello e marker */
         if (activePanel.open)               // metodo già presente in legacy
             activePanel.open(marker, linkObj)
@@ -75,14 +87,10 @@ QtObject {
 
     /** Chiude e pulisce lo stato */
     function closeCurrent() {
-        if (linkedMarker && linkedMarker.unlinkToPanel)
-            linkedMarker.unlinkToPanel()
-
-        if (activePanel)
-            activePanel.destroy()
-
-        activePanel  = null
-        linkedMarker = null
-        currentUid   = ""
+        if (activePanel) {
+            // This is an internal function of BaseTrackPanel
+            // which cleans up and destroys itself.
+            activePanel.close()
+        }
     }
 }
