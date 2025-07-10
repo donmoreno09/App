@@ -95,15 +95,6 @@ PanelsCommons.BasePanel {
         parent: baseTrackPanel.bodySection
         anchors.fill: parent
         anchors.centerIn: parent
-        property bool editMode: false
-
-        onEditModeChanged: {
-            for(let index in infoListView.contentItem.children) {
-                infoListView.contentItem.children[index].editMode = info.editMode
-                //console.log("***saveChanges panel****", infoListView.contentItem.children[index], infoListView.contentItem.children[index].keyTxt, infoListView.contentItem.children[index].valueTxt)
-                //console.log(Object.keys(infoListView.contentItem.children[index]))
-            }
-        }
 
         ListModel {
             id: bodyItemModel
@@ -133,8 +124,6 @@ PanelsCommons.BasePanel {
                     height: 20
                     keyTxt: qsTr(key.toLowerCase())
                     valueTxt: qsTr(value.toLowerCase())
-                    editingModeType: editingMode
-                    editingModeValues: (editingMode === PanelsCommons.PanelListItem.EditModeType.ComboBox) ? baseTrackPanel.getValuesFromKey(key.toLowerCase()) : []
                     keyColor: "#FFF0CB"
                     valueColor: "#ffffff"
                     width: info.width - ((info.width / 25) * 2 )
@@ -191,7 +180,7 @@ PanelsCommons.BasePanel {
             image: "qrc:///assets/icons/panels/track/trackcenter.svg"
             text: "center view"
             anchors.left: parent.left
-            anchors.top: historyBtn.bottom
+            anchors.top: parent.top
             anchors.topMargin: parent.width / 25
             anchors.leftMargin: parent.width / 25
             enabled: !baseTrackPanel.ownShipPovActive
@@ -212,145 +201,7 @@ PanelsCommons.BasePanel {
                 //WmsMapController.centerOn(baseTrackPanel.marker.coordinate)
             }
         }
-
-        Widgets.BaseButton {
-            id: editButton
-            width: 120
-            height: 30
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width / 25
-            anchors.top: parent.top
-            anchors.topMargin: parent.width / 25
-            text: "edit"
-            image: "qrc:///assets/icons/panels/track/edit.svg"
-            orientation: Widgets.BaseButton.LayoutOrientation.Horizontal
-            direction: Widgets.BaseButton.LayoutDirection.LeftToRight
-            labelHAlignment: Text.AlignLeft
-            backgroundColor: "#4a92cb"
-            backgroundColorDown: "#184b80"
-            labelColor: "#cfdff3"
-            labelColorDown: "#ffffff"
-            imageColor: "#cfdff3"
-            imageColorDown: "#ffffff"
-            labelBoldDown: true
-            imagePadding: 2
-
-            onClicked: {
-                    baseTrackPanel.state = "editMode"
-                }
-            }
-
-
-        Widgets.BaseButton {
-            id: saveButton
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width / 25
-            width: centerViewBtn.width * .5 - backButton.anchors.leftMargin * .5
-            height: editButton.height
-            anchors.top: parent.top
-            anchors.topMargin: parent.width / 25
-            text: "save"
-            image: "qrc:///assets/icons/panels/track/save.svg"
-            orientation: Widgets.BaseButton.LayoutOrientation.Horizontal
-            direction: Widgets.BaseButton.LayoutDirection.LeftToRight
-            labelHAlignment: Text.AlignLeft
-            backgroundColor: "#4a92cb"
-            backgroundColorDown: "#184b80"
-            labelColor: "#cfdff3"
-            labelColorDown: "#ffffff"
-            imageColor: "#cfdff3"
-            imageColorDown: "#ffffff"
-            labelBoldDown: true
-            imagePadding: 2
-            visible: false
-
-            onClicked: {
-                baseTrackPanel.saveChanges()
-                baseTrackPanel.state = "baseMode"
-                console.log("*****edit panel state", baseTrackPanel.state)
-            }
-        }
-
-        Widgets.BaseButton {
-            id: backButton
-            image: "qrc:///assets/icons/panels/track/back.svg"
-            anchors.top: parent.top
-            anchors.topMargin: parent.width / 25
-            anchors.left: saveButton.right
-            anchors.leftMargin: 4
-            width: centerViewBtn.width * .5 - anchors.leftMargin * .5
-            height: editButton.height
-            text: "back"
-            orientation: Widgets.BaseButton.LayoutOrientation.Horizontal
-            direction: Widgets.BaseButton.LayoutDirection.LeftToRight
-            labelHAlignment: Text.AlignLeft
-            backgroundColor: "#4a92cb"
-            backgroundColorDown: "#184b80"
-            labelColor: "#cfdff3"
-            labelColorDown: "#ffffff"
-            imageColor: "#cfdff3"
-            imageColorDown: "#ffffff"
-            labelBoldDown: true
-            imagePadding: 2
-            visible: false
-
-            onClicked: {
-                baseTrackPanel.state = "baseMode"
-            }
-        }
     }
-
-    states: [
-        State {
-            name: "editMode"
-
-            PropertyChanges {
-                target: editButton
-                visible: false
-            }
-
-            PropertyChanges {
-                target: backButton
-                visible: true
-            }
-
-            PropertyChanges {
-                target: saveButton
-                visible: true
-            }
-
-            PropertyChanges {
-                target: info
-                editMode: true
-            }
-
-        },
-        State {
-            name: "baseMode"
-
-            PropertyChanges {
-                target: editButton
-                visible: true
-            }
-
-            PropertyChanges {
-                target: backButton
-                visible: false
-            }
-
-            PropertyChanges {
-                target: saveButton
-                visible: false
-            }
-
-            PropertyChanges {
-                target: info
-                editMode: false
-            }
-
-        }
-    ]
-
 
     Component.onCompleted: {
         console.log("BaseTrackPanel on completed...")
@@ -493,7 +344,7 @@ PanelsCommons.BasePanel {
                 let v = date.toLocaleString({ "day": "2-digit", "month": "2-digit", "year": "numeric",
                                           "hour": "2-digit", "minute": "2-digit", "second": "2-digit"});
 
-                res.push({"key": k, "value": v, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                res.push({"key": k, "value": v})
 
                 break
             }
@@ -506,11 +357,11 @@ PanelsCommons.BasePanel {
                 let v2 = (value.length >= 2 && value[1]) ? value[1].toFixed(5)+" °" : "unknown"
                 let v3 = (value.length >= 2 && value[2]) ? ((value[2]*3.281)/100.0).toFixed(2)+ " hFt" : "unknown"
 
-                res.push({"key": k1, "value": v1, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
-                res.push({"key": k2, "value": v2, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                res.push({"key": k1, "value": v1})
+                res.push({"key": k2, "value": v2})
 
                 // Don't show altitude if it doesn't exist.
-                if (v3 !== "unknown") res.push({"key":k3,"value":v3, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit  })
+                if (v3 !== "unknown") res.push({"key":k3,"value":v3  })
                 break
             }
 
@@ -519,20 +370,11 @@ PanelsCommons.BasePanel {
                 let v = value
 
                 let heading=(((Math.atan2(-v[1],v[0]))* (180/Math.PI))+90.0)
-                res.push({"key": "Heading", "value": heading.toString()+"°","editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                res.push({"key": "Heading", "value": heading.toString()+"°"})
                 let vel=Math.sqrt(Math.pow(v[0],2)+Math.pow(v[1],2))
-                res.push({"key": "Speed", "value": vel.toFixed(2)+" Km/h", "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
+                res.push({"key": "Speed", "value": vel.toFixed(2)+" Km/h"})
                 break
             }
-
-            // case "identity": {
-            //     res.push({"key":"identity","value":value, "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox})
-            //     break;
-            // }
-            // case "symbol_set": {
-            //     res.push({"key":"Symbol","value":value, "editingMode": PanelsCommons.PanelListItem.EditModeType.ComboBox})
-            //     break;
-            // }
         }
 
         if (res.length > 0)

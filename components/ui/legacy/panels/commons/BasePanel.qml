@@ -136,7 +136,7 @@ Widgets.BaseScatter {
         QTDSComponents.RectangleItem {
             id: footer
             width: parent.width
-            height: parent.height / 3.8
+            height: parent.height / 6.8
             radius: 0
             anchors.bottom: parent.bottom
             gradient: LinearGradient {
