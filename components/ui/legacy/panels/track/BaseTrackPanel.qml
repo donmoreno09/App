@@ -508,7 +508,9 @@ PanelsCommons.BasePanel {
 
                 res.push({"key": k1, "value": v1, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
                 res.push({"key": k2, "value": v2, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit})
-                res.push({"key":k3,"value":v3, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit  })
+
+                // Don't show altitude if it doesn't exist.
+                if (v3 !== "unknown") res.push({"key":k3,"value":v3, "editingMode": PanelsCommons.PanelListItem.EditModeType.NoEdit  })
                 break
             }
 
