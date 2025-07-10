@@ -5,6 +5,7 @@ import QtQuick.Layouts 6.8
 import QtQuick.Window 6.8
 
 import raise.map.layers 1.0
+import raise.singleton.panelmanager 1.0
 
 Window {
     id: mainWindow
@@ -24,6 +25,8 @@ Window {
         z: 1000
     }
 
-    property alias uiOverlay: uiOverlay
+    Component.onCompleted: {
+        PanelManager.uiOverlay = uiOverlay
+    }
 
 }

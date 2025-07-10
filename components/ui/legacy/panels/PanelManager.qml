@@ -1,11 +1,13 @@
 pragma Singleton
-import QtQuick 6.5
+import QtQuick 6.8
 
 QtObject {
     /* stato interno */
     property var    activePanel   : null    // istanza di BaseTrackPanel
     property var    linkedMarker  : null    // marker a cui è ancorato
     property string currentUid    : ""      // iridess_uid corrente
+
+    property var uiOverlay : null
 
     /**
      * Apre (o chiude) il pannello per la traccia richiesta.
@@ -30,7 +32,7 @@ QtObject {
             return
         }
 
-        const parentObj = marker
+        const parentObj = uiOverlay
 
         activePanel = comp.createObject(parentObj, {
             trackData    : trackData,
