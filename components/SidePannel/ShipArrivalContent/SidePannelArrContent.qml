@@ -36,7 +36,7 @@ ColumnLayout {
         Layout.fillWidth: true
 
         Text {
-            text: "Arrivi Navi"
+            text: "Ship Arrivals"
             font.pixelSize: 20
             font.bold: true
             font.family: "Arial"
@@ -52,16 +52,16 @@ ColumnLayout {
 
         SidePannelStatCard {
             icon: "⏱️"
-            title: "Prossima ora"
+            title: "Next Hour"
             value: controller.currentHourArrivalCount +
-                   (controller.currentHourArrivalCount === 1 ? " nave" : " navi")
+                   (controller.currentHourArrivalCount === 1 ? " ship" : " ships")
         }
 
         SidePannelStatCard {
             icon: "📅"
-            title: "Oggi"
+            title: "Today"
             value: controller.todayArrivalCount +
-                   (controller.todayArrivalCount === 1 ? " nave" : " navi")
+                   (controller.todayArrivalCount === 1 ? " ship" : " ships")
         }
 
         Item {
@@ -69,7 +69,7 @@ ColumnLayout {
         }
 
         Button {
-            text: "Ottieni Arrivi"
+            text: "Fetch Arrivals"
             enabled: !controller.isLoading
             Layout.alignment: Qt.AlignHCenter
             Layout.fillWidth: true

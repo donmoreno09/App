@@ -29,7 +29,7 @@ ColumnLayout {
         Layout.fillWidth: true
 
         Text {
-            text: "Selezione Intervallo Date"
+            text: "Date Range Selection"
             font.pixelSize: 18
             font.bold: true
             color: textColor
@@ -62,9 +62,9 @@ ColumnLayout {
 
             Text {
                 text: rangeCalendar.startDate && rangeCalendar.endDate ?
-                    "Selezionato: " + Qt.formatDate(rangeCalendar.startDate, "dd MMM yyyy") +
+                    "Selected: " + Qt.formatDate(rangeCalendar.startDate, "dd MMM yyyy") +
                     " - " + Qt.formatDate(rangeCalendar.endDate, "dd MMM yyyy") :
-                    "Seleziona un intervallo di date"
+                    "Select a date range"
                 font.pixelSize: 14
                 color: disabledColor
                 Layout.alignment: Qt.AlignHCenter
@@ -74,15 +74,15 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignLeft
                 Layout.topMargin: 10
                 icon: "🛳️"
-                title: "Navi in arrivo"
+                title: "Ships Arriving"
                 value: controller.dateRangeArrivalCount >= 0 ?
-                    controller.dateRangeArrivalCount + (controller.dateRangeArrivalCount === 1 ? " nave" : " navi") :
-                    "0 navi"
+                    controller.dateRangeArrivalCount + (controller.dateRangeArrivalCount === 1 ? " ship" : " ships") :
+                    "0 ships"
             }
         }
 
         Button {
-            text: "Ottieni Arrivi"
+            text: "Fetch Arrivals"
             enabled: !controller.isLoading && rangeCalendar.startDate && rangeCalendar.endDate
             Layout.alignment: Qt.AlignHCenter
             Layout.fillWidth: true
@@ -122,7 +122,6 @@ ColumnLayout {
                 )
             }
         }
-
 
         Item {
             Layout.fillHeight: true

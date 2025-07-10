@@ -28,7 +28,7 @@ ColumnLayout {
             text: "Date Time Range Selection"
             font.pixelSize: 18
             font.bold: true
-            color: "#333333"
+            color: "white"
             Layout.alignment: Qt.AlignHCenter
         }
 
@@ -125,7 +125,7 @@ ColumnLayout {
         }
 
         Button {
-            text: "Ottieni Arrivi"
+            text: "Fetch Arrivals"
             enabled: !controller.isLoading && rangeCalendar.startDate && rangeCalendar.endDate
             Layout.alignment: Qt.AlignHCenter
             Layout.fillWidth: true
@@ -136,7 +136,7 @@ ColumnLayout {
             background: Rectangle {
                 radius: 8
                 color: enabled ? "#1565C0" : disabledColor
-                border.color: borderColor
+                border.color: "#444"
                 border.width: 1
                 opacity: enabled ? 0.95 : 0.6
 

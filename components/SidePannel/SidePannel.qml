@@ -76,9 +76,9 @@ Rectangle {
                 { icon: "⛴️", label: "Ship Arrivals" },
                 { icon: "📅", label: "Ship Arrivals D" },
                 { icon: "⚙️", label: "Ship Arrivals DT" },
-                { icon: "🧭", label: "Trailers Predictions" },
-                { icon: "S" , label: "Layer controll" },
-                { icon: "🖥️", label: "Web Integration" }
+                { icon: "🧭", label: "Trailer Prediction" },
+                { icon: "S" , label: "Level Selector" },
+                { icon: "🖥️", label: "Ship Stowage" }
             ]
             delegate: Item {
                 width: tabBar.width
@@ -167,11 +167,11 @@ Rectangle {
             anchors.fill: parent
             anchors.margins: 2
             Component.onCompleted: {
-                console.log("LayersList caricato con layerList:", LayerManager.layerList)
+                console.log("LayersList loaded with layerList:", LayerManager.layerList)
             }
         }
 
-        SidePannelWebViewContent{
+        SidePannelWebViewContent {
             visible: currentTab === 5
             anchors.fill: parent
             width: parent.width
@@ -197,6 +197,4 @@ Rectangle {
             }
         }
     }
-
-
 }

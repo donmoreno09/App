@@ -166,7 +166,6 @@ Rectangle {
                             color: isInRange ? rangeHighlightColor : "transparent"
                         }
 
-                        // Circle for selected days
                         Rectangle {
                             width: parent.width * dayCheckboxSizeRatio
                             height: width
@@ -177,7 +176,6 @@ Rectangle {
                             color: (isFirstDay || isLastDay) ? accentColor : (isSelectable ? "transparent" : Qt.rgba(0.2, 0.2, 0.2, 0.5))
                         }
 
-                        // Day number
                         Text {
                             text: index + 1
                             anchors.centerIn: parent
