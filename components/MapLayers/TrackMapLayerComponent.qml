@@ -37,7 +37,7 @@ MapItemGroup {
     Component.onCompleted: {
         console.log("[TrackMapLayerComponent:Component.onCompleted] layer : " + trackMapLayerComponent.layerName + " notify layer ready...")
         LayerManager.registerLayer(trackMapLayerBusinessLogic)
-        TrackManager.registerLayer("ais", trackMapLayerBusinessLogic)
+        TrackManager.registerLayer(MqttClientService.getTopicFromLayer("TrackLayer1"), trackMapLayerBusinessLogic)
         MqttClientService.registerLayer("TrackLayer1", trackMapLayerBusinessLogic);
         trackMapLayerBusinessLogic.initialize()
     }
