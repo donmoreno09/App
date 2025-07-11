@@ -160,12 +160,12 @@ Item {
         }
     }
 
-    // RadialMenu {
-    //     id: radialMenu
-    //     width: 350
-    //     height: 350
+    RadialMenu {
+        id: radialMenu
+        width: 350
+        height: 350
 
-    //     logoSrc: Qt.resolvedUrl("./ui/assets/fnxt_n.svg")
-    //     logoGlowPulse: true
-    // }
+        logoSrc: Qt.resolvedUrl("./ui/assets/fnxt_n.svg")
+        logoGlowPulse: true
+    }
 }

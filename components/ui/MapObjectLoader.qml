@@ -37,6 +37,11 @@ MapItemGroup {
     // detach the original modelData preventing it
     // to be modified by this component's children.
     //
+    // The documentation's recommendation is to use
+    // required properties but as of how the current
+    // architecture is, for now we don't and therefore
+    // the warning above not to put required properties.
+    //
     // See:
     // - Models and Views in Qt Quick (https://doc.qt.io/qt-6/qtquick-modelviewsdata-modelview.html)
     // - Using C++ Models with Qt Quick Views (https://doc.qt.io/qt-6/qtquick-modelviewsdata-cppmodels.html)

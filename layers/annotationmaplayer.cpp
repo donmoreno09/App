@@ -21,11 +21,12 @@ void AnnotationMapLayer::initialize() {
     loadData();
 }
 
-void AnnotationMapLayer::syncSelectedObject(const QVariant &object)
+void AnnotationMapLayer::syncSelectedObject(const QVariant &object, bool isToRemove)
 {
     for (int i = 0; i < m_selectedAnnotations.length(); i++) {
         if (m_selectedAnnotations[i].toMap().value("id") == object.toMap().value("id")) {
-            m_selectedAnnotations[i] = object;
+            if (isToRemove) m_selectedAnnotations.removeAt(i);
+            else m_selectedAnnotations[i] = object;
             break;
         }
     }

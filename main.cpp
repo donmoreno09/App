@@ -19,6 +19,7 @@
 #include "core/variantlistmodel.h"
 #include "connections/mqtt/mqttclientservice.h"
 #include "connections/mqtt/parser/simpletrackparser.h"
+#include "core/trackmanager.h"
 #include <QDir>
 
 int main(int argc, char *argv[])
@@ -33,6 +34,7 @@ int main(int argc, char *argv[])
        return LayerManager::getInstance();
     });
 
+    qmlRegisterSingletonType<TrackManager>("raise.singleton.trackmanager", 1, 0, "TrackManager", &TrackManager::singletonProvider);
     qmlRegisterSingletonType<PopupManager>("raise.singleton.popupmanager", 1, 0, "PopupManager", &PopupManager::singletonProvider);
     qmlRegisterSingletonType<SelectionBoxBus>("raise.singleton.selectionboxbus", 1, 0, "SelectionBoxBus", &SelectionBoxBus::singletonProvider);
 
@@ -64,7 +66,7 @@ int main(int argc, char *argv[])
 
     MqttClientService::getInstance()->initialize(":/config/mqtt_config.json");
     MqttClientService::getInstance()->registerParser("ais", new SimpleTrackParser());
-    // MqttClientService::getInstance()->registerParser("doc-space", new SimpleTrackParser());
+    MqttClientService::getInstance()->registerParser("doc-space", new SimpleTrackParser());
 
     QQmlApplicationEngine engine;
     qDebug() << "QML import paths:" << engine.importPathList();

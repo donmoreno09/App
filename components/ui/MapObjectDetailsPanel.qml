@@ -245,6 +245,9 @@ Item {
                                     break
                                 }
                             }
+
+                            // the `true` flag means to remove the object from the selected objects pane
+                            annotationLayerInstance.businessLogic.syncSelectedObject(modelData, true)
                         } else {
                             PoiController.deletePoiFromQml(modelData.id)
 
@@ -256,11 +259,10 @@ Item {
                                     break
                                 }
                             }
-                        }
 
-                        const index = selectedObjects.findIndex((o) => o.id === modelData.id)
-                        selectedObjects.splice(index, 1)
-                        selectedObjects = selectedObjects
+                            // the `true` flag means to remove the object from the selected objects pane
+                            staticPoiLayerInstance.businessLogic.syncSelectedObject(modelData, true)
+                        }
                     }
                 }
             }

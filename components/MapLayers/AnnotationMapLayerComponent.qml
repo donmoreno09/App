@@ -23,12 +23,6 @@ MapItemGroup {
 
     visible: isVisible
 
-    // Punti statici hardcoded per verifica
-    property var hardcodedAnnotations: [
-        ShapeModel.createPoint("ANN-01", "Annotation 1", QtPositioning.coordinate(44.1005, 9.8220)),
-        ShapeModel.createPoint("ANN-02", "Annotation 2", QtPositioning.coordinate(44.1030, 9.8290)),
-    ]
-
     MapItemView {
         id: mapItemView
         model: annotationLayerBusinessLogic.annotationModel
@@ -64,7 +58,6 @@ MapItemGroup {
 
     Component.onCompleted: {
         console.log("[AnnotationMapLayerComponent:Component.onCompleted] layer : " + annotationMapLayerComponent.layerName + " qmlReady, registering layer")
-        // annotationLayerBusinessLogic.annotationModel.resetWith(hardcodedAnnotations) // for testing purposes
         LayerManager.registerLayer(annotationLayerBusinessLogic)
         annotationLayerBusinessLogic.initialize()
     }

@@ -29,7 +29,7 @@ Item {
             spacing: 10
 
             Text {
-                text: "Previsione Tempo di Attesa"
+                text: "Waiting Time Prediction"
                 font {
                     pixelSize: 18
                     bold: true
@@ -52,7 +52,7 @@ Item {
             spacing: 8
 
             Text {
-                text: "ID Rimorchio:"
+                text: "Trailer ID:"
                 color: textColor
                 font.pixelSize: 14
             }
@@ -60,7 +60,7 @@ Item {
             TextField {
                 id: trailerIdInput
                 Layout.fillWidth: true
-                placeholderText: "Inserisci ID"
+                placeholderText: "Enter ID"
                 inputMethodHints: Qt.ImhDigitsOnly
                 color: textColor
                 font.pixelSize: 16
@@ -80,7 +80,7 @@ Item {
         // Button
         Button {
             id: fetchButton
-            text: "Calcola Previsione"
+            text: "Calculate Prediction"
             Layout.fillWidth: true
             Layout.preferredHeight: 40
             Layout.topMargin: 5
@@ -129,7 +129,7 @@ Item {
                 Layout.leftMargin: 10
                 Layout.rightMargin: 10
                 icon: "⏱️"
-                title: "Tempo Stimato"
+                title: "Estimated Time"
                 value: formatMinutes(controller.prediction)
             }
 
@@ -148,7 +148,7 @@ Item {
         // Error Message
         Text {
             visible: controller.prediction === -1 && !controller.isLoading && trailerIdInput.text
-            text: "Nessun dato disponibile"
+            text: "No data available"
             color: "#F44336"
             Layout.alignment: Qt.AlignHCenter
             font.pixelSize: 13
@@ -161,19 +161,19 @@ Item {
     }
 
     function formatMinutes(minutes) {
-        if (minutes === 0) return "Pronto"
+        if (minutes === 0) return "Ready"
         if (minutes < 60) return minutes + " min"
 
         const hours = Math.floor(minutes / 60)
         const mins = minutes % 60
-        return mins === 0 ? hours + (hours > 1 ? " ore" : " ora")
+        return mins === 0 ? hours + (hours > 1 ? " hours" : " hour")
                          : hours + "h " + mins + "min"
     }
 
     function getStatusText(minutes) {
-        if (minutes === 0) return "Accesso immediato alla baia"
-        if (minutes < 30) return "Attesa breve - ingresso imminente"
-        if (minutes < 120) return "In coda - attesa moderata"
-        return "Attesa prolungata - valutare alternative"
+        if (minutes === 0) return "Immediate access to the bay"
+        if (minutes < 30) return "Short wait - entry soon"
+        if (minutes < 120) return "In queue - moderate wait"
+        return "Extended wait - consider alternatives"
     }
 }

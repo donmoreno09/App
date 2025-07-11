@@ -46,10 +46,7 @@ qt_add_executable(Sanbdox
     connections/apiendpoints.h
     models/poi.h
     models/shape.h
-    models/coordinates.h
     models/geometry.h
-    models/metadata.h
-    models/links.h
     controllers/poicontroller.h controllers/poicontroller.cpp
     controllers/poioptionscontroller.h controllers/poioptionscontroller.cpp
     events/selectionboxbus.h
@@ -60,10 +57,19 @@ qt_add_executable(Sanbdox
     core/legacy/clock.h core/legacy/clock.cpp
     core/legacy/registertemplate.h
     controllers/radialmenucontroller.h
+    controllers/radialmenucontroller.cpp
     core/legacy/enums/econtrollers.h core/legacy/enums/econtrollers.cpp
     core/legacy/enums/eservice.h core/legacy/enums/eservice.cpp
     enums/etrackstate.h enums/etrackstate.cpp
     enums/etrackstate.h enums/etrackstate.cpp
+    models/metadata/metadataentry.h
+    models/metadata/notemetadataentry.h
+    models/details.h
+    models/radial-menu/radialmenunode.h
+    models/radial-menu/propertytreenode.h
+    models/radial-menu/radialmenunode.cpp
+    models/radial-menu/propertytreenode.cpp
+    core/trackmanager.h core/trackmanager.cpp
 )
 
 target_link_libraries(Sanbdox PRIVATE

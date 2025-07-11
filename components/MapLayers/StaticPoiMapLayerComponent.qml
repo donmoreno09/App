@@ -22,12 +22,6 @@ MapItemGroup {
 
     visible: isVisible
 
-    // Hardcoded POIs for testing purposes
-    property var hardcodedPois: [
-        ShapeModel.createPoint("POI-01", "POI 1", QtPositioning.coordinate(44.14, 9.8220)),
-        ShapeModel.createPoint("POI-02", "POI 2", QtPositioning.coordinate(44.1030, 9.7468)),
-    ]
-
     MapItemView {
         model: staticPoiMapLayerBusinessLogic.poiModel
 
