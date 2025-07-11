@@ -14,7 +14,7 @@ Item {
         spacing: 30
 
         Text {
-            text: "Web Integration"
+            text: "Ship Stowage"
             font.pixelSize: 20
             font.bold: true
             font.family: "Arial"
@@ -44,10 +44,10 @@ Item {
                     if (component.status === Component.Ready) {
                         let webView = component.createObject(root, {})
                         if (webView === null) {
-                            console.error("Errore nella creazione del WebView")
+                            console.error("Error creating WebView")
                         }
                     } else {
-                        console.error("Errore nel caricamento del componente:", component.errorString())
+                        console.error("Error loading component:", component.errorString())
                     }
                 }
                 onEntered: buttonBackground.color = "#0039CB"
@@ -55,7 +55,7 @@ Item {
             }
 
             Text {
-                text: "FourClicks"
+                text: "Stowage - FourClicks"
                 anchors.centerIn: parent
                 color: "white"
                 font.pixelSize: 14

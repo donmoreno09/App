@@ -18,7 +18,7 @@ Item {
         spacing: 12
 
         Text {
-            text: "Controllo Layers"
+            text: "Layers Selector"
             font.pixelSize: 20
             font.bold: true
             color: "white"
@@ -81,7 +81,7 @@ Item {
                         }
 
                         onClicked: {
-                            console.log("Layer selezionato:", modelData.layerName)
+                            console.log("Layer selected:", modelData.layerName)
                             modelData.onFocus = !modelData.onFocus
                             LayerManager.setFocusLayer(modelData.layerName)
                         }
@@ -120,13 +120,13 @@ Item {
     }
 
     Component.onCompleted: {
-        console.log("✅ LayersList caricato. layerList:", layers)
+        console.log("✅ LayersList loaded. layerList:", layers)
     }
 
     Connections {
         target: LayerManager
         function onLayerListChanged() {
-            console.log("🔁 layerList aggiornata. Nuovo valore:", LayerManager.layerList)
+            console.log("🔁 layerList updated. New value:", LayerManager.layerList)
             layers = LayerManager.layerList
         }
     }

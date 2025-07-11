@@ -57,7 +57,6 @@
         <file>components/ui/top-toolbar/ToolbarItem.qml</file>
         <file>components/ui/top-toolbar/ToolbarSeparator.qml</file>
         <file>components/ui/top-toolbar/utils.js</file>
-        <file>components/ui/top-toolbar/menus.js</file>
         <file>components/ui/top-toolbar/ToolbarMenuItem.qml</file>
         <file>components/ui/top-toolbar/StyledMenuItem.qml</file>
         <file>components/ui/top-toolbar/MenuItemArrow.qml</file>
@@ -104,7 +103,7 @@
         <file>components/ui/legacy/assets/osm.svg</file>
         <file>components/ui/legacy/assets/ownship.svg</file>
         <file>components/ui/legacy/assets/settings.svg</file>
-        <file>components/ui/legacy/assets/smartport.svg</file>
+        <file>components/ui/legacy/assets/ais.svg</file>
         <file>components/ui/legacy/assets/tirOnline.svg</file>
         <file>components/ui/legacy/assets/tools.svg</file>
         <file>components/ui/legacy/assets/tracks.svg</file>
@@ -364,5 +363,6 @@
         <file>assets/icons/panels/track/trackhistory.svg</file>
         <file>assets/icons/panels/close.svg</file>
         <file>components/ui/legacy/panels/PanelManager.qml</file>
+        <file>components/ui/legacy/assets/doc-space.svg</file>
     </qresource>
 </RCC>

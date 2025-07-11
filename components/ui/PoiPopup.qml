@@ -6,7 +6,6 @@ import QtPositioning 6.8
 import raise.singleton.popupmanager 1.0
 import raise.singleton.controllers 1.0
 
-import "../ui/top-toolbar/menus.js" as ToolbarMenus
 import "../ui/top-toolbar/utils.js" as ToolbarUtils
 
 // I'm not using a Popup component since it cannot be
