@@ -95,7 +95,7 @@
         <file>components/SidePannel/WebComponent/WebViewItem.qml</file>
         <file>components/SidePannel/WebComponent/WebPageContainer.qml</file>
         <file>components/SidePannel/WebComponent/SidePannelWebViewContent.qml</file>
-        <file>components/ui/shapes/PoiMarkerGreen.qml</file>
+        <file>components/ui/shapes/PoiMarker.qml</file>
         <file>components/ui/shapes/AnnotationMarker.qml</file>
         <file>components/ui/assets/fnxt_n.svg</file>
         <file>components/ui/legacy/assets/google.svg</file>
@@ -364,5 +364,7 @@
         <file>assets/icons/panels/close.svg</file>
         <file>components/ui/legacy/panels/PanelManager.qml</file>
         <file>components/ui/legacy/assets/doc-space.svg</file>
+        <file>components/ui/assets/poi.svg</file>
+        <file>components/ui/assets/tir.svg</file>
     </qresource>
 </RCC>
