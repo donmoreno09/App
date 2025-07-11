@@ -26,7 +26,7 @@ BaseShape {
                 id: svgIcon
                 width: 24
                 height: 24
-                source: "qrc:/components/ui/assets/poi_green.svg"
+                source: "qrc:/components/ui/assets/poi.svg"
                 smooth: true
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true

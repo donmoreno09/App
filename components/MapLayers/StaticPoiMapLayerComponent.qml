@@ -31,7 +31,7 @@ MapItemGroup {
             source: {
                 switch (modelData.geometry.shapeTypeId) {
                 case ShapeModel.POINT_TYPE_ID:
-                    return Qt.resolvedUrl("../ui/shapes/PoiMarkerGreen.qml")
+                    return Qt.resolvedUrl("../ui/shapes/PoiMarker.qml")
                 case ShapeModel.ELLIPSE_TYPE_ID:
                     return Qt.resolvedUrl("../ui/shapes/Ellipse.qml")
                 case ShapeModel.POLYGON_TYPE_ID:
