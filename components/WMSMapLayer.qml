@@ -28,6 +28,7 @@ Item {
     property alias insertPopupPoi: insertPoiPopup
     property alias staticPoiLayerInstance: staticPoiLayerComponentIstance
     property alias annotationLayerInstance: annotationLayerComponentIstance
+    property alias map: mapView
 
     Plugin {
         id: mapPlugin

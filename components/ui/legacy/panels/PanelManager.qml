@@ -9,6 +9,8 @@ QtObject {
 
     property var uiOverlay : null
 
+    signal centerViewRequested(var coordinate)
+
     /**
      * Apre (o chiude) il pannello per la traccia richiesta.
      *   @param trackData  QVariantMap arrivato via MQTT (modelData del marker)
@@ -61,6 +63,20 @@ QtObject {
             })
         }
 
+        activePanel.closed.connect(function () {
+            // After closing BaseTrackPanel (activePanel in this case)
+            // This function will be called to handle cleanups associated
+            // with this PanelManager.
+            if (linkedMarker && linkedMarker.unlinkToPanel)
+                linkedMarker.unlinkToPanel()
+
+            activePanel  = null
+            linkedMarker = null
+            currentUid   = ""
+        })
+
+        activePanel.centerViewRequested.connect(centerViewRequested)
+
         /* Avvisa pannello e marker */
         if (activePanel.open)               // metodo già presente in legacy
             activePanel.open(marker, linkObj)
@@ -75,14 +91,10 @@ QtObject {
 
     /** Chiude e pulisce lo stato */
     function closeCurrent() {
-        if (linkedMarker && linkedMarker.unlinkToPanel)
-            linkedMarker.unlinkToPanel()
-
-        if (activePanel)
-            activePanel.destroy()
-
-        activePanel  = null
-        linkedMarker = null
-        currentUid   = ""
+        if (activePanel) {
+            // This is an internal function of BaseTrackPanel
+            // which cleans up and destroys itself.
+            activePanel.close()
+        }
     }
 }

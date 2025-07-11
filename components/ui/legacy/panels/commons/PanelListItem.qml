@@ -30,35 +30,9 @@ Item {
     property alias inputValidator: textField.validator
     property string inputDefaultValue: ""
 
-
-
-    enum EditModeType{
-        ComboBox,
-        TextField,
-        NoEdit
-    }
-
-    property int editingModeType: PanelListItem.EditModeType.NoEdit
-    property var editingModeValues: []
-    property bool editMode: false
-
     signal textFieldAccepted(string val, bool val)
 
     Component.onCompleted: {
-    }
-
-    onEditModeChanged: {
-
-        if (editMode)
-        {
-            if(editingModeType === PanelListItem.EditModeType.ComboBox)
-                setComboBoxCurrentItem()
-            else if (editingModeType === PanelListItem.EditModeType.TextField)
-                setTextFieldText()
-        }
-
-
-
     }
 
     Text {
@@ -115,20 +89,7 @@ Item {
             font.capitalization: subvalueTxtFormat
             font.family: valueFontFamily
             visible: (subvalueTxt.length > 0) ? true : false
-
         }
-
-    }
-
-    PanelComboBox{
-        id: combobox
-        width: valueLabel.width
-        height: parent.height
-        visible: false
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-        model: editingModeValues
-
     }
 
     TextField {
@@ -146,26 +107,12 @@ Item {
         placeholderTextColor: "#80ffffff"
         font.family: valueFontFamily
         font.capitalization: Font.Capitalize
-        background: Rectangle{
+        background: Rectangle {
             anchors.fill: parent
             anchors.centerIn: parent
             color:"#4d000000"
             border.color: "transparent"
-
         }
-
-        /*
-        onEditingFinished:
-        {
-            console.log("onEditingFinished", text, acceptableInput)
-        }
-
-        onAccepted:
-        {
-            console.log("onAccepted", text, acceptableInput)
-        }*/
-
-
     }
 
 
@@ -187,54 +134,5 @@ Item {
             if (!textField.acceptableInput)
                 textField.text = inputDefaultValue
         }
-
-
     }
-
-    function saveChanges()
-    {
-        if(editMode && editingModeType === PanelListItem.EditModeType.ComboBox)
-            panelListItem.valueTxt = combobox.displayText.toLowerCase()
-        else if(editMode && editingModeType === PanelListItem.EditModeType.TextField)
-            if(textField.acceptableInput)
-            {
-                panelListItem.valueTxt = textField.text.toLowerCase()
-                textFieldAccepted(panelListItem.valueTxt, textField.acceptableInput)
-            }
-
-
-
-    }
-
-    states: [
-        State {
-            name: "editCombobox"
-            when: panelListItem.editMode && panelListItem.editingModeType === PanelListItem.EditModeType.ComboBox
-
-            PropertyChanges {
-            target: combobox
-            visible: true
-            }
-
-            PropertyChanges {
-            target: valueLabel
-            visible: false
-            }
-        },
-        State {
-            name: "editTextfield"
-            when: panelListItem.editMode && panelListItem.editingModeType === PanelListItem.EditModeType.TextField
-
-            PropertyChanges {
-                target: valueLabel
-                visible: false
-            }
-
-            PropertyChanges {
-                target: textField
-                visible: true
-            }
-        }
-    ]
-
 }
