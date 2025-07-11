@@ -17,6 +17,7 @@ public:
     void initialize(const QString& configPath);
     Q_INVOKABLE void registerLayer(const QString& name, QObject* layer); // <-- AGGIUNGI QUESTO
     void registerParser(const QString& topic, IMessageParser* parser);
+    Q_INVOKABLE QString getTopicFromLayer(const QString& layer);
 
 private slots:
     void handleMessage(const QByteArray &message, const QMqttTopicName &topic);
@@ -30,6 +31,7 @@ private:
 
     QMqttClient* client;
     QMap<QString, QString> topicToLayer;
+    QMap<QString, QString> layerToTopic;
     QMap<QString, IMessageParser*> topicToParser;
     QMap<QString, TrackMapLayer*> layerInstances;
 };

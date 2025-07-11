@@ -3,8 +3,11 @@ import QtLocation 6.8
 import QtPositioning 6.8
 import raise.map.layers 1.0
 import raise.singleton.layermanager 1.0
+import raise.singleton.panelmanager 1.0
 import raise.singleton.trackmanager 1.0
 import raise.singleton.mqtt 1.0
+
+import "../ui/tracks"
 
 MapItemGroup {
     id: trackMapLayerComponent
@@ -20,38 +23,8 @@ MapItemGroup {
     Component {
         id: trackDelegate
 
-        MapQuickItem {
-            id: item
-            coordinate: QtPositioning.coordinate(modelData.pos[0], modelData.pos[1])
-            anchorPoint.x: 40
-            anchorPoint.y: 40
-
-            sourceItem: Rectangle {
-                width: 40
-                height: 40
-                radius: 2
-                color: "blue"
-                border.color: "white"
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: modelData.name
-                    font.pixelSize: 12
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.Wrap
-                }
-            }
-
-            Component.onCompleted: {
-                mapView.addMapItem(item)
-            }
-
-            Component.onDestruction: {
-                mapView.removeMapItem(item)
-            }
+        Track {
+            trackType: MqttClientService.getTopicFromLayer("TrackLayer1")
         }
     }
 
@@ -64,7 +37,7 @@ MapItemGroup {
     Component.onCompleted: {
         console.log("[TrackMapLayerComponent:Component.onCompleted] layer : " + trackMapLayerComponent.layerName + " notify layer ready...")
         LayerManager.registerLayer(trackMapLayerBusinessLogic)
-        TrackManager.registerLayer("ais", trackMapLayerBusinessLogic)
+        TrackManager.registerLayer(MqttClientService.getTopicFromLayer("TrackLayer1"), trackMapLayerBusinessLogic)
         MqttClientService.registerLayer("TrackLayer1", trackMapLayerBusinessLogic);
         trackMapLayerBusinessLogic.initialize()
     }
@@ -82,6 +55,25 @@ MapItemGroup {
             LayerManager.notifyLayerReady(trackMapLayerBusinessLogic)
         }
 
+        function onTracksChanged() {
+            if (!PanelManager.activePanel)
+                return
+
+            const uid = PanelManager.currentUid
+            for (let i = 0; i < repeaterTracks.count; ++i) {
+                const m = repeaterTracks.itemAt(i)
+                if (m && m.trackData.iridess_uid === uid) {
+                    if (PanelManager.linkedMarker !== m) {
+                        PanelManager.linkedMarker = m
+                        m.linkToPanel(PanelManager.activePanel.link || PanelManager.activePanel)
+                    }
+                    m.trackData.tracktype = MqttClientService.getTopicFromLayer("TrackLayer2")
+                    PanelManager.activePanel.trackData = m.trackData   // refresh info
+                    break
+                }
+            }
+        }
+        
         function onActivated() {
             console.log("AIS ACTIVATED!")
             trackMapLayerComponent.visible = true

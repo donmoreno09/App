@@ -4,8 +4,7 @@
       "port": 1883
     },
     "topics": {
-      "operation/track1": "TrackLayer1",
-      "operation/track2": "TrackLayer2"
+      "ais": "TrackLayer1",
+      "doc-space": "TrackLayer2"
     }
 }
-  

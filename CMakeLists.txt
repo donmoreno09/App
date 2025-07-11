@@ -60,6 +60,8 @@ qt_add_executable(Sanbdox
     controllers/radialmenucontroller.cpp
     core/legacy/enums/econtrollers.h core/legacy/enums/econtrollers.cpp
     core/legacy/enums/eservice.h core/legacy/enums/eservice.cpp
+    enums/etrackstate.h enums/etrackstate.cpp
+    enums/etrackstate.h enums/etrackstate.cpp
     models/metadata/metadataentry.h
     models/metadata/notemetadataentry.h
     models/details.h

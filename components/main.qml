@@ -5,6 +5,7 @@ import QtQuick.Layouts 6.8
 import QtQuick.Window 6.8
 
 import raise.map.layers 1.0
+import raise.singleton.panelmanager 1.0
 
 Window {
     id: mainWindow
@@ -15,5 +16,24 @@ Window {
 
     WMSMapLayer {
         id: wmsmaplayer
+    }
+
+    // uiOverlay per pannelli ed altro
+    Item {
+        id: uiOverlay
+        anchors.fill: parent
+        z: 1000
+    }
+
+    Component.onCompleted: {
+        PanelManager.uiOverlay = uiOverlay
+    }
+
+    Connections {
+        target: PanelManager
+
+        function onCenterViewRequested(coordinate) {
+            wmsmaplayer.map.center = coordinate
+        }
     }
 }
