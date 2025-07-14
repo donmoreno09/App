@@ -45,6 +45,7 @@ void TrackManager::activate(const QString &track)
 
         if (m_trackToLayer.contains(track)) {
             emit m_trackToLayer.value(track)->activated();
+            emit activated(track);
         }
     });
 }
@@ -64,6 +65,7 @@ void TrackManager::deactivate(const QString &track)
 
         if (m_trackToLayer.contains(track)) {
             emit m_trackToLayer.value(track)->deactivated();
+            emit deactivated(track);
         }
     });
 }

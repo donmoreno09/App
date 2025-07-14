@@ -24,6 +24,10 @@ public:
 
     Q_INVOKABLE void deactivate(const QString& track);
 
+signals:
+    void activated(const QString& track);
+    void deactivated(const QString& track);
+
 private:
     explicit TrackManager(QObject* parent = nullptr);
 

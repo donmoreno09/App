@@ -6,6 +6,7 @@ import QtQuick.Window 6.8
 
 import raise.map.layers 1.0
 import raise.singleton.panelmanager 1.0
+import raise.singleton.trackmanager 1.0
 
 Window {
     id: mainWindow
@@ -34,6 +35,14 @@ Window {
 
         function onCenterViewRequested(coordinate) {
             wmsmaplayer.map.center = coordinate
+        }
+    }
+
+    Connections {
+        target: TrackManager
+
+        function onDeactivated() {
+            PanelManager.closeCurrent();
         }
     }
 }
