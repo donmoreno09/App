@@ -16,6 +16,7 @@ import "handlers"
 Item {
     id: root
     anchors.fill: parent
+    z: 999
     property var mapLayers: []
     property int layerReadyCount: 0
     property int expectedLayers: 4
@@ -48,8 +49,19 @@ Item {
             root.mapLayers = [trackLayerComponentIstance, track2LayerComponentIstance, annotationLayerComponentIstance, staticPoiLayerComponentIstance]
             updateZoomLevels()
         }
-
         onZoomLevelChanged: updateZoomLevels()
+
+        WheelHandler {
+                   acceptedDevices: PointerDevice.Mouse
+                   onWheel: (event) => {
+                       if (event.angleDelta.y > 0) {
+                           mapView.zoomLevel += 1
+                       } else if (event.angleDelta.y < 0) {
+                           mapView.zoomLevel -= 1
+                       }
+                       event.accepted = true
+                   }
+               }
 
         DrawingArea {
             id: drawingArea
