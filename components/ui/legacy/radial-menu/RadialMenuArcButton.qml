@@ -145,7 +145,7 @@ Widgets.BaseShapeButton {
                     font.pointSize: 12
 
                     onContentWidthChanged: {
-                            var availableWidth = parent.width - (radialMenuArcButton.customPadding * 2);
+                            var availableWidth = parent.width;
 
                             if (contentWidth > availableWidth && font.pointSize > 8) {
                                 font.pointSize = font.pointSize - 1;
