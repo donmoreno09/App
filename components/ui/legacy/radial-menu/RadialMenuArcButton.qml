@@ -138,23 +138,17 @@ Widgets.BaseShapeButton {
                     id: radialMenuArcButtonLabel
                     text: qsTr(displayName.toLowerCase())
                     horizontalAlignment: Text.AlignHCenter
-                    width: radialMenuArcButton.width*0.8
-                    wrapMode: Text.WordWrap
+                    width: radialMenuArcButton.width*0.3
                     font.capitalization: Font.Capitalize
                     color: "white"
                     font.family: radialMenuArcButton.fontFamily
                     font.pointSize: 12
 
                     onContentWidthChanged: {
-                            // Calculate available width for text (e.g., width of parent rectangle minus padding)
                             var availableWidth = parent.width - (radialMenuArcButton.customPadding * 2);
 
-                            if (contentWidth > availableWidth && font.pointSize > 8) { // Don't go too small
-                                font.pointSize = font.pointSize - 1; // Reduce font size
-                            } else if (contentWidth < availableWidth && font.pointSize < 12) { // Increase if space allows (optional)
-                                // You might need more sophisticated logic here to prevent constant resizing
-                                // For example, only increase if it was previously reduced, and there's ample space.
-                                // font.pointSize = font.pointSize + 1;
+                            if (contentWidth > availableWidth && font.pointSize > 8) {
+                                font.pointSize = font.pointSize - 1;
                             }
                         }
                 }
