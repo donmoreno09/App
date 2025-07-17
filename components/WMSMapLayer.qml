@@ -12,23 +12,30 @@ import "SidePannel"
 import "ui/top-toolbar"
 import "ui/legacy/radial-menu"
 import "handlers"
+import "ui/tracks"
 
 Item {
     id: root
     anchors.fill: parent
-    property var mapLayers: []
-    property int layerReadyCount: 0
-    property int expectedLayers: 4
-    property bool globalVisibility: true
     property var selectionPoints: []
     property int currentMode: InteractionModeManager.currentMode
 
-    // expose these "global" components for now
     property alias topToolbar: topToolbar
     property alias insertPopupPoi: insertPoiPopup
     property alias staticPoiLayerInstance: staticPoiLayerComponentIstance
     property alias annotationLayerInstance: annotationLayerComponentIstance
     property alias map: mapView
+
+    // Aggiungi queste proprietà per tenere traccia dei layer caricati
+    property var mapLayers: []
+    property int layerReadyCount: 0
+    property int expectedLayers: 4 // Assicurati che questo corrisponda al numero di layer che ti aspetti
+
+    property bool globalVisibility: true // Mantieni questa proprietà se usata altrove
+
+    Component.onCompleted: {
+        console.log("WSMapLayer.qml loaded.");
+    }
 
     Plugin {
         id: mapPlugin
@@ -81,6 +88,10 @@ Item {
         }
     }
 
+    TracksSelectionHintDialog {
+        id: tracksSelectionHintDialog
+    }
+
     Connections {
         target: LayerManager
         function onAllLayersReady() {
@@ -88,6 +99,8 @@ Item {
             Qt.callLater(() => {
                 topToolbar.visible = true
                 sidePannel.visible = true
+
+                tracksSelectionHintDialog.syncInitialTrackStates();
             })
 
             Qt.callLater(() => {
@@ -128,7 +141,7 @@ Item {
     SidePannel{
         id: sidePannel
     }
-    
+
     InsertPoiPopup {
         id: insertPoiPopup
     }
@@ -167,5 +180,7 @@ Item {
 
         logoSrc: Qt.resolvedUrl("./ui/assets/fnxt_n.svg")
         logoGlowPulse: true
+
+        onOptionToggledCallback: tracksSelectionHintDialog.handleRadialMenuOptionToggled
     }
 }
