@@ -110,7 +110,7 @@ Widgets.BaseScatter {
         let angle = 0
         angles.push(0)
 
-        for (let j = 0; j < parts; j++)
+        for (let i = 0; i < parts; i++)
         {
             angle += angleStep
             angles.push(angle)

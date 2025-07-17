@@ -99,12 +99,14 @@ Item {
             Qt.callLater(() => {
                 topToolbar.visible = true
                 sidePannel.visible = true
-
-                tracksSelectionHintDialog.syncInitialTrackStates();
             })
 
             Qt.callLater(() => {
                 PoiOptionsController.fetchAll()
+            })
+
+            Qt.callLater(() => {
+                tracksSelectionHintDialog.syncInitialTrackStates();
             })
         }
     }

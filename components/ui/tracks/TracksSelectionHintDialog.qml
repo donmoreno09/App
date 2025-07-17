@@ -24,14 +24,27 @@ Dialog {
     property bool docSpaceActive: false
     property bool aisActive: false
 
+    // Debug timing
+    property bool dialogInitialized: false
+
     Settings {
         id: appSettings
         category: "TracksHint"
         property alias hideMessageInternal: tracksSelectionHintDialog.hideMessage
 
         Component.onCompleted: {
+            console.log("=== SETTINGS COMPONENT COMPLETED ===");
+            console.log("Settings completed at:", new Date().toISOString());
+            console.log("hideMessageInternal:", hideMessageInternal);
+
             tracksSelectionHintDialog.hideMessageReady = true;
-            console.log("TracksSelectionHintDialog: appSettings (Settings) Component.onCompleted. hideMessageInternal:", hideMessageInternal, "hideMessageReady:", hideMessageReady);
+            console.log("hideMessageReady set to:", tracksSelectionHintDialog.hideMessageReady);
+
+            // Prova a chiamare checkAndOpenDialog dopo che Settings è pronto
+            if (tracksSelectionHintDialog.dialogInitialized) {
+                console.log("Settings ready, calling checkAndOpenDialog");
+                Qt.callLater(tracksSelectionHintDialog.checkAndOpenDialog);
+            }
         }
     }
 
@@ -45,7 +58,7 @@ Dialog {
             text: "Per selezionare le tracce sulla mappa (quelle blu), utilizza lo <b>strumento di selezione</b> <img src='qrc:/components/ui/assets/cursor.svg' width='20' height='20' style='vertical-align: middle;'/> nella barra degli strumenti in alto."
             textFormat: Text.RichText
             font.pixelSize: 14
-            color: "black" // Testo nero
+            color: "black"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
@@ -79,9 +92,15 @@ Dialog {
     }
 
     Component.onCompleted: {
-        console.log("TracksSelectionHintDialog: Dialog Component.onCompleted.");
+        console.log("=== DIALOG COMPONENT COMPLETED ===");
+        console.log("Dialog completed at:", new Date().toISOString());
+
         docSpaceActive = false;
         aisActive = false;
+        dialogInitialized = true;
+
+        console.log("Dialog initialized. hideMessageReady:", hideMessageReady);
+
         var parentWindow = tracksSelectionHintDialog.parent;
         while (parentWindow && !(parentWindow instanceof Window)) {
             parentWindow = parentWindow.parent;
@@ -95,7 +114,18 @@ Dialog {
     }
 
     function syncInitialTrackStates() {
-        console.log("TracksSelectionHintDialog: syncInitialTrackStates called.");
+        console.log("=== SYNC INITIAL TRACK STATES ===");
+        console.log("syncInitialTrackStates called at:", new Date().toISOString());
+        console.log("Current state - hideMessageReady:", hideMessageReady, "dialogInitialized:", dialogInitialized);
+
+        // Verifica se RadialMenuController è pronto
+        if (!RadialMenuController.checkIsReady()) {
+            console.log("RadialMenuController not ready, retrying in 100ms");
+            Qt.callLater(function() {
+                setTimeout(syncInitialTrackStates, 100);
+            });
+            return;
+        }
 
         var rootNode = RadialMenuController.getRoot();
         if (!rootNode) {
@@ -110,7 +140,6 @@ Dialog {
             return;
         }
         console.log("Root Children Names and Active States:", JSON.stringify(rootChildren.map(n => ({name: n.propertyTreeNode ? n.propertyTreeNode.name : 'N/A', active: n.active}))));
-
 
         var tracksNodeId = "";
         for (var i = 0; i < rootChildren.length; i++) {
@@ -129,26 +158,17 @@ Dialog {
             }
             console.log("Tracks Children (doc-space, ais, etc.) Names and Active States:", JSON.stringify(trackChildren.map(n => ({name: n.propertyTreeNode ? n.propertyTreeNode.name : 'N/A', active: n.active}))));
 
-
             var initialDocSpaceActive = false;
             var initialAisActive = false;
 
             for (var j = 0; j < trackChildren.length; j++) {
                 if (trackChildren[j].propertyTreeNode) {
                     if (trackChildren[j].propertyTreeNode.name === "doc-space") {
-                        if (trackChildren[j].active) {
-                            initialDocSpaceActive = true;
-                            initialAisActive = false; // Exclusivity
-                            console.log("Found doc-space active.");
-                            break;
-                        }
+                        initialDocSpaceActive = trackChildren[j].active;
+                        console.log("doc-space found, active:", initialDocSpaceActive);
                     } else if (trackChildren[j].propertyTreeNode.name === "ais") {
-                        if (trackChildren[j].active) {
-                            initialAisActive = true;
-                            initialDocSpaceActive = false; // Exclusivity
-                            console.log("Found ais active.");
-                            break;
-                        }
+                        initialAisActive = trackChildren[j].active;
+                        console.log("ais found, active:", initialAisActive);
                     }
                 }
             }
@@ -156,17 +176,32 @@ Dialog {
             docSpaceActive = initialDocSpaceActive;
             aisActive = initialAisActive;
 
-            console.log("TracksSelectionHintDialog: syncInitialTrackStates - Final state: docSpaceActive:", docSpaceActive, "aisActive:", aisActive);
+            console.log("=== FINAL SYNC STATE ===");
+            console.log("docSpaceActive:", docSpaceActive, "aisActive:", aisActive);
+            console.log("hideMessageReady:", hideMessageReady, "hideMessage:", hideMessage);
+            console.log("Should show dialog?", (docSpaceActive || aisActive) && hideMessageReady && !hideMessage);
 
-            checkAndOpenDialog();
+            // Usa un timer per dare tempo al Settings di completarsi
+            if (!hideMessageReady) {
+                console.log("Settings not ready, waiting 200ms");
+                Qt.callLater(function() {
+                    setTimeout(function() {
+                        console.log("Retry after Settings delay - hideMessageReady:", hideMessageReady);
+                        checkAndOpenDialog();
+                    }, 200);
+                });
+            } else {
+                checkAndOpenDialog();
+            }
         } else {
             console.log("TracksSelectionHintDialog: syncInitialTrackStates - 'tracks' node not found in root.");
         }
     }
 
     function handleRadialMenuOptionToggled(optionId, checked) {
-        console.log("TracksSelectionHintDialog: handleRadialMenuOptionToggled RECEIVED - optionId:", optionId, "checked:", checked);
-        console.log("TracksSelectionHintDialog: handleRadialMenuOptionToggled - BEFORE update: docSpaceActive:", docSpaceActive, "aisActive:", aisActive);
+        console.log("=== RADIAL MENU OPTION TOGGLED ===");
+        console.log("optionId:", optionId, "checked:", checked);
+        console.log("BEFORE update: docSpaceActive:", docSpaceActive, "aisActive:", aisActive);
 
         if (optionId === "doc-space") {
             docSpaceActive = checked;
@@ -177,35 +212,67 @@ Dialog {
             if (checked) docSpaceActive = false;
             checkAndOpenDialog();
         } else {
-            console.log("TracksSelectionHintDialog: handleRadialMenuOptionToggled - Non-track option or parent node. Setting both to false.");
+            console.log("Non-track option or parent node. Setting both to false.");
             docSpaceActive = false;
             aisActive = false;
             Qt.callLater(function() {
-                console.log("TracksSelectionHintDialog: checkAndOpenDialog called via Qt.callLater for non-leaf node.");
                 checkAndOpenDialog();
             });
         }
-        console.log("TracksSelectionHintDialog: handleRadialMenuOptionToggled - AFTER update: docSpaceActive:", docSpaceActive, "aisActive:", aisActive);
+        console.log("AFTER update: docSpaceActive:", docSpaceActive, "aisActive:", aisActive);
     }
 
     function checkAndOpenDialog() {
-        console.log("TracksSelectionHintDialog: checkAndOpenDialog called. CURRENT STATE: docSpaceActive:", docSpaceActive, "aisActive:", aisActive, "hideMessage:", hideMessage, "hideMessageReady:", hideMessageReady, "visible:", visible);
-        if ((docSpaceActive || aisActive) && hideMessageReady) {
-            if (!hideMessage && !visible) {
-                console.log("TracksSelectionHintDialog: Conditions met for opening dialog. Opening now.");
+        console.log("=== CHECK AND OPEN DIALOG ===");
+        console.log("Current time:", new Date().toISOString());
+        console.log("CURRENT STATE:");
+        console.log("  docSpaceActive:", docSpaceActive);
+        console.log("  aisActive:", aisActive);
+        console.log("  hideMessage:", hideMessage);
+        console.log("  hideMessageReady:", hideMessageReady);
+        console.log("  visible:", visible);
+        console.log("  dialogInitialized:", dialogInitialized);
+
+        var shouldShow = (docSpaceActive || aisActive) && hideMessageReady && !hideMessage;
+        console.log("Should show dialog?", shouldShow);
+
+        if (shouldShow) {
+            if (!visible) {
+                console.log("*** OPENING DIALOG ***");
                 Qt.callLater(function() {
                     open();
                 });
-            } else if (hideMessage) {
-                console.log("TracksSelectionHintDialog: Dialog not opened because hideMessage is true.");
-            } else if (visible) {
-                console.log("TracksSelectionHintDialog: Dialog not opened because it's already visible.");
+            } else {
+                console.log("Dialog already visible");
             }
         } else {
-            console.log("TracksSelectionHintDialog: Conditions not met for opening dialog. Closing dialog if open.");
+            console.log("Conditions not met for opening dialog");
+            if (!hideMessageReady) {
+                console.log("  -> hideMessageReady is false");
+            }
+            if (hideMessage) {
+                console.log("  -> hideMessage is true");
+            }
+            if (!(docSpaceActive || aisActive)) {
+                console.log("  -> Neither docSpaceActive nor aisActive is true");
+            }
+
             if (visible) {
+                console.log("Closing dialog");
                 close();
             }
         }
+    }
+
+    // Funzione di utility per setTimeout
+    function setTimeout(callback, delay) {
+        var timer = Qt.createQmlObject("import QtQuick 6.8; Timer {}", tracksSelectionHintDialog);
+        timer.interval = delay;
+        timer.repeat = false;
+        timer.triggered.connect(function() {
+            callback();
+            timer.destroy();
+        });
+        timer.start();
     }
 }
