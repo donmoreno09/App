@@ -5,8 +5,9 @@ import QtQuick.Layouts 6.8
 ToolbarItem {
     id: toolBtn
 
-    // Use onPressed for now to stop the flickering to previous tool bug
-    // Check ToolbarItem's onPressed
+    property TopToolbar toolbar
+    property var tool
+
     onPressed: {
         menu.open()
     }
@@ -16,25 +17,31 @@ ToolbarItem {
         y: toolBtn.height + 2
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
+        // RIMOSSO: background: Rectangle { ... } e il suo padding
+        // RIMOSSO: contentItem: ColumnLayout { padding: 4; spacing: 2 }
+
         onClosed: {
-            toolbar.setCurrentTool(toolbar.previousToolId)
+            if (tool.id !== toolbar.currentToolId && tool.id !== toolbar.currentMode) {
+                toolbar.setCurrentTool(toolbar.previousToolId)
+            }
         }
 
         Instantiator {
             model: tool.menu
             delegate: Loader {
-                // sometimes modelData does not exist (sometimes it gives '0' as the first element)
                 sourceComponent: {
-                    if (!tool) return
-                    if (tool.menu.get(index) === 0) return
+                    if (!tool) return null
+                    if (tool.menu.get(index) === 0) return null
                     if (tool.menu.get(index).separator) return sectionTitleComponent
                     return subMenuComponent
                 }
 
                 onLoaded: {
-                    item.item = tool.menu.get(index)
-                    if (tool.menu.get(index).separator) menu.insertItem(index, item)
-                    else menu.insertMenu(index, item)
+                    if (item) {
+                        item.item = tool.menu.get(index)
+                        if (tool.menu.get(index).separator) menu.insertItem(index, item)
+                        else menu.insertMenu(index, item)
+                    }
                 }
 
                 Component.onDestruction: {
@@ -55,13 +62,20 @@ ToolbarItem {
                 id: subMenu
                 title: item.name
 
+                // RIMOSSO: background: Rectangle { ... } e il suo padding
+                // RIMOSSO: contentItem: ColumnLayout { ... }
+
                 Instantiator {
                     model: item.values
                     delegate: StyledMenuItem {
+                        // RIMOSSO: contentItem: Text { ... } e il suo colore e font.
+                        // RIMOSSO: background: Rectangle { ... }
+
                         text: item ? item.values.get(index).value : undefined
 
                         onTriggered: {
                             toolbar.onPoiSelect(tool.id, item, item.values.get(index))
+                            menu.close()
                         }
                     }
 
@@ -77,6 +91,8 @@ ToolbarItem {
             MenuSectionTitle {
                 property var item
                 text: item.label
+
+                // RIMOSSO: color: "#CCCCCC"; font.family: "RobotoMedium"; font.pointSize: 10; padding: ...
             }
         }
     }
