@@ -40,7 +40,7 @@ Dialog {
             tracksSelectionHintDialog.hideMessageReady = true;
             console.log("hideMessageReady set to:", tracksSelectionHintDialog.hideMessageReady);
 
-            // Prova a chiamare checkAndOpenDialog dopo che Settings è pronto
+
             if (tracksSelectionHintDialog.dialogInitialized) {
                 console.log("Settings ready, calling checkAndOpenDialog");
                 Qt.callLater(tracksSelectionHintDialog.checkAndOpenDialog);
