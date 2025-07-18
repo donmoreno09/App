@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QObject::connect(&app, &QCoreApplication::aboutToQuit, [](){
-        qDebug() << "Applicazione in chiusura: cleanup e salvataggi qui.";
+        qDebug() << "[Shutdown] Application is terminating — performing cleanup and persisting state.";
         TrackManager::instance()->deactivateSync("doc-space");
         TrackManager::instance()->deactivateSync("ais");
     });
@@ -82,7 +82,5 @@ int main(int argc, char *argv[])
         return -1;
 
     int result = app.exec();
-    // delete wmsBaseMapLayer;
-
     return result;
 }

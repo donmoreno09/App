@@ -33,8 +33,8 @@ void TrackMapLayer::setTracks(const QVariantList& tracks) {
     if (m_tracks != tracks) {
         m_tracks = tracks;
         emit tracksChanged();
-        qDebug() << "[TrackMapLayer] setTracks:" << tracks.size() << " elementi";
-        // Riavvia il timer ogni volta che arrivano nuovi dati
+        qDebug() << "[TrackMapLayer] setting:" << tracks.size() << " tracks";
+        // Reset timer everytime tracks has been updated
         m_clearTracksTimer->start();
     }
 }
@@ -49,7 +49,7 @@ void TrackMapLayer::loadData() {
 
 void TrackMapLayer::handleLoadedObjects(const QList<IPersistable*>& objects) {
     for (auto obj : objects) {
-        qDebug() << "Loaded object:" << obj; // supponendo che IPersistable abbia toString()
+        qDebug() << "[TrackMapLayer] Loaded object:" << obj;
     }
 }
 
@@ -78,7 +78,7 @@ void TrackMapLayer::handleSelectionBoxSelected(const QString &target, const QGeo
     }
 
     QVariantList selectedTracks = GeoSelection::selectInRect(geoTracks, topLeft, bottomRight);
-    qDebug() << "elek: selectedTracks: " << selectedTracks;
+    qDebug() << "[TrackMapLayer] selectedTracks: " << selectedTracks;
     m_selectedTracks = selectedTracks;
     emit selectedObjectsChanged();
 }

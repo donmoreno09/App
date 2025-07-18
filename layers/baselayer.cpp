@@ -5,12 +5,12 @@
 BaseLayer::BaseLayer(QObject* parent)
     : QObject(parent)
 {
-    // Lo stato viene inizializzato direttamente nella dichiarazione dei membri
+    // Initial state is set via default member initializers
 }
 
 BaseLayer::~BaseLayer()
 {
-    qDebug() << "[BaseLayer] Distrutto:" << m_layerName;
+    qDebug() << "[BaseLayer] Destroyed:" << m_layerName;
 }
 
 bool BaseLayer::isVisible() const { return m_isVisible; }
@@ -19,7 +19,7 @@ void BaseLayer::setVisible(bool visible) {
     if (m_isVisible != visible) {
         m_isVisible = visible;
         emit visibleChanged();
-        qDebug() << "[BaseLayer]" << m_layerName << "→ visibilità cambiata a:" << visible;
+        qDebug() << "[BaseLayer]" << m_layerName << "→ visibility changed to:" << visible;
     }
 }
 
@@ -29,7 +29,7 @@ void BaseLayer::setEnabled(bool enabled) {
     if (m_isEnabled != enabled) {
         m_isEnabled = enabled;
         emit enabledChanged();
-        qDebug() << "[BaseLayer]" << m_layerName << "→ stato abilitato:" << enabled;
+        qDebug() << "[BaseLayer]" << m_layerName << "→ enabled state changed to:" << enabled;
     }
 }
 
@@ -39,7 +39,7 @@ void BaseLayer::setActive(bool active) {
     if (m_isActive != active) {
         m_isActive = active;
         emit activeChanged();
-        qDebug() << "[BaseLayer]" << m_layerName << "→ attivo:" << active;
+        qDebug() << "[BaseLayer]" << m_layerName << "→ active state changed to:" << active;
     }
 }
 
@@ -49,7 +49,7 @@ void BaseLayer::setFocus(bool focus) {
     if (m_onFocus != focus) {
         m_onFocus = focus;
         emit focusChanged();
-        qDebug() << "[BaseLayer]" << m_layerName << "→ focus:" << focus;
+        qDebug() << "[BaseLayer]" << m_layerName << "→ focus state changed to:" << focus;
     }
 }
 
@@ -57,7 +57,7 @@ QString BaseLayer::layerName() const { return m_layerName; }
 
 void BaseLayer::setLayerName(const QString& name) {
     if (m_layerName != name) {
-        qDebug() << "[BaseLayer] Layer name cambiato da" << m_layerName << "a:" << name;
+        qDebug() << "[BaseLayer] Layer name changed from" << m_layerName << "to:" << name;
         m_layerName = name;
         emit layerNameChanged();
     }
@@ -65,7 +65,7 @@ void BaseLayer::setLayerName(const QString& name) {
 
 void BaseLayer::initialize() {
     QTimer::singleShot(0, this, [this]() {
-        qDebug() << "[BaseLayer:initialize] Ready:" << layerName();
+        qDebug() << "[BaseLayer:initialize] Layer is ready:" << layerName();
         emit layerReady();
     });
 }
