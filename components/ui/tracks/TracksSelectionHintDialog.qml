@@ -55,7 +55,7 @@ Dialog {
         Text {
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
-            text: "Per selezionare le tracce sulla mappa (quelle blu), utilizza lo <b>strumento di selezione</b> <img src='qrc:/components/ui/assets/cursor.svg' width='20' height='20' style='vertical-align: middle;'/> nella barra degli strumenti in alto."
+            text: "Per selezionare le tracce sulla mappa, utilizza lo <b>strumento di selezione</b> <img src='qrc:/components/ui/assets/cursor.svg' width='20' height='20' style='vertical-align: middle;'/> nella barra degli strumenti in alto."
             textFormat: Text.RichText
             font.pixelSize: 14
             color: "black"

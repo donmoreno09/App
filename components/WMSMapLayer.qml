@@ -111,9 +111,9 @@ Item {
                 PoiOptionsController.fetchAll()
             })
 
-            // Qt.callLater(() => {
-            //     tracksSelectionHintDialog.syncInitialTrackStates();
-            // })
+            Qt.callLater(() => {
+                tracksSelectionHintDialog.syncInitialTrackStates();
+            })
         }
     }
 
