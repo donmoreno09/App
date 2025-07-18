@@ -12,11 +12,21 @@ Dialog {
     closePolicy: Dialog.CloseOnEscape
 
     background: Rectangle{
-        color: "white"
+        color: "#1D2B4A"
         radius: 8
     }
 
+
+    palette {
+        window: "#404040"
+        windowText: "white"
+        button: "#1D2B4A"
+        buttonText: "white"
+    }
+
     width: 450
+
+    property string fontFamily: "RobotoMedium"
 
     property bool hideMessage: false
     property bool hideMessageReady: false
@@ -55,10 +65,11 @@ Dialog {
         Text {
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
-            text: "Per selezionare le tracce sulla mappa, utilizza lo <b>strumento di selezione</b> <img src='qrc:/components/ui/assets/cursor.svg' width='20' height='20' style='vertical-align: middle;'/> nella barra degli strumenti in alto."
+            text: "Per selezionare le tracce sulla mappa, utilizza lo <b>strumento di selezione</b> <img src='qrc:/components/ui/assets/cursor_dialog.svg' width='20' height='20' style='vertical-align: middle;'/> nella barra degli strumenti in alto."
             textFormat: Text.RichText
             font.pixelSize: 14
-            color: "black"
+            font.family: tracksSelectionHintDialog.fontFamily;
+            color: "white"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
@@ -68,13 +79,14 @@ Dialog {
             Layout.alignment: Qt.AlignLeft
             text: "Non mostrare più questo messaggio"
             font.pixelSize: 13
+            font.family: tracksSelectionHintDialog.fontFamily;
             checked: tracksSelectionHintDialog.hideMessage
             spacing: 12
 
             Component.onCompleted: {
                 for (var i = 0; i < children.length; i++) {
                     if (children[i].hasOwnProperty('color')) {
-                        children[i].color = "black"
+                        children[i].color = "white"
                     }
                 }
             }
