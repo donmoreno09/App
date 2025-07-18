@@ -26,6 +26,12 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, [](){
+        qDebug() << "Applicazione in chiusura: cleanup e salvataggi qui.";
+        TrackManager::instance()->deactivateSync("doc-space");
+        TrackManager::instance()->deactivateSync("ais");
+    });
+
     qmlRegisterSingletonType<InteractionModeManager>("raise.singleton.interactionmanager", 1, 0, "InteractionModeManager", [](QQmlEngine*, QJSEngine*) -> QObject* {
         return InteractionModeManager::getInstance();
     });

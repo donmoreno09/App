@@ -10,6 +10,19 @@ TrackMapLayer::TrackMapLayer(QObject* parent)
 
     connect(SelectionBoxBus::instance(), &SelectionBoxBus::selected, this, &TrackMapLayer::handleSelectionBoxSelected);
     connect(SelectionBoxBus::instance(), &SelectionBoxBus::deselected, this, &TrackMapLayer::handleSelectionBoxDeselected);
+    m_isVisible = false;
+
+    m_clearTracksTimer = new QTimer(this);
+    m_clearTracksTimer->setSingleShot(true);
+    m_clearTracksTimer->setInterval(60 * 1000); // 60 seconds
+
+    connect(m_clearTracksTimer, &QTimer::timeout, this, [this]() {
+        if (!m_tracks.isEmpty()) {
+            qDebug() << "[TrackMapLayer] Timeout: clearing tracks due to inactivity";
+            m_tracks.clear();
+            emit tracksChanged();
+        }
+    });
 }
 
 QVariantList TrackMapLayer::tracks() const {
@@ -21,6 +34,8 @@ void TrackMapLayer::setTracks(const QVariantList& tracks) {
         m_tracks = tracks;
         emit tracksChanged();
         qDebug() << "[TrackMapLayer] setTracks:" << tracks.size() << " elementi";
+        // Riavvia il timer ogni volta che arrivano nuovi dati
+        m_clearTracksTimer->start();
     }
 }
 

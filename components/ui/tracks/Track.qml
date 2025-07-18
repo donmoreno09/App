@@ -53,6 +53,7 @@ MapQuickItem {
         id: trackRect
         width: 40
         height: 40
+        opacity: trackData.state === 1 ? 0.5 : 1.0
 
 
         // Semiretta di orientamento COG
@@ -110,15 +111,12 @@ MapQuickItem {
     }
 
     Component.onCompleted: {
-        console.log("[Track.qml] istanziato, tracknumber: " + trackData.tracknumber)
         mapView.addMapItem(traceMarker)
         traceMarker.screenPos = mapView.fromCoordinate(traceMarker.coordinate)
-        // Se è Nan entrambi significa che è fuori schermo.
-        console.log("[Track.qml] screen position: ", traceMarker.screenPos.toString())
     }
 
     Component.onDestruction: {
-        console.log("[Track.qml] distrutto")
+        //console.log("[Track.qml] distrutto")
         mapView.removeMapItem(traceMarker)
     }
 

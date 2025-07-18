@@ -23,6 +23,8 @@ public:
     Q_INVOKABLE void activate(const QString& track);
 
     Q_INVOKABLE void deactivate(const QString& track);
+    Q_INVOKABLE void deactivateSync(const QString& track);
+
 
 signals:
     void activated(const QString& track);

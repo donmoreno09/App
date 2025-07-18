@@ -1,3 +1,4 @@
+#include "QEventLoop"
 #include "trackmanager.h"
 #include "../connections/apiendpoints.h"
 
@@ -68,4 +69,32 @@ void TrackManager::deactivate(const QString &track)
             emit deactivated(track);
         }
     });
+}
+
+void TrackManager::deactivateSync(const QString &track)
+{
+    QNetworkRequest request(ApiEndpoints::TrackSenderStop(track));
+    QNetworkReply* reply = m_networkManager.post(request, QByteArray{});
+
+    QEventLoop loop;
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+
+    // Timeout opzionale per evitare blocchi infiniti
+    QTimer timeoutTimer;
+    timeoutTimer.setSingleShot(true);
+    QObject::connect(&timeoutTimer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    timeoutTimer.start(3000); // max 3s
+
+    loop.exec(); // blocca finché termina reply o timeout
+
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "[TrackManager] Failed to deactivate track '" << track << "':" << reply->errorString();
+    } else {
+        if (m_trackToLayer.contains(track)) {
+            emit m_trackToLayer.value(track)->deactivated();
+            emit deactivated(track);
+        }
+    }
+
+    reply->deleteLater();
 }
