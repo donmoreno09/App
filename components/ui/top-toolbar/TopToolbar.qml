@@ -109,7 +109,7 @@ ToolBar {
         },
         {
             id: "polyline",
-            icon: "../assets/line.svg"
+            icon: "../assets/polyline.svg"
         },
         {
             id: "polygon",

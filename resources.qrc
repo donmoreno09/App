@@ -367,5 +367,6 @@
         <file>components/ui/assets/poi.svg</file>
         <file>components/ui/assets/tir.svg</file>
         <file>components/ui/tracks/TracksSelectionHintDialog.qml</file>
+        <file>components/ui/assets/polyline.svg</file>
     </qresource>
 </RCC>
