@@ -12,6 +12,7 @@ import "SidePannel"
 import "ui/top-toolbar"
 import "ui/legacy/radial-menu"
 import "handlers"
+import "ui/tracks"
 
 Item {
     id: root
@@ -93,6 +94,10 @@ Item {
         }
     }
 
+    TracksSelectionHintDialog {
+        id: tracksSelectionHintDialog
+    }
+
     Connections {
         target: LayerManager
         function onAllLayersReady() {
@@ -104,6 +109,10 @@ Item {
 
             Qt.callLater(() => {
                 PoiOptionsController.fetchAll()
+            })
+
+            Qt.callLater(() => {
+                tracksSelectionHintDialog.syncInitialTrackStates();
             })
         }
     }
@@ -140,7 +149,7 @@ Item {
     SidePannel{
         id: sidePannel
     }
-    
+
     InsertPoiPopup {
         id: insertPoiPopup
     }
@@ -179,5 +188,7 @@ Item {
 
         logoSrc: Qt.resolvedUrl("./ui/assets/fnxt_n.svg")
         logoGlowPulse: true
+
+        onOptionToggledCallback: tracksSelectionHintDialog.handleRadialMenuOptionToggled
     }
 }

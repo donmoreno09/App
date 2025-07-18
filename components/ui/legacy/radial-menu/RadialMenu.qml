@@ -52,6 +52,8 @@ Widgets.BaseScatter {
 
     property string buttonFont: "RobotoRegular"
 
+    property var onOptionToggledCallback: null
+
     Connections {
         target: RadialMenuController
 
@@ -185,12 +187,19 @@ Widgets.BaseScatter {
         {
             changeLevel(w.nodeId)
             radialMenuInnerBckg.setBackParent(w.nodeId, w.name)
+            if (radialMenu.onOptionToggledCallback) {
+               radialMenu.onOptionToggledCallback("", false);
+            }
         }
         else
         {
             RadialMenuController.trigger(w.name, w.checkable?w.checked:w.clicked)
             RadialMenuController.setNodeActive(node.id, w.checkable?w.checked:false)
-            console.log("BUTTON", node.id, ":", w.checked)
+            console.log("BUTTON", node.id, ":", w.checked) // Log originale
+
+            if (w.checkable && radialMenu.onOptionToggledCallback) {
+                radialMenu.onOptionToggledCallback(node.propertyTreeNode.name, w.checked);
+            }
         }
     }
 
@@ -200,7 +209,11 @@ Widgets.BaseScatter {
     {
         var node = RadialMenuController.getNode(w.nodeId)
         RadialMenuController.setNodeActive(node.id, w.checked)
-        console.log(node.id, ":", w.checked)
+        console.log(node.id, ":", w.checked) // Log originale
+
+        if (radialMenu.onOptionToggledCallback) {
+            radialMenu.onOptionToggledCallback(node.propertyTreeNode.name, w.checked);
+        }
     }
 
     function handleBackButtonClicked(nodeId)
@@ -210,6 +223,10 @@ Widgets.BaseScatter {
         changeLevel(node.parent)
         var parent = RadialMenuController.getNode(node.parent)
         radialMenuInnerBckg.setBackParent(parent.id, parent.propertyTreeNode.name, parent.propertyTreeNode.isRoot)
+
+        if (radialMenu.onOptionToggledCallback) {
+                    radialMenu.onOptionToggledCallback("", false);
+                }
     }
 
     function parseNotifyStatus(status)
