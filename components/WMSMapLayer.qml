@@ -17,25 +17,20 @@ import "ui/tracks"
 Item {
     id: root
     anchors.fill: parent
+    z: 999
+    property var mapLayers: []
+    property int layerReadyCount: 0
+    property int expectedLayers: 4
+    property bool globalVisibility: true
     property var selectionPoints: []
     property int currentMode: InteractionModeManager.currentMode
 
+    // expose these "global" components for now
     property alias topToolbar: topToolbar
     property alias insertPopupPoi: insertPoiPopup
     property alias staticPoiLayerInstance: staticPoiLayerComponentIstance
     property alias annotationLayerInstance: annotationLayerComponentIstance
     property alias map: mapView
-
-    // Aggiungi queste proprietà per tenere traccia dei layer caricati
-    property var mapLayers: []
-    property int layerReadyCount: 0
-    property int expectedLayers: 4 // Assicurati che questo corrisponda al numero di layer che ti aspetti
-
-    property bool globalVisibility: true // Mantieni questa proprietà se usata altrove
-
-    Component.onCompleted: {
-        console.log("WSMapLayer.qml loaded.");
-    }
 
     Plugin {
         id: mapPlugin
@@ -55,8 +50,19 @@ Item {
             root.mapLayers = [trackLayerComponentIstance, track2LayerComponentIstance, annotationLayerComponentIstance, staticPoiLayerComponentIstance]
             updateZoomLevels()
         }
-
         onZoomLevelChanged: updateZoomLevels()
+
+        WheelHandler {
+                   acceptedDevices: PointerDevice.Mouse
+                   onWheel: (event) => {
+                       if (event.angleDelta.y > 0) {
+                           mapView.zoomLevel += 1
+                       } else if (event.angleDelta.y < 0) {
+                           mapView.zoomLevel -= 1
+                       }
+                       event.accepted = true
+                   }
+               }
 
         DrawingArea {
             id: drawingArea
