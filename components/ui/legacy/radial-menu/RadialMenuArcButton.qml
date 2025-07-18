@@ -138,11 +138,19 @@ Widgets.BaseShapeButton {
                     id: radialMenuArcButtonLabel
                     text: qsTr(displayName.toLowerCase())
                     horizontalAlignment: Text.AlignHCenter
-                    width: radialMenuArcButton.width*.3
+                    width: radialMenuArcButton.width*0.3
                     font.capitalization: Font.Capitalize
                     color: "white"
                     font.family: radialMenuArcButton.fontFamily
                     font.pointSize: 12
+
+                    onContentWidthChanged: {
+                            var availableWidth = parent.width;
+
+                            if (contentWidth > availableWidth && font.pointSize > 8) {
+                                font.pointSize = font.pointSize - 1;
+                            }
+                        }
                 }
 
                 Glow {
