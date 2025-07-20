@@ -5,12 +5,12 @@ MenuItem {
     contentItem: Text {
         text: parent.text
         font: parent.font
-        color: "black"
+        color: "white"
         verticalAlignment: Text.AlignVCenter
     }
 
     background: Rectangle {
         implicitWidth: 200
-        color: parent.highlighted ? "#adbed9" : "transparent"
+        color: parent.highlighted ? "#404040" : "transparent"
     }
 }
