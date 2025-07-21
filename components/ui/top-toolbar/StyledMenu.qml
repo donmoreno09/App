@@ -3,9 +3,10 @@ import QtQuick.Controls 6.8
 
 Menu {
     background: Rectangle {
+        color:"#1F3154"
         implicitWidth: 200
         radius: 2
-        border.color: "#dddddd"
+        border.color: "#404040"
         border.width: 1
     }
 

@@ -99,6 +99,7 @@ ColumnLayout {
 
                 MouseArea {
                     anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
                     hoverEnabled: true
                     onPressed: parent.color = Qt.darker("#1565C0", 1.2)
                     onReleased: parent.color = "#1565C0"

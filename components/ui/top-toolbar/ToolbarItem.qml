@@ -1,5 +1,6 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
+import Qt5Compat.GraphicalEffects
 import "./utils.js" as ToolbarUtils
 
 ToolButton {
@@ -13,8 +14,8 @@ ToolButton {
 
     background: Rectangle {
         color: {
-            if (toolBtn.hovered) return "#aabcda"
-            if (tool.id === toolbar.currentToolId || tool.id === toolbar.currentMode) return "#bfcbde"
+            if (toolBtn.hovered) return "#2a2a2a"
+            if (tool.id === toolbar.currentToolId || tool.id === toolbar.currentMode) return "#404040"
 
             return "transparent"
         }
@@ -26,11 +27,23 @@ ToolButton {
         anchors.fill: parent
 
         Image {
+            id: toolIcon
             source: tool.icon
             width: 16
             height: 16
             anchors.centerIn: parent
             fillMode: Image.PreserveAspectFit
+            visible: false
+        }
+
+        ColorOverlay {
+            anchors.fill: toolIcon
+            source: toolIcon
+            color: {
+                if (tool.id === toolbar.currentToolId || tool.id === toolbar.currentMode) return "#FFFFFF"
+                if (toolBtn.hovered) return "#FFFFFF"
+                return "#CCCCCC"
+            }
         }
 
         Text {

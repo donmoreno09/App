@@ -70,7 +70,7 @@ ColumnLayout {
                         text: "Start Time"
                         font.pixelSize: 14
                         font.bold: true
-                        color: "#333333"
+                        color: "white"
                     }
 
                     TimePicker {
@@ -90,7 +90,7 @@ ColumnLayout {
                         text: "End Time"
                         font.pixelSize: 14
                         font.bold: true
-                        color: "#333333"
+                        color: "white"
                     }
 
                     TimePicker {
@@ -109,7 +109,7 @@ ColumnLayout {
                     " - " + Qt.formatDateTime(getEndDateTime(), "dd MMM yyyy hh:mm") :
                     "Select a date range"
                 font.pixelSize: 14
-                color: isDateTimeRangeValid() ? "#666666" : "#ff0000"
+                color: isDateTimeRangeValid() ? "#CCCCCC" : "#ff0000"
                 Layout.alignment: Qt.AlignHCenter
             }
 
@@ -143,6 +143,7 @@ ColumnLayout {
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
                     onPressed: parent.color = Qt.darker("#1565C0", 1.2)
                     onReleased: parent.color = "#1565C0"
                     onEntered: parent.opacity = 1

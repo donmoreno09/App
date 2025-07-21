@@ -13,7 +13,7 @@ ColumnLayout {
     property color highlightColor: "#4CAF50"
     property color textColor: "white"
     property color borderColor: "#444"
-    property color disabledColor: "#808080"
+    property color disabledColor: "#1D2B4A"
 
     required property ShipArrivalController controller
 
@@ -86,6 +86,7 @@ ColumnLayout {
 
                 MouseArea {
                     anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
                     hoverEnabled: true
                     onPressed: parent.color = Qt.darker("#1565C0", 1.2)
                     onReleased: parent.color = "#1565C0"

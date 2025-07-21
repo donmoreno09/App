@@ -28,8 +28,8 @@ Item {
             width: 280
             height: 40
             radius: 8
-            color: enabled ? "#1565C0" : "#808080"
-            border.color: "#444444"
+            color: "#1565C0"
+            border.color: "#404040"
             border.width: 1
             Layout.alignment: Qt.AlignHCenter
 
@@ -50,8 +50,8 @@ Item {
                         console.error("Error loading component:", component.errorString())
                     }
                 }
-                onEntered: buttonBackground.color = "#0039CB"
-                onExited: buttonBackground.color = "#2962FF"
+                onEntered: buttonBackground.color = "#0D47A1"
+                onExited: buttonBackground.color = "#1565C0"
             }
 
             Text {

@@ -7,7 +7,6 @@ import raise.singleton.controllers 1.0
 
 ToolBar {
     id: topToolbar
-    // the property `padding` does not work by itself
     topPadding: 6
     bottomPadding: 6
     leftPadding: 6
@@ -224,8 +223,8 @@ ToolBar {
 
     background: Rectangle {
         radius: 6
-        color: "white"
-        border.color: "#dddddd"
+        color: "#1F3154"
+        border.color: "#404040"
         border.width: 1
     }
 

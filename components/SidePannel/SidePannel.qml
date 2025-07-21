@@ -12,10 +12,10 @@ Rectangle {
     id: sidePanel
     width: 500
     height: parent.height
-    color: Qt.lighter("#000f1f", 1.1)
+    color: "#1F3154"
     gradient: Gradient {
-        GradientStop { position: 0.0; color: "#000000" }
-        GradientStop { position: 1.0; color: "#001122" }
+        GradientStop { position: 0.0; color: "#1F3154" }
+        GradientStop { position: 1.0; color: "#0F1F35" }
     }
 
     property bool expanded: false
@@ -85,7 +85,10 @@ Rectangle {
                 height: 70
 
                 MouseArea {
+                    id: tabMouseArea
+                    cursorShape: Qt.PointingHandCursor
                     anchors.fill: parent
+                    hoverEnabled: true
                     onClicked: currentTab = index
                 }
 
@@ -98,22 +101,30 @@ Rectangle {
                         width: 40
                         height: 40
                         radius: 20
-                        color: currentTab === index ? "white" : "transparent"
-                        border.color: "white"
+                        color: {
+                            if (currentTab === index) return "#FFFFFF"
+                            if (tabMouseArea.containsMouse) return "#404040"
+                            return "transparent"
+                        }
+                        border.color: currentTab === index ? "#FFFFFF" : "#666666"
                         border.width: 1
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         Text {
                             anchors.centerIn: parent
                             text: modelData.icon
-                            color: currentTab === index ? "#000" : "#fff"
+                            color: {
+                                if (currentTab === index) return "#000000"
+                                if (tabMouseArea.containsMouse) return "#FFFFFF"
+                                return "#CCCCCC"
+                            }
                             font.pixelSize: 18
                         }
                     }
 
                     Text {
                         text: modelData.label
-                        color: "white"
+                        color: currentTab === index ? "#FFFFFF" : "#CCCCCC"
                         font.pixelSize: 12
                         horizontalAlignment: Text.AlignHCenter
                         anchors.horizontalCenter: parent.horizontalCenter

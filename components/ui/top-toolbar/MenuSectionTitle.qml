@@ -11,6 +11,7 @@ MenuSeparator {
 
     contentItem: Text {
         text: parent.text
+        color: "white"
         width: parent.width
         font.pixelSize: 12
         anchors.verticalCenter: parent.verticalCenter
