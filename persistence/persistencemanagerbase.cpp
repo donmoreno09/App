@@ -14,26 +14,26 @@ PersistenceManagerBase::PersistenceManagerBase(QObject *parent)
 
 void PersistenceManagerBase::load()
 {
-    qDebug() << "[PersistenceManagerBase] calling load...";
+    qDebug() << "[PersistenceManagerBase] Invoking load operation...";
     m_httpClient.get(QUrl(getApiEndpoint()));
 }
 
 void PersistenceManagerBase::get(const QString &objectId)
 {
-    qDebug() << "[PersistenceManagerBase] calling get...";
+    qDebug() << "[PersistenceManagerBase] Invoking get operation...";
     m_httpClient.get(QUrl(getApiEndpoint() + "/" + objectId));
 }
 
 void PersistenceManagerBase::save(const IPersistable &object)
 {
-    qDebug() << "[PersistenceManagerBase] calling save...";
+    qDebug() << "[PersistenceManagerBase] Invoking save operation...";
     qDebug() << QJsonDocument(object.toJson()).toJson();
     m_httpClient.post(QUrl(getApiEndpoint()), QJsonDocument(object.toJson()).toJson());
 }
 
 void PersistenceManagerBase::update(const IPersistable &object)
 {
-    qDebug() << "[PersistenceManagerBase] calling update...";
+    qDebug() << "[PersistenceManagerBase] Invoking update operation...";
     QJsonObject objJson = object.toJson();
     QString objectId = objJson["id"].toString();
     m_httpClient.put(QUrl(getApiEndpoint() + "/" + objectId),
@@ -42,34 +42,32 @@ void PersistenceManagerBase::update(const IPersistable &object)
 
 void PersistenceManagerBase::remove(const QString &objectId)
 {
-    qDebug() << "[PersistenceManagerBase] calling remove...";
+    qDebug() << "[PersistenceManagerBase] Invoking remove operation...";
     m_httpClient.deleteResource(QUrl(getApiEndpoint() + "/" + objectId));
 }
 
 void PersistenceManagerBase::onRequestFinished(QNetworkReply *reply)
 {
-    qDebug() << "[PersistenceManagerBase] Richiesta completata. Errore:" << reply->error();
+    qDebug() << "[PersistenceManagerBase] Request completed. Network error:" << reply->error();
 
     if (reply->error() != QNetworkReply::NoError) {
-        qWarning() << "[PersistenceManagerBase] Errore di rete:" << reply->errorString();
+        qWarning() << "[PersistenceManagerBase] Network error occurred:" << reply->errorString();
         emitFailed(reply);
 
-        // ERRORE: response contiene un JSON
+        // Attempt to parse error response payload (expected to be JSON)
         QByteArray response = reply->readAll();
         QJsonParseError err;
         QJsonDocument doc = QJsonDocument::fromJson(response, &err);
 
         if (err.error == QJsonParseError::NoError && doc.isObject()) {
             QJsonObject obj = doc.object();
-            qWarning() << "[PersistenceManagerBase] Errore nel salvataggio:"
-                       << obj;
+            qWarning() << "[PersistenceManagerBase] Error response payload:" << obj;
         } else {
-            // se JSON malformato o non oggetto
-            qWarning() << "[PersistenceManagerBase] Errore nel salvataggio, risposta:"
-                       << response;
+            // Response is malformed or not a JSON object
+            qWarning() << "[PersistenceManagerBase] Malformed error response:" << response;
         }
-        emit objectSaved(false, "");
 
+        emit objectSaved(false, "");
         reply->deleteLater();
         return;
     }
@@ -90,7 +88,7 @@ void PersistenceManagerBase::onRequestFinished(QNetworkReply *reply)
         handleDeleteReply(reply);
         break;
     default:
-        qWarning() << "[PersistenceManagerBase] Operazione HTTP non gestita:" << static_cast<int>(op);
+        qWarning() << "[PersistenceManagerBase] Unsupported HTTP operation:" << static_cast<int>(op);
         break;
     }
 
@@ -104,7 +102,7 @@ void PersistenceManagerBase::handleGetOrLoadReply(QNetworkReply *reply)
     QJsonDocument doc = QJsonDocument::fromJson(response, &error);
 
     if (error.error != QJsonParseError::NoError) {
-        qWarning() << "[PersistenceManagerBase] Errore parsing JSON:" << error.errorString();
+        qWarning() << "[PersistenceManagerBase] Failed to parse response JSON:" << error.errorString();
         return;
     }
 
@@ -122,23 +120,19 @@ void PersistenceManagerBase::handleGetOrLoadReply(QNetworkReply *reply)
         obj->fromJson(doc.object());
         emit objectGot(obj);
     } else {
-        qWarning() << "[PersistenceManagerBase] Risposta inattesa (né array né oggetto)";
+        qWarning() << "[PersistenceManagerBase] Unexpected response format (neither array nor object)";
     }
 }
 
 void PersistenceManagerBase::handleSaveReply(QNetworkReply *reply)
 {
-    // 1) Legge lo status code
-    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
-                         .toInt();
-
-    // 2) Legge sempre il body
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     QByteArray response = reply->readAll();
 
     if (statusCode == 201) {
-        // OK: response contiene l'UUID
+        // Created — server responded with UUID string
         QString uuid = QString::fromUtf8(response).remove('\"');
-        qDebug() << "[PersistenceManagerBase] Creato con UUID =" << uuid;
+        qDebug() << "[PersistenceManagerBase] Object created with UUID =" << uuid;
         emit objectSaved(true, uuid);
     }
 
@@ -151,16 +145,16 @@ void PersistenceManagerBase::handleUpdateReply(QNetworkReply *reply)
     QByteArray response = reply->readAll();
 
     if (statusCode == 200) {
-        // OK: response contiene l'UUID
+        // OK — server responded with UUID (or success payload)
         QString uuid = QString::fromUtf8(response);
-        qDebug() << "[PersistenceManagerBase] Aggiornato con UUID =" << uuid;
+        qDebug() << "[PersistenceManagerBase] Object updated with UUID =" << uuid;
         emit objectUpdated(true);
     }
 }
 
 void PersistenceManagerBase::handleDeleteReply(QNetworkReply *reply)
 {
-    // In un sistema reale potresti controllare HTTP 204/200 ecc.
+    // In production scenarios, you may want to check for 200/204/etc.
     emit objectRemoved(true);
 }
 

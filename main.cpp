@@ -26,6 +26,12 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, [](){
+        qDebug() << "[Shutdown] Application is terminating — performing cleanup and persisting state.";
+        TrackManager::instance()->deactivateSync("doc-space");
+        TrackManager::instance()->deactivateSync("ais");
+    });
+
     qmlRegisterSingletonType<InteractionModeManager>("raise.singleton.interactionmanager", 1, 0, "InteractionModeManager", [](QQmlEngine*, QJSEngine*) -> QObject* {
         return InteractionModeManager::getInstance();
     });
@@ -76,7 +82,5 @@ int main(int argc, char *argv[])
         return -1;
 
     int result = app.exec();
-    // delete wmsBaseMapLayer;
-
     return result;
 }

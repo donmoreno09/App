@@ -26,14 +26,14 @@ void MqttClientService::initialize(const QString& configPath) {
 void MqttClientService::loadConfiguration(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Errore apertura file config" << path;
+        qWarning() << "[MQTT] Failed to open configuration file:" << path;
         return;
     }
 
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &err);
     if (err.error != QJsonParseError::NoError) {
-        qWarning() << "Errore parsing config JSON:" << err.errorString();
+        qWarning() << "[MQTT] JSON parsing error in configuration:" << err.errorString();
         return;
     }
 
@@ -56,30 +56,30 @@ void MqttClientService::connectToBroker() {
 }
 
 void MqttClientService::onConnected() {
-    qDebug() << "[MQTT] Connesso";
+    qDebug() << "[MQTT] Connected to broker";
     for (const QString &topic : topicToLayer.keys()) {
         client->subscribe(topic);
-        qDebug() << "[MQTT] Sottoscritto a" << topic;
+        qDebug() << "[MQTT] Subscribed to topic:" << topic;
     }
 }
 
 void MqttClientService::onDisconnected() {
-    qDebug() << "[MQTT] Disconnesso dal broker";
+    qDebug() << "[MQTT] Disconnected from broker";
 }
 
 void MqttClientService::registerLayer(const QString& name, QObject* layer) {
     auto* casted = qobject_cast<TrackMapLayer*>(layer);
     if (casted) {
         layerInstances[name] = casted;
-        qDebug() << "[MQTT] Registrato layer" << name;
+        qDebug() << "[MQTT] Layer registered:" << name;
     } else {
-        qWarning() << "[MQTT] Errore: oggetto non è un TrackMapLayer valido";
+        qWarning() << "[MQTT] Error: provided object is not a valid TrackMapLayer instance";
     }
 }
 
 void MqttClientService::registerParser(const QString& topic, IMessageParser* parser) {
     topicToParser[topic] = parser;
-    qDebug() << "[MQTT] Parser registrato per topic" << topic;
+    qDebug() << "[MQTT] Parser registered for topic:" << topic;
 }
 
 QString MqttClientService::getTopicFromLayer(const QString &layer)
@@ -90,16 +90,16 @@ QString MqttClientService::getTopicFromLayer(const QString &layer)
 void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopicName& topicName) {
     QString topic = topicName.name();
     if (!topicToParser.contains(topic)) {
-        qWarning() << "[MQTT] Nessun parser per topic" << topic;
+        qWarning() << "[MQTT] No parser available for topic:" << topic;
         return;
     }
     if (!topicToLayer.contains(topic)) {
-        qWarning() << "[MQTT] Nessun layer associato per topic" << topic;
+        qWarning() << "[MQTT] No layer associated with topic:" << topic;
         return;
     }
     QString layerName = topicToLayer.value(topic);
     if (!layerInstances.contains(layerName)) {
-        qWarning() << "[MQTT] Layer" << layerName << "non registrato.";
+        qWarning() << "[MQTT] Target layer not registered:" << layerName;
         return;
     }
     IMessageParser* parser = topicToParser.value(topic);

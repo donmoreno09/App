@@ -91,17 +91,8 @@ void RadialMenuNode::fromJson(const QJsonObject& json)
     m_propertyTreeNode->fromJson(json["propertyTreeNode"].toObject());
     m_displayName = m_propertyTreeNode->name();
 
-    // This should be set outside but for now force it to highlight wms since
-    // that's the default map. (Technically it's "osm" but for whatever reason
-    // it's called wms.)
-    QStringList actives{"wms", "ais", "doc-space"};
-    m_active = actives.contains(m_propertyTreeNode->name());
-
-    // These tracks are activated by default. Should be called outside but for
-    // convenience, it's located here for now.
-    qDebug() << "[RadialMenuController] Activating tracks, ignore any HTTP requests 400/404 errors because they denote that the tracks are already active.";
-    TrackManager::instance()->activate("ais");
-    TrackManager::instance()->activate("doc-space");
+    // These tracks are not activated by default.
+    m_active = false;
 }
 
 void RadialMenuNode::setServiceStatus(int newServiceStatus)

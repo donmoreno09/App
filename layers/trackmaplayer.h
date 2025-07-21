@@ -4,6 +4,7 @@
 #include "./basemaplayer.h"
 #include <QGeoCoordinate>
 #include <QVariantList>
+#include <QTimer>
 
 class TrackMapLayer : public BaseMapLayer
 {
@@ -38,6 +39,7 @@ protected slots:
 private:
     QVariantList m_tracks;
     QVariantList m_selectedTracks;
+    QTimer* m_clearTracksTimer = nullptr;
 };
 
 #endif // TRACKMAPLAYER_H

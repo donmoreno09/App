@@ -4,7 +4,7 @@
 #include <QString>
 
 namespace ApiEndpoints {
-    static const QString BaseUrl = "https://trusted-wahoo-smooth.ngrok-free.app";
+    static const QString BaseUrl = "http://localhost:7000";
 
     static const QString BaseUrlPoi = BaseUrl + "/pointofinterest";
 

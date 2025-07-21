@@ -10,6 +10,19 @@ TrackMapLayer::TrackMapLayer(QObject* parent)
 
     connect(SelectionBoxBus::instance(), &SelectionBoxBus::selected, this, &TrackMapLayer::handleSelectionBoxSelected);
     connect(SelectionBoxBus::instance(), &SelectionBoxBus::deselected, this, &TrackMapLayer::handleSelectionBoxDeselected);
+    m_isVisible = false;
+
+    m_clearTracksTimer = new QTimer(this);
+    m_clearTracksTimer->setSingleShot(true);
+    m_clearTracksTimer->setInterval(60 * 1000); // 60 seconds
+
+    connect(m_clearTracksTimer, &QTimer::timeout, this, [this]() {
+        if (!m_tracks.isEmpty()) {
+            qDebug() << "[TrackMapLayer] Timeout: clearing tracks due to inactivity";
+            m_tracks.clear();
+            emit tracksChanged();
+        }
+    });
 }
 
 QVariantList TrackMapLayer::tracks() const {
@@ -20,7 +33,9 @@ void TrackMapLayer::setTracks(const QVariantList& tracks) {
     if (m_tracks != tracks) {
         m_tracks = tracks;
         emit tracksChanged();
-        qDebug() << "[TrackMapLayer] setTracks:" << tracks.size() << " elementi";
+        qDebug() << "[TrackMapLayer] setting:" << tracks.size() << " tracks";
+        // Reset timer everytime tracks has been updated
+        m_clearTracksTimer->start();
     }
 }
 
@@ -34,7 +49,7 @@ void TrackMapLayer::loadData() {
 
 void TrackMapLayer::handleLoadedObjects(const QList<IPersistable*>& objects) {
     for (auto obj : objects) {
-        qDebug() << "Loaded object:" << obj; // supponendo che IPersistable abbia toString()
+        qDebug() << "[TrackMapLayer] Loaded object:" << obj;
     }
 }
 
@@ -63,7 +78,7 @@ void TrackMapLayer::handleSelectionBoxSelected(const QString &target, const QGeo
     }
 
     QVariantList selectedTracks = GeoSelection::selectInRect(geoTracks, topLeft, bottomRight);
-    qDebug() << "elek: selectedTracks: " << selectedTracks;
+    qDebug() << "[TrackMapLayer] selectedTracks: " << selectedTracks;
     m_selectedTracks = selectedTracks;
     emit selectedObjectsChanged();
 }

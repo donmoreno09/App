@@ -40,7 +40,7 @@ void StaticPoiMapLayer::handleSelectionBoxSelected(const QString &target, const 
         return;
 
     QVariantList selectedPois = GeoSelection::selectInRect(m_poiModel->data(), topLeft, bottomRight);
-    qDebug() << "elek: selectedPois: " << selectedPois;
+    qDebug() << "[StaticPoiMapLayer] selectedPois: " << selectedPois;
     m_selectedPois = selectedPois;
     emit selectedObjectsChanged();
 }
