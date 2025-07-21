@@ -101,9 +101,14 @@ Item {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            onClicked: {
-                Qt.inputMethod.commit()
-                controller.fetchPredictionByTrailerId(parseInt(trailerIdInput.text))
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    Qt.inputMethod.commit()
+                    controller.fetchPredictionByTrailerId(parseInt(trailerIdInput.text))
+                }
             }
         }
 

@@ -41,9 +41,11 @@ Rectangle {
         z: -1
         radius: 8
         gradient: Gradient {
-            GradientStop { position: 0.0; color: "#000000" }
-            GradientStop { position: 1.0; color: "#001b2e" }
+            GradientStop { position: 0.0; color: "#1F3154" }
+            GradientStop { position: 1.0; color: "#0F1F35" }
         }
+        border.color: "#404040"
+        border.width: 1
     }
 
     property date startDate: new Date()
@@ -219,20 +221,25 @@ Rectangle {
             spacing: 0
 
             Button {
+                id: prevButton
                 text: "◀"
                 font.pixelSize: navButtonFontSize
                 flat: true
+                hoverEnabled: true
                 onClicked: {
                     var d = new Date(calendar.currentViewDate)
                     d.setMonth(d.getMonth() - 1)
                     if (d >= calendar.minimumDate)
                         calendar.currentViewDate = d
                 }
-                background: Rectangle { color: "transparent" }
+                background: Rectangle {
+                    color: prevButton.hovered ? "#404040" : "transparent"
+                    radius: 4
+                }
                 contentItem: Text {
                     text: parent.text
                     font: parent.font
-                    color: textColor
+                    color: prevButton.hovered ? "#FFFFFF" : textColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -241,20 +248,25 @@ Rectangle {
             Item { Layout.fillWidth: true }
 
             Button {
+                id: nextButton
                 text: "▶"
                 font.pixelSize: navButtonFontSize
                 flat: true
+                hoverEnabled: true
                 onClicked: {
                     var d = new Date(calendar.currentViewDate)
                     d.setMonth(d.getMonth() + 1)
                     if (d <= calendar.maximumDate)
                         calendar.currentViewDate = d
                 }
-                background: Rectangle { color: "transparent" }
+                background: Rectangle {
+                    color: nextButton.hovered ? "#404040" : "transparent"
+                    radius: 4
+                }
                 contentItem: Text {
                     text: parent.text
                     font: parent.font
-                    color: textColor
+                    color: nextButton.hovered ? "#FFFFFF" : textColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }

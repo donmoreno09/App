@@ -9,18 +9,33 @@ Rectangle {
     property bool active: false
     signal clicked()
 
-    color: active ? "white" : "#f0f0f0"
-    border.color: active ? "#aaaaaa" : "#dddddd"
+    color: active ? "#404040" : "transparent"
+    border.color: active ? "#666666" : "#444444"
     border.width: 1
 
     Text {
         text: root.icon
         font.pixelSize: 20
         anchors.centerIn: parent
+        color: active ? "#FFFFFF" : "#CCCCCC"
     }
 
     MouseArea {
         anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
         onClicked: root.clicked()
+        hoverEnabled: true
+        onEntered: {
+            if (!root.active) {
+                parent.color = "#2a2a2a"
+                parent.border.color = "#666666"
+            }
+        }
+        onExited: {
+            if (!root.active) {
+                parent.color = "transparent"
+                parent.border.color = "#444444"
+            }
+        }
     }
 }

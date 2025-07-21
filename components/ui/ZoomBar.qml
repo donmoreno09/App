@@ -12,7 +12,7 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: 12
-        color: "#0D1117"
+        color: "#1F3154"
         border.color: "#2E2E2E"
         border.width: 1
 
@@ -28,7 +28,7 @@ Item {
 
                 background: Rectangle {
                     anchors.fill: parent
-                    color: "#21262D"
+                    color: "#404040"
                     radius: 8
                     border.color: "#30363D"
                     border.width: 1
@@ -45,7 +45,12 @@ Item {
                     }
                 }
 
-                onClicked: zoomBar.zoomInRequested()
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: zoomBar.zoomInRequested()
+                }
+
             }
 
             // Bottone "-"
@@ -56,7 +61,7 @@ Item {
 
                 background: Rectangle {
                     anchors.fill: parent
-                    color: "#21262D"
+                    color: "#404040"
                     radius: 8
                     border.color: "#30363D"
                     border.width: 1
@@ -73,7 +78,11 @@ Item {
                     }
                 }
 
-                onClicked: zoomBar.zoomOutRequested()
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: zoomBar.zoomOutRequested()
+                }
             }
         }
     }
