@@ -121,10 +121,9 @@ BaseShape {
 
                     root.center = map.toCoordinate(screenPoint, false)
 
-                    const geometry = JSON.parse(JSON.stringify(modelData.geometry))
-                    geometry.coordinate = ShapeModel.toBECoordinate(root.center)
-                    modelData.geometry = geometry
-                    root.syncModelData()
+                    const newModelData = JSON.parse(JSON.stringify(modelData))
+                    newModelData.geometry.coordinate = ShapeModel.toBECoordinate(root.center)
+                    root.syncModelData(newModelData)
 
                     lastTranslation = Qt.vector2d(translation.x, translation.y)
                     updateDragHandlers()
@@ -246,12 +245,10 @@ BaseShape {
                         root.updateDragHandlers()
 
                         // update shape data (remember that radiusA is longitude and radiusB is latitude)
-                        const modelData = root.getModelData()
-                        const geometry = JSON.parse(JSON.stringify(modelData.geometry))
-                        geometry.radiusA = root.radiusLon
-                        geometry.radiusB = root.radiusLat
-                        modelData.geometry = geometry
-                        root.syncModelData()
+                        const newModelData = JSON.parse(JSON.stringify(root.getModelData()))
+                        newModelData.geometry.radiusA = root.radiusLon
+                        newModelData.geometry.radiusB = root.radiusLat
+                        root.syncModelData(newModelData)
 
                         root.modified()
                     }

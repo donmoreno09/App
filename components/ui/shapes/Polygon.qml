@@ -48,10 +48,9 @@ BaseShape {
         ShapeDragHandler {
             dragEnabled: !isDraggingHandle
             handleTranslationChange: function () {
-                const geometry = JSON.parse(JSON.stringify(modelData.geometry))
-                geometry.coordinates = ShapeModel.toBECoordinates(mapPolygon.path)
-                modelData.geometry = geometry
-                root.syncModelData()
+                const newModelData = JSON.parse(JSON.stringify(modelData))
+                newModelData.geometry.coordinates = ShapeModel.toBECoordinates(mapPolygon.path)
+                root.syncModelData(newModelData)
 
                 // Update dragging points coords
                 for (let i = 0; i < mapPolygon.path.length; i++) {
@@ -128,11 +127,9 @@ BaseShape {
                         const coord = path[0]
                         path.push(QtPositioning.coordinate(coord.latitude, coord.longitude)) // close polygon
 
-                        const modelData = root.getModelData()
-                        const geometry = JSON.parse(JSON.stringify(modelData.geometry))
-                        geometry.coordinates = ShapeModel.toBECoordinates(path)
-                        modelData.geometry = geometry
-                        root.syncModelData()
+                        const newModelData = JSON.parse(JSON.stringify(root.getModelData()))
+                        newModelData.geometry.coordinates = ShapeModel.toBECoordinates(path)
+                        root.syncModelData(newModelData)
 
                         root.modified()
                     }

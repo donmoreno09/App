@@ -41,10 +41,9 @@ BaseShape {
         ShapeDragHandler {
             dragEnabled: !isChangingHandle
             handleTranslationChange: function () {
-                const geometry = JSON.parse(JSON.stringify(modelData.geometry))
-                geometry.coordinates = ShapeModel.toBECoordinates(mapPolyline.path)
-                modelData.geometry = geometry
-                root.syncModelData()
+                const newModelData = JSON.parse(JSON.stringify(modelData))
+                newModelData.geometry.coordinates = ShapeModel.toBECoordinates(mapPolyline.path)
+                root.syncModelData(newModelData)
 
                 // Update dragging points coords
                 for (let i = 0; i < mapPolyline.path.length; i++) {
@@ -117,11 +116,9 @@ BaseShape {
 
                         mapPolyline.path = path
 
-                        const modelData = root.getModelData()
-                        const geometry = JSON.parse(JSON.stringify(modelData.geometry))
-                        geometry.coordinates = ShapeModel.toBECoordinates(path)
-                        modelData.geometry = geometry
-                        root.syncModelData()
+                        const newModelData = JSON.parse(JSON.stringify(root.getModelData()))
+                        newModelData.geometry.coordinates = ShapeModel.toBECoordinates(path)
+                        root.syncModelData(newModelData)
 
                         root.modified()
                     }
