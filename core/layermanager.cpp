@@ -94,6 +94,7 @@ void LayerManager::setFocusLayer(const QString& layerName) {
     if (BaseMapLayer* oldMapLayer = focusedMapLayer()) {
         disconnect(oldMapLayer, &BaseMapLayer::selectedObjectsChanged,
                    this, &LayerManager::selectedObjectsChanged);
+        oldMapLayer->setFocus(false);
     }
 
     m_focusedLayer = layerName;
@@ -103,6 +104,7 @@ void LayerManager::setFocusLayer(const QString& layerName) {
     if (BaseMapLayer* newMapLayer = focusedMapLayer()) {
         connect(newMapLayer, &BaseMapLayer::selectedObjectsChanged,
                 this, &LayerManager::selectedObjectsChanged);
+        newMapLayer->setFocus(true);
     }
 
     emit selectedObjectsChanged();
