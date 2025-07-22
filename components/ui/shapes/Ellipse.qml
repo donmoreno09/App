@@ -268,8 +268,8 @@ BaseShape {
                         centerScreen.y - dy
                     )
 
-                    const handleCoord = map.toCoordinate(handleScreen)
-                    const mirrorCoord = map.toCoordinate(mirrorScreen)
+                    const handleCoord = map.toCoordinate(handleScreen, false)
+                    const mirrorCoord = map.toCoordinate(mirrorScreen, false)
                     switch (index) {
                     case 0:  // North
                         dragHandlersModel.set(0, handleCoord)
