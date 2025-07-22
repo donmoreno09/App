@@ -34,7 +34,7 @@ MapItemGroup {
         return modelData
     }
 
-    function syncModelData() {
-        modelData = modelData
+    function syncModelData(newModelData) {
+        modelData = newModelData
     }
 }

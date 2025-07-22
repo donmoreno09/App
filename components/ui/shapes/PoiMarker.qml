@@ -50,11 +50,10 @@ BaseShape {
 
         ShapeDragHandler {
             handleTranslationChange: function () {
-                const geometry = JSON.parse(JSON.stringify(modelData.geometry))
-                geometry.coordinate.x = mapItem.coordinate.longitude
-                geometry.coordinate.y = mapItem.coordinate.latitude
-                modelData.geometry = geometry
-                root.syncModelData()
+                const newModelData = JSON.parse(JSON.stringify(modelData))
+                newModelData.geometry.coordinate.x = mapItem.coordinate.longitude
+                newModelData.geometry.coordinate.y = mapItem.coordinate.latitude
+                root.syncModelData(newModelData)
             }
 
             onReleased: {
