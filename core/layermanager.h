@@ -12,6 +12,7 @@ class BaseLayer;
 class LayerManager : public QObject
 {
     Q_OBJECT
+
     Q_PROPERTY(QVariantList layerNames READ listLayerNames NOTIFY layerNamesChanged)
     Q_PROPERTY(QVariantList layerList READ layerList NOTIFY layerListChanged)
     Q_PROPERTY(QVariantList selectedObjects READ selectedObjects NOTIFY selectedObjectsChanged)
