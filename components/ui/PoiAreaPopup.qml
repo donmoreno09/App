@@ -21,7 +21,7 @@ Rectangle {
     signal saveClicked(var details)
     signal rectangleChanged(real topLat, real topLon, real bottomLat, real bottomLon)
 
-    width: 320
+    width: 300
     height: 36 + popupContent.implicitHeight + 12
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
@@ -59,6 +59,17 @@ Rectangle {
         bottomRightLon.text = bottomLon.toFixed(6)
     }
 
+    function validateRectangle() {
+        let lat1 = parseFloat(topLeftLat.text)
+        let lon1 = parseFloat(topLeftLon.text)
+        let lat2 = parseFloat(bottomRightLat.text)
+        let lon2 = parseFloat(bottomRightLon.text)
+
+        if (!isNaN(lat1) && !isNaN(lon1) && !isNaN(lat2) && !isNaN(lon2)) {
+            rectangleChanged(lat1, lon1, lat2, lon2)
+        }
+    }
+
     Component.onCompleted: bringToFront()
     Component.onDestruction: PopupManager.unregister(popup)
 
@@ -74,9 +85,11 @@ Rectangle {
         color: "transparent"
 
         Text {
-            text: "Insert Area POI"
+            text: popup.title
             anchors.verticalCenter: parent.verticalCenter
+            anchors.top: parent.top
             anchors.left: parent.left
+            anchors.topMargin: 12
             anchors.leftMargin: 12
             font.bold: true
             color: "black"
@@ -90,6 +103,7 @@ Rectangle {
             yAxis.enabled: true
             yAxis.minimum: 0
             yAxis.maximum: popup.parent.height - popup.height
+
             onActiveChanged: mouseArea.cursorShape = active ? Qt.ClosedHandCursor : Qt.OpenHandCursor
         }
 
@@ -97,7 +111,11 @@ Rectangle {
             id: mouseArea
             anchors.fill: parent
             cursorShape: Qt.OpenHandCursor
-            onPressed: cursorShape = Qt.ClosedHandCursor
+            onPressed: {
+                cursorShape = Qt.ClosedHandCursor
+                popup.bringToFront()
+            }
+
             onReleased: cursorShape = Qt.OpenHandCursor
         }
     }
@@ -105,65 +123,105 @@ Rectangle {
     ColumnLayout {
         id: popupContent
         spacing: 12
-        anchors.top: header.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: 12
+        anchors {
+            top: header.bottom;
+            left: parent.left;
+            right: parent.right;
+            topMargin: 0
+            bottomMargin: 12
+            leftMargin: 12
+            rightMargin: 12
+        }
 
         // === Label ===
         ColumnLayout {
+            width: parent.width - 24
             spacing: 2
             Label { text: "Label"; color: "black" }
             TextField {
                 id: labelField
                 placeholderText: "Enter label..."
+                font.pixelSize: 14
+                color: "black"
                 Layout.fillWidth: true
-                background: Rectangle { radius: 2; border.color: "#888888" }
+
+                background: Rectangle {
+                    radius: 2
+                    border.color: "#888888"
+                }
             }
         }
 
         // === Category ===
         ColumnLayout {
+            width: parent.width
             spacing: 2
-            Label { text: "Category"; color: "black" }
+
+            Label {
+                text: "Category"
+                color: "black"
+            }
+
             StyledComboBox {
                 id: categoryComboBox
                 model: []
+                font.pixelSize: 14
                 Layout.fillWidth: true
             }
         }
 
         // === Type ===
         ColumnLayout {
+            width: parent.width
             spacing: 2
-            Label { text: "Type"; color: "black" }
+
+            Label {
+                text: "Type"
+                color: "black"
+            }
+
             StyledComboBox {
                 id: typeComboBox
                 model: []
+                font.pixelSize: 14
                 Layout.fillWidth: true
             }
         }
 
         // === Health Status ===
         ColumnLayout {
+            width: parent.width
             spacing: 2
-            Label { text: "Health Status"; color: "black" }
+
+            Label {
+                text: "Health Status"
+                color: "black"
+            }
+
             StyledComboBox {
                 id: healthStatusComboBox
                 model: PoiOptionsController.healthStatuses
                 textRole: "value"
+                font.pixelSize: 14
                 Layout.fillWidth: true
             }
         }
 
         // === Operational State ===
         ColumnLayout {
+            width: parent.width
             spacing: 2
-            Label { text: "Operational State"; color: "black" }
+
+            Label {
+                text: "Operational State"
+                color: "black"
+            }
+
             StyledComboBox {
                 id: operationalStateComboBox
                 model: PoiOptionsController.operationalStates
                 textRole: "value"
+                font.pixelSize: 14
                 Layout.fillWidth: true
             }
         }
@@ -175,47 +233,78 @@ Rectangle {
             rowSpacing: 4
             Layout.fillWidth: true
 
-            Label { text: "Top Left Latitude" }
+            Label { text: "Top Left Latitude"; color: "black" }
             TextField {
                 id: topLeftLat
+                placeholderText: "0.000000"
+                color: "black"
                 validator: DoubleValidator { bottom: -90; top: 90; decimals: 6 }
                 onEditingFinished: validateRectangle()
+                background: Rectangle { radius: 2; border.color: "#888888" }
             }
 
-            Label { text: "Top Left Longitude" }
+            Label { text: "Top Left Longitude"; color: "black" }
             TextField {
                 id: topLeftLon
+                placeholderText: "0.000000"
+                color: "black"
                 validator: DoubleValidator { bottom: -180; top: 180; decimals: 6 }
                 onEditingFinished: validateRectangle()
+                background: Rectangle { radius: 2; border.color: "#888888" }
             }
 
-            Label { text: "Bottom Right Latitude" }
+            Label { text: "Bottom Right Latitude"; color: "black" }
             TextField {
                 id: bottomRightLat
+                placeholderText: "0.000000"
+                color: "black"
                 validator: DoubleValidator { bottom: -90; top: 90; decimals: 6 }
                 onEditingFinished: validateRectangle()
+                background: Rectangle { radius: 2; border.color: "#888888" }
             }
 
-            Label { text: "Bottom Right Longitude" }
+            Label { text: "Bottom Right Longitude"; color: "black" }
             TextField {
                 id: bottomRightLon
+                placeholderText: "0.000000"
+                color: "black"
                 validator: DoubleValidator { bottom: -180; top: 180; decimals: 6 }
                 onEditingFinished: validateRectangle()
+                background: Rectangle { radius: 2; border.color: "#888888" }
             }
         }
 
         // === Note ===
         ColumnLayout {
+            width: parent.width
             spacing: 2
-            Label { text: "Note"; color: "black" }
+            Layout.preferredHeight: 80
+
+            Label {
+                text: "Note"
+                color: "black"
+            }
+
             ScrollView {
-                Layout.preferredHeight: 80
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                ScrollBar.vertical.policy: ScrollBar.AsNeeded
+                Layout.fillHeight: true
                 Layout.fillWidth: true
+
                 TextArea {
                     id: noteField
                     placeholderText: "Enter a note..."
-                    wrapMode: TextEdit.Wrap
-                    background: Rectangle { radius: 2; border.color: "#888888" }
+                    font.pixelSize: 14
+                    color: "black"
+                    padding: 0
+                    topPadding: 4
+                    bottomPadding: 4
+
+                    background: Rectangle {
+                        height: parent.height
+                        radius: 2
+                        border.color: "#888888"
+                    }
                 }
             }
         }
