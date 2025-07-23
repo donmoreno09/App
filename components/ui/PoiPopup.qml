@@ -20,10 +20,13 @@ Rectangle {
     property alias healthStatusComboBox: healthStatusComboBox
     property alias operationalStateComboBox: operationalStateComboBox
     property alias noteField: noteField
+    property alias latitudeField: latitudeField
+    property alias longitudeField: longitudeField
 
     signal opened()
     signal closed()
     signal saveClicked(var details)
+    signal coordinatesChanged(real latitude, real longitude)
 
     width: 300
     height: 36 + popupContent.implicitHeight + 12
@@ -50,6 +53,13 @@ Rectangle {
     function clearForm() {
         labelField.text = ""
         noteField.text = ""
+        latitudeField.text = ""
+        longitudeField.text = ""
+    }
+
+    function setCoordinates(latitude, longitude) {
+        latitudeField.text = latitude.toFixed(6)
+        longitudeField.text = longitude.toFixed(6)
     }
 
     Component.onCompleted: bringToFront()
@@ -219,6 +229,86 @@ Rectangle {
                 }
             }
 
+            // Coordinate fields
+            RowLayout {
+                width: parent.width
+                spacing: 6
+
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 2
+
+                    Label {
+                        text: "Latitude"
+                        color: "black"
+                    }
+
+                    TextField {
+                        id: latitudeField
+                        placeholderText: "0.000000"
+                        font.pixelSize: 14
+                        color: "black"
+                        Layout.fillWidth: true
+
+                        validator: DoubleValidator {
+                            bottom: -90.0
+                            top: 90.0
+                            decimals: 6
+                        }
+
+                        background: Rectangle {
+                            radius: 2
+                            border.color: "#888888"
+                        }
+
+                        onEditingFinished: {
+                            var lat = parseFloat(latitudeField.text)
+                            var lng = parseFloat(longitudeField.text)
+                            if (!isNaN(lat) && !isNaN(lng)) {
+                                popup.coordinatesChanged(lat, lng)
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 2
+
+                    Label {
+                        text: "Longitude"
+                        color: "black"
+                    }
+
+                    TextField {
+                        id: longitudeField
+                        placeholderText: "0.000000"
+                        font.pixelSize: 14
+                        color: "black"
+                        Layout.fillWidth: true
+
+                        validator: DoubleValidator {
+                            bottom: -180.0
+                            top: 180.0
+                            decimals: 6
+                        }
+
+                        background: Rectangle {
+                            radius: 2
+                            border.color: "#888888"
+                        }
+
+                        onEditingFinished: {
+                            var lat = parseFloat(latitudeField.text)
+                            var lng = parseFloat(longitudeField.text)
+                            if (!isNaN(lat) && !isNaN(lng)) {
+                                popup.coordinatesChanged(lat, lng)
+                            }
+                        }
+                    }
+                }
+            }
+
             ColumnLayout {
                 width: parent.width
                 spacing: 2
@@ -272,7 +362,7 @@ Rectangle {
                 id: saveBtn
                 text: "Save"
                 font.pixelSize: 14
-                enabled: !!labelField.text
+                enabled: !!labelField.text && !!latitudeField.text && !!longitudeField.text
                 onClicked: {
                     const categories = PoiOptionsController.types
 
@@ -290,6 +380,8 @@ Rectangle {
                         operationalState,
                         label: labelField.text,
                         note: noteField.text,
+                        latitude: parseFloat(latitudeField.text),
+                        longitude: parseFloat(longitudeField.text)
                     })
 
                     popup.clearForm()
