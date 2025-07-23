@@ -153,6 +153,9 @@ Item {
     InsertPoiPopup {
         id: insertPoiPopup
     }
+    AreaPoiPopup {
+        id: areaPoiPopup
+    }
 
     PointPoiInsertHandler {}
     RectanglePoiInsertHandler {}
