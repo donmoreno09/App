@@ -369,5 +369,6 @@
         <file>components/ui/tracks/TracksSelectionHintDialog.qml</file>
         <file>components/ui/assets/polyline.svg</file>
         <file>components/ui/assets/cursor_dialog.svg</file>
+        <file>components/ui/PoiAreaPopup.qml</file>
     </qresource>
 </RCC>
