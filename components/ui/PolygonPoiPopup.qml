@@ -109,21 +109,57 @@ Rectangle {
     function checkCoordinatesValidity() {
         // Un poligono è valido se ha almeno 3 punti con coordinate valide
         var validCount = 0
+        var invalidPoints = []
+
+        console.log("=== POLYGON VALIDATION DEBUG ===")
+        console.log("Total points in model:", coordinatesModel.count)
 
         for (let i = 0; i < coordinatesModel.count; i++) {
             const item = coordinatesModel.get(i)
-            const lat = parseFloat(item.latitude)
-            const lon = parseFloat(item.longitude)
+            const latStr = item.latitude
+            const lonStr = item.longitude
 
-            if (!isNaN(lat) && !isNaN(lon) &&
-                lat >= -90 && lat <= 90 &&
-                lon >= -180 && lon <= 180) {
-                validCount++
+            console.log(`Point ${i + 1}: lat="${latStr}", lon="${lonStr}"`)
+
+            // Controlla se le stringhe sono vuote o contengono solo caratteri non validi
+            if (!latStr || latStr.trim() === "" || !lonStr || lonStr.trim() === "") {
+                console.log(`Point ${i + 1}: EMPTY STRING - lat="${latStr}", lon="${lonStr}"`)
+                invalidPoints.push(i + 1)
+                continue
             }
+
+            const lat = parseFloat(latStr)
+            const lon = parseFloat(lonStr)
+
+            console.log(`Point ${i + 1}: parsed lat=${lat}, lon=${lon}`)
+
+            // Verifica se i numeri sono validi
+            if (isNaN(lat) || isNaN(lon)) {
+                console.log(`Point ${i + 1}: NaN VALUES - lat=${lat}, lon=${lon}`)
+                invalidPoints.push(i + 1)
+                continue
+            }
+
+            // Verifica i range geografici
+            if (lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+                console.log(`Point ${i + 1}: OUT OF RANGE - lat=${lat} (valid: -90 to 90), lon=${lon} (valid: -180 to 180)`)
+                invalidPoints.push(i + 1)
+                continue
+            }
+
+            // Se arriviamo qui, il punto è valido
+            validCount++
+            console.log(`Point ${i + 1}: VALID ✅`)
         }
 
         coordinatesAreValid = validCount >= 3
-        console.log("Polygon validation - valid points:", validCount, "isValid:", coordinatesAreValid)
+
+        console.log("=== VALIDATION RESULT ===")
+        console.log("Valid points:", validCount)
+        console.log("Invalid points:", invalidPoints)
+        console.log("Polygon is valid:", coordinatesAreValid)
+        console.log("===========================")
+
         return coordinatesAreValid
     }
 
