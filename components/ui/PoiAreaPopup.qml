@@ -7,7 +7,7 @@ import raise.singleton.controllers 1.0
 
 Rectangle {
     id: popup
-    property var title: "Insert Area POI"
+    property string title: "Insert Area POI"
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
     property alias typeComboBox: typeComboBox
