@@ -20,6 +20,10 @@ PanelsCommons.BasePanel {
     required property var trackData   // PORTING: dati live della traccia
     required property var marker      // PORTING: riferimento al Track.qml
 
+    // variables to track responsiveness to screen resize
+    property real relativeX: 0.5 // as a percentage of parent.width
+    property real relativeY: 0.5 // as a percentage of parent.height
+
     objectName: "baseTrackPanel"
     width: 330
     height: 390
@@ -398,5 +402,41 @@ PanelsCommons.BasePanel {
             return res
 
         return null
+    }
+
+    // Handle responsiveness when screen is resized
+    onXChanged: updateRelativePosition()
+    onYChanged: updateRelativePosition()
+
+    function updateRelativePosition() {
+        if (!baseTrackPanel.isAnchorActive && baseTrackPanel.visible) { // only update if not collapsed
+            relativeX = x / parent.width
+            relativeY = y / parent.height
+        }
+    }
+
+    function repositionFromRelative() {
+        if (!baseTrackPanel.isAnchorActive && baseTrackPanel.visible) {
+            x = relativeX * parent.width
+            y = relativeY * parent.height
+        }
+    }
+
+    Connections {
+        target: parent
+        function onWidthChanged() { repositionFromRelative() }
+        function onHeightChanged() { repositionFromRelative() }
+    }
+
+    // Handle responsiveness on the panel marker link
+    function repositionMarkerAnchor() {
+        if (marker && marker.updateScreenPos)
+            marker.updateScreenPos()
+    }
+
+    Connections {
+        target: parent
+        function onWidthChanged() { repositionMarkerAnchor() }
+        function onHeightChanged() { repositionMarkerAnchor() }
     }
 }

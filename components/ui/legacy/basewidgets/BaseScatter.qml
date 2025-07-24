@@ -36,6 +36,8 @@ Widgets.BaseKinetic {
     property bool minimizable: false
     property bool isAnchorActive: false
     property var anchor: null
+    property int collapsedOrientation: -1 // store last collapsed edge
+    property real anchorRelativeOffset: 0.5 // percentage (0.0 = left/top, 1.0 = right/bottom)
 
 
     property bool xOutLimit: true
@@ -379,11 +381,22 @@ Widgets.BaseKinetic {
 
         //baseScatter.kReset()
         baseScatter.reposBeforeAnchor()
+        baseScatter.collapsedOrientation = orientation
+
+        switch (orientation) {
+        case BaseScatterAnchor.Orientation.Bottom:
+        case BaseScatterAnchor.Orientation.Top:
+            baseScatter.anchorRelativeOffset = (baseScatter._centerX) / parent.width;
+            break;
+        case BaseScatterAnchor.Orientation.Left:
+        case BaseScatterAnchor.Orientation.Right:
+            baseScatter.anchorRelativeOffset = (baseScatter._centerY) / parent.height;
+            break;
+        }
+
         baseScatter.activeAnchor(true, orientation)
         baseScatter.show(false)
         baseScatter.minimized(true)
-
-
     }
 
     onXChanged: () => {
@@ -495,6 +508,36 @@ Widgets.BaseKinetic {
     onCenterYChanged: () => {
                          applyCenterY(baseScatter.centerY)
                       }
+
+    function realignAnchor() {
+        if (!baseScatter.isAnchorActive || !baseScatter.anchor)
+            return;
+
+        switch (baseScatter.collapsedOrientation) {
+        case BaseScatterAnchor.Orientation.Right:
+            baseScatter.anchor.centerX = parent.width;
+            baseScatter.anchor.centerY = baseScatter.anchorRelativeOffset * parent.height;
+            break;
+        case BaseScatterAnchor.Orientation.Left:
+            baseScatter.anchor.centerX = 0;
+            baseScatter.anchor.centerY = baseScatter.anchorRelativeOffset * parent.height;
+            break;
+        case BaseScatterAnchor.Orientation.Bottom:
+            baseScatter.anchor.centerX = baseScatter.anchorRelativeOffset * parent.width;
+            baseScatter.anchor.centerY = parent.height;
+            break;
+        case BaseScatterAnchor.Orientation.Top:
+            baseScatter.anchor.centerX = baseScatter.anchorRelativeOffset * parent.width;
+            baseScatter.anchor.centerY = 0;
+            break;
+        }
+    }
+
+    Connections {
+        target: baseScatter.parent
+        function onWidthChanged() { realignAnchor() }
+        function onHeightChanged() { realignAnchor() }
+    }
 
 
 }
