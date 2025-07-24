@@ -351,14 +351,19 @@ Rectangle {
             // === Buttons ===
             RowLayout {
                 spacing: 6
-                Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
+                Layout.topMargin: 12
 
-                Item { Layout.fillWidth: true } // Spacer
+                // Spacer per spingere i bottoni a destra
+                Item {
+                    Layout.fillWidth: true
+                }
 
                 StyledButton {
                     text: "Cancel"
                     font.pixelSize: 14
+                    Layout.preferredWidth: 80
+                    Layout.preferredHeight: 32
                     onClicked: {
                         popup.clearForm()
                         popup.close()
@@ -368,26 +373,31 @@ Rectangle {
                 StyledButton {
                     text: "Save"
                     font.pixelSize: 14
+                    Layout.preferredWidth: 80
+                    Layout.preferredHeight: 32
                     enabled: !!labelField.text &&
                             !!topLeftLat.text &&
                             !!topLeftLon.text &&
                             !!bottomRightLat.text &&
                             !!bottomRightLon.text
                     onClicked: {
-                        const categories = PoiOptionsController.types
+                        // Ottieni le categorie area POI (primi 4)
+                        const categories = PoiOptionsController.types.slice(0, 4)
                         const category = categories.find((c) => c.name === categoryComboBox.currentText)
                         const type = category ? category.values.find((v) => v.value === typeComboBox.currentText) : null
                         const healthStatus = PoiOptionsController.healthStatuses[healthStatusComboBox.currentIndex]
                         const operationalState = PoiOptionsController.operationalStates[operationalStateComboBox.currentIndex]
 
-                        saveClicked({
+                        // Crea l'oggetto details con tutti i campi necessari
+                        const details = {
                             id: null,
-                            category,
-                            type,
-                            healthStatus,
-                            operationalState,
+                            category: category,
+                            type: type,
+                            healthStatus: healthStatus,
+                            operationalState: operationalState,
                             label: labelField.text,
                             note: noteField.text,
+                            // Per area POI serve il rettangolo, non lat/lng singole
                             topLeft: QtPositioning.coordinate(
                                 parseFloat(topLeftLat.text),
                                 parseFloat(topLeftLon.text)
@@ -396,7 +406,18 @@ Rectangle {
                                 parseFloat(bottomRightLat.text),
                                 parseFloat(bottomRightLon.text)
                             )
-                        })
+                        }
+
+                        console.log("Area POI Save Details:", JSON.stringify({
+                            category: category ? category.name : "null",
+                            type: type ? type.value : "null",
+                            healthStatus: healthStatus ? healthStatus.value : "null",
+                            operationalState: operationalState ? operationalState.value : "null",
+                            label: details.label,
+                            note: details.note
+                        }))
+
+                        saveClicked(details)
                         popup.clearForm()
                         popup.close()
                     }
