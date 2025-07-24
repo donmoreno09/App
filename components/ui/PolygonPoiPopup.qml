@@ -27,13 +27,15 @@ Rectangle {
     height: Math.min(700, 36 + popupContent.implicitHeight + 12)
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
-    radius: 6
-    border.color: "#dddddd"
-    border.width: 2
+    radius: 12
+    color: "#1F3154"
+    border.color: "#333333"
+    border.width: 1
 
     property var polygonCoordinates: []
     property var originalPolygonPath: [] // Mantieni il path originale con punto di chiusura
     property bool isUpdatingFromExternal: false // Flag per prevenire loop
+    property bool coordinatesAreValid: false
 
     function open() {
         popup.visible = true
@@ -55,6 +57,7 @@ Rectangle {
         polygonCoordinates = []
         originalPolygonPath = []
         coordinatesModel.clear()
+        coordinatesAreValid = false
     }
 
     function setPolygonCoordinates(coordinates) {
@@ -87,16 +90,15 @@ Rectangle {
 
         console.log("Original coordinates:", coordinates.length, "-> Display coordinates:", displayCoordinates.length)
 
-        // CORREZIONE: NON includere il campo "index" nel modello
         for (let i = 0; i < displayCoordinates.length; i++) {
             coordinatesModel.append({
-                // RIMUOVI COMPLETAMENTE: index: i + 1,
                 latitude: displayCoordinates[i].latitude.toFixed(6),
                 longitude: displayCoordinates[i].longitude.toFixed(6)
             })
         }
 
         polygonCoordinates = displayCoordinates
+        checkCoordinatesValidity()
 
         Qt.callLater(function() {
             isUpdatingFromExternal = false
@@ -104,12 +106,31 @@ Rectangle {
         })
     }
 
+    function checkCoordinatesValidity() {
+        // Un poligono è valido se ha almeno 3 punti con coordinate valide
+        var validCount = 0
+
+        for (let i = 0; i < coordinatesModel.count; i++) {
+            const item = coordinatesModel.get(i)
+            const lat = parseFloat(item.latitude)
+            const lon = parseFloat(item.longitude)
+
+            if (!isNaN(lat) && !isNaN(lon) &&
+                lat >= -90 && lat <= 90 &&
+                lon >= -180 && lon <= 180) {
+                validCount++
+            }
+        }
+
+        coordinatesAreValid = validCount >= 3
+        console.log("Polygon validation - valid points:", validCount, "isValid:", coordinatesAreValid)
+        return coordinatesAreValid
+    }
 
     function updateCoordinatesFromModel() {
         console.log("=== updateCoordinatesFromModel called ===")
         console.log("isUpdatingFromExternal:", isUpdatingFromExternal)
 
-        // RIPRISTINA QUESTO CONTROLLO ESSENZIALE!
         if (isUpdatingFromExternal) {
             console.log("BLOCKED by isUpdatingFromExternal flag - preventing loop")
             return
@@ -128,7 +149,6 @@ Rectangle {
 
             console.log(`Point ${i}: lat="${latStr}" -> ${lat}, lon="${lonStr}" -> ${lon}`)
 
-            // Validazione range più specifica
             if (isNaN(lat) || lat < -90 || lat > 90) {
                 console.error("INVALID LATITUDE at index", i, ":", lat, "from string:", latStr)
                 continue
@@ -143,23 +163,20 @@ Rectangle {
 
         console.log("Valid coordinates found:", newCoordinates.length, "of", coordinatesModel.count)
 
+        polygonCoordinates = newCoordinates
+        checkCoordinatesValidity()
+
         if (newCoordinates.length >= 3) {
             console.log("=== UPDATING POLYGON ===")
-            console.log("Old polygonCoordinates count:", polygonCoordinates.length)
 
-            polygonCoordinates = newCoordinates
-
-            // Crea il path chiuso per il disegno
             var closedPath = [...newCoordinates]
-            closedPath.push(closedPath[0]) // Aggiungi il primo punto alla fine per chiudere
+            closedPath.push(closedPath[0])
 
             console.log("New polygonCoordinates count:", polygonCoordinates.length)
             console.log("Closed path count:", closedPath.length)
 
-            // IMPORTANTE: Segnala che stiamo per emettere un segnale dal popup
             console.log("=== EMITTING polygonChanged FROM POPUP ===")
 
-            // Stampa le coordinate per debug
             for (let i = 0; i < closedPath.length; i++) {
                 console.log(`Closed path[${i}]: ${closedPath[i].latitude}, ${closedPath[i].longitude}`)
             }
@@ -170,12 +187,10 @@ Rectangle {
         }
     }
 
-    // Funzione helper per creare un path chiuso
     function createClosedPath(coordinates) {
         if (coordinates.length < 3) return coordinates
 
         var closedPath = [...coordinates]
-        // Aggiungi il primo punto alla fine se non è già presente
         const firstPoint = closedPath[0]
         const lastPoint = closedPath[closedPath.length - 1]
 
@@ -187,7 +202,6 @@ Rectangle {
         return closedPath
     }
 
-    // Funzione helper per validare input coordinate
     function isValidCoordinate(value, isLatitude) {
         const num = parseFloat(value)
         if (isNaN(num)) return false
@@ -219,7 +233,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.leftMargin: 12
             font.bold: true
-            color: "black"
+            color: "#ffffff"
         }
 
         DragHandler {
@@ -269,18 +283,18 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Label"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 TextField {
                     id: labelField
                     placeholderText: "Enter label..."
                     font.pixelSize: 14
-                    color: "black"
+                    color: "#ffffff"
                     Layout.fillWidth: true
                     background: Rectangle {
-                        radius: 2
-                        border.color: "#888888"
-                        color: "white"
+                        radius: 6
+                        color: "#2a2a2a"
+                        border.color: "#444444"
                     }
                 }
             }
@@ -291,7 +305,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Category"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: categoryComboBox
@@ -307,7 +321,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Type"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: typeComboBox
@@ -323,7 +337,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Health Status"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: healthStatusComboBox
@@ -340,7 +354,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Operational State"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: operationalStateComboBox
@@ -356,38 +370,19 @@ Rectangle {
                 spacing: 6
                 Layout.fillWidth: true
 
-                RowLayout {
-                    Layout.fillWidth: true
-                    Label {
-                        text: "Polygon Vertices"
-                        color: "black"
-                        font.bold: true
-                    }
-
-                    Item { Layout.fillWidth: true }
-
-                    StyledButton {
-                        text: "Add Point"
-                        font.pixelSize: 12
-                        Layout.preferredWidth: 80
-                        Layout.preferredHeight: 24
-                        enabled: coordinatesModel.count < 50
-                        onClicked: {
-                            coordinatesModel.append({
-                                // RIMUOVI COMPLETAMENTE: index: coordinatesModel.count + 1,
-                                latitude: "0.000000",
-                                longitude: "0.000000"
-                            })
-                        }
-                    }
+                Label {
+                    text: "Polygon Vertices"
+                    color: "#ffffff"
+                    font.bold: true
                 }
 
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 200
-                    border.color: "#888888"
+                    color: "#2a2a2a"
+                    border.color: "#444444"
                     border.width: 1
-                    radius: 2
+                    radius: 6
 
                     ListView {
                         id: coordinatesList
@@ -400,9 +395,10 @@ Rectangle {
                         delegate: Rectangle {
                             width: coordinatesList.width
                             height: 40
-                            color: index % 2 === 0 ? "#f5f5f5" : "white"
-                            border.color: "#e0e0e0"
+                            color: index % 2 === 0 ? "#333333" : "#2a2a2a"
+                            border.color: "#444444"
                             border.width: 1
+                            radius: 4
 
                             RowLayout {
                                 anchors.fill: parent
@@ -410,8 +406,8 @@ Rectangle {
                                 spacing: 8
 
                                 Label {
-                                    text: "Point " + (index + 1) // CORREZIONE: usa index + 1 invece di model.index
-                                    color: "black"
+                                    text: "Point " + (index + 1)
+                                    color: "#ffffff"
                                     Layout.preferredWidth: 50
                                     font.pixelSize: 12
                                 }
@@ -421,43 +417,29 @@ Rectangle {
                                     text: model.latitude
                                     placeholderText: "Latitude"
                                     font.pixelSize: 12
-                                    color: "black"
+                                    color: "#ffffff"
                                     Layout.fillWidth: true
 
-                                    property bool isValidInput: true
-                                    property string lastValidValue: model.latitude
-
-                                    function validateInput(value) {
-                                        const num = parseFloat(value)
-                                        return !isNaN(num) && num >= -90.0 && num <= 90.0
-                                    }
-
                                     background: Rectangle {
-                                        radius: 2
-                                        border.color: latField.isValidInput ? "#cccccc" : "#ff6b6b"
-                                        border.width: latField.isValidInput ? 1 : 2
-                                        color: "white"
-                                    }
-
-                                    onTextChanged: {
-                                        isValidInput = validateInput(text)
+                                        radius: 4
+                                        color: "#1F3154"
+                                        border.color: "#555555"
+                                        border.width: 1
                                     }
 
                                     onEditingFinished: {
                                         console.log("=== LATITUDE EDITING FINISHED ===")
-                                        console.log("Field text:", text, "Model value:", model.latitude, "Valid:", isValidInput)
+                                        console.log("Field text:", text, "Model value:", model.latitude)
                                         console.log("Delegate index:", index, "of", coordinatesModel.count, "total items")
 
-                                        // VERIFICA CHE L'INDEX SIA VALIDO
                                         if (index < 0 || index >= coordinatesModel.count) {
                                             console.error("INDEX OUT OF RANGE! index:", index, "count:", coordinatesModel.count)
                                             return
                                         }
 
-                                        if (isValidInput && text !== model.latitude) {
+                                        if (text !== model.latitude) {
                                             console.log("UPDATING latitude from", model.latitude, "to", text)
 
-                                            // Verifica che l'item esista prima di aggiornarlo
                                             const item = coordinatesModel.get(index)
                                             if (!item) {
                                                 console.error("Item at index", index, "does not exist!")
@@ -465,22 +447,9 @@ Rectangle {
                                             }
 
                                             coordinatesModel.setProperty(index, "latitude", text)
-                                            lastValidValue = text
-
-                                            // Aggiorna il model immediatamente
                                             updateCoordinatesFromModel()
-                                        } else if (!isValidInput) {
-                                            console.log("INVALID latitude, reverting to:", lastValidValue)
-                                            text = lastValidValue
-                                            isValidInput = true
                                         } else {
                                             console.log("No change needed - same value")
-                                        }
-                                    }
-
-                                    Component.onCompleted: {
-                                        if (model && model.latitude) {
-                                            lastValidValue = model.latitude
                                         }
                                     }
                                 }
@@ -490,43 +459,29 @@ Rectangle {
                                     text: model.longitude
                                     placeholderText: "Longitude"
                                     font.pixelSize: 12
-                                    color: "black"
+                                    color: "#ffffff"
                                     Layout.fillWidth: true
 
-                                    property bool isValidInput: true
-                                    property string lastValidValue: model.longitude
-
-                                    function validateInput(value) {
-                                        const num = parseFloat(value)
-                                        return !isNaN(num) && num >= -180.0 && num <= 180.0
-                                    }
-
                                     background: Rectangle {
-                                        radius: 2
-                                        border.color: lonField.isValidInput ? "#cccccc" : "#ff6b6b"
-                                        border.width: lonField.isValidInput ? 1 : 2
-                                        color: "white"
-                                    }
-
-                                    onTextChanged: {
-                                        isValidInput = validateInput(text)
+                                        radius: 4
+                                        color: "#1F3154"
+                                        border.color: "#555555"
+                                        border.width: 1
                                     }
 
                                     onEditingFinished: {
                                         console.log("=== LONGITUDE EDITING FINISHED ===")
-                                        console.log("Field text:", text, "Model value:", model.longitude, "Valid:", isValidInput)
+                                        console.log("Field text:", text, "Model value:", model.longitude)
                                         console.log("Delegate index:", index, "of", coordinatesModel.count, "total items")
 
-                                        // VERIFICA CHE L'INDEX SIA VALIDO
                                         if (index < 0 || index >= coordinatesModel.count) {
                                             console.error("INDEX OUT OF RANGE! index:", index, "count:", coordinatesModel.count)
                                             return
                                         }
 
-                                        if (isValidInput && text !== model.longitude) {
+                                        if (text !== model.longitude) {
                                             console.log("UPDATING longitude from", model.longitude, "to", text)
 
-                                            // Verifica che l'item esista prima di aggiornarlo
                                             const item = coordinatesModel.get(index)
                                             if (!item) {
                                                 console.error("Item at index", index, "does not exist!")
@@ -534,22 +489,9 @@ Rectangle {
                                             }
 
                                             coordinatesModel.setProperty(index, "longitude", text)
-                                            lastValidValue = text
-
-                                            // Aggiorna il model immediatamente
                                             updateCoordinatesFromModel()
-                                        } else if (!isValidInput) {
-                                            console.log("INVALID longitude, reverting to:", lastValidValue)
-                                            text = lastValidValue
-                                            isValidInput = true
                                         } else {
                                             console.log("No change needed - same value")
-                                        }
-                                    }
-
-                                    Component.onCompleted: {
-                                        if (model && model.longitude) {
-                                            lastValidValue = model.longitude
                                         }
                                     }
                                 }
@@ -562,7 +504,6 @@ Rectangle {
                                     enabled: coordinatesModel.count > 3
                                     onClicked: {
                                         coordinatesModel.remove(index)
-                                        // RIMUOVI la rinumerazione degli indici - non è necessaria
                                         updateCoordinatesFromModel()
                                     }
                                 }
@@ -571,18 +512,23 @@ Rectangle {
                     }
                 }
 
+                // Status message
                 Label {
                     text: {
                         const count = coordinatesModel.count
-                        if (count < 3) {
+                        if (coordinatesAreValid) {
+                            return `✓ Valid polygon (${count} points)`
+                        } else if (count < 3) {
                             return `Points: ${count} (${3 - count} more needed to form a polygon)`
                         } else {
-                            return `Points: ${count} (valid polygon)`
+                            return `⚠ Invalid coordinates in polygon`
                         }
                     }
-                    color: coordinatesModel.count >= 3 ? "#22c55e" : "#ef4444"
+                    color: coordinatesAreValid ? "#22c55e" : "#ef4444"
                     font.pixelSize: 12
                     font.bold: true
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
                 }
             }
 
@@ -594,7 +540,7 @@ Rectangle {
 
                 Label {
                     text: "Note"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 ScrollView {
                     Layout.preferredHeight: 80
@@ -606,13 +552,13 @@ Rectangle {
                         id: noteField
                         placeholderText: "Enter a note..."
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         wrapMode: TextEdit.Wrap
                         padding: 4
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
-                            color: "white"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
                     }
                 }
@@ -645,7 +591,7 @@ Rectangle {
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
-                    enabled: !!labelField.text && coordinatesModel.count >= 3
+                    enabled: !!labelField.text && coordinatesAreValid
                     onClicked: {
                         // Ottieni le categorie area POI (primi 4)
                         const categories = PoiOptionsController.types.slice(0, 4)
@@ -673,7 +619,6 @@ Rectangle {
                             operationalState: operationalState,
                             label: labelField.text,
                             note: noteField.text,
-                            // Per il server, usa le coordinate modificate invece di originalPolygonPath
                             coordinates: createClosedPath(polygonCoordinates)
                         }
 

@@ -24,9 +24,13 @@ Rectangle {
     height: Math.min(600, 36 + popupContent.implicitHeight + 12)
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
-    radius: 6
-    border.color: "#dddddd"
-    border.width: 2
+    radius: 12
+    color: "#1F3154"
+    border.color: "#333333"
+    border.width: 1
+
+    // Proprietà per validazione
+    property bool coordinatesAreValid: false
 
     function open() {
         popup.visible = true
@@ -49,6 +53,7 @@ Rectangle {
         topLeftLon.text = ""
         bottomRightLat.text = ""
         bottomRightLon.text = ""
+        coordinatesAreValid = false
     }
 
     function setCoordinates(topLat, topLon, bottomLat, bottomLon) {
@@ -56,6 +61,43 @@ Rectangle {
         topLeftLon.text = topLon.toFixed(6)
         bottomRightLat.text = bottomLat.toFixed(6)
         bottomRightLon.text = bottomLon.toFixed(6)
+        checkCoordinatesValidity()
+    }
+
+    // Funzione per controllare se le coordinate formano un rettangolo valido
+    function checkCoordinatesValidity() {
+        var lat1 = parseFloat(topLeftLat.text)
+        var lon1 = parseFloat(topLeftLon.text)
+        var lat2 = parseFloat(bottomRightLat.text)
+        var lon2 = parseFloat(bottomRightLon.text)
+
+        // Prima verifica: tutti i numeri devono essere validi
+        var numbersValid = !isNaN(lat1) && !isNaN(lon1) && !isNaN(lat2) && !isNaN(lon2)
+
+        // Seconda verifica: devono essere nei range corretti
+        var rangesValid = numbersValid &&
+                         lat1 >= -90 && lat1 <= 90 &&
+                         lat2 >= -90 && lat2 <= 90 &&
+                         lon1 >= -180 && lon1 <= 180 &&
+                         lon2 >= -180 && lon2 <= 180
+
+        // Terza verifica: devono formare un rettangolo logico
+        // TopLeft deve essere a nord-ovest di BottomRight
+        var rectangleValid = rangesValid &&
+                           lat1 > lat2 &&  // Top deve essere più a nord (latitudine maggiore)
+                           lon1 < lon2     // Left deve essere più a ovest (longitudine minore)
+
+        coordinatesAreValid = rectangleValid
+
+        console.log("Coordinate validation:", {
+            lat1: lat1, lon1: lon1, lat2: lat2, lon2: lon2,
+            numbersValid: numbersValid,
+            rangesValid: rangesValid,
+            rectangleValid: rectangleValid,
+            coordinatesAreValid: coordinatesAreValid
+        })
+
+        return coordinatesAreValid
     }
 
     Component.onCompleted: bringToFront()
@@ -78,7 +120,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.leftMargin: 12
             font.bold: true
-            color: "black"
+            color: "#ffffff"
         }
 
         DragHandler {
@@ -128,17 +170,18 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Label"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 TextField {
                     id: labelField
                     placeholderText: "Enter label..."
                     font.pixelSize: 14
-                    color: "black"
+                    color: "#ffffff"
                     Layout.fillWidth: true
                     background: Rectangle {
-                        radius: 2
-                        border.color: "#888888"
+                        radius: 6
+                        color: "#2a2a2a"
+                        border.color: "#444444"
                     }
                 }
             }
@@ -149,7 +192,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Category"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: categoryComboBox
@@ -165,7 +208,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Type"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: typeComboBox
@@ -181,7 +224,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Health Status"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: healthStatusComboBox
@@ -198,7 +241,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Operational State"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: operationalStateComboBox
@@ -216,7 +259,7 @@ Rectangle {
 
                 Label {
                     text: "Rectangle Coordinates"
-                    color: "black"
+                    color: "#ffffff"
                     font.bold: true
                 }
 
@@ -228,14 +271,14 @@ Rectangle {
 
                     Label {
                         text: "Top Left Latitude"
-                        color: "black"
+                        color: "#ffffff"
                         Layout.preferredWidth: 120
                     }
                     TextField {
                         id: topLeftLat
                         placeholderText: "0.000000"
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         Layout.fillWidth: true
                         validator: DoubleValidator {
                             bottom: -90.0
@@ -243,21 +286,23 @@ Rectangle {
                             decimals: 6
                         }
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
+                        onTextChanged: checkCoordinatesValidity()
                         onEditingFinished: validateRectangle()
                     }
 
                     Label {
                         text: "Top Left Longitude"
-                        color: "black"
+                        color: "#ffffff"
                     }
                     TextField {
                         id: topLeftLon
                         placeholderText: "0.000000"
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         Layout.fillWidth: true
                         validator: DoubleValidator {
                             bottom: -180.0
@@ -265,21 +310,23 @@ Rectangle {
                             decimals: 6
                         }
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
+                        onTextChanged: checkCoordinatesValidity()
                         onEditingFinished: validateRectangle()
                     }
 
                     Label {
                         text: "Bottom Right Latitude"
-                        color: "black"
+                        color: "#ffffff"
                     }
                     TextField {
                         id: bottomRightLat
                         placeholderText: "0.000000"
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         Layout.fillWidth: true
                         validator: DoubleValidator {
                             bottom: -90.0
@@ -287,21 +334,23 @@ Rectangle {
                             decimals: 6
                         }
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
+                        onTextChanged: checkCoordinatesValidity()
                         onEditingFinished: validateRectangle()
                     }
 
                     Label {
                         text: "Bottom Right Longitude"
-                        color: "black"
+                        color: "#ffffff"
                     }
                     TextField {
                         id: bottomRightLon
                         placeholderText: "0.000000"
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         Layout.fillWidth: true
                         validator: DoubleValidator {
                             bottom: -180.0
@@ -309,11 +358,30 @@ Rectangle {
                             decimals: 6
                         }
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
+                        onTextChanged: checkCoordinatesValidity()
                         onEditingFinished: validateRectangle()
                     }
+                }
+
+                // Messaggio di stato
+                Label {
+                    visible: !!topLeftLat.text || !!topLeftLon.text || !!bottomRightLat.text || !!bottomRightLon.text
+                    text: {
+                        if (coordinatesAreValid) {
+                            return "✓ Valid rectangle coordinates"
+                        } else {
+                            return "⚠ Invalid coordinates "
+                        }
+                    }
+                    color: coordinatesAreValid ? "#22c55e" : "#ef4444"
+                    font.pixelSize: 12
+                    font.bold: true
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
                 }
             }
 
@@ -325,7 +393,7 @@ Rectangle {
 
                 Label {
                     text: "Note"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 ScrollView {
                     Layout.preferredHeight: 80
@@ -337,12 +405,13 @@ Rectangle {
                         id: noteField
                         placeholderText: "Enter a note..."
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         wrapMode: TextEdit.Wrap
                         padding: 4
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
                     }
                 }
@@ -375,11 +444,8 @@ Rectangle {
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
-                    enabled: !!labelField.text &&
-                            !!topLeftLat.text &&
-                            !!topLeftLon.text &&
-                            !!bottomRightLat.text &&
-                            !!bottomRightLon.text
+                    // CONDIZIONE AGGIORNATA: deve avere label E coordinate valide
+                    enabled: !!labelField.text && coordinatesAreValid
                     onClicked: {
                         // Ottieni le categorie area POI (primi 4)
                         const categories = PoiOptionsController.types.slice(0, 4)
@@ -427,12 +493,11 @@ Rectangle {
     }
 
     function validateRectangle() {
-        let lat1 = parseFloat(topLeftLat.text)
-        let lon1 = parseFloat(topLeftLon.text)
-        let lat2 = parseFloat(bottomRightLat.text)
-        let lon2 = parseFloat(bottomRightLon.text)
-
-        if (!isNaN(lat1) && !isNaN(lon1) && !isNaN(lat2) && !isNaN(lon2)) {
+        if (checkCoordinatesValidity()) {
+            let lat1 = parseFloat(topLeftLat.text)
+            let lon1 = parseFloat(topLeftLon.text)
+            let lat2 = parseFloat(bottomRightLat.text)
+            let lon2 = parseFloat(bottomRightLon.text)
             rectangleChanged(lat1, lon1, lat2, lon2)
         }
     }
