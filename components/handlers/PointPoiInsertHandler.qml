@@ -38,7 +38,8 @@ BasePoiInsertHandler {
             mapView.center = handler.currentCoordinate
 
             insertPoiPopup.x = (parent.width - insertPoiPopup.width) / 2
-            insertPoiPopup.y = parent.height / 2 - insertPoiPopup.height - 24
+            insertPoiPopup.y = (parent.height - insertPoiPopup.height) - 2
+
             insertPoiPopup.open()
         }
     }

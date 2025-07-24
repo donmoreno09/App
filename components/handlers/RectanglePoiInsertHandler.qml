@@ -125,15 +125,28 @@ BaseAreaPoiInsertHandler {
             handler.savingIndex = staticPoiLayerInstance.businessLogic.poiModel.rowCount()
             staticPoiLayerInstance.businessLogic.poiModel.append(data)
             PoiController.savePoiFromQml(data)
+
+            // IMPORTANTE: Pulisci il preview del rettangolo dopo il salvataggio
+            // per evitare che rimangano due rettangoli visibili
+            if (drawingArea.loader.item && drawingArea.loader.item.objectName === "RectangleEditor") {
+                console.log("Cleaning rectangle preview after save")
+                drawingArea.loader.item.resetPreview()
+            }
+
+            // Reset dello stato del handler
+            handler.rect = null
         }
 
         function onClosed() {
-            handler.rect = null
-
-            // Nascondi il rettangolo quando il popup si chiude
+            // Pulisci il preview del rettangolo quando il popup si chiude
+            // (sia per Cancel che per Save)
             if (drawingArea.loader.item && drawingArea.loader.item.objectName === "RectangleEditor") {
+                console.log("Cleaning rectangle preview on popup close")
                 drawingArea.loader.item.resetPreview()
             }
+
+            // Reset dello stato del handler
+            handler.rect = null
         }
     }
 
