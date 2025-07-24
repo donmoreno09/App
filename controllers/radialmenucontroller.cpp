@@ -107,10 +107,6 @@ void RadialMenuController::buildTriggerMap()
     m_triggerMap.insert("videoplayer", [](bool active) {
         qDebug() << "videoplayer triggered!";
     });
-
-    m_triggerMap.insert("ownship", [](bool active) {
-        qDebug() << "ownship triggered!";
-    });
 }
 
 void RadialMenuController::fetchMenu()
