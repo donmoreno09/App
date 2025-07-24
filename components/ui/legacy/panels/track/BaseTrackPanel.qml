@@ -424,7 +424,19 @@ PanelsCommons.BasePanel {
 
     Connections {
         target: parent
-        function onWidthChanged()  { repositionFromRelative() }
+        function onWidthChanged() { repositionFromRelative() }
         function onHeightChanged() { repositionFromRelative() }
+    }
+
+    // Handle responsiveness on the panel marker link
+    function repositionMarkerAnchor() {
+        if (marker && marker.updateScreenPos)
+            marker.updateScreenPos()
+    }
+
+    Connections {
+        target: parent
+        function onWidthChanged() { repositionMarkerAnchor() }
+        function onHeightChanged() { repositionMarkerAnchor() }
     }
 }
