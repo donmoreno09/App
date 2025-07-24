@@ -153,8 +153,17 @@ Item {
     InsertPoiPopup {
         id: insertPoiPopup
     }
-    AreaPoiPopup {
+    RectanglePoiPopup {
         id: areaPoiPopup
+        visible: false
+    }
+    EllipsePoiPopup {
+        id: ellipsePoiPopup
+        visible: false
+    }
+    PolygonPoiPopup {
+        id: polygonPoiPopup
+        visible: false
     }
 
     PointPoiInsertHandler {}

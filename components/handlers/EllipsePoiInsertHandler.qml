@@ -1,60 +1,3 @@
-// import QtQuick 2.15
-// import QtPositioning 6.8
-
-// import raise.singleton.controllers 1.0
-
-// import "../models/shapes.js" as ShapeModel
-
-// BaseAreaPoiInsertHandler {
-//     id: handler
-//     property var ellipse: null
-
-//     Connections {
-//         target: drawingArea.loader.item
-//         // depending on current loaded item, some signals are unknown so ignore their warnings
-//         ignoreUnknownSignals: true
-
-//         function onEllipseCreated(ellipse) {
-//             if (!(topToolbar.currentMode === 'poi-area' || topToolbar.currentMode === 'poi-point')) return
-//             if (topToolbar.currentPoiCategory < 0 || topToolbar.currentPoiType < 0) return
-
-//             console.log("[EllipseEditor.onReleased] ⊙", ellipse.center, " rLat:", ellipse.radiusLat, " rLon:", ellipse.radiusLon)
-//             handler.ellipse = ellipse
-
-//             mapView.center = ellipse.center
-
-//             insertPoiPopup.x = (parent.width - insertPoiPopup.width) / 2
-//             insertPoiPopup.y = parent.height / 2 - insertPoiPopup.height - 24
-//             insertPoiPopup.open()
-//         }
-//     }
-
-//     Connections {
-//         target: insertPoiPopup
-//         ignoreUnknownSignals: true
-//         // only allow these connections to fire when it's on shape tools for poi area insertion
-//         enabled: topToolbar.currentMode === 'poi-area'
-
-//         function onSaveClicked(details) {
-//             // ignore insert poi popup save if not this handler
-//             if (!handler.ellipse) return
-
-//             // Remember that radiusA => longitude and radiusB => latitude
-//             const data = ShapeModel.createEllipse(details.id, details.label, ellipse.center, ellipse.radiusLon, ellipse.radiusLat)
-//             handler.prefillData(data, details)
-//             console.log("SAVING ELLIPSE:", JSON.stringify(data))
-//             handler.savingIndex = staticPoiLayerInstance.businessLogic.poiModel.rowCount()
-//             staticPoiLayerInstance.businessLogic.poiModel.append(data)
-//             PoiController.savePoiFromQml(data)
-//         }
-
-//         function onClosed() {
-//             handler.ellipse = null
-//         }
-//     }
-// }
-
-
 import QtQuick 2.15
 import QtPositioning 6.8
 import raise.singleton.controllers 1.0
@@ -80,48 +23,31 @@ BaseAreaPoiInsertHandler {
             mapView.center = newEllipse.center
 
             // Posiziona il popup al centro
-            areaPoiPopup.x = (parent.width - areaPoiPopup.width) / 2
-            areaPoiPopup.y = (parent.height - areaPoiPopup.height) / 2
+            ellipsePoiPopup.x = (parent.width - ellipsePoiPopup.width) / 2
+            ellipsePoiPopup.y = (parent.height - ellipsePoiPopup.height) / 2
 
-            // Converti l'ellisse in coordinate rettangolari per il popup
-            // L'ellisse è definita da center + radius, convertiamo in topLeft/bottomRight
-            const topLeft = QtPositioning.coordinate(
-                newEllipse.center.latitude + newEllipse.radiusLat,
-                newEllipse.center.longitude - newEllipse.radiusLon
-            )
-            const bottomRight = QtPositioning.coordinate(
-                newEllipse.center.latitude - newEllipse.radiusLat,
-                newEllipse.center.longitude + newEllipse.radiusLon
-            )
-
-            // Imposta le coordinate nel popup (bounding box dell'ellisse)
-            areaPoiPopup.setCoordinates(
-                topLeft.latitude,
-                topLeft.longitude,
-                bottomRight.latitude,
-                bottomRight.longitude
+            // Imposta direttamente i parametri dell'ellisse nel popup
+            ellipsePoiPopup.setEllipseCoordinates(
+                newEllipse.center.latitude,
+                newEllipse.center.longitude,
+                newEllipse.radiusLat,
+                newEllipse.radiusLon
             )
 
             // Apri il popup
-            areaPoiPopup.open()
+            ellipsePoiPopup.open()
         }
     }
 
     Connections {
-        target: areaPoiPopup
+        target: ellipsePoiPopup
         ignoreUnknownSignals: true
         enabled: topToolbar.currentMode === "poi-area" && handler.savingIndex < 0
 
-        function onRectangleChanged(topLat, topLon, bottomLat, bottomLon) {
-            console.log("Ellipse coordinates changed:", topLat, topLon, bottomLat, bottomLon)
+        function onEllipseChanged(centerLat, centerLon, radiusLat, radiusLon) {
+            console.log("Ellipse parameters changed:", centerLat, centerLon, radiusLat, radiusLon)
 
-            // Riconverti le coordinate rettangolari in ellisse
-            const centerLat = (topLat + bottomLat) / 2
-            const centerLon = (topLon + bottomLon) / 2
-            const radiusLat = Math.abs(topLat - bottomLat) / 2
-            const radiusLon = Math.abs(topLon - bottomLon) / 2
-
-            // Aggiorna l'ellisse
+            // Aggiorna l'ellisse direttamente dai parametri del popup
             handler.ellipse = {
                 center: QtPositioning.coordinate(centerLat, centerLon),
                 radiusLat: radiusLat,
@@ -166,19 +92,14 @@ BaseAreaPoiInsertHandler {
                 radiusLon: handler.ellipse.radiusLon
             }))
 
-            // Se l'utente ha modificato le coordinate, usa quelle invece dell'ellisse originale
+            // Se l'utente ha modificato i parametri, usa quelli invece dell'ellisse originale
             let finalEllipse = handler.ellipse
-            if (details.topLeft && details.bottomRight) {
-                // L'utente ha modificato le coordinate, riconverti in ellisse
-                const centerLat = (details.topLeft.latitude + details.bottomRight.latitude) / 2
-                const centerLon = (details.topLeft.longitude + details.bottomRight.longitude) / 2
-                const radiusLat = Math.abs(details.topLeft.latitude - details.bottomRight.latitude) / 2
-                const radiusLon = Math.abs(details.topLeft.longitude - details.bottomRight.longitude) / 2
-
+            if (details.center && details.radiusLat && details.radiusLon) {
+                // L'utente ha modificato i parametri nel popup
                 finalEllipse = {
-                    center: QtPositioning.coordinate(centerLat, centerLon),
-                    radiusLat: radiusLat,
-                    radiusLon: radiusLon
+                    center: details.center,
+                    radiusLat: details.radiusLat,
+                    radiusLon: details.radiusLon
                 }
             }
 
@@ -211,15 +132,28 @@ BaseAreaPoiInsertHandler {
             handler.savingIndex = staticPoiLayerInstance.businessLogic.poiModel.rowCount()
             staticPoiLayerInstance.businessLogic.poiModel.append(data)
             PoiController.savePoiFromQml(data)
+
+            // IMPORTANTE: Pulisci il preview dell'ellisse dopo il salvataggio
+            // per evitare che rimangano due ellissi visibili
+            if (drawingArea.loader.item && drawingArea.loader.item.objectName === "EllipseEditor") {
+                console.log("Cleaning ellipse preview after save")
+                drawingArea.loader.item.resetPreview()
+            }
+
+            // Reset dello stato del handler
+            handler.ellipse = null
         }
 
         function onClosed() {
-            handler.ellipse = null
-
-            // Nascondi l'ellisse quando il popup si chiude
+            // Pulisci il preview dell'ellisse quando il popup si chiude
+            // (sia per Cancel che per Save)
             if (drawingArea.loader.item && drawingArea.loader.item.objectName === "EllipseEditor") {
+                console.log("Cleaning ellipse preview on popup close")
                 drawingArea.loader.item.resetPreview()
             }
+
+            // Reset dello stato del handler
+            handler.ellipse = null
         }
     }
 
