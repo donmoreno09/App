@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls.Basic
 
@@ -9,30 +8,31 @@ ComboBox {
 
     delegate: ItemDelegate {
         id: delegate
-
         required property var model
         required property int index
-
         width: control.width
         height: 28
+
         contentItem: Text {
             text: delegate.model[control.textRole]
-            color: "black"
+            color: "#ffffff"  // Changed to white
             font: control.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
         }
 
         highlighted: control.highlightedIndex === index
+
         background: Rectangle {
             anchors.fill: parent
-            color: delegate.highlighted ? "#adbed9" : "transparent"
+            color: delegate.highlighted ? "#1F3154" : "#2a2a2a"  // Dark theme colors
+            radius: 4
         }
     }
 
     indicator: Text {
         text: "\u25BE" // ▼
-        color: "#878787"
+        color: "#ffffff"  // Changed to white
         font.pixelSize: 12
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
@@ -40,12 +40,11 @@ ComboBox {
     }
 
     contentItem: Text {
-        leftPadding: 4
+        leftPadding: 8  // Increased padding
         rightPadding: control.indicator.width + control.spacing
-
         text: control.displayText
         font: control.font
-        color: "black"
+        color: "#ffffff"  // Changed to white
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
@@ -53,9 +52,10 @@ ComboBox {
     background: Rectangle {
         implicitWidth: 120
         implicitHeight: 28
-        border.color: "#888888"
+        color: "#2a2a2a"  // Dark background
+        border.color: "#444444"  // Dark border
         border.width: control.visualFocus ? 2 : 1
-        radius: 2
+        radius: 6  // Increased radius to match other inputs
     }
 
     popup: Popup {
@@ -69,13 +69,14 @@ ComboBox {
             implicitHeight: contentHeight
             model: control.popup.visible ? control.delegateModel : null
             currentIndex: control.highlightedIndex
-
             ScrollIndicator.vertical: ScrollIndicator { }
         }
 
         background: Rectangle {
-            border.color: "#888888"
-            radius: 2
+            color: "#2a2a2a"  // Dark popup background
+            border.color: "#444444"  // Dark border
+            border.width: 1
+            radius: 6
         }
     }
 }

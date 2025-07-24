@@ -24,9 +24,13 @@ Rectangle {
     height: Math.min(600, 36 + popupContent.implicitHeight + 12)
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
-    radius: 6
-    border.color: "#dddddd"
-    border.width: 2
+    radius: 12
+    color: "#1F3154"
+    border.color: "#333333"
+    border.width: 1
+
+    // Property for validation
+    property bool coordinatesAreValid: false
 
     function open() {
         popup.visible = true
@@ -45,17 +49,48 @@ Rectangle {
     function clearForm() {
         labelField.text = ""
         noteField.text = ""
-        centerLatField.text = ""
-        centerLonField.text = ""
+        centerLat.text = ""
+        centerLon.text = ""
         radiusLatField.text = ""
         radiusLonField.text = ""
+        coordinatesAreValid = false
     }
 
-    function setEllipseCoordinates(centerLat, centerLon, radiusLat, radiusLon) {
-        centerLatField.text = centerLat.toFixed(6)
-        centerLonField.text = centerLon.toFixed(6)
+    function setEllipseCoordinates(centerLatitude, centerLongitude, radiusLat, radiusLon) {
+        centerLat.text = centerLatitude.toFixed(6)
+        centerLon.text = centerLongitude.toFixed(6)
         radiusLatField.text = radiusLat.toFixed(6)
         radiusLonField.text = radiusLon.toFixed(6)
+        checkCoordinatesValidity()
+    }
+
+    // Function to check if ellipse parameters are valid
+    function checkCoordinatesValidity() {
+        var lat = parseFloat(centerLat.text)
+        var lon = parseFloat(centerLon.text)
+        var rLat = parseFloat(radiusLatField.text)
+        var rLon = parseFloat(radiusLonField.text)
+
+        // First check: all numbers must be valid
+        var numbersValid = !isNaN(lat) && !isNaN(lon) && !isNaN(rLat) && !isNaN(rLon)
+
+        // Second check: must be in correct ranges
+        var rangesValid = numbersValid &&
+                         lat >= -90 && lat <= 90 &&
+                         lon >= -180 && lon <= 180 &&
+                         rLat > 0 && rLat <= 90 &&  // Radius must be positive
+                         rLon > 0 && rLon <= 180    // Radius must be positive
+
+        coordinatesAreValid = rangesValid
+
+        console.log("Ellipse validation:", {
+            centerLat: lat, centerLon: lon, radiusLat: rLat, radiusLon: rLon,
+            numbersValid: numbersValid,
+            rangesValid: rangesValid,
+            coordinatesAreValid: coordinatesAreValid
+        })
+
+        return coordinatesAreValid
     }
 
     Component.onCompleted: bringToFront()
@@ -78,7 +113,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.leftMargin: 12
             font.bold: true
-            color: "black"
+            color: "#ffffff"
         }
 
         DragHandler {
@@ -128,17 +163,18 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Label"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 TextField {
                     id: labelField
                     placeholderText: "Enter label..."
                     font.pixelSize: 14
-                    color: "black"
+                    color: "#ffffff"
                     Layout.fillWidth: true
                     background: Rectangle {
-                        radius: 2
-                        border.color: "#888888"
+                        radius: 6
+                        color: "#2a2a2a"
+                        border.color: "#444444"
                     }
                 }
             }
@@ -149,7 +185,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Category"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: categoryComboBox
@@ -165,7 +201,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Type"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: typeComboBox
@@ -181,7 +217,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Health Status"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: healthStatusComboBox
@@ -198,7 +234,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label {
                     text: "Operational State"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 StyledComboBox {
                     id: operationalStateComboBox
@@ -209,14 +245,14 @@ Rectangle {
                 }
             }
 
-            // === Ellipse Coordinates ===
+            // === Coordinate inputs ===
             ColumnLayout {
                 spacing: 6
                 Layout.fillWidth: true
 
                 Label {
                     text: "Ellipse Parameters"
-                    color: "black"
+                    color: "#ffffff"
                     font.bold: true
                 }
 
@@ -228,14 +264,14 @@ Rectangle {
 
                     Label {
                         text: "Center Latitude"
-                        color: "black"
+                        color: "#ffffff"
                         Layout.preferredWidth: 120
                     }
                     TextField {
-                        id: centerLatField
+                        id: centerLat
                         placeholderText: "0.000000"
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         Layout.fillWidth: true
                         validator: DoubleValidator {
                             bottom: -90.0
@@ -243,21 +279,23 @@ Rectangle {
                             decimals: 6
                         }
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
+                        onTextChanged: checkCoordinatesValidity()
                         onEditingFinished: validateEllipse()
                     }
 
                     Label {
                         text: "Center Longitude"
-                        color: "black"
+                        color: "#ffffff"
                     }
                     TextField {
-                        id: centerLonField
+                        id: centerLon
                         placeholderText: "0.000000"
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         Layout.fillWidth: true
                         validator: DoubleValidator {
                             bottom: -180.0
@@ -265,55 +303,78 @@ Rectangle {
                             decimals: 6
                         }
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
+                        onTextChanged: checkCoordinatesValidity()
                         onEditingFinished: validateEllipse()
                     }
 
                     Label {
-                        text: "Latitude Radius"
-                        color: "black"
+                        text: "Radius (Latitude)"
+                        color: "#ffffff"
                     }
                     TextField {
                         id: radiusLatField
                         placeholderText: "0.000000"
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         Layout.fillWidth: true
                         validator: DoubleValidator {
-                            bottom: 0.0
+                            bottom: 0.000001
                             top: 90.0
                             decimals: 6
                         }
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
+                        onTextChanged: checkCoordinatesValidity()
                         onEditingFinished: validateEllipse()
                     }
 
                     Label {
-                        text: "Longitude Radius"
-                        color: "black"
+                        text: "Radius (Longitude)"
+                        color: "#ffffff"
                     }
                     TextField {
                         id: radiusLonField
                         placeholderText: "0.000000"
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         Layout.fillWidth: true
                         validator: DoubleValidator {
-                            bottom: 0.0
+                            bottom: 0.000001
                             top: 180.0
                             decimals: 6
                         }
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
+                        onTextChanged: checkCoordinatesValidity()
                         onEditingFinished: validateEllipse()
                     }
+                }
+
+                // Status message
+                Label {
+                    visible: !!centerLat.text || !!centerLon.text || !!radiusLatField.text || !!radiusLonField.text
+                    text: {
+                        if (coordinatesAreValid) {
+                            return "✓ Valid ellipse parameters"
+                        } else {
+                            return "⚠ Invalid parameters"
+                        }
+                    }
+                    color: coordinatesAreValid ? "#22c55e" : "#ef4444"
+                    font.pixelSize: 12
+                    font.bold: true
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
                 }
             }
 
@@ -325,7 +386,7 @@ Rectangle {
 
                 Label {
                     text: "Note"
-                    color: "black"
+                    color: "#ffffff"
                 }
                 ScrollView {
                     Layout.preferredHeight: 80
@@ -337,12 +398,13 @@ Rectangle {
                         id: noteField
                         placeholderText: "Enter a note..."
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         wrapMode: TextEdit.Wrap
                         padding: 4
                         background: Rectangle {
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
                     }
                 }
@@ -354,7 +416,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.topMargin: 12
 
-                // Spacer per spingere i bottoni a destra
+                // Spacer to push buttons to the right
                 Item {
                     Layout.fillWidth: true
                 }
@@ -375,20 +437,17 @@ Rectangle {
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
-                    enabled: !!labelField.text &&
-                            !!centerLatField.text &&
-                            !!centerLonField.text &&
-                            !!radiusLatField.text &&
-                            !!radiusLonField.text
+                    // UPDATED CONDITION: must have label AND valid coordinates
+                    enabled: !!labelField.text && coordinatesAreValid
                     onClicked: {
-                        // Ottieni le categorie area POI (primi 4)
+                        // Get area POI categories (first 4)
                         const categories = PoiOptionsController.types.slice(0, 4)
                         const category = categories.find((c) => c.name === categoryComboBox.currentText)
                         const type = category ? category.values.find((v) => v.value === typeComboBox.currentText) : null
                         const healthStatus = PoiOptionsController.healthStatuses[healthStatusComboBox.currentIndex]
                         const operationalState = PoiOptionsController.operationalStates[operationalStateComboBox.currentIndex]
 
-                        // Crea l'oggetto details con tutti i campi necessari
+                        // Create details object with all necessary fields
                         const details = {
                             id: null,
                             category: category,
@@ -397,10 +456,9 @@ Rectangle {
                             operationalState: operationalState,
                             label: labelField.text,
                             note: noteField.text,
-                            // Per ellisse POI serve center + radius
                             center: QtPositioning.coordinate(
-                                parseFloat(centerLatField.text),
-                                parseFloat(centerLonField.text)
+                                parseFloat(centerLat.text),
+                                parseFloat(centerLon.text)
                             ),
                             radiusLat: parseFloat(radiusLatField.text),
                             radiusLon: parseFloat(radiusLonField.text)
@@ -428,13 +486,12 @@ Rectangle {
     }
 
     function validateEllipse() {
-        let centerLat = parseFloat(centerLatField.text)
-        let centerLon = parseFloat(centerLonField.text)
-        let radiusLat = parseFloat(radiusLatField.text)
-        let radiusLon = parseFloat(radiusLonField.text)
-
-        if (!isNaN(centerLat) && !isNaN(centerLon) && !isNaN(radiusLat) && !isNaN(radiusLon)) {
-            ellipseChanged(centerLat, centerLon, radiusLat, radiusLon)
+        if (checkCoordinatesValidity()) {
+            let lat = parseFloat(centerLat.text)
+            let lon = parseFloat(centerLon.text)
+            let rLat = parseFloat(radiusLatField.text)
+            let rLon = parseFloat(radiusLonField.text)
+            ellipseChanged(lat, lon, rLat, rLon)
         }
     }
 }
