@@ -7,8 +7,7 @@ import raise.singleton.controllers 1.0
 
 Rectangle {
     id: popup
-
-    property var title
+    property var title: "Insert Area POI"
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
     property alias typeComboBox: typeComboBox
@@ -21,8 +20,8 @@ Rectangle {
     signal saveClicked(var details)
     signal rectangleChanged(real topLat, real topLon, real bottomLat, real bottomLon)
 
-    width: 300
-    height: 36 + popupContent.implicitHeight + 12
+    width: 340
+    height: Math.min(600, 36 + popupContent.implicitHeight + 12)
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
     radius: 6
@@ -59,17 +58,6 @@ Rectangle {
         bottomRightLon.text = bottomLon.toFixed(6)
     }
 
-    function validateRectangle() {
-        let lat1 = parseFloat(topLeftLat.text)
-        let lon1 = parseFloat(topLeftLon.text)
-        let lat2 = parseFloat(bottomRightLat.text)
-        let lon2 = parseFloat(bottomRightLon.text)
-
-        if (!isNaN(lat1) && !isNaN(lon1) && !isNaN(lat2) && !isNaN(lon2)) {
-            rectangleChanged(lat1, lon1, lat2, lon2)
-        }
-    }
-
     Component.onCompleted: bringToFront()
     Component.onDestruction: PopupManager.unregister(popup)
 
@@ -87,9 +75,7 @@ Rectangle {
         Text {
             text: popup.title
             anchors.verticalCenter: parent.verticalCenter
-            anchors.top: parent.top
             anchors.left: parent.left
-            anchors.topMargin: 12
             anchors.leftMargin: 12
             font.bold: true
             color: "black"
@@ -103,8 +89,10 @@ Rectangle {
             yAxis.enabled: true
             yAxis.minimum: 0
             yAxis.maximum: popup.parent.height - popup.height
-
-            onActiveChanged: mouseArea.cursorShape = active ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+            onActiveChanged: {
+                if (active) mouseArea.cursorShape = Qt.ClosedHandCursor
+                else mouseArea.cursorShape = Qt.OpenHandCursor
+            }
         }
 
         MouseArea {
@@ -115,237 +103,303 @@ Rectangle {
                 cursorShape = Qt.ClosedHandCursor
                 popup.bringToFront()
             }
-
             onReleased: cursorShape = Qt.OpenHandCursor
         }
     }
 
-    ColumnLayout {
-        id: popupContent
-        spacing: 12
-        anchors {
-            top: header.bottom;
-            left: parent.left;
-            right: parent.right;
-            topMargin: 0
-            bottomMargin: 12
-            leftMargin: 12
-            rightMargin: 12
-        }
+    ScrollView {
+        anchors.top: header.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.margins: 12
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.vertical.policy: ScrollBar.AsNeeded
+        contentHeight: popupContent.implicitHeight
 
-        // === Label ===
         ColumnLayout {
-            width: parent.width - 24
-            spacing: 2
-            Label { text: "Label"; color: "black" }
-            TextField {
-                id: labelField
-                placeholderText: "Enter label..."
-                font.pixelSize: 14
-                color: "black"
-                Layout.fillWidth: true
+            id: popupContent
+            spacing: 12
+            width: popup.width - 24
 
-                background: Rectangle {
-                    radius: 2
-                    border.color: "#888888"
+            // === Label ===
+            ColumnLayout {
+                spacing: 2
+                Layout.fillWidth: true
+                Label {
+                    text: "Label"
+                    color: "black"
                 }
-            }
-        }
-
-        // === Category ===
-        ColumnLayout {
-            width: parent.width
-            spacing: 2
-
-            Label {
-                text: "Category"
-                color: "black"
-            }
-
-            StyledComboBox {
-                id: categoryComboBox
-                model: []
-                font.pixelSize: 14
-                Layout.fillWidth: true
-            }
-        }
-
-        // === Type ===
-        ColumnLayout {
-            width: parent.width
-            spacing: 2
-
-            Label {
-                text: "Type"
-                color: "black"
-            }
-
-            StyledComboBox {
-                id: typeComboBox
-                model: []
-                font.pixelSize: 14
-                Layout.fillWidth: true
-            }
-        }
-
-        // === Health Status ===
-        ColumnLayout {
-            width: parent.width
-            spacing: 2
-
-            Label {
-                text: "Health Status"
-                color: "black"
-            }
-
-            StyledComboBox {
-                id: healthStatusComboBox
-                model: PoiOptionsController.healthStatuses
-                textRole: "value"
-                font.pixelSize: 14
-                Layout.fillWidth: true
-            }
-        }
-
-        // === Operational State ===
-        ColumnLayout {
-            width: parent.width
-            spacing: 2
-
-            Label {
-                text: "Operational State"
-                color: "black"
-            }
-
-            StyledComboBox {
-                id: operationalStateComboBox
-                model: PoiOptionsController.operationalStates
-                textRole: "value"
-                font.pixelSize: 14
-                Layout.fillWidth: true
-            }
-        }
-
-        // === Coordinate inputs ===
-        GridLayout {
-            columns: 2
-            columnSpacing: 6
-            rowSpacing: 4
-            Layout.fillWidth: true
-
-            Label { text: "Top Left Latitude"; color: "black" }
-            TextField {
-                id: topLeftLat
-                placeholderText: "0.000000"
-                color: "black"
-                validator: DoubleValidator { bottom: -90; top: 90; decimals: 6 }
-                onEditingFinished: validateRectangle()
-                background: Rectangle { radius: 2; border.color: "#888888" }
-            }
-
-            Label { text: "Top Left Longitude"; color: "black" }
-            TextField {
-                id: topLeftLon
-                placeholderText: "0.000000"
-                color: "black"
-                validator: DoubleValidator { bottom: -180; top: 180; decimals: 6 }
-                onEditingFinished: validateRectangle()
-                background: Rectangle { radius: 2; border.color: "#888888" }
-            }
-
-            Label { text: "Bottom Right Latitude"; color: "black" }
-            TextField {
-                id: bottomRightLat
-                placeholderText: "0.000000"
-                color: "black"
-                validator: DoubleValidator { bottom: -90; top: 90; decimals: 6 }
-                onEditingFinished: validateRectangle()
-                background: Rectangle { radius: 2; border.color: "#888888" }
-            }
-
-            Label { text: "Bottom Right Longitude"; color: "black" }
-            TextField {
-                id: bottomRightLon
-                placeholderText: "0.000000"
-                color: "black"
-                validator: DoubleValidator { bottom: -180; top: 180; decimals: 6 }
-                onEditingFinished: validateRectangle()
-                background: Rectangle { radius: 2; border.color: "#888888" }
-            }
-        }
-
-        // === Note ===
-        ColumnLayout {
-            width: parent.width
-            spacing: 2
-            Layout.preferredHeight: 80
-
-            Label {
-                text: "Note"
-                color: "black"
-            }
-
-            ScrollView {
-                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-                ScrollBar.vertical.policy: ScrollBar.AsNeeded
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-
-                TextArea {
-                    id: noteField
-                    placeholderText: "Enter a note..."
+                TextField {
+                    id: labelField
+                    placeholderText: "Enter label..."
                     font.pixelSize: 14
                     color: "black"
-                    padding: 0
-                    topPadding: 4
-                    bottomPadding: 4
-
+                    Layout.fillWidth: true
                     background: Rectangle {
-                        height: parent.height
                         radius: 2
                         border.color: "#888888"
                     }
                 }
             }
-        }
 
-        // === Buttons ===
-        RowLayout {
-            spacing: 6
-            Layout.alignment: Qt.AlignRight
-
-            StyledButton {
-                text: "Cancel"
-                onClicked: {
-                    popup.clearForm()
-                    popup.close()
+            // === Category ===
+            ColumnLayout {
+                spacing: 2
+                Layout.fillWidth: true
+                Label {
+                    text: "Category"
+                    color: "black"
+                }
+                StyledComboBox {
+                    id: categoryComboBox
+                    model: []
+                    font.pixelSize: 14
+                    Layout.fillWidth: true
                 }
             }
 
-            StyledButton {
-                text: "Save"
-                enabled: !!labelField.text && !!topLeftLat.text && !!topLeftLon.text && !!bottomRightLat.text && !!bottomRightLon.text
-                onClicked: {
-                    const categories = PoiOptionsController.types
-                    const category = categories.find((c) => c.name === categoryComboBox.currentText)
-                    const type = category.values.find((v) => v.value === typeComboBox.currentText)
-                    const healthStatus = PoiOptionsController.healthStatuses[healthStatusComboBox.currentIndex]
-                    const operationalState = PoiOptionsController.operationalStates[operationalStateComboBox.currentIndex]
+            // === Type ===
+            ColumnLayout {
+                spacing: 2
+                Layout.fillWidth: true
+                Label {
+                    text: "Type"
+                    color: "black"
+                }
+                StyledComboBox {
+                    id: typeComboBox
+                    model: []
+                    font.pixelSize: 14
+                    Layout.fillWidth: true
+                }
+            }
 
-                    saveClicked({
-                        id: null,
-                        category,
-                        type,
-                        healthStatus,
-                        operationalState,
-                        label: labelField.text,
-                        note: noteField.text,
-                        topLeft: QtPositioning.coordinate(parseFloat(topLeftLat.text), parseFloat(topLeftLon.text)),
-                        bottomRight: QtPositioning.coordinate(parseFloat(bottomRightLat.text), parseFloat(bottomRightLon.text))
-                    })
+            // === Health Status ===
+            ColumnLayout {
+                spacing: 2
+                Layout.fillWidth: true
+                Label {
+                    text: "Health Status"
+                    color: "black"
+                }
+                StyledComboBox {
+                    id: healthStatusComboBox
+                    model: PoiOptionsController.healthStatuses
+                    textRole: "value"
+                    font.pixelSize: 14
+                    Layout.fillWidth: true
+                }
+            }
 
-                    popup.clearForm()
-                    popup.close()
+            // === Operational State ===
+            ColumnLayout {
+                spacing: 2
+                Layout.fillWidth: true
+                Label {
+                    text: "Operational State"
+                    color: "black"
+                }
+                StyledComboBox {
+                    id: operationalStateComboBox
+                    model: PoiOptionsController.operationalStates
+                    textRole: "value"
+                    font.pixelSize: 14
+                    Layout.fillWidth: true
+                }
+            }
+
+            // === Coordinate inputs ===
+            ColumnLayout {
+                spacing: 6
+                Layout.fillWidth: true
+
+                Label {
+                    text: "Rectangle Coordinates"
+                    color: "black"
+                    font.bold: true
+                }
+
+                GridLayout {
+                    columns: 2
+                    columnSpacing: 8
+                    rowSpacing: 4
+                    Layout.fillWidth: true
+
+                    Label {
+                        text: "Top Left Latitude"
+                        color: "black"
+                        Layout.preferredWidth: 120
+                    }
+                    TextField {
+                        id: topLeftLat
+                        placeholderText: "0.000000"
+                        font.pixelSize: 14
+                        color: "black"
+                        Layout.fillWidth: true
+                        validator: DoubleValidator {
+                            bottom: -90.0
+                            top: 90.0
+                            decimals: 6
+                        }
+                        background: Rectangle {
+                            radius: 2
+                            border.color: "#888888"
+                        }
+                        onEditingFinished: validateRectangle()
+                    }
+
+                    Label {
+                        text: "Top Left Longitude"
+                        color: "black"
+                    }
+                    TextField {
+                        id: topLeftLon
+                        placeholderText: "0.000000"
+                        font.pixelSize: 14
+                        color: "black"
+                        Layout.fillWidth: true
+                        validator: DoubleValidator {
+                            bottom: -180.0
+                            top: 180.0
+                            decimals: 6
+                        }
+                        background: Rectangle {
+                            radius: 2
+                            border.color: "#888888"
+                        }
+                        onEditingFinished: validateRectangle()
+                    }
+
+                    Label {
+                        text: "Bottom Right Latitude"
+                        color: "black"
+                    }
+                    TextField {
+                        id: bottomRightLat
+                        placeholderText: "0.000000"
+                        font.pixelSize: 14
+                        color: "black"
+                        Layout.fillWidth: true
+                        validator: DoubleValidator {
+                            bottom: -90.0
+                            top: 90.0
+                            decimals: 6
+                        }
+                        background: Rectangle {
+                            radius: 2
+                            border.color: "#888888"
+                        }
+                        onEditingFinished: validateRectangle()
+                    }
+
+                    Label {
+                        text: "Bottom Right Longitude"
+                        color: "black"
+                    }
+                    TextField {
+                        id: bottomRightLon
+                        placeholderText: "0.000000"
+                        font.pixelSize: 14
+                        color: "black"
+                        Layout.fillWidth: true
+                        validator: DoubleValidator {
+                            bottom: -180.0
+                            top: 180.0
+                            decimals: 6
+                        }
+                        background: Rectangle {
+                            radius: 2
+                            border.color: "#888888"
+                        }
+                        onEditingFinished: validateRectangle()
+                    }
+                }
+            }
+
+            // === Note ===
+            ColumnLayout {
+                spacing: 2
+                Layout.fillWidth: true
+                Layout.preferredHeight: 80
+
+                Label {
+                    text: "Note"
+                    color: "black"
+                }
+                ScrollView {
+                    Layout.preferredHeight: 80
+                    Layout.fillWidth: true
+                    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                    ScrollBar.vertical.policy: ScrollBar.AsNeeded
+
+                    TextArea {
+                        id: noteField
+                        placeholderText: "Enter a note..."
+                        font.pixelSize: 14
+                        color: "black"
+                        wrapMode: TextEdit.Wrap
+                        padding: 4
+                        background: Rectangle {
+                            radius: 2
+                            border.color: "#888888"
+                        }
+                    }
+                }
+            }
+
+            // === Buttons ===
+            RowLayout {
+                spacing: 6
+                Layout.alignment: Qt.AlignRight
+                Layout.fillWidth: true
+
+                Item { Layout.fillWidth: true } // Spacer
+
+                StyledButton {
+                    text: "Cancel"
+                    font.pixelSize: 14
+                    onClicked: {
+                        popup.clearForm()
+                        popup.close()
+                    }
+                }
+
+                StyledButton {
+                    text: "Save"
+                    font.pixelSize: 14
+                    enabled: !!labelField.text &&
+                            !!topLeftLat.text &&
+                            !!topLeftLon.text &&
+                            !!bottomRightLat.text &&
+                            !!bottomRightLon.text
+                    onClicked: {
+                        const categories = PoiOptionsController.types
+                        const category = categories.find((c) => c.name === categoryComboBox.currentText)
+                        const type = category ? category.values.find((v) => v.value === typeComboBox.currentText) : null
+                        const healthStatus = PoiOptionsController.healthStatuses[healthStatusComboBox.currentIndex]
+                        const operationalState = PoiOptionsController.operationalStates[operationalStateComboBox.currentIndex]
+
+                        saveClicked({
+                            id: null,
+                            category,
+                            type,
+                            healthStatus,
+                            operationalState,
+                            label: labelField.text,
+                            note: noteField.text,
+                            topLeft: QtPositioning.coordinate(
+                                parseFloat(topLeftLat.text),
+                                parseFloat(topLeftLon.text)
+                            ),
+                            bottomRight: QtPositioning.coordinate(
+                                parseFloat(bottomRightLat.text),
+                                parseFloat(bottomRightLon.text)
+                            )
+                        })
+                        popup.clearForm()
+                        popup.close()
+                    }
                 }
             }
         }
