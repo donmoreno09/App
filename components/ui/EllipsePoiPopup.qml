@@ -168,6 +168,7 @@ Rectangle {
                 TextField {
                     id: labelField
                     placeholderText: "Enter label..."
+                    placeholderTextColor: "#888888"
                     font.pixelSize: 14
                     color: "#ffffff"
                     Layout.fillWidth: true
@@ -270,6 +271,7 @@ Rectangle {
                     TextField {
                         id: centerLat
                         placeholderText: "0.000000"
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
                         Layout.fillWidth: true
@@ -294,6 +296,7 @@ Rectangle {
                     TextField {
                         id: centerLon
                         placeholderText: "0.000000"
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
                         Layout.fillWidth: true
@@ -318,6 +321,7 @@ Rectangle {
                     TextField {
                         id: radiusLatField
                         placeholderText: "0.000000"
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
                         Layout.fillWidth: true
@@ -342,6 +346,7 @@ Rectangle {
                     TextField {
                         id: radiusLonField
                         placeholderText: "0.000000"
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
                         Layout.fillWidth: true
@@ -397,6 +402,7 @@ Rectangle {
                     TextArea {
                         id: noteField
                         placeholderText: "Enter a note..."
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
                         wrapMode: TextEdit.Wrap

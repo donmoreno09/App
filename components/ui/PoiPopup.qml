@@ -179,6 +179,7 @@ Rectangle {
                 TextField {
                     id: labelField
                     placeholderText: "Enter label..."
+                    placeholderTextColor: "#888888"
                     font.pixelSize: 14
                     color: "#ffffff"
                     Layout.fillWidth: true
@@ -278,6 +279,7 @@ Rectangle {
                     TextField {
                         id: latitudeField
                         placeholderText: "0.000000"
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
                         Layout.fillWidth: true
@@ -318,6 +320,7 @@ Rectangle {
                     TextField {
                         id: longitudeField
                         placeholderText: "0.000000"
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
                         Layout.fillWidth: true
@@ -383,6 +386,7 @@ Rectangle {
                     TextArea {
                         id: noteField
                         placeholderText: "Enter a note..."
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
                         padding: 0
