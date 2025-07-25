@@ -293,6 +293,7 @@ PanelsCommons.BasePanel {
             baseTrackPanel.link = null
         }
         baseTrackPanel.marker = null
+        baseTrackPanel.destroyAnchor() // Method from BaseScatter.qml to destroy the minimized UI state
         baseTrackPanel.destroy()
         baseTrackPanel.closed()
     }
