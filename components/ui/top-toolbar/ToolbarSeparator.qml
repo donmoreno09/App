@@ -6,5 +6,5 @@ Rectangle {
 
     width: 1
     height: 24
-    color: "#dddddd"
+    color: "#3a4a6a"
 }
