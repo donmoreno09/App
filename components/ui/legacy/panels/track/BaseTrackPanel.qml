@@ -430,8 +430,16 @@ PanelsCommons.BasePanel {
 
     // Handle responsiveness on the panel marker link
     function repositionMarkerAnchor() {
-        if (marker && marker.updateScreenPos)
-            marker.updateScreenPos()
+        if (marker && marker.updateScreenPos) {
+            // By using callLater, we're deferring the update
+            // of the marker anchor. This is important since
+            // maximizing/restoring down the window is triggered
+            // as a onWidth/HeightChanged and the map track object
+            // is updated after the window has been maximized/restored.
+            // Therefore, the need to defer the updateScreenPos
+            // after the map object has been updated.
+            Qt.callLater(marker.updateScreenPos)
+        }
     }
 
     Connections {
