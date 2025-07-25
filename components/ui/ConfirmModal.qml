@@ -26,7 +26,7 @@ Popup {
     background: Rectangle {
         radius: 6
         height: popup.implicitHeight
-        color: "#1F3154"
+        color: "#f21f3154"
     }
 
     contentItem: ColumnLayout {

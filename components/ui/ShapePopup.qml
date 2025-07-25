@@ -22,7 +22,7 @@ Rectangle {
     height: 36 + popupContent.implicitHeight + 12
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
-    color: "#1F3154"
+    color: "#f21f3154"
     radius: 6
     border.color: "#3a4a6a"
     border.width: 2

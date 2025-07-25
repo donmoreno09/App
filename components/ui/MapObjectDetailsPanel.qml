@@ -14,7 +14,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "#1F3154"
+        color: "#f21f3154"
         border.color: "#3a4a6a"
         border.width: 1
         radius: 12
@@ -53,7 +53,7 @@ Item {
                 width: parent.width
                 height: column.implicitHeight
                 radius: 6
-                color: "#1F3154"
+                color: "#f21f3154"
                 border.color: "#3a4a6a"
                 border.width: 1
                 anchors.margins: 4
