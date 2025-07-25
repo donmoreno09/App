@@ -3,7 +3,7 @@ import QtQuick.Controls 6.8
 
 Menu {
     background: Rectangle {
-        color:"#1F3154"
+        color:"#f21f3154"
         implicitWidth: 200
         radius: 2
         border.color: "#404040"
