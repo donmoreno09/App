@@ -24,6 +24,7 @@ Popup {
     closePolicy: Popup.CloseOnEscape
 
     background: Rectangle {
+        radius: 6
         height: popup.implicitHeight
         color: "#1F3154"
     }
