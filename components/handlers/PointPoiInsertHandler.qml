@@ -27,7 +27,6 @@ BasePoiInsertHandler {
 
     Connections {
         target: drawingArea.loader.item
-        // depending on current loaded item, some signals are unknown so ignore their warnings
         ignoreUnknownSignals: true
         function onPointCreated(point) {
             if (!(topToolbar.currentMode === 'poi-area' || topToolbar.currentMode === 'poi-point')) return
@@ -38,7 +37,7 @@ BasePoiInsertHandler {
             mapView.center = handler.currentCoordinate
 
             insertPoiPopup.x = (parent.width - insertPoiPopup.width) / 2
-            insertPoiPopup.y = (parent.height - insertPoiPopup.height) - 2
+            insertPoiPopup.y = (parent.height - insertPoiPopup.height) / 2
 
             insertPoiPopup.open()
         }
@@ -50,7 +49,6 @@ BasePoiInsertHandler {
         enabled: topToolbar.currentMode === 'poi-point' && savingIndex < 0
 
         function onOpened() {
-            // Popola i combo box come prima
             var categories = PoiOptionsController.types.slice(4)
             insertPoiPopup.categoryComboBox.model = categories.map((c) => c.name)
             insertPoiPopup.categoryComboBox.currentIndex = categories.findIndex((c) => c.key === topToolbar.currentPoiCategory)
@@ -59,7 +57,6 @@ BasePoiInsertHandler {
             insertPoiPopup.typeComboxBox.model = types.map((t) => t.value)
             insertPoiPopup.typeComboxBox.currentIndex = types.findIndex((t) => t.key === topToolbar.currentPoiType)
 
-            // Popola i campi coordinate
             if (handler.currentCoordinate.isValid) {
                 insertPoiPopup.setCoordinates(handler.currentCoordinate.latitude, handler.currentCoordinate.longitude)
             }
@@ -78,16 +75,12 @@ BasePoiInsertHandler {
         }
 
         function onSaveClicked(details) {
-            // ignore insert poi popup save if not this handler
             if (!handler.point) return
 
             var finalCoordinate = QtPositioning.coordinate(details.latitude, details.longitude)
 
             const data = ShapeModel.createPoint(details.id, details.label, finalCoordinate)
             handler.prefillData(data, details)
-
-            console.log("SAVING POINT:", JSON.stringify(data))
-            console.log("Coordinates - lat:", details.latitude, "lng:", details.longitude)
 
             handler.savingIndex = staticPoiLayerInstance.businessLogic.poiModel.rowCount()
             staticPoiLayerInstance.businessLogic.poiModel.append(data)

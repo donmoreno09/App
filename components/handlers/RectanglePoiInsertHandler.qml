@@ -15,8 +15,6 @@ BaseAreaPoiInsertHandler {
             if (topToolbar.currentMode !== "poi-area") return
             if (topToolbar.currentPoiCategory < 0 || topToolbar.currentPoiType < 0) return
 
-            console.log("[RectangleEditor.onReleased] ↖", newRect.topLeft, " ↘", newRect.bottomRight)
-
             handler.rect = newRect
 
             const center = QtPositioning.coordinate(
@@ -25,11 +23,9 @@ BaseAreaPoiInsertHandler {
             )
             mapView.center = center
 
-            // Posiziona il popup al centro
             areaPoiPopup.x = (parent.width - areaPoiPopup.width) / 2
             areaPoiPopup.y = (parent.height - areaPoiPopup.height) / 2
 
-            // Imposta le coordinate nel popup
             areaPoiPopup.setCoordinates(
                 newRect.topLeft.latitude,
                 newRect.topLeft.longitude,
@@ -37,7 +33,6 @@ BaseAreaPoiInsertHandler {
                 newRect.bottomRight.longitude
             )
 
-            // Apri il popup
             areaPoiPopup.open()
         }
     }
@@ -48,30 +43,18 @@ BaseAreaPoiInsertHandler {
         enabled: topToolbar.currentMode === "poi-area" && handler.savingIndex < 0
 
         function onRectangleChanged(topLat, topLon, bottomLat, bottomLon) {
-            console.log("RectangleChanged called with:", topLat, topLon, bottomLat, bottomLon)
-
-            // Aggiorna il rettangolo quando le coordinate cambiano nel popup
             handler.rect = {
                 topLeft: QtPositioning.coordinate(topLat, topLon),
                 bottomRight: QtPositioning.coordinate(bottomLat, bottomLon)
             }
 
-            // CRUCIALE: Aggiorna anche il RectangleEditor per mostrare il nuovo rettangolo
             if (drawingArea && drawingArea.loader && drawingArea.loader.item) {
-                console.log("DrawingArea loader item found:", drawingArea.loader.item.objectName)
-
                 if (drawingArea.loader.item.objectName === "RectangleEditor") {
-                    console.log("Updating RectangleEditor coordinates")
                     drawingArea.loader.item.topLeft = QtPositioning.coordinate(topLat, topLon)
                     drawingArea.loader.item.bottomRight = QtPositioning.coordinate(bottomLat, bottomLon)
-                } else {
-                    console.log("Current editor is not RectangleEditor:", drawingArea.loader.item.objectName)
                 }
-            } else {
-                console.log("DrawingArea or loader not available")
             }
 
-            // Aggiorna la vista mappa al centro del nuovo rettangolo
             const center = QtPositioning.coordinate(
                 (topLat + bottomLat) / 2,
                 (topLon + bottomLon) / 2
@@ -82,74 +65,37 @@ BaseAreaPoiInsertHandler {
         function onSaveClicked(details) {
             if (!handler.rect) return
 
-            console.log("Rectangle POI Handler - Saving with details:", JSON.stringify({
-                label: details.label,
-                category: details.category ? details.category.name : "null",
-                type: details.type ? details.type.value : "null",
-                categoryId: details.categoryId,
-                typeId: details.typeId,
-                healthStatus: details.healthStatus ? details.healthStatus.value : "null",
-                operationalState: details.operationalState ? details.operationalState.value : "null",
-                topLeft: details.topLeft ? [details.topLeft.latitude, details.topLeft.longitude] : "null",
-                bottomRight: details.bottomRight ? [details.bottomRight.latitude, details.bottomRight.longitude] : "null"
-            }))
-
-            // Usa le coordinate dal details se disponibili, altrimenti usa handler.rect
             const finalRect = {
                 topLeft: details.topLeft || handler.rect.topLeft,
                 bottomRight: details.bottomRight || handler.rect.bottomRight
             }
 
-            // Converti il rettangolo in coordinate per il poligono
             const coordinates = ShapeModel.rectToQtCoordinates(finalRect, QtPositioning)
             const data = ShapeModel.createPolygon(details.id, details.label, coordinates)
 
-            // Aggiungi i dettagli aggiuntivi usando prefillData
             handler.prefillData(data, details)
 
-            console.log("SAVING RECTANGLE (POLYGON) - Final Data:", JSON.stringify(data))
-
-            // Verifica che i dati siano completi prima del salvataggio
             if (!data.label || !details.category || !details.type) {
-                console.error("Missing required data for POI save:", {
-                    hasLabel: !!data.label,
-                    hasCategory: !!details.category,
-                    hasType: !!details.type,
-                    categoryId: details.categoryId,
-                    typeId: details.typeId
-                })
                 return
             }
 
-            // Salva nel modello
             handler.savingIndex = staticPoiLayerInstance.businessLogic.poiModel.rowCount()
             staticPoiLayerInstance.businessLogic.poiModel.append(data)
             PoiController.savePoiFromQml(data)
 
-            // IMPORTANTE: Pulisci il preview del rettangolo dopo il salvataggio
-            // per evitare che rimangano due rettangoli visibili
             if (drawingArea.loader.item && drawingArea.loader.item.objectName === "RectangleEditor") {
-                console.log("Cleaning rectangle preview after save")
                 drawingArea.loader.item.resetPreview()
             }
 
-            // Reset dello stato del handler
             handler.rect = null
         }
 
         function onClosed() {
-            // Pulisci il preview del rettangolo quando il popup si chiude
-            // (sia per Cancel che per Save)
             if (drawingArea.loader.item && drawingArea.loader.item.objectName === "RectangleEditor") {
-                console.log("Cleaning rectangle preview on popup close")
                 drawingArea.loader.item.resetPreview()
             }
 
-            // Reset dello stato del handler
             handler.rect = null
         }
     }
-
-    // I Connections per categoryComboBox e typeComboBox sono ora gestiti dal BaseAreaPoiInsertHandler
-    // Non servono più qui, evitando duplicazioni
 }

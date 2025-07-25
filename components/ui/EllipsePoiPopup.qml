@@ -29,7 +29,6 @@ Rectangle {
     border.color: "#333333"
     border.width: 1
 
-    // Property for validation
     property bool coordinatesAreValid: false
 
     function open() {
@@ -64,32 +63,20 @@ Rectangle {
         checkCoordinatesValidity()
     }
 
-    // Function to check if ellipse parameters are valid
     function checkCoordinatesValidity() {
         var lat = parseFloat(centerLat.text)
         var lon = parseFloat(centerLon.text)
         var rLat = parseFloat(radiusLatField.text)
         var rLon = parseFloat(radiusLonField.text)
 
-        // First check: all numbers must be valid
         var numbersValid = !isNaN(lat) && !isNaN(lon) && !isNaN(rLat) && !isNaN(rLon)
-
-        // Second check: must be in correct ranges
         var rangesValid = numbersValid &&
                          lat >= -90 && lat <= 90 &&
                          lon >= -180 && lon <= 180 &&
-                         rLat > 0 && rLat <= 90 &&  // Radius must be positive
-                         rLon > 0 && rLon <= 180    // Radius must be positive
+                         rLat > 0 && rLat <= 90 &&
+                         rLon > 0 && rLon <= 180
 
         coordinatesAreValid = rangesValid
-
-        console.log("Ellipse validation:", {
-            centerLat: lat, centerLon: lon, radiusLat: rLat, radiusLon: rLon,
-            numbersValid: numbersValid,
-            rangesValid: rangesValid,
-            coordinatesAreValid: coordinatesAreValid
-        })
-
         return coordinatesAreValid
     }
 
@@ -157,7 +144,6 @@ Rectangle {
             spacing: 12
             width: popup.width - 24
 
-            // === Label ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -180,7 +166,6 @@ Rectangle {
                 }
             }
 
-            // === Category ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -196,7 +181,6 @@ Rectangle {
                 }
             }
 
-            // === Type ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -212,7 +196,6 @@ Rectangle {
                 }
             }
 
-            // === Health Status ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -229,7 +212,6 @@ Rectangle {
                 }
             }
 
-            // === Operational State ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -246,7 +228,6 @@ Rectangle {
                 }
             }
 
-            // === Coordinate inputs ===
             ColumnLayout {
                 spacing: 6
                 Layout.fillWidth: true
@@ -365,7 +346,6 @@ Rectangle {
                     }
                 }
 
-                // Status message
                 Label {
                     visible: !!centerLat.text || !!centerLon.text || !!radiusLatField.text || !!radiusLonField.text
                     text: {
@@ -383,7 +363,6 @@ Rectangle {
                 }
             }
 
-            // === Note ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -416,13 +395,11 @@ Rectangle {
                 }
             }
 
-            // === Buttons ===
             RowLayout {
                 spacing: 6
                 Layout.fillWidth: true
                 Layout.topMargin: 12
 
-                // Spacer to push buttons to the right
                 Item {
                     Layout.fillWidth: true
                 }
@@ -443,17 +420,14 @@ Rectangle {
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
-                    // UPDATED CONDITION: must have label AND valid coordinates
                     enabled: !!labelField.text && coordinatesAreValid
                     onClicked: {
-                        // Get area POI categories (first 4)
                         const categories = PoiOptionsController.types.slice(0, 4)
                         const category = categories.find((c) => c.name === categoryComboBox.currentText)
                         const type = category ? category.values.find((v) => v.value === typeComboBox.currentText) : null
                         const healthStatus = PoiOptionsController.healthStatuses[healthStatusComboBox.currentIndex]
                         const operationalState = PoiOptionsController.operationalStates[operationalStateComboBox.currentIndex]
 
-                        // Create details object with all necessary fields
                         const details = {
                             id: null,
                             category: category,
@@ -469,18 +443,6 @@ Rectangle {
                             radiusLat: parseFloat(radiusLatField.text),
                             radiusLon: parseFloat(radiusLonField.text)
                         }
-
-                        console.log("Ellipse POI Save Details:", JSON.stringify({
-                            category: category ? category.name : "null",
-                            type: type ? type.value : "null",
-                            healthStatus: healthStatus ? healthStatus.value : "null",
-                            operationalState: operationalState ? operationalState.value : "null",
-                            label: details.label,
-                            note: details.note,
-                            center: [details.center.latitude, details.center.longitude],
-                            radiusLat: details.radiusLat,
-                            radiusLon: details.radiusLon
-                        }))
 
                         saveClicked(details)
                         popup.clearForm()

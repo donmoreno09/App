@@ -29,7 +29,6 @@ Rectangle {
     border.color: "#333333"
     border.width: 1
 
-    // Proprietà per validazione
     property bool coordinatesAreValid: false
 
     function open() {
@@ -64,39 +63,24 @@ Rectangle {
         checkCoordinatesValidity()
     }
 
-    // Funzione per controllare se le coordinate formano un rettangolo valido
     function checkCoordinatesValidity() {
         var lat1 = parseFloat(topLeftLat.text)
         var lon1 = parseFloat(topLeftLon.text)
         var lat2 = parseFloat(bottomRightLat.text)
         var lon2 = parseFloat(bottomRightLon.text)
 
-        // Prima verifica: tutti i numeri devono essere validi
         var numbersValid = !isNaN(lat1) && !isNaN(lon1) && !isNaN(lat2) && !isNaN(lon2)
-
-        // Seconda verifica: devono essere nei range corretti
         var rangesValid = numbersValid &&
                          lat1 >= -90 && lat1 <= 90 &&
                          lat2 >= -90 && lat2 <= 90 &&
                          lon1 >= -180 && lon1 <= 180 &&
                          lon2 >= -180 && lon2 <= 180
 
-        // Terza verifica: devono formare un rettangolo logico
-        // TopLeft deve essere a nord-ovest di BottomRight
         var rectangleValid = rangesValid &&
-                           lat1 > lat2 &&  // Top deve essere più a nord (latitudine maggiore)
-                           lon1 < lon2     // Left deve essere più a ovest (longitudine minore)
+                           lat1 > lat2 &&
+                           lon1 < lon2
 
         coordinatesAreValid = rectangleValid
-
-        console.log("Coordinate validation:", {
-            lat1: lat1, lon1: lon1, lat2: lat2, lon2: lon2,
-            numbersValid: numbersValid,
-            rangesValid: rangesValid,
-            rectangleValid: rectangleValid,
-            coordinatesAreValid: coordinatesAreValid
-        })
-
         return coordinatesAreValid
     }
 
@@ -164,7 +148,6 @@ Rectangle {
             spacing: 12
             width: popup.width - 24
 
-            // === Label ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -187,7 +170,6 @@ Rectangle {
                 }
             }
 
-            // === Category ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -203,7 +185,6 @@ Rectangle {
                 }
             }
 
-            // === Type ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -219,7 +200,6 @@ Rectangle {
                 }
             }
 
-            // === Health Status ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -236,7 +216,6 @@ Rectangle {
                 }
             }
 
-            // === Operational State ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -253,7 +232,6 @@ Rectangle {
                 }
             }
 
-            // === Coordinate inputs ===
             ColumnLayout {
                 spacing: 6
                 Layout.fillWidth: true
@@ -372,14 +350,13 @@ Rectangle {
                     }
                 }
 
-                // Messaggio di stato
                 Label {
                     visible: !!topLeftLat.text || !!topLeftLon.text || !!bottomRightLat.text || !!bottomRightLon.text
                     text: {
                         if (coordinatesAreValid) {
                             return "✓ Valid rectangle coordinates"
                         } else {
-                            return "⚠ Invalid coordinates "
+                            return "⚠ Invalid coordinates"
                         }
                     }
                     color: coordinatesAreValid ? "#22c55e" : "#ef4444"
@@ -390,7 +367,6 @@ Rectangle {
                 }
             }
 
-            // === Note ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -423,13 +399,11 @@ Rectangle {
                 }
             }
 
-            // === Buttons ===
             RowLayout {
                 spacing: 6
                 Layout.fillWidth: true
                 Layout.topMargin: 12
 
-                // Spacer per spingere i bottoni a destra
                 Item {
                     Layout.fillWidth: true
                 }
@@ -450,17 +424,14 @@ Rectangle {
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
-                    // CONDIZIONE AGGIORNATA: deve avere label E coordinate valide
                     enabled: !!labelField.text && coordinatesAreValid
                     onClicked: {
-                        // Ottieni le categorie area POI (primi 4)
                         const categories = PoiOptionsController.types.slice(0, 4)
                         const category = categories.find((c) => c.name === categoryComboBox.currentText)
                         const type = category ? category.values.find((v) => v.value === typeComboBox.currentText) : null
                         const healthStatus = PoiOptionsController.healthStatuses[healthStatusComboBox.currentIndex]
                         const operationalState = PoiOptionsController.operationalStates[operationalStateComboBox.currentIndex]
 
-                        // Crea l'oggetto details con tutti i campi necessari
                         const details = {
                             id: null,
                             category: category,
@@ -469,7 +440,6 @@ Rectangle {
                             operationalState: operationalState,
                             label: labelField.text,
                             note: noteField.text,
-                            // Per area POI serve il rettangolo, non lat/lng singole
                             topLeft: QtPositioning.coordinate(
                                 parseFloat(topLeftLat.text),
                                 parseFloat(topLeftLon.text)
@@ -479,15 +449,6 @@ Rectangle {
                                 parseFloat(bottomRightLon.text)
                             )
                         }
-
-                        console.log("Area POI Save Details:", JSON.stringify({
-                            category: category ? category.name : "null",
-                            type: type ? type.value : "null",
-                            healthStatus: healthStatus ? healthStatus.value : "null",
-                            operationalState: operationalState ? operationalState.value : "null",
-                            label: details.label,
-                            note: details.note
-                        }))
 
                         saveClicked(details)
                         popup.clearForm()
