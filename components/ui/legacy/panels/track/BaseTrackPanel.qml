@@ -222,7 +222,8 @@ PanelsCommons.BasePanel {
 
     onTrackDataChanged: {
         baseTrackPanel.updateData()
-        baseTrackPanel.visible = true
+        if (!baseTrackPanel.isMinimized)
+            baseTrackPanel.visible = true
     }
 
     function saveChanges() {
