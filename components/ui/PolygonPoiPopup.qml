@@ -324,6 +324,7 @@ Rectangle {
                 TextField {
                     id: labelField
                     placeholderText: "Enter label..."
+                    placeholderTextColor: "#888888"
                     font.pixelSize: 14
                     color: "#ffffff"
                     Layout.fillWidth: true
@@ -452,6 +453,7 @@ Rectangle {
                                     id: latField
                                     text: model.latitude
                                     placeholderText: "Latitude"
+                                    placeholderTextColor: "#888888"
                                     font.pixelSize: 12
                                     color: "#ffffff"
                                     Layout.fillWidth: true
@@ -494,6 +496,7 @@ Rectangle {
                                     id: lonField
                                     text: model.longitude
                                     placeholderText: "Longitude"
+                                    placeholderTextColor: "#888888"
                                     font.pixelSize: 12
                                     color: "#ffffff"
                                     Layout.fillWidth: true
@@ -587,6 +590,7 @@ Rectangle {
                     TextArea {
                         id: noteField
                         placeholderText: "Enter a note..."
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
                         wrapMode: TextEdit.Wrap
