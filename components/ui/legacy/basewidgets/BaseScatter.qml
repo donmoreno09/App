@@ -36,6 +36,7 @@ Widgets.BaseKinetic {
     property bool minimizable: false
     property bool isAnchorActive: false
     property var anchor: null
+    property bool isMinimized: false
     property int collapsedOrientation: -1 // store last collapsed edge
     property real anchorRelativeOffset: 0.5 // percentage (0.0 = left/top, 1.0 = right/bottom)
 
@@ -372,8 +373,8 @@ Widgets.BaseKinetic {
         baseScatter.activeAnchor(false)
         baseScatter.show(true)
         baseScatter.reposAfterAnchor(pos)
+        baseScatter.isMinimized = false
         baseScatter.minimized(false)
-
     }
 
     function minimize(orientation)
@@ -396,6 +397,7 @@ Widgets.BaseKinetic {
 
         baseScatter.activeAnchor(true, orientation)
         baseScatter.show(false)
+        baseScatter.isMinimized = true
         baseScatter.minimized(true)
     }
 

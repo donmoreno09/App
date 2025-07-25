@@ -222,7 +222,8 @@ PanelsCommons.BasePanel {
 
     onTrackDataChanged: {
         baseTrackPanel.updateData()
-        baseTrackPanel.visible = true
+        if (!baseTrackPanel.isMinimized)
+            baseTrackPanel.visible = true
     }
 
     function saveChanges() {
@@ -293,6 +294,7 @@ PanelsCommons.BasePanel {
             baseTrackPanel.link = null
         }
         baseTrackPanel.marker = null
+        baseTrackPanel.destroyAnchor() // Method from BaseScatter.qml to destroy the minimized UI state
         baseTrackPanel.destroy()
         baseTrackPanel.closed()
     }

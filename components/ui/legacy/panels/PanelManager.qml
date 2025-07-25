@@ -17,9 +17,13 @@ QtObject {
      *   @param marker     riferimento al Track.qml che ha emesso il tap
      */
     function openPanel(trackData, marker) {
-        /* clic sullo stesso marker ⇒ chiudo */
+        /* clic sullo stesso marker ⇒ chiudo oppure riapro se minimizzato */
         if (currentUid === trackData.iridess_uid) {
-            closeCurrent()
+            if (activePanel && activePanel.isMinimized) {
+                activePanel.unminimize()
+            } else {
+                closeCurrent()
+            }
             return
         }
 
