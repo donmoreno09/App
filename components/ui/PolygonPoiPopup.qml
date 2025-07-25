@@ -90,10 +90,10 @@ Rectangle {
 
         console.log("Original coordinates:", coordinates.length, "-> Display coordinates:", displayCoordinates.length)
 
-        for (let i = 0; i < displayCoordinates.length; i++) {
+        for (let j = 0; j < displayCoordinates.length; j++) {
             coordinatesModel.append({
-                latitude: displayCoordinates[i].latitude.toFixed(6),
-                longitude: displayCoordinates[i].longitude.toFixed(6)
+                latitude: displayCoordinates[j].latitude.toFixed(6),
+                longitude: displayCoordinates[j].longitude.toFixed(6)
             })
         }
 
