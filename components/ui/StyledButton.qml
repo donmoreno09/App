@@ -10,7 +10,7 @@ Button {
         text: control.text
         font: control.font
         opacity: enabled ? 1.0 : 0.3
-        color: "#ffffff"
+        color: "black"
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight

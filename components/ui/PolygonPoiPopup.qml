@@ -15,7 +15,6 @@ Rectangle {
     property alias operationalStateComboBox: operationalStateComboBox
     property alias noteField: noteField
 
-    // IMPORTANTE: nascosto di default
     visible: false
 
     signal opened()
@@ -33,8 +32,8 @@ Rectangle {
     border.width: 1
 
     property var polygonCoordinates: []
-    property var originalPolygonPath: [] // Mantieni il path originale con punto di chiusura
-    property bool isUpdatingFromExternal: false // Flag per prevenire loop
+    property var originalPolygonPath: []
+    property bool isUpdatingFromExternal: false
     property bool coordinatesAreValid: false
 
     function open() {
@@ -61,15 +60,10 @@ Rectangle {
     }
 
     function setPolygonCoordinates(coordinates) {
-        console.log("=== setPolygonCoordinates called ===")
-        console.log("Current isUpdatingFromExternal:", isUpdatingFromExternal)
-
         if (isUpdatingFromExternal) {
-            console.log("PREVENTED LOOP in setPolygonCoordinates")
             return
         }
 
-        console.log("setPolygonCoordinates called with", coordinates.length, "points")
         isUpdatingFromExternal = true
         coordinatesModel.clear()
 
@@ -81,14 +75,11 @@ Rectangle {
                 const firstPoint = coordinates[0]
                 if (Math.abs(coordinates[i].latitude - firstPoint.latitude) < 0.000001 &&
                     Math.abs(coordinates[i].longitude - firstPoint.longitude) < 0.000001) {
-                    console.log("Hiding closing point from UI (duplicate of first point)")
                     continue
                 }
             }
             displayCoordinates.push(coordinates[i])
         }
-
-        console.log("Original coordinates:", coordinates.length, "-> Display coordinates:", displayCoordinates.length)
 
         for (let j = 0; j < displayCoordinates.length; j++) {
             coordinatesModel.append({
@@ -102,28 +93,19 @@ Rectangle {
 
         Qt.callLater(function() {
             isUpdatingFromExternal = false
-            console.log("=== setPolygonCoordinates completed, flag reset ===")
         })
     }
 
     function checkCoordinatesValidity() {
-        // Un poligono è valido se ha almeno 3 punti con coordinate valide
         var validCount = 0
         var invalidPoints = []
-
-        console.log("=== POLYGON VALIDATION DEBUG ===")
-        console.log("Total points in model:", coordinatesModel.count)
 
         for (let i = 0; i < coordinatesModel.count; i++) {
             const item = coordinatesModel.get(i)
             const latStr = item.latitude
             const lonStr = item.longitude
 
-            console.log(`Point ${i + 1}: lat="${latStr}", lon="${lonStr}"`)
-
-            // Controlla se le stringhe sono vuote o contengono solo caratteri non validi
             if (!latStr || latStr.trim() === "" || !lonStr || lonStr.trim() === "") {
-                console.log(`Point ${i + 1}: EMPTY STRING - lat="${latStr}", lon="${lonStr}"`)
                 invalidPoints.push(i + 1)
                 continue
             }
@@ -131,51 +113,30 @@ Rectangle {
             const lat = parseFloat(latStr)
             const lon = parseFloat(lonStr)
 
-            console.log(`Point ${i + 1}: parsed lat=${lat}, lon=${lon}`)
-
-            // Verifica se i numeri sono validi
             if (isNaN(lat) || isNaN(lon)) {
-                console.log(`Point ${i + 1}: NaN VALUES - lat=${lat}, lon=${lon}`)
                 invalidPoints.push(i + 1)
                 continue
             }
 
-            // Verifica i range geografici
             if (lat < -90 || lat > 90 || lon < -180 || lon > 180) {
-                console.log(`Point ${i + 1}: OUT OF RANGE - lat=${lat} (valid: -90 to 90), lon=${lon} (valid: -180 to 180)`)
                 invalidPoints.push(i + 1)
                 continue
             }
 
-            // Se arriviamo qui, il punto è valido
             validCount++
-            console.log(`Point ${i + 1}: VALID ✅`)
         }
 
         coordinatesAreValid = validCount >= 3
-
-        console.log("=== VALIDATION RESULT ===")
-        console.log("Valid points:", validCount)
-        console.log("Invalid points:", invalidPoints)
-        console.log("Polygon is valid:", coordinatesAreValid)
-        console.log("===========================")
-
         return coordinatesAreValid
     }
 
     function updateCoordinatesFromModel() {
-        console.log("=== updateCoordinatesFromModel called ===")
-        console.log("isUpdatingFromExternal:", isUpdatingFromExternal)
-
         if (isUpdatingFromExternal) {
-            console.log("BLOCKED by isUpdatingFromExternal flag - preventing loop")
             return
         }
 
         var newCoordinates = []
 
-        console.log("Processing", coordinatesModel.count, "coordinates from model")
-
         for (let i = 0; i < coordinatesModel.count; i++) {
             const item = coordinatesModel.get(i)
             const latStr = item.latitude
@@ -183,43 +144,23 @@ Rectangle {
             const lat = parseFloat(latStr)
             const lon = parseFloat(lonStr)
 
-            console.log(`Point ${i}: lat="${latStr}" -> ${lat}, lon="${lonStr}" -> ${lon}`)
-
             if (isNaN(lat) || lat < -90 || lat > 90) {
-                console.error("INVALID LATITUDE at index", i, ":", lat, "from string:", latStr)
                 continue
             }
             if (isNaN(lon) || lon < -180 || lon > 180) {
-                console.error("INVALID LONGITUDE at index", i, ":", lon, "from string:", lonStr)
                 continue
             }
 
             newCoordinates.push(QtPositioning.coordinate(lat, lon))
         }
 
-        console.log("Valid coordinates found:", newCoordinates.length, "of", coordinatesModel.count)
-
         polygonCoordinates = newCoordinates
         checkCoordinatesValidity()
 
         if (newCoordinates.length >= 3) {
-            console.log("=== UPDATING POLYGON ===")
-
             var closedPath = [...newCoordinates]
             closedPath.push(closedPath[0])
-
-            console.log("New polygonCoordinates count:", polygonCoordinates.length)
-            console.log("Closed path count:", closedPath.length)
-
-            console.log("=== EMITTING polygonChanged FROM POPUP ===")
-
-            for (let i = 0; i < closedPath.length; i++) {
-                console.log(`Closed path[${i}]: ${closedPath[i].latitude}, ${closedPath[i].longitude}`)
-            }
-
             polygonChanged(closedPath)
-        } else {
-            console.error("NOT ENOUGH valid coordinates for polygon:", newCoordinates.length)
         }
     }
 
@@ -236,17 +177,6 @@ Rectangle {
         }
 
         return closedPath
-    }
-
-    function isValidCoordinate(value, isLatitude) {
-        const num = parseFloat(value)
-        if (isNaN(num)) return false
-
-        if (isLatitude) {
-            return num >= -90.0 && num <= 90.0
-        } else {
-            return num >= -180.0 && num <= 180.0
-        }
     }
 
     Component.onCompleted: bringToFront()
@@ -313,7 +243,6 @@ Rectangle {
             spacing: 12
             width: popup.width - 24
 
-            // === Label ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -336,7 +265,6 @@ Rectangle {
                 }
             }
 
-            // === Category ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -352,7 +280,6 @@ Rectangle {
                 }
             }
 
-            // === Type ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -368,7 +295,6 @@ Rectangle {
                 }
             }
 
-            // === Health Status ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -385,7 +311,6 @@ Rectangle {
                 }
             }
 
-            // === Operational State ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -402,7 +327,6 @@ Rectangle {
                 }
             }
 
-            // === Polygon Coordinates ===
             ColumnLayout {
                 spacing: 6
                 Layout.fillWidth: true
@@ -466,28 +390,18 @@ Rectangle {
                                     }
 
                                     onEditingFinished: {
-                                        console.log("=== LATITUDE EDITING FINISHED ===")
-                                        console.log("Field text:", text, "Model value:", model.latitude)
-                                        console.log("Delegate index:", index, "of", coordinatesModel.count, "total items")
-
                                         if (index < 0 || index >= coordinatesModel.count) {
-                                            console.error("INDEX OUT OF RANGE! index:", index, "count:", coordinatesModel.count)
                                             return
                                         }
 
                                         if (text !== model.latitude) {
-                                            console.log("UPDATING latitude from", model.latitude, "to", text)
-
                                             const item = coordinatesModel.get(index)
                                             if (!item) {
-                                                console.error("Item at index", index, "does not exist!")
                                                 return
                                             }
 
                                             coordinatesModel.setProperty(index, "latitude", text)
                                             updateCoordinatesFromModel()
-                                        } else {
-                                            console.log("No change needed - same value")
                                         }
                                     }
                                 }
@@ -509,28 +423,18 @@ Rectangle {
                                     }
 
                                     onEditingFinished: {
-                                        console.log("=== LONGITUDE EDITING FINISHED ===")
-                                        console.log("Field text:", text, "Model value:", model.longitude)
-                                        console.log("Delegate index:", index, "of", coordinatesModel.count, "total items")
-
                                         if (index < 0 || index >= coordinatesModel.count) {
-                                            console.error("INDEX OUT OF RANGE! index:", index, "count:", coordinatesModel.count)
                                             return
                                         }
 
                                         if (text !== model.longitude) {
-                                            console.log("UPDATING longitude from", model.longitude, "to", text)
-
                                             const item = coordinatesModel.get(index)
                                             if (!item) {
-                                                console.error("Item at index", index, "does not exist!")
                                                 return
                                             }
 
                                             coordinatesModel.setProperty(index, "longitude", text)
                                             updateCoordinatesFromModel()
-                                        } else {
-                                            console.log("No change needed - same value")
                                         }
                                     }
                                 }
@@ -551,7 +455,6 @@ Rectangle {
                     }
                 }
 
-                // Status message
                 Label {
                     text: {
                         const count = coordinatesModel.count
@@ -571,7 +474,6 @@ Rectangle {
                 }
             }
 
-            // === Note ===
             ColumnLayout {
                 spacing: 2
                 Layout.fillWidth: true
@@ -604,13 +506,11 @@ Rectangle {
                 }
             }
 
-            // === Buttons ===
             RowLayout {
                 spacing: 6
                 Layout.fillWidth: true
                 Layout.topMargin: 12
 
-                // Spacer per spingere i bottoni a destra
                 Item {
                     Layout.fillWidth: true
                 }
@@ -633,24 +533,19 @@ Rectangle {
                     Layout.preferredHeight: 32
                     enabled: !!labelField.text && coordinatesAreValid
                     onClicked: {
-                        // Ottieni le categorie area POI (primi 4)
                         const categories = PoiOptionsController.types.slice(0, 4)
                         const category = categories.find((c) => c.name === categoryComboBox.currentText)
                         const type = category ? category.values.find((v) => v.value === typeComboBox.currentText) : null
                         const healthStatus = PoiOptionsController.healthStatuses[healthStatusComboBox.currentIndex]
                         const operationalState = PoiOptionsController.operationalStates[operationalStateComboBox.currentIndex]
 
-                        // Verifica che i dati essenziali siano disponibili
                         if (!category) {
-                            console.error("Category not found for:", categoryComboBox.currentText)
                             return
                         }
                         if (!type) {
-                            console.error("Type not found for:", typeComboBox.currentText)
                             return
                         }
 
-                        // Crea l'oggetto details con tutti i campi necessari
                         const details = {
                             id: null,
                             category: category,
@@ -661,20 +556,6 @@ Rectangle {
                             note: noteField.text,
                             coordinates: createClosedPath(polygonCoordinates)
                         }
-
-                        console.log("Polygon POI Save Details:", JSON.stringify({
-                            category: category ? category.name : "null",
-                            categoryKey: category ? category.key : "null",
-                            type: type ? type.value : "null",
-                            typeKey: type ? type.key : "null",
-                            healthStatus: healthStatus ? healthStatus.value : "null",
-                            healthStatusKey: healthStatus ? healthStatus.key : "null",
-                            operationalState: operationalState ? operationalState.value : "null",
-                            operationalStateKey: operationalState ? operationalState.key : "null",
-                            label: details.label,
-                            note: details.note,
-                            pointsCount: details.coordinates.length
-                        }))
 
                         saveClicked(details)
                         popup.clearForm()
