@@ -27,7 +27,7 @@ Rectangle {
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
     radius: 12
-    color: "#1F3154"
+    color: "#f21f3154"
     border.color: "#333333"
     border.width: 1
 
@@ -384,7 +384,7 @@ Rectangle {
 
                                     background: Rectangle {
                                         radius: 4
-                                        color: "#1F3154"
+                                        color: "#f21f3154"
                                         border.color: "#555555"
                                         border.width: 1
                                     }
@@ -417,7 +417,7 @@ Rectangle {
 
                                     background: Rectangle {
                                         radius: 4
-                                        color: "#1F3154"
+                                        color: "#f21f3154"
                                         border.color: "#555555"
                                         border.width: 1
                                     }
