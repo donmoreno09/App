@@ -134,16 +134,16 @@ Item {
         anchors.topMargin: 10
     }
 
-    MapObjectDetailsPanel {
-        id: objectDetails
-        width: 300
-        height: 400
-        z: 1000
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.margins: 10
-        visible: selectedObjects.length > 0
-    }
+    // MapObjectDetailsPanel {
+    //     id: objectDetails
+    //     width: 300
+    //     height: 400
+    //     z: 1000
+    //     anchors.left: parent.left
+    //     anchors.bottom: parent.bottom
+    //     anchors.margins: 10
+    //     visible: selectedObjects.length > 0
+    // }
 
     ZoomBar {
         anchors.right: parent.right
