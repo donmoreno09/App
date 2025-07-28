@@ -7,21 +7,21 @@ import "../models/shapes.js" as ShapeModel
 
 BaseShapeCreateHandler {
     id: handler
+
     property var rect: null
 
     Connections {
         target: drawingArea.loader.item
-        enabled: topToolbar.currentMode === 'shapes'
-        // depending on current loaded item, some signals are unknown so ignore their warnings
+        enabled: topToolbar.currentMode === "shapes"
         ignoreUnknownSignals: true
 
-        function onRectangleCreated(rect) {
-            console.log("[RectangleEditor.onReleased] ↖️", rect.topLeft, " ↘️", rect.bottomRight)
-            handler.rect = rect
+        function onRectangleCreated(newRect) {
+            console.log("[RectangleEditor.onReleased] ↖️", newRect.topLeft, " ↘️", newRect.bottomRight)
+            handler.rect = newRect
 
             const centerCoord = QtPositioning.coordinate(
-                (rect.topLeft.latitude  + rect.bottomRight.latitude)  / 2,
-                (rect.topLeft.longitude + rect.bottomRight.longitude) / 2
+                (newRect.topLeft.latitude + newRect.bottomRight.latitude) / 2,
+                (newRect.topLeft.longitude + newRect.bottomRight.longitude) / 2
             )
             mapView.center = centerCoord
 
@@ -34,15 +34,15 @@ BaseShapeCreateHandler {
     Connections {
         target: shapePopup
         ignoreUnknownSignals: true
-        enabled: topToolbar.currentMode === 'shapes'
+        enabled: topToolbar.currentMode === "shapes"
 
         function onSaveClicked(details) {
-            // ignore popup save if not this handler
             if (!handler.rect) return
 
             const coordinates = ShapeModel.rectToQtCoordinates(handler.rect, QtPositioning)
             const data = ShapeModel.createPolygon(details.id, details.label, coordinates)
             console.log("SAVING RECTANGLE (POLYGON) SHAPE:", JSON.stringify(data))
+
             handler.savingIndex = annotationLayerInstance.businessLogic.annotationModel.rowCount()
             annotationLayerInstance.businessLogic.annotationModel.append(data)
             ShapeController.saveShapeFromQml(data)
@@ -53,3 +53,4 @@ BaseShapeCreateHandler {
         }
     }
 }
+

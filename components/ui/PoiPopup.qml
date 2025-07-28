@@ -2,14 +2,10 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 2.15
 import QtPositioning 6.8
-
 import raise.singleton.popupmanager 1.0
 import raise.singleton.controllers 1.0
-
 import "../ui/top-toolbar/utils.js" as ToolbarUtils
 
-// I'm not using a Popup component since it cannot be
-// targeted by DragHandler and I need to style its borders
 Rectangle {
     id: popup
 
@@ -20,18 +16,24 @@ Rectangle {
     property alias healthStatusComboBox: healthStatusComboBox
     property alias operationalStateComboBox: operationalStateComboBox
     property alias noteField: noteField
+    property alias latitudeField: latitudeField
+    property alias longitudeField: longitudeField
 
     signal opened()
     signal closed()
     signal saveClicked(var details)
+    signal coordinatesChanged(real latitude, real longitude)
 
     width: 300
     height: 36 + popupContent.implicitHeight + 12
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
-    radius: 6
-    border.color: "#dddddd"
-    border.width: 2
+    radius: 12
+    color: "#1F3154"
+    border.color: "#333333"
+    border.width: 1
+
+    property bool coordinatesAreValid: false
 
     function open() {
         popup.visible = true
@@ -50,6 +52,28 @@ Rectangle {
     function clearForm() {
         labelField.text = ""
         noteField.text = ""
+        latitudeField.text = ""
+        longitudeField.text = ""
+        coordinatesAreValid = false
+    }
+
+    function setCoordinates(latitude, longitude) {
+        latitudeField.text = latitude.toFixed(6)
+        longitudeField.text = longitude.toFixed(6)
+        checkCoordinatesValidity()
+    }
+
+    function checkCoordinatesValidity() {
+        var lat = parseFloat(latitudeField.text)
+        var lon = parseFloat(longitudeField.text)
+
+        var numbersValid = !isNaN(lat) && !isNaN(lon)
+        var rangesValid = numbersValid &&
+                         lat >= -90 && lat <= 90 &&
+                         lon >= -180 && lon <= 180
+
+        coordinatesAreValid = rangesValid
+        return coordinatesAreValid
     }
 
     Component.onCompleted: bringToFront()
@@ -74,18 +98,14 @@ Rectangle {
             anchors.topMargin: 12
             anchors.leftMargin: 12
             font.bold: true
-            color: "black"
+            color: "#ffffff"
         }
 
         DragHandler {
             target: popup
-
-            // Enable and clamp horizontal movement
             xAxis.enabled: true
             xAxis.minimum: 0
             xAxis.maximum: popup.parent.width  - popup.width
-
-            // Enable and clamp vertical movement
             yAxis.enabled: true
             yAxis.minimum: 0
             yAxis.maximum: popup.parent.height - popup.height
@@ -104,7 +124,6 @@ Rectangle {
                 cursorShape = Qt.ClosedHandCursor
                 popup.bringToFront()
             }
-
             onReleased: cursorShape = Qt.OpenHandCursor
         }
     }
@@ -132,19 +151,21 @@ Rectangle {
 
                 Label {
                     text: "Label"
-                    color: "black"
+                    color: "#ffffff"
                 }
 
                 TextField {
                     id: labelField
                     placeholderText: "Enter label..."
+                    placeholderTextColor: "#888888"
                     font.pixelSize: 14
-                    color: "black"
+                    color: "#ffffff"
                     Layout.fillWidth: true
 
                     background: Rectangle {
-                        radius: 2
-                        border.color: "#888888"
+                        radius: 6
+                        color: "#2a2a2a"
+                        border.color: "#444444"
                     }
                 }
             }
@@ -155,7 +176,7 @@ Rectangle {
 
                 Label {
                     text: "Category"
-                    color: "black"
+                    color: "#ffffff"
                 }
 
                 StyledComboBox {
@@ -172,7 +193,7 @@ Rectangle {
 
                 Label {
                     text: "Type"
-                    color: "black"
+                    color: "#ffffff"
                 }
 
                 StyledComboBox {
@@ -189,7 +210,7 @@ Rectangle {
 
                 Label {
                     text: "Health Status"
-                    color: "black"
+                    color: "#ffffff"
                 }
 
                 StyledComboBox {
@@ -207,7 +228,7 @@ Rectangle {
 
                 Label {
                     text: "Operational State"
-                    color: "black"
+                    color: "#ffffff"
                 }
 
                 StyledComboBox {
@@ -219,6 +240,109 @@ Rectangle {
                 }
             }
 
+            RowLayout {
+                width: parent.width
+                spacing: 6
+
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 2
+
+                    Label {
+                        text: "Latitude"
+                        color: "#ffffff"
+                    }
+
+                    TextField {
+                        id: latitudeField
+                        placeholderText: "0.000000"
+                        placeholderTextColor: "#888888"
+                        font.pixelSize: 14
+                        color: "#ffffff"
+                        Layout.fillWidth: true
+
+                        validator: DoubleValidator {
+                            bottom: -90.0
+                            top: 90.0
+                            decimals: 6
+                        }
+
+                        background: Rectangle {
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
+                        }
+
+                        onTextChanged: checkCoordinatesValidity()
+                        onEditingFinished: {
+                            checkCoordinatesValidity()
+                            var lat = parseFloat(latitudeField.text)
+                            var lng = parseFloat(longitudeField.text)
+                            if (!isNaN(lat) && !isNaN(lng)) {
+                                popup.coordinatesChanged(lat, lng)
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 2
+
+                    Label {
+                        text: "Longitude"
+                        color: "#ffffff"
+                    }
+
+                    TextField {
+                        id: longitudeField
+                        placeholderText: "0.000000"
+                        placeholderTextColor: "#888888"
+                        font.pixelSize: 14
+                        color: "#ffffff"
+                        Layout.fillWidth: true
+
+                        validator: DoubleValidator {
+                            bottom: -180.0
+                            top: 180.0
+                            decimals: 6
+                        }
+
+                        background: Rectangle {
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
+                        }
+
+                        onTextChanged: checkCoordinatesValidity()
+                        onEditingFinished: {
+                            checkCoordinatesValidity()
+                            var lat = parseFloat(latitudeField.text)
+                            var lng = parseFloat(longitudeField.text)
+                            if (!isNaN(lat) && !isNaN(lng)) {
+                                popup.coordinatesChanged(lat, lng)
+                            }
+                        }
+                    }
+                }
+            }
+
+            Label {
+                visible: !!latitudeField.text || !!longitudeField.text
+                text: {
+                    if (coordinatesAreValid) {
+                        return "✓ Valid coordinates"
+                    } else {
+                        return "⚠ Invalid coordinates (Lat: -90 to 90, Lon: -180 to 180)"
+                    }
+                }
+                color: coordinatesAreValid ? "#22c55e" : "#ef4444"
+                font.pixelSize: 12
+                font.bold: true
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+            }
+
             ColumnLayout {
                 width: parent.width
                 spacing: 2
@@ -226,7 +350,7 @@ Rectangle {
 
                 Label {
                     text: "Note"
-                    color: "black"
+                    color: "#ffffff"
                 }
 
                 ScrollView {
@@ -238,16 +362,18 @@ Rectangle {
                     TextArea {
                         id: noteField
                         placeholderText: "Enter a note..."
+                        placeholderTextColor: "#888888"
                         font.pixelSize: 14
-                        color: "black"
+                        color: "#ffffff"
                         padding: 0
                         topPadding: 4
                         bottomPadding: 4
 
                         background: Rectangle {
                             height: parent.height
-                            radius: 2
-                            border.color: "#888888"
+                            radius: 6
+                            color: "#2a2a2a"
+                            border.color: "#444444"
                         }
                     }
                 }
@@ -272,7 +398,7 @@ Rectangle {
                 id: saveBtn
                 text: "Save"
                 font.pixelSize: 14
-                enabled: !!labelField.text
+                enabled: !!labelField.text && coordinatesAreValid
                 onClicked: {
                     const categories = PoiOptionsController.types
 
@@ -290,6 +416,8 @@ Rectangle {
                         operationalState,
                         label: labelField.text,
                         note: noteField.text,
+                        latitude: parseFloat(latitudeField.text),
+                        longitude: parseFloat(longitudeField.text)
                     })
 
                     popup.clearForm()
