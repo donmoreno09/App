@@ -35,6 +35,14 @@ Item {
     Plugin {
         id: mapPlugin
         name: "osm"
+        PluginParameter {
+            name: "osm.mapping.providersrepository.disabled"
+            value: true
+        }
+        PluginParameter {
+            name: "osm.mapping.cache.directory"
+            value: "osm_cache"
+        }
     }
 
     Map {
