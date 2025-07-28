@@ -18,7 +18,7 @@ Button {
 
     background: Rectangle {
         opacity: enabled ? 1 : 0.3
-        color: control.hovered && control.enabled ? "#adbed9" : "transparent"
+        color: control.hovered && control.enabled ? "#2a2a2a" : "transparent"
         border.color: "#888888"
         border.width: 1
         radius: 2
