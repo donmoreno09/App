@@ -223,7 +223,7 @@ ToolBar {
 
     background: Rectangle {
         radius: 6
-        color: "#1F3154"
+        color: "#f21f3154"
         border.color: "#404040"
         border.width: 1
     }

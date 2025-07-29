@@ -25,7 +25,7 @@ ComboBox {
 
         background: Rectangle {
             anchors.fill: parent
-            color: delegate.highlighted ? "#1F3154" : "#2a2a2a"  // Dark theme colors
+            color: delegate.highlighted ? "#404040" : "#2a2a2a"  // Dark theme colors
             radius: 4
         }
     }

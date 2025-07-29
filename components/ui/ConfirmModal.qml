@@ -24,8 +24,9 @@ Popup {
     closePolicy: Popup.CloseOnEscape
 
     background: Rectangle {
+        radius: 6
         height: popup.implicitHeight
-        color: "white"
+        color: "#f21f3154"
     }
 
     contentItem: ColumnLayout {
@@ -34,7 +35,7 @@ Popup {
         Text {
             text: popup.title
             font.bold: true
-            color: "black"
+            color: "#ffffff"
         }
 
         Text {
@@ -42,7 +43,7 @@ Popup {
             Layout.fillWidth: true
             Layout.preferredHeight: 60
             wrapMode: Text.WordWrap
-            color: "black"
+            color: "#ffffff"
         }
 
         Row {

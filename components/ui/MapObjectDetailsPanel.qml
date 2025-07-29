@@ -14,8 +14,8 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "white"
-        border.color: "#dddddd"
+        color: "#f21f3154"
+        border.color: "#3a4a6a"
         border.width: 1
         radius: 12
     }
@@ -29,13 +29,13 @@ Item {
             width: parent.width
             height: 40
             radius: 6
-            color: "#adbed9"
-            border.color: "#cccccc"
+            color: "#2a2a2a"
+            border.color: "#3a4a6a"
             border.width: 1
 
             Text {
                 text: "Selected Assets"
-                color: "#333"
+                color: "#ffffff"
                 font.bold: true
                 font.pixelSize: 14
                 anchors.centerIn: parent
@@ -53,8 +53,8 @@ Item {
                 width: parent.width
                 height: column.implicitHeight
                 radius: 6
-                color: "#f2f2f2"
-                border.color: "#cccccc"
+                color: "#f21f3154"
+                border.color: "#3a4a6a"
                 border.width: 1
                 anchors.margins: 4
 
@@ -77,7 +77,8 @@ Item {
 
                     Text {
                         text: "Label: " + JSON.stringify(modelData.label)
-                        color: "red"
+                        color: "white"
+                        font.bold: true
                         font.pixelSize: 12
                         wrapMode: Text.Wrap
                     }
@@ -90,7 +91,7 @@ Item {
                         model: filteredKeys
                         delegate: Text {
                             text: modelData + ": " + jsObject[modelData]
-                            color: "black"
+                            color: "#ffffff"
                             font.pixelSize: 12
                             wrapMode: Text.Wrap
                         }
