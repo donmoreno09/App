@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import QtPositioning 6.8
 
 import raise.singleton.layermanager 1.0
 import raise.singleton.controllers 1.0
@@ -14,6 +15,8 @@ Item {
     property var layers: LayerManager.layerList
     property var selectedObjects: LayerManager.selectedObjects
     property bool detailsPanelExpanded: false
+
+    signal requestSidepanelOpen()
 
     ColumnLayout {
         id: layerColumn
@@ -222,7 +225,7 @@ Item {
 
                                 Text {
                                     text: "Label: " + JSON.stringify(modelData.label)
-                                    color: "#ff6b6b"
+                                    color: "white"
                                     font.pixelSize: 11
                                     font.bold: true
                                     wrapMode: Text.Wrap
@@ -237,7 +240,7 @@ Item {
                                     model: filteredKeys
                                     delegate: Text {
                                         text: modelData + ": " + jsObject[modelData]
-                                        color: "#cccccc"
+                                        color: "white"
                                         font.pixelSize: 10
                                         wrapMode: Text.Wrap
                                         width: parent.width
@@ -253,11 +256,68 @@ Item {
                                         text: "Edit"
 
                                         onClicked: {
+
+                                            console.log("=== POPUP DEBUG ===")
+                                                console.log("poiPopup exists:", !!poiPopup)
+                                                console.log("ellipsePoiPopup exists:", !!ellipsePoiPopup)
+                                                console.log("rectanglePoiPopup exists:", !!rectanglePoiPopup)
+                                                console.log("polygonPoiPopup exists:", !!polygonPoiPopup)
+
+                                            console.log("=== DEBUG GEOMETRY ===")
+                                                console.log("Full modelData:", JSON.stringify(modelData, null, 2))
+                                                console.log("Geometry object:", JSON.stringify(modelData.geometry, null, 2))
+                                                console.log("Geometry keys:", Object.keys(modelData.geometry || {}))
                                             if (LayerManager.focusedLayerName() === "AnnotationMapLayer") {
                                                 shapePopup.labelField.text = modelData.label
                                                 shapePopup.open()
                                             } else {
                                                 poiPopup.labelField.text = modelData.label
+                                                ellipsePoiPopup.labelField.text = modelData.label
+                                                rectanglePoiPopup.labelField.text = modelData.label
+                                                polygonPoiPopup.labelField.text = modelData.label
+
+                                                if (modelData.geometry && modelData.geometry.coordinate) {
+                                                    const longitude = Number(modelData.geometry.coordinate.x) || 0
+                                                    const latitude = Number(modelData.geometry.coordinate.y) || 0
+                                                    poiPopup.longitudeField.text = longitude.toFixed(6)
+                                                    poiPopup.latitudeField.text = latitude.toFixed(6)
+                                                } else {
+                                                    // Fallback to default values
+                                                    poiPopup.longitudeField.text = "0.000000"
+                                                    poiPopup.latitudeField.text = "0.000000"
+                                                }
+
+                                                if (modelData.geometry.shapeTypeId === 3) {
+
+                                                    // Per Rectangle
+                                                    if (modelData.geometry.coordinates && modelData.geometry.coordinates.length === 4) {
+                                                        const coords = modelData.geometry.coordinates
+                                                        rectanglePoiPopup.topLeftLat.text = coords[0].y.toFixed(6)
+                                                        rectanglePoiPopup.topLeftLon.text = coords[0].x.toFixed(6)
+                                                        rectanglePoiPopup.bottomRightLat.text = coords[2].y.toFixed(6)
+                                                        rectanglePoiPopup.bottomRightLon.text = coords[2].x.toFixed(6)
+                                                    }
+
+                                                    // Per Polygon
+                                                    if (modelData.geometry.coordinates) {
+                                                        const coordinates = modelData.geometry.coordinates.map(coord =>
+                                                            QtPositioning.coordinate(coord.y, coord.x)
+                                                        )
+                                                        polygonPoiPopup.setPolygonCoordinates(coordinates)
+                                                    }
+
+                                                } else if (modelData.geometry.shapeTypeId === 5) {
+                                                    // Ellipse
+                                                    if (modelData.geometry && modelData.geometry.coordinate) {
+                                                        ellipsePoiPopup.centerLat.text = Number(modelData.geometry.coordinate.y).toFixed(6)
+                                                        ellipsePoiPopup.centerLon.text = Number(modelData.geometry.coordinate.x).toFixed(6)
+
+                                                        const radiusA = Number(modelData.geometry.radiusA) || 0
+                                                        const radiusB = Number(modelData.geometry.radiusB) || 0
+                                                        ellipsePoiPopup.radiusLatField.text = radiusA.toFixed(6)
+                                                        ellipsePoiPopup.radiusLonField.text = radiusB.toFixed(6)
+                                                    }
+                                                }
 
                                                 // find typeId by looping through each category
                                                 let categoryId = -1
@@ -278,11 +338,44 @@ Item {
                                                 poiPopupDataLoader.currentPoiCategory = categoryId
                                                 poiPopupDataLoader.currentPoiType = typeId
 
+                                                rectanglePoiPopupDataLoader.currentPoiCategory = categoryId
+                                                rectanglePoiPopupDataLoader.currentPoiType = typeId
+
+                                                ellipsePoiPopupDataLoader.currentPoiCategory = categoryId
+                                                ellipsePoiPopupDataLoader.currentPoiType = typeId
+
+                                                polygonPoiPopupDataLoader.currentPoiCategory = categoryId
+                                                polygonPoiPopupDataLoader.currentPoiType = typeId
+
                                                 poiPopup.healthStatusComboBox.currentIndex = PoiOptionsController.healthStatuses.findIndex((h) => h.key === modelData.healthStatusId)
                                                 poiPopup.operationalStateComboBox.currentIndex = PoiOptionsController.operationalStates.findIndex((o) => o.key === modelData.operationalStateId)
 
+
+                                                rectanglePoiPopup.healthStatusComboBox.currentIndex = PoiOptionsController.healthStatuses.findIndex((h) => h.key === modelData.healthStatusId)
+                                                rectanglePoiPopup.operationalStateComboBox.currentIndex = PoiOptionsController.operationalStates.findIndex((o) => o.key === modelData.operationalStateId)
+
+                                                ellipsePoiPopup.healthStatusComboBox.currentIndex = PoiOptionsController.healthStatuses.findIndex((h) => h.key === modelData.healthStatusId)
+                                                ellipsePoiPopup.operationalStateComboBox.currentIndex = PoiOptionsController.operationalStates.findIndex((o) => o.key === modelData.operationalStateId)
+
+                                                polygonPoiPopup.healthStatusComboBox.currentIndex = PoiOptionsController.healthStatuses.findIndex((h) => h.key === modelData.healthStatusId)
+                                                polygonPoiPopup.operationalStateComboBox.currentIndex = PoiOptionsController.operationalStates.findIndex((o) => o.key === modelData.operationalStateId)
+
                                                 PoiController.getPoi(modelData.id);
-                                                poiPopup.open()
+
+                                                if (modelData.geometry.shapeTypeId === 1) {
+                                                    poiPopup.open()
+                                                } else if (modelData.geometry.shapeTypeId === 5) {
+                                                    ellipsePoiPopup.open()
+                                                } else if (modelData.geometry.shapeTypeId === 3) {
+
+                                                    if (modelData.geometry.coordinates.length === 5) {
+                                                        rectanglePoiPopup.open()
+                                                     } else {
+                                                         polygonPoiPopup.open()
+                                                     }
+                                                } else {
+                                                    poiPopup.open()
+                                                }
                                             }
                                         }
                                     }
@@ -315,7 +408,146 @@ Item {
                                     dataToSave.operationalStateName = details.operationalState.value
                                     dataToSave.details = { metadata: { note: details.note } }
 
+                                    if (dataToSave.geometry && dataToSave.geometry.coordinate) {
+                                        dataToSave.geometry.coordinate.x = Number(details.longitude) || dataToSave.geometry.coordinate.x
+                                        dataToSave.geometry.coordinate.y = Number(details.latitude) || dataToSave.geometry.coordinate.y
+
+                                        // Aggiorna anche l'array coordinates se esiste
+                                        if (dataToSave.geometry.coordinates && dataToSave.geometry.coordinates[0]) {
+                                            dataToSave.geometry.coordinates[0].x = dataToSave.geometry.coordinate.x
+                                            dataToSave.geometry.coordinates[0].y = dataToSave.geometry.coordinate.y
+                                        }
+                                    }
+
                                     console.log("UPDATE POI:", JSON.stringify(dataToSave))
+                                    PoiController.updatePoiFromQml(dataToSave)
+
+                                    const poiModel = root.staticPoiLayerInstance.businessLogic.poiModel
+                                    for (let i = 0; i < poiModel.rowCount(); i++) {
+                                        const poi = poiModel.at(i)
+                                        if (poi.id === dataToSave.id) {
+                                            poiModel.setItemAt(i, dataToSave)
+                                            break
+                                        }
+                                    }
+
+                                    staticPoiLayerInstance.businessLogic.syncSelectedObject(dataToSave)
+                                }
+                            }
+
+                            RectanglePoiPopup {
+                                id: rectanglePoiPopup
+                                title: `Update ${modelData.label}?`
+                                visible: false
+                                parent: root
+
+                                onSaveClicked: function (details) {
+                                    const dataToSave = JSON.parse(JSON.stringify(modelData))
+                                    dataToSave.label = details.label
+                                    dataToSave.typeId = details.type.key
+                                    dataToSave.typeName = details.type.value
+                                    dataToSave.healthStatusId = details.healthStatus.key
+                                    dataToSave.healthStatusName = details.healthStatus.value
+                                    dataToSave.operationalStateId = details.operationalState.key
+                                    dataToSave.operationalStateName = details.operationalState.value
+                                    dataToSave.details = { metadata: { note: details.note } }
+
+                                    // Update rectangle coordinates
+                                    if (dataToSave.geometry) {
+                                        // Adatta questa logica in base a come sono strutturati i tuoi dati rectangle
+                                        dataToSave.geometry.topLeft = {
+                                            x: Number(details.topLeft.longitude),
+                                            y: Number(details.topLeft.latitude)
+                                        }
+                                        dataToSave.geometry.bottomRight = {
+                                            x: Number(details.bottomRight.longitude),
+                                            y: Number(details.bottomRight.latitude)
+                                        }
+                                    }
+
+                                    console.log("UPDATE RECTANGLE POI:", JSON.stringify(dataToSave))
+                                    PoiController.updatePoiFromQml(dataToSave)
+
+                                    const poiModel = root.staticPoiLayerInstance.businessLogic.poiModel
+                                    for (let i = 0; i < poiModel.rowCount(); i++) {
+                                        const poi = poiModel.at(i)
+                                        if (poi.id === dataToSave.id) {
+                                            poiModel.setItemAt(i, dataToSave)
+                                            break
+                                        }
+                                    }
+
+                                    staticPoiLayerInstance.businessLogic.syncSelectedObject(dataToSave)
+                                }
+                            }
+
+                            EllipsePoiPopup {
+                                id: ellipsePoiPopup
+                                title: `Update ${modelData.label}?`
+                                visible: false
+                                parent: root
+
+                                onSaveClicked: function (details) {
+                                    const dataToSave = JSON.parse(JSON.stringify(modelData))
+                                    dataToSave.label = details.label
+                                    dataToSave.typeId = details.type.key
+                                    dataToSave.typeName = details.type.value
+                                    dataToSave.healthStatusId = details.healthStatus.key
+                                    dataToSave.healthStatusName = details.healthStatus.value
+                                    dataToSave.operationalStateId = details.operationalState.key
+                                    dataToSave.operationalStateName = details.operationalState.value
+                                    dataToSave.details = { metadata: { note: details.note } }
+
+                                    // Update ellipse coordinates
+                                    if (dataToSave.geometry && dataToSave.geometry.coordinate) {
+                                        dataToSave.geometry.coordinate.x = Number(details.center.longitude) || dataToSave.geometry.coordinate.x
+                                        dataToSave.geometry.coordinate.y = Number(details.center.latitude) || dataToSave.geometry.coordinate.y
+                                        dataToSave.geometry.radiusA = Number(details.radiusLat) || dataToSave.geometry.radiusA
+                                        dataToSave.geometry.radiusB = Number(details.radiusLon) || dataToSave.geometry.radiusB
+                                    }
+
+                                    console.log("UPDATE ELLIPSE POI:", JSON.stringify(dataToSave))
+                                    PoiController.updatePoiFromQml(dataToSave)
+
+                                    const poiModel = root.staticPoiLayerInstance.businessLogic.poiModel
+                                    for (let i = 0; i < poiModel.rowCount(); i++) {
+                                        const poi = poiModel.at(i)
+                                        if (poi.id === dataToSave.id) {
+                                            poiModel.setItemAt(i, dataToSave)
+                                            break
+                                        }
+                                    }
+
+                                    staticPoiLayerInstance.businessLogic.syncSelectedObject(dataToSave)
+                                }
+                            }
+
+                            PolygonPoiPopup {
+                                id: polygonPoiPopup
+                                title: `Update ${modelData.label}?`
+                                visible: false
+                                parent: root
+
+                                onSaveClicked: function (details) {
+                                    const dataToSave = JSON.parse(JSON.stringify(modelData))
+                                    dataToSave.label = details.label
+                                    dataToSave.typeId = details.type.key
+                                    dataToSave.typeName = details.type.value
+                                    dataToSave.healthStatusId = details.healthStatus.key
+                                    dataToSave.healthStatusName = details.healthStatus.value
+                                    dataToSave.operationalStateId = details.operationalState.key
+                                    dataToSave.operationalStateName = details.operationalState.value
+                                    dataToSave.details = { metadata: { note: details.note } }
+
+                                    // Update polygon coordinates
+                                    if (dataToSave.geometry && details.coordinates) {
+                                        dataToSave.geometry.coordinates = details.coordinates.map(coord => ({
+                                            x: coord.longitude,
+                                            y: coord.latitude
+                                        }))
+                                    }
+
+                                    console.log("UPDATE POLYGON POI:", JSON.stringify(dataToSave))
                                     PoiController.updatePoiFromQml(dataToSave)
 
                                     const poiModel = root.staticPoiLayerInstance.businessLogic.poiModel
@@ -362,6 +594,21 @@ Item {
                                 targetPoiPopup: poiPopup
                             }
 
+                            PoiPopupDataLoader {
+                                id: rectanglePoiPopupDataLoader
+                                targetPoiPopup: rectanglePoiPopup
+                            }
+
+                            PoiPopupDataLoader {
+                                id: ellipsePoiPopupDataLoader
+                                targetPoiPopup: ellipsePoiPopup
+                            }
+
+                            PoiPopupDataLoader {
+                                id: polygonPoiPopupDataLoader
+                                targetPoiPopup: polygonPoiPopup
+                            }
+
                             ConfirmModal {
                                 id: confirmModal
 
@@ -389,7 +636,7 @@ Item {
                                         const poiModel = root.staticPoiLayerInstance.businessLogic.poiModel
                                         for (let ip = 0; ip < poiModel.rowCount(); ip++) {
                                             const poi = poiModel.at(ip)
-                                            if (poi.id === dataToSave.id) {
+                                            if (poi.id === modelData.id) {
                                                 poiModel.removeItemAt(ip)
                                                 break
                                             }
@@ -406,6 +653,9 @@ Item {
                                 function onPoiFetchedSuccessfully(poi) {
                                     if (poi.details && poi.details.metadata && poi.details.metadata.note) {
                                         poiPopup.noteField.text = poi.details.metadata.note
+                                        rectanglePoiPopup.noteField.text = poi.details.metadata.note
+                                        ellipsePoiPopup.noteField.text = poi.details.metadata.note
+                                        polygonPoiPopup.noteField.text = poi.details.metadata.note
                                     }
                                 }
                             }
@@ -443,6 +693,7 @@ Item {
             // Auto-expand when objects are selected
             if (selectedObjects && selectedObjects.length > 0) {
                 detailsPanelExpanded = true
+                requestSidepanelOpen()
             }
         }
     }
