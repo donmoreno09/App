@@ -12,7 +12,7 @@ Rectangle {
     property var title
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
-    property alias typeComboxBox: typeComboBox
+    property alias typeComboBox: typeComboBox
     property alias healthStatusComboBox: healthStatusComboBox
     property alias operationalStateComboBox: operationalStateComboBox
     property alias noteField: noteField

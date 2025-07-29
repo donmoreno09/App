@@ -263,6 +263,12 @@ Item {
                                                 console.log("rectanglePoiPopup exists:", !!rectanglePoiPopup)
                                                 console.log("polygonPoiPopup exists:", !!polygonPoiPopup)
 
+                                            if (ellipsePoiPopup) {
+                                                console.log("ellipsePoiPopup properties:", Object.keys(ellipsePoiPopup))
+                                                console.log("centerLat exists:", !!ellipsePoiPopup.centerLat)
+                                                console.log("centerLon exists:", !!ellipsePoiPopup.centerLon)
+                                            }
+
                                             console.log("=== DEBUG GEOMETRY ===")
                                                 console.log("Full modelData:", JSON.stringify(modelData, null, 2))
                                                 console.log("Geometry object:", JSON.stringify(modelData.geometry, null, 2))
@@ -288,9 +294,8 @@ Item {
                                                 }
 
                                                 if (modelData.geometry.shapeTypeId === 3) {
-
                                                     // Per Rectangle
-                                                    if (modelData.geometry.coordinates && modelData.geometry.coordinates.length === 4) {
+                                                    if (modelData.geometry.coordinates && modelData.geometry.coordinates.length === 5) {
                                                         const coords = modelData.geometry.coordinates
                                                         rectanglePoiPopup.topLeftLat.text = coords[0].y.toFixed(6)
                                                         rectanglePoiPopup.topLeftLon.text = coords[0].x.toFixed(6)
@@ -299,13 +304,12 @@ Item {
                                                     }
 
                                                     // Per Polygon
-                                                    if (modelData.geometry.coordinates) {
+                                                    if (modelData.geometry.coordinates && modelData.geometry.coordinates.length) {
                                                         const coordinates = modelData.geometry.coordinates.map(coord =>
                                                             QtPositioning.coordinate(coord.y, coord.x)
                                                         )
                                                         polygonPoiPopup.setPolygonCoordinates(coordinates)
                                                     }
-
                                                 } else if (modelData.geometry.shapeTypeId === 5) {
                                                     // Ellipse
                                                     if (modelData.geometry && modelData.geometry.coordinate) {

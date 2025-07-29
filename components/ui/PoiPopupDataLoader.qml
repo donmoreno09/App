@@ -22,8 +22,8 @@ Item {
             targetPoiPopup.categoryComboBox.currentIndex = categories.findIndex((c) => c.key === currentPoiCategory)
 
             var types = categories[targetPoiPopup.categoryComboBox.currentIndex].values
-            targetPoiPopup.typeComboxBox.model = types.map((t) => t.value)
-            targetPoiPopup.typeComboxBox.currentIndex = types.findIndex((t) => t.key === currentPoiType)
+            targetPoiPopup.typeComboBox.model = types.map((t) => t.value)
+            targetPoiPopup.typeComboBox.currentIndex = types.findIndex((t) => t.key === currentPoiType)
         }
     }
 
@@ -34,8 +34,8 @@ Item {
         function onActivated(index) {
             var categories = currentPoiCategory > 4 ? PoiOptionsController.types.slice(4) : PoiOptionsController.types.slice(0, 4)
             var types = categories[index].values
-            targetPoiPopup.typeComboxBox.model = types.map((t) => t.value)
-            targetPoiPopup.typeComboxBox.currentIndex = 0
+            targetPoiPopup.typeComboBox.model = types.map((t) => t.value)
+            targetPoiPopup.typeComboBox.currentIndex = 0
 
             categoryChanged(categories[index].key)
             typeChanged(types[0].key)
@@ -43,7 +43,7 @@ Item {
     }
 
     Connections {
-        target: targetPoiPopup.typeComboxBox
+        target: targetPoiPopup.typeComboBox
         ignoreUnknownSignals: true
 
         function onActivated(index) {
