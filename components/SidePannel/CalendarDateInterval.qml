@@ -41,7 +41,7 @@ Rectangle {
         z: -1
         radius: 8
         gradient: Gradient {
-            GradientStop { position: 0.0; color: "#1F3154" }
+            GradientStop { position: 0.0; color: "#f21f3154" }
             GradientStop { position: 1.0; color: "#0F1F35" }
         }
         border.color: "#404040"

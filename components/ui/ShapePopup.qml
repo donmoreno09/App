@@ -22,8 +22,9 @@ Rectangle {
     height: 36 + popupContent.implicitHeight + 12
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
+    color: "#f21f3154"
     radius: 6
-    border.color: "#dddddd"
+    border.color: "#3a4a6a"
     border.width: 2
 
     function open() {
@@ -66,7 +67,7 @@ Rectangle {
             anchors.topMargin: 12
             anchors.leftMargin: 12
             font.bold: true
-            color: "black"
+            color: "#ffffff"
         }
 
         DragHandler {
@@ -124,19 +125,21 @@ Rectangle {
 
                 Label {
                     text: "Label"
-                    color: "black"
+                    color: "#ffffff"
                 }
 
                 TextField {
                     id: labelField
                     placeholderText: "Enter label..."
+                    placeholderTextColor : "#444444"
                     font.pixelSize: 14
-                    color: "black"
+                    color: "#ffffff"
                     Layout.fillWidth: true
 
                     background: Rectangle {
                         radius: 2
-                        border.color: "#888888"
+                        color: "#2a2a2a"
+                        border.color: "#3a4a6a"
                     }
                 }
             }

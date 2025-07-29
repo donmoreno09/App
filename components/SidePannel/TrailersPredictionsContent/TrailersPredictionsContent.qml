@@ -61,6 +61,7 @@ Item {
                 id: trailerIdInput
                 Layout.fillWidth: true
                 placeholderText: "Enter ID"
+                placeholderTextColor: "#444444"
                 inputMethodHints: Qt.ImhDigitsOnly
                 color: textColor
                 font.pixelSize: 16
@@ -68,7 +69,7 @@ Item {
 
                 background: Rectangle {
                     radius: 4
-                    color: inputBackground
+                    color: "#2a2a2a"
                     border.color: trailerIdInput.activeFocus ? highlightColor : borderColor
                     border.width: 1
                 }

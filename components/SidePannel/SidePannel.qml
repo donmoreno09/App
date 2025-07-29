@@ -12,9 +12,9 @@ Rectangle {
     id: sidePanel
     width: 500
     height: parent.height
-    color: "#1F3154"
+    color: "#f21f3154"
     gradient: Gradient {
-        GradientStop { position: 0.0; color: "#1F3154" }
+        GradientStop { position: 0.0; color: "#f21f3154" }
         GradientStop { position: 1.0; color: "#0F1F35" }
     }
 

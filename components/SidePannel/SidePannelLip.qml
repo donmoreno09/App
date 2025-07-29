@@ -11,7 +11,7 @@ Shape {
     signal clicked()
 
     ShapePath {
-        fillColor: "#1F3154"
+        fillColor: "#f21f3154"
         strokeColor: "#30363D"
         strokeWidth: 1
         startX: 0; startY: 0
