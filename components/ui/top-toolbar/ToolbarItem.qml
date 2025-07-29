@@ -14,8 +14,8 @@ ToolButton {
 
     background: Rectangle {
         color: {
-            if (toolBtn.hovered) return "#2a2a2a"
-            if (tool.id === toolbar.currentToolId || tool.id === toolbar.currentMode) return "#404040"
+            if (toolBtn.hovered) return "#404040"
+            if (tool.id === toolbar.currentToolId || tool.id === toolbar.currentMode) return "#2a2a2a"
 
             return "transparent"
         }
