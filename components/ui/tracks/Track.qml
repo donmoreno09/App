@@ -49,8 +49,8 @@ MapQuickItem {
 
     sourceItem: Item {
         id: trackRect
-        width: 24
-        height: 24
+        width: 40
+        height: 40
         opacity: trackData.state === 1 ? 0.5 : 1.0
 
         // COG direction vector (track heading line)
@@ -71,39 +71,24 @@ MapQuickItem {
             visible: vectorVisible
         }
 
-        // Commented out for now since it does not seem to serve any purpose
-        // yet other than the fact that this block of code is from legacy.
-        // Image {
-        //     anchors.fill: parent
-        //     anchors.centerIn: parent
-        //     source: "../../../assets/icons/track/smartport/" + trackData.code.substring(0,2) + "/" + trackData.code.substring(2,4) + "/" + trackData.code.substring(4,6) + "/" + trackData.code + ".svg"
-        //     fillMode: Image.PreserveAspectFit
-        //     smooth: true
-        //     opacity: trackData.state === 1 ? 0.5 : 1.0
-        // }
-
         Image {
             id: image
             anchors.fill: parent
             anchors.centerIn: parent
-            source: "qrc:/components/ui/assets/tir.svg"
-            smooth: true
+            source: "../../../assets/icons/track/smartport/" + trackData.code.substring(0,2) + "/" + trackData.code.substring(2,4) + "/" + trackData.code.substring(4,6) + "/" + trackData.code + ".svg"
             fillMode: Image.PreserveAspectFit
-            asynchronous: true
-            cache: true
+            smooth: true
             opacity: trackData.state === 1 ? 0.5 : 1.0
         }
 
         Text {
             id: trackLabel
             text: "T" + qsTr(trackData.tracknumber.toString())
-            color: "black"
             font.pixelSize: 12
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: image.bottom
-            anchors.topMargin: 4
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
+            color: "black"
+            anchors.left: parent.right
+            anchors.leftMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
             wrapMode: Text.Wrap
             visible: labelVisible
         }
