@@ -64,22 +64,52 @@ Rectangle {
             return
         }
 
+        console.log("setPolygonCoordinates called with:", JSON.stringify(coordinates.map(c => ({lat: c.latitude, lon: c.longitude}))))
+
         isUpdatingFromExternal = true
         coordinatesModel.clear()
 
         originalPolygonPath = coordinates
 
         let displayCoordinates = []
+
         for (let i = 0; i < coordinates.length; i++) {
+            let coord = coordinates[i]
+            let lat, lon
+
+            if (typeof coord.latitude !== 'undefined') {
+                lat = coord.latitude
+                lon = coord.longitude
+            } else if (typeof coord.y !== 'undefined') {
+                lat = coord.y
+                lon = coord.x
+            } else {
+                continue
+            }
+
+            // Skip the last coordinate if it's identical to the first (closed polygon)
             if (i === coordinates.length - 1 && coordinates.length > 1) {
-                const firstPoint = coordinates[0]
-                if (Math.abs(coordinates[i].latitude - firstPoint.latitude) < 0.000001 &&
-                    Math.abs(coordinates[i].longitude - firstPoint.longitude) < 0.000001) {
+                const firstCoord = coordinates[0]
+                let firstLat, firstLon
+
+                if (typeof firstCoord.latitude !== 'undefined') {
+                    firstLat = firstCoord.latitude
+                    firstLon = firstCoord.longitude
+                } else if (typeof firstCoord.y !== 'undefined') {
+                    firstLat = firstCoord.y
+                    firstLon = firstCoord.x
+                }
+
+                if (Math.abs(lat - firstLat) < 0.000001 && Math.abs(lon - firstLon) < 0.000001) {
+                    console.log("Skipping duplicate closing coordinate")
                     continue
                 }
             }
-            displayCoordinates.push(coordinates[i])
+
+            displayCoordinates.push(QtPositioning.coordinate(lat, lon))
         }
+
+        console.log("Display coordinates:", displayCoordinates.length)
 
         for (let j = 0; j < displayCoordinates.length; j++) {
             coordinatesModel.append({
@@ -93,6 +123,7 @@ Rectangle {
 
         Qt.callLater(function() {
             isUpdatingFromExternal = false
+            console.log("Coordinates model now has", coordinatesModel.count, "items")
         })
     }
 

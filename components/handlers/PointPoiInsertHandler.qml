@@ -54,8 +54,8 @@ BasePoiInsertHandler {
             insertPoiPopup.categoryComboBox.currentIndex = categories.findIndex((c) => c.key === topToolbar.currentPoiCategory)
 
             var types = categories[insertPoiPopup.categoryComboBox.currentIndex].values
-            insertPoiPopup.typeComboxBox.model = types.map((t) => t.value)
-            insertPoiPopup.typeComboxBox.currentIndex = types.findIndex((t) => t.key === topToolbar.currentPoiType)
+            insertPoiPopup.typeComboBox.model = types.map((t) => t.value)
+            insertPoiPopup.typeComboBox.currentIndex = types.findIndex((t) => t.key === topToolbar.currentPoiType)
 
             if (handler.currentCoordinate.isValid) {
                 insertPoiPopup.setCoordinates(handler.currentCoordinate.latitude, handler.currentCoordinate.longitude)
@@ -100,15 +100,15 @@ BasePoiInsertHandler {
         function onActivated(index) {
             var categories = PoiOptionsController.types.slice(4)
             var types = categories[index].values
-            insertPoiPopup.typeComboxBox.model = types.map((t) => t.value)
-            insertPoiPopup.typeComboxBox.currentIndex = 0
+            insertPoiPopup.typeComboBox.model = types.map((t) => t.value)
+            insertPoiPopup.typeComboBox.currentIndex = 0
             topToolbar.currentPoiCategory = categories[index].key
             topToolbar.currentPoiType = types[0].key
         }
     }
 
     Connections {
-        target: insertPoiPopup.typeComboxBox
+        target: insertPoiPopup.typeComboBox
         ignoreUnknownSignals: true
         enabled: topToolbar.currentMode === 'poi-point'
         function onActivated(index) {
