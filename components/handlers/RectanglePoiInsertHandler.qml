@@ -73,8 +73,6 @@ BaseAreaPoiInsertHandler {
             const coordinates = ShapeModel.rectToQtCoordinates(finalRect, QtPositioning)
             const data = ShapeModel.createPolygon(details.id, details.label, coordinates)
 
-            data.geometry.subtype = "rectangle"
-
             handler.prefillData(data, details)
 
             if (!data.label || !details.category || !details.type) {

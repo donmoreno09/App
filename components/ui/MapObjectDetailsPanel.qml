@@ -23,9 +23,33 @@ Rectangle {
 
     visible: selectedObjects && selectedObjects.length > 0
 
-    // Behavior on height {
-    //     NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-    // }
+    function isRectangle(geometry) {
+        if (!geometry || !geometry.coordinates || geometry.shapeTypeId !== 3) {
+            return false;
+        }
+
+        // Un rettangolo ha esattamente 5 coordinate (4 vertici + chiusura)
+        if (geometry.coordinates.length !== 5) {
+            return false;
+        }
+
+        const coords = geometry.coordinates;
+
+        // Verifica che sia effettivamente un rettangolo
+        const x1 = coords[0].x, y1 = coords[0].y;
+        const x2 = coords[1].x, y2 = coords[1].y;
+        const x3 = coords[2].x, y3 = coords[2].y;
+        const x4 = coords[3].x, y4 = coords[3].y;
+
+        // Verifica che sia un rettangolo (lati paralleli agli assi)
+        const isRect = (
+            Math.abs(x1 - x4) < 0.000001 && Math.abs(x2 - x3) < 0.000001 && // lati verticali
+            Math.abs(y1 - y2) < 0.000001 && Math.abs(y3 - y4) < 0.000001 && // lati orizzontali
+            Math.abs(x1 - x2) > 0.000001 && Math.abs(y1 - y3) > 0.000001    // non è un punto singolo
+        );
+
+        return isRect;
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -88,7 +112,7 @@ Rectangle {
                     width: listView.width
                     height: column.implicitHeight + 12
                     radius: 6
-                    color: "#1c2a38"
+                    color: "#f21f3154"
                     border.color: "#3a506b"
                     border.width: 1
 
@@ -180,21 +204,28 @@ Rectangle {
                                         }
 
                                         if (modelData.geometry.shapeTypeId === 3) {
-                                            // Per Rectangle
-                                            if (modelData.geometry.coordinates && modelData.geometry.subtype === "rectangle") {
-                                                const coords = modelData.geometry.coordinates
-                                                rectanglePoiPopup.topLeftLat.text = coords[0].y.toFixed(6)
-                                                rectanglePoiPopup.topLeftLon.text = coords[0].x.toFixed(6)
-                                                rectanglePoiPopup.bottomRightLat.text = coords[2].y.toFixed(6)
-                                                rectanglePoiPopup.bottomRightLon.text = coords[2].x.toFixed(6)
-                                            }
+                                            // Rectangle
+                                            if (isRectangle(modelData.geometry)) {
+                                                console.log("Opening Rectangle popup for:", modelData.label);
 
-                                            // Per Polygon
-                                            if (modelData.geometry.coordinates && modelData.geometry.coordinates.length) {
-                                                const coordinates = modelData.geometry.coordinates.map(coord =>
-                                                    QtPositioning.coordinate(coord.y, coord.x)
-                                                )
-                                                polygonPoiPopup.setPolygonCoordinates(coordinates)
+
+                                                if (modelData.geometry.coordinates) {
+                                                    const coords = modelData.geometry.coordinates;
+                                                    rectanglePoiPopup.topLeftLat.text = coords[0].y.toFixed(6);
+                                                    rectanglePoiPopup.topLeftLon.text = coords[0].x.toFixed(6);
+                                                    rectanglePoiPopup.bottomRightLat.text = coords[2].y.toFixed(6);
+                                                    rectanglePoiPopup.bottomRightLon.text = coords[2].x.toFixed(6);
+                                                }
+                                            } else {
+                                                console.log("Opening Polygon popup for:", modelData.label);
+
+                                                // Polygon
+                                                if (modelData.geometry.coordinates && modelData.geometry.coordinates.length) {
+                                                    const coordinates = modelData.geometry.coordinates.map(coord =>
+                                                        QtPositioning.coordinate(coord.y, coord.x)
+                                                    );
+                                                    polygonPoiPopup.setPolygonCoordinates(coordinates);
+                                                }
                                             }
                                         } else if (modelData.geometry.shapeTypeId === 5) {
                                             // Ellipse
@@ -258,10 +289,12 @@ Rectangle {
                                             ellipsePoiPopup.open()
                                         } else if (modelData.geometry.shapeTypeId === 3) {
 
-                                            if (modelData.geometry.subtype === "rectangle") {
+                                            if (isRectangle(modelData.geometry)) {
+                                                console.log("Opening Rectangle popup for:", modelData.label);
                                                 rectanglePoiPopup.open()
                                              } else {
-                                                 polygonPoiPopup.open()
+                                                console.log("Opening Polygon popup for:", modelData.label);
+                                                polygonPoiPopup.open()
                                              }
                                         } else {
                                             poiPopup.open()
