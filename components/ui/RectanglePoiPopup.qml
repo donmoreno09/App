@@ -14,6 +14,10 @@ Rectangle {
     property alias healthStatusComboBox: healthStatusComboBox
     property alias operationalStateComboBox: operationalStateComboBox
     property alias noteField: noteField
+    property alias topLeftLat: topLeftLat
+    property alias topLeftLon: topLeftLon
+    property alias bottomRightLat: bottomRightLat
+    property alias bottomRightLon: bottomRightLon
 
     signal opened()
     signal closed()

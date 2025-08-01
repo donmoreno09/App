@@ -177,6 +177,13 @@ Rectangle {
             visible: currentTab === 4
             anchors.fill: parent
             anchors.margins: 2
+
+            onRequestSidepanelOpen: {
+                sidePanel.expanded = true
+                sidePanel.x = 0
+                currentTab = 4
+            }
+
             Component.onCompleted: {
                 console.log("LayersList loaded with layerList:", LayerManager.layerList)
             }

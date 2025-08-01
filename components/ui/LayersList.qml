@@ -1,6 +1,8 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import QtPositioning 6.8
+
 import raise.singleton.layermanager 1.0
 
 Item {
@@ -10,6 +12,9 @@ Item {
     clip: true
 
     property var layers: LayerManager.layerList
+    property var selectedObjects: LayerManager.selectedObjects
+
+    signal requestSidepanelOpen()
 
     ColumnLayout {
         id: layerColumn
@@ -17,6 +22,7 @@ Item {
         anchors.margins: 16
         spacing: 12
 
+        // LAYERS SELECTOR SECTION
         Text {
             text: "Layers Selector"
             font.pixelSize: 20
@@ -31,6 +37,7 @@ Item {
             Layout.fillWidth: true
         }
 
+        // Layers List
         Repeater {
             model: layers
 
@@ -116,6 +123,10 @@ Item {
             }
         }
 
+        MapObjectDetailsPanel {
+            id: mapObjectDetailsPanel
+        }
+
         Item { Layout.fillHeight: true }
     }
 
@@ -128,6 +139,19 @@ Item {
         function onLayerListChanged() {
             console.log("🔁 layerList updated. New value:", LayerManager.layerList)
             layers = LayerManager.layerList
+        }
+    }
+
+    Connections {
+        target: LayerManager
+        function onSelectedObjectsChanged() {
+            console.log("🔁 Oggetti selezionati aggiornati:\n" + JSON.stringify(LayerManager.selectedObjects, null, 2))
+            selectedObjects = LayerManager.selectedObjects
+
+            // Auto-expand when objects are selected and request sidepanel open
+            if (selectedObjects && selectedObjects.length > 0) {
+                requestSidepanelOpen()
+            }
         }
     }
 }
