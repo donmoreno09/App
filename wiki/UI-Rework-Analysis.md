@@ -45,7 +45,7 @@ Related: [4.3](#4-user-management)
 
 - We only have one theme but it's worth to already write the code to be easily swapped with another theme if it'll exist.
 
-#### 1.7 Modal/Popup management
+#### 1.7 Modal/Popup/Dialog management
 
 - What will constitute as a modal? Or as a popup?
   - Because to me a modal takes the full screen with dim background while a popup can be moved around. (To deepen.)
@@ -54,27 +54,33 @@ Related: [4.3](#4-user-management)
 - Should we support multiple modals? (Stack-based.)
 - We also need manager to tell which modal/popup is on the top of the stack of all other popups.
   - Should they have their own managers (modal and popup)?
+- Dialogs can serve the purpose of confirmation.
 
-#### 1.8 Siderail items configuration file maybe?
+#### 1.8 Siderail items configuration file
+
+Perhaps we can introduce a configuration file (json or yaml) which defines the items in the siderail. This allows us to have a dynamic and easy to update siderail system.
 
 #### 1.9 Guidelines for folder structuring and naming
 
 #### 1.10 Assets management.
 
-- There's QRC but how should we use it well? I remember there being multiple .qrc files.
+- There's QRC but how should we use it well? I remember seeing in another Qt codebase (example) there being multiple .qrc files.
 
 #### 1.11 Event/Communication system.
 
 - There are signals and slots of Qt. But how should we decouple and make modular our communication between modules?
-- I don't believe in a centralized global event manager, rather, the modules themselves have signals and slots that other modules can connect/disconnect to. This avoids recreating an event in two places (event manager and the module) and also manually handling event-handler maps.
+- We should try to avoid a custom centralized global event manager. The modules themselves should have signals and slots that other modules can connect/disconnect to. This avoids recreating an event in two places (a global custom event manager and the module) and also manually handling event-handler maps since Qt's signals and slots already handle it for us.
 
-#### 1.12 Singleton Manager-based approach?
+#### 1.12 Singleton Manager-based approach
 
-- Currently, we eventually did something like singleton manager-based approach which solves coupling very well but I think a proper analysis on this should be made.
+Currently, we eventually did something like singleton manager-based approach which solves coupling very well but I think a proper analysis on this should be made.
+
+We could analyze like guidelines of creating a Singleton manager and what needs to be a manager, etc.
 
 #### 1.13 Data filtering.
 
 - Useful for searching. This is a task since Qt has a word on this ([QSortFilterProxyModel Class](https://doc.qt.io/qt-6/qsortfilterproxymodel.html)) that must be analyzed and learned to use.
+- Wouldn't filtering make sense more in the BE than in FE? In the sense that the BE has direct access to DB and can make complex queries than fetching all items to FE and filtering them locally.
 
 #### 1.14 Data fetching management.
 
@@ -82,7 +88,7 @@ Related: [4.3](#4-user-management)
 - Loading.
 - Retry.
 - Caching.
-- Check if Qt's Network Access Manager has these functionalities. Or if there's a library for this like TanStack Query for web.
+- Check if Qt's Network Access Manager has the functionalities mentioned above. Or if there's a library for this like how the web package TanStack Query does.
 
 #### 1.15 Command Pattern (Undo/Redo)
 
@@ -212,9 +218,9 @@ One of main goal is to avoid ambiguity by giving each component a self-descripti
 
 #### 2.6 Context Panel (should we call it this way for general use?)
 
-##### 2.6.1 Assets/tracks list
+It will be left as an empty div component as discussed during the call on August 4, 2025.
 
-- List available tracks with icons. (Like submarine in the Figma)
+It was where the **Assets List** and **Payload List** were located.
 
 ### 3. Multilingual Support
 
@@ -327,58 +333,96 @@ One of main goal is to avoid ambiguity by giving each component a self-descripti
 
 ### Fincantieri
 
-#### F.1. Do we have UI as to when the user icon in the side panel is clicked?
-#### F.2. Why is there two versions of the map toolbar? One on the bottom and the other integrated in the title bar.
+#### F.1. How should we name our components?
 
-![map toolbar in title bar](.attachments/ui-rework-analysis/map-toolbar-in-title.png)
+It's better if we have Figma and our own Qt components synchronized with self-descriptive and unambiguous names.
 
-#### F.3. What does the search bar in the title bar actually do?
+#### F.2. Do we need toasts? For notification purposes and since the Figma doesn't provide it.
 
-#### F.4. We don't need Mission right?
+#### F.3. How about modals/popups/dialog?
 
-#### F.5. Why do side panel's icons in Figma sometimes there and sometimes aren't? For example:
+- Modals are replaced by the side panel.
+- Popups can be used for like clicking on the user icon in the siderail to show settings.
+- **Surely** we would need dialogs for confirmation and such. 
 
-![siderail icons](.attachments/ui-rework-analysis/siderail-icons.png)
+#### F.4. Do we have UI as to when the user icon in the side panel is clicked?
 
-#### F.6. Why is there an "X" in the Search Assets? Where are the other searches for like PoIs? Wait, is PoI an asset as well?
+![siderail's user profile icon](.attachments/ui-rework-analysis/siderail-profile-icon.png)
 
-![search assets](.attachments/ui-rework-analysis/sidepanel-search-assets.png)
+#### F.5. We don't have a way to sign up or log in accounts. What are the plans on this?
 
-#### F.7. Where's the tool to select assets?
-
-#### F.8. There's no mention of annotations or shapes. Do we still need it? If so, where's the UI to create one?
-
-#### F.9. How do we get to the video streams panel? Like does the side panel have its icon? The Figma doesn't show it. Also, why is there an "X" next to the "Video Stream List" label?
-
-#### F.10. The language side panel also have the "X", was it for?
-
-#### F.11. And do we really need "Save" for selecting a language?
+#### F.6. And do we really need "Save" for selecting a language?
 
 ![language side panel](.attachments/ui-rework-analysis/sidepanel-languages.png)
 
-#### F.12. We don't have a way to sign up or log in accounts. What are the plans on this?
+#### F.7. Why are there two versions of the map toolbar? One on the bottom and the other integrated in the title bar.
 
-#### F.13. The map toolbar isn't part of the main skeleton:
+First there's one in the title bar:
+
+![map toolbar in title bar](.attachments/ui-rework-analysis/map-toolbar-in-title.png)
+
+And the other one is on the map:
+
+![map toolbra on map](.attachments/ui-rework-analysis/map-toolbar-on-map.png)
+
+#### F.8. The map toolbar isn't part of the main skeleton:
 
 ![mising map toolbar](.attachments/ui-rework-analysis/missing-map-toolbar.png)
 
-#### F.14. What's the Home button for in the map toolbar?
+#### F.9. What's the Home button for in the map toolbar?
 
-#### F.15. There's an alert timeline with circled numbered items, what do they do? Do they open a modal/popup?
+![map toolbar](.attachments/ui-rework-analysis/map-toolbar.png)
 
-#### F.16. Also what do the icons on the right do? The "right pointing to a vertical bar arrow" and "circled underlined check".
+#### F.10. There's no "panning" (or hand) icon in the map toolbar:
+
+![map toolbar](.attachments/ui-rework-analysis/map-toolbar.png)
+
+#### F.11. Should the map remain with the shade of blue (blue opaque on top of the map)?
+
+![map with blue shade](.attachments/ui-rework-analysis/map.png)
+
+#### F.12. What does the search bar in the title bar actually do?
+
+![title searchbar](.attachments/ui-rework-analysis/title-searchbar.png)
+
+#### F.13. Where's the tool to select assets?
+
+#### F.14. There's no mention of annotations or shapes. Do we still need it? If so, where's the UI to create one?
+
+#### F.15. Where in Figma do we press to insert a new PoI? Or a shape annotation?
+
+#### F.16. Why do side panel's icons in Figma sometimes there and sometimes aren't? For example:
+
+![siderail icons](.attachments/ui-rework-analysis/siderail-icons.png)
+
+#### F.17. How do we get to the video streams panel? Like does the side panel have its icon? The Figma doesn't show it.
+
+#### F.18. There's an alert timeline with circled numbered items, what do they do? Do they open a modal/popup?
 
 ![alert panel](.attachments/ui-rework-analysis/alert-panel.png)
 
-#### F.17. What's EWS Network?
+#### F.19. Also what do the icons on the right do? The "right pointing to a vertical bar arrow" and "circled underlined check".
+
+![alert panel](.attachments/ui-rework-analysis/alert-panel.png)
+
+#### F.20. Where are the notifications bar opened? And where's the icon to close/hide it?
+
+![alert panel](.attachments/ui-rework-analysis/alert-panel.png)
+
+#### F.21. We don't need Mission right?
+
+![mission](.attachments/ui-rework-analysis/mission.png)
+
+#### F.22. What's EWS Network?
 
 ![context panel listing assets](.attachments/ui-rework-analysis/context-panel-assets-list.png)
-
-#### F.18. There's no "panning" (or hand) icon in the map toolbar:
-
-![map toolbar](.attachments/ui-rework-analysis/map-toolbar.png)
 
 ### Technical
 
 #### T.1. How should we handle the background color though?
+
 #### T.2. How many points can a polygon create? This can be in an application manifest handled by AppConfig or something like that.
+
+#### T.3. Wouldn't filtering make sense more in the BE than in FE? In the sense that the BE has direct access to DB and can make complex queries than fetching all items to FE and filtering them locally.
+
+Related: [1.13](#113-data-filtering)
