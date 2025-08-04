@@ -363,7 +363,7 @@ First there's one in the title bar:
 
 And the other one is on the map:
 
-![map toolbra on map](.attachments/ui-rework-analysis/map-toolbar-on-map.png)
+![map toolbar on map](.attachments/ui-rework-analysis/map-toolbar-on-map.png)
 
 #### F.8. The map toolbar isn't part of the main skeleton:
 
@@ -384,6 +384,12 @@ And the other one is on the map:
 #### F.12. What does the search bar in the title bar actually do?
 
 ![title searchbar](.attachments/ui-rework-analysis/title-searchbar.png)
+
+Does it show a popup with suggestions, and it updates accordingly to the input?
+
+Or does it open the search panel? Which if the search icon is in the siderail, isn’t it a bit useless?
+
+![side panel search](.attachments/ui-rework-analysis/sidepanel-search.png)
 
 #### F.13. Where's the tool to select assets?
 
