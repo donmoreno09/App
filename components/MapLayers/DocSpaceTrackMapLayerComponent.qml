@@ -10,13 +10,13 @@ import raise.singleton.mqtt 1.0
 import "../ui/tracks"
 
 MapItemGroup {
-    id: trackMapLayerComponent
+    id: docSpaceTrackMapLayerComponent
 
     property real zoomLevel: 0
     property alias isVisible: trackMapLayerBusinessLogic.isVisible
     property alias isEnabled: trackMapLayerBusinessLogic.isEnabled
 
-    property string layerName: "TrackMapLayer"
+    property string layerName: "Doc Space Tracks"
 
     visible: isVisible
 
@@ -24,7 +24,7 @@ MapItemGroup {
         id: trackDelegate
 
         Track {
-            trackType: MqttClientService.getTopicFromLayer("TrackLayer1")
+            trackType: MqttClientService.getTopicFromLayer("DocSpaceTrackMapLayer")
         }
     }
 
@@ -35,17 +35,17 @@ MapItemGroup {
     }
 
     Component.onCompleted: {
-        console.log("[TrackMapLayerComponent:Component.onCompleted] layer : " + trackMapLayerComponent.layerName + " notify layer ready...")
+        console.log("[docSpaceTrackMapLayerComponent:Component.onCompleted] layer : " + docSpaceTrackMapLayerComponent.layerName + " notify layer ready...")
         LayerManager.registerLayer(trackMapLayerBusinessLogic)
-        TrackManager.registerLayer(MqttClientService.getTopicFromLayer("TrackLayer1"), trackMapLayerBusinessLogic)
-        MqttClientService.registerLayer("TrackLayer1", trackMapLayerBusinessLogic);
+        TrackManager.registerLayer(MqttClientService.getTopicFromLayer("DocSpaceTrackMapLayer"), trackMapLayerBusinessLogic)
+        MqttClientService.registerLayer("DocSpaceTrackMapLayer", trackMapLayerBusinessLogic);
         trackMapLayerBusinessLogic.initialize()
     }
 
     TrackMapLayer {
         id: trackMapLayerBusinessLogic
-        layerName: trackMapLayerComponent.layerName
-        zoomLevel: trackMapLayerComponent.zoomLevel
+        layerName: docSpaceTrackMapLayerComponent.layerName
+        zoomLevel: docSpaceTrackMapLayerComponent.zoomLevel
     }
 
     Connections {
@@ -67,7 +67,7 @@ MapItemGroup {
                         PanelManager.linkedMarker = m
                         m.linkToPanel(PanelManager.activePanel.link || PanelManager.activePanel)
                     }
-                    m.trackData.tracktype = MqttClientService.getTopicFromLayer("TrackLayer2")
+                    m.trackData.tracktype = MqttClientService.getTopicFromLayer("DocSpaceTrackMapLayer")
                     PanelManager.activePanel.trackData = m.trackData   // refresh info
                     break
                 }
@@ -75,13 +75,13 @@ MapItemGroup {
         }
         
         function onActivated() {
-            console.log("AIS ACTIVATED!")
-            trackMapLayerComponent.visible = true
+            console.log("DOC-SPACE ACTIVATED!")
+            docSpaceTrackMapLayerComponent.visible = true
         }
 
         function onDeactivated() {
-            console.log("AIS DEACTIVATED!")
-            trackMapLayerComponent.visible = false
+            console.log("DOC-SPACE DEACTIVATED!")
+            docSpaceTrackMapLayerComponent.visible = false
         }
     }
 }

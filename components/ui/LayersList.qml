@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import QtPositioning 6.8
+import Qt5Compat.GraphicalEffects
 
 import raise.singleton.layermanager 1.0
 
@@ -14,7 +15,7 @@ Item {
     property var layers: LayerManager.layerList
     property var selectedObjects: LayerManager.selectedObjects
 
-    signal requestSidepanelOpen()
+    signal requestSidepanelOpen
 
     ColumnLayout {
         id: layerColumn
@@ -59,10 +60,62 @@ Item {
                         width: 36
                         height: 36
                         radius: 18
-                        color: "#ffcccb"
+                        color: "#3a506b"
                         border.color: "#999"
                         border.width: 1
                         Layout.alignment: Qt.AlignVCenter
+
+                        // Contenuto dinamico in base al nome del layer
+                        Item {
+                            anchors.centerIn: parent
+                            width: parent.width
+                            height: parent.height
+
+                            // Emoji per navi
+                            Text {
+                                visible: modelData.layerName === "Doc Space Tracks"
+                                         || modelData.layerName === "AIS Tracks"
+                                text: "🚢"
+                                font.pixelSize: 20
+                                anchors.centerIn: parent
+                            }
+
+                            // SVG Shapes icon
+                            Image {
+                                id: geometricalShapeIcon
+                                visible: modelData.layerName === "Geometrical Shapes"
+                                source: "qrc:/components/ui/assets/shapes.svg"
+                                fillMode: Image.PreserveAspectFit
+                                anchors.centerIn: parent
+                                width: 20
+                                height: 20
+                            }
+
+                            // SVG POI icon
+                            Image {
+                                id: poiIcon
+                                visible: modelData.layerName === "Points of Interest"
+                                source: "qrc:/components/ui/assets/poi-area.svg"
+                                anchors.centerIn: parent
+                                width: 20
+                                height: 20
+                                fillMode: Image.PreserveAspectFit
+                            }
+
+                            ColorOverlay {
+                                anchors.fill: geometricalShapeIcon
+                                visible: modelData.layerName === "Geometrical Shapes"
+                                source: geometricalShapeIcon
+                                color: "white"
+                            }
+
+                            ColorOverlay {
+                                anchors.fill: poiIcon
+                                visible: modelData.layerName === "Points of Interest"
+                                source: poiIcon
+                                color: "white"
+                            }
+                        }
                     }
 
                     Button {
@@ -127,7 +180,9 @@ Item {
             id: mapObjectDetailsPanel
         }
 
-        Item { Layout.fillHeight: true }
+        Item {
+            Layout.fillHeight: true
+        }
     }
 
     Component.onCompleted: {
@@ -137,7 +192,8 @@ Item {
     Connections {
         target: LayerManager
         function onLayerListChanged() {
-            console.log("🔁 layerList updated. New value:", LayerManager.layerList)
+            console.log("🔁 layerList updated. New value:",
+                        LayerManager.layerList)
             layers = LayerManager.layerList
         }
     }
@@ -145,7 +201,8 @@ Item {
     Connections {
         target: LayerManager
         function onSelectedObjectsChanged() {
-            console.log("🔁 Oggetti selezionati aggiornati:\n" + JSON.stringify(LayerManager.selectedObjects, null, 2))
+            console.log("🔁 Oggetti selezionati aggiornati:\n" + JSON.stringify(
+                            LayerManager.selectedObjects, null, 2))
             selectedObjects = LayerManager.selectedObjects
 
             // Auto-expand when objects are selected and request sidepanel open

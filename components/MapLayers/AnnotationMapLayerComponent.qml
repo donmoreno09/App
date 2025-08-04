@@ -19,7 +19,7 @@ MapItemGroup {
     property alias isVisible: annotationLayerBusinessLogic.isVisible
     property alias isEnabled: annotationLayerBusinessLogic.isEnabled
 
-    property string layerName: "AnnotationMapLayer"
+    property string layerName: "Geometrical Shapes"
 
     visible: isVisible
 

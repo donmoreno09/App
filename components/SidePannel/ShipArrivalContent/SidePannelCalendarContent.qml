@@ -73,11 +73,11 @@ ColumnLayout {
             SidePannelStatCard {
                 Layout.alignment: Qt.AlignLeft
                 Layout.topMargin: 10
-                icon: "🛳️"
-                title: "Ships Arriving"
+                icon: "🚚️"
+                title: "Arriving Trucks"
                 value: controller.dateRangeArrivalCount >= 0 ?
-                    controller.dateRangeArrivalCount + (controller.dateRangeArrivalCount === 1 ? " ship" : " ships") :
-                    "0 ships"
+                    controller.dateRangeArrivalCount + (controller.dateRangeArrivalCount === 1 ? " truck" : " trucks") :
+                    "0 trucks"
             }
         }
 

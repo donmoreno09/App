@@ -73,9 +73,9 @@ Rectangle {
         // Tab Buttons
         Repeater {
             model: [
-                { icon: "⛴️", label: "Ship Arrivals" },
-                { icon: "📅", label: "Ship Arrivals D" },
-                { icon: "⚙️", label: "Ship Arrivals DT" },
+                { icon: "🚚️", label: "Truck Arrivals" },
+                { icon: "📅", label: "Truck Arrivals D" },
+                { icon: "⚙️", label: "Truck Arrivals DT" },
                 { icon: "🧭", label: "Trailer Prediction" },
                 { icon: "S" , label: "Level Selector" },
                 { icon: "🖥️", label: "Ship Stowage" }

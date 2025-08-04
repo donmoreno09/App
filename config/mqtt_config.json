@@ -4,7 +4,7 @@
       "port": 1883
     },
     "topics": {
-      "ais": "TrackLayer1",
-      "doc-space": "TrackLayer2"
+      "ais": "AISTrackMapLayer",
+      "doc-space": "DocSpaceTrackMapLayer"
     }
 }
