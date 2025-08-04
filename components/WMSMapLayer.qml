@@ -55,7 +55,7 @@ Item {
 
         Component.onCompleted: {
             console.log("[WMSMapLayer:Component.onCompleted] Propagating base properties from BaseMapLayer to all child layers ...")
-            root.mapLayers = [trackLayerComponentIstance, track2LayerComponentIstance, annotationLayerComponentIstance, staticPoiLayerComponentIstance]
+            root.mapLayers = [aisTrackMapLayerComponentIstance, docSpaceTrackMapLayerComponentIstance, annotationLayerComponentIstance, staticPoiLayerComponentIstance]
             updateZoomLevels()
         }
         onZoomLevelChanged: updateZoomLevels()
@@ -78,8 +78,8 @@ Item {
             map: mapView
         }
 
-        TrackMapLayerComponent { id: trackLayerComponentIstance }
-        Track2MapLayerComponent { id: track2LayerComponentIstance }
+        AISTrackMapLayerComponent { id: aisTrackMapLayerComponentIstance }
+        DocSpaceTrackMapLayerComponent { id: docSpaceTrackMapLayerComponentIstance }
         StaticPoiMapLayerComponent { id: staticPoiLayerComponentIstance }
         AnnotationMapLayerComponent { id: annotationLayerComponentIstance }
 

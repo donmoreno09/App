@@ -18,7 +18,7 @@ MapItemGroup {
     property alias isVisible: staticPoiMapLayerBusinessLogic.isVisible
     property alias isEnabled: staticPoiMapLayerBusinessLogic.isEnabled
 
-    property string layerName: "StaticPoiMapLayer"
+    property string layerName: "Points of Interest"
 
     visible: isVisible
 

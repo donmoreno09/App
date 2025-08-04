@@ -3,9 +3,9 @@
         <file>components/main.qml</file>
         <file>components/WMSMapLayer.qml</file>
         <file>components/MapLayers/StaticPoiMapLayerComponent.qml</file>
-        <file>components/MapLayers/TrackMapLayerComponent.qml</file>
+        <file>components/MapLayers/AISTrackMapLayerComponent.qml</file>
         <file>components/MapLayers/AnnotationMapLayerComponent.qml</file>
-        <file>components/MapLayers/Track2MapLayerComponent.qml</file>
+        <file>components/MapLayers/DocSpaceTrackMapLayerComponent.qml</file>
         <file>components/ui/LeftToolbar.qml</file>
         <file>components/ui/assets/corridor.svg</file>
         <file>components/ui/assets/cursor.svg</file>

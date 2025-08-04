@@ -36,7 +36,7 @@ ColumnLayout {
         Layout.fillWidth: true
 
         Text {
-            text: "Ship Arrivals"
+            text: "Truck Arrivals"
             font.pixelSize: 20
             font.bold: true
             font.family: "Arial"
@@ -54,14 +54,14 @@ ColumnLayout {
             icon: "⏱️"
             title: "Next Hour"
             value: controller.currentHourArrivalCount +
-                   (controller.currentHourArrivalCount === 1 ? " ship" : " ships")
+                   (controller.currentHourArrivalCount === 1 ? " truck" : " trucks")
         }
 
         SidePannelStatCard {
             icon: "📅"
             title: "Today"
             value: controller.todayArrivalCount +
-                   (controller.todayArrivalCount === 1 ? " ship" : " ships")
+                   (controller.todayArrivalCount === 1 ? " truck" : " trucks")
         }
 
         Item {
