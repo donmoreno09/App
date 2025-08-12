@@ -21,14 +21,18 @@ QtObject {
     readonly property string familyMono: "JetBrains Mono, Fira Code, Menlo, Consolas, 'DejaVu Sans Mono', monospace"
     readonly property string familySerif: "Merriweather, Georgia, serif"
 
-    // Font sizes (px) — Text.font.pixelSize
-    readonly property int sizeXs:   12
-    readonly property int sizeSm:   14
-    readonly property int sizeBase: 16
-    readonly property int sizeLg:   18
-    readonly property int sizeXl:   20
-    readonly property int size2xl:  24
-    readonly property int size3xl:  30
+    // Base size and scale ratio (named font size steps derive from these)
+    readonly property int  baseFontSize:   16     // px
+    readonly property real fontScaleRatio: 1.15   // common raitio, reads well across steps
+
+    // Font sizes (derived) — Text.font.pixelSize
+    readonly property int sizeXs:   Math.round(baseFontSize * Math.pow(fontScaleRatio, -2))  // = 12 (with scale ratio = 1.15)
+    readonly property int sizeSm:   Math.round(baseFontSize * Math.pow(fontScaleRatio, -1))  // = 14 (with scale ratio = 1.15)
+    readonly property int sizeBase: Math.round(baseFontSize * Math.pow(fontScaleRatio,  0))  // = 16 (with scale ratio = 1.15)
+    readonly property int sizeLg:   Math.round(baseFontSize * Math.pow(fontScaleRatio,  1))  // = 18 (with scale ratio = 1.15)
+    readonly property int sizeXl:   Math.round(baseFontSize * Math.pow(fontScaleRatio,  2))  // = 21 (with scale ratio = 1.15)
+    readonly property int size2xl:  Math.round(baseFontSize * Math.pow(fontScaleRatio,  3))  // = 24 (with scale ratio = 1.15)
+    readonly property int size3xl:  Math.round(baseFontSize * Math.pow(fontScaleRatio,  4))  // = 28 (with scale ratio = 1.15)
 
     // Font weights — Text.font.weight
     readonly property int weightThin:     Font.Thin
@@ -91,5 +95,6 @@ QtObject {
     readonly property int wrapAtWordBoundaryOrAnywhere: Text.WrapAtWordBoundaryOrAnywhere
 
     // Rendering — Text.antialiasing
+    // Already enabled by default; only included here for consistency.
     readonly property bool antialiased: true
 }
