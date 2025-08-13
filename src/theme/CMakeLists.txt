@@ -1,6 +1,7 @@
 set(qml_files
     BaseTheme.qml
     tokens/ColorTokens.qml
+    tokens/SpacingTokens.qml
     tokens/TypographyTokens.qml
 )
 
