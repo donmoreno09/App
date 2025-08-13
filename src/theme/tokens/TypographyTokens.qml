@@ -23,7 +23,7 @@ QtObject {
 
     // Base size and scale ratio (named font size steps derive from these)
     readonly property int  baseFontSize:   16     // px
-    readonly property real fontScaleRatio: 1.15   // common raitio, reads well across steps
+    readonly property real fontScaleRatio: 1.15   // common ratio, reads well across steps
 
     // Font sizes (derived) — Text.font.pixelSize
     readonly property int sizeXs:   Math.round(baseFontSize * Math.pow(fontScaleRatio, -2))  // = 12 (with scale ratio = 1.15)
