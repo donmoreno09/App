@@ -18,6 +18,7 @@ ApplicationWindow {
         contentItem: Text {
             text: "Change Theme"
             color: Theme.colors.primaryText
+            font.family: Theme.typography.familyMono
         }
 
         background: Rectangle {

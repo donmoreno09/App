@@ -17,9 +17,9 @@ import QtQuick 2.15
 
 QtObject {
     // Font families — Text.font.family
-    readonly property string familySans: "Inter, Noto Sans, Ubuntu, Cantarell, Segoe UI, Roboto, sans-serif"
-    readonly property string familyMono: "JetBrains Mono, Fira Code, Menlo, Consolas, 'DejaVu Sans Mono', monospace"
-    readonly property string familySerif: "Merriweather, Georgia, serif"
+    readonly property string familySans: "Segoe UI"
+    readonly property string familyMono: "Consolas"
+    readonly property string familySerif: "Georgia"
 
     // Base size and scale ratio (named font size steps derive from these)
     readonly property int  baseFontSize:   16     // px
