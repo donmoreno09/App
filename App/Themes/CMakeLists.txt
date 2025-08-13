@@ -3,6 +3,7 @@ set(qml_files
     tokens/ColorTokens.qml
     tokens/SpacingTokens.qml
     tokens/TypographyTokens.qml
+    variants/Fincantieri.qml
 )
 
 set(qml_singletons
@@ -17,9 +18,5 @@ set_source_files_properties(
 qt_add_qml_module(app_themes
     URI App.Themes
     VERSION 1.0
-
-    TARGET_PATH App/Themes
-    OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/App/Themes"
-
     QML_FILES ${qml_files} ${qml_singletons}
 )

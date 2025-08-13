@@ -38,7 +38,7 @@ QtObject {
     readonly property color primary: "#0A4C8B"
     readonly property color primaryHover: "#0C5BA6"
     readonly property color primaryPressed: "#09406F"
-    readonly property color onPrimary: "white"
+    readonly property color primaryText: "white" // "onPrimary" naming cannot work since Qt thinks it's a signal
 
     // Status colors
     readonly property color success: "#3BA55C"
