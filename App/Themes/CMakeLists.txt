@@ -4,6 +4,7 @@ set(qml_files
     tokens/SpacingTokens.qml
     tokens/TypographyTokens.qml
     variants/Fincantieri.qml
+    variants/FincantieriLight.qml
 )
 
 set(qml_singletons

@@ -10,8 +10,26 @@ ApplicationWindow {
     visible: true
     title: qsTr("Theming System")
 
-    Text {
-        text: "Sample text"
-        color: Theme.current.colors.text
+    background: Rectangle {
+        color: Theme.colors.background
+    }
+
+    Button {
+        contentItem: Text {
+            text: "Change Theme"
+            color: Theme.colors.primaryText
+        }
+
+        background: Rectangle {
+            color: Theme.colors.primary
+        }
+
+        onClicked: {
+            if (Theme.current === Theme.fincantieriTheme) {
+                Theme.current = Theme.fincantieriLightTheme
+            } else {
+                Theme.current = Theme.fincantieriTheme
+            }
+        }
     }
 }
