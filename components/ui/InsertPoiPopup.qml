@@ -6,7 +6,7 @@ import "../"
 PoiPopup {
     // TODO: Either to be removed or extract the save button functionality here
     id: poiPopup
-    title: root.popupTitle
+    title: popupTitle
     visible: false
 
     // Automatic retranslation properties

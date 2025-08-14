@@ -8,7 +8,7 @@ import raise.singleton.language 1.0
 
 Rectangle {
     id: popup
-    property string title: root.popupTitle
+    property string title: popup.popupTitle
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
     property alias typeComboBox: typeComboBox
@@ -135,7 +135,7 @@ Rectangle {
         target: LanguageController
         function onLanguageChanged() {
             console.log("Language changed signal received - auto-retranslating")
-            root.retranslateUi()
+            popup.retranslateUi()
         }
         function onLanguageLoadFailed(language, reason) {
             console.error("Language load failed:", language, "-", reason)
@@ -207,12 +207,12 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: root.labelText
+                    text: popup.labelText
                     color: "#ffffff"
                 }
                 TextField {
                     id: labelField
-                    placeholderText: root.labelPlaceholder
+                    placeholderText: popup.labelPlaceholder
                     placeholderTextColor: "#888888"
                     font.pixelSize: 14
                     color: "#ffffff"
@@ -229,7 +229,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: root.categoryText
+                    text: popup.categoryText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -244,7 +244,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: root.typeText
+                    text: popup.typeText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -259,7 +259,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: root.healthStatusText
+                    text: popup.healthStatusText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -275,7 +275,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: root.operationalStateText
+                    text: popup.operationalStateText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -292,7 +292,7 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Label {
-                    text: root.ellipseParamsText
+                    text: popup.ellipseParamsText
                     color: "#ffffff"
                     font.bold: true
                 }
@@ -304,7 +304,7 @@ Rectangle {
                     Layout.fillWidth: true
 
                     Label {
-                        text: root.centerLatText
+                        text: popup.centerLatText
                         color: "#ffffff"
                         Layout.preferredWidth: 120
                     }
@@ -330,7 +330,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: root.centerLonText
+                        text: popup.centerLonText
                         color: "#ffffff"
                     }
                     TextField {
@@ -355,7 +355,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: root.radiusLatText
+                        text: popup.radiusLatText
                         color: "#ffffff"
                     }
                     TextField {
@@ -380,7 +380,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: root.radiusLonText
+                        text: popup.radiusLonText
                         color: "#ffffff"
                     }
                     TextField {
@@ -409,9 +409,9 @@ Rectangle {
                     visible: !!centerLat.text || !!centerLon.text || !!radiusLatField.text || !!radiusLonField.text
                     text: {
                         if (coordinatesAreValid) {
-                            return root.validEllipseText
+                            return popup.validEllipseText
                         } else {
-                            return root.invalidParamsText
+                            return popup.invalidParamsText
                         }
                     }
                     color: coordinatesAreValid ? "#22c55e" : "#ef4444"
@@ -428,7 +428,7 @@ Rectangle {
                 Layout.preferredHeight: 80
 
                 Label {
-                    text: root.noteText
+                    text: popup.noteText
                     color: "#ffffff"
                 }
                 ScrollView {
@@ -439,7 +439,7 @@ Rectangle {
 
                     TextArea {
                         id: noteField
-                        placeholderText: root.notePlaceholder
+                        placeholderText: popup.notePlaceholder
                         placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
@@ -464,7 +464,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: root.cancelText
+                    text: popup.cancelText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
@@ -475,7 +475,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: root.saveText
+                    text: popup.saveText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32

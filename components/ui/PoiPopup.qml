@@ -10,7 +10,7 @@ import "../ui/top-toolbar/utils.js" as ToolbarUtils
 Rectangle {
     id: popup
 
-    property var title: root.popupTitle
+    property var title: popup.popupTitle
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
     property alias typeComboBox: typeComboBox
@@ -121,7 +121,7 @@ Rectangle {
         target: LanguageController
         function onLanguageChanged() {
             console.log("Language changed signal received - auto-retranslating")
-            root.retranslateUi()
+            popup.retranslateUi()
         }
         function onLanguageLoadFailed(language, reason) {
             console.error("Language load failed:", language, "-", reason)
@@ -199,13 +199,13 @@ Rectangle {
                 spacing: 2
 
                 Label {
-                    text: root.labelText
+                    text: popup.labelText
                     color: "#ffffff"
                 }
 
                 TextField {
                     id: labelField
-                    placeholderText: root.labelPlaceholder
+                    placeholderText: popup.labelPlaceholder
                     placeholderTextColor: "#888888"
                     font.pixelSize: 14
                     color: "#ffffff"
@@ -224,7 +224,7 @@ Rectangle {
                 spacing: 2
 
                 Label {
-                    text: root.categoryText
+                    text: popup.categoryText
                     color: "#ffffff"
                 }
 
@@ -241,7 +241,7 @@ Rectangle {
                 spacing: 2
 
                 Label {
-                    text: root.typeText
+                    text: popup.typeText
                     color: "#ffffff"
                 }
 
@@ -258,7 +258,7 @@ Rectangle {
                 spacing: 2
 
                 Label {
-                    text: root.healthStatusText
+                    text: popup.healthStatusText
                     color: "#ffffff"
                 }
 
@@ -276,7 +276,7 @@ Rectangle {
                 spacing: 2
 
                 Label {
-                    text: root.operationalStateText
+                    text: popup.operationalStateText
                     color: "#ffffff"
                 }
 
@@ -298,7 +298,7 @@ Rectangle {
                     spacing: 2
 
                     Label {
-                        text: root.latitudeText
+                        text: popup.latitudeText
                         color: "#ffffff"
                     }
 
@@ -339,7 +339,7 @@ Rectangle {
                     spacing: 2
 
                     Label {
-                        text: root.longitudeText
+                        text: popup.longitudeText
                         color: "#ffffff"
                     }
 
@@ -380,9 +380,9 @@ Rectangle {
                 visible: !!latitudeField.text || !!longitudeField.text
                 text: {
                     if (coordinatesAreValid) {
-                        return root.validCoordsText
+                        return popup.validCoordsText
                     } else {
-                        return root.invalidCoordsText
+                        return popup.invalidCoordsText
                     }
                 }
                 color: coordinatesAreValid ? "#22c55e" : "#ef4444"
@@ -398,7 +398,7 @@ Rectangle {
                 Layout.preferredHeight: 80
 
                 Label {
-                    text: root.noteText
+                    text: popup.noteText
                     color: "#ffffff"
                 }
 
@@ -410,7 +410,7 @@ Rectangle {
 
                     TextArea {
                         id: noteField
-                        placeholderText: root.notePlaceholder
+                        placeholderText: popup.notePlaceholder
                         placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
@@ -435,7 +435,7 @@ Rectangle {
             Layout.alignment: Qt.AlignRight
 
             StyledButton {
-                text: root.cancelText
+                text: popup.cancelText
                 font.pixelSize: 14
                 onClicked: {
                     popup.clearForm()
@@ -445,7 +445,7 @@ Rectangle {
 
             StyledButton {
                 id: saveBtn
-                text: root.saveText
+                text: popup.saveText
                 font.pixelSize: 14
                 enabled: !!labelField.text && coordinatesAreValid
                 onClicked: {

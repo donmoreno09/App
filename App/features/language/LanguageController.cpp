@@ -90,7 +90,7 @@ QString LanguageController::initializeLanguage()
     }
 
     // Fallback to system locale detection
-    QString systemLocale = QLocale::system().name().left(2); // "es", "fr", etc.
+    QString systemLocale = QLocale::system().name().left(2);
 
     if (Language::isSupported(systemLocale)) {
         qDebug() << "Using system language:" << systemLocale;
