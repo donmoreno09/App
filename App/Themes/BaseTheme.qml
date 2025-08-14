@@ -30,4 +30,6 @@ QtObject {
     required property BorderTokens borders
 
     required property ElevationTokens elevation
+
+    required property OpacityTokens opacity
 }

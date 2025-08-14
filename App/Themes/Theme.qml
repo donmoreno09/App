@@ -19,4 +19,5 @@ QtObject {
     readonly property RadiusTokens radius: current.radius
     readonly property BorderTokens borders: current.borders
     readonly property ElevationTokens elevation: current.elevation
+    readonly property OpacityTokens opacity: current.opacity
 }

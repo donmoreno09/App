@@ -23,4 +23,5 @@ qt_add_qml_module(app_themes
     URI App.Themes
     VERSION 1.0
     QML_FILES ${qml_files} ${qml_singletons}
+    QML_FILES tokens/OpacityTokens.qml
 )

@@ -36,4 +36,6 @@ BaseTheme {
     borders: BorderTokens { }
 
     elevation: ElevationTokens { }
+
+    opacity: OpacityTokens { }
 }
