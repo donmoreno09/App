@@ -14,23 +14,68 @@ ApplicationWindow {
         color: Theme.colors.background
     }
 
-    Button {
-        contentItem: Text {
-            text: "Change Theme"
-            color: Theme.colors.primaryText
-            font.family: Theme.typography.familyMono
+    Column {
+        anchors.centerIn: parent
+        spacing: Theme.spacing.s4
+
+        Item {
+            width: 220
+            height: 140
+
+            // Border
+            Rectangle {
+                anchors.fill: parent
+                radius: Theme.radius.md
+                color: Theme.colors.surface
+                border.width: Theme.borders.b2
+                border.color: Theme.colors.textMuted
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "Hover me"
+                    color: Theme.colors.text
+                    font.family: Theme.typography.familySans
+                }
+            }
+
+            // Outline ring (helper computes offset so there's no gap)
+            Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+                anchors.margins: -Theme.borders.offset2 // expand outward
+                border.width: Theme.borders.outline2
+                radius: Theme.radius.md + Theme.borders.outline2
+                border.color: Theme.colors.primary
+                visible: hoverArea.containsMouse
+            }
+
+            // Hover detection
+            MouseArea {
+                id: hoverArea
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.NoButton // hover only
+            }
         }
 
-        background: Rectangle {
-            color: Theme.colors.primary
-            radius: Theme.radius.sm
-        }
+        Button {
+            contentItem: Text {
+                text: "Change Theme"
+                color: Theme.colors.primaryText
+                font.family: Theme.typography.familyMono
+            }
 
-        onClicked: {
-            if (Theme.current === Theme.fincantieriTheme) {
-                Theme.current = Theme.fincantieriLightTheme
-            } else {
-                Theme.current = Theme.fincantieriTheme
+            background: Rectangle {
+                color: Theme.colors.primary
+                radius: Theme.radius.sm
+            }
+
+            onClicked: {
+                if (Theme.current === Theme.fincantieriTheme) {
+                    Theme.current = Theme.fincantieriLightTheme
+                } else {
+                    Theme.current = Theme.fincantieriTheme
+                }
             }
         }
     }

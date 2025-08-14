@@ -32,4 +32,6 @@ BaseTheme {
     spacing: SpacingTokens { }
 
     radius: RadiusTokens { }
+
+    borders: BorderTokens { }
 }

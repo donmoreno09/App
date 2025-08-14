@@ -17,4 +17,5 @@ QtObject {
     readonly property TypographyTokens typography: current.typography
     readonly property SpacingTokens spacing: current.spacing
     readonly property RadiusTokens radius: current.radius
+    readonly property BorderTokens borders: current.borders
 }
