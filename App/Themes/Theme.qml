@@ -12,7 +12,9 @@ QtObject {
 
     property BaseTheme current: fincantieriTheme
 
+    // Expose token families for direct access
     readonly property ColorTokens colors: current.colors
     readonly property TypographyTokens typography: current.typography
     readonly property SpacingTokens spacing: current.spacing
+    readonly property RadiusTokens radius: current.radius
 }

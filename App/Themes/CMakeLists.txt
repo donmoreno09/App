@@ -1,6 +1,7 @@
 set(qml_files
     BaseTheme.qml
     tokens/ColorTokens.qml
+    tokens/RadiusTokens.qml
     tokens/SpacingTokens.qml
     tokens/TypographyTokens.qml
     variants/Fincantieri.qml

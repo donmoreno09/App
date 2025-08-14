@@ -23,6 +23,7 @@ ApplicationWindow {
 
         background: Rectangle {
             color: Theme.colors.primary
+            radius: Theme.radius.sm
         }
 
         onClicked: {

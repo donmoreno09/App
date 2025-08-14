@@ -30,4 +30,6 @@ BaseTheme {
     typography: TypographyTokens { }
 
     spacing: SpacingTokens { }
+
+    radius: RadiusTokens { }
 }

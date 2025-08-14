@@ -24,4 +24,6 @@ QtObject {
     required property TypographyTokens typography
 
     required property SpacingTokens spacing
+
+    required property RadiusTokens radius
 }
