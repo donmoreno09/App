@@ -6,6 +6,7 @@ import QtPositioning 6.8
 import raise.map.layers 1.0
 import raise.singleton.layermanager 1.0
 import raise.singleton.controllers 1.0
+import raise.singleton.language 1.0
 
 import "../models/shapes.js" as ShapeModel
 import "../ui"
@@ -19,9 +20,17 @@ MapItemGroup {
     property alias isVisible: annotationLayerBusinessLogic.isVisible
     property alias isEnabled: annotationLayerBusinessLogic.isEnabled
 
-    property string layerName: "Geometrical Shapes"
+    // Automatic retranslation properties
+    property string layerNameText: qsTr("Geometrical Shapes")
+
+    property string layerName: layerNameText
 
     visible: isVisible
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        layerNameText = qsTr("Geometrical Shapes")
+    }
 
     MapItemView {
         id: mapItemView
@@ -72,6 +81,18 @@ MapItemGroup {
         target: annotationLayerBusinessLogic
         function onLayerReady() {
             LayerManager.notifyLayerReady(annotationLayerBusinessLogic)
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            annotationMapLayerComponent.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

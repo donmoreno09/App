@@ -4,12 +4,27 @@ import QtQuick.Layouts 2.15
 import QtPositioning 6.8
 
 import raise.singleton.popupmanager 1.0
+import raise.singleton.language 1.0
 
 // I'm not using a Popup component since it cannot be
 // targeted by DragHandler and I need to style its borders
 // TODO: Extract these popups in a base popup component for reusability (as is the case with PoiPopup)
 Rectangle {
     id: popup
+
+    // Automatic retranslation properties
+    property string labelText: qsTr("Label")
+    property string enterLabelText: qsTr("Enter label...")
+    property string cancelText: qsTr("Cancel")
+    property string saveText: qsTr("Save")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        labelText = qsTr("Label")
+        enterLabelText = qsTr("Enter label...")
+        cancelText = qsTr("Cancel")
+        saveText = qsTr("Save")
+    }
 
     property var title
     property alias labelField: labelField
@@ -124,13 +139,13 @@ Rectangle {
                 spacing: 2
 
                 Label {
-                    text: "Label"
+                    text: popup.labelText
                     color: "#ffffff"
                 }
 
                 TextField {
                     id: labelField
-                    placeholderText: "Enter label..."
+                    placeholderText: popup.enterLabelText
                     placeholderTextColor : "#444444"
                     font.pixelSize: 14
                     color: "#ffffff"
@@ -151,7 +166,7 @@ Rectangle {
             Layout.alignment: Qt.AlignRight
 
             StyledButton {
-                text: "Cancel"
+                text: popup.cancelText
                 font.pixelSize: 14
                 onClicked: {
                     popup.clearForm()
@@ -161,7 +176,7 @@ Rectangle {
 
             StyledButton {
                 id: saveBtn
-                text: "Save"
+                text: popup.saveText
                 font.pixelSize: 14
                 enabled: !!labelField.text
                 onClicked: {
@@ -176,6 +191,18 @@ Rectangle {
                     popup.close()
                 }
             }
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            popup.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

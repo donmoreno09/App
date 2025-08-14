@@ -5,6 +5,14 @@ import QtLocation 6.8
 BaseEditor {
     objectName: "PanEditor"
 
+    // Automatic retranslation properties
+    property string panningMessage: qsTr("[PanArea] panning x:")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        panningMessage = qsTr("[PanArea] panning x:")
+    }
+
     MouseArea {
         id: panEditor
         anchors.fill: parent
@@ -31,10 +39,22 @@ BaseEditor {
 
             map.center = QtPositioning.coordinate(newLat, newLon)
 
-            console.log("[PanArea] panning x: " + mouse.x + " y: " + mouse.y)
+            console.log(parent.panningMessage + " " + mouse.x + " y: " + mouse.y)
 
             lastX = mouse.x
             lastY = mouse.y
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

@@ -43,6 +43,14 @@ MapQuickItem {
     property bool   labelVisible: true
     property bool   vectorVisible: true
 
+    // Automatic retranslation properties
+    property string trackPrefix: qsTr("T")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        trackPrefix = qsTr("T")
+    }
+
     // Signals
     signal detailsReady(var obj, string channel)
     signal detailsClose(var obj, string channel)
@@ -83,7 +91,7 @@ MapQuickItem {
 
         Text {
             id: trackLabel
-            text: "T" + qsTr(trackData.tracknumber.toString())
+            text: root.trackPrefix + trackData.tracknumber.toString()
             font.pixelSize: 12
             color: "black"
             anchors.left: parent.right
@@ -115,6 +123,18 @@ MapQuickItem {
     Component.onDestruction: {
         // console.log("[Track.qml] Marker destroyed");
         mapView.removeMapItem(traceMarker);
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
     }
 
     // -- PANEL LINKING ------------------ //

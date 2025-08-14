@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import ShipArrivalController 1.0
+import raise.singleton.language 1.0
 import ".."
 
 ColumnLayout {
@@ -16,6 +17,24 @@ ColumnLayout {
     property color disabledColor: "#1D2B4A"
 
     required property ShipArrivalController controller
+
+    // Automatic retranslation properties
+    property string truckArrivalsTitle: qsTr("Truck Arrivals")
+    property string nextHourTitle: qsTr("Next Hour")
+    property string todayTitle: qsTr("Today")
+    property string fetchArrivalsText: qsTr("Fetch Arrivals")
+    property string truckSingular: qsTr(" truck")
+    property string truckPlural: qsTr(" trucks")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        truckArrivalsTitle = qsTr("Truck Arrivals")
+        nextHourTitle = qsTr("Next Hour")
+        todayTitle = qsTr("Today")
+        fetchArrivalsText = qsTr("Fetch Arrivals")
+        truckSingular = qsTr(" truck")
+        truckPlural = qsTr(" trucks")
+    }
 
     onVisibleChanged: {
         if (visible && !controller.isLoading) {
@@ -36,7 +55,7 @@ ColumnLayout {
         Layout.fillWidth: true
 
         Text {
-            text: "Truck Arrivals"
+            text: root.truckArrivalsTitle
             font.pixelSize: 20
             font.bold: true
             font.family: "Arial"
@@ -52,16 +71,16 @@ ColumnLayout {
 
         SidePannelStatCard {
             icon: "⏱️"
-            title: "Next Hour"
+            title: root.nextHourTitle
             value: controller.currentHourArrivalCount +
-                   (controller.currentHourArrivalCount === 1 ? " truck" : " trucks")
+                   (controller.currentHourArrivalCount === 1 ? root.truckSingular : root.truckPlural)
         }
 
         SidePannelStatCard {
             icon: "📅"
-            title: "Today"
+            title: root.todayTitle
             value: controller.todayArrivalCount +
-                   (controller.todayArrivalCount === 1 ? " truck" : " trucks")
+                   (controller.todayArrivalCount === 1 ? root.truckSingular : root.truckPlural)
         }
 
         Item {
@@ -69,7 +88,7 @@ ColumnLayout {
         }
 
         Button {
-            text: "Fetch Arrivals"
+            text: root.fetchArrivalsText
             enabled: !controller.isLoading
             Layout.alignment: Qt.AlignHCenter
             Layout.fillWidth: true
@@ -104,6 +123,19 @@ ColumnLayout {
             }
 
             onClicked: controller.fetchAllArrivalData()
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

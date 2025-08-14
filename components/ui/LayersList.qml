@@ -4,6 +4,7 @@ import QtQuick.Layouts 6.8
 import QtPositioning 6.8
 import Qt5Compat.GraphicalEffects
 
+import raise.singleton.language 1.0
 import raise.singleton.layermanager 1.0
 
 Item {
@@ -17,6 +18,14 @@ Item {
 
     signal requestSidepanelOpen
 
+    // Automatic retranslation properties
+    property string layersSelectorText: qsTr("Layers Selector")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        layersSelectorText = qsTr("Layers Selector")
+    }
+
     ColumnLayout {
         id: layerColumn
         anchors.fill: parent
@@ -25,7 +34,7 @@ Item {
 
         // LAYERS SELECTOR SECTION
         Text {
-            text: "Layers Selector"
+            text: layersList.layersSelectorText
             font.pixelSize: 20
             font.bold: true
             color: "white"
@@ -189,6 +198,18 @@ Item {
         console.log("✅ LayersList loaded. layerList:", layers)
     }
 
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
+    }
+
     Connections {
         target: LayerManager
         function onLayerListChanged() {
@@ -201,7 +222,7 @@ Item {
     Connections {
         target: LayerManager
         function onSelectedObjectsChanged() {
-            console.log("🔁 Oggetti selezionati aggiornati:\n" + JSON.stringify(
+            console.log("🔁 Selected objects updated:\n" + JSON.stringify(
                             LayerManager.selectedObjects, null, 2))
             selectedObjects = LayerManager.selectedObjects
 

@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import TrailersPredictionsController 1.0
+import raise.singleton.language 1.0
 import ".."
 
 Item {
@@ -18,6 +19,40 @@ Item {
 
     required property TrailersPredictionsController controller
 
+    // Automatic retranslation properties
+    property string waitingTimePredictionTitle: qsTr("Waiting Time Prediction")
+    property string trailerIdLabel: qsTr("Trailer ID:")
+    property string enterIdPlaceholder: qsTr("Enter ID")
+    property string calculatePredictionText: qsTr("Calculate Prediction")
+    property string estimatedTimeTitle: qsTr("Estimated Time")
+    property string readyText: qsTr("Ready")
+    property string minuteText: qsTr(" min")
+    property string hourText: qsTr(" hour")
+    property string hoursText: qsTr(" hours")
+    property string immediateAccessText: qsTr("Immediate access to the bay")
+    property string shortWaitText: qsTr("Short wait - entry soon")
+    property string moderateWaitText: qsTr("In queue - moderate wait")
+    property string extendedWaitText: qsTr("Extended wait - consider alternatives")
+    property string noDataAvailableText: qsTr("No data available")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        waitingTimePredictionTitle = qsTr("Waiting Time Prediction")
+        trailerIdLabel = qsTr("Trailer ID:")
+        enterIdPlaceholder = qsTr("Enter ID")
+        calculatePredictionText = qsTr("Calculate Prediction")
+        estimatedTimeTitle = qsTr("Estimated Time")
+        readyText = qsTr("Ready")
+        minuteText = qsTr(" min")
+        hourText = qsTr(" hour")
+        hoursText = qsTr(" hours")
+        immediateAccessText = qsTr("Immediate access to the bay")
+        shortWaitText = qsTr("Short wait - entry soon")
+        moderateWaitText = qsTr("In queue - moderate wait")
+        extendedWaitText = qsTr("Extended wait - consider alternatives")
+        noDataAvailableText = qsTr("No data available")
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 15
@@ -29,7 +64,7 @@ Item {
             spacing: 10
 
             Text {
-                text: "Waiting Time Prediction"
+                text: root.waitingTimePredictionTitle
                 font {
                     pixelSize: 18
                     bold: true
@@ -52,7 +87,7 @@ Item {
             spacing: 8
 
             Text {
-                text: "Trailer ID:"
+                text: root.trailerIdLabel
                 color: textColor
                 font.pixelSize: 14
             }
@@ -60,7 +95,7 @@ Item {
             TextField {
                 id: trailerIdInput
                 Layout.fillWidth: true
-                placeholderText: "Enter ID"
+                placeholderText: root.enterIdPlaceholder
                 placeholderTextColor: "#444444"
                 inputMethodHints: Qt.ImhDigitsOnly
                 color: textColor
@@ -81,7 +116,7 @@ Item {
         // Button
         Button {
             id: fetchButton
-            text: "Calculate Prediction"
+            text: root.calculatePredictionText
             Layout.fillWidth: true
             Layout.preferredHeight: 40
             Layout.topMargin: 5
@@ -135,7 +170,7 @@ Item {
                 Layout.leftMargin: 10
                 Layout.rightMargin: 10
                 icon: "⏱️"
-                title: "Estimated Time"
+                title: root.estimatedTimeTitle
                 value: formatMinutes(controller.prediction)
             }
 
@@ -154,7 +189,7 @@ Item {
         // Error Message
         Text {
             visible: controller.prediction === -1 && !controller.isLoading && trailerIdInput.text
-            text: "No data available"
+            text: root.noDataAvailableText
             color: "#F44336"
             Layout.alignment: Qt.AlignHCenter
             font.pixelSize: 13
@@ -167,19 +202,32 @@ Item {
     }
 
     function formatMinutes(minutes) {
-        if (minutes === 0) return "Ready"
-        if (minutes < 60) return minutes + " min"
+        if (minutes === 0) return root.readyText
+        if (minutes < 60) return minutes + root.minuteText
 
         const hours = Math.floor(minutes / 60)
         const mins = minutes % 60
-        return mins === 0 ? hours + (hours > 1 ? " hours" : " hour")
+        return mins === 0 ? hours + (hours > 1 ? root.hoursText : root.hourText)
                          : hours + "h " + mins + "min"
     }
 
     function getStatusText(minutes) {
-        if (minutes === 0) return "Immediate access to the bay"
-        if (minutes < 30) return "Short wait - entry soon"
-        if (minutes < 120) return "In queue - moderate wait"
-        return "Extended wait - consider alternatives"
+        if (minutes === 0) return root.immediateAccessText
+        if (minutes < 30) return root.shortWaitText
+        if (minutes < 120) return root.moderateWaitText
+        return root.extendedWaitText
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
     }
 }

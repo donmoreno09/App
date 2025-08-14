@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Shapes
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
+import raise.singleton.language 1.0
 
 
 import "../basewidgets" as Widgets
@@ -61,8 +62,18 @@ Widgets.BaseShapeButton {
     anchors.margins: customPadding
     property int btnStateNotify: RadialMenuArcButton.ButtonStateNotify.None
 
+    // Automatic retranslation properties
+    property string componentCompletedMessage: qsTr("Component.onCompleted RArcButton repos")
+    property string stateNotifyChangedMessage: qsTr("onBtnStateNotifyChanged")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        componentCompletedMessage = qsTr("Component.onCompleted RArcButton repos")
+        stateNotifyChangedMessage = qsTr("onBtnStateNotifyChanged")
+    }
+
     Component.onCompleted: {
-        console.log(" Component.onCompleted RArcButton repos")
+        console.log(radialMenuArcButton.componentCompletedMessage)
         //btnStateNotify = RadialMenuArcButton.ButtonStateNotify.Active
     }
 
@@ -71,7 +82,7 @@ Widgets.BaseShapeButton {
     }
 
     onBtnStateNotifyChanged: function () {
-        console.log("onBtnStateNotifyChanged", btnStateNotify)
+        console.log(radialMenuArcButton.stateNotifyChangedMessage, btnStateNotify)
     }
 
     onClicked: {}
@@ -264,4 +275,16 @@ Widgets.BaseShapeButton {
             PropertyChanges { target: radialMenuArcButtonLabelGlowEffect; visible: true; radius:8; color:"#5281c6f0"}
         }
     ]
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            radialMenuArcButton.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
+    }
 }

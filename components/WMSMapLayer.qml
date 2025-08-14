@@ -5,6 +5,7 @@ import QtPositioning 6.8
 import raise.singleton.layermanager 1.0
 import raise.singleton.interactionmanager 1.0
 import raise.singleton.controllers 1.0
+import raise.singleton.language 1.0
 
 import "MapLayers"
 import "ui"
@@ -32,6 +33,35 @@ Item {
     property alias annotationLayerInstance: annotationLayerComponentIstance
     property alias map: mapView
 
+    // Automatic retranslation properties
+    property string layersReadyMessage: qsTr("All layers are ready! Activating UI")
+    property string basePropertiesMessage: qsTr("[WMSMapLayer:Component.onCompleted] Propagating base properties from BaseMapLayer to all child layers ...")
+    property string selectedShapeMessage: qsTr("SELECTED SHAPE WITH ID:")
+    property string unselectedShapeMessage: qsTr("UNSELECTED SHAPE WITH ID:")
+    property string createShapeTitle: qsTr("Create new shape")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        layersReadyMessage = qsTr("All layers are ready! Activating UI")
+        basePropertiesMessage = qsTr("[WMSMapLayer:Component.onCompleted] Propagating base properties from BaseMapLayer to all child layers ...")
+        selectedShapeMessage = qsTr("SELECTED SHAPE WITH ID:")
+        unselectedShapeMessage = qsTr("UNSELECTED SHAPE WITH ID:")
+        createShapeTitle = qsTr("Create new shape")
+        shapePopup.title = root.createShapeTitle
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
+    }
+
     Plugin {
         id: mapPlugin
         name: "osm"
@@ -54,7 +84,7 @@ Item {
         focus: true
 
         Component.onCompleted: {
-            console.log("[WMSMapLayer:Component.onCompleted] Propagating base properties from BaseMapLayer to all child layers ...")
+            console.log(root.basePropertiesMessage)
             root.mapLayers = [aisTrackMapLayerComponentIstance, docSpaceTrackMapLayerComponentIstance, annotationLayerComponentIstance, staticPoiLayerComponentIstance]
             updateZoomLevels()
         }
@@ -109,7 +139,7 @@ Item {
     Connections {
         target: LayerManager
         function onAllLayersReady() {
-            console.log("Tutti i layer sono pronti! Attivo UI")
+            console.log(root.layersReadyMessage)
             Qt.callLater(() => {
                 topToolbar.visible = true
                 sidePannel.visible = true
@@ -133,17 +163,6 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 10
     }
-
-    // MapObjectDetailsPanel {
-    //     id: objectDetails
-    //     width: 300
-    //     height: 400
-    //     z: 1000
-    //     anchors.left: parent.left
-    //     anchors.bottom: parent.bottom
-    //     anchors.margins: 10
-    //     visible: selectedObjects.length > 0
-    // }
 
     ZoomBar {
         anchors.right: parent.right
@@ -181,7 +200,7 @@ Item {
 
     ShapePopup {
         id: shapePopup
-        title: "Create new shape"
+        title: root.createShapeTitle
         visible: false
     }
 
@@ -194,9 +213,9 @@ Item {
         target: InteractionModeManager
         function onCurrentSelectedShapeIdChanged(selectedId, previousSelectedId) {
             if (selectedId) {
-                console.log("SELECTED SHAPE WITH ID:", selectedId)
+                console.log(root.selectedShapeMessage, selectedId)
             } else {
-                console.log("UNSELECTED SHAPE WITH ID:", previousSelectedId)
+                console.log(root.unselectedShapeMessage, previousSelectedId)
             }
         }
     }

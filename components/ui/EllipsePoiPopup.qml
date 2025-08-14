@@ -4,10 +4,11 @@ import QtQuick.Layouts 2.15
 import QtPositioning 6.8
 import raise.singleton.popupmanager 1.0
 import raise.singleton.controllers 1.0
+import raise.singleton.language 1.0
 
 Rectangle {
     id: popup
-    property string title: "Insert Ellipse POI"
+    property string title: root.popupTitle
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
     property alias typeComboBox: typeComboBox
@@ -34,6 +35,48 @@ Rectangle {
     border.width: 1
 
     property bool coordinatesAreValid: false
+
+    // Automatic retranslation properties
+    property string popupTitle: qsTr("Insert Ellipse POI")
+    property string labelText: qsTr("Label")
+    property string labelPlaceholder: qsTr("Enter label...")
+    property string categoryText: qsTr("Category")
+    property string typeText: qsTr("Type")
+    property string healthStatusText: qsTr("Health Status")
+    property string operationalStateText: qsTr("Operational State")
+    property string ellipseParamsText: qsTr("Ellipse Parameters")
+    property string centerLatText: qsTr("Center Latitude")
+    property string centerLonText: qsTr("Center Longitude")
+    property string radiusLatText: qsTr("Radius (Latitude)")
+    property string radiusLonText: qsTr("Radius (Longitude)")
+    property string validEllipseText: qsTr("✓ Valid ellipse parameters")
+    property string invalidParamsText: qsTr("⚠ Invalid parameters")
+    property string noteText: qsTr("Note")
+    property string notePlaceholder: qsTr("Enter a note...")
+    property string cancelText: qsTr("Cancel")
+    property string saveText: qsTr("Save")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        popupTitle = qsTr("Insert Ellipse POI")
+        labelText = qsTr("Label")
+        labelPlaceholder = qsTr("Enter label...")
+        categoryText = qsTr("Category")
+        typeText = qsTr("Type")
+        healthStatusText = qsTr("Health Status")
+        operationalStateText = qsTr("Operational State")
+        ellipseParamsText = qsTr("Ellipse Parameters")
+        centerLatText = qsTr("Center Latitude")
+        centerLonText = qsTr("Center Longitude")
+        radiusLatText = qsTr("Radius (Latitude)")
+        radiusLonText = qsTr("Radius (Longitude)")
+        validEllipseText = qsTr("✓ Valid ellipse parameters")
+        invalidParamsText = qsTr("⚠ Invalid parameters")
+        noteText = qsTr("Note")
+        notePlaceholder = qsTr("Enter a note...")
+        cancelText = qsTr("Cancel")
+        saveText = qsTr("Save")
+    }
 
     function open() {
         popup.visible = true
@@ -86,6 +129,18 @@ Rectangle {
 
     Component.onCompleted: bringToFront()
     Component.onDestruction: PopupManager.unregister(popup)
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
+    }
 
     TapHandler {
         gesturePolicy: TapHandler.ReleaseWithinBounds
@@ -152,12 +207,12 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Label"
+                    text: root.labelText
                     color: "#ffffff"
                 }
                 TextField {
                     id: labelField
-                    placeholderText: "Enter label..."
+                    placeholderText: root.labelPlaceholder
                     placeholderTextColor: "#888888"
                     font.pixelSize: 14
                     color: "#ffffff"
@@ -174,7 +229,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Category"
+                    text: root.categoryText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -189,7 +244,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Type"
+                    text: root.typeText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -204,7 +259,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Health Status"
+                    text: root.healthStatusText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -220,7 +275,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Operational State"
+                    text: root.operationalStateText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -237,7 +292,7 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Label {
-                    text: "Ellipse Parameters"
+                    text: root.ellipseParamsText
                     color: "#ffffff"
                     font.bold: true
                 }
@@ -249,7 +304,7 @@ Rectangle {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "Center Latitude"
+                        text: root.centerLatText
                         color: "#ffffff"
                         Layout.preferredWidth: 120
                     }
@@ -275,7 +330,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: "Center Longitude"
+                        text: root.centerLonText
                         color: "#ffffff"
                     }
                     TextField {
@@ -300,7 +355,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: "Radius (Latitude)"
+                        text: root.radiusLatText
                         color: "#ffffff"
                     }
                     TextField {
@@ -325,7 +380,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: "Radius (Longitude)"
+                        text: root.radiusLonText
                         color: "#ffffff"
                     }
                     TextField {
@@ -354,9 +409,9 @@ Rectangle {
                     visible: !!centerLat.text || !!centerLon.text || !!radiusLatField.text || !!radiusLonField.text
                     text: {
                         if (coordinatesAreValid) {
-                            return "✓ Valid ellipse parameters"
+                            return root.validEllipseText
                         } else {
-                            return "⚠ Invalid parameters"
+                            return root.invalidParamsText
                         }
                     }
                     color: coordinatesAreValid ? "#22c55e" : "#ef4444"
@@ -373,7 +428,7 @@ Rectangle {
                 Layout.preferredHeight: 80
 
                 Label {
-                    text: "Note"
+                    text: root.noteText
                     color: "#ffffff"
                 }
                 ScrollView {
@@ -384,7 +439,7 @@ Rectangle {
 
                     TextArea {
                         id: noteField
-                        placeholderText: "Enter a note..."
+                        placeholderText: root.notePlaceholder
                         placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
@@ -409,7 +464,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: "Cancel"
+                    text: root.cancelText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
@@ -420,7 +475,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: "Save"
+                    text: root.saveText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32

@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import ShipArrivalController 1.0
+import raise.singleton.language 1.0
 import ".."
 
 ColumnLayout {
@@ -11,6 +12,32 @@ ColumnLayout {
     property color disabledColor: "#808080"
 
     required property ShipArrivalController controller
+
+    // Automatic retranslation properties
+    property string dateTimeRangeSelectionTitle: qsTr("Date Time Range Selection")
+    property string startTimeLabel: qsTr("Start Time")
+    property string endTimeLabel: qsTr("End Time")
+    property string selectedPrefix: qsTr("Selected: ")
+    property string selectDateRangeText: qsTr("Select a date range")
+    property string arrivingTrucksTitle: qsTr("Arriving trucks")
+    property string fetchArrivalsText: qsTr("Fetch Arrivals")
+    property string truckSingular: qsTr(" truck")
+    property string truckPlural: qsTr(" trucks")
+    property string zeroTrucksText: qsTr("0 trucks")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        dateTimeRangeSelectionTitle = qsTr("Date Time Range Selection")
+        startTimeLabel = qsTr("Start Time")
+        endTimeLabel = qsTr("End Time")
+        selectedPrefix = qsTr("Selected: ")
+        selectDateRangeText = qsTr("Select a date range")
+        arrivingTrucksTitle = qsTr("Arriving trucks")
+        fetchArrivalsText = qsTr("Fetch Arrivals")
+        truckSingular = qsTr(" truck")
+        truckPlural = qsTr(" trucks")
+        zeroTrucksText = qsTr("0 trucks")
+    }
 
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
@@ -25,7 +52,7 @@ ColumnLayout {
         Layout.fillWidth: true
 
         Text {
-            text: "Date Time Range Selection"
+            text: root.dateTimeRangeSelectionTitle
             font.pixelSize: 18
             font.bold: true
             color: "white"
@@ -67,7 +94,7 @@ ColumnLayout {
                     Layout.fillWidth: true
 
                     Text {
-                        text: "Start Time"
+                        text: root.startTimeLabel
                         font.pixelSize: 14
                         font.bold: true
                         color: "white"
@@ -87,7 +114,7 @@ ColumnLayout {
                     Layout.fillWidth: true
 
                     Text {
-                        text: "End Time"
+                        text: root.endTimeLabel
                         font.pixelSize: 14
                         font.bold: true
                         color: "white"
@@ -105,9 +132,9 @@ ColumnLayout {
 
             Text {
                 text: rangeCalendar.startDate && rangeCalendar.endDate ?
-                    "Selected: " + Qt.formatDateTime(getStartDateTime(), "dd MMM yyyy hh:mm") +
+                    root.selectedPrefix + Qt.formatDateTime(getStartDateTime(), "dd MMM yyyy hh:mm") +
                     " - " + Qt.formatDateTime(getEndDateTime(), "dd MMM yyyy hh:mm") :
-                    "Select a date range"
+                    root.selectDateRangeText
                 font.pixelSize: 14
                 color: isDateTimeRangeValid() ? "#CCCCCC" : "#ff0000"
                 Layout.alignment: Qt.AlignHCenter
@@ -117,15 +144,15 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignLeft
                 Layout.topMargin: 10
                 icon: "🚚"
-                title: "Arriving trucks"
+                title: root.arrivingTrucksTitle
                 value: controller.dateTimeRangeArrivalCount >= 0 ?
-                    controller.dateTimeRangeArrivalCount + (controller.dateTimeRangeArrivalCount === 1 ? " truck" : " trucks") :
-                    "0 trucks"
+                    controller.dateTimeRangeArrivalCount + (controller.dateTimeRangeArrivalCount === 1 ? root.truckSingular : root.truckPlural) :
+                    root.zeroTrucksText
             }
         }
 
         Button {
-            text: "Fetch Arrivals"
+            text: root.fetchArrivalsText
             enabled: !controller.isLoading && rangeCalendar.startDate && rangeCalendar.endDate
             Layout.alignment: Qt.AlignHCenter
             Layout.fillWidth: true
@@ -205,5 +232,18 @@ ColumnLayout {
         rangeCalendar.startDate = today
         rangeCalendar.endDate = tomorrow
         updateTimePickers()
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
     }
 }

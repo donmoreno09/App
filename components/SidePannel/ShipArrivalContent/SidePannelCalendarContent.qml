@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import ShipArrivalController 1.0
+import raise.singleton.language 1.0
 import "../"
 
 ColumnLayout {
@@ -16,6 +17,28 @@ ColumnLayout {
 
     required property ShipArrivalController controller
 
+    // Automatic retranslation properties
+    property string dateRangeSelectionTitle: qsTr("Date Range Selection")
+    property string selectedPrefix: qsTr("Selected: ")
+    property string selectDateRangeText: qsTr("Select a date range")
+    property string arrivingTrucksTitle: qsTr("Arriving Trucks")
+    property string fetchArrivalsText: qsTr("Fetch Arrivals")
+    property string truckSingular: qsTr(" truck")
+    property string truckPlural: qsTr(" trucks")
+    property string zeroTrucksText: qsTr("0 trucks")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        dateRangeSelectionTitle = qsTr("Date Range Selection")
+        selectedPrefix = qsTr("Selected: ")
+        selectDateRangeText = qsTr("Select a date range")
+        arrivingTrucksTitle = qsTr("Arriving Trucks")
+        fetchArrivalsText = qsTr("Fetch Arrivals")
+        truckSingular = qsTr(" truck")
+        truckPlural = qsTr(" trucks")
+        zeroTrucksText = qsTr("0 trucks")
+    }
+
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
         running: controller.isLoading
@@ -29,7 +52,7 @@ ColumnLayout {
         Layout.fillWidth: true
 
         Text {
-            text: "Date Range Selection"
+            text: root.dateRangeSelectionTitle
             font.pixelSize: 18
             font.bold: true
             color: textColor
@@ -62,9 +85,9 @@ ColumnLayout {
 
             Text {
                 text: rangeCalendar.startDate && rangeCalendar.endDate ?
-                    "Selected: " + Qt.formatDate(rangeCalendar.startDate, "dd MMM yyyy") +
+                    root.selectedPrefix + Qt.formatDate(rangeCalendar.startDate, "dd MMM yyyy") +
                     " - " + Qt.formatDate(rangeCalendar.endDate, "dd MMM yyyy") :
-                    "Select a date range"
+                    root.selectDateRangeText
                 font.pixelSize: 14
                 color: disabledColor
                 Layout.alignment: Qt.AlignHCenter
@@ -74,15 +97,15 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignLeft
                 Layout.topMargin: 10
                 icon: "🚚️"
-                title: "Arriving Trucks"
+                title: root.arrivingTrucksTitle
                 value: controller.dateRangeArrivalCount >= 0 ?
-                    controller.dateRangeArrivalCount + (controller.dateRangeArrivalCount === 1 ? " truck" : " trucks") :
-                    "0 trucks"
+                    controller.dateRangeArrivalCount + (controller.dateRangeArrivalCount === 1 ? root.truckSingular : root.truckPlural) :
+                    root.zeroTrucksText
             }
         }
 
         Button {
-            text: "Fetch Arrivals"
+            text: root.fetchArrivalsText
             enabled: !controller.isLoading && rangeCalendar.startDate && rangeCalendar.endDate
             Layout.alignment: Qt.AlignHCenter
             Layout.fillWidth: true
@@ -136,5 +159,18 @@ ColumnLayout {
 
         rangeCalendar.startDate = today
         rangeCalendar.endDate = tomorrow
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
     }
 }

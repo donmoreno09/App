@@ -3,6 +3,7 @@ import QtLocation 6.8
 import raise.singleton.interactionmanager 1.0
 import raise.singleton.layermanager 1.0
 import raise.singleton.selectionboxbus 1.0
+import raise.singleton.language 1.0
 
 BaseEditor {
     objectName: "SelectionEditor"
@@ -18,6 +19,16 @@ BaseEditor {
     property point dragStart: Qt.point(0,0)
     property point dragEnd  : Qt.point(0,0)
 
+    // Automatic retranslation properties
+    property string dragStartMessage: qsTr("DRAG START:")
+    property string selectionMessage: qsTr("[SelectionEditor.onReleased] ↖️")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        dragStartMessage = qsTr("DRAG START:")
+        selectionMessage = qsTr("[SelectionEditor.onReleased] ↖️")
+    }
+
     DragHandler {
         target: null
         acceptedButtons: Qt.LeftButton
@@ -29,7 +40,7 @@ BaseEditor {
             if (transition === PointerDevice.GrabPassive) {
                 dragStart = eventPoint.position
                 dragEnd = dragStart
-                console.log("DRAG START:", JSON.stringify(dragStart))
+                console.log(parent.dragStartMessage, JSON.stringify(dragStart))
             }
         }
 
@@ -40,7 +51,7 @@ BaseEditor {
                 const topLeft = map.toCoordinate(Qt.point(Math.min(dragStart.x, dragEnd.x), Math.min(dragStart.y, dragEnd.y)))
                 const bottomRight = map.toCoordinate(Qt.point(Math.max(dragStart.x, dragEnd.x), Math.max(dragStart.y, dragEnd.y)))
 
-                console.log("[SelectionEditor.onReleased] ↖️", topLeft, " ↘️", bottomRight)
+                console.log(parent.selectionMessage, topLeft, " ↘️", bottomRight)
                 SelectionBoxBus.selected(LayerManager.focusedLayerName(), topLeft, bottomRight, InteractionModeManager.currentMode)
             }
         }
@@ -66,5 +77,17 @@ BaseEditor {
         border.color: "blue"
         border.width: 1
         z: 1100
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
     }
 }
