@@ -28,4 +28,6 @@ QtObject {
     required property RadiusTokens radius
 
     required property BorderTokens borders
+
+    required property ElevationTokens elevation
 }

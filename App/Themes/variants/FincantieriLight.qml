@@ -34,4 +34,6 @@ BaseTheme {
     radius: RadiusTokens { }
 
     borders: BorderTokens { }
+
+    elevation: ElevationTokens { }
 }

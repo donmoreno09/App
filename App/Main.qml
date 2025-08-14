@@ -21,6 +21,7 @@ ApplicationWindow {
         Item {
             width: 220
             height: 140
+            z: Theme.elevation.raised
 
             // Border
             Rectangle {
