@@ -72,6 +72,245 @@ Rectangle {
         );
     }
 
+    // Move all popup components to the root level, outside the ListView
+    PoiPopup {
+        id: poiPopup
+        visible: false
+        parent: root
+
+        onSaveClicked: function (details) {
+            const dataToSave = JSON.parse(JSON.stringify(poiPopup.currentModelData))
+            dataToSave.label = details.label
+            dataToSave.typeId = details.type.key
+            dataToSave.typeName = details.type.value
+            dataToSave.healthStatusId = details.healthStatus.key
+            dataToSave.healthStatusName = details.healthStatus.value
+            dataToSave.operationalStateId = details.operationalState.key
+            dataToSave.operationalStateName = details.operationalState.value
+            dataToSave.details = { metadata: { note: details.note } }
+
+            if (dataToSave.geometry && dataToSave.geometry.coordinate) {
+                dataToSave.geometry.coordinate.x = Number(details.longitude) || dataToSave.geometry.coordinate.x
+                dataToSave.geometry.coordinate.y = Number(details.latitude) || dataToSave.geometry.coordinate.y
+
+                if (dataToSave.geometry.coordinates && dataToSave.geometry.coordinates[0]) {
+                    dataToSave.geometry.coordinates[0].x = dataToSave.geometry.coordinate.x
+                    dataToSave.geometry.coordinates[0].y = dataToSave.geometry.coordinate.y
+                }
+            }
+
+            PoiController.updatePoiFromQml(dataToSave)
+
+            const poiModel = staticPoiLayerInstance.businessLogic.poiModel
+            for (let i = 0; i < poiModel.rowCount(); i++) {
+                if (poiModel.at(i).id === dataToSave.id) {
+                    poiModel.setItemAt(i, dataToSave)
+                    break
+                }
+            }
+
+            staticPoiLayerInstance.businessLogic.syncSelectedObject(dataToSave)
+        }
+
+        property var currentModelData: null
+    }
+
+    RectanglePoiPopup {
+        id: rectanglePoiPopup
+        visible: false
+        parent: root
+
+        onSaveClicked: function (details) {
+            const dataToSave = JSON.parse(JSON.stringify(rectanglePoiPopup.currentModelData))
+            dataToSave.label = details.label
+            dataToSave.typeId = details.type.key
+            dataToSave.typeName = details.type.value
+            dataToSave.healthStatusId = details.healthStatus.key
+            dataToSave.healthStatusName = details.healthStatus.value
+            dataToSave.operationalStateId = details.operationalState.key
+            dataToSave.operationalStateName = details.operationalState.value
+            dataToSave.details = { metadata: { note: details.note } }
+
+            if (dataToSave.geometry) {
+                const topLeft = {
+                    x: Number(details.topLeft.longitude),
+                    y: Number(details.topLeft.latitude)
+                }
+                const bottomRight = {
+                    x: Number(details.bottomRight.longitude),
+                    y: Number(details.bottomRight.latitude)
+                }
+
+                const topRight = { x: bottomRight.x, y: topLeft.y }
+                const bottomLeft = { x: topLeft.x, y: bottomRight.y }
+
+                dataToSave.geometry.topLeft = topLeft
+                dataToSave.geometry.bottomRight = bottomRight
+                dataToSave.geometry.coordinates = [
+                    topLeft,
+                    topRight,
+                    bottomRight,
+                    bottomLeft,
+                    topLeft
+                ]
+            }
+
+            PoiController.updatePoiFromQml(dataToSave)
+
+            const poiModel = staticPoiLayerInstance.businessLogic.poiModel
+            for (let i = 0; i < poiModel.rowCount(); i++) {
+                if (poiModel.at(i).id === dataToSave.id) {
+                    poiModel.setItemAt(i, dataToSave)
+                    break
+                }
+            }
+
+            staticPoiLayerInstance.businessLogic.syncSelectedObject(dataToSave)
+        }
+
+        property var currentModelData: null
+    }
+
+    EllipsePoiPopup {
+        id: ellipsePoiPopup
+        visible: false
+        parent: root
+
+        onSaveClicked: function (details) {
+            const dataToSave = JSON.parse(JSON.stringify(ellipsePoiPopup.currentModelData))
+            dataToSave.label = details.label
+            dataToSave.typeId = details.type.key
+            dataToSave.typeName = details.type.value
+            dataToSave.healthStatusId = details.healthStatus.key
+            dataToSave.healthStatusName = details.healthStatus.value
+            dataToSave.operationalStateId = details.operationalState.key
+            dataToSave.operationalStateName = details.operationalState.value
+            dataToSave.details = { metadata: { note: details.note } }
+
+            if (dataToSave.geometry && dataToSave.geometry.coordinate) {
+                dataToSave.geometry.coordinate.x = Number(details.center.longitude) || dataToSave.geometry.coordinate.x
+                dataToSave.geometry.coordinate.y = Number(details.center.latitude) || dataToSave.geometry.coordinate.y
+                dataToSave.geometry.radiusA = Number(details.radiusLat) || dataToSave.geometry.radiusA
+                dataToSave.geometry.radiusB = Number(details.radiusLon) || dataToSave.geometry.radiusB
+            }
+
+            PoiController.updatePoiFromQml(dataToSave)
+
+            const poiModel = staticPoiLayerInstance.businessLogic.poiModel
+            for (let i = 0; i < poiModel.rowCount(); i++) {
+                if (poiModel.at(i).id === dataToSave.id) {
+                    poiModel.setItemAt(i, dataToSave)
+                    break
+                }
+            }
+
+            staticPoiLayerInstance.businessLogic.syncSelectedObject(dataToSave)
+        }
+
+        property var currentModelData: null
+    }
+
+    PolygonPoiPopup {
+        id: polygonPoiPopup
+        visible: false
+        parent: root
+
+        onSaveClicked: function (details) {
+            const dataToSave = JSON.parse(JSON.stringify(polygonPoiPopup.currentModelData))
+            dataToSave.label = details.label
+            dataToSave.typeId = details.type.key
+            dataToSave.typeName = details.type.value
+            dataToSave.healthStatusId = details.healthStatus.key
+            dataToSave.healthStatusName = details.healthStatus.value
+            dataToSave.operationalStateId = details.operationalState.key
+            dataToSave.operationalStateName = details.operationalState.value
+            dataToSave.details = { metadata: { note: details.note } }
+
+            if (dataToSave.geometry && details.coordinates) {
+                dataToSave.geometry.coordinates = details.coordinates.map(coord => ({
+                    x: coord.longitude,
+                    y: coord.latitude
+                }))
+            }
+
+            PoiController.updatePoiFromQml(dataToSave)
+
+            const poiModel = staticPoiLayerInstance.businessLogic.poiModel
+            for (let i = 0; i < poiModel.rowCount(); i++) {
+                if (poiModel.at(i).id === dataToSave.id) {
+                    poiModel.setItemAt(i, dataToSave)
+                    break
+                }
+            }
+
+            staticPoiLayerInstance.businessLogic.syncSelectedObject(dataToSave)
+        }
+
+        property var currentModelData: null
+    }
+
+    ShapePopup {
+        id: shapePopup
+        visible: false
+        parent: root
+
+        onSaveClicked: function (details) {
+            const dataToSave = JSON.parse(JSON.stringify(shapePopup.currentModelData))
+            dataToSave.label = details.label
+
+            ShapeController.updateShapeFromQml(dataToSave)
+
+            const shapeModel = annotationLayerInstance.businessLogic.annotationModel
+            for (let i = 0; i < shapeModel.rowCount(); i++) {
+                if (shapeModel.at(i).id === dataToSave.id) {
+                    shapeModel.setItemAt(i, dataToSave)
+                    break
+                }
+            }
+
+            annotationLayerInstance.businessLogic.syncSelectedObject(dataToSave)
+        }
+
+        property var currentModelData: null
+    }
+
+    ConfirmModal {
+        id: confirmModal
+        parent: root
+
+        onConfirm: {
+            if (LayerManager.focusedLayerName() === "AnnotationMapLayer") {
+                ShapeController.deleteShapeFromQml(confirmModal.currentModelData.id)
+                const shapeModel = annotationLayerInstance.businessLogic.annotationModel
+                for (let i = 0; i < shapeModel.rowCount(); i++) {
+                    if (shapeModel.at(i).id === confirmModal.currentModelData.id) {
+                        shapeModel.removeItemAt(i)
+                        break
+                    }
+                }
+                annotationLayerInstance.businessLogic.syncSelectedObject(confirmModal.currentModelData, true)
+            } else {
+                PoiController.deletePoiFromQml(confirmModal.currentModelData.id)
+                const poiModel = staticPoiLayerInstance.businessLogic.poiModel
+                for (let i = 0; i < poiModel.rowCount(); i++) {
+                    if (poiModel.at(i).id === confirmModal.currentModelData.id) {
+                        poiModel.removeItemAt(i)
+                        break
+                    }
+                }
+                staticPoiLayerInstance.businessLogic.syncSelectedObject(confirmModal.currentModelData, true)
+            }
+        }
+
+        property var currentModelData: null
+    }
+
+    // Data loaders
+    PoiPopupDataLoader { id: poiPopupDataLoader; targetPoiPopup: poiPopup }
+    PoiPopupDataLoader { id: rectanglePoiPopupDataLoader; targetPoiPopup: rectanglePoiPopup }
+    PoiPopupDataLoader { id: ellipsePoiPopupDataLoader; targetPoiPopup: ellipsePoiPopup }
+    PoiPopupDataLoader { id: polygonPoiPopupDataLoader; targetPoiPopup: polygonPoiPopup }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
@@ -184,9 +423,16 @@ Rectangle {
                                 text: editText
                                 onClicked: {
                                     if (LayerManager.focusedLayerName() === "AnnotationMapLayer") {
+                                        shapePopup.currentModelData = modelData
                                         shapePopup.labelField.text = modelData.label
                                         shapePopup.open()
                                     } else {
+                                        // Store current model data in the respective popup
+                                        poiPopup.currentModelData = modelData
+                                        ellipsePoiPopup.currentModelData = modelData
+                                        rectanglePoiPopup.currentModelData = modelData
+                                        polygonPoiPopup.currentModelData = modelData
+
                                         poiPopup.labelField.text = modelData.label
                                         ellipsePoiPopup.labelField.text = modelData.label
                                         rectanglePoiPopup.labelField.text = modelData.label
@@ -268,60 +514,13 @@ Rectangle {
 
                             StyledButton {
                                 text: removeText
-                                onClicked: confirmModal.open()
-                            }
-                        }
-                    }
-
-                    // Popups and data loaders (unchanged)
-                    PoiPopup { /* ... same as original but without logs */ }
-                    RectanglePoiPopup { /* ... */ }
-                    EllipsePoiPopup { /* ... */ }
-                    PolygonPoiPopup { /* ... */ }
-                    ShapePopup { /* ... */ }
-                    PoiPopupDataLoader { id: poiPopupDataLoader; targetPoiPopup: poiPopup }
-                    PoiPopupDataLoader { id: rectanglePoiPopupDataLoader; targetPoiPopup: rectanglePoiPopup }
-                    PoiPopupDataLoader { id: ellipsePoiPopupDataLoader; targetPoiPopup: ellipsePoiPopup }
-                    PoiPopupDataLoader { id: polygonPoiPopupDataLoader; targetPoiPopup: polygonPoiPopup }
-
-                    ConfirmModal {
-                        id: confirmModal
-                        title: removeObjectTitleText
-                        description: `${removeObjectDescText} ${modelData.label}?`
-                        confirmBtnText: removeButtonText
-                        onConfirm: {
-                            if (LayerManager.focusedLayerName() === "AnnotationMapLayer") {
-                                ShapeController.deleteShapeFromQml(modelData.id)
-                                const shapeModel = annotationLayerInstance.businessLogic.annotationModel
-                                for (let i = 0; i < shapeModel.rowCount(); i++) {
-                                    if (shapeModel.at(i).id === modelData.id) {
-                                        shapeModel.removeItemAt(i)
-                                        break
-                                    }
+                                onClicked: {
+                                    confirmModal.currentModelData = modelData
+                                    confirmModal.title = removeObjectTitleText
+                                    confirmModal.description = `${removeObjectDescText} ${modelData.label}?`
+                                    confirmModal.confirmBtnText = removeButtonText
+                                    confirmModal.open()
                                 }
-                                annotationLayerInstance.businessLogic.syncSelectedObject(modelData, true)
-                            } else {
-                                PoiController.deletePoiFromQml(modelData.id)
-                                const poiModel = staticPoiLayerInstance.businessLogic.poiModel
-                                for (let i = 0; i < poiModel.rowCount(); i++) {
-                                    if (poiModel.at(i).id === modelData.id) {
-                                        poiModel.removeItemAt(i)
-                                        break
-                                    }
-                                }
-                                staticPoiLayerInstance.businessLogic.syncSelectedObject(modelData, true)
-                            }
-                        }
-                    }
-
-                    Connections {
-                        target: PoiController
-                        function onPoiFetchedSuccessfully(poi) {
-                            if (poi.details?.metadata?.note) {
-                                poiPopup.noteField.text = poi.details.metadata.note
-                                rectanglePoiPopup.noteField.text = poi.details.metadata.note
-                                ellipsePoiPopup.noteField.text = poi.details.metadata.note
-                                polygonPoiPopup.noteField.text = poi.details.metadata.note
                             }
                         }
                     }
@@ -340,6 +539,18 @@ Rectangle {
         function onSelectedObjectsChanged() {
             selectedObjects = LayerManager.selectedObjects
             if (selectedObjects && selectedObjects.length > 0) detailsPanelExpanded = true
+        }
+    }
+
+    Connections {
+        target: PoiController
+        function onPoiFetchedSuccessfully(poi) {
+            if (poi.details?.metadata?.note) {
+                poiPopup.noteField.text = poi.details.metadata.note
+                rectanglePoiPopup.noteField.text = poi.details.metadata.note
+                ellipsePoiPopup.noteField.text = poi.details.metadata.note
+                polygonPoiPopup.noteField.text = poi.details.metadata.note
+            }
         }
     }
 }

@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("raise.singleton.mqtt", 1, 0, "MqttClientService", MqttClientService::getInstance());
     qmlRegisterSingletonInstance("raise.singleton.language", 1, 0, "LanguageController", new LanguageController());
 
-    // LanguageController::instance()->setCurrentLanguage("it");
+    LanguageController::instance()->setCurrentLanguage("it");
 
     QString configPath = QDir(QCoreApplication::applicationDirPath()).filePath("config/mqtt_config.json");
 
