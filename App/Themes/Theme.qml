@@ -20,4 +20,5 @@ QtObject {
     readonly property BorderTokens borders: current.borders
     readonly property ElevationTokens elevation: current.elevation
     readonly property OpacityTokens opacity: current.opacity
+    readonly property IconTokens icons: current.icons
 }

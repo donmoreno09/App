@@ -38,4 +38,6 @@ BaseTheme {
     elevation: ElevationTokens { }
 
     opacity: OpacityTokens { }
+
+    icons: IconTokens { }
 }

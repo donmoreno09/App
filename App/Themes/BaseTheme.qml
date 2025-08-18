@@ -32,4 +32,6 @@ QtObject {
     required property ElevationTokens elevation
 
     required property OpacityTokens opacity
+
+    required property IconTokens icons
 }
