@@ -35,7 +35,7 @@ Rectangle {
     property string removeObjectTitleText: qsTr("Remove Object")
     property string removeObjectDescText: qsTr("Are you sure you want to remove")
     property string removeButtonText: qsTr("Remove")
-    property string updateLabelText: qsTr("Update Label")
+    property string updateText: qsTr("Update")
 
     // Auto-retranslate when language changes
     function retranslateUi() {
@@ -51,7 +51,7 @@ Rectangle {
         removeObjectTitleText      = qsTr("Remove object?")
         removeObjectDescText       = qsTr("Are you sure you want to remove")
         removeButtonText           = qsTr("Remove")
-        updateLabelText            = qsTr("Update Label")
+        updateLabelText            = qsTr("Update")
     }
 
     visible: selectedObjects && selectedObjects.length > 0

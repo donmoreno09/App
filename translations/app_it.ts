@@ -360,8 +360,8 @@
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="39"/>
-        <source>Update Label</source>
-        <translation>Aggiorna Etichetta</translation>
+        <source>Update</source>
+        <translation>Aggiorna</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="46"/>
