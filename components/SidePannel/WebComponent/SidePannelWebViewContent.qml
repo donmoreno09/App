@@ -1,10 +1,21 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import raise.singleton.language 1.0
 
 Item {
     id: root
     anchors.fill: parent
+
+    // Automatic retranslation properties
+    property string shipStowageTitle: qsTr("Ship Stowage")
+    property string stowageFourClicksText: qsTr("Stowage - FourClicks")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        shipStowageTitle = qsTr("Ship Stowage")
+        stowageFourClicksText = qsTr("Stowage - FourClicks")
+    }
 
     ColumnLayout {
         anchors.left: parent.left
@@ -14,7 +25,7 @@ Item {
         spacing: 30
 
         Text {
-            text: "Ship Stowage"
+            text: root.shipStowageTitle
             font.pixelSize: 20
             font.bold: true
             font.family: "Arial"
@@ -55,7 +66,7 @@ Item {
             }
 
             Text {
-                text: "Stowage - FourClicks"
+                text: root.stowageFourClicksText
                 anchors.centerIn: parent
                 color: "white"
                 font.pixelSize: 14
@@ -63,6 +74,14 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            root.retranslateUi()
         }
     }
 }

@@ -9,7 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.8 REQUIRED COMPONENTS Widgets Quick Positioning WebEngineQuick Mqtt)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Widgets Quick Positioning WebEngineQuick Mqtt LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 
 set(PROJECT_SOURCES
@@ -70,6 +71,8 @@ qt_add_executable(Sanbdox
     models/radial-menu/radialmenunode.cpp
     models/radial-menu/propertytreenode.cpp
     core/trackmanager.h core/trackmanager.cpp
+    App/features/language/LanguageController.h App/features/language/LanguageController.cpp
+    App/features/language/LanguageEnum.h App/features/language/LanguageEnum.cpp
 )
 
 target_link_libraries(Sanbdox PRIVATE
@@ -80,6 +83,7 @@ target_link_libraries(Sanbdox PRIVATE
     Qt6::Mqtt
 
 )
+target_link_libraries(Sanbdox PRIVATE Qt6::Core)
 
 set_target_properties(Sanbdox PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Sanbdox
@@ -94,6 +98,17 @@ install(TARGETS Sanbdox
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+# Add translation files
+set(TS_FILES
+    translations/app_en.ts
+    translations/app_it.ts
+)
+
+qt_add_translations(Sanbdox
+    TS_FILES ${TS_FILES}
+    RESOURCE_PREFIX "/translations"
 )
 
 qt_finalize_executable(Sanbdox)

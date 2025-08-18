@@ -19,21 +19,55 @@ Frame {
         border.width: 1
     }
 
+    // Automatic retranslation properties
+    property string modeText: qsTr("Mode")
+    property string handText: qsTr("Hand")
+    property string cursorText: qsTr("Cursor")
+    property string drawText: qsTr("Draw")
+    property string squareText: qsTr("Square")
+    property string ellipseText: qsTr("Ellipse")
+    property string polygonText: qsTr("Polygon")
+    property string corridorText: qsTr("Corridor")
+    property string focusLayerText: qsTr("Focus Layer")
+    property string annotationText: qsTr("Annotation")
+    property string trackText: qsTr("Track")
+    property string poisText: qsTr("PoIs")
+    property string visibilityText: qsTr("Visibility")
+    property string tracksText: qsTr("Tracks")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        modeText = qsTr("Mode")
+        handText = qsTr("Hand")
+        cursorText = qsTr("Cursor")
+        drawText = qsTr("Draw")
+        squareText = qsTr("Square")
+        ellipseText = qsTr("Ellipse")
+        polygonText = qsTr("Polygon")
+        corridorText = qsTr("Corridor")
+        focusLayerText = qsTr("Focus Layer")
+        annotationText = qsTr("Annotation")
+        trackText = qsTr("Track")
+        poisText = qsTr("PoIs")
+        visibilityText = qsTr("Visibility")
+        tracksText = qsTr("Tracks")
+    }
+
     ColumnLayout {
         spacing: 16
 
-        // Modalità
+        // Mode section
         ColumnLayout {
             spacing: 8
             Label {
-                text: "Modalità"
+                text: toolbar.modeText
                 font.bold: true
                 font.pointSize: 11
                 color: "#333"
             }
 
             Button {
-                text: "Mano"
+                text: toolbar.handText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -43,7 +77,7 @@ Frame {
             }
 
             Button {
-                text: "Cursore"
+                text: toolbar.cursorText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -52,7 +86,7 @@ Frame {
             }
             Button {
                 id: drawButton
-                text: "Disegna"
+                text: toolbar.drawText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -95,7 +129,7 @@ Frame {
                     spacing: 8
 
                     Button {
-                        text: "Quadrato"
+                        text: toolbar.squareText
                         Layout.fillWidth: true
                         onClicked: {
                             InteractionModeManager.currentDrawShape = "Square"
@@ -104,7 +138,7 @@ Frame {
                     }
 
                     Button {
-                        text: "Ellisse"
+                        text: toolbar.ellipseText
                         Layout.fillWidth: true
                         onClicked: {
                             InteractionModeManager.currentDrawShape = "Ellipse"
@@ -113,7 +147,7 @@ Frame {
                     }
 
                     Button {
-                        text: "Poligono"
+                        text: toolbar.polygonText
                         Layout.fillWidth: true
                         onClicked: {
                             InteractionModeManager.currentDrawShape = "Polygon"
@@ -122,7 +156,7 @@ Frame {
                     }
 
                     Button {
-                        text: "Corridoio"
+                        text: toolbar.corridorText
                         Layout.fillWidth: true
                         onClicked: {
                             InteractionModeManager.currentDrawShape = "Corridor"
@@ -138,14 +172,14 @@ Frame {
         ColumnLayout {
             spacing: 16
             Label {
-                text: "Focus Layer"
+                text: toolbar.focusLayerText
                 font.bold: true
                 font.pointSize: 11
                 color: "#333"
             }
 
             Button {
-                text: "Annotation"
+                text: toolbar.annotationText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -154,7 +188,7 @@ Frame {
             }
 
             Button {
-                text: "Track"
+                text: toolbar.trackText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -163,7 +197,7 @@ Frame {
             }
 
             Button {
-                text: "PoIs"
+                text: toolbar.poisText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -176,14 +210,14 @@ Frame {
         ColumnLayout {
             spacing: 16
             Label {
-                text: "Visibilità"
+                text: toolbar.visibilityText
                 font.bold: true
                 font.pointSize: 11
                 color: "#333"
             }
 
             Button {
-                text: "Annotation"
+                text: toolbar.annotationText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -192,7 +226,7 @@ Frame {
             }
 
             Button {
-                text: "Tracks"
+                text: toolbar.tracksText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -201,7 +235,7 @@ Frame {
             }
 
             Button {
-                text: "PoIs"
+                text: toolbar.poisText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -211,8 +245,20 @@ Frame {
         }
     }
 
-    // Layer references passate dall’esterno
+    // Layer references passed from outside
     property var annotationLayer
     property var trackLayer
     property var poiLayer
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            toolbar.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
+    }
 }

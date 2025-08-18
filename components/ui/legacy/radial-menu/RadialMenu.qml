@@ -6,6 +6,7 @@ import Qt5Compat.GraphicalEffects
 import qml.service.status 1.0
 import qml.econtrollers 1.0
 import raise.singleton.radialmenucontroller 1.0
+import raise.singleton.language 1.0
 
 import "../radial-menu" as RadialMenuWidget
 import "../js/QmlComponentFactory.js" as ComponentFactory
@@ -57,6 +58,14 @@ Widgets.BaseScatter {
     property string buttonFont: "RobotoRegular"
 
     property var onOptionToggledCallback: null
+
+    // Automatic retranslation properties
+    property string buttonLogText: qsTr("BUTTON")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        buttonLogText = qsTr("BUTTON")
+    }
 
     Connections {
         target: RadialMenuController
@@ -199,7 +208,7 @@ Widgets.BaseScatter {
         {
             RadialMenuController.trigger(w.name, w.checkable?w.checked:w.clicked)
             RadialMenuController.setNodeActive(node.id, w.checkable?w.checked:false)
-            console.log("BUTTON", node.id, ":", w.checked) // Log originale
+            console.log(radialMenu.buttonLogText, node.id, ":", w.checked)
 
             if (w.checkable && radialMenu.onOptionToggledCallback) {
                 radialMenu.onOptionToggledCallback(node.propertyTreeNode.name, w.checked);
@@ -213,7 +222,7 @@ Widgets.BaseScatter {
     {
         var node = RadialMenuController.getNode(w.nodeId)
         RadialMenuController.setNodeActive(node.id, w.checked)
-        console.log(node.id, ":", w.checked) // Log originale
+        console.log(node.id, ":", w.checked)
 
         if (radialMenu.onOptionToggledCallback) {
             radialMenu.onOptionToggledCallback(node.propertyTreeNode.name, w.checked);
@@ -302,5 +311,17 @@ Widgets.BaseScatter {
         target: parent
         function onWidthChanged() { repositionFromRelative() }
         function onHeightChanged() { repositionFromRelative() }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            radialMenu.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
     }
 }

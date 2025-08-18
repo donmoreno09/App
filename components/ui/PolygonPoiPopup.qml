@@ -4,10 +4,56 @@ import QtQuick.Layouts 2.15
 import QtPositioning 6.8
 import raise.singleton.popupmanager 1.0
 import raise.singleton.controllers 1.0
+import raise.singleton.language 1.0
 
 Rectangle {
     id: popup
-    property string title: "Insert Polygon POI"
+
+    // Automatic retranslation properties
+    property string titleText: qsTr("Insert Polygon POI")
+    property string labelText: qsTr("Label")
+    property string enterLabelText: qsTr("Enter label...")
+    property string categoryText: qsTr("Category")
+    property string typeText: qsTr("Type")
+    property string healthStatusText: qsTr("Health Status")
+    property string operationalStateText: qsTr("Operational State")
+    property string polygonVerticesText: qsTr("Polygon Vertices")
+    property string pointText: qsTr("Point")
+    property string latitudeText: qsTr("Latitude")
+    property string longitudeText: qsTr("Longitude")
+    property string validPolygonText: qsTr("✓ Valid polygon")
+    property string pointsText: qsTr("Points:")
+    property string moreNeededText: qsTr("more needed to form a polygon")
+    property string invalidCoordinatesText: qsTr("⚠ Invalid coordinates in polygon")
+    property string noteText: qsTr("Note")
+    property string enterNoteText: qsTr("Enter a note...")
+    property string cancelText: qsTr("Cancel")
+    property string saveText: qsTr("Save")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        titleText = qsTr("Insert Polygon POI")
+        labelText = qsTr("Label")
+        enterLabelText = qsTr("Enter label...")
+        categoryText = qsTr("Category")
+        typeText = qsTr("Type")
+        healthStatusText = qsTr("Health Status")
+        operationalStateText = qsTr("Operational State")
+        polygonVerticesText = qsTr("Polygon Vertices")
+        pointText = qsTr("Point")
+        latitudeText = qsTr("Latitude")
+        longitudeText = qsTr("Longitude")
+        validPolygonText = qsTr("✓ Valid polygon")
+        pointsText = qsTr("Points:")
+        moreNeededText = qsTr("more needed to form a polygon")
+        invalidCoordinatesText = qsTr("⚠ Invalid coordinates in polygon")
+        noteText = qsTr("Note")
+        enterNoteText = qsTr("Enter a note...")
+        cancelText = qsTr("Cancel")
+        saveText = qsTr("Save")
+    }
+
+    property string title: titleText
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
     property alias typeComboBox: typeComboBox
@@ -278,12 +324,12 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Label"
+                    text: popup.labelText
                     color: "#ffffff"
                 }
                 TextField {
                     id: labelField
-                    placeholderText: "Enter label..."
+                    placeholderText: popup.enterLabelText
                     placeholderTextColor: "#888888"
                     font.pixelSize: 14
                     color: "#ffffff"
@@ -300,7 +346,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Category"
+                    text: popup.categoryText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -315,7 +361,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Type"
+                    text: popup.typeText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -330,7 +376,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Health Status"
+                    text: popup.healthStatusText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -346,7 +392,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Operational State"
+                    text: popup.operationalStateText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -363,7 +409,7 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Label {
-                    text: "Polygon Vertices"
+                    text: popup.polygonVerticesText
                     color: "#ffffff"
                     font.bold: true
                 }
@@ -398,7 +444,7 @@ Rectangle {
                                 spacing: 8
 
                                 Label {
-                                    text: "Point " + (index + 1)
+                                    text: popup.pointText + " " + (index + 1)
                                     color: "#ffffff"
                                     Layout.preferredWidth: 50
                                     font.pixelSize: 12
@@ -407,7 +453,7 @@ Rectangle {
                                 TextField {
                                     id: latField
                                     text: model.latitude
-                                    placeholderText: "Latitude"
+                                    placeholderText: popup.latitudeText
                                     placeholderTextColor: "#888888"
                                     font.pixelSize: 12
                                     color: "#ffffff"
@@ -440,7 +486,7 @@ Rectangle {
                                 TextField {
                                     id: lonField
                                     text: model.longitude
-                                    placeholderText: "Longitude"
+                                    placeholderText: popup.longitudeText
                                     placeholderTextColor: "#888888"
                                     font.pixelSize: 12
                                     color: "#ffffff"
@@ -490,11 +536,11 @@ Rectangle {
                     text: {
                         const count = coordinatesModel.count
                         if (coordinatesAreValid) {
-                            return `✓ Valid polygon (${count} points)`
+                            return `${popup.validPolygonText} (${count} ${popup.pointsText.toLowerCase()})`
                         } else if (count < 3) {
-                            return `Points: ${count} (${3 - count} more needed to form a polygon)`
+                            return `${popup.pointsText} ${count} (${3 - count} ${popup.moreNeededText})`
                         } else {
-                            return `⚠ Invalid coordinates in polygon`
+                            return popup.invalidCoordinatesText
                         }
                     }
                     color: coordinatesAreValid ? "#22c55e" : "#ef4444"
@@ -511,7 +557,7 @@ Rectangle {
                 Layout.preferredHeight: 80
 
                 Label {
-                    text: "Note"
+                    text: popup.noteText
                     color: "#ffffff"
                 }
                 ScrollView {
@@ -522,7 +568,7 @@ Rectangle {
 
                     TextArea {
                         id: noteField
-                        placeholderText: "Enter a note..."
+                        placeholderText: popup.enterNoteText
                         placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
@@ -547,7 +593,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: "Cancel"
+                    text: popup.cancelText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
@@ -558,7 +604,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: "Save"
+                    text: popup.saveText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
@@ -594,6 +640,18 @@ Rectangle {
                     }
                 }
             }
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            popup.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }
