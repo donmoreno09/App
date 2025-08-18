@@ -71,8 +71,8 @@ qt_add_executable(Sanbdox
     models/radial-menu/radialmenunode.cpp
     models/radial-menu/propertytreenode.cpp
     core/trackmanager.h core/trackmanager.cpp
-    App/features/language/LanguageController.h App/features/language/LanguageController.cpp
-    App/features/language/LanguageEnum.h App/features/language/LanguageEnum.cpp
+    App/Features/language/LanguageController.h App/features/language/LanguageController.cpp
+    App/Features/language/LanguageEnum.h App/features/language/LanguageEnum.cpp
 )
 
 target_link_libraries(Sanbdox PRIVATE
