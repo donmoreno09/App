@@ -356,7 +356,7 @@
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="37"/>
         <source>Are you sure you want to remove this object?</source>
-        <translation>Sei sicuro di voler rimuovere questo oggetto?</translation>
+        <translation>Sei sicuro di voler rimuovere</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="39"/>

@@ -33,7 +33,7 @@ Rectangle {
     property string updatePolygonPoiText: qsTr("Update Polygon POI")
     property string updateShapeText: qsTr("Update Shape")
     property string removeObjectTitleText: qsTr("Remove Object")
-    property string removeObjectDescText: qsTr("Are you sure you want to remove this object?")
+    property string removeObjectDescText: qsTr("Are you sure you want to remove")
     property string removeButtonText: qsTr("Remove")
     property string updateLabelText: qsTr("Update Label")
 
