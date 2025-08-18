@@ -1030,51 +1030,176 @@
     <name>TopToolbar</name>
     <message>
         <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="27"/>
-        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="37"/>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="38"/>
         <source>Hand</source>
         <translation>Hand</translation>
     </message>
     <message>
         <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="28"/>
-        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="38"/>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="39"/>
         <source>Cursor</source>
         <translation>Cursor</translation>
     </message>
     <message>
         <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="29"/>
-        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="39"/>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="40"/>
         <source>Insert Point POI</source>
-        <translation >Insert Point POI</translation>
+        <translation>Insert Point POI</translation>
     </message>
     <message>
         <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="30"/>
-        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="40"/>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="41"/>
         <source>Insert Area POI</source>
         <translation>Insert Area POI</translation>
     </message>
     <message>
         <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="31"/>
-        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="41"/>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="42"/>
         <source>Rectangle</source>
         <translation>Rectangle</translation>
     </message>
     <message>
         <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="32"/>
-        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="42"/>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="43"/>
         <source>Ellipse</source>
         <translation>Ellipse</translation>
     </message>
     <message>
         <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="33"/>
-        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="43"/>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="44"/>
         <source>Polyline</source>
         <translation>Polyline</translation>
     </message>
     <message>
         <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="34"/>
-        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="44"/>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="45"/>
         <source>Polygon</source>
         <translation>Polygon</translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="142"/>
+        <source>Buildings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="143"/>
+        <source>Docking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="144"/>
+        <source>Terminals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="145"/>
+        <source>Container Area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="146"/>
+        <source>Gates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="147"/>
+        <source>Structures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="148"/>
+        <source>Cranes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="156"/>
+        <source>Office</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="157"/>
+        <source>Fuel station</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="158"/>
+        <source>Mechanical workshop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="159"/>
+        <source>Maintenance Building</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="160"/>
+        <source>Worksite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="162"/>
+        <source>Dock A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="163"/>
+        <source>Dock B</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="165"/>
+        <source>Container Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="166"/>
+        <source>Ro-Ro Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="168"/>
+        <source>Trailer Container Area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="169"/>
+        <source>Container Storage Area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="171"/>
+        <source>Security Gate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="172"/>
+        <source>Terminal Gate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="174"/>
+        <source>Control Tower</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="175"/>
+        <source>Bridge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="176"/>
+        <source>Tunnel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="178"/>
+        <source>Ship-to-Shore Crane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/ui/top-toolbar/TopToolbar.qml" line="179"/>
+        <source>Mobile Crane</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
