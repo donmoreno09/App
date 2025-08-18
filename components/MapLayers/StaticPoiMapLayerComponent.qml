@@ -6,6 +6,7 @@ import QtPositioning 6.8
 import raise.map.layers 1.0
 import raise.singleton.layermanager 1.0
 import raise.singleton.controllers 1.0
+import raise.singleton.language 1.0
 
 import "../models/shapes.js" as ShapeModel
 import "../ui"
@@ -18,9 +19,17 @@ MapItemGroup {
     property alias isVisible: staticPoiMapLayerBusinessLogic.isVisible
     property alias isEnabled: staticPoiMapLayerBusinessLogic.isEnabled
 
-    property string layerName: "Points of Interest"
+    // Automatic retranslation properties
+    property string layerNameText: qsTr("Points of Interest")
+
+    property string layerName: layerNameText
 
     visible: isVisible
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        layerNameText = qsTr("Points of Interest")
+    }
 
     MapItemView {
         model: staticPoiMapLayerBusinessLogic.poiModel
@@ -68,6 +77,18 @@ MapItemGroup {
         target: staticPoiMapLayerBusinessLogic
         function onLayerReady() {
             LayerManager.notifyLayerReady(staticPoiMapLayerBusinessLogic)
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            staticPoiMapLayerComponent.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

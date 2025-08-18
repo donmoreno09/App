@@ -1,18 +1,27 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-
+import raise.singleton.language 1.0
 
 Popup {
     id: popup
 
-    property string title: ""
-    property string description: ""
-    property string cancelBtnText: "Cancel"
-    property string confirmBtnText: "OK"
+    // Externally configurable properties
+    property string title: qsTr("Confirm")
+    property string description: qsTr("Are you sure you want to proceed?")
+    property string cancelBtnText: qsTr("Cancel")
+    property string confirmBtnText: qsTr("OK")
 
     signal confirm()
     signal cancel()
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        title = qsTr("Confirm")
+        description = qsTr("Are you sure you want to proceed?")
+        cancelBtnText = qsTr("Cancel")
+        confirmBtnText = qsTr("OK")
+    }
 
     width: 320
     modal: true
@@ -20,7 +29,6 @@ Popup {
     parent: Overlay.overlay
     x: Math.round((parent.width - width) / 2)
     y: Math.round((parent.height - height) / 2)
-    // Popup.CloseOnPressOutsideParent won't work since the parent is the entire screen through Overlay.overlay
     closePolicy: Popup.CloseOnEscape
 
     background: Rectangle {
@@ -31,6 +39,7 @@ Popup {
 
     contentItem: ColumnLayout {
         id: popupContent
+        spacing: 12
 
         Text {
             text: popup.title
@@ -52,7 +61,6 @@ Popup {
 
             StyledButton {
                 text: popup.cancelBtnText
-
                 onClicked: {
                     popup.close()
                     cancel()
@@ -61,12 +69,22 @@ Popup {
 
             StyledButton {
                 text: popup.confirmBtnText
-
                 onClicked: {
                     popup.close()
                     confirm()
                 }
             }
+        }
+    }
+
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            popup.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

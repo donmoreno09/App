@@ -3,6 +3,7 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 import raise.singleton.panelmanager 1.0
+import raise.singleton.language 1.0
 
 
 MapQuickItem {
@@ -42,6 +43,14 @@ MapQuickItem {
     property double correctionAngle: 0   // Used to offset heading display (if needed)
     property bool   labelVisible: true
     property bool   vectorVisible: true
+
+    // Automatic retranslation properties
+    property string trackPrefix: qsTr("T")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        trackPrefix = qsTr("T")
+    }
 
     // Signals
     signal detailsReady(var obj, string channel)
@@ -83,7 +92,7 @@ MapQuickItem {
 
         Text {
             id: trackLabel
-            text: "T" + qsTr(trackData.tracknumber.toString())
+            text: traceMarker.trackPrefix + trackData.tracknumber.toString()
             font.pixelSize: 12
             color: "black"
             anchors.left: parent.right
@@ -115,6 +124,14 @@ MapQuickItem {
     Component.onDestruction: {
         // console.log("[Track.qml] Marker destroyed");
         mapView.removeMapItem(traceMarker);
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            traceMarker.retranslateUi()
+        }
     }
 
     // -- PANEL LINKING ------------------ //

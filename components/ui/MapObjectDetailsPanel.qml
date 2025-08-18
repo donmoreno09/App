@@ -5,6 +5,7 @@ import QtPositioning 6.8
 
 import raise.singleton.layermanager 1.0
 import raise.singleton.controllers 1.0
+import raise.singleton.language 1.0
 
 Rectangle {
     id: mapObjectDetailsPanel
@@ -20,6 +21,38 @@ Rectangle {
 
     property var selectedObjects: LayerManager.selectedObjects
     property bool detailsPanelExpanded: false
+
+    // Translation strings
+    property string selectedAssetsText: qsTr("Selected Assets")
+    property string labelText: qsTr("Label:")
+    property string editText: qsTr("Edit")
+    property string removeText: qsTr("Remove")
+    property string updatePoiText: qsTr("Update POI")
+    property string updateRectanglePoiText: qsTr("Update Rectangle POI")
+    property string updateEllipsePoiText: qsTr("Update Ellipse POI")
+    property string updatePolygonPoiText: qsTr("Update Polygon POI")
+    property string updateShapeText: qsTr("Update Shape")
+    property string removeObjectTitleText: qsTr("Remove Object")
+    property string removeObjectDescText: qsTr("Are you sure you want to remove")
+    property string removeButtonText: qsTr("Remove")
+    property string updateText: qsTr("Update")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        selectedAssetsText        = qsTr("Selected Assets")
+        labelText                 = qsTr("Label:")
+        editText                  = qsTr("Edit")
+        removeText                = qsTr("Remove")
+        updatePoiText              = qsTr("UPDATE POI:")
+        updateRectanglePoiText     = qsTr("UPDATE RECTANGLE POI:")
+        updateEllipsePoiText       = qsTr("UPDATE ELLIPSE POI:")
+        updatePolygonPoiText       = qsTr("UPDATE POLYGON POI:")
+        updateShapeText            = qsTr("UPDATE SHAPE:")
+        removeObjectTitleText      = qsTr("Remove object?")
+        removeObjectDescText       = qsTr("Are you sure you want to remove")
+        removeButtonText           = qsTr("Remove")
+        updateLabelText            = qsTr("Update")
+    }
 
     visible: selectedObjects && selectedObjects.length > 0
 
@@ -62,7 +95,7 @@ Rectangle {
             height: 30
 
             Text {
-                text: "Selected Assets (" + (selectedObjects ? selectedObjects.length : 0) + ")"
+                text: mapObjectDetailsPanel.selectedAssetsText + " (" + (selectedObjects ? selectedObjects.length : 0) + ")"
                 color: "white"
                 font.bold: true
                 font.pixelSize: 14
@@ -134,7 +167,7 @@ Rectangle {
                         spacing: 4
 
                         Text {
-                            text: "Label: " + JSON.stringify(modelData.label)
+                            text: mapObjectDetailsPanel.labelText + " " + JSON.stringify(modelData.label)
                             color: "white"
                             font.pixelSize: 11
                             font.bold: true
@@ -163,7 +196,7 @@ Rectangle {
                             spacing: 6
 
                             StyledButton {
-                                text: "Edit"
+                                text: mapObjectDetailsPanel.editText
 
                                 onClicked: {
 
@@ -304,7 +337,7 @@ Rectangle {
                             }
 
                             StyledButton {
-                                text: "Remove"
+                                text: mapObjectDetailsPanel.removeText
 
                                 onClicked: {
                                     confirmModal.open()
@@ -316,7 +349,7 @@ Rectangle {
                     // Popup components for each item
                     PoiPopup {
                         id: poiPopup
-                        title: `Update ${modelData.label}?`
+                        title: mapObjectDetailsPanel.updateText + " " + modelData.label + "?"
                         visible: false
                         parent: root
 
@@ -360,7 +393,7 @@ Rectangle {
 
                     RectanglePoiPopup {
                         id: rectanglePoiPopup
-                        title: `Update ${modelData.label}?`
+                        title: mapObjectDetailsPanel.updateText + " " + modelData.label + "?"
                         visible: false
                         parent: root
 
@@ -419,7 +452,7 @@ Rectangle {
 
                     EllipsePoiPopup {
                         id: ellipsePoiPopup
-                        title: `Update ${modelData.label}?`
+                        title: mapObjectDetailsPanel.updateText + " " + modelData.label + "?"
                         visible: false
                         parent: root
 
@@ -460,7 +493,7 @@ Rectangle {
 
                     PolygonPoiPopup {
                         id: polygonPoiPopup
-                        title: `Update ${modelData.label}?`
+                        title: mapObjectDetailsPanel.updateText + " " + modelData.label + "?"
                         visible: false
                         parent: root
 
@@ -501,7 +534,7 @@ Rectangle {
 
                     ShapePopup {
                         id: shapePopup
-                        title: `Update ${modelData.label}?`
+                        title: mapObjectDetailsPanel.updateText + " " + modelData.label + "?"
                         visible: false
                         parent: root
 
@@ -548,9 +581,9 @@ Rectangle {
                     ConfirmModal {
                         id: confirmModal
 
-                        title: "Remove object?"
-                        description: `Are you sure you want to remove ${modelData.label}?`
-                        confirmBtnText: "Remove"
+                        title: mapObjectDetailsPanel.removeObjectTitleText
+                        description: mapObjectDetailsPanel.removeObjectDescText + " " + modelData.label + "?"
+                        confirmBtnText: mapObjectDetailsPanel.removeButtonText
 
                         onConfirm: {
                             if (LayerManager.focusedLayerName() === "AnnotationMapLayer") {
@@ -597,6 +630,18 @@ Rectangle {
                     }
                 }
             }
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            mapObjectDetailsPanel.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 

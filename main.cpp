@@ -20,6 +20,7 @@
 #include "connections/mqtt/mqttclientservice.h"
 #include "connections/mqtt/parser/simpletrackparser.h"
 #include "core/trackmanager.h"
+#include "App/features/language/LanguageController.h"
 #include <QDir>
 
 int main(int argc, char *argv[])
@@ -37,7 +38,7 @@ int main(int argc, char *argv[])
     });
 
     qmlRegisterSingletonType<LayerManager>("raise.singleton.layermanager", 1, 0, "LayerManager", [](QQmlEngine*, QJSEngine*) -> QObject* {
-       return LayerManager::getInstance();
+        return LayerManager::getInstance();
     });
 
     qmlRegisterSingletonType<TrackManager>("raise.singleton.trackmanager", 1, 0, "TrackManager", &TrackManager::singletonProvider);
@@ -67,6 +68,9 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("raise.singleton.radialmenucontroller", 1, 0, "RadialMenuController", new RadialMenuController());
 
     qmlRegisterSingletonInstance("raise.singleton.mqtt", 1, 0, "MqttClientService", MqttClientService::getInstance());
+    qmlRegisterSingletonInstance("raise.singleton.language", 1, 0, "LanguageController", new LanguageController());
+
+    LanguageController::instance()->setCurrentLanguage("it");
 
     QString configPath = QDir(QCoreApplication::applicationDirPath()).filePath("config/mqtt_config.json");
 

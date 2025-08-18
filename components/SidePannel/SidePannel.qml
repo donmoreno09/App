@@ -7,6 +7,7 @@ import "ShipArrivalContent"
 import "TrailersPredictionsContent"
 import "../ui/"
 import "WebComponent"
+import raise.singleton.language 1.0
 
 Rectangle {
     id: sidePanel
@@ -20,6 +21,26 @@ Rectangle {
 
     property bool expanded: false
     property int currentTab: 0
+
+    // Automatic retranslation properties
+    property string componentLabel: qsTr("Component")
+    property string truckArrivalsLabel: qsTr("Truck Arrivals")
+    property string truckArrivalsDLabel: qsTr("Truck Arrivals D")
+    property string truckArrivalsDTLabel: qsTr("Truck Arrivals DT")
+    property string trailerPredictionLabel: qsTr("Trailer Prediction")
+    property string levelSelectorLabel: qsTr("Level Selector")
+    property string shipStowageLabel: qsTr("Ship Stowage")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        componentLabel = qsTr("Component")
+        truckArrivalsLabel = qsTr("Truck Arrivals")
+        truckArrivalsDLabel = qsTr("Truck Arrivals D")
+        truckArrivalsDTLabel = qsTr("Truck Arrivals DT")
+        trailerPredictionLabel = qsTr("Trailer Prediction")
+        levelSelectorLabel = qsTr("Level Selector")
+        shipStowageLabel = qsTr("Ship Stowage")
+    }
 
     x: -width
     Behavior on x {
@@ -64,7 +85,7 @@ Rectangle {
         }
 
         Text {
-            text: "Component"
+            text: sidePanel.componentLabel
             color: "#ccc"
             font.pixelSize: 14
             font.bold: true
@@ -73,12 +94,12 @@ Rectangle {
         // Tab Buttons
         Repeater {
             model: [
-                { icon: "🚚️", label: "Truck Arrivals" },
-                { icon: "📅", label: "Truck Arrivals D" },
-                { icon: "⚙️", label: "Truck Arrivals DT" },
-                { icon: "🧭", label: "Trailer Prediction" },
-                { icon: "S" , label: "Level Selector" },
-                { icon: "🖥️", label: "Ship Stowage" }
+                { icon: "🚚️", label: sidePanel.truckArrivalsLabel },
+                { icon: "📅", label: sidePanel.truckArrivalsDLabel },
+                { icon: "⚙️", label: sidePanel.truckArrivalsDTLabel },
+                { icon: "🧭", label: sidePanel.trailerPredictionLabel },
+                { icon: "S" , label: sidePanel.levelSelectorLabel },
+                { icon: "🖥️", label: sidePanel.shipStowageLabel }
             ]
             delegate: Item {
                 width: tabBar.width
@@ -147,27 +168,27 @@ Rectangle {
         }
 
         SidePannelArrContent {
-            visible: currentTab === 0
+            visible: currentTab === 0 && arrivalController
             anchors.fill: parent
             controller: arrivalController
         }
 
         SidePannelCalendarContent {
-            visible: currentTab === 1
+            visible: currentTab === 1 && arrivalController
             anchors.fill: parent
             width: parent.width
             controller: arrivalController
         }
 
         SidePannelCalendarTimeContent {
-            visible: currentTab === 2
+            visible: currentTab === 2 && arrivalController
             anchors.fill: parent
             width: parent.width
             controller: arrivalController
         }
 
         TrailersPredictionsContent {
-            visible: currentTab === 3
+            visible: currentTab === 3 && trailerPredictions
             anchors.fill: parent
             width: parent.width
             controller: trailerPredictions
@@ -213,6 +234,19 @@ Rectangle {
                     sidePanel.x = -sidePanel.width
                 }
             }
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            sidePanel.retranslateUi()
+        }
+
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

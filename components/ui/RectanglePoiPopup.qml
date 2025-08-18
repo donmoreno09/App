@@ -4,10 +4,11 @@ import QtQuick.Layouts 2.15
 import QtPositioning 6.8
 import raise.singleton.popupmanager 1.0
 import raise.singleton.controllers 1.0
+import raise.singleton.language 1.0
 
 Rectangle {
     id: popup
-    property string title: "Insert Rectangle POI"
+    property string title: popup.titleText
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
     property alias typeComboBox: typeComboBox
@@ -34,6 +35,48 @@ Rectangle {
     border.width: 1
 
     property bool coordinatesAreValid: false
+
+    // Automatic retranslation properties
+    property string titleText: qsTr("Insert Rectangle POI")
+    property string labelText: qsTr("Label")
+    property string enterLabelText: qsTr("Enter label...")
+    property string categoryText: qsTr("Category")
+    property string typeText: qsTr("Type")
+    property string healthStatusText: qsTr("Health Status")
+    property string operationalStateText: qsTr("Operational State")
+    property string rectangleCoordinatesText: qsTr("Rectangle Coordinates")
+    property string topLeftLatitudeText: qsTr("Top Left Latitude")
+    property string topLeftLongitudeText: qsTr("Top Left Longitude")
+    property string bottomRightLatitudeText: qsTr("Bottom Right Latitude")
+    property string bottomRightLongitudeText: qsTr("Bottom Right Longitude")
+    property string validRectangleText: qsTr("✓ Valid rectangle coordinates")
+    property string invalidCoordinatesText: qsTr("⚠ Invalid coordinates")
+    property string noteText: qsTr("Note")
+    property string enterNoteText: qsTr("Enter a note...")
+    property string cancelText: qsTr("Cancel")
+    property string saveText: qsTr("Save")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        titleText = qsTr("Insert Rectangle POI")
+        labelText = qsTr("Label")
+        enterLabelText = qsTr("Enter label...")
+        categoryText = qsTr("Category")
+        typeText = qsTr("Type")
+        healthStatusText = qsTr("Health Status")
+        operationalStateText = qsTr("Operational State")
+        rectangleCoordinatesText = qsTr("Rectangle Coordinates")
+        topLeftLatitudeText = qsTr("Top Left Latitude")
+        topLeftLongitudeText = qsTr("Top Left Longitude")
+        bottomRightLatitudeText = qsTr("Bottom Right Latitude")
+        bottomRightLongitudeText = qsTr("Bottom Right Longitude")
+        validRectangleText = qsTr("✓ Valid rectangle coordinates")
+        invalidCoordinatesText = qsTr("⚠ Invalid coordinates")
+        noteText = qsTr("Note")
+        enterNoteText = qsTr("Enter a note...")
+        cancelText = qsTr("Cancel")
+        saveText = qsTr("Save")
+    }
 
     function open() {
         popup.visible = true
@@ -156,12 +199,12 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Label"
+                    text: popup.labelText
                     color: "#ffffff"
                 }
                 TextField {
                     id: labelField
-                    placeholderText: "Enter label..."
+                    placeholderText: popup.enterLabelText
                     placeholderTextColor: "#888888"
                     font.pixelSize: 14
                     color: "#ffffff"
@@ -178,7 +221,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Category"
+                    text: popup.categoryText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -193,7 +236,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Type"
+                    text: popup.typeText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -208,7 +251,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Health Status"
+                    text: popup.healthStatusText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -224,7 +267,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Operational State"
+                    text: popup.operationalStateText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -241,7 +284,7 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Label {
-                    text: "Rectangle Coordinates"
+                    text: popup.rectangleCoordinatesText
                     color: "#ffffff"
                     font.bold: true
                 }
@@ -253,7 +296,7 @@ Rectangle {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "Top Left Latitude"
+                        text: popup.topLeftLatitudeText
                         color: "#ffffff"
                         Layout.preferredWidth: 120
                     }
@@ -279,7 +322,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: "Top Left Longitude"
+                        text: popup.topLeftLongitudeText
                         color: "#ffffff"
                     }
                     TextField {
@@ -304,7 +347,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: "Bottom Right Latitude"
+                        text: popup.bottomRightLatitudeText
                         color: "#ffffff"
                     }
                     TextField {
@@ -329,7 +372,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: "Bottom Right Longitude"
+                        text: popup.bottomRightLongitudeText
                         color: "#ffffff"
                     }
                     TextField {
@@ -358,9 +401,9 @@ Rectangle {
                     visible: !!topLeftLat.text || !!topLeftLon.text || !!bottomRightLat.text || !!bottomRightLon.text
                     text: {
                         if (coordinatesAreValid) {
-                            return "✓ Valid rectangle coordinates"
+                            return popup.validRectangleText
                         } else {
-                            return "⚠ Invalid coordinates"
+                            return popup.invalidCoordinatesText
                         }
                     }
                     color: coordinatesAreValid ? "#22c55e" : "#ef4444"
@@ -377,7 +420,7 @@ Rectangle {
                 Layout.preferredHeight: 80
 
                 Label {
-                    text: "Note"
+                    text: popup.noteText
                     color: "#ffffff"
                 }
                 ScrollView {
@@ -388,7 +431,7 @@ Rectangle {
 
                     TextArea {
                         id: noteField
-                        placeholderText: "Enter a note..."
+                        placeholderText: popup.enterNoteText
                         placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
@@ -413,7 +456,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: "Cancel"
+                    text: popup.cancelText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
@@ -424,7 +467,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: "Save"
+                    text: popup.saveText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
@@ -470,6 +513,18 @@ Rectangle {
             let lat2 = parseFloat(bottomRightLat.text)
             let lon2 = parseFloat(bottomRightLon.text)
             rectangleChanged(lat1, lon1, lat2, lon2)
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            popup.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }
