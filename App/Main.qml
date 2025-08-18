@@ -71,13 +71,7 @@ ApplicationWindow {
                 radius: Theme.radius.sm
             }
 
-            onClicked: {
-                if (Theme.current === Theme.fincantieriTheme) {
-                    Theme.current = Theme.fincantieriLightTheme
-                } else {
-                    Theme.current = Theme.fincantieriTheme
-                }
-            }
+            onClicked: Theme.setTheme(Theme.currentVariant === Themes.Fincantieri ? Themes.FincantieriLight : Themes.Fincantieri)
         }
     }
 }

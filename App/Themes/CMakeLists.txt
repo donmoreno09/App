@@ -15,6 +15,7 @@ set(qml_files
 
 set(qml_singletons
     Theme.qml
+    Themes.qml
 )
 
 set_source_files_properties(
