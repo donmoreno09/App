@@ -83,6 +83,7 @@ MapItemGroup {
             }
         }
 
+
         function onActivated() {
             console.log("AIS ACTIVATED!")
             aisTrackMapLayerComponent.visible = true

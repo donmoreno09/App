@@ -196,7 +196,7 @@
         <location filename="../components/ui/InsertPoiPopup.qml" line="12"/>
         <location filename="../components/ui/InsertPoiPopup.qml" line="16"/>
         <source>Insert new POI</source>
-        <translation>Inserisci nuovo PDI</translation>
+        <translation>Inserisci nuovo POI</translation>
     </message>
 </context>
 <context>
@@ -280,7 +280,7 @@
         <location filename="../components/ui/LeftToolbar.qml" line="34"/>
         <location filename="../components/ui/LeftToolbar.qml" line="51"/>
         <source>PoIs</source>
-        <translation>PDI</translation>
+        <translation>POI</translation>
     </message>
     <message>
         <location filename="../components/ui/LeftToolbar.qml" line="35"/>
@@ -326,22 +326,22 @@
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="31"/>
         <source>Update POI</source>
-        <translation>Aggiorna PDI</translation>
+        <translation>Aggiorna POI</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="32"/>
         <source>Update Rectangle POI</source>
-        <translation>Aggiorna PDI Rettangolo</translation>
+        <translation>Aggiorna POI Rettangolo</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="33"/>
         <source>Update Ellipse POI</source>
-        <translation>Aggiorna PDI Ellisse</translation>
+        <translation>Aggiorna POI Ellisse</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="34"/>
         <source>Update Polygon POI</source>
-        <translation>Aggiorna PDI Poligono</translation>
+        <translation>Aggiorna POI Poligono</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="35"/>
@@ -366,22 +366,22 @@
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="46"/>
         <source>UPDATE POI:</source>
-        <translation>AGGIORNA PDI:</translation>
+        <translation>AGGIORNA POI:</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="47"/>
         <source>UPDATE RECTANGLE POI:</source>
-        <translation>AGGIORNA PDI RETTANGOLO:</translation>
+        <translation>AGGIORNA POI RETTANGOLO:</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="48"/>
         <source>UPDATE ELLIPSE POI:</source>
-        <translation>AGGIORNA PDI ELLISSE:</translation>
+        <translation>AGGIORNA POI ELLISSE:</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="49"/>
         <source>UPDATE POLYGON POI:</source>
-        <translation>AGGIORNA PDI POLIGONO:</translation>
+        <translation>AGGIORNA POI POLIGONO:</translation>
     </message>
     <message>
         <location filename="../components/ui/MapObjectDetailsPanel.qml" line="50"/>
@@ -419,7 +419,7 @@
         <location filename="../components/ui/PoiPopup.qml" line="39"/>
         <location filename="../components/ui/PoiPopup.qml" line="57"/>
         <source>POI Details</source>
-        <translation>Dettagli PDI</translation>
+        <translation>Dettagli POI</translation>
     </message>
     <message>
         <location filename="../components/ui/PoiPopup.qml" line="40"/>
@@ -512,7 +512,7 @@
         <location filename="../components/ui/PolygonPoiPopup.qml" line="12"/>
         <location filename="../components/ui/PolygonPoiPopup.qml" line="34"/>
         <source>Insert Polygon POI</source>
-        <translation>Inserisci PDI Poligono</translation>
+        <translation>Inserisci POI Poligono</translation>
     </message>
     <message>
         <location filename="../components/ui/PolygonPoiPopup.qml" line="13"/>
@@ -653,7 +653,7 @@
         <location filename="../components/ui/RectanglePoiPopup.qml" line="12"/>
         <location filename="../components/ui/RectanglePoiPopup.qml" line="33"/>
         <source>Insert Rectangle POI</source>
-        <translation>Inserisci PDI Rettangolo</translation>
+        <translation>Inserisci POI Rettangolo</translation>
     </message>
     <message>
         <location filename="../components/ui/RectanglePoiPopup.qml" line="13"/>

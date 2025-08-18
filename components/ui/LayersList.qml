@@ -4,7 +4,6 @@ import QtQuick.Layouts 6.8
 import QtPositioning 6.8
 import Qt5Compat.GraphicalEffects
 
-import raise.singleton.language 1.0
 import raise.singleton.layermanager 1.0
 
 Item {
@@ -84,6 +83,8 @@ Item {
                             Text {
                                 visible: modelData.layerName === "Doc Space Tracks"
                                          || modelData.layerName === "AIS Tracks"
+                                            || modelData.layerName === "Tracce Doc Space"
+                                            || modelData.layerName === "Tracce AIS"
                                 text: "🚢"
                                 font.pixelSize: 20
                                 anchors.centerIn: parent
@@ -92,7 +93,7 @@ Item {
                             // SVG Shapes icon
                             Image {
                                 id: geometricalShapeIcon
-                                visible: modelData.layerName === "Geometrical Shapes"
+                                visible: modelData.layerName === "Geometrical Shapes" || modelData.layerName === "Forme Geometriche"
                                 source: "qrc:/components/ui/assets/shapes.svg"
                                 fillMode: Image.PreserveAspectFit
                                 anchors.centerIn: parent
@@ -103,7 +104,7 @@ Item {
                             // SVG POI icon
                             Image {
                                 id: poiIcon
-                                visible: modelData.layerName === "Points of Interest"
+                                visible: modelData.layerName === "Points of Interest" || modelData.layerName === "Punti di Interesse"
                                 source: "qrc:/components/ui/assets/poi-area.svg"
                                 anchors.centerIn: parent
                                 width: 20
@@ -113,14 +114,14 @@ Item {
 
                             ColorOverlay {
                                 anchors.fill: geometricalShapeIcon
-                                visible: modelData.layerName === "Geometrical Shapes"
+                                visible: modelData.layerName === "Geometrical Shapes" || modelData.layerName === "Forme Geometriche"
                                 source: geometricalShapeIcon
                                 color: "white"
                             }
 
                             ColorOverlay {
                                 anchors.fill: poiIcon
-                                visible: modelData.layerName === "Points of Interest"
+                                visible: modelData.layerName === "Points of Interest" || modelData.layerName === "Punti di Interesse"
                                 source: poiIcon
                                 color: "white"
                             }
@@ -198,18 +199,6 @@ Item {
         console.log("✅ LayersList loaded. layerList:", layers)
     }
 
-    // Automatic retranslation on language change
-    Connections {
-        target: LanguageController
-        function onLanguageChanged() {
-            console.log("Language changed signal received - auto-retranslating")
-            root.retranslateUi()
-        }
-        function onLanguageLoadFailed(language, reason) {
-            console.error("Language load failed:", language, "-", reason)
-        }
-    }
-
     Connections {
         target: LayerManager
         function onLayerListChanged() {
@@ -222,7 +211,7 @@ Item {
     Connections {
         target: LayerManager
         function onSelectedObjectsChanged() {
-            console.log("🔁 Selected objects updated:\n" + JSON.stringify(
+            console.log("🔁 Oggetti selezionati aggiornati:\n" + JSON.stringify(
                             LayerManager.selectedObjects, null, 2))
             selectedObjects = LayerManager.selectedObjects
 
@@ -230,6 +219,18 @@ Item {
             if (selectedObjects && selectedObjects.length > 0) {
                 requestSidepanelOpen()
             }
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            layersList.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

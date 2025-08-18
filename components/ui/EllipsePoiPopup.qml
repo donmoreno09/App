@@ -130,18 +130,6 @@ Rectangle {
     Component.onCompleted: bringToFront()
     Component.onDestruction: PopupManager.unregister(popup)
 
-    // Automatic retranslation on language change
-    Connections {
-        target: LanguageController
-        function onLanguageChanged() {
-            console.log("Language changed signal received - auto-retranslating")
-            popup.retranslateUi()
-        }
-        function onLanguageLoadFailed(language, reason) {
-            console.error("Language load failed:", language, "-", reason)
-        }
-    }
-
     TapHandler {
         gesturePolicy: TapHandler.ReleaseWithinBounds
         onTapped: bringToFront()
@@ -509,6 +497,18 @@ Rectangle {
                     }
                 }
             }
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            popup.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 

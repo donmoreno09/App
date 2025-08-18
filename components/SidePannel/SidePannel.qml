@@ -3,11 +3,11 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import ShipArrivalController 1.0
 import TrailersPredictionsController 1.0
-import raise.singleton.language 1.0
 import "ShipArrivalContent"
 import "TrailersPredictionsContent"
 import "../ui/"
 import "WebComponent"
+import raise.singleton.language 1.0
 
 Rectangle {
     id: sidePanel
@@ -168,27 +168,27 @@ Rectangle {
         }
 
         SidePannelArrContent {
-            visible: currentTab === 0
+            visible: currentTab === 0 && arrivalController
             anchors.fill: parent
             controller: arrivalController
         }
 
         SidePannelCalendarContent {
-            visible: currentTab === 1
+            visible: currentTab === 1 && arrivalController
             anchors.fill: parent
             width: parent.width
             controller: arrivalController
         }
 
         SidePannelCalendarTimeContent {
-            visible: currentTab === 2
+            visible: currentTab === 2 && arrivalController
             anchors.fill: parent
             width: parent.width
             controller: arrivalController
         }
 
         TrailersPredictionsContent {
-            visible: currentTab === 3
+            visible: currentTab === 3 && trailerPredictions
             anchors.fill: parent
             width: parent.width
             controller: trailerPredictions

@@ -8,6 +8,33 @@ import raise.singleton.language 1.0
 
 Rectangle {
     id: popup
+    property string title: popup.titleText
+    property alias labelField: labelField
+    property alias categoryComboBox: categoryComboBox
+    property alias typeComboBox: typeComboBox
+    property alias healthStatusComboBox: healthStatusComboBox
+    property alias operationalStateComboBox: operationalStateComboBox
+    property alias noteField: noteField
+    property alias topLeftLat: topLeftLat
+    property alias topLeftLon: topLeftLon
+    property alias bottomRightLat: bottomRightLat
+    property alias bottomRightLon: bottomRightLon
+
+    signal opened()
+    signal closed()
+    signal saveClicked(var details)
+    signal rectangleChanged(real topLat, real topLon, real bottomLat, real bottomLon)
+
+    width: 340
+    height: Math.min(600, 36 + popupContent.implicitHeight + 12)
+    x: (parent.width - width) / 2
+    y: (parent.height - height) / 2
+    radius: 12
+    color: "#f21f3154"
+    border.color: "#333333"
+    border.width: 1
+
+    property bool coordinatesAreValid: false
 
     // Automatic retranslation properties
     property string titleText: qsTr("Insert Rectangle POI")
@@ -50,34 +77,6 @@ Rectangle {
         cancelText = qsTr("Cancel")
         saveText = qsTr("Save")
     }
-
-    property string title: titleText
-    property alias labelField: labelField
-    property alias categoryComboBox: categoryComboBox
-    property alias typeComboBox: typeComboBox
-    property alias healthStatusComboBox: healthStatusComboBox
-    property alias operationalStateComboBox: operationalStateComboBox
-    property alias noteField: noteField
-    property alias topLeftLat: topLeftLat
-    property alias topLeftLon: topLeftLon
-    property alias bottomRightLat: bottomRightLat
-    property alias bottomRightLon: bottomRightLon
-
-    signal opened()
-    signal closed()
-    signal saveClicked(var details)
-    signal rectangleChanged(real topLat, real topLon, real bottomLat, real bottomLon)
-
-    width: 340
-    height: Math.min(600, 36 + popupContent.implicitHeight + 12)
-    x: (parent.width - width) / 2
-    y: (parent.height - height) / 2
-    radius: 12
-    color: "#f21f3154"
-    border.color: "#333333"
-    border.width: 1
-
-    property bool coordinatesAreValid: false
 
     function open() {
         popup.visible = true

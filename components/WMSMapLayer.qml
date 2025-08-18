@@ -26,41 +26,20 @@ Item {
     property var selectionPoints: []
     property int currentMode: InteractionModeManager.currentMode
 
+    // Automatic retranslation properties
+    property string createShapeText: qsTr("Create new shape")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        createShapeText = qsTr("Create new shape")
+    }
+
     // expose these "global" components for now
     property alias topToolbar: topToolbar
     property alias insertPopupPoi: insertPoiPopup
     property alias staticPoiLayerInstance: staticPoiLayerComponentIstance
     property alias annotationLayerInstance: annotationLayerComponentIstance
     property alias map: mapView
-
-    // Automatic retranslation properties
-    property string layersReadyMessage: qsTr("All layers are ready! Activating UI")
-    property string basePropertiesMessage: qsTr("[WMSMapLayer:Component.onCompleted] Propagating base properties from BaseMapLayer to all child layers ...")
-    property string selectedShapeMessage: qsTr("SELECTED SHAPE WITH ID:")
-    property string unselectedShapeMessage: qsTr("UNSELECTED SHAPE WITH ID:")
-    property string createShapeTitle: qsTr("Create new shape")
-
-    // Auto-retranslate when language changes
-    function retranslateUi() {
-        layersReadyMessage = qsTr("All layers are ready! Activating UI")
-        basePropertiesMessage = qsTr("[WMSMapLayer:Component.onCompleted] Propagating base properties from BaseMapLayer to all child layers ...")
-        selectedShapeMessage = qsTr("SELECTED SHAPE WITH ID:")
-        unselectedShapeMessage = qsTr("UNSELECTED SHAPE WITH ID:")
-        createShapeTitle = qsTr("Create new shape")
-        shapePopup.title = root.createShapeTitle
-    }
-
-    // Automatic retranslation on language change
-    Connections {
-        target: LanguageController
-        function onLanguageChanged() {
-            console.log("Language changed signal received - auto-retranslating")
-            root.retranslateUi()
-        }
-        function onLanguageLoadFailed(language, reason) {
-            console.error("Language load failed:", language, "-", reason)
-        }
-    }
 
     Plugin {
         id: mapPlugin
@@ -84,7 +63,7 @@ Item {
         focus: true
 
         Component.onCompleted: {
-            console.log(root.basePropertiesMessage)
+            console.log("[WMSMapLayer:Component.onCompleted] Propagating base properties from BaseMapLayer to all child layers ...")
             root.mapLayers = [aisTrackMapLayerComponentIstance, docSpaceTrackMapLayerComponentIstance, annotationLayerComponentIstance, staticPoiLayerComponentIstance]
             updateZoomLevels()
         }
@@ -139,7 +118,7 @@ Item {
     Connections {
         target: LayerManager
         function onAllLayersReady() {
-            console.log(root.layersReadyMessage)
+            console.log("Tutti i layer sono pronti! Attivo UI")
             Qt.callLater(() => {
                 topToolbar.visible = true
                 sidePannel.visible = true
@@ -163,6 +142,17 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 10
     }
+
+    // MapObjectDetailsPanel {
+    //     id: objectDetails
+    //     width: 300
+    //     height: 400
+    //     z: 1000
+    //     anchors.left: parent.left
+    //     anchors.bottom: parent.bottom
+    //     anchors.margins: 10
+    //     visible: selectedObjects.length > 0
+    // }
 
     ZoomBar {
         anchors.right: parent.right
@@ -200,7 +190,7 @@ Item {
 
     ShapePopup {
         id: shapePopup
-        title: root.createShapeTitle
+        title: root.createShapeText
         visible: false
     }
 
@@ -213,9 +203,9 @@ Item {
         target: InteractionModeManager
         function onCurrentSelectedShapeIdChanged(selectedId, previousSelectedId) {
             if (selectedId) {
-                console.log(root.selectedShapeMessage, selectedId)
+                console.log("SELECTED SHAPE WITH ID:", selectedId)
             } else {
-                console.log(root.unselectedShapeMessage, previousSelectedId)
+                console.log("UNSELECTED SHAPE WITH ID:", previousSelectedId)
             }
         }
     }
@@ -229,5 +219,17 @@ Item {
         logoGlowPulse: true
 
         onOptionToggledCallback: tracksSelectionHintDialog.handleRadialMenuOptionToggled
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
     }
 }

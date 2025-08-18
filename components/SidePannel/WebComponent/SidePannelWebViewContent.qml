@@ -81,12 +81,7 @@ Item {
     Connections {
         target: LanguageController
         function onLanguageChanged() {
-            console.log("Language changed signal received - auto-retranslating")
             root.retranslateUi()
-        }
-
-        function onLanguageLoadFailed(language, reason) {
-            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

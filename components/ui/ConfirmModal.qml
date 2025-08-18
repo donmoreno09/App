@@ -1,18 +1,27 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-
+import raise.singleton.language 1.0
 
 Popup {
     id: popup
 
-    property string title: root.titleText
-    property string description: root.descriptionText
-    property string cancelBtnText: root.cancelText
-    property string confirmBtnText: root.confirmText
+    // Externally configurable properties
+    property string title: qsTr("Confirm")
+    property string description: qsTr("Are you sure you want to proceed?")
+    property string cancelBtnText: qsTr("Cancel")
+    property string confirmBtnText: qsTr("OK")
 
     signal confirm()
     signal cancel()
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        title = qsTr("Confirm")
+        description = qsTr("Are you sure you want to proceed?")
+        cancelBtnText = qsTr("Cancel")
+        confirmBtnText = qsTr("OK")
+    }
 
     width: 320
     modal: true
@@ -20,22 +29,7 @@ Popup {
     parent: Overlay.overlay
     x: Math.round((parent.width - width) / 2)
     y: Math.round((parent.height - height) / 2)
-    // Popup.CloseOnPressOutsideParent won't work since the parent is the entire screen through Overlay.overlay
     closePolicy: Popup.CloseOnEscape
-
-    // Automatic retranslation properties
-    property string titleText: qsTr("Confirm")
-    property string descriptionText: qsTr("Are you sure you want to proceed?")
-    property string cancelText: qsTr("Cancel")
-    property string confirmText: qsTr("OK")
-
-    // Auto-retranslate when language changes
-    function retranslateUi() {
-        titleText = qsTr("Confirm")
-        descriptionText = qsTr("Are you sure you want to proceed?")
-        cancelText = qsTr("Cancel")
-        confirmText = qsTr("OK")
-    }
 
     background: Rectangle {
         radius: 6
@@ -45,6 +39,7 @@ Popup {
 
     contentItem: ColumnLayout {
         id: popupContent
+        spacing: 12
 
         Text {
             text: popup.title
@@ -55,45 +50,38 @@ Popup {
         Text {
             text: popup.description
             Layout.fillWidth: true
-            Layout.preferredHeight: implicitHeight
+            Layout.preferredHeight: 60
             wrapMode: Text.WordWrap
             color: "#ffffff"
         }
 
-        RowLayout {
-            spacing: 8
-            Layout.fillWidth: true
-            Layout.topMargin: 12
+        Row {
+            Layout.alignment: Qt.AlignRight
+            spacing: 6
 
-            Item {
-                Layout.fillWidth: true
-            }
-
-            Button {
+            StyledButton {
                 text: popup.cancelBtnText
                 onClicked: {
-                    popup.cancel()
                     popup.close()
+                    cancel()
                 }
             }
 
-            Button {
+            StyledButton {
                 text: popup.confirmBtnText
-                highlighted: true
                 onClicked: {
-                    popup.confirm()
                     popup.close()
+                    confirm()
                 }
             }
         }
     }
 
-    // Automatic retranslation on language change
     Connections {
         target: LanguageController
         function onLanguageChanged() {
             console.log("Language changed signal received - auto-retranslating")
-            root.retranslateUi()
+            popup.retranslateUi()
         }
         function onLanguageLoadFailed(language, reason) {
             console.error("Language load failed:", language, "-", reason)

@@ -3,6 +3,7 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 import raise.singleton.panelmanager 1.0
+import raise.singleton.language 1.0
 
 
 MapQuickItem {
@@ -91,7 +92,7 @@ MapQuickItem {
 
         Text {
             id: trackLabel
-            text: root.trackPrefix + trackData.tracknumber.toString()
+            text: traceMarker.trackPrefix + trackData.tracknumber.toString()
             font.pixelSize: 12
             color: "black"
             anchors.left: parent.right
@@ -129,11 +130,7 @@ MapQuickItem {
     Connections {
         target: LanguageController
         function onLanguageChanged() {
-            console.log("Language changed signal received - auto-retranslating")
-            root.retranslateUi()
-        }
-        function onLanguageLoadFailed(language, reason) {
-            console.error("Language load failed:", language, "-", reason)
+            traceMarker.retranslateUi()
         }
     }
 

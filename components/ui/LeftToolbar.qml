@@ -56,18 +56,18 @@ Frame {
     ColumnLayout {
         spacing: 16
 
-        // Mode
+        // Mode section
         ColumnLayout {
             spacing: 8
             Label {
-                text: root.modeText
+                text: toolbar.modeText
                 font.bold: true
                 font.pointSize: 11
                 color: "#333"
             }
 
             Button {
-                text: root.handText
+                text: toolbar.handText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -77,7 +77,7 @@ Frame {
             }
 
             Button {
-                text: root.cursorText
+                text: toolbar.cursorText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -86,7 +86,7 @@ Frame {
             }
             Button {
                 id: drawButton
-                text: root.drawText
+                text: toolbar.drawText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -129,7 +129,7 @@ Frame {
                     spacing: 8
 
                     Button {
-                        text: root.squareText
+                        text: toolbar.squareText
                         Layout.fillWidth: true
                         onClicked: {
                             InteractionModeManager.currentDrawShape = "Square"
@@ -138,7 +138,7 @@ Frame {
                     }
 
                     Button {
-                        text: root.ellipseText
+                        text: toolbar.ellipseText
                         Layout.fillWidth: true
                         onClicked: {
                             InteractionModeManager.currentDrawShape = "Ellipse"
@@ -147,7 +147,7 @@ Frame {
                     }
 
                     Button {
-                        text: root.polygonText
+                        text: toolbar.polygonText
                         Layout.fillWidth: true
                         onClicked: {
                             InteractionModeManager.currentDrawShape = "Polygon"
@@ -156,7 +156,7 @@ Frame {
                     }
 
                     Button {
-                        text: root.corridorText
+                        text: toolbar.corridorText
                         Layout.fillWidth: true
                         onClicked: {
                             InteractionModeManager.currentDrawShape = "Corridor"
@@ -172,14 +172,14 @@ Frame {
         ColumnLayout {
             spacing: 16
             Label {
-                text: root.focusLayerText
+                text: toolbar.focusLayerText
                 font.bold: true
                 font.pointSize: 11
                 color: "#333"
             }
 
             Button {
-                text: root.annotationText
+                text: toolbar.annotationText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -188,7 +188,7 @@ Frame {
             }
 
             Button {
-                text: root.trackText
+                text: toolbar.trackText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -197,7 +197,7 @@ Frame {
             }
 
             Button {
-                text: root.poisText
+                text: toolbar.poisText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -206,18 +206,18 @@ Frame {
             }
         }
 
-        // Visibility
+        // Visibilità
         ColumnLayout {
             spacing: 16
             Label {
-                text: root.visibilityText
+                text: toolbar.visibilityText
                 font.bold: true
                 font.pointSize: 11
                 color: "#333"
             }
 
             Button {
-                text: root.annotationText
+                text: toolbar.annotationText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -226,7 +226,7 @@ Frame {
             }
 
             Button {
-                text: root.tracksText
+                text: toolbar.tracksText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -235,7 +235,7 @@ Frame {
             }
 
             Button {
-                text: root.poisText
+                text: toolbar.poisText
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 padding: 8
@@ -245,20 +245,20 @@ Frame {
         }
     }
 
+    // Layer references passed from outside
+    property var annotationLayer
+    property var trackLayer
+    property var poiLayer
+
     // Automatic retranslation on language change
     Connections {
         target: LanguageController
         function onLanguageChanged() {
             console.log("Language changed signal received - auto-retranslating")
-            root.retranslateUi()
+            toolbar.retranslateUi()
         }
         function onLanguageLoadFailed(language, reason) {
             console.error("Language load failed:", language, "-", reason)
         }
     }
-
-    // Layer references passate dall'esterno
-    property var annotationLayer
-    property var trackLayer
-    property var poiLayer
 }

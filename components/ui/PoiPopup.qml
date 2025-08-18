@@ -10,7 +10,7 @@ import "../ui/top-toolbar/utils.js" as ToolbarUtils
 Rectangle {
     id: popup
 
-    property var title: popup.popupTitle
+    property string title: popup.popupTitle
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
     property alias typeComboBox: typeComboBox
@@ -120,7 +120,6 @@ Rectangle {
     Connections {
         target: LanguageController
         function onLanguageChanged() {
-            console.log("Language changed signal received - auto-retranslating")
             popup.retranslateUi()
         }
         function onLanguageLoadFailed(language, reason) {

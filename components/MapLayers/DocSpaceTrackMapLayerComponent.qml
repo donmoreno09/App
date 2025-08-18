@@ -83,6 +83,7 @@ MapItemGroup {
             }
         }
 
+
         function onActivated() {
             console.log("DOC-SPACE ACTIVATED!")
             docSpaceTrackMapLayerComponent.visible = true

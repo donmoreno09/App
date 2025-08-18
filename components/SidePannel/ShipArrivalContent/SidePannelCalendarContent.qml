@@ -2,8 +2,8 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import ShipArrivalController 1.0
-import raise.singleton.language 1.0
 import "../"
+import raise.singleton.language 1.0
 
 ColumnLayout {
     id: root
