@@ -19,4 +19,6 @@ BaseTheme {
     opacity: OpacityTokens { }
 
     icons: IconTokens { }
+
+    effects: EffectTokens { }
 }

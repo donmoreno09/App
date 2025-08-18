@@ -2,6 +2,7 @@ set(qml_files
     BaseTheme.qml
     tokens/BorderTokens.qml
     tokens/ColorTokens.qml
+    tokens/EffectTokens.qml
     tokens/ElevationTokens.qml
     tokens/IconTokens.qml
     tokens/OpacityTokens.qml

@@ -34,4 +34,6 @@ QtObject {
     required property OpacityTokens opacity
 
     required property IconTokens icons
+
+    required property EffectTokens effects
 }

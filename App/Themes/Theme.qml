@@ -21,4 +21,5 @@ QtObject {
     readonly property ElevationTokens elevation: current.elevation
     readonly property OpacityTokens opacity: current.opacity
     readonly property IconTokens icons: current.icons
+    readonly property EffectTokens effects: current.effects
 }
