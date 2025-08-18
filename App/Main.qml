@@ -8,7 +8,7 @@ ApplicationWindow {
     width: 640
     height: 480
     visible: true
-    title: qsTr("Theming System")
+    title: qsTr("IRIDESS FE")
 
     background: Rectangle {
         color: Theme.colors.background
