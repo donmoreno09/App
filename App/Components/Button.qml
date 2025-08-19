@@ -76,12 +76,19 @@ Item {
     signal pressAndHold()
 
     // Size using clean approach - no binding loops
-    implicitWidth: Math.max(background.implicitWidth, _sizeStyles.minWidth)
-    implicitHeight: Math.max(background.implicitHeight, _sizeStyles.height)
+    implicitWidth: Math.max(background.implicitWidth, contentContainer.implicitWidth + Theme.spacing.s8)
+    implicitHeight: Math.max(background.implicitHeight, contentContainer.implicitHeight + Theme.spacing.s6)
 
-    // REMOVED: These lines were causing binding loops
-    // width: implicitWidth
-    // height: implicitHeight
+    // Ensure minimum size for text content
+    width: implicitWidth
+    height: implicitHeight
+
+    state: {
+        if (!enabled) return "disabled"
+        if (mouseArea.pressed) return "pressed"
+        if (mouseArea.containsMouse) return "hover"
+        return "normal"
+    }
 
     // Size configuration
     readonly property var _sizeVariants: ({
@@ -213,16 +220,15 @@ Item {
         id: background
         anchors.fill: parent
 
-        // Clean implicit size - no binding to content
-        implicitWidth: _sizeStyles.minWidth
-        implicitHeight: _sizeStyles.height
-
-        color: _getBackgroundColor(root.currentState)
         radius: Theme.radius.md
-        border.width: _getBorderWidth()
-        border.color: _getBorderColor(root.currentState)
+        implicitWidth: Theme.spacing.s16 * 2 // 128px
+        implicitHeight: Theme.spacing.s12 // 48px
 
-        opacity: root.currentState === "disabled" ? (Theme.opacity.o50 || 0.5) : 1.0
+        color: _getBackgroundColor(root.state)
+        border.color: _getBorderColor(root.state)
+        border.width: _getBorderWidth()
+
+        opacity: root.state === "disabled" ? (Theme.opacity.o50 || 0.5) : 1.0
 
         // Smooth state transitions
         Behavior on color {
@@ -273,11 +279,8 @@ Item {
         id: contentContainer
         anchors {
             fill: parent
-            margins: _sizeStyles.padding
+            margins: Theme.spacing.s4
         }
-
-        // Remove implicit size bindings to avoid loops
-        // The container will size based on its anchors and content will flow naturally
     }
 
     // Mouse interaction
