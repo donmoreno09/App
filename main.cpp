@@ -20,7 +20,7 @@
 #include "connections/mqtt/mqttclientservice.h"
 #include "connections/mqtt/parser/simpletrackparser.h"
 #include "core/trackmanager.h"
-#include "App/features/language/LanguageController.h"
+#include "App/Features/language/LanguageController.h"
 #include <QDir>
 
 int main(int argc, char *argv[])
