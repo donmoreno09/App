@@ -27,6 +27,10 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    app.setApplicationName("LanguageSystem");
+    app.setOrganizationName("QtExample");
+    app.setApplicationVersion("1.0");
+
     QObject::connect(&app, &QCoreApplication::aboutToQuit, [](){
         qDebug() << "[Shutdown] Application is terminating — performing cleanup and persisting state.";
         TrackManager::instance()->deactivateSync("doc-space");
