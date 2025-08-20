@@ -78,7 +78,7 @@ import App.Components 1.0 as UI
 UI.Button {
     variant: "primary"
     
-    Text {
+    contentItem: Text {
         text: "Submit"
         color: Theme.colors.primaryText
         anchors.centerIn: parent
@@ -91,7 +91,7 @@ UI.Button {
 UI.Button {
     variant: "secondary"
     
-    Text {
+    contentItem: Text {
         text: "Cancel"
         color: Theme.colors.text
         anchors.centerIn: parent
@@ -104,7 +104,7 @@ UI.Button {
 UI.Button {
     variant: "danger"
     
-    Text {
+    contentItem: Text {
         text: "Delete"
         color: Theme.colors.primaryText
         anchors.centerIn: parent
@@ -117,7 +117,7 @@ UI.Button {
 UI.Button {
     variant: "ghost"
     
-    Text {
+    contentItem: Text {
         text: "Learn More"
         color: Theme.colors.text
         anchors.centerIn: parent
@@ -130,7 +130,7 @@ UI.Button {
 UI.Button {
     variant: "success"
     
-    Text {
+    contentItem: Text {
         text: "Save"
         color: Theme.colors.primaryText
         anchors.centerIn: parent
@@ -146,7 +146,7 @@ UI.Button {
     variant: "primary"
     size: "sm"
     
-    Text {
+    contentItem: Text {
         text: "Small"
         color: Theme.colors.primaryText
         font.pixelSize: Theme.typography.sizeSm
@@ -161,7 +161,7 @@ UI.Button {
     variant: "primary"
     size: "md"  // or omit (default)
     
-    Text {
+    contentItem: Text {
         text: "Medium"
         color: Theme.colors.primaryText
         anchors.centerIn: parent
@@ -175,7 +175,7 @@ UI.Button {
     variant: "primary"
     size: "lg"
     
-    Text {
+    contentItem: Text {
         text: "Large"
         color: Theme.colors.primaryText
         font.pixelSize: Theme.typography.sizeLg
@@ -191,7 +191,7 @@ UI.Button {
 UI.Button {
     variant: "ghost"
     
-    Image {
+    contentItem: Image {
         source: "qrc:/icons/settings.svg"
         width: 16
         height: 16
@@ -205,7 +205,7 @@ UI.Button {
 UI.Button {
     variant: "secondary"
     
-    Row {
+    contentItem:Row {
         spacing: Theme.spacing.s2
         anchors.centerIn: parent
         
@@ -233,7 +233,7 @@ UI.Button {
     variant: "primary"
     radius: Theme.radius.lg
     
-    Text {
+    contentItem: Text {
         text: "Rounded"
         color: Theme.colors.primaryText
         anchors.centerIn: parent
@@ -248,7 +248,7 @@ UI.Button {
     focusColor: Theme.colors.success
     focusOutlineWidth: 3
     
-    Text {
+    contentItem: Text {
         text: "Custom Focus"
         color: Theme.colors.primaryText
         anchors.centerIn: parent
@@ -265,7 +265,7 @@ Row {
     
     UI.Button {
         variant: "secondary"
-        Text {
+        contentItem: Text {
             text: "Cancel"
             color: Theme.colors.text
             anchors.centerIn: parent
@@ -274,7 +274,7 @@ Row {
     
     UI.Button {
         variant: "primary"
-        Text {
+        contentItem: Text {
             text: "Submit"
             color: Theme.colors.primaryText
             anchors.centerIn: parent
@@ -291,7 +291,7 @@ Row {
     UI.Button {
         variant: "ghost"
         size: "sm"
-        Image {
+        contentItem: Image {
             source: "qrc:/icons/bold.svg"
             width: 16
             height: 16
@@ -302,7 +302,7 @@ Row {
     UI.Button {
         variant: "ghost"
         size: "sm"
-        Image {
+        contentItem: Image {
             source: "qrc:/icons/italic.svg"
             width: 16
             height: 16
@@ -334,7 +334,7 @@ Text {
 // ✅ Correct - matches variant
 UI.Button {
     variant: "primary"
-    Text {
+    contentItem: Text {
         color: Theme.colors.primaryText
     }
 }
@@ -342,7 +342,7 @@ UI.Button {
 // ❌ Incorrect - hardcoded color
 UI.Button {
     variant: "primary"
-    Text {
+    contentItem: Text {
         color: "white"
     }
 }
