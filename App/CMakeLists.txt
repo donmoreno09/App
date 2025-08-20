@@ -9,6 +9,8 @@ qt_add_qml_module(${PROJECT_NAME}
         Main.qml
 )
 
+add_subdirectory(Components)
+add_subdirectory(Tests)
 add_subdirectory(Themes)
 
 target_link_libraries(${PROJECT_NAME}
