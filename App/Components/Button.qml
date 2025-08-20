@@ -13,100 +13,48 @@
     - Content-agnostic design (supports any children)
     - Accessibility support with keyboard navigation
     - Theme integration with automatic state transitions
-
-    Example usage:
-    \code
-    Button {
-        variant: "primary"
-        Text {
-            text: "Submit"
-            color: Theme.colors.primaryText
-            anchors.centerIn: parent
-        }
-    }
-
-    Button {
-        variant: "ghost"
-        Row {
-            anchors.centerIn: parent
-            spacing: Theme.spacing.s2
-            Image {
-                source: "qrc:/icons/settings.svg"
-                width: Theme.icons.sizeSm
-                height: Theme.icons.sizeSm
-            }
-            Text {
-                text: "Settings"
-                color: Theme.colors.text
-            }
-        }
-    }
-    \endcode
-
-    \sa IconButton, MapToolButton, NavRailItem
 */
 
-import QtQuick 2.15
+import QtQuick 6.8
+import QtQuick.Controls 6.8
 import App.Themes 1.0
 
-Item {
+Button {
     id: root
 
-    // Public API
+
     property string variant: "primary"
     property string size: "md"
-    property bool disabled: false
+    property int radius: Theme.radius.md
+    property int focusOutlineWidth: Theme.borders.outline2
+    property int focusOffset: Theme.borders.offset2
+    property color focusColor: Theme.colors.primary
 
-    // Read-only state properties
-    readonly property bool hovered: mouseArea.containsMouse && !disabled
-    readonly property bool pressed: mouseArea.pressed && !disabled
-    readonly property bool focused: focusScope.activeFocus && !disabled
+    readonly property bool focused: activeFocus && enabled
 
-    // Computed current state for easier state management
+    default property alias children: contentArea.children
+
     readonly property string currentState: {
-        if (disabled) return "disabled"
+        if (!enabled) return "disabled"
         if (pressed) return "pressed"
         if (hovered) return "hovered"
         if (focused) return "focused"
         return "normal"
     }
 
-    // Signals
-    signal clicked()
-    signal pressAndHold()
-
-    // Size using clean approach - no binding loops
-    implicitWidth: Math.max(background.implicitWidth, contentContainer.implicitWidth + Theme.spacing.s8)
-    implicitHeight: Math.max(background.implicitHeight, contentContainer.implicitHeight + Theme.spacing.s6)
-
-    // Ensure minimum size for text content
-    width: implicitWidth
-    height: implicitHeight
-
-    state: {
-        if (!enabled) return "disabled"
-        if (mouseArea.pressed) return "pressed"
-        if (mouseArea.containsMouse) return "hover"
-        return "normal"
-    }
-
-    // Size configuration
     readonly property var _sizeVariants: ({
         "sm": {
-            minWidth: 64,
-            height: 32,
+            minHeight: Theme.spacing.s8,
             padding: Theme.spacing.s2,
             fontSize: Theme.typography.sizeSm
         },
         "md": {
-            minWidth: 80,
-            height: 40,
+            minHeight: Theme.spacing.s10,
             padding: Theme.spacing.s3,
             fontSize: Theme.typography.sizeBase
         },
         "lg": {
-            minWidth: 96,
-            height: 48,
+            minHeight: Theme.spacing.s12,
             padding: Theme.spacing.s4,
             fontSize: Theme.typography.sizeLg
         }
@@ -114,66 +62,64 @@ Item {
 
     readonly property var _sizeStyles: _sizeVariants[size] || _sizeVariants["md"]
 
-    // Variant style definitions
     readonly property var _variantStyles: ({
         "primary": {
             background: Theme.colors.primary,
-            backgroundHover: Theme.colors.primaryHover,
+            backgroundHover: Qt.lighter(Theme.colors.primary, 1.2),
             backgroundPressed: Theme.colors.primaryPressed,
-            backgroundDisabled: Qt.rgba(Theme.colors.primary.r, Theme.colors.primary.g, Theme.colors.primary.b, Theme.opacity.o50),
+            backgroundDisabled: Theme.colors.primary,
             border: Theme.borders.b0,
-            borderColor: "transparent",
+            borderColor: Theme.colors.primary,
             textColor: Theme.colors.primaryText,
-            textColorDisabled: Qt.rgba(Theme.colors.primaryText.r, Theme.colors.primaryText.g, Theme.colors.primaryText.b, Theme.opacity.o50)
+            textColorDisabled: Theme.colors.primaryText
         },
         "secondary": {
             background: Theme.colors.surface,
             backgroundHover: Theme.colors.overlay,
             backgroundPressed: Theme.colors.background,
-            backgroundDisabled: Qt.rgba(Theme.colors.surface.r, Theme.colors.surface.g, Theme.colors.surface.b, Theme.opacity.o50),
+            backgroundDisabled: Theme.colors.surface,
             border: Theme.borders.b1,
             borderColor: Theme.colors.textMuted,
-            borderColorDisabled: Qt.rgba(Theme.colors.textMuted.r, Theme.colors.textMuted.g, Theme.colors.textMuted.b, Theme.opacity.o30),
+            borderColorDisabled: Theme.colors.textMuted,
             textColor: Theme.colors.text,
             textColorDisabled: Theme.colors.textMuted
         },
         "danger": {
             background: Theme.colors.danger,
-            backgroundHover: Qt.darker(Theme.colors.danger, 1.1),
+            backgroundHover: Qt.lighter(Theme.colors.danger, 1.1),
             backgroundPressed: Qt.darker(Theme.colors.danger, 1.2),
-            backgroundDisabled: Qt.rgba(Theme.colors.danger.r, Theme.colors.danger.g, Theme.colors.danger.b, Theme.opacity.o50),
+            backgroundDisabled: Theme.colors.danger,
             border: Theme.borders.b0,
-            borderColor: "transparent",
-            textColor: "white",
-            textColorDisabled: Qt.rgba(1, 1, 1, Theme.opacity.o50)
+            borderColor: Theme.colors.danger,
+            textColor: Theme.colors.primaryText,
+            textColorDisabled: Theme.colors.primaryText
         },
         "ghost": {
-            background: "transparent",
-            backgroundHover: Qt.rgba(Theme.colors.overlay.r, Theme.colors.overlay.g, Theme.colors.overlay.b, Theme.opacity.o20),
-            backgroundPressed: Qt.rgba(Theme.colors.surface.r, Theme.colors.surface.g, Theme.colors.surface.b, Theme.opacity.o50),
-            backgroundDisabled: "transparent",
+            background: Theme.colors.background,
+            backgroundHover: Theme.colors.overlay,
+            backgroundPressed: Theme.colors.surface,
+            backgroundDisabled: Theme.colors.background,
             border: Theme.borders.b0,
-            borderColor: "transparent",
+            borderColor: Theme.colors.background,
             textColor: Theme.colors.text,
             textColorDisabled: Theme.colors.textMuted
         },
         "success": {
             background: Theme.colors.success,
-            backgroundHover: Qt.darker(Theme.colors.success, 1.1),
+            backgroundHover: Qt.lighter(Theme.colors.success, 1.1),
             backgroundPressed: Qt.darker(Theme.colors.success, 1.2),
-            backgroundDisabled: Qt.rgba(Theme.colors.success.r, Theme.colors.success.g, Theme.colors.success.b, Theme.opacity.o50),
+            backgroundDisabled: Theme.colors.success,
             border: Theme.borders.b0,
-            borderColor: "transparent",
-            textColor: "white",
-            textColorDisabled: Qt.rgba(1, 1, 1, Theme.opacity.o50)
+            borderColor: Theme.colors.success,
+            textColor: Theme.colors.primaryText,
+            textColorDisabled: Theme.colors.primaryText
         }
     })
 
     readonly property var _currentVariantStyle: _variantStyles[variant] || _variantStyles["primary"]
 
-    // Helper functions for state-based styling
-    function _getBackgroundColor(state) {
-        switch (state) {
+    readonly property color _currentBackground: {
+        switch (currentState) {
             case "disabled": return _currentVariantStyle.backgroundDisabled
             case "pressed": return _currentVariantStyle.backgroundPressed
             case "hovered": return _currentVariantStyle.backgroundHover
@@ -181,164 +127,72 @@ Item {
         }
     }
 
-    function _getBorderColor(state) {
-        if (state === "disabled" && _currentVariantStyle.borderColorDisabled) {
+    readonly property color _currentBorderColor: {
+        if (currentState === "disabled" && _currentVariantStyle.borderColorDisabled) {
             return _currentVariantStyle.borderColorDisabled
         }
         return _currentVariantStyle.borderColor
     }
 
-    function _getBorderWidth() {
-        return _currentVariantStyle.border
-    }
+    flat: true
+    focusPolicy: Qt.StrongFocus
 
-    // Public methods
-    function forceActiveFocus() {
-        focusScope.forceActiveFocus()
-    }
+    background: Rectangle {
+        id: backgroundRect
+        color: _currentBackground
+        radius: root.radius
+        border.width: _currentVariantStyle.border
+        border.color: _currentBorderColor
 
-    // Focus scope for keyboard navigation
-    FocusScope {
-        id: focusScope
-        anchors.fill: parent
-
-        Keys.onSpacePressed: {
-            if (!disabled) {
-                clicked()
-            }
-        }
-
-        Keys.onReturnPressed: {
-            if (!disabled) {
-                clicked()
-            }
-        }
-    }
-
-    // Background rectangle with clean implicit sizing
-    Rectangle {
-        id: background
-        anchors.fill: parent
-
-        radius: Theme.radius.md
-        implicitWidth: Theme.spacing.s16 * 2 // 128px
-        implicitHeight: Theme.spacing.s12 // 48px
-
-        color: _getBackgroundColor(root.state)
-        border.color: _getBorderColor(root.state)
-        border.width: _getBorderWidth()
-
-        opacity: root.state === "disabled" ? (Theme.opacity.o50 || 0.5) : 1.0
-
-        // Smooth state transitions
         Behavior on color {
-            ColorAnimation {
-                duration: 150
-                easing.type: Easing.OutCubic
-            }
+            ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
         }
-
         Behavior on border.color {
-            ColorAnimation {
-                duration: 150
-                easing.type: Easing.OutCubic
-            }
+            ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
         }
 
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 150
-                easing.type: Easing.OutCubic
-            }
-        }
-    }
 
-    // Focus indicator - separate ring outside the button
-    Rectangle {
-        id: focusIndicator
-        anchors.fill: parent
-        anchors.margins: -Theme.borders.offset2
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: -root.focusOffset
+            color: Theme.colors.background
+            radius: root.radius + root.focusOutlineWidth
+            border.width: focused ? root.focusOutlineWidth : 0
+            border.color: root.focusColor
+            visible: focused
 
-        color: "transparent"
-        radius: Theme.radius.md + Theme.borders.outline2
-        border.width: focused ? Theme.borders.outline2 : 0
-        border.color: Theme.colors.primary
-
-        visible: focused
-
-        Behavior on border.width {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.OutCubic
+            Behavior on border.width {
+                NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
             }
         }
     }
 
-    // Content container - clean approach with no binding loops
-    Item {
-        id: contentContainer
-        anchors {
-            fill: parent
-            margins: Theme.spacing.s4
+    // Content item - automatically sizes to children
+    contentItem: Item {
+        id: contentArea
+
+        // implicitWidth: childrenRect.width
+        // implicitHeight: childrenRect.height
+
+        // Use a delayed binding to avoid loops
+        property real contentWidth: 0
+        property real contentHeight: 0
+
+        // Update content size when children change
+        onChildrenChanged: Qt.callLater(updateContentSize)
+
+        function updateContentSize() {
+            contentWidth = childrenRect.width
+            contentHeight = childrenRect.height
         }
+
+        implicitWidth: contentWidth
+        implicitHeight: Math.max(contentHeight, _sizeStyles.minHeight - 2 * _sizeStyles.padding)
     }
 
-    // Mouse interaction
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-
-        enabled: !disabled
-        hoverEnabled: true
-        cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-
-        onClicked: {
-            focusScope.forceActiveFocus()
-            root.clicked()
-        }
-
-        onPressAndHold: {
-            root.pressAndHold()
-        }
-    }
-
-    // Accessibility
-    Accessible.role: Accessible.Button
-    Accessible.name: {
-        // Try to find text in children for accessibility
-        for (let i = 0; i < children.length; i++) {
-            if (children[i].text !== undefined) {
-                return children[i].text
-            }
-        }
-        return "Button"
-    }
-    Accessible.description: `${variant} button`
-    Accessible.onPressAction: {
-        if (!disabled) {
-            clicked()
-        }
-    }
-
-    // Reparent children to content container for proper layout
-    onChildrenChanged: {
-        for (let i = 0; i < children.length; i++) {
-            const child = children[i]
-            // Skip internal elements
-            if (child !== background && child !== focusIndicator &&
-                child !== contentContainer && child !== mouseArea && child !== focusScope) {
-                child.parent = contentContainer
-            }
-        }
-    }
-
-    // Validation and warnings
-    Component.onCompleted: {
-        if (!_variantStyles.hasOwnProperty(variant)) {
-            console.warn(`Button: Unknown variant '${variant}'. Available variants: ${Object.keys(_variantStyles).join(', ')}`)
-        }
-        if (!_sizeVariants.hasOwnProperty(size)) {
-            console.warn(`Button: Unknown size '${size}'. Available sizes: ${Object.keys(_sizeVariants).join(', ')}`)
-        }
-    }
+    padding: _sizeStyles.padding
+    topPadding: _sizeStyles.padding
+    leftPadding: _sizeStyles.padding
+    rightPadding: _sizeStyles.padding
+    bottomPadding: _sizeStyles.padding
 }
