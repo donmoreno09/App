@@ -32,8 +32,6 @@ Button {
 
     readonly property bool focused: activeFocus && enabled
 
-    default property alias children: contentArea.children
-
     readonly property string currentState: {
         if (!enabled) return "disabled"
         if (pressed) return "pressed"
@@ -165,29 +163,6 @@ Button {
                 NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
             }
         }
-    }
-
-    // Content item - automatically sizes to children
-    contentItem: Item {
-        id: contentArea
-
-        // implicitWidth: childrenRect.width
-        // implicitHeight: childrenRect.height
-
-        // Use a delayed binding to avoid loops
-        property real contentWidth: 0
-        property real contentHeight: 0
-
-        // Update content size when children change
-        onChildrenChanged: Qt.callLater(updateContentSize)
-
-        function updateContentSize() {
-            contentWidth = childrenRect.width
-            contentHeight = childrenRect.height
-        }
-
-        implicitWidth: contentWidth
-        implicitHeight: Math.max(contentHeight, _sizeStyles.minHeight - 2 * _sizeStyles.padding)
     }
 
     padding: _sizeStyles.padding

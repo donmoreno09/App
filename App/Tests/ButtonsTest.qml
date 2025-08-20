@@ -38,7 +38,7 @@ Item {
                 UI.Button {
                     variant: "primary"
                     focus: true
-                    Text {
+                    contentItem: Text {
                         text: "Primary"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeBase
@@ -49,7 +49,7 @@ Item {
 
                 UI.Button {
                     variant: "secondary"
-                    Text {
+                    contentItem: Text {
                         text: "Secondary"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -60,7 +60,7 @@ Item {
 
                 UI.Button {
                     variant: "danger"
-                    Text {
+                    contentItem: Text {
                         text: "Danger"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeBase
@@ -71,7 +71,7 @@ Item {
 
                 UI.Button {
                     variant: "ghost"
-                    Text {
+                    contentItem: Text {
                         text: "Ghost"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -82,7 +82,7 @@ Item {
 
                 UI.Button {
                     variant: "success"
-                    Text {
+                    contentItem: Text {
                         text: "Success"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeBase
@@ -120,7 +120,7 @@ Item {
                 UI.Button {
                     variant: "primary"
                     size: "sm"
-                    Text {
+                    contentItem: Text {
                         text: "Small"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeSm
@@ -132,7 +132,7 @@ Item {
                 UI.Button {
                     variant: "primary"
                     size: "md"
-                    Text {
+                    contentItem: Text {
                         text: "Medium"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeBase
@@ -144,7 +144,7 @@ Item {
                 UI.Button {
                     variant: "primary"
                     size: "lg"
-                    Text {
+                    contentItem: Text {
                         text: "Large"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeLg
@@ -181,7 +181,7 @@ Item {
 
                 UI.Button {
                     variant: "secondary"
-                    Text {
+                    contentItem: Text {
                         text: "OK"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -191,7 +191,7 @@ Item {
 
                 UI.Button {
                     variant: "secondary"
-                    Text {
+                    contentItem: Text {
                         text: "Cancel Operation"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -201,7 +201,7 @@ Item {
 
                 UI.Button {
                     variant: "secondary"
-                    Text {
+                    contentItem: Text {
                         text: "Download and Install Updates"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -211,7 +211,7 @@ Item {
 
                 UI.Button {
                     variant: "primary"
-                    Text {
+                    contentItem: Text {
                         text: "This is a very long button text that should make the button quite wide"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeBase
@@ -248,7 +248,7 @@ Item {
                 UI.Button {
                     variant: "secondary"
                     radius: Theme.radius.none  // Square corners
-                    Text {
+                    contentItem: Text {
                         text: "Square"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -259,7 +259,7 @@ Item {
                 UI.Button {
                     variant: "secondary"
                     radius: Theme.radius.xl  // Extra rounded
-                    Text {
+                    contentItem: Text {
                         text: "Extra Rounded"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -270,7 +270,7 @@ Item {
                 UI.Button {
                     variant: "secondary"
                     radius: height / 2  // Pill shape
-                    Text {
+                    contentItem: Text {
                         text: "Pill Shape"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -282,7 +282,7 @@ Item {
                     variant: "ghost"
                     focusColor: Theme.colors.danger  // Red focus ring
                     focusOutlineWidth: Theme.borders.outline4  // Thick ring
-                    Text {
+                    contentItem: Text {
                         text: "Red Focus Ring"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -294,7 +294,7 @@ Item {
                     variant: "ghost"
                     focusColor: Theme.colors.success  // Green focus ring
                     focusOffset: Theme.borders.offset4  // Large gap
-                    Text {
+                    contentItem: Text {
                         text: "Green Distant Focus"
                         color: Theme.colors.text
                         font.pixelSize: Theme.typography.sizeBase
@@ -362,7 +362,7 @@ Item {
                 UI.Button {
                     variant: "secondary"
 
-                    Row {
+                    contentItem: Row {
                         spacing: Theme.spacing.s2
                         anchors.centerIn: parent
 
@@ -400,7 +400,7 @@ Item {
                     size: "lg"
                     radius: Theme.radius.lg
 
-                    Column {
+                    contentItem: Column {
                         spacing: 2
                         anchors.centerIn: parent
 
@@ -454,7 +454,7 @@ Item {
                 UI.Button {
                     variant: "primary"
                     enabled: false
-                    Text {
+                    contentItem: Text {
                         text: "Disabled Primary"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeBase
@@ -466,7 +466,7 @@ Item {
                 UI.Button {
                     variant: "secondary"
                     enabled: false
-                    Text {
+                    contentItem: Text {
                         text: "Disabled Secondary"
                         color: Theme.colors.textMuted
                         font.pixelSize: Theme.typography.sizeBase
@@ -477,7 +477,7 @@ Item {
                 UI.Button {
                     variant: "danger"
                     enabled: false
-                    Text {
+                    contentItem: Text {
                         text: "Disabled Danger"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeBase
@@ -517,7 +517,7 @@ Item {
                     variant: "primary"
                     property int clickCount: 0
 
-                    Text {
+                    contentItem: Text {
                         text: "Clicks: " + clickCounter.clickCount
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeBase
@@ -533,7 +533,7 @@ Item {
                 UI.Button {
                     variant: "secondary"
 
-                    Column {
+                    contentItem: Column {
                         anchors.centerIn: parent
                         spacing: 2
 
@@ -564,7 +564,7 @@ Item {
                     variant: isOn ? "success" : "danger"
                     property bool isOn: true
 
-                    Text {
+                    contentItem: Text {
                         text: toggleButton.isOn ? "Turn OFF" : "Turn ON"
                         color: Theme.colors.primaryText
                         font.pixelSize: Theme.typography.sizeBase
@@ -611,7 +611,7 @@ Item {
                     UI.Button {
                         variant: index % 2 === 0 ? "primary" : "secondary"
 
-                        Text {
+                        contentItem: Text {
                             text: modelData
                             color: index % 2 === 0 ? Theme.colors.primaryText : Theme.colors.text
                             font.pixelSize: Theme.typography.sizeBase
@@ -673,7 +673,7 @@ Item {
                             variant: "primary"
                             size: "sm"
 
-                            Text {
+                            contentItem: Text {
                                 text: modelData
                                 color: Theme.colors.primaryText
                                 font.pixelSize: Theme.typography.sizeSm
