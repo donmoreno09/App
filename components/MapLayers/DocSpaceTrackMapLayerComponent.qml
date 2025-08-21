@@ -6,6 +6,7 @@ import raise.singleton.layermanager 1.0
 import raise.singleton.panelmanager 1.0
 import raise.singleton.trackmanager 1.0
 import raise.singleton.mqtt 1.0
+import raise.singleton.language 1.0
 
 import "../ui/tracks"
 
@@ -16,9 +17,17 @@ MapItemGroup {
     property alias isVisible: trackMapLayerBusinessLogic.isVisible
     property alias isEnabled: trackMapLayerBusinessLogic.isEnabled
 
-    property string layerName: "Doc Space Tracks"
+    // Automatic retranslation properties
+    property string layerNameText: qsTr("Doc Space Tracks")
+
+    property string layerName: layerNameText
 
     visible: isVisible
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        layerNameText = qsTr("Doc Space Tracks")
+    }
 
     Component {
         id: trackDelegate
@@ -73,7 +82,8 @@ MapItemGroup {
                 }
             }
         }
-        
+
+
         function onActivated() {
             console.log("DOC-SPACE ACTIVATED!")
             docSpaceTrackMapLayerComponent.visible = true
@@ -82,6 +92,18 @@ MapItemGroup {
         function onDeactivated() {
             console.log("DOC-SPACE DEACTIVATED!")
             docSpaceTrackMapLayerComponent.visible = false
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            docSpaceTrackMapLayerComponent.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 }

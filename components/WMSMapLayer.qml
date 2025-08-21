@@ -5,6 +5,7 @@ import QtPositioning 6.8
 import raise.singleton.layermanager 1.0
 import raise.singleton.interactionmanager 1.0
 import raise.singleton.controllers 1.0
+import raise.singleton.language 1.0
 
 import "MapLayers"
 import "ui"
@@ -24,6 +25,14 @@ Item {
     property bool globalVisibility: true
     property var selectionPoints: []
     property int currentMode: InteractionModeManager.currentMode
+
+    // Automatic retranslation properties
+    property string createShapeText: qsTr("Create new shape")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        createShapeText = qsTr("Create new shape")
+    }
 
     // expose these "global" components for now
     property alias topToolbar: topToolbar
@@ -181,7 +190,7 @@ Item {
 
     ShapePopup {
         id: shapePopup
-        title: "Create new shape"
+        title: root.createShapeText
         visible: false
     }
 
@@ -210,5 +219,17 @@ Item {
         logoGlowPulse: true
 
         onOptionToggledCallback: tracksSelectionHintDialog.handleRadialMenuOptionToggled
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            root.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
+        }
     }
 }

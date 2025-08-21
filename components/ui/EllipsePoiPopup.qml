@@ -4,10 +4,11 @@ import QtQuick.Layouts 2.15
 import QtPositioning 6.8
 import raise.singleton.popupmanager 1.0
 import raise.singleton.controllers 1.0
+import raise.singleton.language 1.0
 
 Rectangle {
     id: popup
-    property string title: "Insert Ellipse POI"
+    property string title: popup.popupTitle
     property alias labelField: labelField
     property alias categoryComboBox: categoryComboBox
     property alias typeComboBox: typeComboBox
@@ -34,6 +35,48 @@ Rectangle {
     border.width: 1
 
     property bool coordinatesAreValid: false
+
+    // Automatic retranslation properties
+    property string popupTitle: qsTr("Insert Ellipse POI")
+    property string labelText: qsTr("Label")
+    property string labelPlaceholder: qsTr("Enter label...")
+    property string categoryText: qsTr("Category")
+    property string typeText: qsTr("Type")
+    property string healthStatusText: qsTr("Health Status")
+    property string operationalStateText: qsTr("Operational State")
+    property string ellipseParamsText: qsTr("Ellipse Parameters")
+    property string centerLatText: qsTr("Center Latitude")
+    property string centerLonText: qsTr("Center Longitude")
+    property string radiusLatText: qsTr("Radius (Latitude)")
+    property string radiusLonText: qsTr("Radius (Longitude)")
+    property string validEllipseText: qsTr("✓ Valid ellipse parameters")
+    property string invalidParamsText: qsTr("⚠ Invalid parameters")
+    property string noteText: qsTr("Note")
+    property string notePlaceholder: qsTr("Enter a note...")
+    property string cancelText: qsTr("Cancel")
+    property string saveText: qsTr("Save")
+
+    // Auto-retranslate when language changes
+    function retranslateUi() {
+        popupTitle = qsTr("Insert Ellipse POI")
+        labelText = qsTr("Label")
+        labelPlaceholder = qsTr("Enter label...")
+        categoryText = qsTr("Category")
+        typeText = qsTr("Type")
+        healthStatusText = qsTr("Health Status")
+        operationalStateText = qsTr("Operational State")
+        ellipseParamsText = qsTr("Ellipse Parameters")
+        centerLatText = qsTr("Center Latitude")
+        centerLonText = qsTr("Center Longitude")
+        radiusLatText = qsTr("Radius (Latitude)")
+        radiusLonText = qsTr("Radius (Longitude)")
+        validEllipseText = qsTr("✓ Valid ellipse parameters")
+        invalidParamsText = qsTr("⚠ Invalid parameters")
+        noteText = qsTr("Note")
+        notePlaceholder = qsTr("Enter a note...")
+        cancelText = qsTr("Cancel")
+        saveText = qsTr("Save")
+    }
 
     function open() {
         popup.visible = true
@@ -152,12 +195,12 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Label"
+                    text: popup.labelText
                     color: "#ffffff"
                 }
                 TextField {
                     id: labelField
-                    placeholderText: "Enter label..."
+                    placeholderText: popup.labelPlaceholder
                     placeholderTextColor: "#888888"
                     font.pixelSize: 14
                     color: "#ffffff"
@@ -174,7 +217,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Category"
+                    text: popup.categoryText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -189,7 +232,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Type"
+                    text: popup.typeText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -204,7 +247,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Health Status"
+                    text: popup.healthStatusText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -220,7 +263,7 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
                 Label {
-                    text: "Operational State"
+                    text: popup.operationalStateText
                     color: "#ffffff"
                 }
                 StyledComboBox {
@@ -237,7 +280,7 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Label {
-                    text: "Ellipse Parameters"
+                    text: popup.ellipseParamsText
                     color: "#ffffff"
                     font.bold: true
                 }
@@ -249,7 +292,7 @@ Rectangle {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "Center Latitude"
+                        text: popup.centerLatText
                         color: "#ffffff"
                         Layout.preferredWidth: 120
                     }
@@ -275,7 +318,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: "Center Longitude"
+                        text: popup.centerLonText
                         color: "#ffffff"
                     }
                     TextField {
@@ -300,7 +343,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: "Radius (Latitude)"
+                        text: popup.radiusLatText
                         color: "#ffffff"
                     }
                     TextField {
@@ -325,7 +368,7 @@ Rectangle {
                     }
 
                     Label {
-                        text: "Radius (Longitude)"
+                        text: popup.radiusLonText
                         color: "#ffffff"
                     }
                     TextField {
@@ -354,9 +397,9 @@ Rectangle {
                     visible: !!centerLat.text || !!centerLon.text || !!radiusLatField.text || !!radiusLonField.text
                     text: {
                         if (coordinatesAreValid) {
-                            return "✓ Valid ellipse parameters"
+                            return popup.validEllipseText
                         } else {
-                            return "⚠ Invalid parameters"
+                            return popup.invalidParamsText
                         }
                     }
                     color: coordinatesAreValid ? "#22c55e" : "#ef4444"
@@ -373,7 +416,7 @@ Rectangle {
                 Layout.preferredHeight: 80
 
                 Label {
-                    text: "Note"
+                    text: popup.noteText
                     color: "#ffffff"
                 }
                 ScrollView {
@@ -384,7 +427,7 @@ Rectangle {
 
                     TextArea {
                         id: noteField
-                        placeholderText: "Enter a note..."
+                        placeholderText: popup.notePlaceholder
                         placeholderTextColor: "#888888"
                         font.pixelSize: 14
                         color: "#ffffff"
@@ -409,7 +452,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: "Cancel"
+                    text: popup.cancelText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
@@ -420,7 +463,7 @@ Rectangle {
                 }
 
                 StyledButton {
-                    text: "Save"
+                    text: popup.saveText
                     font.pixelSize: 14
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 32
@@ -454,6 +497,18 @@ Rectangle {
                     }
                 }
             }
+        }
+    }
+
+    // Automatic retranslation on language change
+    Connections {
+        target: LanguageController
+        function onLanguageChanged() {
+            console.log("Language changed signal received - auto-retranslating")
+            popup.retranslateUi()
+        }
+        function onLanguageLoadFailed(language, reason) {
+            console.error("Language load failed:", language, "-", reason)
         }
     }
 
