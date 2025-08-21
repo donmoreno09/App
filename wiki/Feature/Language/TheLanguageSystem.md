@@ -1,8 +1,3 @@
----
-title: "Qt Language System - Complete Documentation"
-description: "Production-ready internationalization system with English and Italian language support"
----
-
 # Qt Language System - Complete Documentation
 
 ## Table of Contents
