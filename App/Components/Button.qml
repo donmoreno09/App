@@ -22,7 +22,6 @@ import App.Themes 1.0
 Button {
     id: root
 
-
     property string variant: "primary"
     property string size: "md"
     property int radius: Theme.radius.md
@@ -63,9 +62,9 @@ Button {
     readonly property var _variantStyles: ({
         "primary": {
             background: Theme.colors.primary,
-            backgroundHover: Qt.lighter(Theme.colors.primary, 1.2),
-            backgroundPressed: Theme.colors.primaryPressed,
-            backgroundDisabled: Theme.colors.primary,
+            backgroundHover: Qt.darker(Theme.colors.primary, 1.2),
+            backgroundPressed: Qt.darker(Theme.colors.primary, 1.4),
+            backgroundDisabled: Theme.colors.textMuted,
             border: Theme.borders.b0,
             borderColor: Theme.colors.primary,
             textColor: Theme.colors.primaryText,
@@ -75,7 +74,7 @@ Button {
             background: Theme.colors.surface,
             backgroundHover: Theme.colors.overlay,
             backgroundPressed: Theme.colors.background,
-            backgroundDisabled: Theme.colors.surface,
+            backgroundDisabled: Theme.colors.textMuted,
             border: Theme.borders.b1,
             borderColor: Theme.colors.textMuted,
             borderColorDisabled: Theme.colors.textMuted,
@@ -84,9 +83,9 @@ Button {
         },
         "danger": {
             background: Theme.colors.danger,
-            backgroundHover: Qt.lighter(Theme.colors.danger, 1.1),
+            backgroundHover: Qt.darker(Theme.colors.danger, 1.1),
             backgroundPressed: Qt.darker(Theme.colors.danger, 1.2),
-            backgroundDisabled: Theme.colors.danger,
+            backgroundDisabled: Theme.colors.textMuted,
             border: Theme.borders.b0,
             borderColor: Theme.colors.danger,
             textColor: Theme.colors.primaryText,
@@ -96,17 +95,17 @@ Button {
             background: Theme.colors.background,
             backgroundHover: Theme.colors.overlay,
             backgroundPressed: Theme.colors.surface,
-            backgroundDisabled: Theme.colors.background,
-            border: Theme.borders.b0,
-            borderColor: Theme.colors.background,
+            backgroundDisabled: Theme.colors.textMuted,
+            border: Theme.borders.b1,
+            borderColor: Theme.colors.textMuted,
             textColor: Theme.colors.text,
             textColorDisabled: Theme.colors.textMuted
         },
         "success": {
             background: Theme.colors.success,
-            backgroundHover: Qt.lighter(Theme.colors.success, 1.1),
+            backgroundHover: Qt.darker(Theme.colors.success, 1.1),
             backgroundPressed: Qt.darker(Theme.colors.success, 1.2),
-            backgroundDisabled: Theme.colors.success,
+            backgroundDisabled: Theme.colors.textMuted,
             border: Theme.borders.b0,
             borderColor: Theme.colors.success,
             textColor: Theme.colors.primaryText,
@@ -149,14 +148,13 @@ Button {
             ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
         }
 
-
         Rectangle {
             anchors.fill: parent
             anchors.margins: -root.focusOffset
-            color: Theme.colors.background
+            color: _currentBackground
             radius: root.radius + root.focusOutlineWidth
             border.width: focused ? root.focusOutlineWidth : 0
-            border.color: root.focusColor
+            border.color: Qt.lighter(_currentVariantStyle.borderColor, 1.6)
             visible: focused
 
             Behavior on border.width {
