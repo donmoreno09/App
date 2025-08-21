@@ -3,7 +3,7 @@ import QtQuick.Controls.Fusion
 import QtQuick.Controls
 
 import App.Themes 1.0
-import App.Tests 1.0 as UI
+import App.Playground 1.0 as UI
 // import App.Components 1.0
 
 ApplicationWindow {

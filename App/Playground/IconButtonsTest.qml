@@ -76,9 +76,6 @@ Item {
                     icon.height: Theme.icons.sizeLg
                     icon.color: Theme.colors.text
 
-                    implicitWidth: Theme.spacing.s10
-                    implicitHeight: Theme.spacing.s10
-
                     onClicked: console.log("Map clicked")
 
                     ToolTip {
@@ -98,8 +95,6 @@ Item {
                     icon.height: Theme.icons.sizeLg
                     icon.color: Theme.colors.text
 
-                    implicitWidth: Theme.spacing.s10
-                    implicitHeight: Theme.spacing.s10
 
                     onClicked: console.log("Home clicked")
 
@@ -120,8 +115,6 @@ Item {
                     icon.height: Theme.icons.sizeLg
                     icon.color: Theme.colors.text
 
-                    implicitWidth: Theme.spacing.s10
-                    implicitHeight: Theme.spacing.s10
 
                     onClicked: console.log("Send clicked")
 
@@ -142,8 +135,6 @@ Item {
                     icon.height: Theme.icons.sizeLg
                     icon.color: Theme.colors.primaryText
 
-                    implicitWidth: Theme.spacing.s10
-                    implicitHeight: Theme.spacing.s10
 
                     onClicked: console.log("Add clicked")
 
@@ -164,8 +155,6 @@ Item {
                     icon.height: Theme.icons.sizeLg
                     icon.color: Theme.colors.primaryText
 
-                    implicitWidth: Theme.spacing.s10
-                    implicitHeight: Theme.spacing.s10
 
                     onClicked: console.log("Remove clicked")
 
@@ -213,9 +202,6 @@ Item {
                     icon.height: Theme.icons.sizeSm
                     icon.color: Theme.colors.text
 
-                    implicitWidth: Theme.spacing.s8   // 32px
-                    implicitHeight: Theme.spacing.s8
-
                     ToolTip {
                         visible: parent.hovered
                         text: "Small (32px)"
@@ -255,9 +241,6 @@ Item {
                     icon.height: Theme.icons.sizeLg
                     icon.color: Theme.colors.text
 
-                    implicitWidth: Theme.spacing.s10  // 40px
-                    implicitHeight: Theme.spacing.s10
-
                     ToolTip {
                         visible: parent.hovered
                         text: "Large (40px)"
@@ -289,9 +272,9 @@ Item {
 
             Rectangle {
                 width: 80  // Fixed width from Figma
-                height: 320
+                height: 380
                 color: Theme.colors.surface
-                border.color: Theme.colors.border
+                border.color: Theme.colors.text
                 border.width: Theme.borders.b1
                 radius: Theme.radius.md
                 Layout.alignment: Qt.AlignLeft
@@ -312,8 +295,8 @@ Item {
                         icon.height: Theme.icons.sizeLg
                         icon.color: Theme.colors.primaryText
 
-                        implicitWidth: Theme.spacing.s10   // 40px
-                        implicitHeight: Theme.spacing.s10
+
+
                         radius: Theme.radius.md
 
                         onClicked: console.log("Mission selected")
@@ -335,8 +318,8 @@ Item {
                         icon.height: Theme.icons.sizeLg
                         icon.color: Theme.colors.text
 
-                        implicitWidth: Theme.spacing.s10
-                        implicitHeight: Theme.spacing.s10
+
+
                         radius: Theme.radius.md
 
                         onClicked: console.log("Map selected")
@@ -358,8 +341,8 @@ Item {
                         icon.height: Theme.icons.sizeLg
                         icon.color: Theme.colors.text
 
-                        implicitWidth: Theme.spacing.s10
-                        implicitHeight: Theme.spacing.s10
+
+
                         radius: Theme.radius.md
 
                         onClicked: console.log("Home selected")
@@ -381,8 +364,8 @@ Item {
                         icon.height: Theme.icons.sizeLg
                         icon.color: Theme.colors.text
 
-                        implicitWidth: Theme.spacing.s10
-                        implicitHeight: Theme.spacing.s10
+
+
                         radius: Theme.radius.md
 
                         onClicked: console.log("Send selected")
@@ -404,8 +387,8 @@ Item {
                         icon.height: Theme.icons.sizeLg
                         icon.color: Theme.colors.text
 
-                        implicitWidth: Theme.spacing.s10
-                        implicitHeight: Theme.spacing.s10
+
+
                         radius: Theme.radius.md
 
                         onClicked: console.log("Add selected")
@@ -427,8 +410,8 @@ Item {
                         icon.height: Theme.icons.sizeLg
                         icon.color: Theme.colors.text
 
-                        implicitWidth: Theme.spacing.s10
-                        implicitHeight: Theme.spacing.s10
+
+
                         radius: Theme.radius.md
 
                         onClicked: console.log("Remove selected")
@@ -477,8 +460,6 @@ Item {
                     icon.height: Theme.icons.sizeLg
                     icon.color: Theme.colors.primaryText
 
-                    implicitWidth: Theme.spacing.s10
-                    implicitHeight: Theme.spacing.s10
 
                     onClicked: console.log("Enabled button clicked")
 
@@ -500,8 +481,6 @@ Item {
                     icon.height: Theme.icons.sizeLg
                     icon.color: Theme.colors.primaryText
 
-                    implicitWidth: Theme.spacing.s10
-                    implicitHeight: Theme.spacing.s10
 
                     ToolTip {
                         visible: parent.hovered && parent.enabled
@@ -522,8 +501,6 @@ Item {
                     icon.height: Theme.icons.sizeLg
                     icon.color: isActive ? Theme.colors.primaryText : Theme.colors.text
 
-                    implicitWidth: Theme.spacing.s10
-                    implicitHeight: Theme.spacing.s10
 
                     onClicked: {
                         isActive = !isActive

@@ -11,8 +11,8 @@ set(icon_resources
     icons/clipboard.svg
 )
 
-qt_add_qml_module(app_tests
-    URI App.Tests
+qt_add_qml_module(app_playground
+    URI App.Playground
     VERSION 1.0
     QML_FILES ${qml_files}
     RESOURCES ${icon_resources}
