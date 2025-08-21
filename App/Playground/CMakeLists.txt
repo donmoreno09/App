@@ -1,5 +1,6 @@
 set(qml_files
     IconButtonsTest.qml
+    DateTimeTest.qml
 )
 
 set(icon_resources
@@ -9,6 +10,7 @@ set(icon_resources
     icons/plus.svg
     icons/minus.svg
     icons/clipboard.svg
+    icons/clock.svg
 )
 
 qt_add_qml_module(app_playground
