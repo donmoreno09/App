@@ -15,6 +15,8 @@ add_subdirectory(Themes)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
+        Qt6::Gui
+        Qt6::Qml
         Qt6::Quick
 )
 

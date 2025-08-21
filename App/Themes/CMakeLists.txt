@@ -37,8 +37,6 @@ qt_add_qml_module(app_themes
 )
 
 # Qt Quick Test Configs
-find_package(Qt6 REQUIRED COMPONENTS QuickTest Qml)
-
 add_executable(tst_themes
     ${CMAKE_CURRENT_SOURCE_DIR}/tst_runner.cpp
 )
