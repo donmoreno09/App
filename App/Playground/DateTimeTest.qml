@@ -10,15 +10,8 @@ import QtQuick.Layouts 1.15
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-Rectangle {
-    width: 800
-    height: 400
-    color: Theme.colors.background
-
-
+RowLayout {
     UI.DateTime {
         id: dateTimeComponent
     }
-
-
 }

@@ -21,9 +21,6 @@ Item {
 
     property bool showSeconds: true
 
-    implicitWidth: 246
-    implicitHeight: 24
-
     QtObject {
         id: d
         property string utcTimeString: ""
@@ -45,7 +42,7 @@ Item {
     }
 
     Timer {
-        interval: 1000
+        interval: 300
         repeat: true
         running: root.visible
         onTriggered: d.updateTimeStrings()
