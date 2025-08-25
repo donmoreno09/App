@@ -5,6 +5,7 @@ import QtQuick.Controls
 import App.Themes 1.0
 import App.Components 1.0
 import App.Features.SideRail 1.0
+import App.Features.SidePanel 1.0
 
 ApplicationWindow {
     width: 1400
@@ -28,6 +29,21 @@ ApplicationWindow {
             anchors.fill: parent
             color: "transparent"
             border.color: "blue"
+            border.width: 2
+        }
+    }
+
+    SidePanel {
+        id: sidePanel
+        width: 490
+        anchors.top: parent.top
+        anchors.left: sideRail.right
+        anchors.bottom: parent.bottom
+
+        Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+            border.color: "orange"
             border.width: 2
         }
     }
