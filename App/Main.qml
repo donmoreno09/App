@@ -1,20 +1,26 @@
 import QtQuick
 import QtQuick.Controls.Fusion
 import QtQuick.Controls
+
 import App.Themes 1.0
-import App.Playground 1.0 as Playground
+import App.Components 1.0
 
 ApplicationWindow {
-    width: 800
-    height: 600
+    width: 1400
+    height: 800
     visible: true
-    title: qsTr("DateTime Component Testing")
+    title: qsTr("IRIDESS FE")
 
-    background: Rectangle {
-        color: Theme.colors.background
+    GlobalBackground {
+        id: globalBackground
+        anchors.fill: parent
+        visible: false
     }
 
-    Playground.DateTimeTest {
-        anchors.fill: parent
+    GlobalBackgroundConsumer {
+        x: 20
+        y: 40
+        width: 400
+        height: 400
     }
 }

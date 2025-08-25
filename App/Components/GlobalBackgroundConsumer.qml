@@ -6,7 +6,14 @@ Item {
 
     property alias maskRect: maskRect
 
-    property AppBackground bg: appBackground
+    // NOTE: To be analyzed where should we pull from the
+    //       global background component, right now it's
+    //       being pulled through the "context tree" meaning
+    //       this consumer component must be under a component
+    //       instantiating the GlobalBackground component.
+    //       I am thinking of a singleton-controller solution but
+    //       be properly assessed.
+    property GlobalBackground bg: globalBackground
 
     Rectangle {
         id: maskRect
