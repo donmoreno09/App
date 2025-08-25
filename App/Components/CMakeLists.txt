@@ -1,6 +1,7 @@
 set(qml_files
     Button.qml
     DateTime.qml
+    GlobalBackground.qml
 )
 
 set(icon_resources
