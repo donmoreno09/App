@@ -7,6 +7,7 @@ import App.Components 1.0
 import App.Features.TitleBar 1.0
 import App.Features.SideRail 1.0
 import App.Features.SidePanel 1.0
+import App.Features.ContextPanel 1.0
 
 ApplicationWindow {
     width: 1400
@@ -59,6 +60,21 @@ ApplicationWindow {
             anchors.fill: parent
             color: "transparent"
             border.color: "orange"
+            border.width: 2
+        }
+    }
+
+    ContextPanel {
+        id: contextPanel
+        width: 486
+        anchors.top: titleBar.bottom
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+            border.color: "green"
             border.width: 2
         }
     }
