@@ -8,6 +8,7 @@ import App.Features.TitleBar 1.0
 import App.Features.SideRail 1.0
 import App.Features.SidePanel 1.0
 import App.Features.ContextPanel 1.0
+import App.Features.NotificationsBar 1.0
 
 ApplicationWindow {
     width: 1400
@@ -75,6 +76,21 @@ ApplicationWindow {
             anchors.fill: parent
             color: "transparent"
             border.color: "green"
+            border.width: 2
+        }
+    }
+
+    NotificationsBar {
+        id: notificationsBar
+        width: 490
+        height: 135
+        x: sideRail.width + sidePanel.width
+        anchors.bottom: parent.bottom
+
+        Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+            border.color: "red"
             border.width: 2
         }
     }
