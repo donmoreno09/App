@@ -1,9 +1,11 @@
 import QtQuick
 import QtQuick.Controls.Fusion
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import App.Themes 1.0
 import App.Components 1.0
+import App.StubComponents 1.0 as UI
 import App.Features.TitleBar 1.0
 import App.Features.SideRail 1.0
 import App.Features.SidePanel 1.0
@@ -22,76 +24,94 @@ ApplicationWindow {
         visible: false
     }
 
-    TitleBar {
-        id: titleBar
-        height: 68
-        anchors.left: sideRail.right
-        anchors.right: parent.right
+    RowLayout {
+        anchors.fill: parent
+        spacing: 0
 
-        Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            border.color: "white"
-            border.width: 2
+        SideRail {
+            Layout.preferredWidth: 80
+            Layout.fillHeight: true
+            z: Theme.elevation.panel
+
+            Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+                border.color: "blue"
+                border.width: 2
+            }
         }
-    }
 
-    SideRail {
-        id: sideRail
-        width: 80
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+        ColumnLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: 0
 
-        Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            border.color: "blue"
-            border.width: 2
-        }
-    }
+            TitleBar {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 68
 
-    SidePanel {
-        id: sidePanel
-        width: 490
-        anchors.top: titleBar.bottom
-        anchors.left: sideRail.right
-        anchors.bottom: parent.bottom
+                Rectangle {
+                    anchors.fill: parent
+                    color: "transparent"
+                    border.color: "white"
+                    border.width: 2
+                }
+            }
 
-        Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            border.color: "orange"
-            border.width: 2
-        }
-    }
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                spacing: 0
 
-    ContextPanel {
-        id: contextPanel
-        width: 486
-        anchors.top: titleBar.bottom
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+                Item {
+                    Layout.preferredWidth: sidePanel.width
+                    Layout.fillHeight: true
 
-        Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            border.color: "green"
-            border.width: 2
-        }
-    }
+                    SidePanel {
+                        id: sidePanel
+                        width: 490
+                        height: parent.height
 
-    NotificationsBar {
-        id: notificationsBar
-        width: 490
-        height: 135
-        x: sideRail.width + sidePanel.width
-        anchors.bottom: parent.bottom
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                            border.color: "orange"
+                            border.width: 2
+                        }
+                    }
 
-        Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            border.color: "red"
-            border.width: 2
+                    NotificationsBar {
+                        id: notificationsBar
+                        width: 490
+                        height: 135
+                        anchors.left: sidePanel.right
+                        anchors.bottom: sidePanel.bottom
+
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
+                            border.color: "red"
+                            border.width: 2
+                        }
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+
+                ContextPanel {
+                    Layout.preferredWidth: 486
+                    Layout.fillHeight: true
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "transparent"
+                        border.color: "green"
+                        border.width: 2
+                    }
+                }
+            }
         }
     }
 }
