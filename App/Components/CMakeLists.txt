@@ -4,6 +4,8 @@ set(qml_files
 )
 
 set(icon_resources
+    # It's better if we move the svg inside an assets folder of Components itself
+    # or a global assets folder. To be analyzed.
     ../Playground/icons/clock.svg
 )
 
