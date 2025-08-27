@@ -3,6 +3,10 @@ set(qml_files
     DateTime.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
+    HorizontalPadding.qml
+    VerticalPadding.qml
+    HorizontalSpacing.qml
+    VerticalSpacing.qml
 )
 
 set(icon_resources
