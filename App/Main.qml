@@ -5,7 +5,8 @@ import QtQuick.Layouts
 
 import App.Themes 1.0
 import App.Components 1.0
-import App.StubComponents 1.0 as UI
+import App.Playground 1.0
+// import App.StubComponents 1.0 as UI
 import App.Features.TitleBar 1.0
 import App.Features.SideRail 1.0
 import App.Features.SidePanel 1.0
