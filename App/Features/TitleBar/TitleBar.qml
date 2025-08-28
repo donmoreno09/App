@@ -13,9 +13,7 @@ UI.GlobalBackgroundConsumer {
         spacing: Theme.spacing.s2
         z: Theme.elevation.panel
 
-        UI.HorizontalPadding {
-            Layout.preferredWidth: Theme.spacing.s8
-        }
+        UI.HorizontalPadding { padding: Theme.spacing.s8 }
 
         UI.DateTime { }
 
@@ -94,9 +92,7 @@ UI.GlobalBackgroundConsumer {
             }
         }
 
-        UI.HorizontalPadding {
-            Layout.preferredWidth: Theme.spacing.s8
-        }
+        UI.HorizontalPadding { padding: Theme.spacing.s8 }
     }
 
     MouseArea {

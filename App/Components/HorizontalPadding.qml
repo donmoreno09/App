@@ -4,5 +4,7 @@ import QtQuick.Layouts 6.8
 import App.Themes
 
 Item {
-    Layout.preferredWidth: Theme.spacing.p4
+    property int padding: Theme.spacing.s4
+
+    Layout.preferredWidth: padding
 }
