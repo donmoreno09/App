@@ -22,10 +22,10 @@ QtObject {
     readonly property string familySerif: "Georgia"
 
     // Base size and scale ratio (named font size steps derive from these)
-    readonly property int  baseFontSize:   16     // px
+    readonly property int  baseFontSize:   16     // dpi
     readonly property real fontScaleRatio: 1.15   // common ratio, reads well across steps
 
-    // Font sizes (derived) — Text.font.pixelSize
+    // Font sizes (derived) — Text.font.pointSize
     readonly property int sizeXs:   Math.round(baseFontSize * Math.pow(fontScaleRatio, -2))  // = 12 (with scale ratio = 1.15)
     readonly property int sizeSm:   Math.round(baseFontSize * Math.pow(fontScaleRatio, -1))  // = 14 (with scale ratio = 1.15)
     readonly property int sizeBase: Math.round(baseFontSize * Math.pow(fontScaleRatio,  0))  // = 16 (with scale ratio = 1.15)
