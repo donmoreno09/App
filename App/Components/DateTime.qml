@@ -52,7 +52,7 @@ RowLayout {
     }
 
     Image {
-        source: "../Playground/icons/clock.svg"
+        source: "qrc:/App/assets/icons/clock.svg"
         width: Theme.icons.sizeLg
         height: Theme.icons.sizeLg
     }

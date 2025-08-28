@@ -2,11 +2,20 @@ qt_add_executable(${PROJECT_NAME}
     main.cpp
 )
 
+file(GLOB_RECURSE APP_ASSETS
+    RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+    CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/assets/*.*"
+)
+
 qt_add_qml_module(${PROJECT_NAME}
     URI App
     VERSION 1.0
     QML_FILES
         Main.qml
+    RESOURCE_PREFIX "/" # For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
+    RESOURCES
+        ${APP_ASSETS}
 )
 
 add_subdirectory(Components)
