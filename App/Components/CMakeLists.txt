@@ -5,8 +5,8 @@ set(qml_files
     GlobalBackgroundConsumer.qml
     HorizontalPadding.qml
     VerticalPadding.qml
-    HorizontalSpacing.qml
-    VerticalSpacing.qml
+    HorizontalSpacer.qml
+    VerticalSpacer.qml
 )
 
 set(icon_resources
