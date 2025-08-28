@@ -8,14 +8,6 @@ import App.Components 1.0 as UI
 import App.StubComponents 1.0 as UI
 
 UI.GlobalBackgroundConsumer {
-    // This component is outside RowLayout because
-    // it is positioned absolutely in the center.
-    // QtQuick.Layouts don't like having anchored
-    // children within themselves.
-    UI.Title {
-        anchors.centerIn: parent
-    }
-
     RowLayout {
         anchors.fill: parent
         spacing: Theme.spacing.s2
@@ -26,6 +18,10 @@ UI.GlobalBackgroundConsumer {
         }
 
         UI.DateTime { }
+
+        UI.HorizontalSpacer { }
+
+        UI.Title { }
 
         UI.HorizontalSpacer { }
 
