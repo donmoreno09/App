@@ -49,4 +49,17 @@ QtObject {
     readonly property int s10:  base * 10                // 40px
     readonly property int s12:  base * 12                // 48px
     readonly property int s16:  base * 16                // 64px
+
+    // Since paddings don't exist in Qt 6.8 and they behave differently
+    // when set using `Layout.preferredWidth`, they will have their own tokens:
+    readonly property int p1:   Math.round(base * 0.25)
+    readonly property int p2:   Math.round(base * 0.5)
+    readonly property int p3:   Math.round(base * 0.75)
+    readonly property int p4:   base * 1
+    readonly property int p5:   base * 1.25
+    readonly property int p6:   base * 1.5
+    readonly property int p8:   base * 2
+    readonly property int p10:  base * 2.5
+    readonly property int p12:  base * 3
+    readonly property int p16:  base * 4
 }

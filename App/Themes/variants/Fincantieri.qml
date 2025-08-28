@@ -21,4 +21,6 @@ BaseTheme {
     icons: IconTokens { }
 
     effects: EffectTokens { }
+
+    layout: LayoutTokens { }
 }

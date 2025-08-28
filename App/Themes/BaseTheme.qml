@@ -36,4 +36,6 @@ QtObject {
     required property IconTokens icons
 
     required property EffectTokens effects
+
+    required property LayoutTokens layout
 }
