@@ -5,6 +5,7 @@ set(qml_files
     tokens/EffectTokens.qml
     tokens/ElevationTokens.qml
     tokens/IconTokens.qml
+    tokens/LayoutTokens.qml
     tokens/OpacityTokens.qml
     tokens/RadiusTokens.qml
     tokens/SpacingTokens.qml

@@ -15,8 +15,8 @@ import App.Features.NotificationsBar 1.0
 
 ApplicationWindow {
     id: app
-    width: 1400
-    height: 800
+    width: Theme.layout.appWindowWidth
+    height: Theme.layout.appWindowHeight
     visible: true
     title: qsTr("IRIDESS FE")
 
@@ -35,7 +35,7 @@ ApplicationWindow {
         spacing: 0
 
         SideRail {
-            Layout.preferredWidth: 80
+            Layout.preferredWidth: Theme.layout.sideRailWidth
             Layout.fillHeight: true
             z: Theme.elevation.panel
 
@@ -54,7 +54,7 @@ ApplicationWindow {
 
             TitleBar {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 68
+                Layout.preferredHeight: Theme.layout.titleBarHeight
             }
 
             RowLayout {
@@ -68,7 +68,7 @@ ApplicationWindow {
 
                     SidePanel {
                         id: sidePanel
-                        width: 490
+                        width: Theme.layout.sidePanelWidth
                         height: parent.height
 
                         Rectangle {
@@ -81,8 +81,8 @@ ApplicationWindow {
 
                     NotificationsBar {
                         id: notificationsBar
-                        width: 490
-                        height: 135
+                        width: Theme.layout.notificationsBarWidth
+                        height: Theme.layout.notificationsBarHeight
                         anchors.left: sidePanel.right
                         anchors.bottom: sidePanel.bottom
 
@@ -100,7 +100,7 @@ ApplicationWindow {
                 }
 
                 ContextPanel {
-                    Layout.preferredWidth: 486
+                    Layout.preferredWidth: Theme.layout.contextPanelWidth
                     Layout.fillHeight: true
 
                     Rectangle {

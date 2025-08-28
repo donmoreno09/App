@@ -23,6 +23,7 @@ QtObject {
     readonly property OpacityTokens     opacity:    current ? current.opacity    : null
     readonly property IconTokens        icons:      current ? current.icons      : null
     readonly property EffectTokens      effects:    current ? current.effects    : null
+    readonly property LayoutTokens      layout:     current ? current.layout     : null
 
     // Signals
     signal themeAboutToChange(int fromVariant, int toVariant)
