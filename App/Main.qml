@@ -4,9 +4,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import App.Themes 1.0
-import App.Components 1.0
+import App.Components 1.0 as UI
+import App.StubComponents 1.0 as UI
 import App.Playground 1.0
-// import App.StubComponents 1.0 as UI
 import App.Features.TitleBar 1.0
 import App.Features.SideRail 1.0
 import App.Features.SidePanel 1.0
@@ -14,12 +14,17 @@ import App.Features.ContextPanel 1.0
 import App.Features.NotificationsBar 1.0
 
 ApplicationWindow {
+    id: app
     width: 1400
     height: 800
     visible: true
     title: qsTr("IRIDESS FE")
 
-    GlobalBackground {
+    Component.onCompleted: {
+        WindowsNcController.attachToWindow(app)
+    }
+
+    UI.GlobalBackground {
         id: globalBackground
         anchors.fill: parent
         visible: false
@@ -50,13 +55,6 @@ ApplicationWindow {
             TitleBar {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 68
-
-                Rectangle {
-                    anchors.fill: parent
-                    color: "transparent"
-                    border.color: "white"
-                    border.width: 2
-                }
             }
 
             RowLayout {
