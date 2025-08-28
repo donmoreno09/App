@@ -1,6 +1,6 @@
 set(qml_files
     Button.qml
-    DateTime.qml
+    StubDateTime.qml
     SearchBar.qml
     Title.qml
 )

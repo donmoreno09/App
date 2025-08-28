@@ -13,11 +13,14 @@
     \endcode
 */
 
-import QtQuick 2.15
+import QtQuick 6.8
+import QtQuick.Layouts 6.8
+
 import App.Themes 1.0
 
-Item {
+RowLayout {
     id: root
+    spacing: Theme.spacing.s2
 
     property bool showSeconds: true
 
@@ -48,55 +51,45 @@ Item {
         onTriggered: d.updateTimeStrings()
     }
 
-    Row {
-        anchors.fill: parent
-        spacing: Theme.spacing.s2
+    Image {
+        source: "../Playground/icons/clock.svg"
+        width: Theme.icons.sizeLg
+        height: Theme.icons.sizeLg
+    }
 
-        Image {
-            source: "../Playground/icons/clock.svg"
-            width: Theme.icons.sizeLg
-            height: Theme.icons.sizeLg
-            anchors.verticalCenter: parent.verticalCenter
-        }
+    Text {
+        text: "UTC"
+        font.family: Theme.typography.familySans
+        font.pixelSize: Theme.typography.sizeLg
+        font.weight: Theme.typography.weightMedium
+        color: Theme.colors.text
+        font.letterSpacing: Theme.typography.letterSpacingWide
+    }
 
-        Text {
-            text: "UTC"
-            font.family: Theme.typography.familySans
-            font.pixelSize: Theme.typography.sizeLg
-            font.weight: Theme.typography.weightMedium
-            color: Theme.colors.text
-            font.letterSpacing: Theme.typography.letterSpacingWide
-            anchors.verticalCenter: parent.verticalCenter
-        }
+    Text {
+        text: d.utcTimeString
+        font.family: Theme.typography.familySans
+        font.pixelSize: Theme.typography.sizeLg
+        font.weight: Theme.typography.weightMedium
+        color: Theme.colors.text
+        font.letterSpacing: Theme.typography.letterSpacingWide
+    }
 
-        Text {
-            text: d.utcTimeString
-            font.family: Theme.typography.familySans
-            font.pixelSize: Theme.typography.sizeLg
-            font.weight: Theme.typography.weightMedium
-            color: Theme.colors.text
-            font.letterSpacing: Theme.typography.letterSpacingWide
-            anchors.verticalCenter: parent.verticalCenter
-        }
+    Text {
+        text: "LOCAL"
+        font.family: Theme.typography.familySans
+        font.pixelSize: Theme.typography.sizeLg
+        font.weight: Theme.typography.weightMedium
+        color: Theme.colors.text
+        font.letterSpacing: Theme.typography.letterSpacingWide
+    }
 
-        Text {
-            text: "LOCAL"
-            font.family: Theme.typography.familySans
-            font.pixelSize: Theme.typography.sizeLg
-            font.weight: Theme.typography.weightMedium
-            color: Theme.colors.text
-            font.letterSpacing: Theme.typography.letterSpacingWide
-            anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Text {
-            text: d.localTimeString
-            font.family: Theme.typography.familySans
-            font.pixelSize: Theme.typography.sizeLg
-            font.weight: Theme.typography.weightMedium
-            color: Theme.colors.text
-            font.letterSpacing: Theme.typography.letterSpacingWide
-            anchors.verticalCenter: parent.verticalCenter
-        }
+    Text {
+        text: d.localTimeString
+        font.family: Theme.typography.familySans
+        font.pixelSize: Theme.typography.sizeLg
+        font.weight: Theme.typography.weightMedium
+        color: Theme.colors.text
+        font.letterSpacing: Theme.typography.letterSpacingWide
     }
 }
