@@ -7,6 +7,8 @@ set(qml_files
     VerticalPadding.qml
     HorizontalSpacer.qml
     VerticalSpacer.qml
+    HorizontalDivider.qml
+    VerticalDivider.qml
 )
 
 qt_add_qml_module(app_components
