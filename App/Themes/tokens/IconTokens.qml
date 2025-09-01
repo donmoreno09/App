@@ -44,5 +44,6 @@ QtObject {
 
     // Semantic role mappings
     // (empty for now, feel free to add when needed)
-    // Example: readonly property int button: sizeLg
+    // Example: readonly property int sizeButton: sizeLg
+    readonly property int sizeLogo: 36
 }
