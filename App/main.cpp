@@ -1,0 +1,21 @@
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QDir>
+
+int main(int argc, char *argv[])
+{
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
+
+    QObject::connect(
+        &engine,
+        &QQmlApplicationEngine::objectCreationFailed,
+        &app,
+        []() { QCoreApplication::exit(-1); },
+        Qt::QueuedConnection);
+
+    engine.addImportPath("qrc:/"); // For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
+    engine.loadFromModule("App", "Main");
+
+    return app.exec();
+}

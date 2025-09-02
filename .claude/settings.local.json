@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ninja:*)",
+      "Bash(cmake:*)",
+      "Bash(git checkout:*)",
+      "Bash(dir)",
+      "Bash(ThemingApp.exe)",
+      "Bash(./ThemingApp.exe)",
+      "Bash(.ThemingApp.exe)",
+      "Bash(where cmake)",
+      "Bash(\"/c/Qt/6.8.3/msvc2022_64/bin/cmake.exe\" --build .)",
+      "Bash(\"/c/Qt/Tools/Ninja/ninja.exe\")",
+      "Bash(\"/c/Qt/Tools/Ninja/ninja.exe\" -j1)",
+      "Bash(dir \"C:\\Users\\esis\\Documents\\ThemingSystem\\qt-theming\\App\\Components\\wizard-page\" /s)",
+      "Bash(dir \"C:\\Users\\esis\\Documents\\ThemingSystem\\qt-theming\\App\\Components\\wizard-page\")",
+      "Bash(dir \"C:\\Users\\esis\\Documents\\ThemingSystem\\qt-theming\\App\\Components\\wizard-page\\constants\")",
+      "Bash(dir \"C:\\Users\\esis\\Documents\\ThemingSystem\\qt-theming\\App\\Components\\wizard-page\\pages\")",
+      "Bash(dir \"C:\\Users\\esis\\Documents\\ThemingSystem\\qt-theming\\App\\Themes\")",
+      "Bash(dir \"C:\\Users\\esis\\Documents\\ThemingSystem\\qt-theming\\App\\Themes\\tokens\")",
+      "Bash(dir \"C:\\Users\\esis\\Documents\\ThemingSystem\\qt-theming\\App\\Themes\\variants\")",
+      "Bash(dir build)",
+      "Bash(dir:*)",
+      "Bash(Title.exe)",
+      "Bash(.buildDesktop_Qt_6_8_3_MSVC2022_64bit-DebugTitle.exe)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "C:\\c\\Qt"
+    ]
+  }
+}
