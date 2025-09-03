@@ -53,6 +53,8 @@ UI.GlobalBackgroundConsumer {
             Layout.preferredWidth: Theme.icons.sizeLogo
             Layout.preferredHeight: Theme.icons.sizeLogo
             Layout.alignment: Qt.AlignCenter
+
+            onClicked: SidePanelController.toggle()
         }
 
         UI.VerticalPadding { }

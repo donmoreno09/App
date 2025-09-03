@@ -19,7 +19,7 @@ QtObject {
 
     function _emitStackChanged() {
         const depth = stackView ? stackView.depth : 0
-        currentPath = _pathStack.length ? _pathStack[_pathStack.length - 1] : ""
+        currentPath = _pathStack.length ? _pathStack[_pathStack.length - 1] ?? "" : ""
         root.stackChanged(depth, currentPath)
     }
 

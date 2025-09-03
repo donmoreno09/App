@@ -34,8 +34,10 @@ QtObject {
     }
 
     function toggle(path, props) {
+        if (path == null) path = ""
+
         if (!isOpen) {
-            open(path, props)
+            open(path ?? PanelRouter.currentPath, props)
             return
         }
 
