@@ -1,4 +1,5 @@
 import QtQuick 6.8
+import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 import App.Components 1.0 as UI
@@ -7,7 +8,7 @@ import App.Themes 1.0
 UI.GlobalBackgroundConsumer {
     ColumnLayout {
         anchors.fill: parent
-        spacing: Theme.spacing.s2
+        spacing: Theme.spacing.s0
         z: Theme.elevation.panel
 
         UI.VerticalPadding { }
@@ -19,8 +20,20 @@ UI.GlobalBackgroundConsumer {
             Layout.alignment: Qt.AlignCenter
         }
 
-        Text {
-            text: "OK"
+        UI.VerticalPadding { }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/clipboard.svg"
+                label: "Mission"
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/submarine.svg"
+                label: "Pod"
+            }
         }
 
         UI.VerticalSpacer { }
