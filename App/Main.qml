@@ -20,8 +20,13 @@ ApplicationWindow {
     visible: true
     title: qsTr("IRIDESS FE")
 
+    // Used for listeners that needs for the app to be fully loaded first.
+    // Apparently Qt's ApplicationWindow does not have a flag for it.
+    property bool appLoaded: false
+
     Component.onCompleted: {
         WindowsNcController.attachToWindow(app)
+        appLoaded = true
     }
 
     UI.GlobalBackground {
@@ -34,18 +39,19 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 0
 
-        SideRail {
-            Layout.preferredWidth: Theme.layout.sideRailWidth
+        RowLayout {
             Layout.fillHeight: true
+            spacing: 0
             z: Theme.elevation.panel
 
-            Rectangle {
-                anchors.fill: parent
-                color: "transparent"
-                border.color: "blue"
-                border.width: 2
+            SideRail {
+                Layout.preferredWidth: Theme.layout.sideRailWidth
+                Layout.fillHeight: true
             }
+
+            UI.VerticalDivider { }
         }
+
 
         ColumnLayout {
             Layout.fillWidth: true
@@ -57,61 +63,48 @@ ApplicationWindow {
                 Layout.preferredHeight: Theme.layout.titleBarHeight
             }
 
+            UI.HorizontalDivider { }
+
             RowLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 spacing: 0
 
                 Item {
-                    Layout.preferredWidth: sidePanel.width
+                    Layout.preferredWidth: 0
                     Layout.fillHeight: true
 
-                    SidePanel {
-                        id: sidePanel
-                        width: Theme.layout.sidePanelWidth
+                    RowLayout {
+                        id: slider
                         height: parent.height
+                        spacing: 0
 
-                        // UI.WizardPageTest {}
+                        x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1 * 2)
+                        Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+                        onXChanged: {
+                            if (!appLoaded) return
+                            sidePanel.recalculateMaskedBg()
+                            notificationsBar.recalculateMaskedBg()
+                        }
 
-                        Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                            border.color: "orange"
-                            border.width: 2
+                        SidePanel {
+                            id: sidePanel
+                            Layout.preferredWidth: Theme.layout.sidePanelWidth
+                            Layout.fillHeight: true
+                        }
+
+                        UI.VerticalDivider { }
+
+                        NotificationsBar {
+                            id: notificationsBar
+                            Layout.preferredWidth: Theme.layout.notificationsBarWidth
+                            Layout.preferredHeight: Theme.layout.notificationsBarHeight
+                            Layout.alignment: Qt.AlignBottom
                         }
                     }
-
-                    NotificationsBar {
-                        id: notificationsBar
-                        width: Theme.layout.notificationsBarWidth
-                        height: Theme.layout.notificationsBarHeight
-                        anchors.left: sidePanel.right
-                        anchors.bottom: sidePanel.bottom
-
-                        Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                            border.color: "red"
-                            border.width: 2
-                        }
-                    }
                 }
 
-                Item {
-                    Layout.fillWidth: true
-                }
-
-                ContextPanel {
-                    Layout.preferredWidth: Theme.layout.contextPanelWidth
-                    Layout.fillHeight: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        color: "transparent"
-                        border.color: "green"
-                        border.width: 2
-                    }
-                }
+                UI.HorizontalSpacer { }
             }
         }
     }

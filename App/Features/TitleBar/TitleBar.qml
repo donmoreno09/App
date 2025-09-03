@@ -1,9 +1,11 @@
 import QtQuick 6.8
+import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 // Import itself to get autocomplete with WindowsNcController
 import App.Features.TitleBar 1.0
+import App.Features.SidePanel 1.0
 import App.StubComponents 1.0 as UI
 import App.Components 1.0 as UI
 
@@ -28,14 +30,15 @@ UI.GlobalBackgroundConsumer {
 
             // LanguageButton
             UI.Button {
-                Layout.preferredWidth: Theme.icons.sizeXl
-                Layout.preferredHeight: Theme.icons.sizeXl
+                display: AbstractButton.IconOnly
+                size: "sm"
+                variant: "ghost"
 
-                background: Rectangle {
-                    anchors.fill: parent
-                    radius: Theme.radius.md
-                    color: Theme.colors.textMuted
-                }
+                icon.width: Theme.icons.sizeSm
+                icon.height: Theme.icons.sizeSm
+                icon.source: "qrc:/App/assets/icons/world.svg"
+
+                onClicked: SidePanelController.toggle("language")
             }
 
             UI.SearchBar { }

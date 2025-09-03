@@ -35,6 +35,7 @@ qt_add_qml_module(app_themes
         ${qml_files}
         ${qml_singletons}
         ${qml_test_files}
+    RESOURCE_PREFIX "/"
 )
 
 # Qt Quick Test Configs

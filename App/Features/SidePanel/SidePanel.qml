@@ -1,7 +1,27 @@
 import QtQuick 6.8
+import QtQuick.Controls 6.8
+import QtQuick.Layouts 6.8
 
-import App.Components 1.0
+import App.Themes 1.0
+import App.Features.TitleBar 1.0
+import App.Features.SidePanel 1.0
+import App.Features.Language 1.0
+import App.Features.Mission 1.0
+import App.Components 1.0 as UI
 
-GlobalBackgroundConsumer {
-    id: root
+UI.GlobalBackgroundConsumer {
+    id: sidePanel
+
+    StackView {
+        id: stackView
+        anchors.fill: parent
+
+        Component.onCompleted: {
+            PanelRouter.stackView = stackView
+        }
+    }
+
+    Component.onCompleted: {
+        SidePanelController.attach(sidePanel)
+    }
 }
