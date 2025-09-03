@@ -1,4 +1,5 @@
 set(qml_files
+    BasePanel.qml
     SidePanel.qml
 )
 
