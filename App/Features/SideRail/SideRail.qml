@@ -24,6 +24,7 @@ UI.GlobalBackgroundConsumer {
 
         ColumnLayout {
             Layout.fillWidth: true
+            spacing: Theme.spacing.s0
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/clipboard.svg"
