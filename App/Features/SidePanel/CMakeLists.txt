@@ -7,6 +7,7 @@ set(qml_files
 
 set(qml_singletons
     PanelRouter.qml
+    SidePanelController.qml
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
