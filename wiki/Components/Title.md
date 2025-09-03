@@ -14,17 +14,16 @@
 
 ## Project Overview
 
-This Qt 6 application demonstrates a production-ready dynamic title management system with centralized state control and automatic UI updates. The component provides smooth animations, visual feedback, and seamless integration with Qt's property binding system.
+This Qt 6 application demonstrates a production-ready dynamic title management system with centralized state control and automatic UI updates. The component provides smooth fade animations, glow visual effects, and seamless integration with Qt's property binding system.
 
 ### Key Features
 
 - **Dynamic Title Updates**: Change titles at runtime with smooth fade animations
-- **Centralized State Management**: Single controller manages all title state
-- **Visual Feedback**: Glow effects provide user feedback during title changes
+- **Centralized State Management**: TitleBarController singleton manages all title state
+- **Visual Feedback**: Glow effects using Qt5Compat.GraphicalEffects
 - **Theme Integration**: Full integration with existing design token system
-- **Property Binding**: Automatic UI updates when controller state changes
-- **Production-Ready**: Type-safe implementation with proper error handling
-- **Modular Architecture**: Clean separation between controller logic and UI components
+- **Property Binding**: Automatic UI updates when TitleBarController state changes
+- **Modular Architecture**: Clean separation between TitleBar controller and Components UI
 
 ## Why This Approach?
 
@@ -45,7 +44,7 @@ Text { text: "Navigation Map" }
 - **No Animation**: Abrupt title changes without smooth transitions
 - **Difficult Testing**: No centralized point to verify title behavior
 
-✅ **Our Solution: Centralized Controller with Property Binding**
+✅ **Our Solution: TitleBarController Singleton with Property Binding**
 
 ### Benefits of This Approach:
 
@@ -63,21 +62,23 @@ Text { text: TitleBarController.currentTitle }
 // No manual update calls needed
 ```
 
-**3. Smooth Animations**
+**3. Smooth Fade Animations**
 ```qml
 // Built-in fade animations for title changes
 SequentialAnimation on opacity {
     PropertyAnimation { to: 0; duration: 200 }
+    PauseAnimation { duration: 200 }
     PropertyAnimation { to: 1; duration: 1000 }
 }
 ```
 
-**4. Visual Feedback**
+**4. Visual Glow Effects**
 ```qml
-// Glow effects provide user feedback
+// Glow effects provide professional appearance
+import Qt5Compat.GraphicalEffects
 Glow {
     source: glowRect
-    color: "#5281c6f0" 
+    color: "#5281c6f0"
     radius: 8
 }
 ```
@@ -93,7 +94,7 @@ Glow {
 └─────────────────┘    └──────────────────┘    └─────────────────┘
          │                       │                       │
     User Actions              State Storage         Visual Rendering
-    (Button clicks)           (currentTitle)        (Text + Glow)
+    (Button clicks)           (currentTitle)     (Text + Glow Effect)
          │                       │                       │
          └──── Property Binding ─┴──── Signal/Slot ─────┘
              (QML auto-updates via property changes)
@@ -103,7 +104,10 @@ Glow {
 
 **1. Singleton Pattern (TitleBarController)**
 ```qml
+// App/Features/TitleBar/TitleBarController.qml
 pragma Singleton
+import QtQuick 6.8
+
 QtObject {
     property string currentTitle: "Overview"
     function setTitle(title) { /* implementation */ }
@@ -113,7 +117,7 @@ QtObject {
 
 **2. Observer Pattern (Qt Property Binding)**
 ```qml
-// UI automatically observes controller changes
+// UI automatically observes TitleBarController changes
 Text { text: TitleBarController.currentTitle }
 // Updates automatically when currentTitle changes
 ```
@@ -130,7 +134,7 @@ Button {
 
 **4. Template Method Pattern (Animation Sequence)**
 ```qml
-SequentialAnimation {
+SequentialAnimation on opacity {
     PropertyAnimation { to: 0; duration: 200 }    // Fade out
     PauseAnimation { duration: 200 }              // Brief pause  
     PropertyAnimation { to: 1; duration: 1000 }   // Fade in
@@ -166,7 +170,6 @@ QtObject {
     function setTitle(title) {
         if (currentTitle !== title) {
             currentTitle = title
-            console.log("Title changed to:", title)
         }
     }
 }
@@ -179,7 +182,7 @@ QtObject {
 
 ### 2. Title Component (UI Display)
 
-**Purpose:** Visual presentation of title with animations and effects.
+**Purpose:** Visual presentation of title with fade animations and glow effects.
 
 **File:** `App/Components/Title.qml`
 
@@ -191,6 +194,8 @@ QtObject {
 
 ```qml
 import QtQuick 6.8
+import QtQuick.Layouts 6.8
+import QtQuick.Controls 6.8
 import Qt5Compat.GraphicalEffects
 import App.Themes 1.0
 import App.Features.TitleBar 1.0
@@ -203,27 +208,39 @@ Rectangle {
         anchors.centerIn: parent
         text: TitleBarController.currentTitle  // Property binding
         color: Theme.colors.text
+        font.pointSize: Theme.typography.sizeSm
+        opacity: 0
         
-        // Fade animation on text changes
+        // Fade animation sequence
         SequentialAnimation on opacity {
             id: fadeAnim
             running: false
-            PropertyAnimation { to: 0; duration: 200 }
-            PauseAnimation { duration: 200 }  
+            PropertyAnimation { to: 0; duration: 0 }
+            PauseAnimation { duration: 200 }
             PropertyAnimation { to: 1; duration: 1000 }
         }
         
         onTextChanged: fadeAnim.restart()
     }
     
-    // Visual indicator with glow effect
+    // Visual indicator rectangle
     Rectangle {
         id: glowRect
-        // ... positioning and styling
+        anchors.top: titleText.bottom
+        anchors.horizontalCenter: titleText.horizontalCenter
+        anchors.topMargin: 4
+        width: 16
+        height: 4
+        topLeftRadius: Theme.radius.sm
+        topRightRadius: Theme.radius.sm
+        color: Theme.colors.primaryText
     }
     
+    // Glow effect using Qt5Compat
     Glow {
+        id: titleGlowEffect
         source: glowRect
+        anchors.fill: glowRect
         color: "#5281c6f0"
         radius: 8
     }
@@ -236,6 +253,16 @@ Rectangle {
 
 **TitleBar Module (Controller):**
 ```cmake
+# App/Features/TitleBar/CMakeLists.txt
+set(qml_files
+    TitleBar.qml
+)
+
+set(cpp_singletons
+    WindowsNcController.h
+    WindowsNcController.cpp
+)
+
 set(qml_singletons
     TitleBarController.qml
 )
@@ -248,21 +275,42 @@ set_source_files_properties(
 qt_add_qml_module(app_features_titlebar
     URI App.Features.TitleBar
     VERSION 1.0
-    QML_FILES ${qml_singletons}
+    QML_FILES
+        ${qml_files}
+        ${qml_singletons}
+    SOURCES ${cpp_singletons}
+)
+
+target_link_libraries(app_features_titlebar
+    PRIVATE
+        Qt6::Quick
 )
 ```
 
 **Components Module (UI):**
 ```cmake
+# App/Components/CMakeLists.txt
 set(qml_files
-    Title.qml
-    # ... other components
+    Button.qml
+    DateTime.qml
+    GlobalBackground.qml
+    GlobalBackgroundConsumer.qml
+    HorizontalPadding.qml
+    VerticalPadding.qml
+    HorizontalSpacer.qml
+    VerticalSpacer.qml
+    Title.qml                    # Title component here
+    wizard-page/WizardPage.qml
+    wizard-page/constants/StepDefinitions.qml
+    wizard-page/test-pages/MissionOverview.qml
+    wizard-page/test-pages/OperationalArea.qml
 )
 
 qt_add_qml_module(app_components
-    URI App.Components  
+    URI App.Components
     VERSION 1.0
     QML_FILES ${qml_files}
+    RESOURCES ${icon_resources}
 )
 ```
 
@@ -270,7 +318,7 @@ qt_add_qml_module(app_components
 
 ### Property Binding Fundamentals
 
-**Problem:** How do UI components know when controller state changes?
+**Problem:** How do UI components know when TitleBarController state changes?
 
 **Solution:** Qt's property binding system provides automatic updates.
 
@@ -290,16 +338,17 @@ currentTitle = "New Title"
 
 ### Animation Integration
 
-**Property-Driven Animations:**
+**Property-Driven Fade Animation:**
 ```qml
 Text {
     text: TitleBarController.currentTitle
     opacity: 0
     
-    // Animation triggers on text changes
+    // Specific animation sequence from your implementation
     SequentialAnimation on opacity {
+        id: fadeAnim
         running: false
-        PropertyAnimation { to: 0; duration: 200 }
+        PropertyAnimation { to: 0; duration: 0 }
         PauseAnimation { duration: 200 }
         PropertyAnimation { to: 1; duration: 1000 }
     }
@@ -309,11 +358,11 @@ Text {
 }
 ```
 
-**Why This Approach?**
-- **Automatic Triggering**: Animations start automatically on property changes
-- **Consistent Timing**: Same animation behavior for all title changes
-- **Smooth Transitions**: Fade out old text, pause, fade in new text
-- **Visual Continuity**: Users see clear transition between titles
+**Why This Timing?**
+- **Initial State (0 opacity)**: Text starts invisible
+- **Pause (200ms)**: Brief delay before fade-in begins
+- **Fade In (1000ms)**: Slow, smooth appearance of new title
+- **Total Experience**: Professional, readable transition
 
 ## Implementation Details
 
@@ -327,7 +376,7 @@ set_source_files_properties(
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
 )
 
-# Include in QML module
+# Include in TitleBar module
 qt_add_qml_module(app_features_titlebar
     URI App.Features.TitleBar
     QML_FILES TitleBarController.qml
@@ -340,79 +389,78 @@ pragma Singleton
 import QtQuick 6.8
 
 QtObject {
-    // Singleton implementation
+    id: titleBarController
+    property string currentTitle: "Overview"
+    function setTitle(title) {
+        if (currentTitle !== title) {
+            currentTitle = title
+        }
+    }
 }
 ```
 
 **What This Enables:**
-1. **Global Access**: Available from any QML component via import
-2. **Single Instance**: Only one controller instance exists
+1. **Global Access**: Available from any QML component via `import App.Features.TitleBar 1.0`
+2. **Single Instance**: Only one TitleBarController instance exists
 3. **Automatic Loading**: Qt creates instance on first access
 4. **Memory Efficiency**: Shared across all components
 
-### Animation Timing Strategy
+### Glow Effect Implementation
 
-**Animation Sequence Breakdown:**
-
-```qml
-SequentialAnimation on opacity {
-    PropertyAnimation { to: 0; duration: 200 }    // Fade out: 200ms
-    PauseAnimation { duration: 200 }              // Pause: 200ms
-    PropertyAnimation { to: 1; duration: 1000 }   // Fade in: 1000ms
-}
-// Total duration: 1400ms
-```
-
-**Timing Rationale:**
-- **Fast Fade Out (200ms)**: Quick removal of old content
-- **Brief Pause (200ms)**: Clear separation between old/new content
-- **Slow Fade In (1000ms)**: Gentle presentation of new content
-- **Total Experience**: Smooth, professional transition
-
-### Visual Effects Implementation
-
-**Glow Effect Setup:**
+**Qt5Compat Dependency:**
 ```qml
 import Qt5Compat.GraphicalEffects
 
 Rectangle {
     id: glowRect
     color: Theme.colors.primaryText
-    // ... positioning
+    // ... positioning and sizing
 }
 
 Glow {
-    source: glowRect
-    anchors.fill: glowRect
-    color: "#5281c6f0"  // Semi-transparent blue
-    radius: 8           // Soft glow spread
+    id: titleGlowEffect
+    source: glowRect           // Source rectangle to glow
+    anchors.fill: glowRect     // Same size as source
+    color: "#5281c6f0"         // Semi-transparent blue
+    radius: 8                  // Glow spread radius
 }
 ```
 
-**Effect Benefits:**
-- **Visual Hierarchy**: Draws attention to title area
-- **Professional Appearance**: Polished, modern look
-- **Theme Integration**: Colors from design system
-- **Performance**: GPU-accelerated rendering
+**Effect Configuration:**
+- **Source**: The `glowRect` Rectangle provides the shape to glow
+- **Color**: `#5281c6f0` creates a semi-transparent blue glow
+- **Radius**: `8` pixels provides subtle but visible glow spread
+- **Performance**: GPU-accelerated when available
+
+### Animation Sequence Breakdown
+
+**Your Specific Implementation:**
+```qml
+SequentialAnimation on opacity {
+    id: fadeAnim
+    running: false
+    PropertyAnimation { to: 0; duration: 0 }      // Instant reset
+    PauseAnimation { duration: 200 }              // 200ms pause
+    PropertyAnimation { to: 1; duration: 1000 }   // 1000ms fade in
+}
+onTextChanged: fadeAnim.restart()
+```
+
+**Timing Analysis:**
+- **Instant Reset**: Immediately hides text when change occurs
+- **200ms Pause**: Brief moment for visual separation
+- **1000ms Fade**: Slow, readable appearance of new title
+- **Total Duration**: 1200ms for complete transition
 
 ## Workflow & Process
 
 ### Development Workflow
 
-**1. Title Definition Phase**
+**1. Title Integration**
 ```qml
-// Define titles for each section
-const SECTION_TITLES = {
-    "overview": "Overview",
-    "mission": "Mission Planning", 
-    "map": "Navigation Map",
-    "analytics": "Analytics Dashboard"
-}
-```
+// Import TitleBarController in navigation components
+import App.Features.TitleBar 1.0
 
-**2. Navigation Integration**
-```qml
-// Connect navigation to title updates
 Button {
     text: "Mission"
     onClicked: {
@@ -422,42 +470,48 @@ Button {
 }
 ```
 
-**3. Testing & Verification**
+**2. Title Component Usage**
+```qml
+// Use Title component in layouts
+import App.Components 1.0
+
+RowLayout {
+    // ... other components
+    Title { }  // Automatically shows current title
+    // ... other components
+}
+```
+
+**3. Testing Integration**
 ```qml
 // Test title updates
 Component.onCompleted: {
-    console.log("Initial title:", TitleBarController.currentTitle)
-    TitleBarController.setTitle("Test Title")
-    console.log("Updated title:", TitleBarController.currentTitle)
+    console.log("Initial:", TitleBarController.currentTitle)
+    TitleBarController.setTitle("Test")
 }
 ```
 
-### Adding New Titles
+### Adding New Navigation Sections
 
-**Example: Adding Settings Section**
+**Example: Adding Analytics Section**
 
-**Step 1: Define title constant**
+**Step 1: Update navigation handler**
 ```qml
-const SETTINGS_TITLE = "Application Settings"
-```
-
-**Step 2: Create navigation handler**
-```qml
-function navigateToSettings() {
-    TitleBarController.setTitle(SETTINGS_TITLE)
-    // Additional navigation logic
+function navigateToAnalytics() {
+    TitleBarController.setTitle("Analytics Dashboard")
+    stackView.push("AnalyticsPage.qml")
 }
 ```
 
-**Step 3: Connect to UI**
+**Step 2: Connect to UI button**
 ```qml
 Button {
-    text: "Settings"
-    onClicked: navigateToSettings()
+    text: "Analytics"
+    onClicked: navigateToAnalytics()
 }
 ```
 
-**Result:** Settings navigation now updates title automatically with consistent animations.
+**Result:** Analytics navigation now updates title with fade animation automatically.
 
 ## Building & Running
 
@@ -466,7 +520,7 @@ Button {
 - **Qt 6.8+**: Core framework with QML and property binding
 - **CMake 3.16+**: Build system with Qt module support
 - **C++17 Compiler**: For Qt framework compatibility
-- **Qt5Compat.GraphicalEffects**: For glow effects (legacy module)
+- **Qt5Compat.GraphicalEffects**: Required for Glow effects
 
 ### Build Commands
 
@@ -478,106 +532,108 @@ cmake -B build -S .
 cmake --build build
 
 # Run application
-./build/Debug/YourApp.exe  # Windows
-./build/YourApp            # Linux/macOS
+./build/Debug/IRIDESS_FE.exe  # Windows
+./build/IRIDESS_FE            # Linux/macOS
 ```
 
 ### Verification Steps
 
 **1. Check Module Registration**
 ```bash
-# Verify QML modules are built
+# Verify TitleBar module built correctly
 ls build/*/App/Features/TitleBar/
+# Should contain: qmldir, TitleBarController.qmlc
+
+# Verify Components module built correctly
 ls build/*/App/Components/
+# Should contain: qmldir, Title.qmlc
 ```
 
 **2. Test Title Updates**
-- Start application (should show "Overview")
-- Navigate between sections (titles should change with animations)
-- Check console output for title change logs
+- Start application (should show "Overview" with glow effect)
+- Navigate using SideRail buttons
+- Watch for fade animation: text disappears, pause, then fades in
+- Verify glow effect is visible around small rectangle
 
-**3. Verify Animations**
-- Watch for fade out/pause/fade in sequence
-- Confirm glow effects are visible
-- Test rapid title changes (animations should queue properly)
+**3. Console Verification**
+Expected output when clicking navigation:
+```
+Language button clicked
+Title changed to: Language Settings
+```
 
 ## Best Practices
 
-### 1. Title Management
+### 1. TitleBarController Usage
 
 **✅ Good Practices**
 ```qml
-// Use descriptive, user-friendly titles
+// Import controller properly
+import App.Features.TitleBar 1.0
+
+// Use descriptive titles
 TitleBarController.setTitle("Mission Planning")
 
-// Update titles before navigation
+// Update before navigation
 function navigateToSection(section) {
     TitleBarController.setTitle(getSectionTitle(section))
     performNavigation(section)
-}
-
-// Use constants for consistency
-const TITLES = {
-    OVERVIEW: "Overview",
-    MISSION: "Mission Planning"
 }
 ```
 
 **❌ Avoid**
 ```qml
-// Vague or technical titles
-TitleBarController.setTitle("Screen2")
+// Missing import
+TitleBarController.setTitle("Title")  // Error: not defined
 
-// Navigation without title updates
-stackView.push("MissionPage.qml") // Title stays old
+// Vague titles  
+TitleBarController.setTitle("Page 2")
 
-// Magic strings scattered throughout code
-TitleBarController.setTitle("Mission Planning") // No consistency
+// Navigation without title update
+stackView.push("NewPage.qml")  // Title stays old
 ```
 
 ### 2. Animation Performance
 
 **✅ Optimize Animations**
 ```qml
-// Use appropriate durations
+// Use your specific timing
 SequentialAnimation on opacity {
-    PropertyAnimation { to: 0; duration: 200 }  // Quick fade out
-    PropertyAnimation { to: 1; duration: 800 }  // Smooth fade in
+    running: false  // Only run when triggered
+    PropertyAnimation { to: 0; duration: 0 }
+    PauseAnimation { duration: 200 }
+    PropertyAnimation { to: 1; duration: 1000 }
 }
 
-// Avoid complex animations for frequent changes
-onTextChanged: {
-    if (animationEnabled) {
-        fadeAnimation.restart()
-    }
-}
+// Trigger efficiently
+onTextChanged: fadeAnim.restart()  // Only on actual changes
 ```
 
-**Performance Considerations**
+**Performance Benefits:**
 - **GPU Acceleration**: Glow effects use GPU when available
-- **Animation Queuing**: Qt handles overlapping animations gracefully
-- **Memory Usage**: Single controller instance shared across components
+- **Efficient Triggering**: Animation only runs on text changes
+- **Single Controller**: Shared instance reduces memory usage
 
-### 3. Module Architecture
+### 3. Module Organization
 
 **✅ Recommended Structure**
 ```
 App/Features/TitleBar/
 ├── TitleBarController.qml    # Singleton controller
-├── CMakeLists.txt           # Module build config
-└── README.md               # Module documentation
+├── TitleBar.qml             # Main title bar UI
+├── WindowsNcController.h/.cpp # Window controls
+└── CMakeLists.txt           # Module build config
 
 App/Components/
-├── Title.qml               # UI component
-├── CMakeLists.txt         # Components build config
-└── ...                    # Other components
+├── Title.qml               # Title display component
+├── Button.qml              # Other reusable components
+└── CMakeLists.txt         # Components build config
 ```
 
 **Benefits:**
-- **Separation of Concerns**: Controller logic separate from UI
-- **Reusability**: Title component can be used anywhere
-- **Testability**: Controller can be tested independently
-- **Maintainability**: Changes localized to specific modules
+- **Clear Separation**: Controller logic in TitleBar module, UI in Components
+- **Reusability**: Title component can be used in any layout
+- **Maintainability**: Related functionality grouped together
 
 ## Troubleshooting
 
@@ -585,133 +641,141 @@ App/Components/
 
 **1. "TitleBarController is not defined"**
 
-**Problem:** QML cannot find the singleton controller.
+**Problem:** QML cannot find the TitleBarController singleton.
 
 **Solutions:**
 ```qml
 // ✅ Ensure correct import
 import App.Features.TitleBar 1.0
 
-// ✅ Verify CMakeLists.txt registration
+// ✅ Verify CMakeLists.txt in App/Features/TitleBar/
 set_source_files_properties(TitleBarController.qml
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 // ✅ Check module URI matches import
 qt_add_qml_module(app_features_titlebar
-    URI App.Features.TitleBar  # Must match import
+    URI App.Features.TitleBar  # Must match import exactly
 ```
 
-**2. Title Updates But No Animation**
+**2. Title Updates But No Fade Animation**
 
 **Problem:** Text changes but fade animation doesn't trigger.
 
-**Solutions:**
+**Debug Steps:**
 ```qml
-// ❌ Wrong: Animation not connected to text changes
-SequentialAnimation on opacity {
-    running: true  // Always running
+Text {
+    text: TitleBarController.currentTitle
+    opacity: 0  // ✅ Must start at 0
+    
+    SequentialAnimation on opacity {
+        id: fadeAnim
+        running: false  // ✅ Must be false initially
+        PropertyAnimation { to: 0; duration: 0 }
+        PauseAnimation { duration: 200 }
+        PropertyAnimation { to: 1; duration: 1000 }
+    }
+    
+    onTextChanged: {
+        console.log("Text changed to:", text)
+        fadeAnim.restart()  // ✅ Must call restart()
+    }
 }
-
-// ✅ Correct: Animation triggered by text changes  
-SequentialAnimation on opacity {
-    id: fadeAnim
-    running: false
-    // ... animation steps
-}
-onTextChanged: fadeAnim.restart()
 ```
 
 **3. Glow Effect Not Visible**
 
-**Problem:** Glow component renders but no visual effect appears.
+**Problem:** Glow component exists but no visual effect appears.
 
 **Solutions:**
 ```qml
-// ✅ Verify import
+// ✅ Verify Qt5Compat import
 import Qt5Compat.GraphicalEffects
 
-// ✅ Check source rectangle
+// ✅ Check source rectangle properties
 Rectangle {
     id: glowRect
-    visible: true           # Must be visible
-    color: "white"         # Must have visible color
+    color: Theme.colors.primaryText  // Must have visible color
+    width: 16                        // Must have size
+    height: 4                        // Must have size
 }
 
 // ✅ Configure glow properly
 Glow {
-    source: glowRect       # Must reference visible source
-    anchors.fill: glowRect # Must have proper sizing
-    color: "#5281c6f0"     # Semi-transparent color
-    radius: 8              # Appropriate radius
+    source: glowRect              // Must reference existing rectangle
+    anchors.fill: glowRect        // Must have proper anchoring
+    color: "#5281c6f0"           // Semi-transparent for effect
+    radius: 8                     // Appropriate radius (4-12 typical)
 }
 ```
 
-**4. Build Errors with QML Modules**
+**4. Module Build Errors**
 
 **Problem:** CMake can't find or build QML modules.
 
 **Debug Steps:**
 ```bash
-# Check Qt installation
-qmake --version
-
-# Verify CMake Qt integration  
+# Check Qt6 QML tools installation
+find /path/to/qt -name "qmlcachegen"
 find /path/to/qt -name "Qt6QmlMacros.cmake"
 
 # Clean build to resolve cache issues
 rm -rf build/
 cmake -B build -S .
-cmake --build build
+cmake --build build --verbose
+
+# Check module output
+find build/ -name "qmldir"
+find build/ -name "*.qmlc"
 ```
 
-**5. Property Binding Not Updating**
+**5. Animation Overlap Issues**
 
-**Problem:** UI component doesn't update when controller property changes.
+**Problem:** Multiple rapid title changes cause animation conflicts.
 
-**Debug Steps:**
+**Solutions:**
 ```qml
-// Add debug logging
-Text {
-    text: TitleBarController.currentTitle
+// ✅ Your implementation handles this correctly
+onTextChanged: fadeAnim.restart()  // restart() stops current and begins new
+
+// ✅ Verify animation state
+SequentialAnimation {
+    id: fadeAnim
+    running: false  // Important: only run when explicitly started
     
-    Component.onCompleted: {
-        console.log("Initial title:", text)
-    }
-    
-    onTextChanged: {
-        console.log("Title updated to:", text)
+    onRunningChanged: {
+        console.log("Animation running:", running)
     }
 }
-
-// Verify controller property changes
-TitleBarController.setTitle("Test")
-console.log("Controller title:", TitleBarController.currentTitle)
 ```
 
 ### Debugging Commands
 
 ```bash
-# Check QML module compilation
-find build/ -name "*.qmlc"
-find build/ -name "qmldir"
+# Check TitleBar module compilation
+find build/ -path "*/TitleBar/*.qmlc"
+find build/ -path "*/TitleBar/qmldir"
 
-# Verify resource embedding  
-objdump -s -j .rodata build/YourApp | grep -i title
+# Check Components module compilation  
+find build/ -path "*/Components/*.qmlc"
+find build/ -path "*/Components/qmldir"
 
-# Test QML syntax
-qmlscene --help
-qmlscene App/Components/Title.qml
+# Verify Qt5Compat availability
+find /path/to/qt -name "*Qt5Compat*"
+
+# Test QML syntax independently
+qmlscene App/Components/Title.qml  # May not work due to dependencies
 ```
 
 ## Conclusion
 
 This Qt Dynamic Title Component demonstrates a production-ready approach to centralized title management with:
 
-- **Centralized Control**: Single controller manages all title state
-- **Automatic Updates**: Property binding ensures UI stays synchronized  
-- **Visual Polish**: Smooth animations and glow effects enhance user experience
-- **Modular Architecture**: Clean separation between controller and UI components
-- **Qt Integration**: Leverages Qt's property system and QML module architecture
-- **Maintainability**: Easy to extend with new titles and customize animations
+- **TitleBarController Singleton**: Centralized state management with global access
+- **Automatic Property Binding**: UI components update automatically via Qt's property system  
+- **Smooth Fade Animations**: Professional 1200ms transition sequence (200ms pause + 1000ms fade)
+- **Glow Visual Effects**: Qt5Compat.GraphicalEffects provides polished appearance
+- **Modular Architecture**: Clean separation between TitleBar controller and Components UI
+- **Theme Integration**: Uses existing design token system for consistent styling
+- **CMake Integration**: Proper QML module configuration with singleton registration
 
-The architecture scales well for larger applications and provides a solid foundation for sophisticated UI state management patterns throughout Qt applications.
+The architecture scales well for larger applications and demonstrates best practices for Qt QML singleton controllers, property binding, and visual effects integration.
