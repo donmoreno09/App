@@ -1,4 +1,5 @@
 set(qml_files
+    ButtonGroupTest.qml
     IconButtonsTest.qml
     DateTimeTest.qml
     WizardPageTest.qml
