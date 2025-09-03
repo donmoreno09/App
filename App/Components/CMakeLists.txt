@@ -1,4 +1,5 @@
 set(qml_files
+    Avatar.qml
     Button.qml
     DateTime.qml
     GlobalBackground.qml
