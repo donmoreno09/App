@@ -22,6 +22,8 @@ import App.Themes 1.0
 Button {
     id: root
 
+    property alias backgroundRect: backgroundRect
+
     property string variant: "primary"
     property string size: "md"
     property int radius: Theme.radius.md
