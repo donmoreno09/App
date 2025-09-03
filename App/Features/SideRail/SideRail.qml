@@ -4,12 +4,14 @@ import QtQuick.Layouts 6.8
 
 import App.Components 1.0
 import App.Themes 1.0
+import App.Features.TitleBar 1.0
 
 GlobalBackgroundConsumer {
     id: root
 
     ColumnLayout {
         spacing: Theme.spacing.s4
+        anchors.fill: parent
 
         Button {
             id: languageButton
@@ -24,7 +26,7 @@ GlobalBackgroundConsumer {
 
 
             onClicked: {
-                TitleController.setTitle("Language Settings")
+                TitleBarController.setTitle("Language Settings")
             }
 
             ToolTip {
@@ -47,7 +49,7 @@ GlobalBackgroundConsumer {
             icon.color: checked ? Theme.colors.primaryText : Theme.colors.text
 
             onClicked: {
-                TitleController.setTitle("Mission Wizard")
+                TitleBarController.setTitle("Mission Wizard")
             }
 
             ToolTip {
