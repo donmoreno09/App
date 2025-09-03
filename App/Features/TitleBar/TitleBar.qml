@@ -4,8 +4,8 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 // Import itself to get autocomplete with WindowsNcController
 import App.Features.TitleBar 1.0
-import App.Components 1.0 as UI
 import App.StubComponents 1.0 as UI
+import App.Components 1.0 as UI
 
 UI.GlobalBackgroundConsumer {
     RowLayout {
