@@ -41,6 +41,14 @@ UI.GlobalBackgroundConsumer {
 
                 onClicked: SidePanelController.toggle("pod")
             }
+
+            SideRailItem {
+                visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
+                source: "qrc:/App/assets/icons/world.svg"
+                label: "Language"
+
+                onClicked: SidePanelController.toggle("language")
+            }
         }
 
         UI.VerticalSpacer { }
