@@ -38,14 +38,9 @@ ApplicationWindow {
             Layout.preferredWidth: Theme.layout.sideRailWidth
             Layout.fillHeight: true
             z: Theme.elevation.panel
-
-            Rectangle {
-                anchors.fill: parent
-                color: "transparent"
-                border.color: "blue"
-                border.width: 2
-            }
         }
+
+        UI.VerticalDivider { }
 
         ColumnLayout {
             Layout.fillWidth: true
@@ -56,6 +51,8 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.preferredHeight: Theme.layout.titleBarHeight
             }
+
+            UI.HorizontalDivider { }
 
             RowLayout {
                 Layout.fillWidth: true
@@ -70,48 +67,35 @@ ApplicationWindow {
                         id: sidePanel
                         width: Theme.layout.sidePanelWidth
                         height: parent.height
-
+                        
                         // UI.WizardPageTest {}
+                    }
 
-                        Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                            border.color: "orange"
-                            border.width: 2
-                        }
+                    UI.VerticalDivider {
+                        id: sidePanelDivider
+                        width: Theme.borders.b1
+                        height: parent.height
+                        anchors.left: sidePanel.right
                     }
 
                     NotificationsBar {
                         id: notificationsBar
                         width: Theme.layout.notificationsBarWidth
                         height: Theme.layout.notificationsBarHeight
-                        anchors.left: sidePanel.right
+                        anchors.left: sidePanelDivider.right
                         anchors.bottom: sidePanel.bottom
 
                         Rectangle {
                             anchors.fill: parent
                             color: "transparent"
-                            border.color: "red"
-                            border.width: 2
+                            border.color: "white"
+                            border.width: Theme.borders.b1
+                            opacity: Theme.opacity.o10
                         }
                     }
                 }
 
-                Item {
-                    Layout.fillWidth: true
-                }
-
-                ContextPanel {
-                    Layout.preferredWidth: Theme.layout.contextPanelWidth
-                    Layout.fillHeight: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        color: "transparent"
-                        border.color: "green"
-                        border.width: 2
-                    }
-                }
+                UI.HorizontalSpacer { }
             }
         }
     }

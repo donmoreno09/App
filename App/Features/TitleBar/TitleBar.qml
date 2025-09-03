@@ -1,4 +1,5 @@
 import QtQuick 6.8
+import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
@@ -28,14 +29,13 @@ UI.GlobalBackgroundConsumer {
 
             // LanguageButton
             UI.Button {
-                Layout.preferredWidth: Theme.icons.sizeXl
-                Layout.preferredHeight: Theme.icons.sizeXl
+                display: AbstractButton.IconOnly
+                size: "sm"
+                variant: "ghost"
 
-                background: Rectangle {
-                    anchors.fill: parent
-                    radius: Theme.radius.md
-                    color: Theme.colors.textMuted
-                }
+                icon.width: Theme.icons.sizeSm
+                icon.height: Theme.icons.sizeSm
+                icon.source: "qrc:/App/assets/icons/world.svg"
             }
 
             UI.SearchBar { }

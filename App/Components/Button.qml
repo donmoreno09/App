@@ -22,6 +22,8 @@ import App.Themes 1.0
 Button {
     id: root
 
+    property alias backgroundRect: backgroundRect
+
     property string variant: "primary"
     property string size: "md"
     property int radius: Theme.radius.md
@@ -29,7 +31,7 @@ Button {
     property int focusOffset: Theme.borders.offset2
     property color focusColor: Theme.colors.primary
 
-    readonly property bool focused: activeFocus && enabled
+    readonly property bool focused: visualFocus && enabled
 
     readonly property string currentState: {
         if (!enabled) return "disabled"
@@ -92,7 +94,7 @@ Button {
             textColorDisabled: Theme.colors.primaryText
         },
         "ghost": {
-            background: Theme.colors.background,
+            background: Theme.colors.transparent,
             backgroundHover: Theme.colors.overlay,
             backgroundPressed: Theme.colors.surface,
             backgroundDisabled: Theme.colors.overlay,

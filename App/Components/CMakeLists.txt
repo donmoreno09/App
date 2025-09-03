@@ -1,4 +1,5 @@
 set(qml_files
+    Avatar.qml
     Button.qml
     DateTime.qml
     GlobalBackground.qml
@@ -7,6 +8,8 @@ set(qml_files
     VerticalPadding.qml
     HorizontalSpacer.qml
     VerticalSpacer.qml
+    HorizontalDivider.qml
+    VerticalDivider.qml
     wizard-page/WizardPage.qml
     wizard-page/constants/StepDefinitions.qml
     wizard-page/test-pages/MissionOverview.qml

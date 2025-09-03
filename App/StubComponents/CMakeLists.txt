@@ -1,5 +1,5 @@
 set(qml_files
-    Button.qml
+    StubButton.qml
     StubDateTime.qml
     SearchBar.qml
     Title.qml

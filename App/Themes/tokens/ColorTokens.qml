@@ -29,6 +29,7 @@ QtObject {
     readonly property color background: "#0F1115" // App base layer; behind all content
     readonly property color surface: "#171A21"    // Elevated containers (cards, panels, sheets)
     readonly property color overlay: "#202630"    // Transparent/dim layer above background/surface
+    readonly property color transparent: "transparent"
 
     // Text
     readonly property color text: "#E8EAED"
