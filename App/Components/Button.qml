@@ -94,7 +94,7 @@ Button {
             textColorDisabled: Theme.colors.primaryText
         },
         "ghost": {
-            background: Theme.colors.background,
+            background: Theme.colors.transparent,
             backgroundHover: Theme.colors.overlay,
             backgroundPressed: Theme.colors.surface,
             backgroundDisabled: Theme.colors.textMuted,

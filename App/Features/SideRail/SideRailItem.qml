@@ -24,5 +24,4 @@ UI.Button {
 
     radius: 0
     backgroundRect.border.width: Theme.borders.b0
-    backgroundRect.color: "transparent"
 }
