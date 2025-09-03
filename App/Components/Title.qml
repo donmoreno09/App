@@ -14,6 +14,17 @@ Rectangle {
         text: TitleBarController.currentTitle
         color: Theme.colors.text
         font.pointSize: Theme.typography.sizeSm
+        opacity: 0
+
+        SequentialAnimation on opacity {
+            id: fadeAnim
+            running: false
+            PropertyAnimation { to: 0; duration: 0 }
+            PauseAnimation { duration: 200 }
+            PropertyAnimation { to: 1; duration: 1000 }
+        }
+
+        onTextChanged: fadeAnim.restart()
     }
 
     Rectangle {
@@ -26,7 +37,6 @@ Rectangle {
         topLeftRadius: Theme.radius.sm
         topRightRadius: Theme.radius.sm
         color: Theme.colors.primaryText
-        opacity: 0.9
     }
 
     Glow {
@@ -35,6 +45,5 @@ Rectangle {
         anchors.fill: glowRect
         color: "#5281c6f0"
         radius: 8
-        scale: glowRect.scale
     }
 }
