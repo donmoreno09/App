@@ -3,8 +3,9 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import QtQuick.Effects 6.8
 
-import App.Components 1.0 as UI
 import App.Themes 1.0
+import App.Components 1.0 as UI
+import App.Features.SidePanel
 
 UI.GlobalBackgroundConsumer {
     ColumnLayout {
@@ -30,11 +31,15 @@ UI.GlobalBackgroundConsumer {
             SideRailItem {
                 source: "qrc:/App/assets/icons/clipboard.svg"
                 label: "Mission"
+
+                onClicked: SidePanelController.toggle("language")
             }
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/submarine.svg"
                 label: "Pod"
+
+                onClicked: SidePanelController.toggle("pod")
             }
         }
 

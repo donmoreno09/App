@@ -20,8 +20,13 @@ ApplicationWindow {
     visible: true
     title: qsTr("IRIDESS FE")
 
+    // Used for listeners that needs for the app to be fully loaded first.
+    // Apparently Qt's ApplicationWindow does not have a flag for it.
+    property bool appLoaded: false
+
     Component.onCompleted: {
         WindowsNcController.attachToWindow(app)
+        appLoaded = true
     }
 
     UI.GlobalBackground {
@@ -60,37 +65,39 @@ ApplicationWindow {
                 spacing: 0
 
                 Item {
-                    Layout.preferredWidth: sidePanel.width
+                    Layout.preferredWidth: 0
                     Layout.fillHeight: true
 
-                    SidePanel {
-                        id: sidePanel
-                        width: Theme.layout.sidePanelWidth
+                    RowLayout {
+                        id: slider
                         height: parent.height
-                        
-                        // UI.WizardPageTest {}
-                    }
+                        spacing: 0
 
-                    UI.VerticalDivider {
-                        id: sidePanelDivider
-                        width: Theme.borders.b1
-                        height: parent.height
-                        anchors.left: sidePanel.right
-                    }
+                        x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1)
+                        Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+                        onXChanged: {
+                            if (!appLoaded) return
+                            sidePanel.recalculateMaskedBg()
+                            notificationsBar.recalculateMaskedBg()
+                        }
 
-                    NotificationsBar {
-                        id: notificationsBar
-                        width: Theme.layout.notificationsBarWidth
-                        height: Theme.layout.notificationsBarHeight
-                        anchors.left: sidePanelDivider.right
-                        anchors.bottom: sidePanel.bottom
+                        SidePanel {
+                            id: sidePanel
+                            Layout.preferredWidth: Theme.layout.sidePanelWidth
+                            Layout.fillHeight: true
+                        }
 
                         Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                            border.color: "white"
-                            border.width: Theme.borders.b1
-                            opacity: Theme.opacity.o10
+                            Layout.preferredWidth: Theme.borders.b1
+                            Layout.fillHeight: true
+                            color: Theme.colors.border
+                        }
+
+                        NotificationsBar {
+                            id: notificationsBar
+                            Layout.preferredWidth: Theme.layout.notificationsBarWidth
+                            Layout.preferredHeight: Theme.layout.notificationsBarHeight
+                            Layout.alignment: Qt.AlignBottom
                         }
                     }
                 }
