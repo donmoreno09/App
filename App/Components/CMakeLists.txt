@@ -10,6 +10,10 @@ set(qml_files
     VerticalSpacer.qml
     HorizontalDivider.qml
     VerticalDivider.qml
+    wizard-page/WizardPage.qml
+    wizard-page/constants/StepDefinitions.qml
+    wizard-page/test-pages/MissionOverview.qml
+    wizard-page/test-pages/OperationalArea.qml
 )
 
 qt_add_qml_module(app_components

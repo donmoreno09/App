@@ -28,6 +28,10 @@ Item {
             recursive: true
             visible: false
             sourceRect: {
+                // Force dependency tracking of screen resizes.
+                // This fixes stuck panel with white background.
+                root.x; root.y; bg.x; bg.y; bg.width; bg.height;
+
                 const p = bg.mapFromItem(root, 0, 0)
                 return Qt.rect(p.x, p.y, root.width, root.height)
             }
