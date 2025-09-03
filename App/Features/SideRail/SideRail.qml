@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import QtQuick.Effects 6.8
 
 import App.Components 1.0 as UI
 import App.Themes 1.0
@@ -38,6 +39,27 @@ UI.GlobalBackgroundConsumer {
         }
 
         UI.VerticalSpacer { }
+
+        UI.Button {
+            display: AbstractButton.IconOnly
+            icon.source: "qrc:/App/assets/icons/panel-chevron.svg"
+            icon.width: Theme.icons.sizeMd
+            icon.height: Theme.icons.sizeMd
+            Layout.preferredWidth: Theme.icons.sizeLogo
+            Layout.preferredHeight: Theme.icons.sizeLogo
+            Layout.alignment: Qt.AlignCenter
+        }
+
+        UI.VerticalPadding { }
+
+        UI.Avatar {
+            Layout.preferredWidth: Theme.icons.sizeLogo
+            Layout.preferredHeight: Theme.icons.sizeLogo
+            Layout.alignment: Qt.AlignCenter
+
+            source: "qrc:/App/assets/images/avatar.png"
+            radius: Theme.radius.circle(width, height)
+        }
 
         UI.VerticalPadding { }
     }
