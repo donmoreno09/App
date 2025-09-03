@@ -31,7 +31,7 @@ Button {
     property int focusOffset: Theme.borders.offset2
     property color focusColor: Theme.colors.primary
 
-    readonly property bool focused: activeFocus && enabled
+    readonly property bool focused: visualFocus && enabled
 
     readonly property string currentState: {
         if (!enabled) return "disabled"
