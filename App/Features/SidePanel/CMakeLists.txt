@@ -1,5 +1,6 @@
 set(qml_files
     BasePanel.qml
+    NotFoundPanel.qml
     SidePanel.qml
 )
 
