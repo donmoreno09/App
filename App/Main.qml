@@ -39,13 +39,19 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 0
 
-        SideRail {
-            Layout.preferredWidth: Theme.layout.sideRailWidth
+        RowLayout {
             Layout.fillHeight: true
+            spacing: 0
             z: Theme.elevation.panel
+
+            SideRail {
+                Layout.preferredWidth: Theme.layout.sideRailWidth
+                Layout.fillHeight: true
+            }
+
+            UI.VerticalDivider { }
         }
 
-        UI.VerticalDivider { }
 
         ColumnLayout {
             Layout.fillWidth: true
@@ -73,7 +79,7 @@ ApplicationWindow {
                         height: parent.height
                         spacing: 0
 
-                        x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1)
+                        x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1 * 2)
                         Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
                         onXChanged: {
                             if (!appLoaded) return
@@ -87,11 +93,7 @@ ApplicationWindow {
                             Layout.fillHeight: true
                         }
 
-                        Rectangle {
-                            Layout.preferredWidth: Theme.borders.b1
-                            Layout.fillHeight: true
-                            color: Theme.colors.border
-                        }
+                        UI.VerticalDivider { }
 
                         NotificationsBar {
                             id: notificationsBar
