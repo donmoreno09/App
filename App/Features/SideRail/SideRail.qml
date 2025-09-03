@@ -32,7 +32,7 @@ UI.GlobalBackgroundConsumer {
                 source: "qrc:/App/assets/icons/clipboard.svg"
                 label: "Mission"
 
-                onClicked: SidePanelController.toggle("language")
+                onClicked: SidePanelController.toggle("mission")
             }
 
             SideRailItem {
