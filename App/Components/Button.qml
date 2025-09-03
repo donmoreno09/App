@@ -95,7 +95,7 @@ Button {
             background: Theme.colors.background,
             backgroundHover: Theme.colors.overlay,
             backgroundPressed: Theme.colors.surface,
-            backgroundDisabled: Theme.colors.textMuted,
+            backgroundDisabled: Theme.colors.overlay,
             border: Theme.borders.b1,
             borderColor: Theme.colors.textMuted,
             textColor: Theme.colors.text,
