@@ -9,6 +9,7 @@ qt_add_qml_module(app_features_language
     URI App.Features.Language
     VERSION 1.0
     SOURCES ${cpp_files}
+    RESOURCE_PREFIX "/"
 )
 
 target_link_libraries(app_features_language
