@@ -69,13 +69,6 @@ ApplicationWindow {
                         height: parent.height
                         
                         // UI.WizardPageTest {}
-
-                        Rectangle {
-                            anchors.fill: parent
-                            color: "transparent"
-                            border.color: "orange"
-                            border.width: 2
-                        }
                     }
 
                     UI.VerticalDivider {
