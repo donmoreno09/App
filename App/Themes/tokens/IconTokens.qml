@@ -35,7 +35,7 @@ import QtQuick 2.15
 QtObject {
     // Sizes
     readonly property int sizeXs:   12
-    readonly property int sizeSm:   16
+    readonly property int sizeSm:   18
     readonly property int sizeMd:   20
     readonly property int sizeLg:   24
     readonly property int sizeXl:   32
@@ -44,5 +44,6 @@ QtObject {
 
     // Semantic role mappings
     // (empty for now, feel free to add when needed)
-    // Example: readonly property int button: sizeLg
+    // Example: readonly property int sizeButton: sizeLg
+    readonly property int sizeLogo: 36
 }

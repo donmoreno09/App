@@ -49,51 +49,6 @@ Item {
         anchors.fill: parent
         spacing: 0
 
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight:Theme.spacing.s16
-            spacing: Theme.spacing.s4
-
-            Item { Layout.preferredWidth: Theme.spacing.s4 }
-
-            // Title
-            Text {
-                text: wizardPage.title
-                color: Theme.colors.primaryText
-                font.family: Theme.typography.familySans
-                font.pixelSize: Theme.typography.sizeLg
-                font.weight: Theme.typography.weightMedium
-                Layout.fillWidth: true
-            }
-
-            // Close Button
-            UI.Button {
-                Layout.preferredWidth: Theme.spacing.s10
-                Layout.preferredHeight: Theme.spacing.s10
-                visible: wizardPage.showCloseButton
-                variant: "ghost"
-                background: Rectangle { color: "transparent" }
-
-                // Close icon
-                Text {
-                    anchors.centerIn: parent
-                    text: "✕"
-                    color: Theme.colors.primaryText
-                    font.pixelSize: Theme.typography.sizeBase
-                }
-
-                onClicked: wizardPage.closeWizard()
-            }
-        }
-
-        // Bottom border
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: Theme.spacing.s0_5
-            color: Theme.colors.primaryText
-            opacity: 0.1
-        }
-
         // Section Title
         Rectangle {
             Layout.fillWidth: true

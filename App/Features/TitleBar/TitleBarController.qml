@@ -11,8 +11,4 @@ QtObject {
             currentTitle = title
         }
     }
-
-    // function resetTitle() {
-    //     setTitle("Overview")
-    // }
 }

@@ -12,8 +12,19 @@ Item {
     //       this consumer component must be under a component
     //       instantiating the GlobalBackground component.
     //       I am thinking of a singleton-controller solution but
-    //       be properly assessed.
+    //       needs to be properly assessed.
     property GlobalBackground bg: globalBackground
+
+    // Certain actions like animations need manual intervention
+    // to update the background so it does not come off bugged.
+    function recalculateMaskedBg() {
+        maskShader.sourceRect = _recalculate()
+    }
+
+    function _recalculate() {
+        const p = bg.mapFromItem(root, 0, 0)
+        return Qt.rect(p.x, p.y, root.width, root.height)
+    }
 
     Rectangle {
         id: maskRect
@@ -28,8 +39,11 @@ Item {
             recursive: true
             visible: false
             sourceRect: {
-                const p = bg.mapFromItem(root, 0, 0)
-                return Qt.rect(p.x, p.y, root.width, root.height)
+                // Force dependency tracking of screen resizes.
+                // This fixes stuck panel with white background.
+                root.x; root.y; bg.x; bg.y; bg.width; bg.height;
+
+                return _recalculate()
             }
         }
     }

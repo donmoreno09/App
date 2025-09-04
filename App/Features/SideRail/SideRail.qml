@@ -1,62 +1,94 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import QtQuick.Effects 6.8
 
-import App.Components 1.0
 import App.Themes 1.0
-import App.Features.TitleBar 1.0
+import App.Components 1.0 as UI
+import App.Features.SidePanel
+import App.Features.TitleBar
 
-GlobalBackgroundConsumer {
-    id: root
-
+UI.GlobalBackgroundConsumer {
     ColumnLayout {
-        spacing: Theme.spacing.s4
         anchors.fill: parent
+        spacing: Theme.spacing.s0
+        z: Theme.elevation.panel
 
-        Button {
-            id: languageButton
-            variant: checked ? "primary" : "ghost"
-            size: "lg"
-            display: AbstractButton.IconOnly
+        UI.VerticalPadding { }
 
-            icon.source: "qrc:/App/assets/icons/home.svg"
-            icon.width: Theme.icons.sizeLg
-            icon.height: Theme.icons.sizeLg
-            icon.color: checked ? Theme.colors.primaryText : Theme.colors.text
+        Image {
+            source: "qrc:/App/assets/images/logo.png"
+            Layout.preferredWidth: Theme.icons.sizeLogo
+            Layout.preferredHeight: Theme.icons.sizeLogo
+            Layout.alignment: Qt.AlignCenter
+        }
 
+        UI.VerticalPadding { }
 
-            onClicked: {
-                TitleBarController.setTitle("Language Settings")
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: Theme.spacing.s0
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/clipboard.svg"
+                text: "Mission"
+                active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
+
+                onClicked: {
+                    SidePanelController.toggle("mission")
+                    TitleBarController.setTitle("Mission")
+                }
             }
 
-            ToolTip {
-                visible: parent.hovered
-                text: "Language Settings"
-                delay: 800
+            SideRailItem {
+                source: "qrc:/App/assets/icons/submarine.svg"
+                text: "Pod"
+                active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
+
+                onClicked: {
+                    SidePanelController.toggle("pod")
+                    TitleBarController.setTitle("Pod")
+                }
+            }
+
+            SideRailItem {
+                visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
+                source: "qrc:/App/assets/icons/world.svg"
+                text: "Language"
+                active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle("language")
             }
         }
 
+        UI.VerticalSpacer { }
 
-        Button {
-            id: wizardButton
-            variant: checked ? "primary" : "ghost"
-            size: "lg"
+        UI.Button {
             display: AbstractButton.IconOnly
-
-            icon.source: "qrc:/App/assets/icons/plus.svg"
-            icon.width: Theme.icons.sizeLg
-            icon.height: Theme.icons.sizeLg
-            icon.color: checked ? Theme.colors.primaryText : Theme.colors.text
+            icon.source: "qrc:/App/assets/icons/panel-chevron.svg"
+            icon.width: Theme.icons.sizeMd
+            icon.height: Theme.icons.sizeMd
+            Layout.preferredWidth: Theme.icons.sizeLogo
+            Layout.preferredHeight: Theme.icons.sizeLogo
+            Layout.alignment: Qt.AlignCenter
 
             onClicked: {
-                TitleBarController.setTitle("Mission Wizard")
-            }
-
-            ToolTip {
-                visible: parent.hovered
-                text: "Mission Wizard"
-                delay: 800
+                if (SidePanelController.isOpen) SidePanelController.close()
+                else SidePanelController.open()
             }
         }
+
+        UI.VerticalPadding { }
+
+        UI.Avatar {
+            Layout.preferredWidth: Theme.icons.sizeLogo
+            Layout.preferredHeight: Theme.icons.sizeLogo
+            Layout.alignment: Qt.AlignCenter
+
+            source: "qrc:/App/assets/images/avatar.png"
+            radius: Theme.radius.circle(width, height)
+        }
+
+        UI.VerticalPadding { }
     }
 }

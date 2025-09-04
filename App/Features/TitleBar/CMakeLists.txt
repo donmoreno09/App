@@ -23,6 +23,7 @@ qt_add_qml_module(app_features_titlebar
         ${qml_files}
         ${qml_singletons}
     SOURCES ${cpp_singletons}
+    RESOURCE_PREFIX "/"
 )
 
 target_link_libraries(app_features_titlebar
