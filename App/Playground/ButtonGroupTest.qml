@@ -1,7 +1,7 @@
 /*!
     \qmltype ButtonGroupTest
     \inqmlmodule App.Playground
-    \brief Test component showing ButtonGroup as a simple container with existing Button components.
+    \brief Test component showing ButtonGroup as a simple container with optional selection management.
 */
 
 import QtQuick 6.8
@@ -21,7 +21,7 @@ ScrollView {
 
         // Header
         Text {
-            text: "ButtonGroup - Simple Container Approach"
+            text: "ButtonGroup - Simple Container + Selection"
             font.pixelSize: Theme.typography.size2xl
             font.weight: Theme.typography.weightBold
             color: Theme.colors.text
@@ -29,44 +29,44 @@ ScrollView {
         }
 
         Text {
-            text: "ButtonGroup as a simple container - you compose it with your existing Button components"
+            text: "ButtonGroup as simple container with optional exclusive selection management"
             font.pixelSize: Theme.typography.sizeSm
             color: Theme.colors.textMuted
             Layout.bottomMargin: Theme.spacing.s4
         }
 
-        // 1. Exact Figma Left Toolbar Recreation
+        // 1. Figma Left Toolbar (Exclusive Selection)
         ColumnLayout {
             spacing: Theme.spacing.s4
             Layout.fillWidth: true
 
             Text {
-                text: "1. Left Toolbar from Figma (Map + Home)"
+                text: "1. Navigation Toolbar (Exclusive Selection)"
                 font.pixelSize: Theme.typography.sizeXl
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
-                text: "Using your existing Button component inside ButtonGroup container"
+                text: "exclusive: true - only one button can be checked at a time"
                 font.pixelSize: Theme.typography.sizeSm
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
             }
 
             UI.ButtonGroup {
+                exclusive: true
                 Layout.alignment: Qt.AlignLeft
 
                 UI.Button {
                     icon.source: "qrc:/App/assets/icons/map.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
                     display: AbstractButton.IconOnly
-                    variant: "primary"
-                    size: "md"
+                    variant: "ghost"
+                    // checkable: true
+                    // checked: true
 
-                    // Compact toolbar size
                     implicitWidth: Theme.spacing.s10
                     implicitHeight: Theme.spacing.s10
 
@@ -81,10 +81,9 @@ ScrollView {
                     icon.source: "qrc:/App/assets/icons/home.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
                     display: AbstractButton.IconOnly
                     variant: "ghost"
-                    size: "md"
+                    checkable: true
 
                     implicitWidth: Theme.spacing.s10
                     implicitHeight: Theme.spacing.s10
@@ -98,41 +97,41 @@ ScrollView {
             }
         }
 
-        // 2. Exact Figma Right Toolbar Recreation
+        // 2. Figma Right Toolbar (Action Buttons - No Selection)
         ColumnLayout {
             spacing: Theme.spacing.s4
             Layout.fillWidth: true
 
             Text {
-                text: "2. Right Toolbar from Figma (Send + Plus + Menu)"
+                text: "2. Action Toolbar (No Selection)"
                 font.pixelSize: Theme.typography.sizeXl
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
-                text: "Action buttons - no selection state, just click actions"
+                text: "exclusive: false, no checkable - just action buttons"
                 font.pixelSize: Theme.typography.sizeSm
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
             }
 
             UI.ButtonGroup {
+                exclusive: false  // No selection management needed
                 Layout.alignment: Qt.AlignLeft
 
                 UI.Button {
                     icon.source: "qrc:/App/assets/icons/send.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
                     display: AbstractButton.IconOnly
                     variant: "ghost"
-                    size: "md"
+                    // No checkable - just action button
 
                     implicitWidth: Theme.spacing.s10
                     implicitHeight: Theme.spacing.s10
 
-                    onClicked: console.log("Send command clicked")
+                    onClicked: console.log("Send command")
 
                     ToolTip {
                         visible: parent.hovered
@@ -145,15 +144,13 @@ ScrollView {
                     icon.source: "qrc:/App/assets/icons/plus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
                     display: AbstractButton.IconOnly
-                    variant: "primary"
-                    size: "md"
+                    variant: "primary"  // Highlighted for emphasis
 
                     implicitWidth: Theme.spacing.s10
                     implicitHeight: Theme.spacing.s10
 
-                    onClicked: console.log("Add item clicked")
+                    onClicked: console.log("Add item")
 
                     ToolTip {
                         visible: parent.hovered
@@ -166,15 +163,13 @@ ScrollView {
                     icon.source: "qrc:/App/assets/icons/minus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
                     display: AbstractButton.IconOnly
                     variant: "ghost"
-                    size: "md"
 
                     implicitWidth: Theme.spacing.s10
                     implicitHeight: Theme.spacing.s10
 
-                    onClicked: console.log("Menu options clicked")
+                    onClicked: console.log("Menu options")
 
                     ToolTip {
                         visible: parent.hovered
@@ -185,7 +180,7 @@ ScrollView {
             }
         }
 
-        // 3. Full Layout Recreation
+        // 3. Full Figma Recreation
         ColumnLayout {
             spacing: Theme.spacing.s4
             Layout.fillWidth: true
@@ -198,14 +193,6 @@ ScrollView {
                 color: Theme.colors.text
             }
 
-            Text {
-                text: "Both toolbars positioned exactly like in your Figma design"
-                font.pixelSize: Theme.typography.sizeSm
-                color: Theme.colors.textMuted
-                Layout.bottomMargin: Theme.spacing.s2
-            }
-
-            // Container mimicking your Figma layout
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 100
@@ -218,17 +205,19 @@ ScrollView {
                     anchors.fill: parent
                     anchors.margins: Theme.spacing.s4
 
-                    // Left toolbar
+                    // Left navigation group (exclusive selection)
                     UI.ButtonGroup {
+                        exclusive: true
                         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
                         UI.Button {
                             icon.source: "qrc:/App/assets/icons/map.svg"
                             icon.width: Theme.icons.sizeLg
                             icon.height: Theme.icons.sizeLg
-                            icon.color: Theme.colors.primaryText
                             display: AbstractButton.IconOnly
-                            variant: "primary"
+                            variant: "ghost"
+                            checkable: true
+                            checked: true
                             implicitWidth: Theme.spacing.s10
                             implicitHeight: Theme.spacing.s10
                         }
@@ -237,9 +226,9 @@ ScrollView {
                             icon.source: "qrc:/App/assets/icons/home.svg"
                             icon.width: Theme.icons.sizeLg
                             icon.height: Theme.icons.sizeLg
-                            icon.color: Theme.colors.text
                             display: AbstractButton.IconOnly
                             variant: "ghost"
+                            checkable: true
                             implicitWidth: Theme.spacing.s10
                             implicitHeight: Theme.spacing.s10
                         }
@@ -247,7 +236,7 @@ ScrollView {
 
                     Item { Layout.fillWidth: true } // Spacer
 
-                    // Right toolbar
+                    // Right action group (no selection)
                     UI.ButtonGroup {
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
@@ -255,7 +244,6 @@ ScrollView {
                             icon.source: "qrc:/App/assets/icons/send.svg"
                             icon.width: Theme.icons.sizeLg
                             icon.height: Theme.icons.sizeLg
-                            icon.color: Theme.colors.text
                             display: AbstractButton.IconOnly
                             variant: "ghost"
                             implicitWidth: Theme.spacing.s10
@@ -266,7 +254,6 @@ ScrollView {
                             icon.source: "qrc:/App/assets/icons/plus.svg"
                             icon.width: Theme.icons.sizeLg
                             icon.height: Theme.icons.sizeLg
-                            icon.color: Theme.colors.primaryText
                             display: AbstractButton.IconOnly
                             variant: "primary"
                             implicitWidth: Theme.spacing.s10
@@ -277,7 +264,6 @@ ScrollView {
                             icon.source: "qrc:/App/assets/icons/minus.svg"
                             icon.width: Theme.icons.sizeLg
                             icon.height: Theme.icons.sizeLg
-                            icon.color: Theme.colors.text
                             display: AbstractButton.IconOnly
                             variant: "ghost"
                             implicitWidth: Theme.spacing.s10
@@ -288,14 +274,95 @@ ScrollView {
             }
         }
 
-        // 4. Different Container Styles
+        // 4. Multiple Selection Example
         ColumnLayout {
             spacing: Theme.spacing.s4
             Layout.fillWidth: true
             Layout.topMargin: Theme.spacing.s4
 
             Text {
-                text: "4. Container Style Variations"
+                text: "4. Multiple Selection (No Exclusive)"
+                font.pixelSize: Theme.typography.sizeXl
+                font.weight: Theme.typography.weightSemibold
+                color: Theme.colors.text
+            }
+
+            Text {
+                text: "exclusive: false with checkable buttons - multiple can be selected"
+                font.pixelSize: Theme.typography.sizeSm
+                color: Theme.colors.textMuted
+                Layout.bottomMargin: Theme.spacing.s2
+            }
+
+            UI.ButtonGroup {
+                exclusive: false  // Allow multiple selection
+                Layout.alignment: Qt.AlignLeft
+
+                UI.Button {
+                    icon.source: "qrc:/App/assets/icons/send.svg"
+                    icon.width: Theme.icons.sizeLg
+                    icon.height: Theme.icons.sizeLg
+                    display: AbstractButton.IconOnly
+                    variant: "ghost"
+                    checkable: true
+
+                    implicitWidth: Theme.spacing.s10
+                    implicitHeight: Theme.spacing.s10
+
+                    ToolTip {
+                        visible: parent.hovered
+                        text: "Send Mode"
+                        delay: 800
+                    }
+                }
+
+                UI.Button {
+                    icon.source: "qrc:/App/assets/icons/plus.svg"
+                    icon.width: Theme.icons.sizeLg
+                    icon.height: Theme.icons.sizeLg
+                    display: AbstractButton.IconOnly
+                    variant: "ghost"
+                    checkable: true
+                    checked: true  // Initially selected
+
+                    implicitWidth: Theme.spacing.s10
+                    implicitHeight: Theme.spacing.s10
+
+                    ToolTip {
+                        visible: parent.hovered
+                        text: "Add Mode"
+                        delay: 800
+                    }
+                }
+
+                UI.Button {
+                    icon.source: "qrc:/App/assets/icons/minus.svg"
+                    icon.width: Theme.icons.sizeLg
+                    icon.height: Theme.icons.sizeLg
+                    display: AbstractButton.IconOnly
+                    variant: "ghost"
+                    checkable: true
+
+                    implicitWidth: Theme.spacing.s10
+                    implicitHeight: Theme.spacing.s10
+
+                    ToolTip {
+                        visible: parent.hovered
+                        text: "Remove Mode"
+                        delay: 800
+                    }
+                }
+            }
+        }
+
+        // 5. Container Style Variations
+        ColumnLayout {
+            spacing: Theme.spacing.s4
+            Layout.fillWidth: true
+            Layout.topMargin: Theme.spacing.s4
+
+            Text {
+                text: "5. Container Style Variations"
                 font.pixelSize: Theme.typography.sizeXl
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
@@ -316,6 +383,7 @@ ScrollView {
                     }
 
                     UI.ButtonGroup {
+                        exclusive: true
                         containerColor: Theme.colors.background
 
                         UI.Button {
@@ -323,7 +391,8 @@ ScrollView {
                             icon.width: Theme.icons.sizeLg
                             icon.height: Theme.icons.sizeLg
                             display: AbstractButton.IconOnly
-                            variant: "primary"
+                            variant: "ghost"
+                            checkable: true
                             implicitWidth: Theme.spacing.s10
                             implicitHeight: Theme.spacing.s10
                         }
@@ -334,6 +403,8 @@ ScrollView {
                             icon.height: Theme.icons.sizeLg
                             display: AbstractButton.IconOnly
                             variant: "ghost"
+                            checkable: true
+                            checked: true
                             implicitWidth: Theme.spacing.s10
                             implicitHeight: Theme.spacing.s10
                         }
@@ -374,52 +445,17 @@ ScrollView {
                         }
                     }
                 }
-
-                // Different radius
-                ColumnLayout {
-                    spacing: Theme.spacing.s2
-
-                    Text {
-                        text: "Sharp Corners"
-                        font.pixelSize: Theme.typography.sizeSm
-                        color: Theme.colors.text
-                    }
-
-                    UI.ButtonGroup {
-                        containerRadius: Theme.radius.sm
-
-                        UI.Button {
-                            icon.source: "qrc:/App/assets/icons/minus.svg"
-                            icon.width: Theme.icons.sizeLg
-                            icon.height: Theme.icons.sizeLg
-                            display: AbstractButton.IconOnly
-                            variant: "danger"
-                            implicitWidth: Theme.spacing.s10
-                            implicitHeight: Theme.spacing.s10
-                        }
-
-                        UI.Button {
-                            icon.source: "qrc:/App/assets/icons/send.svg"
-                            icon.width: Theme.icons.sizeLg
-                            icon.height: Theme.icons.sizeLg
-                            display: AbstractButton.IconOnly
-                            variant: "danger"
-                            implicitWidth: Theme.spacing.s10
-                            implicitHeight: Theme.spacing.s10
-                        }
-                    }
-                }
             }
         }
 
-        // 5. Mixed Content Examples
+        // 6. Mixed Content
         ColumnLayout {
             spacing: Theme.spacing.s4
             Layout.fillWidth: true
             Layout.topMargin: Theme.spacing.s4
 
             Text {
-                text: "5. Mixed Content - Icons and Text"
+                text: "6. Mixed Content Examples"
                 font.pixelSize: Theme.typography.sizeXl
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
@@ -429,37 +465,46 @@ ScrollView {
                 Layout.fillWidth: true
                 spacing: Theme.spacing.s6
 
-                // Text buttons
+                // Text buttons with selection
                 UI.ButtonGroup {
+                    exclusive: true
+
                     UI.Button {
                         text: "List"
-                        variant: "primary"
+                        variant: "ghost"
                         size: "sm"
+                        checkable: true
+                        checked: true
                     }
 
                     UI.Button {
                         text: "Grid"
                         variant: "ghost"
                         size: "sm"
+                        checkable: true
                     }
 
                     UI.Button {
                         text: "Details"
                         variant: "ghost"
                         size: "sm"
+                        checkable: true
                     }
                 }
 
                 // Mixed icons and text
                 UI.ButtonGroup {
+                    exclusive: true
+
                     UI.Button {
                         icon.source: "qrc:/App/assets/icons/home.svg"
                         icon.width: Theme.icons.sizeSm
                         icon.height: Theme.icons.sizeSm
                         text: "Home"
                         display: AbstractButton.TextBesideIcon
-                        variant: "secondary"
+                        variant: "ghost"
                         size: "sm"
+                        checkable: true
                     }
 
                     UI.Button {
@@ -470,6 +515,8 @@ ScrollView {
                         display: AbstractButton.TextBesideIcon
                         variant: "ghost"
                         size: "sm"
+                        checkable: true
+                        checked: true
                     }
                 }
             }

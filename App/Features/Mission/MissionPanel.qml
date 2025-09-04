@@ -7,5 +7,5 @@ import App.Features.SidePanel 1.0
 
 BasePanel {
     WizardPageTest { }
-    // ButtonGroupTest { }
+    // ButtonGroupTest { anchors.fill: parent}
 }
