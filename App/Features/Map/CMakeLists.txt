@@ -1,14 +1,9 @@
 set(qml_files
-    BasePanel.qml
-    NotFoundPanel.qml
-    PanelTemplate.qml
-    SidePanel.qml
-    routes.js
+    Map.qml
 )
 
 set(qml_singletons
-    PanelRouter.qml
-    SidePanelController.qml
+    MapController.qml
 )
 
 set_source_files_properties(
@@ -16,8 +11,8 @@ set_source_files_properties(
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
 )
 
-qt_add_qml_module(app_features_sidepanel
-    URI App.Features.SidePanel
+qt_add_qml_module(app_features_map
+    URI App.Features.Map
     VERSION 1.0
     QML_FILES
         ${qml_files}
@@ -25,7 +20,7 @@ qt_add_qml_module(app_features_sidepanel
     RESOURCE_PREFIX "/"
 )
 
-target_link_libraries(app_features_sidepanel
+target_link_libraries(app_features_map
     PRIVATE
         Qt6::Quick
 )

@@ -7,11 +7,13 @@ import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.StubComponents 1.0 as UI
 import App.Playground 1.0 as UI
+import App.Features.Map 1.0
 import App.Features.TitleBar 1.0
 import App.Features.SideRail 1.0
 import App.Features.SidePanel 1.0
 import App.Features.ContextPanel 1.0
 import App.Features.NotificationsBar 1.0
+import App.Features.MapToolbar 1.0
 
 ApplicationWindow {
     id: app
@@ -35,10 +37,15 @@ ApplicationWindow {
         visible: false
     }
 
+    Map {
+        anchors.fill: parent
+    }
+
     RowLayout {
         anchors.fill: parent
         spacing: 0
 
+        // SideRail container
         RowLayout {
             Layout.fillHeight: true
             spacing: 0
@@ -52,7 +59,7 @@ ApplicationWindow {
             UI.VerticalDivider { }
         }
 
-
+        // Main container w/ TitleBar
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -65,27 +72,39 @@ ApplicationWindow {
 
             UI.HorizontalDivider { }
 
-            RowLayout {
+            // Main container
+            Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                spacing: 0
 
+                // Main's left side components
                 Item {
-                    Layout.preferredWidth: 0
-                    Layout.fillHeight: true
+                    implicitWidth: childrenRect.width
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
 
                     RowLayout {
                         id: slider
                         height: parent.height
                         spacing: 0
 
-                        x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1 * 2)
-                        Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
-                        onXChanged: {
+                        function recalculateMaskedBgs() {
                             if (!appLoaded) return
                             sidePanel.recalculateMaskedBg()
                             notificationsBar.recalculateMaskedBg()
                         }
+
+                        Connections {
+                            target: app
+
+                            function onWidthChanged() { slider.recalculateMaskedBgs() }
+                            function onHeightChanged() { slider.recalculateMaskedBgs() }
+                        }
+
+                        x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1 * 2)
+                        Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+                        onXChanged: recalculateMaskedBgs()
 
                         SidePanel {
                             id: sidePanel
@@ -104,7 +123,13 @@ ApplicationWindow {
                     }
                 }
 
-                UI.HorizontalSpacer { }
+                // Main's right side components
+                MapToolbar {
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.rightMargin: Theme.spacing.s7
+                    anchors.bottomMargin: Theme.spacing.s5
+                }
             }
         }
     }
