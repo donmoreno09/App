@@ -22,4 +22,5 @@ UI.Button {
     padding: Theme.spacing.s0
 
     backgroundRect.border.width: Theme.borders.b0
+    // backgroundRect.color: checked ? Qt.darker(Theme.colors.primary, 2) : Theme.colors.primary
 }

@@ -22,7 +22,8 @@
       "Bash(dir build)",
       "Bash(dir:*)",
       "Bash(Title.exe)",
-      "Bash(.buildDesktop_Qt_6_8_3_MSVC2022_64bit-DebugTitle.exe)"
+      "Bash(.buildDesktop_Qt_6_8_3_MSVC2022_64bit-DebugTitle.exe)",
+      "Read(/C:\\Users\\esis\\Documents\\Title\\App\\Features\\MapToolbar/**)"
     ],
     "deny": [],
     "ask": [],

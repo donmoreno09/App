@@ -11,29 +11,43 @@ import "components"
 RowLayout {
     spacing: Theme.spacing.s3
 
+    ButtonGroup { id: navigationGroup; exclusive: true }
+    ButtonGroup { id: toolsGroup; exclusive: true}
+
+
     MapToolbarContainer {
         MapToolbarItem {
             source: "qrc:/App/assets/icons/map.svg"
+            checkable: true
+            ButtonGroup.group: navigationGroup
         }
 
         MapToolbarItem {
             source: "qrc:/App/assets/icons/home.svg"
+            checkable: true
+            ButtonGroup.group: navigationGroup
         }
     }
 
     MapToolbarContainer {
         MapToolbarItem {
             source: "qrc:/App/assets/icons/gps.svg"
+            checkable: true
+            ButtonGroup.group: toolsGroup
         }
 
         MapToolbarItem {
             source: "qrc:/App/assets/icons/plus.svg"
+            checkable: true
+            ButtonGroup.group: toolsGroup
 
             onClicked: MapController.zoomIn()
         }
 
         MapToolbarItem {
             source: "qrc:/App/assets/icons/minus.svg"
+            checkable: true
+            ButtonGroup.group: toolsGroup
             icon.height: 0 // Hacky fix since the minus svg is being stretched
 
             onClicked: MapController.zoomOut()
