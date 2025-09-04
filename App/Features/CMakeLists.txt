@@ -2,6 +2,7 @@ add_subdirectory(Language)
 add_subdirectory(Mission)
 
 # Core UIs
+add_subdirectory(Map)
 add_subdirectory(TitleBar)
 add_subdirectory(SideRail)
 add_subdirectory(SidePanel)
@@ -18,6 +19,7 @@ target_link_libraries(${PROJECT_NAME}
         app_features_mission
 
         # Core UIs
+        app_features_map
         app_features_titlebar
         app_features_siderail
         app_features_sidepanel
