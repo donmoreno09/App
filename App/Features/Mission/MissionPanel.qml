@@ -5,6 +5,8 @@ import App.Components 1.0 as UI
 import App.Playground 1.0
 import App.Features.SidePanel 1.0
 
-BasePanel {
+PanelTemplate {
+    title.text: "New Mission"
+
     WizardPageTest { }
 }
