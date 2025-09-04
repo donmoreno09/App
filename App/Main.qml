@@ -89,13 +89,22 @@ ApplicationWindow {
                         height: parent.height
                         spacing: 0
 
-                        x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1 * 2)
-                        Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
-                        onXChanged: {
+                        function recalculateMaskedBgs() {
                             if (!appLoaded) return
                             sidePanel.recalculateMaskedBg()
                             notificationsBar.recalculateMaskedBg()
                         }
+
+                        Connections {
+                            target: app
+
+                            function onWidthChanged() { slider.recalculateMaskedBgs() }
+                            function onHeightChanged() { slider.recalculateMaskedBgs() }
+                        }
+
+                        x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1 * 2)
+                        Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+                        onXChanged: recalculateMaskedBgs()
 
                         SidePanel {
                             id: sidePanel
