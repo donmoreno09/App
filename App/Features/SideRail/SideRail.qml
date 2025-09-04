@@ -31,6 +31,7 @@ UI.GlobalBackgroundConsumer {
             SideRailItem {
                 source: "qrc:/App/assets/icons/clipboard.svg"
                 label: "Mission"
+                active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle("mission")
             }
@@ -38,6 +39,7 @@ UI.GlobalBackgroundConsumer {
             SideRailItem {
                 source: "qrc:/App/assets/icons/submarine.svg"
                 label: "Pod"
+                active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle("pod")
             }
@@ -46,6 +48,7 @@ UI.GlobalBackgroundConsumer {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 label: "Language"
+                active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle("language")
             }

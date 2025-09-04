@@ -6,7 +6,6 @@ import App.Features.SidePanel 1.0
 QtObject {
     // Properties
     property bool isOpen: false
-    property string currentPath: ""
 
     // Signals
     signal willOpen()
