@@ -6,6 +6,7 @@ import QtQuick.Effects 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.SidePanel
+import App.Features.TitleBar
 
 UI.GlobalBackgroundConsumer {
     ColumnLayout {
@@ -33,7 +34,10 @@ UI.GlobalBackgroundConsumer {
                 text: "Mission"
                 active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
 
-                onClicked: SidePanelController.toggle("mission")
+                onClicked: {
+                    SidePanelController.toggle("mission")
+                    TitleBarController.setTitle("Mission")
+                }
             }
 
             SideRailItem {
@@ -41,7 +45,10 @@ UI.GlobalBackgroundConsumer {
                 text: "Pod"
                 active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
 
-                onClicked: SidePanelController.toggle("pod")
+                onClicked: {
+                    SidePanelController.toggle("pod")
+                    TitleBarController.setTitle("Pod")
+                }
             }
 
             SideRailItem {
