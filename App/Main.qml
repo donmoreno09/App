@@ -12,6 +12,7 @@ import App.Features.SideRail 1.0
 import App.Features.SidePanel 1.0
 import App.Features.ContextPanel 1.0
 import App.Features.NotificationsBar 1.0
+import App.Features.MapToolbar 1.0
 
 ApplicationWindow {
     id: app
@@ -39,6 +40,7 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 0
 
+        // SideRail container
         RowLayout {
             Layout.fillHeight: true
             spacing: 0
@@ -52,7 +54,7 @@ ApplicationWindow {
             UI.VerticalDivider { }
         }
 
-
+        // Main container w/ TitleBar
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -65,14 +67,17 @@ ApplicationWindow {
 
             UI.HorizontalDivider { }
 
-            RowLayout {
+            // Main container
+            Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                spacing: 0
 
+                // Main's left side components
                 Item {
-                    Layout.preferredWidth: 0
-                    Layout.fillHeight: true
+                    implicitWidth: childrenRect.width
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
 
                     RowLayout {
                         id: slider
@@ -104,7 +109,13 @@ ApplicationWindow {
                     }
                 }
 
-                UI.HorizontalSpacer { }
+                // Main's right side components
+                MapToolbar {
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.rightMargin: Theme.spacing.s7
+                    anchors.bottomMargin: Theme.spacing.s5
+                }
             }
         }
     }

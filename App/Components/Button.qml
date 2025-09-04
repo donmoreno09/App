@@ -174,8 +174,4 @@ Button {
     }
 
     padding: _sizeStyles.padding
-    topPadding: _sizeStyles.padding
-    leftPadding: _sizeStyles.padding
-    rightPadding: _sizeStyles.padding
-    bottomPadding: _sizeStyles.padding
 }
