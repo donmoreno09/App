@@ -61,8 +61,10 @@ UI.GlobalBackgroundConsumer {
             icon.source: "qrc:/App/assets/icons/panel-chevron.svg"
             icon.width: Theme.icons.sizeMd
             icon.height: Theme.icons.sizeMd
-            Layout.preferredWidth: Theme.icons.sizeLogo
-            Layout.preferredHeight: Theme.icons.sizeLogo
+            padding: Theme.spacing.s2
+
+            Layout.preferredWidth: Theme.spacing.s9
+            Layout.preferredHeight: Theme.spacing.s9
             Layout.alignment: Qt.AlignCenter
 
             onClicked: {
@@ -74,8 +76,8 @@ UI.GlobalBackgroundConsumer {
         UI.VerticalPadding { }
 
         UI.Avatar {
-            Layout.preferredWidth: Theme.icons.sizeLogo
-            Layout.preferredHeight: Theme.icons.sizeLogo
+            Layout.preferredWidth: Theme.spacing.s9
+            Layout.preferredHeight: Theme.spacing.s9
             Layout.alignment: Qt.AlignCenter
 
             source: "qrc:/App/assets/images/avatar.png"
