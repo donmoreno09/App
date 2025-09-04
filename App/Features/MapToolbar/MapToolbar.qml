@@ -4,6 +4,7 @@ import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.Map 1.0
 
 import "components"
 
@@ -27,13 +28,15 @@ RowLayout {
 
         MapToolbarItem {
             source: "qrc:/App/assets/icons/plus.svg"
+
+            onClicked: MapController.zoomIn()
         }
 
         MapToolbarItem {
             source: "qrc:/App/assets/icons/minus.svg"
+            icon.height: 0 // Hacky fix since the minus svg is being stretched
 
-            // Hacky fix since the minus svg is being stretched
-            icon.height: 0
+            onClicked: MapController.zoomOut()
         }
     }
 }

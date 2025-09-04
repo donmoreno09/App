@@ -11,8 +11,6 @@ set(qml_singletons
     SidePanelController.qml
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Quick)
-
 set_source_files_properties(
     ${qml_singletons}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
