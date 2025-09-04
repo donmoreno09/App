@@ -3,8 +3,9 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import QtQuick.Effects 6.8
 
-import App.Components 1.0 as UI
 import App.Themes 1.0
+import App.Components 1.0 as UI
+import App.Features.SidePanel
 
 UI.GlobalBackgroundConsumer {
     ColumnLayout {
@@ -29,12 +30,27 @@ UI.GlobalBackgroundConsumer {
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/clipboard.svg"
-                label: "Mission"
+                text: "Mission"
+                active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle("mission")
             }
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/submarine.svg"
-                label: "Pod"
+                text: "Pod"
+                active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle("pod")
+            }
+
+            SideRailItem {
+                visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
+                source: "qrc:/App/assets/icons/world.svg"
+                text: "Language"
+                active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle("language")
             }
         }
 
@@ -48,6 +64,11 @@ UI.GlobalBackgroundConsumer {
             Layout.preferredWidth: Theme.icons.sizeLogo
             Layout.preferredHeight: Theme.icons.sizeLogo
             Layout.alignment: Qt.AlignCenter
+
+            onClicked: {
+                if (SidePanelController.isOpen) SidePanelController.close()
+                else SidePanelController.open()
+            }
         }
 
         UI.VerticalPadding { }

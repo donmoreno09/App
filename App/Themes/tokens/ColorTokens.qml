@@ -35,6 +35,9 @@ QtObject {
     readonly property color text: "#E8EAED"
     readonly property color textMuted: "#A3A9B5"
 
+    // Borders
+    readonly property color border: "#232C36"
+
     // Primary role
     readonly property color primary: "#0A4C8B"
     readonly property color primaryHover: "#0C5BA6"

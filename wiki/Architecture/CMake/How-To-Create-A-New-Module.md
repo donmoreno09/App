@@ -50,6 +50,7 @@ qt_add_qml_module(app_features_map
         ${qml_singletons}
     SOURCES
         ${cpp_files}
+    RESOURCE_PREFIX "/"
 )
 
 target_link_libraries(app_features_map
@@ -63,6 +64,8 @@ target_link_libraries(app_features_map
 ```
 
 If you don’t have singletons, you can remove or keep the `set_source_files_properties` block inside the `if(qml_singletons)` guard as shown. Finally, always keep the target and URI aligned: the folder `Map/` in TitleCase corresponds to the URI segment `Map`, which allows the import `App.Features.Map`.
+
+Notice the line `RESOURCE_PREFIX "/"`, that is needed to align with our Qt imports of `qrc:/` instead of `qrc:/qt/qml` and to be able to load QML files such as when dynamically loading `SidePanel`'s content. Also, **make sure to link the module inside `App/Features/CMakeLists.txt`.** (You'll find a comment there regarding module imports with qrc.)
 
 ## 3 | Register the subdirectory
 
