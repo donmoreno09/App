@@ -49,14 +49,6 @@ Item {
         anchors.fill: parent
         spacing: 0
 
-        // Bottom border
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: Theme.spacing.s0_5
-            color: Theme.colors.primaryText
-            opacity: 0.1
-        }
-
         // Section Title
         Rectangle {
             Layout.fillWidth: true

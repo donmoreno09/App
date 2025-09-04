@@ -8,41 +8,49 @@ import App.Features.SidePanel 1.0
 BasePanel {
     property alias title: title
 
-    header: RowLayout {
+    header: ColumnLayout {
         width: parent.width
         height: Theme.layout.panelTitleHeight
-        spacing: Theme.spacing.s4
 
-        UI.HorizontalPadding { }
-
-        // Title
-        Text {
-            id: title
-            color: Theme.colors.primaryText
-            font.family: Theme.typography.familySans
-            font.pixelSize: Theme.typography.sizeXl
-            font.weight: Theme.typography.weightSemibold
+        RowLayout {
             Layout.fillWidth: true
-        }
+            Layout.fillHeight: true
+            spacing: Theme.spacing.s4
 
-        // Close Button
-        UI.Button {
-            Layout.preferredWidth: Theme.spacing.s10
-            Layout.preferredHeight: Theme.spacing.s10
-            variant: "ghost"
-            background: Rectangle { color: "transparent" }
+            UI.HorizontalPadding { }
 
-            // Close icon
+            // Title
             Text {
-                anchors.centerIn: parent
-                text: "✕"
+                id: title
                 color: Theme.colors.primaryText
-                font.pixelSize: Theme.typography.sizeLg
+                font.family: Theme.typography.familySans
+                font.pixelSize: Theme.typography.sizeXl
+                font.weight: Theme.typography.weightSemibold
+                Layout.fillWidth: true
             }
 
-            onClicked: SidePanelController.close()
+            // Close Button
+            UI.Button {
+                Layout.preferredWidth: Theme.spacing.s8
+                Layout.preferredHeight: Theme.spacing.s8
+                variant: "ghost"
+                backgroundRect.radius: Theme.radius.circle(width, height)
+                backgroundRect.border.width: Theme.borders.b0
+
+                // Close icon
+                Text {
+                    anchors.centerIn: parent
+                    text: "✕"
+                    color: Theme.colors.primaryText
+                    font.pixelSize: Theme.typography.sizeLg
+                }
+
+                onClicked: SidePanelController.close()
+            }
+
+            UI.HorizontalPadding { }
         }
 
-        UI.HorizontalPadding { }
+        UI.HorizontalDivider { }
     }
 }
