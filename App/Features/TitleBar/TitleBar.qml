@@ -38,7 +38,10 @@ UI.GlobalBackgroundConsumer {
                 icon.height: Theme.icons.sizeSm
                 icon.source: "qrc:/App/assets/icons/world.svg"
 
-                onClicked: SidePanelController.toggle("language")
+                onClicked: {
+                    TitleBarController.setTitle("Languages")
+                    SidePanelController.toggle("language")
+                }
             }
 
             UI.SearchBar { }
