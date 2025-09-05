@@ -1,6 +1,7 @@
 pragma Singleton
 
 import QtQuick 6.8
+import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 
 QtObject {
@@ -52,6 +53,7 @@ QtObject {
 
         willClose()
         isOpen = false
+        TitleBarController.setTitle("Overview")
         if (destroy) PanelRouter.clear()
         didClose()
     }
