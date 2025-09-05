@@ -47,11 +47,12 @@ QtObject {
         PanelRouter.replace(path, props || {})
     }
 
-    function close() {
+    function close(destroy) {
         if (!isOpen) return
 
         willClose()
         isOpen = false
+        if (destroy) PanelRouter.clear()
         didClose()
     }
 }
