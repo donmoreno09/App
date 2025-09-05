@@ -14,6 +14,7 @@ import App.Features.SidePanel 1.0
 import App.Features.ContextPanel 1.0
 import App.Features.NotificationsBar 1.0
 import App.Features.MapToolbar 1.0
+import App.Features.Language 1.0
 
 ApplicationWindow {
     id: app
@@ -129,6 +130,32 @@ ApplicationWindow {
                     anchors.bottom: parent.bottom
                     anchors.rightMargin: Theme.spacing.s7
                     anchors.bottomMargin: Theme.spacing.s5
+                }
+
+                // Language switching buttons
+                Row {
+                    id: languageButtons
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.rightMargin: Theme.spacing.s4
+                    anchors.topMargin: Theme.spacing.s4
+                    spacing: Theme.spacing.s2
+
+                    UI.Button {
+                        id: englishButton
+                        text: "English"
+                        variant: LanguageController.currentLanguage === "en" ? "primary" : "secondary"
+                        size: "sm"
+                        onClicked: LanguageController.currentLanguage = "en"
+                    }
+
+                    UI.Button {
+                        id: italianButton
+                        text: "Italiano"
+                        variant: LanguageController.currentLanguage === "it" ? "primary" : "secondary"
+                        size: "sm"
+                        onClicked: LanguageController.currentLanguage = "it"
+                    }
                 }
             }
         }

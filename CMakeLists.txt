@@ -23,8 +23,6 @@ enable_testing()
 
 add_subdirectory(App)
 
-
-
 install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
