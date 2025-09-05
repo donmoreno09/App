@@ -31,6 +31,17 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Quick
 )
 
+# Translation setup
+set(TS_FILES
+    ${CMAKE_SOURCE_DIR}/translations/app_en.ts
+    ${CMAKE_SOURCE_DIR}/translations/app_it.ts
+)
+
+qt_add_translations(${PROJECT_NAME} 
+    TS_FILES ${TS_FILES} 
+    RESOURCE_PREFIX "/translations"
+)
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.

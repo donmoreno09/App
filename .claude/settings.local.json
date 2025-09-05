@@ -52,7 +52,9 @@
       "Read(/C:\\Users\\esis\\Documents\\Title\\App\\StubComponents/**)",
       "Read(/C:\\Users\\esis\\Documents\\Title\\App\\StubComponents/**)",
       "Read(/C:\\Users\\esis\\Documents\\Title\\App\\Features\\Language/**)",
-      "Bash(\"C:\\Program Files\\CMake\\bin\\cmake.exe\" --version)"
+      "Bash(\"C:\\Program Files\\CMake\\bin\\cmake.exe\" --version)",
+      "Bash(\"C:\\Qt\\Tools\\CMake_64\\bin\\cmake.exe\" -S . -B build)",
+      "Bash(\"C:\\Qt\\Tools\\CMake_64\\bin\\cmake.exe\" --build build)"
     ],
     "deny": [],
     "ask": [],
