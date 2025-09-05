@@ -24,7 +24,6 @@ public:
 signals:
     void currentLanguageChanged();
     void languageChanged();
-    void languageLoadFailed(const QString &language, const QString &reason);
 
 private:
     QString initializeLanguage();
