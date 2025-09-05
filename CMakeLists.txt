@@ -21,6 +21,25 @@ qt_standard_project_setup(REQUIRES 6.8)
 
 enable_testing()
 
+# Define translation files
+set(TS_FILES
+    translations/app_en.ts
+    translations/app_it.ts
+)
+
+# Create translations directory if it doesn't exist
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/translations)
+
+# Add translation support - this handles EVERYTHING automatically:
+# - Runs lupdate to extract qsTr() calls from source files
+# - Runs lrelease to compile .ts files to .qm files
+# - Embeds .qm files as resources in the executable
+qt_add_translations(${PROJECT_NAME}
+    TS_FILES ${TS_FILES}
+    RESOURCE_PREFIX "/translations"
+    QM_FILES_OUTPUT_VARIABLE qm_files
+)
+
 add_subdirectory(App)
 
 install(TARGETS ${PROJECT_NAME}

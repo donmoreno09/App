@@ -7,6 +7,7 @@ import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.SidePanel
 import App.Features.TitleBar
+import App.Features.Language 1.0
 
 UI.GlobalBackgroundConsumer {
     ColumnLayout {
@@ -31,7 +32,7 @@ UI.GlobalBackgroundConsumer {
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/clipboard.svg"
-                text: "Mission"
+                text: (TranslationManager.revision, qsTr("Mission"))
                 active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
 
                 onClicked: {
@@ -42,7 +43,7 @@ UI.GlobalBackgroundConsumer {
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/submarine.svg"
-                text: "Pod"
+                text: (TranslationManager.revision, qsTr("Pod"))
                 active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
 
                 onClicked: {
@@ -54,7 +55,7 @@ UI.GlobalBackgroundConsumer {
             SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
-                text: "Language"
+                text: (TranslationManager.revision, qsTr("Language"))
                 active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle("language")
