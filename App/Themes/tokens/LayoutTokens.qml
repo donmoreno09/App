@@ -28,6 +28,8 @@ QtObject {
 
     // NotificationsBar
     readonly property int notificationsBarWidth: 410
+    readonly property int notificationsBarItemWidth: 18
+    readonly property int notificationsBarItemHeight: notificationsBarItemWidth
 
     // ContextPanel
     readonly property int contextPanelWidth: 486

@@ -5,6 +5,8 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
+import "components"
+
 Item {
     id: root
 
@@ -31,8 +33,23 @@ Item {
     UI.GlobalBackgroundConsumer {
         id: backgroundConsumer
         anchors.centerIn: parent
+        implicitHeight: notificationsContainer.implicitHeight + Theme.spacing.s1 * 2
         width: Theme.layout.notificationsBarWidth
-        height: 36
         maskRect.radius: Theme.radius.sm
+
+        NotificationsContainer {
+            id: notificationsContainer
+
+            anchors.leftMargin: Theme.spacing.s2
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            NotificationsItem { }
+
+            NotificationsItem { }
+
+            NotificationsItem { }
+        }
     }
 }

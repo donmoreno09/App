@@ -1,5 +1,7 @@
 set(qml_files
     NotificationsBar.qml
+    components/NotificationsItem.qml
+    components/NotificationsContainer.qml
 )
 
 qt_add_qml_module(app_features_notificationsbar
