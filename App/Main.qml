@@ -92,7 +92,7 @@ ApplicationWindow {
                         function recalculateMaskedBgs() {
                             if (!appLoaded) return
                             sidePanel.recalculateMaskedBg()
-                            notificationsBar.recalculateMaskedBg()
+                            notificationsBar.background.recalculateMaskedBg()
                         }
 
                         Connections {
@@ -114,12 +114,16 @@ ApplicationWindow {
 
                         UI.VerticalDivider { }
 
-                        NotificationsBar {
-                            id: notificationsBar
-                            Layout.preferredWidth: Theme.layout.notificationsBarWidth
-                            Layout.preferredHeight: Theme.layout.notificationsBarHeight
+                        UI.HorizontalPadding { padding: Theme.spacing.s5 }
+
+                        ColumnLayout {
                             Layout.alignment: Qt.AlignBottom
+
+                            NotificationsBar { id: notificationsBar }
+
+                            UI.VerticalPadding { padding: Theme.spacing.s5 }
                         }
+
                     }
                 }
 
