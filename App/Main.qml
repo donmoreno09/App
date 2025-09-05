@@ -39,6 +39,7 @@ ApplicationWindow {
 
     Map {
         anchors.fill: parent
+        anchors.bottomMargin: -Theme.spacing.s4 // Hides OSM's bottom label
     }
 
     RowLayout {
