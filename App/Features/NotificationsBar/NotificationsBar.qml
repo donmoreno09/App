@@ -13,6 +13,9 @@ Item {
 
     property alias background: backgroundConsumer
 
+    // NOTE: Right now I'm using Rectangle to create a glass effect,
+    //       however, it might be worth looking into MultiEffect to
+    //       either replace this approach or complement it. (E.g. blur)
     Rectangle {
         id: container
 
