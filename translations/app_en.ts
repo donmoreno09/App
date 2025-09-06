@@ -373,12 +373,12 @@
 <context>
     <name>WizardPage</name>
     <message>
-        <location filename="../App/Components/wizard-page/WizardPage.qml" line="180"/>
+        <location filename="../App/Components/wizard-page/WizardPage.qml" line="181"/>
         <source>Back</source>
         <translation>Back</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/WizardPage.qml" line="199"/>
+        <location filename="../App/Components/wizard-page/WizardPage.qml" line="200"/>
         <source>Next</source>
         <translation>Next</translation>
     </message>
