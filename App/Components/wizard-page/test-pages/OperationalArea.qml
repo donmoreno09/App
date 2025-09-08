@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import App.Features.Language 1.0
 
 Item {
     id: operationalAreaStep
@@ -22,7 +23,7 @@ Item {
             spacing: 12
 
             Text {
-                text: "Area Type"
+                text: (TranslationManager.revision, qsTr("Area Type"))
                 color: "#ffffff"
                 font.pixelSize: 16
                 font.weight: Font.Medium
@@ -33,11 +34,11 @@ Item {
 
                 Repeater {
                     model: [
-                        {name: "Ellipse", icon: "○"},
-                        {name: "Rectangle", icon: "□"},
-                        {name: "Sector", icon: "◗"},
-                        {name: "Polygon", icon: "⬟"},
-                        {name: "Arc", icon: "⌒"}
+                        {name: (TranslationManager.revision, qsTr("Ellipse")), icon: "○"},
+                        {name: (TranslationManager.revision, qsTr("Rectangle")), icon: "□"},
+                        {name: (TranslationManager.revision, qsTr("Sector")), icon: "◗"},
+                        {name: (TranslationManager.revision, qsTr("Polygon")), icon: "⬟"},
+                        {name: (TranslationManager.revision, qsTr("Arc")), icon: "⌒"}
                     ]
 
                     Button {
@@ -86,7 +87,7 @@ Item {
             spacing: 12
 
             Text {
-                text: "Area Details"
+                text: (TranslationManager.revision, qsTr("Area Details"))
                 color: "#ffffff"
                 font.pixelSize: 16
                 font.weight: Font.Medium
@@ -102,7 +103,7 @@ Item {
                 TextField {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
-                    placeholderText: "Latitude"
+                    placeholderText: (TranslationManager.revision, qsTr("Latitude"))
                     placeholderTextColor: "white"
                     text: wizardData.latitude || ""
 
@@ -124,7 +125,7 @@ Item {
                 TextField {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
-                    placeholderText: "Longitude"
+                    placeholderText: (TranslationManager.revision, qsTr("Longitude"))
                     placeholderTextColor: "white"
                     text: wizardData.longitude || ""
 
@@ -146,7 +147,7 @@ Item {
                 TextField {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
-                    placeholderText: "Radius (m)"
+                    placeholderText: (TranslationManager.revision, qsTr("Radius (m)"))
                     placeholderTextColor: "white"
                     text: wizardData.radius || ""
 
@@ -168,7 +169,7 @@ Item {
                 TextField {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
-                    placeholderText: "Rotation (°)"
+                    placeholderText: (TranslationManager.revision, qsTr("Rotation (°)"))
                     placeholderTextColor: "white"
                     text: wizardData.rotation || ""
 

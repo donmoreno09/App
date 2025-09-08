@@ -39,8 +39,8 @@ UI.GlobalBackgroundConsumer {
                 icon.source: "qrc:/App/assets/icons/world.svg"
 
                 onClicked: {
-                    TitleBarController.setTitle("Languages")
                     SidePanelController.toggle("language")
+                    TitleBarController.setTitle("Languages")
                 }
             }
 

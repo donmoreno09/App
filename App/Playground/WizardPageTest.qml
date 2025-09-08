@@ -1,10 +1,11 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import App.Components 1.0
+import App.Features.Language 1.0
 
 WizardPage {
     id: testWizard
-    title: "Mission Menu"
+    title: (TranslationManager.revision, qsTr("Mission Menu"))
 
     StepDefinitions { id: stepDefs }
 
