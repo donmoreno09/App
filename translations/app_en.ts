@@ -369,6 +369,67 @@
         <source>Overview</source>
         <translation>Overview</translation>
     </message>
+    <message>
+        <source>Languages</source>
+        <translation type="obsolete">Languages</translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="obsolete">Mission</translation>
+    </message>
+    <message>
+        <source>Pod</source>
+        <translation type="obsolete">Pod</translation>
+    </message>
+</context>
+<context>
+    <name>TitleBar</name>
+    <message>
+        <source>Languages</source>
+        <translation type="obsolete">Languages</translation>
+    </message>
+</context>
+<context>
+    <name>TitleBarController</name>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="20"/>
+        <source>Overview</source>
+        <translation type="unfinished">Overview</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="21"/>
+        <source>Languages</source>
+        <translation type="unfinished">Languages</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="22"/>
+        <source>Mission</source>
+        <translation type="unfinished">Mission</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="23"/>
+        <source>Pod</source>
+        <translation type="unfinished">Pod</translation>
+    </message>
+</context>
+<context>
+    <name>TitleTranslations</name>
+    <message>
+        <source>Overview</source>
+        <translation type="obsolete">Overview</translation>
+    </message>
+    <message>
+        <source>Languages</source>
+        <translation type="obsolete">Languages</translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="obsolete">Mission</translation>
+    </message>
+    <message>
+        <source>Pod</source>
+        <translation type="obsolete">Pod</translation>
+    </message>
 </context>
 <context>
     <name>WizardPage</name>

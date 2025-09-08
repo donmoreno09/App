@@ -9,10 +9,11 @@ import App.Features.Language 1.0
 Rectangle {
     color: "transparent"
 
+
     Text {
         id: titleText
         anchors.centerIn: parent
-        text: (TranslationManager.revision, qsTr(TitleBarController.currentTitle))
+        text: TitleBarController.currentTitle
         color: Theme.colors.text
         font.pointSize: Theme.typography.sizeSm
         opacity: 0
