@@ -43,13 +43,14 @@ void LanguageController::setCurrentLanguage(const QString &language)
 {
     // Validate input
     if (language.isEmpty()) {
-        emit languageLoadFailed(language, "Empty language code provided");
+        qWarning() << "LanguageController: Empty language code provided";
         return;
     }
 
     if (!Language::isSupported(language)) {
         QString availableList = Language::getAllCodes().join(", ");
-        emit languageLoadFailed(language, QString("Unsupported language. Available languages: %1").arg(availableList));
+        qWarning() << "LanguageController: Unsupported language" << language
+                   << "Available:" << availableList;
         return;
     }
 
