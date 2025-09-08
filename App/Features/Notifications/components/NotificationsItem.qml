@@ -5,12 +5,16 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
+import "../internals"
+
 AbstractButton {
     id: root
 
     padding: Theme.spacing.s2
     implicitWidth: contentItem.implicitWidth + padding * 2
     implicitHeight: contentItem.implicitHeight + padding * 2
+
+    required property NotificationsChannel channel
 
     property bool active: false
     property int variant: NotificationsItemStyles.Info
@@ -37,7 +41,7 @@ AbstractButton {
 
         Text {
             anchors.centerIn: parent
-            text: root.text
+            text: channel.count
             color: _style.textColor
             font.weight: Theme.typography.weightSemibold
         }

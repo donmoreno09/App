@@ -47,17 +47,17 @@ Item {
 
             NotificationsItem {
                 variant: NotificationsItemStyles.Urgent
-                text: "0"
+                channel: NotificationsController.urgent
             }
 
             NotificationsItem {
                 variant: NotificationsItemStyles.Warning
-                text: "0"
+                channel: NotificationsController.warning
             }
 
             NotificationsItem {
                 variant: NotificationsItemStyles.Info
-                text: "0"
+                channel: NotificationsController.info
             }
         }
     }
