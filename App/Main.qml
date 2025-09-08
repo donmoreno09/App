@@ -12,7 +12,7 @@ import App.Features.TitleBar 1.0
 import App.Features.SideRail 1.0
 import App.Features.SidePanel 1.0
 import App.Features.ContextPanel 1.0
-import App.Features.NotificationsBar 1.0
+import App.Features.Notifications 1.0
 import App.Features.MapToolbar 1.0
 
 ApplicationWindow {
