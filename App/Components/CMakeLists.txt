@@ -9,7 +9,7 @@ set(qml_files
     HorizontalSpacer.qml
     VerticalSpacer.qml
     HorizontalDivider.qml
-    title/Title.qml
+    Title.qml
     VerticalDivider.qml
     wizard-page/WizardPage.qml
     wizard-page/constants/StepDefinitions.qml
