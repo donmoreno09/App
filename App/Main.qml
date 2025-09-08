@@ -12,7 +12,7 @@ import App.Features.TitleBar 1.0
 import App.Features.SideRail 1.0
 import App.Features.SidePanel 1.0
 import App.Features.ContextPanel 1.0
-import App.Features.NotificationsBar 1.0
+import App.Features.Notifications 1.0
 import App.Features.MapToolbar 1.0
 import App.Features.Language 1.0
 
@@ -40,6 +40,7 @@ ApplicationWindow {
 
     Map {
         anchors.fill: parent
+        anchors.bottomMargin: -Theme.spacing.s4 // Hides OSM's bottom label
     }
 
     RowLayout {
@@ -93,7 +94,7 @@ ApplicationWindow {
                         function recalculateMaskedBgs() {
                             if (!appLoaded) return
                             sidePanel.recalculateMaskedBg()
-                            notificationsBar.recalculateMaskedBg()
+                            notificationsBar.background.recalculateMaskedBg()
                         }
 
                         Connections {
@@ -115,12 +116,16 @@ ApplicationWindow {
 
                         UI.VerticalDivider { }
 
-                        NotificationsBar {
-                            id: notificationsBar
-                            Layout.preferredWidth: Theme.layout.notificationsBarWidth
-                            Layout.preferredHeight: Theme.layout.notificationsBarHeight
+                        UI.HorizontalPadding { padding: Theme.spacing.s5 }
+
+                        ColumnLayout {
                             Layout.alignment: Qt.AlignBottom
+
+                            NotificationsBar { id: notificationsBar }
+
+                            UI.VerticalPadding { padding: Theme.spacing.s5 }
                         }
+
                     }
                 }
 

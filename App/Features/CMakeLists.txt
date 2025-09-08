@@ -7,7 +7,7 @@ add_subdirectory(TitleBar)
 add_subdirectory(SideRail)
 add_subdirectory(SidePanel)
 add_subdirectory(ContextPanel)
-add_subdirectory(NotificationsBar)
+add_subdirectory(Notifications)
 add_subdirectory(MapToolbar)
 
 # Modules need to be linked in order to be loaded using qrc.
@@ -24,6 +24,6 @@ target_link_libraries(${PROJECT_NAME}
         app_features_siderail
         app_features_sidepanel
         app_features_contextpanel
-        app_features_notificationsbar
+        app_features_notifications
         app_features_maptoolbar
 )
