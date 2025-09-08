@@ -282,6 +282,29 @@
     </message>
 </context>
 <context>
+    <name>NotificationsPanel</name>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="10"/>
+        <source>Notifications</source>
+        <translation>Notifications</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="23"/>
+        <source>Generate Urgent Notification</source>
+        <translation>Generate Urgent Notification</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="31"/>
+        <source>Generate Warning Notification</source>
+        <translation>Generate Warning Notification</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="39"/>
+        <source>Generate Info Notification</source>
+        <translation>Generate Info Notification</translation>
+    </message>
+</context>
+<context>
     <name>OperationalArea</name>
     <message>
         <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="26"/>
@@ -352,7 +375,7 @@
         <translation>Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="58"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="69"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
@@ -417,6 +440,11 @@
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="23"/>
         <source>Pod</source>
         <translation>Pod</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="24"/>
+        <source>Notifications</source>
+        <translation>Notifications</translation>
     </message>
 </context>
 <context>

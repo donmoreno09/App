@@ -21,6 +21,7 @@ QtObject {
             case "Languages": return qsTr("Languages")
             case "Mission": return qsTr("Mission")
             case "Pod": return qsTr("Pod")
+            case "Notifications": return qsTr("Notifications")
             default: return key
         }
     }
