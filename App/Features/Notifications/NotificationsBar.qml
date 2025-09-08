@@ -60,5 +60,42 @@ Item {
                 channel: NotificationsController.info
             }
         }
+
+        RowLayout {
+            id: buttonsContainer
+            spacing: Theme.spacing.s4
+
+            anchors.rightMargin: Theme.spacing.s2
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            UI.Button {
+                variant: "ghost"
+                display: AbstractButton.IconOnly
+
+                icon.source: "qrc:/App/assets/icons/arrow-right-bar.svg"
+                icon.width: Theme.icons.sizeLg
+                icon.color: Theme.colors.text
+
+                radius: 0
+                padding: 0
+                backgroundRect.border.width: Theme.borders.b0
+            }
+
+            UI.Button {
+                variant: "ghost"
+                display: AbstractButton.IconOnly
+
+                icon.source: "qrc:/App/assets/icons/circled-check-underlined.svg"
+                icon.width: Theme.icons.sizeLg
+                icon.height: Theme.icons.sizeLg
+                icon.color: Theme.colors.text
+
+                radius: 0
+                padding: 0
+                backgroundRect.border.width: Theme.borders.b0
+            }
+        }
     }
 }
