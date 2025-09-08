@@ -35,8 +35,8 @@ UI.GlobalBackgroundConsumer {
                 active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
 
                 onClicked: {
-                    SidePanelController.toggle("mission")
                     TitleBarController.setTitle("Mission")
+                    SidePanelController.toggle("mission")
                 }
             }
 
@@ -46,8 +46,19 @@ UI.GlobalBackgroundConsumer {
                 active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
 
                 onClicked: {
-                    SidePanelController.toggle("pod")
                     TitleBarController.setTitle("Pod")
+                    SidePanelController.toggle("pod")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/notification.svg"
+                text: "Notifications"
+                active: PanelRouter.currentPath === "notifications" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Notifications")
+                    SidePanelController.toggle("notifications")
                 }
             }
 
@@ -57,7 +68,10 @@ UI.GlobalBackgroundConsumer {
                 text: "Language"
                 active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
 
-                onClicked: SidePanelController.toggle("language")
+                onClicked: {
+                    TitleBarController.setTitle("Languages")
+                    SidePanelController.toggle("language")
+                }
             }
         }
 
