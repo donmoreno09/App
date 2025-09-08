@@ -41,6 +41,7 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Qml
         Qt6::Quick
         app_features_language
+        app_logging
 )
 
 # Translation setup
