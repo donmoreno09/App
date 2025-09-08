@@ -9,10 +9,10 @@ QtObject {
     property bool isOpen: false
 
     // Signals
-    signal willOpen()
-    signal didOpen()
-    signal willClose()
-    signal didClose()
+    signal opening()
+    signal opened()
+    signal closing()
+    signal closed()
     signal routeChanged(string path)
     signal navigationError(string path, string reason)
 
@@ -27,11 +27,11 @@ QtObject {
     function open(path, props) {
         if (isOpen) return
 
-        willOpen()
+        opening()
         if (path == null) path = PanelRouter.currentPath ?? ""
         PanelRouter.replace(path, props || {})
         isOpen = true
-        didOpen()
+        opened()
     }
 
     function toggle(path, props) {
@@ -51,10 +51,10 @@ QtObject {
     function close(destroy) {
         if (!isOpen) return
 
-        willClose()
+        closing()
         isOpen = false
         TitleBarController.setTitle("Overview")
         if (destroy) PanelRouter.clear()
-        didClose()
+        closed()
     }
 }
