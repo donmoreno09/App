@@ -1,38 +1,59 @@
 import QtQuick 6.8
+import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-Item {
-    Layout.preferredWidth: container.width
-    Layout.preferredHeight: container.height
+AbstractButton {
+    id: root
 
-    Rectangle {
-        id: container
+    padding: Theme.spacing.s2
+    implicitWidth: contentItem.implicitWidth + padding * 2
+    implicitHeight: contentItem.implicitHeight + padding * 2
 
-        width: item.width + Theme.spacing.s3
-        height: item.height + Theme.spacing.s3
-        radius: Theme.radius.circle(width, height)
-        opacity: Theme.opacity.o20
+    property bool active: false
+    property int variant: NotificationsItemStyles.Info
+    property NotificationsItemStyle _style: NotificationsItemStyles.fromVariant(variant)
+
+    readonly property color _bgColor: {
+        if (!enabled) return _style.backgroundDisabled
+        if (pressed) return _style.backgroundPressed
+        if (active) return _style.backgroundActive
+        if (hovered) return _style.backgroundHover
+        return _style.background
     }
 
-    Rectangle {
-        id: item
+    readonly property color _textColor: {
+        if (!enabled) return _style.textColorDisabled
+        return _style.textColor
+    }
 
-        anchors.centerIn: parent
-
-        width: Theme.layout.notificationsBarItemWidth
-        height: Theme.layout.notificationsBarItemHeight
+    contentItem: Rectangle {
+        implicitWidth: 18
+        implicitHeight: 18
         radius: Theme.radius.circle(width, height)
-
-        color: "blue"
+        color: _bgColor
 
         Text {
             anchors.centerIn: parent
-            text: "N"
-            color: Theme.colors.text
+            text: root.text
+            color: _style.textColor
             font.weight: Theme.typography.weightSemibold
+        }
+    }
+
+    background: Rectangle {
+        radius: Theme.radius.circle(width, height)
+        color: _bgColor
+        opacity: Theme.opacity.o10
+
+        SequentialAnimation on opacity {
+            running: root.visible
+            loops: Animation.Infinite
+
+            NumberAnimation { to: Theme.opacity.o40; duration: 1000 }
+            NumberAnimation { to: Theme.opacity.o10; duration: 1000 }
         }
     }
 }

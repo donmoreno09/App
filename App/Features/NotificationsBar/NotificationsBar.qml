@@ -45,11 +45,20 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            NotificationsItem { }
+            NotificationsItem {
+                variant: NotificationsItemStyles.Urgent
+                text: "0"
+            }
 
-            NotificationsItem { }
+            NotificationsItem {
+                variant: NotificationsItemStyles.Warning
+                text: "0"
+            }
 
-            NotificationsItem { }
+            NotificationsItem {
+                variant: NotificationsItemStyles.Info
+                text: "0"
+            }
         }
     }
 }
