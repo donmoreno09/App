@@ -7,6 +7,8 @@ set(cpp_files
     LanguageController.cpp
     LanguageEnum.h
     LanguageEnum.cpp
+    TranslationManager.h
+    TranslationManager.cpp
 )
 
 qt_add_qml_module(app_features_language

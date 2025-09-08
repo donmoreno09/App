@@ -17,6 +17,7 @@ import QtQuick 6.8
 import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
+import App.Features.Language 1.0
 
 RowLayout {
     id: root
@@ -58,7 +59,7 @@ RowLayout {
     }
 
     Text {
-        text: "UTC"
+        text: (TranslationManager.revision, qsTr("UTC"))
         font.family: Theme.typography.familySans
         font.pixelSize: Theme.typography.sizeLg
         font.weight: Theme.typography.weightMedium
@@ -76,7 +77,7 @@ RowLayout {
     }
 
     Text {
-        text: "LOCAL"
+        text: (TranslationManager.revision, qsTr("LOCAL"))
         font.family: Theme.typography.familySans
         font.pixelSize: Theme.typography.sizeLg
         font.weight: Theme.typography.weightMedium

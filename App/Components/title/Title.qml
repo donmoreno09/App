@@ -4,9 +4,11 @@ import QtQuick.Controls 6.8
 import Qt5Compat.GraphicalEffects
 import App.Themes 1.0
 import App.Features.TitleBar 1.0
+import App.Features.Language 1.0
 
 Rectangle {
     color: "transparent"
+
 
     Text {
         id: titleText
