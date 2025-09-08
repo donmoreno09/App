@@ -1,5 +1,6 @@
 set(qml_files
     NotificationsBar.qml
+    NotificationsPanel.qml
     internals/NotificationsChannel.qml
     components/NotificationsItem.qml
     components/NotificationsItemStyle.qml

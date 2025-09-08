@@ -52,6 +52,17 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/notification.svg"
+                text: "Notifications"
+                active: PanelRouter.currentPath === "notifications" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Notifications")
+                    SidePanelController.toggle("notifications")
+                }
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 text: "Language"
