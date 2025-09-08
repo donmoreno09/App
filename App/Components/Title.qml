@@ -4,6 +4,7 @@ import QtQuick.Controls 6.8
 import Qt5Compat.GraphicalEffects
 import App.Themes 1.0
 import App.Features.TitleBar 1.0
+import App.Features.Language 1.0
 
 Rectangle {
     color: "transparent"
@@ -11,7 +12,7 @@ Rectangle {
     Text {
         id: titleText
         anchors.centerIn: parent
-        text: TitleBarController.currentTitle
+        text: (TranslationManager.revision, qsTr(TitleBarController.currentTitle))
         color: Theme.colors.text
         font.pointSize: Theme.typography.sizeSm
         opacity: 0
