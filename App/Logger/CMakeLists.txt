@@ -18,11 +18,6 @@ qt_add_qml_module(app_logger
     SOURCES ${cpp_sources}
 )
 
-target_include_directories(app_logger
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
 target_link_libraries(app_logger
     PRIVATE
         Qt6::Core
