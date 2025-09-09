@@ -22,7 +22,6 @@ qt_standard_project_setup(REQUIRES 6.8)
 
 enable_testing()
 
-add_subdirectory(logging)
 add_subdirectory(App)
 
 install(TARGETS ${PROJECT_NAME}
