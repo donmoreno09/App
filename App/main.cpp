@@ -1,7 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QDir>
-#include "Logger/app_logger.h"
+#include <Logger/app_logger.h>
 
 int main(int argc, char *argv[])
 {
