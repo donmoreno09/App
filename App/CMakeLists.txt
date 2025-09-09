@@ -8,17 +8,6 @@ file(GLOB_RECURSE APP_ASSETS
     "${CMAKE_CURRENT_SOURCE_DIR}/assets/*.*"
 )
 
-file(GLOB_RECURSE APP_SOURCES
-    RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
-    CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Components/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Features/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Playground/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/StubComponents/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Themes/*.qml"
-)
-
 qt_add_qml_module(${PROJECT_NAME}
     URI App
     VERSION 1.0
@@ -52,7 +41,6 @@ set(TS_FILES
 
 qt_add_translations(${PROJECT_NAME}
     TS_FILES ${TS_FILES}
-    SOURCES ${APP_SOURCES}
     RESOURCE_PREFIX "/translations"
 )
 
