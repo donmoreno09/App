@@ -32,7 +32,7 @@ Rectangle {
         anchors.fill: parent
         anchors.leftMargin: Theme.spacing.s3
         anchors.rightMargin: Theme.spacing.s3
-        spacing: Theme.spacing.s3
+        spacing: Theme.spacing.s1
 
         Image {
             Layout.preferredWidth: Theme.icons.sizeXs
