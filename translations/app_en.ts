@@ -418,6 +418,11 @@
         <source>Languages</source>
         <translation type="obsolete">Languages</translation>
     </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBar.qml" line="53"/>
+        <source>Search here...</source>
+        <translation>Search here...</translation>
+    </message>
 </context>
 <context>
     <name>TitleBarController</name>
