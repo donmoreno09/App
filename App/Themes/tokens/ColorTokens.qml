@@ -30,6 +30,7 @@ QtObject {
     readonly property color surface: "#171A21"    // Elevated containers (cards, panels, sheets)
     readonly property color overlay: "#202630"    // Transparent/dim layer above background/surface
     readonly property color transparent: "transparent"
+    readonly property color glass: Qt.rgba(0, 0, 0, 0.12)
 
     // Text
     readonly property color text: "#E8EAED"
@@ -37,6 +38,7 @@ QtObject {
 
     // Borders
     readonly property color border: "#232C36"
+    readonly property color glassBorder: Qt.rgba(1, 1, 1, 0.2)
 
     // Primary role
     readonly property color primary: "#0A4C8B"

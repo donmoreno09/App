@@ -24,6 +24,7 @@ UI.GlobalBackgroundConsumer {
     Component.onCompleted: {
         SidePanelController.attach(sidePanel)
     }
+
     Connections {
         target: LanguageController
         function onLanguageChanged() {
@@ -33,9 +34,9 @@ UI.GlobalBackgroundConsumer {
                 var oldExitTransition = stackView.replaceExit
                 stackView.replaceEnter = null
                 stackView.replaceExit = null
-                
+
                 PanelRouter.replaceCurrent(PanelRouter.currentPath)
-                
+
                 // Restore transitions
                 stackView.replaceEnter = oldTransition
                 stackView.replaceExit = oldExitTransition

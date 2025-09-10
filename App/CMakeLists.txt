@@ -8,17 +8,6 @@ file(GLOB_RECURSE APP_ASSETS
     "${CMAKE_CURRENT_SOURCE_DIR}/assets/*.*"
 )
 
-file(GLOB_RECURSE APP_SOURCES
-    RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
-    CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Components/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Features/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Playground/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/StubComponents/*.qml"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Themes/*.qml"
-)
-
 qt_add_qml_module(${PROJECT_NAME}
     URI App
     VERSION 1.0
@@ -34,13 +23,14 @@ add_subdirectory(StubComponents)
 add_subdirectory(Features)
 add_subdirectory(Playground)
 add_subdirectory(Themes)
+add_subdirectory(Logger)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         Qt6::Gui
         Qt6::Qml
         Qt6::Quick
-        app_features_language
+        Qt6::Sql
 )
 
 # Translation setup
@@ -49,16 +39,9 @@ set(TS_FILES
     ${CMAKE_SOURCE_DIR}/translations/app_it.ts
 )
 
-qt_add_translations(${PROJECT_NAME} 
-    TS_FILES ${TS_FILES} 
-    SOURCES ${APP_SOURCES}
+qt_add_translations(${PROJECT_NAME}
+    TS_FILES ${TS_FILES}
     RESOURCE_PREFIX "/translations"
-)
-
-# Ensure translations are compiled before the main target
-add_dependencies(${PROJECT_NAME}
-    ${PROJECT_NAME}_lupdate
-    ${PROJECT_NAME}_lrelease
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

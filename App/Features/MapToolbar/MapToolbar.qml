@@ -12,7 +12,7 @@ RowLayout {
     spacing: Theme.spacing.s3
 
     ButtonGroup { id: navigationGroup; exclusive: true }
-    ButtonGroup { id: toolsGroup; exclusive: true}
+    ButtonGroup { id: toolsGroup; exclusive: true }
 
 
     MapToolbarContainer {

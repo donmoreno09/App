@@ -14,17 +14,18 @@ QtObject {
             currentTitle = translateTitle(titleKey)
         }
     }
-    
+
     function translateTitle(key) {
         switch(key) {
             case "Overview": return qsTr("Overview")
             case "Languages": return qsTr("Languages")
             case "Mission": return qsTr("Mission")
             case "Pod": return qsTr("Pod")
+            case "Notifications": return qsTr("Notifications")
             default: return key
         }
     }
-    
+
     property Connections translationConnection: Connections {
         target: TranslationManager
         function onRevisionChanged() {

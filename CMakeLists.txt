@@ -15,6 +15,7 @@ find_package(Qt6 6.8 REQUIRED
         Mqtt
         LinguistTools
         QuickTest
+        Sql
 )
 
 qt_standard_project_setup(REQUIRES 6.8)
@@ -22,6 +23,8 @@ qt_standard_project_setup(REQUIRES 6.8)
 enable_testing()
 
 add_subdirectory(App)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR})
 
 install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .

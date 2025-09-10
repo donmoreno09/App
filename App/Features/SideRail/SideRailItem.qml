@@ -20,6 +20,7 @@ UI.Button {
     icon.width: Theme.icons.sizeLg
     icon.height: Theme.icons.sizeLg
     icon.color: Theme.colors.text
+
     radius: 0
     backgroundRect.border.width: Theme.borders.b0
 }

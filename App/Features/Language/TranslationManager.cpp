@@ -17,16 +17,12 @@ TranslationManager::TranslationManager(QObject *parent)
     m_retranslateTimer->setInterval(0); // Next event loop iteration
     connect(m_retranslateTimer, &QTimer::timeout, [this]() {
         ++m_revision;
-        qDebug() << "TranslationManager: Revision updated to" << m_revision;
         emit revisionChanged();
     });
-
-    qDebug() << "TranslationManager: Ready, initial revision:" << m_revision;
 }
 
 void TranslationManager::retranslate()
 {
-    qDebug() << "TranslationManager: Manual retranslate requested";
     if (!m_retranslateTimer->isActive()) {
         m_retranslateTimer->start();
     }
@@ -34,6 +30,5 @@ void TranslationManager::retranslate()
 
 void TranslationManager::onLanguageChanged()
 {
-    qDebug() << "TranslationManager: Language changed signal received, triggering retranslation";
     retranslate();
 }

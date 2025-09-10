@@ -45,7 +45,7 @@ BasePanel {
                     font.pixelSize: Theme.typography.sizeLg
                 }
 
-                onClicked: SidePanelController.close()
+                onClicked: SidePanelController.close(true)
             }
 
             UI.HorizontalPadding { }
