@@ -274,6 +274,29 @@
     </message>
 </context>
 <context>
+    <name>NotificationsPanel</name>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="10"/>
+        <source>Notifications</source>
+        <translation>Notifiche</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="23"/>
+        <source>Generate Urgent Notification</source>
+        <translation>Genera Notifica Urgente</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="31"/>
+        <source>Generate Warning Notification</source>
+        <translation>Genera Notifica di Avviso</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="39"/>
+        <source>Generate Info Notification</source>
+        <translation>Genera Notifica Informativa</translation>
+    </message>
+</context>
+<context>
     <name>OperationalArea</name>
     <message>
         <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="26"/>
@@ -344,7 +367,7 @@
         <translation>Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="58"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="69"/>
         <source>Language</source>
         <translation>Lingua</translation>
     </message>
@@ -365,9 +388,8 @@
 <context>
     <name>Title</name>
     <message>
-        <location filename="../App/StubComponents/Title.qml" line="12"/>
         <source>Overview</source>
-        <translation>Panoramica</translation>
+        <translation type="vanished">Panoramica</translation>
     </message>
     <message>
         <source>Languages</source>
@@ -394,41 +416,27 @@
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="20"/>
         <source>Overview</source>
-        <translation type="unfinished">Panoramica</translation>
+        <translation>Panoramica</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="21"/>
         <source>Languages</source>
-        <translation type="unfinished">Lingue</translation>
+        <translation>Lingue</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="22"/>
         <source>Mission</source>
-        <translation type="unfinished">Missione</translation>
+        <translation>Missione</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="23"/>
         <source>Pod</source>
-        <translation type="unfinished">Pod</translation>
-    </message>
-</context>
-<context>
-    <name>TitleTranslations</name>
-    <message>
-        <source>Overview</source>
-        <translation type="obsolete">Panoramica</translation>
+        <translation>Pod</translation>
     </message>
     <message>
-        <source>Languages</source>
-        <translation type="obsolete">Lingue</translation>
-    </message>
-    <message>
-        <source>Mission</source>
-        <translation type="obsolete">Missione</translation>
-    </message>
-    <message>
-        <source>Pod</source>
-        <translation type="obsolete">Pod</translation>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="24"/>
+        <source>Notifications</source>
+        <translation>Notifiche</translation>
     </message>
 </context>
 <context>
