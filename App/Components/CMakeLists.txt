@@ -7,6 +7,7 @@ set(qml_files
     HorizontalDivider.qml
     HorizontalPadding.qml
     HorizontalSpacer.qml
+    OutlineRect.qml
     SearchBar.qml
     Title.qml
     VerticalDivider.qml

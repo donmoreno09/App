@@ -25,16 +25,7 @@ Rectangle {
         }
     }
 
-    // Outline
-    Rectangle {
-        visible: visualFocus
-        anchors.fill: parent
-        anchors.margins: -Theme.borders.offset2
-        color: Theme.colors.transparent
-        radius: root.radius + Theme.borders.outline2
-        border.width: Theme.borders.outline2
-        border.color: Qt.lighter(Theme.colors.textMuted, 1.6)
-    }
+    OutlineRect { visible: visualFocus }
 
     // Content
     RowLayout {
