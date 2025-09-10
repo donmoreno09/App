@@ -31,6 +31,7 @@ QtObject {
     readonly property color overlay: "#202630"    // Transparent/dim layer above background/surface
     readonly property color transparent: "transparent"
     readonly property color glass: Qt.rgba(0, 0, 0, 0.12)
+    readonly property color glassWhite: Qt.rgba(1, 1, 1, 0.10)
 
     // Text
     readonly property color text: "#E8EAED"

@@ -4,13 +4,14 @@ set(qml_files
     DateTime.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
-    HorizontalPadding.qml
-    VerticalPadding.qml
-    HorizontalSpacer.qml
-    VerticalSpacer.qml
     HorizontalDivider.qml
+    HorizontalPadding.qml
+    HorizontalSpacer.qml
+    SearchBar.qml
     Title.qml
     VerticalDivider.qml
+    VerticalPadding.qml
+    VerticalSpacer.qml
     wizard-page/WizardPage.qml
     wizard-page/constants/StepDefinitions.qml
     wizard-page/test-pages/MissionOverview.qml
