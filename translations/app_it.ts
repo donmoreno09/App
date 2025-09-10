@@ -367,6 +367,11 @@
         <translation>Pod</translation>
     </message>
     <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="57"/>
+        <source>Notifications</source>
+        <translation>Notifiche</translation>
+    </message>
+    <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="69"/>
         <source>Language</source>
         <translation>Lingua</translation>

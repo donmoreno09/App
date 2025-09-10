@@ -54,7 +54,7 @@ UI.GlobalBackgroundConsumer {
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/notification.svg"
-                text: "Notifications"
+                text: (TranslationManager.revision, qsTr("Notifications"))
                 active: PanelRouter.currentPath === "notifications" && SidePanelController.isOpen
 
                 onClicked: {
