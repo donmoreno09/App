@@ -1,6 +1,7 @@
 set(qml_files
     BasePanel.qml
     NotFoundPanel.qml
+    PanelTemplate.qml
     SidePanel.qml
     routes.js
 )

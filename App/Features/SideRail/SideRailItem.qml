@@ -6,8 +6,9 @@ import App.Themes 1.0
 import App.Components 1.0 as UI
 
 UI.Button {
-    required property string source
-    required property string label
+    id: root
+
+    property alias source: root.icon.source
 
     variant: "ghost"
     Layout.fillWidth: true
@@ -19,9 +20,6 @@ UI.Button {
     icon.width: Theme.icons.sizeLg
     icon.height: Theme.icons.sizeLg
     icon.color: Theme.colors.text
-
-    text: label
-
     radius: 0
     backgroundRect.border.width: Theme.borders.b0
 }

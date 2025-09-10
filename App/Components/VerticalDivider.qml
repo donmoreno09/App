@@ -7,4 +7,5 @@ Rectangle {
     Layout.preferredWidth: Theme.borders.b1
     Layout.fillHeight: true
     opacity: Theme.opacity.o10
+    color: Theme.colors.border
 }

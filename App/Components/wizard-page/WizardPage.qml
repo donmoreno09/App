@@ -3,6 +3,7 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.Language 1.0
 
 Item {
     id: wizardPage
@@ -48,51 +49,6 @@ Item {
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight:Theme.spacing.s16
-            spacing: Theme.spacing.s4
-
-            Item { Layout.preferredWidth: Theme.spacing.s4 }
-
-            // Title
-            Text {
-                text: wizardPage.title
-                color: Theme.colors.primaryText
-                font.family: Theme.typography.familySans
-                font.pixelSize: Theme.typography.sizeLg
-                font.weight: Theme.typography.weightMedium
-                Layout.fillWidth: true
-            }
-
-            // Close Button
-            UI.Button {
-                Layout.preferredWidth: Theme.spacing.s10
-                Layout.preferredHeight: Theme.spacing.s10
-                visible: wizardPage.showCloseButton
-                variant: "ghost"
-                background: Rectangle { color: "transparent" }
-
-                // Close icon
-                Text {
-                    anchors.centerIn: parent
-                    text: "✕"
-                    color: Theme.colors.primaryText
-                    font.pixelSize: Theme.typography.sizeBase
-                }
-
-                onClicked: wizardPage.closeWizard()
-            }
-        }
-
-        // Bottom border
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: Theme.spacing.s0_5
-            color: Theme.colors.primaryText
-            opacity: 0.1
-        }
 
         // Section Title
         Rectangle {
@@ -222,7 +178,7 @@ Item {
 
                     Text {
                         anchors.centerIn: parent
-                        text: qsTr("Back")
+                        text: (TranslationManager.revision, qsTr("Back"))
                         color: wizardPage.canGoBack ? Theme.colors.primaryText : Theme.colors.textMuted
                         font.family: Theme.typography.familySans
                         font.pixelSize: Theme.typography.sizeSm
@@ -241,7 +197,7 @@ Item {
 
                     Text {
                         anchors.centerIn: parent
-                        text: qsTr("Next")
+                        text: (TranslationManager.revision, qsTr("Next"))
                         color: Theme.colors.primaryText
                         font.family: Theme.typography.familySans
                         font.pixelSize: Theme.typography.sizeSm

@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QString>
 #include <QTranslator>
+#include <QQmlEngine>
 #include <QGuiApplication>
 
 class LanguageController : public QObject
@@ -10,6 +11,8 @@ class LanguageController : public QObject
     Q_OBJECT
     Q_PROPERTY(QString currentLanguage READ currentLanguage WRITE setCurrentLanguage NOTIFY currentLanguageChanged)
     Q_PROPERTY(QStringList availableLanguages READ availableLanguages CONSTANT)
+    QML_ELEMENT
+    QML_SINGLETON
 
 public:
     explicit LanguageController(QObject *parent = nullptr);
@@ -24,7 +27,6 @@ public:
 signals:
     void currentLanguageChanged();
     void languageChanged();
-    void languageLoadFailed(const QString &language, const QString &reason);
 
 private:
     QString initializeLanguage();

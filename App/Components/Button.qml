@@ -23,6 +23,7 @@ Button {
     id: root
 
     property alias backgroundRect: backgroundRect
+    property bool active: false
 
     property string variant: "primary"
     property string size: "md"
@@ -38,6 +39,7 @@ Button {
         if (pressed) return "pressed"
         if (hovered) return "hovered"
         if (focused) return "focused"
+        if (active) return "active"
         return "normal"
     }
 
@@ -67,6 +69,7 @@ Button {
             backgroundHover: Qt.darker(Theme.colors.primary, 1.2),
             backgroundPressed: Qt.darker(Theme.colors.primary, 1.4),
             backgroundDisabled: Theme.colors.textMuted,
+            backgroundActive: Qt.darker(Theme.colors.primary, 1.1),
             border: Theme.borders.b0,
             borderColor: Theme.colors.primary,
             textColor: Theme.colors.primaryText,
@@ -77,6 +80,7 @@ Button {
             backgroundHover: Theme.colors.overlay,
             backgroundPressed: Theme.colors.background,
             backgroundDisabled: Theme.colors.textMuted,
+            backgroundActive: Theme.colors.overlay,
             border: Theme.borders.b1,
             borderColor: Theme.colors.textMuted,
             borderColorDisabled: Theme.colors.textMuted,
@@ -88,6 +92,7 @@ Button {
             backgroundHover: Qt.darker(Theme.colors.danger, 1.1),
             backgroundPressed: Qt.darker(Theme.colors.danger, 1.2),
             backgroundDisabled: Theme.colors.textMuted,
+            backgroundActive: Qt.darker(Theme.colors.danger, 1.1),
             border: Theme.borders.b0,
             borderColor: Theme.colors.danger,
             textColor: Theme.colors.primaryText,
@@ -98,6 +103,7 @@ Button {
             backgroundHover: Theme.colors.overlay,
             backgroundPressed: Theme.colors.surface,
             backgroundDisabled: Theme.colors.overlay,
+            backgroundActive: Theme.colors.overlay,
             border: Theme.borders.b1,
             borderColor: Theme.colors.textMuted,
             textColor: Theme.colors.text,
@@ -108,6 +114,7 @@ Button {
             backgroundHover: Qt.darker(Theme.colors.success, 1.1),
             backgroundPressed: Qt.darker(Theme.colors.success, 1.2),
             backgroundDisabled: Theme.colors.textMuted,
+            backgroundActive: Qt.darker(Theme.colors.success, 1.1),
             border: Theme.borders.b0,
             borderColor: Theme.colors.success,
             textColor: Theme.colors.primaryText,
@@ -122,6 +129,7 @@ Button {
             case "disabled": return _currentVariantStyle.backgroundDisabled
             case "pressed": return _currentVariantStyle.backgroundPressed
             case "hovered": return _currentVariantStyle.backgroundHover
+            case "active": return _currentVariantStyle.backgroundActive
             default: return _currentVariantStyle.background
         }
     }
@@ -166,8 +174,4 @@ Button {
     }
 
     padding: _sizeStyles.padding
-    topPadding: _sizeStyles.padding
-    leftPadding: _sizeStyles.padding
-    rightPadding: _sizeStyles.padding
-    bottomPadding: _sizeStyles.padding
 }

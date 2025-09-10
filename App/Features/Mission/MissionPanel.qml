@@ -4,8 +4,10 @@ import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Playground 1.0
 import App.Features.SidePanel 1.0
+import App.Features.Language 1.0
 
-BasePanel {
+PanelTemplate {
+    title.text: (TranslationManager.revision, qsTr("New Mission"))
+
     WizardPageTest { }
-    // ButtonGroupTest { anchors.fill: parent}
 }
