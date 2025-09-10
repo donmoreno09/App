@@ -30,7 +30,6 @@ Button {
     property int radius: Theme.radius.md
     property int focusOutlineWidth: Theme.borders.outline2
     property int focusOffset: Theme.borders.offset2
-    property color focusColor: Theme.colors.primary
 
     readonly property bool focused: visualFocus && enabled
 
