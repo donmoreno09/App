@@ -11,10 +11,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("IRIDESS_FE");
     QCoreApplication::setApplicationVersion("1.0.0");
 
-    QQmlApplicationEngine engine;
-
     auto& logger = AppLogger::get();
     logger.info("App start", {kv("version", "1.0.0")});
+
+    QQmlApplicationEngine engine;
 
     QObject::connect(
         &engine,
