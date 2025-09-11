@@ -28,9 +28,6 @@ Button {
     property string variant: "primary"
     property string size: "md"
     property int radius: Theme.radius.md
-    property int focusOutlineWidth: Theme.borders.outline2
-    property int focusOffset: Theme.borders.offset2
-    property color focusColor: Theme.colors.primary
 
     readonly property bool focused: visualFocus && enabled
 
@@ -158,19 +155,7 @@ Button {
             ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
         }
 
-        Rectangle {
-            anchors.fill: parent
-            anchors.margins: -root.focusOffset
-            color: _currentBackground
-            radius: root.radius + root.focusOutlineWidth
-            border.width: focused ? root.focusOutlineWidth : 0
-            border.color: Qt.lighter(_currentVariantStyle.borderColor, 1.6)
-            visible: focused
-
-            Behavior on border.width {
-                NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
-            }
-        }
+        OutlineRect { visible: focused }
     }
 
     padding: _sizeStyles.padding
