@@ -23,12 +23,14 @@ add_subdirectory(StubComponents)
 add_subdirectory(Features)
 add_subdirectory(Playground)
 add_subdirectory(Themes)
+add_subdirectory(Logger)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         Qt6::Gui
         Qt6::Qml
         Qt6::Quick
+        Qt6::Sql
 )
 
 # Translation setup
