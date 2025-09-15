@@ -17,9 +17,8 @@ import QtQuick 2.15
 
 QtObject {
     // Font families — Text.font.family
-    readonly property string familySans: "Segoe UI"
-    readonly property string familyMono: "Consolas"
-    readonly property string familySerif: "Georgia"
+    readonly property string familySans: "PP Fraktion Sans"
+    readonly property string familyMono: "PP Fraktion Mono"
 
     // Base size and scale ratio (named font size steps derive from these)
     readonly property int  baseFontSize:   16     // dpi
