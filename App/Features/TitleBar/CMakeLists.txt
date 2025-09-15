@@ -1,5 +1,6 @@
 set(qml_files
     TitleBar.qml
+    components/SystemButton.qml
 )
 
 set(cpp_singletons
