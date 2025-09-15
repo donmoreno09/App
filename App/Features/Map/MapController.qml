@@ -35,14 +35,6 @@ QtObject {
         }
     }
 
-    function enableBackgroundOverlay(){
-        backgroundOverlayEnabled = true
-    }
-
-    function disableBackgroundOverlay(){
-        backgroundOverlayEnabled = false
-    }
-
     function toggleBackgroundOverlay() {
             backgroundOverlayEnabled = !backgroundOverlayEnabled
         }

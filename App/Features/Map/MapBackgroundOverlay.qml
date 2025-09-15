@@ -1,28 +1,36 @@
 import QtQuick 6.8
-import QtQuick.Effects 6.8
+import Qt5Compat.GraphicalEffects
 import App.Components 1.0 as UI
 import App.Features.Map 1.0
 
-UI.GlobalBackgroundConsumer {
+Blend {
     id: root
+    anchors.fill: parent
+    z: 1
 
-    // Property to receive the map source from parent
     property var mapSource: null
 
-    // Controlled by MapController
-    opacity: MapController.backgroundOverlayEnabled ? 0.8 : 0.0
-
-    MultiEffect {
+    // Base layer: Capture the MapView properly
+    source: ShaderEffectSource {
+        sourceItem: root.mapSource
         anchors.fill: parent
-        source: root.mapSource
-
-        // Make the map brighter so it illuminates through the overlay
-        brightness: 0.8        // Brighten the map significantly
-        contrast: 1.2          // Increase contrast for better visibility
-        saturation: 0.4        // Slightly reduce saturation for tactical look
-
-        opacity: 1.0          // Full opacity for the effect
+        live: true
+        hideSource: false
     }
+
+    // Overlay layer: Your GlobalBackground
+    foregroundSource: UI.GlobalBackground {
+        anchors.fill: parent
+    }
+
+    // Blend mode
+    mode: "multiply"
+
+    // Performance optimization
+    cached: true
+
+    // Controlled by MapController
+    opacity: MapController.backgroundOverlayEnabled ? 1 : 0.0
 
     // Smooth animation
     Behavior on opacity {
