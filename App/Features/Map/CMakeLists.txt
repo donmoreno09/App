@@ -1,5 +1,6 @@
 set(qml_files
     Map.qml
+    MapBackgroundOverlay.qml
 )
 
 set(qml_singletons

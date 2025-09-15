@@ -7,6 +7,7 @@ import QtLocation 6.8
 //       It is actually a suggested approach by the official docs itself
 //       which you can find here: https://doc.qt.io/qt-6/qml-qtlocation-mapview.html
 MapView {
+    id: mapView
     map.plugin: Plugin {
         name: "osm"
 
@@ -23,5 +24,11 @@ MapView {
 
     Component.onCompleted: {
         MapController.attach(map)
+    }
+
+    MapBackgroundOverlay {
+        anchors.fill: parent
+        z: 1  // Above map, below UI controls
+        mapSource: mapView  // Pass the map reference to the overlay
     }
 }
