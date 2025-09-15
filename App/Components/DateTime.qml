@@ -61,7 +61,7 @@ RowLayout {
     Text {
         text: (TranslationManager.revision, qsTr("UTC"))
         font.family: Theme.typography.familySans
-        font.pixelSize: Theme.typography.sizeLg
+        font.pixelSize: Theme.typography.fontSize200
         font.weight: Theme.typography.weightMedium
         color: Theme.colors.text
         font.letterSpacing: Theme.typography.letterSpacingWide
@@ -70,7 +70,7 @@ RowLayout {
     Text {
         text: d.utcTimeString
         font.family: Theme.typography.familySans
-        font.pixelSize: Theme.typography.sizeLg
+        font.pixelSize: Theme.typography.fontSize200
         font.weight: Theme.typography.weightMedium
         color: Theme.colors.text
         font.letterSpacing: Theme.typography.letterSpacingWide
@@ -79,7 +79,7 @@ RowLayout {
     Text {
         text: (TranslationManager.revision, qsTr("LOCAL"))
         font.family: Theme.typography.familySans
-        font.pixelSize: Theme.typography.sizeLg
+        font.pixelSize: Theme.typography.fontSize200
         font.weight: Theme.typography.weightMedium
         color: Theme.colors.text
         font.letterSpacing: Theme.typography.letterSpacingWide
@@ -88,7 +88,7 @@ RowLayout {
     Text {
         text: d.localTimeString
         font.family: Theme.typography.familySans
-        font.pixelSize: Theme.typography.sizeLg
+        font.pixelSize: Theme.typography.fontSize200
         font.weight: Theme.typography.weightMedium
         color: Theme.colors.text
         font.letterSpacing: Theme.typography.letterSpacingWide

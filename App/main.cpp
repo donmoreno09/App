@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QDir>
 #include <App/Logger/app_logger.h>
+#include <QFontDatabase>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +17,27 @@ int main(int argc, char *argv[])
     logger.info("App start", {kv("version", "1.0.0")});
 
     QQmlApplicationEngine engine;
+
+    const QStringList fontFiles = {
+        ":/App/assets/fonts/PPFraktionSans-Light.otf",
+        ":/App/assets/fonts/PPFraktionSans-LightItalic.otf",
+        ":/App/assets/fonts/PPFraktionSans-Bold.otf",
+        ":/App/assets/fonts/PPFraktionSans-BoldItalic.otf",
+        ":/App/assets/fonts/PPFraktionMono-Regular.otf",
+        ":/App/assets/fonts/PPFraktionMono-RegularItalic.otf",
+        ":/App/assets/fonts/PPFraktionMono-Bold.otf",
+        ":/App/assets/fonts/PPFraktionMono-BoldItalic.ttf"
+    };
+
+    for (const QString& fontFile : fontFiles) {
+        int fontId = QFontDatabase::addApplicationFont(fontFile);
+        if (fontId == -1) {
+            qWarning() << "Failed to load font:" << fontFile;
+        } else {
+            QStringList families = QFontDatabase::applicationFontFamilies(fontId);
+            qDebug() << "Loaded font:" << fontFile << "-> Families:" << families;
+        }
+    }
 
     QObject::connect(
         &engine,

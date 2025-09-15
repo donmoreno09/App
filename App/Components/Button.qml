@@ -47,17 +47,17 @@ Button {
         "sm": {
             minHeight: Theme.spacing.s8,
             padding: Theme.spacing.s2,
-            fontSize: Theme.typography.sizeSm
+            fontSize: Theme.typography.fontSize150
         },
         "md": {
             minHeight: Theme.spacing.s10,
             padding: Theme.spacing.s3,
-            fontSize: Theme.typography.sizeBase
+            fontSize: Theme.typography.fontSize175
         },
         "lg": {
             minHeight: Theme.spacing.s12,
             padding: Theme.spacing.s4,
-            fontSize: Theme.typography.sizeLg
+            fontSize: Theme.typography.fontSize200
         }
     })
 
