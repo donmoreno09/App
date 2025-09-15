@@ -85,8 +85,8 @@ Item {
                         text: wizardPage.stepTitle
                         color: Theme.colors.primaryText
                         font.family: Theme.typography.familySans
-                        font.pixelSize: Theme.typography.sizeLg
-                        font.weight: Theme.typography.weightNormal
+                        font.pixelSize: Theme.typography.fontSize200
+                        font.weight: Theme.typography.weightRegular
                         Layout.fillWidth: true
                     }
 
@@ -95,8 +95,8 @@ Item {
                         text: String(wizardPage.currentStep + 1).padStart(2,'0') + " / " + String(wizardPage.totalSteps).padStart(2,'0')
                         color: Theme.colors.primaryText
                         font.family: Theme.typography.familyMono
-                        font.pixelSize: Theme.typography.sizeSm
-                        font.weight: Theme.typography.weightNormal
+                        font.pixelSize: Theme.typography.fontSize150
+                        font.weight: Theme.typography.weightRegular
                     }
                 }
 
@@ -181,8 +181,8 @@ Item {
                         text: (TranslationManager.revision, qsTr("Back"))
                         color: wizardPage.canGoBack ? Theme.colors.primaryText : Theme.colors.textMuted
                         font.family: Theme.typography.familySans
-                        font.pixelSize: Theme.typography.sizeSm
-                        font.weight: Theme.typography.weightNormal
+                        font.pixelSize: Theme.typography.fontSize150
+                        font.weight: Theme.typography.weightRegular
                     }
                 }
 
@@ -200,8 +200,8 @@ Item {
                         text: (TranslationManager.revision, qsTr("Next"))
                         color: Theme.colors.primaryText
                         font.family: Theme.typography.familySans
-                        font.pixelSize: Theme.typography.sizeSm
-                        font.weight: Theme.typography.weightNormal
+                        font.pixelSize: Theme.typography.fontSize150
+                        font.weight: Theme.typography.weightRegular
                     }
                 }
             }

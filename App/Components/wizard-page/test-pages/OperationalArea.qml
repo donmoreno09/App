@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import App.Themes 1.0
 import App.Features.Language 1.0
 
 Item {
@@ -25,8 +26,9 @@ Item {
             Text {
                 text: (TranslationManager.revision, qsTr("Area Type"))
                 color: "#ffffff"
-                font.pixelSize: 16
-                font.weight: Font.Medium
+                font.family: Theme.typography.familySans
+                font.pixelSize: Theme.typography.fontSize175
+                font.weight: Theme.typography.weightMedium
             }
 
             Row {
@@ -61,14 +63,16 @@ Item {
                             Text {
                                 text: modelData.icon
                                 color: "#ffffff"
-                                font.pixelSize: 18
+                                font.family: Theme.typography.familySans
+                                font.pixelSize: Theme.typography.fontSize200
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
 
                             Text {
                                 text: modelData.name
                                 color: "white"
-                                font.pixelSize: 10
+                                font.family: Theme.typography.familySans
+                                font.pixelSize: Theme.typography.fontSize125
                                 anchors.horizontalCenter: parent.horizontalCenter
                             }
                         }
@@ -89,8 +93,9 @@ Item {
             Text {
                 text: (TranslationManager.revision, qsTr("Area Details"))
                 color: "#ffffff"
-                font.pixelSize: 16
-                font.weight: Font.Medium
+                font.family: Theme.typography.familySans
+                font.pixelSize: Theme.typography.fontSize175
+                font.weight: Theme.typography.weightMedium
             }
 
             GridLayout {
