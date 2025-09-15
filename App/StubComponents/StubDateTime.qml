@@ -23,6 +23,6 @@ RowLayout {
     Text {
         text: "UTC 12:35:55 LOCAL 14:35:55"
         color: Theme.colors.text
-        font.pointSize: Theme.typography.sizeSm
+        font.pointSize: Theme.typography.fontSize150
     }
 }

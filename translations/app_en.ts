@@ -379,6 +379,11 @@
         <source>Language</source>
         <translation>Language</translation>
     </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="69"/>
+        <source>Notifications</source>
+        <translation>Notifications</translation>
+    </message>
 </context>
 <context>
     <name>StepDefinitions</name>

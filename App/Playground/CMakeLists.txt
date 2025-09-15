@@ -3,6 +3,7 @@ set(qml_files
     IconButtonsTest.qml
     DateTimeTest.qml
     WizardPageTest.qml
+    FontTest.qml
 )
 
 qt_add_qml_module(app_playground
