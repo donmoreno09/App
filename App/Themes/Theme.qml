@@ -10,7 +10,7 @@ QtObject {
     id: root
 
     // States
-    property int currentVariant: Themes.Fincantieri
+    property int currentVariant: Themes.FincantieriDark
     property BaseTheme current: null
 
     // Token facades
@@ -42,8 +42,8 @@ QtObject {
         case Themes.Fincantieri:
             url = Qt.resolvedUrl("variants/Fincantieri.qml")
             break
-        case Themes.FincantieriLight:
-            url = Qt.resolvedUrl("variants/FincantieriLight.qml")
+        case Themes.FincantieriDark:
+            url = Qt.resolvedUrl("variants/FincantieriDark.qml")
             break
         default:
             console.error("Theme.setTheme: unknown variant:", variant)

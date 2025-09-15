@@ -25,33 +25,25 @@
 import QtQuick 6.8
 
 QtObject {
+    // -------------------------- // SEMANTICS // -------------------------- //
+
     // Surfaces
-    readonly property color background: "#0F1115" // App base layer; behind all content
-    readonly property color surface: "#171A21"    // Elevated containers (cards, panels, sheets)
-    readonly property color overlay: "#202630"    // Transparent/dim layer above background/surface
     readonly property color transparent: "transparent"
-    readonly property color glass: Qt.rgba(0, 0, 0, 0.12)
-    readonly property color glassWhite: Qt.rgba(1, 1, 1, 0.10)
+    readonly property color background: primary900 // App base layer; behind all content
+    readonly property color surface: primary800    // Elevated containers (cards, panels, sheets)
+    readonly property color overlay: grey500       // Transparent/dim layer above background/surface
+    readonly property color glass: blackA10
+    readonly property color glassWhite: whiteA10
 
     // Text
-    readonly property color text: "#E8EAED"
-    readonly property color textMuted: "#A3A9B5"
+    readonly property color text: white500
+    readonly property color textMuted: grey300
 
     // Borders
-    readonly property color border: "#232C36"
-    readonly property color glassBorder: Qt.rgba(1, 1, 1, 0.2)
+    readonly property color border: secondary500
+    readonly property color glassBorder: whiteA20
 
-    // Primary role
-    readonly property color primary: "#0A4C8B"
-    readonly property color primaryHover: "#0C5BA6"
-    readonly property color primaryPressed: "#09406F"
-    readonly property color primaryText: "white" // "onPrimary" naming cannot work since Qt thinks it's a signal
-
-    // Status colors
-    readonly property color success: "#3BA55C"
-    readonly property color warning: "#F9A62B"
-    readonly property color danger: "#D83A3A"
-    readonly property color info: "#4AA3E0"
+    // -------------------------- // PRIMITIVES // -------------------------- //
 
     // Black
     readonly property color black500: "#000000"
@@ -89,6 +81,8 @@ QtObject {
     readonly property color greyA5:  hexWithAlpha(grey500, 0.05)
 
     // Primary
+    readonly property color primary900: "#0F1115"
+    readonly property color primary800: "#171A21"
     readonly property color primary700: "#002347"
     readonly property color primary600: "#002F61"
     readonly property color primary500: "#003A78"
@@ -154,7 +148,7 @@ QtObject {
     readonly property color error300: "#F2AFAF"
     readonly property color error200: "#F8D0D0"
     readonly property color error100: "#FBE5E5"
-    readonly property color error50:  "#FBE5E5" // NOTE: The Figma has this same value; I've already left a comment though.
+    readonly property color error50:  "#FDF3F3"
     readonly property color errorA40: hexWithAlpha(error500, 0.4)
     readonly property color errorA30: hexWithAlpha(error500, 0.3)
     readonly property color errorA20: hexWithAlpha(error500, 0.2)

@@ -40,6 +40,7 @@ UI.GlobalBackgroundConsumer {
                 icon.width: Theme.icons.sizeSm
                 icon.height: Theme.icons.sizeSm
                 icon.source: "qrc:/App/assets/icons/world.svg"
+                backgroundRect.color: Theme.colors.whiteA20
                 backgroundRect.border.width: Theme.borders.b0
 
                 onClicked: {

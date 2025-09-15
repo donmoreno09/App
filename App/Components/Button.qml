@@ -62,61 +62,72 @@ Button {
 
     readonly property var _variantStyles: ({
         "primary": {
-            background: Theme.colors.primary,
-            backgroundHover: Qt.darker(Theme.colors.primary, 1.2),
-            backgroundPressed: Qt.darker(Theme.colors.primary, 1.4),
-            backgroundDisabled: Theme.colors.textMuted,
-            backgroundActive: Qt.darker(Theme.colors.primary, 1.1),
+            background: Theme.colors.primary500,
+            backgroundHover: Theme.colors.primary600,
+            backgroundPressed: Theme.colors.primary700,
+            backgroundDisabled: Theme.colors.greyA20,
+            backgroundActive: Theme.colors.primary600,
             border: Theme.borders.b0,
-            borderColor: Theme.colors.primary,
-            textColor: Theme.colors.primaryText,
-            textColorDisabled: Theme.colors.primaryText
+            borderColor: Theme.colors.primary500,
+            textColor: Theme.colors.white500,
+            textColorDisabled: Theme.colors.whiteA60
         },
         "secondary": {
-            background: Theme.colors.surface,
-            backgroundHover: Theme.colors.overlay,
-            backgroundPressed: Theme.colors.background,
-            backgroundDisabled: Theme.colors.textMuted,
-            backgroundActive: Theme.colors.overlay,
+            background: Theme.colors.secondary100,
+            backgroundHover: Theme.colors.secondary200,
+            backgroundPressed: Theme.colors.secondary300,
+            backgroundDisabled: Theme.colors.greyA20,
+            backgroundActive: Theme.colors.secondary200,
             border: Theme.borders.b1,
-            borderColor: Theme.colors.textMuted,
-            borderColorDisabled: Theme.colors.textMuted,
-            textColor: Theme.colors.text,
-            textColorDisabled: Theme.colors.textMuted
+            borderColor: Theme.colors.grey400,
+            borderColorDisabled: Theme.colors.grey300,
+            textColor: Theme.colors.secondary700,
+            textColorDisabled: Theme.colors.grey400
         },
         "danger": {
-            background: Theme.colors.danger,
-            backgroundHover: Qt.darker(Theme.colors.danger, 1.1),
-            backgroundPressed: Qt.darker(Theme.colors.danger, 1.2),
-            backgroundDisabled: Theme.colors.textMuted,
-            backgroundActive: Qt.darker(Theme.colors.danger, 1.1),
+            background: Theme.colors.error500,
+            backgroundHover: Theme.colors.error600,
+            backgroundPressed: Theme.colors.error700,
+            backgroundDisabled: Theme.colors.greyA20,
+            backgroundActive: Theme.colors.error600,
             border: Theme.borders.b0,
-            borderColor: Theme.colors.danger,
-            textColor: Theme.colors.primaryText,
-            textColorDisabled: Theme.colors.primaryText
+            borderColor: Theme.colors.error500,
+            textColor: Theme.colors.white500,
+            textColorDisabled: Theme.colors.whiteA60
         },
         "ghost": {
             background: Theme.colors.transparent,
-            backgroundHover: Theme.colors.overlay,
-            backgroundPressed: Theme.colors.surface,
-            backgroundDisabled: Theme.colors.overlay,
-            backgroundActive: Theme.colors.overlay,
+            backgroundHover: Theme.colors.greyA20,
+            backgroundPressed: Theme.colors.greyA30,
+            backgroundDisabled: Theme.colors.greyA5,
+            backgroundActive: Theme.colors.greyA20,
             border: Theme.borders.b1,
-            borderColor: Theme.colors.textMuted,
-            textColor: Theme.colors.text,
-            textColorDisabled: Theme.colors.textMuted
+            borderColor: Theme.colors.grey300,
+            textColor: Theme.colors.grey700,
+            textColorDisabled: Theme.colors.grey400
         },
         "success": {
-            background: Theme.colors.success,
-            backgroundHover: Qt.darker(Theme.colors.success, 1.1),
-            backgroundPressed: Qt.darker(Theme.colors.success, 1.2),
-            backgroundDisabled: Theme.colors.textMuted,
-            backgroundActive: Qt.darker(Theme.colors.success, 1.1),
+            background: Theme.colors.success500,
+            backgroundHover: Theme.colors.success600,
+            backgroundPressed: Theme.colors.success700,
+            backgroundDisabled: Theme.colors.greyA20,
+            backgroundActive: Theme.colors.success600,
             border: Theme.borders.b0,
-            borderColor: Theme.colors.success,
-            textColor: Theme.colors.primaryText,
-            textColorDisabled: Theme.colors.primaryText
-        }
+            borderColor: Theme.colors.success500,
+            textColor: Theme.colors.white500,
+            textColorDisabled: Theme.colors.whiteA60
+        },
+        "warning": {
+            background: Theme.colors.warning500,
+            backgroundHover: Theme.colors.warning600,
+            backgroundPressed: Theme.colors.warning700,
+            backgroundDisabled: Theme.colors.greyA20,
+            backgroundActive: Theme.colors.warning600,
+            border: Theme.borders.b0,
+            borderColor: Theme.colors.warning500,
+            textColor: Theme.colors.white500,
+            textColorDisabled: Theme.colors.whiteA60
+        },
     })
 
     readonly property var _currentVariantStyle: _variantStyles[variant] || _variantStyles["primary"]

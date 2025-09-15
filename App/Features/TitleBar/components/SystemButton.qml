@@ -22,6 +22,6 @@ UI.Button {
 
     padding: Theme.spacing.s1
     radius: Theme.radius.circle(width, height)
-    backgroundRect.color: Qt.rgba(1, 1, 1, 0.2)
+    backgroundRect.color: Theme.colors.whiteA20
     backgroundRect.border.width: Theme.borders.b0
 }

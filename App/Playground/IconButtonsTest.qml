@@ -54,7 +54,7 @@ Item {
                     icon.source: "icons/clipboard.svg"
                     icon.width: Theme.icons.sizeLg    // 24px from theme
                     icon.height: Theme.icons.sizeLg   // 24px from theme
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
                     text: (TranslationManager.revision, qsTr("Mission"))
 
@@ -134,7 +134,7 @@ Item {
                     icon.source: "icons/plus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Add clicked")
@@ -154,7 +154,7 @@ Item {
                     icon.source: "icons/minus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Remove clicked")
@@ -274,7 +274,7 @@ Item {
             Rectangle {
                 width: 80  // Fixed width from Figma
                 height: 380
-                color: Theme.colors.surface
+                color: Theme.colors.grey600
                 border.color: Theme.colors.text
                 border.width: Theme.borders.b1
                 radius: Theme.radius.md
@@ -294,7 +294,7 @@ Item {
                         icon.source: "icons/clipboard.svg"
                         icon.width: Theme.icons.sizeLg
                         icon.height: Theme.icons.sizeLg
-                        icon.color: Theme.colors.primaryText
+                        icon.color: Theme.colors.text
 
 
 
@@ -459,7 +459,7 @@ Item {
                     icon.source: "icons/send.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Enabled button clicked")
@@ -480,7 +480,7 @@ Item {
                     icon.source: "icons/send.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
 
                     ToolTip {
@@ -500,7 +500,7 @@ Item {
                     icon.source: isActive ? "icons/minus.svg" : "icons/plus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: isActive ? Theme.colors.primaryText : Theme.colors.text
+                    icon.color: isActive ? Theme.colors.text : Theme.colors.text
 
 
                     onClicked: {
