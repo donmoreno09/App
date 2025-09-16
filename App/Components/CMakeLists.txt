@@ -5,13 +5,13 @@ set(qml_files
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml
-    HorizontalPadding.qml
-    HorizontalSpacer.qml
+    VerticalDivider.qml
     OutlineRect.qml
     SearchBar.qml
     Title.qml
-    VerticalDivider.qml
+    HorizontalPadding.qml
     VerticalPadding.qml
+    HorizontalSpacer.qml
     VerticalSpacer.qml
     wizard-page/WizardPage.qml
     wizard-page/constants/StepDefinitions.qml
