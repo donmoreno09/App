@@ -45,7 +45,7 @@ TestCase {
     function test_switch_variant_emits_signals_and_updates_state() {
         const oldCurrent = Theme.current
 
-        const hasChangedTheme = Theme.setTheme(Themes.FincantieriLight)
+        const hasChangedTheme = Theme.setTheme(Themes.FincantieriDark)
 
         verify(hasChangedTheme, "setTheme should return true when switching variants")
         // Signals
@@ -53,11 +53,11 @@ TestCase {
         // numbered keys corresponding to the signal's arguments
         compare(aboutToChangeSpy.count, 1)
         compare(aboutToChangeSpy.signalArguments[0][0], Themes.Fincantieri)        // fromVariant
-        compare(aboutToChangeSpy.signalArguments[0][1], Themes.FincantieriLight)   // toVariant
+        compare(aboutToChangeSpy.signalArguments[0][1], Themes.FincantieriDark)   // toVariant
         compare(changedSpy.count, 1)
-        compare(changedSpy.signalArguments[0][0], Themes.FincantieriLight)   // variant
+        compare(changedSpy.signalArguments[0][0], Themes.FincantieriDark)   // variant
         // Current theme state
-        compare(Theme.currentVariant, Themes.FincantieriLight)
+        compare(Theme.currentVariant, Themes.FincantieriDark)
         verify(Theme.current !== null)
         verify(Theme.current !== oldCurrent, "Theme.current should be a new theme object after switch")
         // Check if facades still wired
@@ -65,16 +65,16 @@ TestCase {
     }
 
     function test_switch_same_variant_does_nothing() {
-        // Make sure we're on Light
-        Theme.setTheme(Themes.FincantieriLight)
+        // Make sure we're on Dark
+        Theme.setTheme(Themes.FincantieriDark)
         clearSpies()
 
-        const hasChangedTheme = Theme.setTheme(Themes.FincantieriLight) // same as current
+        const hasChangedTheme = Theme.setTheme(Themes.FincantieriDark) // same as current
 
         verify(hasChangedTheme, "setTheme returns true even if variant is unchanged")
         compare(aboutToChangeSpy.count, 0)
         compare(changedSpy.count, 0)
-        compare(Theme.currentVariant, Themes.FincantieriLight)
+        compare(Theme.currentVariant, Themes.FincantieriDark)
     }
 
     function test_invalid_variant_returns_false_and_no_change() {

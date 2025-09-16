@@ -9,6 +9,8 @@ import App.Features.SidePanel 1.0
 import App.StubComponents 1.0 as UI
 import App.Components 1.0 as UI
 
+import "components"
+
 UI.GlobalBackgroundConsumer {
     RowLayout {
         anchors.fill: parent
@@ -37,6 +39,8 @@ UI.GlobalBackgroundConsumer {
                 icon.width: Theme.icons.sizeSm
                 icon.height: Theme.icons.sizeSm
                 icon.source: "qrc:/App/assets/icons/world.svg"
+                backgroundRect.color: Theme.colors.whiteA20
+                backgroundRect.border.width: Theme.borders.b0
 
                 onClicked: {
                     SidePanelController.toggle("language")
@@ -50,50 +54,22 @@ UI.GlobalBackgroundConsumer {
                 visible: WindowsNcController.isWindows()
                 spacing: Theme.spacing.s2
 
-                UI.Button {
-                    text: "\u2013"
+                SystemButton {
+                    source: "qrc:/App/assets/icons/minus.svg"
+
                     onClicked: WindowsNcController.window.showMinimized()
-
-                    // NOTE: Temporary style
-                    Layout.preferredWidth: Theme.icons.sizeXl
-                    Layout.preferredHeight: Theme.icons.sizeXl
-                    background: Rectangle {
-                        anchors.fill: parent
-                        radius: Theme.icons.sizeXl
-                        color: Theme.colors.textMuted
-                        opacity: Theme.opacity.o40
-                    }
                 }
 
-                UI.Button {
-                    id: maxButton
-                    text: "\u2752"
+                SystemButton {
+                    source: "qrc:/App/assets/icons/maximize.svg"
+
                     onClicked: WindowsNcController.window.visibility = (WindowsNcController.window.visibility === Window.Maximized) ? Window.Windowed : Window.Maximized
-
-                    // NOTE: Temporary style
-                    Layout.preferredWidth: Theme.icons.sizeXl
-                    Layout.preferredHeight: Theme.icons.sizeXl
-                    background: Rectangle {
-                        anchors.fill: parent
-                        radius: Theme.icons.sizeXl
-                        color: Theme.colors.textMuted
-                        opacity: Theme.opacity.o40
-                    }
                 }
 
-                UI.Button {
-                    text: "\u2715"
-                    onClicked: WindowsNcController.window.close()
+                SystemButton {
+                    source: "qrc:/App/assets/icons/x-close.svg"
 
-                    // NOTE: Temporary style
-                    Layout.preferredWidth: Theme.icons.sizeXl
-                    Layout.preferredHeight: Theme.icons.sizeXl
-                    background: Rectangle {
-                        anchors.fill: parent
-                        radius: Theme.icons.sizeXl
-                        color: Theme.colors.textMuted
-                        opacity: Theme.opacity.o40
-                    }
+                    onClicked: WindowsNcController.window.close()
                 }
             }
         }

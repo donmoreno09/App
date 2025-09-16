@@ -22,7 +22,7 @@ BasePanel {
             // Title
             Text {
                 id: title
-                color: Theme.colors.primaryText
+                color: Theme.colors.text
                 font.family: Theme.typography.familySans
                 font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
@@ -41,7 +41,7 @@ BasePanel {
                 Text {
                     anchors.centerIn: parent
                     text: "✕"
-                    color: Theme.colors.primaryText
+                    color: Theme.colors.text
                     font.pixelSize: Theme.typography.fontSize200
                 }
 

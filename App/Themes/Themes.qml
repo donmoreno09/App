@@ -13,6 +13,6 @@ QtObject {
 
     enum Variants {
         Fincantieri,
-        FincantieriLight
+        FincantieriDark
     }
 }

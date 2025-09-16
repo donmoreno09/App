@@ -36,7 +36,7 @@ Rectangle {
         height: 4
         topLeftRadius: Theme.radius.sm
         topRightRadius: Theme.radius.sm
-        color: Theme.colors.primaryText
+        color: Theme.colors.text
     }
 
     Glow {
