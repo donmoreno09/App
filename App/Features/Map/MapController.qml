@@ -8,6 +8,8 @@ QtObject {
     // Internals
     property Map _map: null
 
+    property bool backgroundOverlayEnabled: false
+
     // Methods
     function attach(map) {
         _map = map
@@ -31,5 +33,9 @@ QtObject {
         } else {
             _map.zoomLevel -= quantifier
         }
+    }
+
+    function toggleBackgroundOverlay() {
+        backgroundOverlayEnabled = !backgroundOverlayEnabled
     }
 }

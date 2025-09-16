@@ -6,12 +6,13 @@ set(qml_files
     tokens/ElevationTokens.qml
     tokens/IconTokens.qml
     tokens/LayoutTokens.qml
+    tokens/MotionTokens.qml
     tokens/OpacityTokens.qml
     tokens/RadiusTokens.qml
     tokens/SpacingTokens.qml
     tokens/TypographyTokens.qml
     variants/Fincantieri.qml
-    variants/FincantieriLight.qml
+    variants/FincantieriDark.qml
 )
 
 set(qml_singletons

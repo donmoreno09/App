@@ -105,8 +105,13 @@ ApplicationWindow {
                         }
 
                         x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1 * 2)
-                        Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
                         onXChanged: recalculateMaskedBgs()
+                        Behavior on x {
+                            NumberAnimation {
+                                duration: Theme.motion.panelTransitionMs
+                                easing.type: Theme.motion.panelTransitionEasing
+                            }
+                        }
 
                         SidePanel {
                             id: sidePanel
@@ -161,6 +166,23 @@ ApplicationWindow {
                         size: "sm"
                         onClicked: LanguageController.currentLanguage = "it"
                     }
+                }
+
+                Switch {
+                    anchors.right: parent.right
+                    anchors.top: languageButtons.bottom
+                    anchors.rightMargin: Theme.spacing.s2
+                    anchors.topMargin: Theme.spacing.s4
+
+                    checked: MapController.backgroundOverlayEnabled
+
+                    onToggled: {
+                        MapController.toggleBackgroundOverlay()
+                        console.log("Background overlay toggled:", checked)
+                    }
+
+                    palette.highlight: Theme.colors.primary
+                    palette.base: Theme.colors.glass
                 }
             }
         }

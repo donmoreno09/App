@@ -27,7 +27,7 @@ PanelTemplate {
 
         UI.Button {
             Layout.fillWidth: true
-            variant: "secondary"
+            variant: "warning"
             text: (TranslationManager.revision, qsTr("Generate Warning Notification"))
 
             onClicked: NotificationsController.warning.push({ message: "Warning!" })

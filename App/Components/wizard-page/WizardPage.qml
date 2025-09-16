@@ -62,7 +62,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: 1
-                color: Theme.colors.primaryText
+                color: Theme.colors.text
                 opacity: 0.1
             }
 
@@ -83,7 +83,7 @@ Item {
                     // Step Title Text
                     Text {
                         text: wizardPage.stepTitle
-                        color: Theme.colors.primaryText
+                        color: Theme.colors.text
                         font.family: Theme.typography.familySans
                         font.pixelSize: Theme.typography.fontSize200
                         font.weight: Theme.typography.weightRegular
@@ -93,7 +93,7 @@ Item {
                     // Step Counter
                     Text {
                         text: String(wizardPage.currentStep + 1).padStart(2,'0') + " / " + String(wizardPage.totalSteps).padStart(2,'0')
-                        color: Theme.colors.primaryText
+                        color: Theme.colors.text
                         font.family: Theme.typography.familyMono
                         font.pixelSize: Theme.typography.fontSize150
                         font.weight: Theme.typography.weightRegular
@@ -113,7 +113,7 @@ Item {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 4
                             radius: Theme.radius.xs
-                            color: Theme.colors.primaryText
+                            color: Theme.colors.text
                             opacity: index <= wizardPage.currentStep ? 1.0 : 0.1
 
                             Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
@@ -155,7 +155,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: 1
-                color: Theme.colors.primaryText
+                color: Theme.colors.text
                 opacity: 0.1
             }
 
@@ -179,7 +179,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: (TranslationManager.revision, qsTr("Back"))
-                        color: wizardPage.canGoBack ? Theme.colors.primaryText : Theme.colors.textMuted
+                        color: wizardPage.canGoBack ? Theme.colors.text : Theme.colors.textMuted
                         font.family: Theme.typography.familySans
                         font.pixelSize: Theme.typography.fontSize150
                         font.weight: Theme.typography.weightRegular
@@ -198,7 +198,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: (TranslationManager.revision, qsTr("Next"))
-                        color: Theme.colors.primaryText
+                        color: Theme.colors.text
                         font.family: Theme.typography.familySans
                         font.pixelSize: Theme.typography.fontSize150
                         font.weight: Theme.typography.weightRegular

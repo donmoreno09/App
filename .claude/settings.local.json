@@ -57,7 +57,8 @@
       "Bash(\"C:\\Qt\\Tools\\CMake_64\\bin\\cmake.exe\" --build build)",
       "Bash(del \"C:\\Users\\esis\\Documents\\Title\\App\\Components\\title\\TitleTranslations.qml\")",
       "Read(//c/Users/esis/Downloads/**)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(git restore:*)"
     ],
     "deny": [],
     "ask": [],
