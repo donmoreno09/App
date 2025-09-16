@@ -13,7 +13,7 @@ Rectangle {
         anchors.centerIn: parent
         text: TitleBarController.currentTitle
         color: Theme.colors.text
-        font.pointSize: Theme.typography.sizeSm
+        font.pointSize: Theme.typography.fontSize150
         opacity: 0
 
         SequentialAnimation on opacity {

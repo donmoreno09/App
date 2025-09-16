@@ -28,6 +28,9 @@ Button {
     property string variant: "primary"
     property string size: "md"
     property int radius: Theme.radius.md
+    property int focusOutlineWidth: Theme.borders.outline2
+    property int focusOffset: Theme.borders.offset2
+    property color focusColor: Theme.colors.primary
 
     readonly property bool focused: visualFocus && enabled
 
@@ -44,17 +47,17 @@ Button {
         "sm": {
             minHeight: Theme.spacing.s8,
             padding: Theme.spacing.s2,
-            fontSize: Theme.typography.sizeSm
+            fontSize: Theme.typography.fontSize150
         },
         "md": {
             minHeight: Theme.spacing.s10,
             padding: Theme.spacing.s3,
-            fontSize: Theme.typography.sizeBase
+            fontSize: Theme.typography.fontSize175
         },
         "lg": {
             minHeight: Theme.spacing.s12,
             padding: Theme.spacing.s4,
-            fontSize: Theme.typography.sizeLg
+            fontSize: Theme.typography.fontSize200
         }
     })
 
@@ -166,7 +169,19 @@ Button {
             ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
         }
 
-        OutlineRect { visible: focused }
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: -root.focusOffset
+            color: _currentBackground
+            radius: root.radius + root.focusOutlineWidth
+            border.width: focused ? root.focusOutlineWidth : 0
+            border.color: Qt.lighter(_currentVariantStyle.borderColor, 1.6)
+            visible: focused
+
+            Behavior on border.width {
+                NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+            }
+        }
     }
 
     padding: _sizeStyles.padding

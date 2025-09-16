@@ -18,8 +18,6 @@ QtObject {
 
     // TitleBar
     readonly property int titleBarHeight: 68
-    readonly property int searchBarWidth: 284
-    readonly property int searchBarHeight: 32
 
     // SideRail
     readonly property int sideRailWidth: 80

@@ -10,7 +10,7 @@ Rectangle {
         anchors.centerIn: parent
         text: "Overview"
         color: Theme.colors.text
-        font.pointSize: Theme.typography.sizeSm
+        font.pointSize: Theme.typography.fontSize150
     }
 
     Rectangle {

@@ -6,7 +6,6 @@ import App.Themes 1.0
 // Import itself to get autocomplete with WindowsNcController
 import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
-import App.Features.Language 1.0
 import App.StubComponents 1.0 as UI
 import App.Components 1.0 as UI
 
@@ -49,14 +48,7 @@ UI.GlobalBackgroundConsumer {
                 }
             }
 
-            UI.SearchBar {
-                Layout.preferredWidth: Theme.layout.searchBarWidth
-                Layout.preferredHeight: Theme.layout.searchBarHeight
-                textField.placeholderText: {
-                    TranslationManager.revision
-                    return qsTr("Search here...")
-                }
-            }
+            UI.SearchBar { }
 
             RowLayout {
                 visible: WindowsNcController.isWindows()
