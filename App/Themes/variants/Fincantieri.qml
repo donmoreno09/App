@@ -23,4 +23,6 @@ BaseTheme {
     effects: EffectTokens { }
 
     layout: LayoutTokens { }
+
+    motion: MotionTokens { }
 }

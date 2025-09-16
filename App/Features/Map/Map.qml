@@ -28,7 +28,7 @@ MapView {
 
     MapBackgroundOverlay {
         anchors.fill: parent
-        z: 1  // Above map, below UI controls
+        z: 1
         mapSource: mapView
     }
 }

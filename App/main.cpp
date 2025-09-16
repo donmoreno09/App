@@ -32,10 +32,10 @@ int main(int argc, char *argv[])
     for (const QString& fontFile : fontFiles) {
         int fontId = QFontDatabase::addApplicationFont(fontFile);
         if (fontId == -1) {
-            qWarning() << "Failed to load font:" << fontFile;
+            // qWarning() << "Failed to load font:" << fontFile;
         } else {
             QStringList families = QFontDatabase::applicationFontFamilies(fontId);
-            qDebug() << "Loaded font:" << fontFile << "-> Families:" << families;
+            // qDebug() << "Loaded font:" << fontFile << "-> Families:" << families;
         }
     }
 

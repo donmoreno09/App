@@ -38,4 +38,6 @@ QtObject {
     required property EffectTokens effects
 
     required property LayoutTokens layout
+
+    required property MotionTokens motion
 }

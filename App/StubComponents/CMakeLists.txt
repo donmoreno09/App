@@ -1,8 +1,8 @@
 set(qml_files
     StubButton.qml
     StubDateTime.qml
-    SearchBar.qml
-    Title.qml
+    StubSearchBar.qml
+    StubTitle.qml
 )
 
 qt_add_qml_module(app_stubcomponents

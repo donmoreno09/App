@@ -26,7 +26,7 @@
             Rectangle {
                 anchors.fill: parent
                 radius: Theme.radius.md
-                color: Theme.colors.surface
+                color: Theme.colors.grey600
                 border.width: Theme.borders.b2
                 border.color: Theme.colors.textMuted
             }
@@ -38,7 +38,7 @@
                 anchors.margins: -Theme.borders.offset2 // expand outward
                 border.width: Theme.borders.outline2
                 radius: Theme.radius.md + Theme.borders.outline2
-                border.color: Theme.colors.primary
+                border.color: Theme.colors.primary500
                 visible: <condition>
             }
         }
