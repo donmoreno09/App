@@ -3,40 +3,44 @@ import Qt5Compat.GraphicalEffects
 import App.Components 1.0 as UI
 import App.Features.Map 1.0
 
-Blend {
+Item {
     id: root
     anchors.fill: parent
     z: 1
 
     property var mapSource: null
 
-    // Base layer: Capture the MapView properly
-    source: ShaderEffectSource {
-        sourceItem: root.mapSource
+    Blend {
         anchors.fill: parent
-        live: true
-        hideSource: false
-    }
 
-    // Overlay layer: Your GlobalBackground
-    foregroundSource: UI.GlobalBackground {
-        anchors.fill: parent
-    }
+        source: ShaderEffectSource {
+            id: mapShader
+            sourceItem: root.mapSource
+            width: root.width
+            height: root.height
+            live: true
+            hideSource: false
+            sourceRect: Qt.rect(0, 0, root.width, root.height)
+        }
 
-    // Blend mode
-    mode: "multiply"
+        foregroundSource: UI.GlobalBackground {
+            id: globalBg
+            width: root.width
+            height: root.height
+        }
 
-    // Performance optimization
-    cached: true
+        mode: "hardlight"
 
-    // Controlled by MapController
-    opacity: MapController.backgroundOverlayEnabled ? 1 : 0.0
+        cached: false
 
-    // Smooth animation
-    Behavior on opacity {
-        NumberAnimation {
-            duration: 250
-            easing.type: Easing.OutCubic
+        opacity: MapController.backgroundOverlayEnabled ? 1.0 : 0.0
+
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+                easing.type: Easing.OutCubic
+            }
         }
     }
 }

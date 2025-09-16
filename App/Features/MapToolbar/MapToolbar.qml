@@ -52,17 +52,5 @@ RowLayout {
 
             onClicked: MapController.zoomOut()
         }
-
-        // NEW: Background overlay toggle
-        MapToolbarItem {
-            source: "qrc:/App/assets/icons/map.svg"
-            checkable: true
-            checked: MapController.backgroundOverlayEnabled
-
-            onClicked: {
-                MapController.toggleBackgroundOverlay()
-                console.log("Toggled")
-            }
-        }
     }
 }

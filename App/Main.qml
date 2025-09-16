@@ -162,6 +162,23 @@ ApplicationWindow {
                         onClicked: LanguageController.currentLanguage = "it"
                     }
                 }
+
+                Switch {
+                    anchors.right: parent.right
+                    anchors.top: languageButtons.bottom
+                    anchors.rightMargin: Theme.spacing.s2
+                    anchors.topMargin: Theme.spacing.s4
+
+                    checked: MapController.backgroundOverlayEnabled
+
+                    onToggled: {
+                        MapController.toggleBackgroundOverlay()
+                        console.log("Background overlay toggled:", checked)
+                    }
+
+                    palette.highlight: Theme.colors.primary
+                    palette.base: Theme.colors.glass
+                }
             }
         }
     }
