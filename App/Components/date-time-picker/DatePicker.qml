@@ -173,7 +173,7 @@ Rectangle {
     function _navigateNext() {
         switch (_currentView) {
             case "year":
-                _currentYear += 20
+                _currentYear += 12
                 break
             case "month":
                 _currentYear++

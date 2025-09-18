@@ -74,14 +74,36 @@ ColumnLayout {
                 z: -1
             }
 
-            // Range selection background
+            // Range background
             Rectangle {
-                visible: root.mode === "range" && root._isInRange(model.date)
                 anchors.fill: parent
+                visible: root.mode === "range" && root._isInRange(model.date)
                 color: Theme.colors.accent100
                 opacity: 0.3
-                radius: Theme.radius.sm
+                radius: 0
+
+                // Flags
+                property bool isRangeStart: !_isEmpty(root.startDate) && model.date.toDateString() === root.startDate.toDateString()
+                property bool isRangeEnd: !_isEmpty(root.endDate) && model.date.toDateString() === root.endDate.toDateString()
+
+                // Middle cells: flat
+                // Start cell: round left corners
+                // End cell: round right corners
+                Rectangle {
+                    anchors.fill: parent
+                    color: parent.color
+                    opacity: parent.opacity
+                    radius: Theme.radius.sm
+
+                    visible: parent.isRangeStart || parent.isRangeEnd
+
+                    // Clip to only left or right side
+                    anchors.rightMargin: parent.isRangeStart && !parent.isRangeEnd ? parent.width / 2 : 0
+                    anchors.leftMargin: parent.isRangeEnd && !parent.isRangeStart ? parent.width / 2 : 0
+                }
             }
+
+
 
             // Day cell
             UI.DatePickerDay {

@@ -86,11 +86,12 @@ GridView {
 
     // Helper functions
     function _getYearRange() {
-        const startYear = Math.floor(currentYear / 20) * 20
+        const startYear = Math.floor(currentYear / 12) * 12
         const years = []
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 12; i++) {
             years.push(startYear + i)
         }
         return years
     }
+
 }

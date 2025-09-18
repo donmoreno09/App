@@ -111,8 +111,8 @@ Item {
     function _getTitleText() {
         switch (currentView) {
             case "year":
-                const startYear = Math.floor(currentYear / 20) * 20
-                return startYear + " - " + (startYear + 19)
+                const startYear = Math.floor(currentYear / 12) * 12
+                return startYear + " - " + (startYear + 11)
             case "month":
                 return currentYear.toString()
             case "calendar":
