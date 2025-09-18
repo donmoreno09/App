@@ -28,7 +28,7 @@ Item {
     readonly property color _backgroundColor: {
         if (isDisabled) return Theme.colors.transparent
         if (isSelected) return Theme.colors.accent500  // Blue selection
-        if (isToday && isCurrentMonth && !isSelected) return Theme.colors.secondary400  // Gray for today
+        if (isToday && isCurrentMonth && !isSelected) return "transparent"  // Transparent for today
         if (mouseArea.containsMouse && isCurrentMonth && !isDisabled) return Theme.colors.secondary500
         return Theme.colors.transparent
     }
@@ -50,7 +50,8 @@ Item {
         radius: Theme.radius.circle(width, height) // Always circular like the design
 
         // Remove today indicator border since we use background color
-        border.width: Theme.borders.b0
+        border.width: root.isToday && root.isCurrentMonth ? Theme.borders.b1 : Theme.borders.b0
+        border.color: root.isToday && root.isCurrentMonth ? "white" : "transparent"
 
         // Smooth transitions
         Behavior on color {

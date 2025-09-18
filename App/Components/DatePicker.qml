@@ -3,6 +3,7 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
+import App.Features.Language 1.0
 import App.Components 1.0 as UI
 
 /*!
@@ -240,7 +241,7 @@ Rectangle {
                     height: GridView.view.cellHeight - Theme.spacing.s1
 
                     color: root._isMonthSelected(index) ? Theme.colors.accent500 :
-                           mouseArea.containsMouse ? Theme.colors.secondary500 : Theme.colors.transparent
+                           mouseArea2.containsMouse ? Theme.colors.secondary500 : Theme.colors.transparent
                     radius: Theme.radius.sm
 
                     Text {
@@ -252,7 +253,7 @@ Rectangle {
                     }
 
                     MouseArea {
-                        id: mouseArea
+                        id: mouseArea2
                         anchors.fill: parent
                         hoverEnabled: true
 
@@ -271,71 +272,62 @@ Rectangle {
             Layout.fillWidth: true
             Layout.topMargin: Theme.spacing.s4
             spacing: Theme.spacing.s3
+            Layout.alignment: Qt.AlignHCenter
 
             // Clear button
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Theme.spacing.s10
-                color: Theme.colors.transparent
+            UI.Button {
+                Layout.preferredWidth: Theme.spacing.s16 * 2
+                size: "md"
+                variant: "ghost"
+                enabled: root._canClear()
+                onClicked: root._clearSelection()
 
-                Text {
+
+                background: Rectangle {
+                    color: Theme.colors.transparent
+                    radius: parent.radius
+                    border.width: 0
+                    border.color: "transparent"
+                }
+
+                contentItem: Text {
                     anchors.centerIn: parent
-                    text: "Clear"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    text: { TranslationManager.revision; return qsTr("Clear") }
                     font.family: Theme.typography.familySans
                     font.pixelSize: Theme.typography.fontSize150
                     font.weight: Theme.typography.weightRegular
-                    color: root._canClear() ? Theme.colors.text : Theme.colors.textMuted
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    enabled: root._canClear()
-                    cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-
-                    onClicked: {
-                        if (enabled) {
-                            root._clearSelection()
-                        }
-                    }
+                    color: "white"
                 }
             }
 
             // Apply button
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Theme.spacing.s10
-                color: enabled ? Theme.colors.accent500 : Theme.colors.secondary500
-                radius: Theme.radius.sm
+            UI.Button {
+                Layout.preferredWidth: Theme.spacing.s16 * 2
+                size: "md"
+                radius: Theme.radius.md
+                enabled: root._canApply()
+                variant: "primary"
 
-                property bool enabled: root._canApply()
 
-                Text {
+                background: Rectangle {
+                    color: Theme.colors.accent500
+                    radius: parent.radius
+                }
+
+                contentItem: Text {
                     anchors.centerIn: parent
-                    text: "Apply"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    text: { TranslationManager.revision; return qsTr("Apply") }
                     font.family: Theme.typography.familySans
                     font.pixelSize: Theme.typography.fontSize150
                     font.weight: Theme.typography.weightRegular
-                    color: parent.enabled ? Theme.colors.white500 : Theme.colors.textMuted
+                    color: "white"
                 }
 
-                MouseArea {
-                    anchors.fill: parent
-                    enabled: parent.enabled
-                    cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-
-                    onClicked: {
-                        if (enabled) {
-                            root._applySelection()
-                        }
-                    }
-                }
-
-                Behavior on color {
-                    ColorAnimation {
-                        duration: 150
-                        easing.type: Easing.OutCubic
-                    }
-                }
+                onClicked: root._applySelection()
             }
         }
     }

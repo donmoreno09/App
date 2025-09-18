@@ -2,6 +2,7 @@ set(qml_files
     Avatar.qml
     Button.qml
     DateTime.qml
+    DatePicker.qml
     date-time-picker/DateTimePicker.qml
     date-time-picker/DateTimePickerDay.qml
     date-time-picker/DateTimePickerField.qml
@@ -29,5 +30,4 @@ qt_add_qml_module(app_components
     QML_FILES ${qml_files}
     RESOURCE_PREFIX "/"
     RESOURCES ${icon_resources}
-    QML_FILES DatePicker.qml
 )

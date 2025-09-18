@@ -101,7 +101,7 @@ Button {
             backgroundPressed: Theme.colors.greyA30,
             backgroundDisabled: Theme.colors.greyA5,
             backgroundActive: Theme.colors.greyA20,
-            border: Theme.borders.b1,
+            border: Theme.borders.b0,
             borderColor: Theme.colors.grey300,
             textColor: Theme.colors.grey700,
             textColorDisabled: Theme.colors.grey400
