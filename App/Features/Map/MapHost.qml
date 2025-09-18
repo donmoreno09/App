@@ -17,6 +17,9 @@ Item {
 
     readonly property Map map: loader.item
 
+    property bool _firstLoad: true
+
+    signal firstLoaded()
     signal loaded()
 
     Loader {
@@ -34,6 +37,12 @@ Item {
         target: MapController
 
         function onMapLoaded() {
+            if (_firstLoad) {
+                firstLoaded()
+                _firstLoad = false
+                return
+            }
+
             loaded()
         }
     }

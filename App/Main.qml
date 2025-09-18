@@ -44,7 +44,7 @@ ApplicationWindow {
         anchors.fill: parent
         initialPlugin: MapPlugins.osmDefault
 
-        onLoaded: {
+        onFirstLoaded: {
             map.center = QtPositioning.coordinate(44.4071, 8.9347)
         }
     }
