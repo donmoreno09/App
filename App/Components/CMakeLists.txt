@@ -2,11 +2,13 @@ set(qml_files
     Avatar.qml
     Button.qml
     DateTime.qml
-    DatePicker.qml
-    date-time-picker/DateTimePicker.qml
-    date-time-picker/DateTimePickerDay.qml
-    date-time-picker/DateTimePickerField.qml
-    date-time-picker/DateTimePickerPopup.qml
+    date-time-picker/DatePicker.qml
+    date-time-picker/DatePickerHeader.qml
+    date-time-picker/DatePickerYearView.qml
+    date-time-picker/DatePickerMonthView.qml
+    date-time-picker/DatePickerCalendarView.qml
+    date-time-picker/DatePickerDay.qml
+    date-time-picker/DatePickerActions.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml

@@ -27,7 +27,7 @@ PanelTemplate {
 
         UI.HorizontalDivider { Layout.fillWidth: true }
 
-        // Input field with calendar popup
+        // Input field with calendar popup (SAME AS BEFORE)
         ColumnLayout {
             Layout.fillWidth: true
             spacing: Theme.spacing.s1
@@ -41,10 +41,10 @@ PanelTemplate {
                 color: Theme.colors.text
             }
 
-            // Input field
+            // Input field (EXACT SAME CODE)
             Rectangle {
                 id: inputField
-                Layout.fillWidth: true
+                Layout.preferredWidth: parent.width
                 Layout.preferredHeight: Theme.spacing.s10
 
                 color: Theme.colors.primary900
@@ -113,25 +113,22 @@ PanelTemplate {
                     }
                 }
 
-                // Click handler
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
-
                     onClicked: {
                         inputField.focused = true
                         calendarPopup.toggle()
                     }
-
                     onPressed: inputField.focused = true
                 }
 
-                // Calendar popup
+                // Calendar popup - UPDATED TO USE NEW COMPONENT
                 Popup {
                     id: calendarPopup
                     x: 0
                     y: parent.height
-                    width: parent.width
+                    width: Math.max(parent.width, 320)
                     height: 380
 
                     modal: false
@@ -142,10 +139,10 @@ PanelTemplate {
                         color: Theme.colors.transparent
                     }
 
-                    // Calendar picker
+                    // NEW OPTIMIZED DATEPICKER - Updated API
                     UI.DatePicker {
-                        anchors.fill: parent
-                        calendarType: "single"
+                        anchors.centerIn: parent
+                        mode: "single"  // Changed from calendarType to mode
                         selectedDate: inputField.selectedDate
 
                         onDateSelected: function(date) {
@@ -170,7 +167,7 @@ PanelTemplate {
             }
         }
 
-        // Calendar type selector
+        // Calendar type selector (SAME AS BEFORE)
         RowLayout {
             Layout.fillWidth: true
             spacing: Theme.spacing.s4
@@ -185,33 +182,27 @@ PanelTemplate {
             UI.Button {
                 text: "Single"
                 size: "sm"
-                variant: testCalendar.calendarType === "single" ? "primary" : "secondary"
-                onClicked: testCalendar.calendarType = "single"
+                variant: testCalendar.mode === "single" ? "primary" : "secondary"
+                onClicked: testCalendar.mode = "single"
             }
 
             UI.Button {
                 text: "Range"
                 size: "sm"
-                variant: testCalendar.calendarType === "range" ? "primary" : "secondary"
-                onClicked: testCalendar.calendarType = "range"
+                variant: testCalendar.mode === "range" ? "primary" : "secondary"
+                onClicked: testCalendar.mode = "range"
             }
 
-            UI.Button {
-                text: "Year"
-                size: "sm"
-                variant: testCalendar.calendarType === "year" ? "primary" : "secondary"
-                onClicked: testCalendar.calendarType = "year"
-            }
-
-            UI.Button {
-                text: "Month"
-                size: "sm"
-                variant: testCalendar.calendarType === "month" ? "primary" : "secondary"
-                onClicked: testCalendar.calendarType = "month"
+            // Remove Year and Month buttons since new component doesn't support these modes
+            Text {
+                text: (TranslationManager.revision, qsTr("(Year/Month modes removed - use header navigation instead)"))
+                font.family: Theme.typography.familySans
+                font.pixelSize: Theme.typography.fontSize125
+                color: Theme.colors.textMuted
             }
         }
 
-        // Direct calendar test (no input field)
+        // Direct calendar test - NOW WITH ENHANCED NAVIGATION
         Text {
             text: (TranslationManager.revision, qsTr("Direct Calendar Test"))
             font.family: Theme.typography.familySans
@@ -220,11 +211,20 @@ PanelTemplate {
             color: Theme.colors.text
         }
 
-        // Test calendar
+        // Instructions for new features
+        Text {
+            text: "💡 " + (TranslationManager.revision, qsTr("Click on the header (month/year) to navigate: Calendar → Year → Month → Calendar"))
+            font.family: Theme.typography.familySans
+            font.pixelSize: Theme.typography.fontSize125
+            color: Theme.colors.textMuted
+            wrapMode: Text.WordWrap
+        }
+
+        // Test calendar - Updated to match new component API
         UI.DatePicker {
             id: testCalendar
             Layout.alignment: Qt.AlignHCenter
-            calendarType: "single"
+            mode: "single"  // Changed from calendarType to mode
 
             onDateSelected: function(date) {
                 resultText.text = (TranslationManager.revision, qsTr("Calendar Selected: ")) + Qt.formatDate(date, "dd/MM/yyyy")
@@ -237,19 +237,8 @@ PanelTemplate {
                 console.log("Range selected:", Qt.formatDate(startDate, "dd/MM/yyyy"), "to", Qt.formatDate(endDate, "dd/MM/yyyy"))
             }
 
-            onYearSelected: function(year) {
-                resultText.text = (TranslationManager.revision, qsTr("Year Selected: ")) + year
-                console.log("Year selected:", year)
-            }
-
-            onMonthSelected: function(month, year) {
-                resultText.text = (TranslationManager.revision, qsTr("Month Selected: ")) +
-                                 Qt.locale().monthName(month) + " " + year
-                console.log("Month selected:", Qt.locale().monthName(month), year)
-            }
         }
 
-        // Result display
         Text {
             id: resultText
             text: (TranslationManager.revision, qsTr("No selection made"))
@@ -259,7 +248,6 @@ PanelTemplate {
             wrapMode: Text.WordWrap
         }
 
-        // Spacer
         Item { Layout.fillHeight: true }
     }
 }

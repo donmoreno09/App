@@ -13,6 +13,7 @@ import App.Themes 1.0
 
 Item {
     id: root
+    anchors.margins: Theme.spacing.s1
 
     // Props
     property date date
