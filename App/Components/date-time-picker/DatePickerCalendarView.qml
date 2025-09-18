@@ -59,8 +59,20 @@ ColumnLayout {
         month: root.currentMonth
         year: root.currentYear
 
+
         delegate: Item {
             required property var model
+
+            Rectangle {
+                visible: model.date.getDay() === 0 // Only show on Sundays (start of week)
+                x: -parent.x // Extend to start of grid
+                y: 0
+                width: monthGrid.width
+                height: parent.height
+                color: Qt.lighter(Theme.colors.primary800, 1.1)
+                radius: Theme.radius.sm
+                z: -1
+            }
 
             // Range selection background
             Rectangle {

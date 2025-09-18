@@ -36,9 +36,9 @@ Rectangle {
     signal dateSelected(date date)
     signal rangeSelected(date startDate, date endDate)
 
-    // Styling
-    width: 320
-    height: 380
+    // Fixed dimensions from design
+    width: 312
+    height: 404
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
     border.width: Theme.borders.b1

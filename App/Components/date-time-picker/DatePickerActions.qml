@@ -3,6 +3,7 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
+import App.Components 1.0 as UI
 
 /*!
     \qmltype DatePickerActions
@@ -24,67 +25,56 @@ RowLayout {
     spacing: Theme.spacing.s3
 
     // Clear button
-    Rectangle {
+    UI.Button {
         Layout.fillWidth: true
-        Layout.preferredHeight: Theme.spacing.s10
-        color: Theme.colors.transparent
+        size: "md"
+        variant: "ghost"
+        enabled: root.canClear
 
-        Text {
+        onClicked: root.clearClicked()
+
+        background: Rectangle {
+            color: Theme.colors.transparent
+            radius: Theme.radius.md
+            border.width: 0
+            border.color: "transparent"
+        }
+
+        contentItem: Text {
             anchors.centerIn: parent
-            text: "Clear"
+            text: qsTr("Clear")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             font.family: Theme.typography.familySans
             font.pixelSize: Theme.typography.fontSize150
             font.weight: Theme.typography.weightRegular
             color: root.canClear ? Theme.colors.text : Theme.colors.textMuted
         }
-
-        MouseArea {
-            anchors.fill: parent
-            enabled: root.canClear
-            cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-
-            onClicked: {
-                if (enabled) {
-                    root.clearClicked()
-                }
-            }
-        }
     }
 
     // Apply button
-    Rectangle {
+    UI.Button {
         Layout.fillWidth: true
-        Layout.preferredHeight: Theme.spacing.s10
-        color: root.canApply ? Theme.colors.accent500 : Theme.colors.secondary500
-        radius: Theme.radius.sm
+        size: "md"
+        variant: "primary"
+        enabled: root.canApply
 
-        Text {
+        onClicked: root.applyClicked()
+
+        background: Rectangle {
+            color: root.canApply ? Theme.colors.accent500 : Theme.colors.secondary500
+            radius: Theme.radius.md
+        }
+
+        contentItem: Text {
             anchors.centerIn: parent
-            text: "Apply"
+            text: qsTr("Apply")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             font.family: Theme.typography.familySans
             font.pixelSize: Theme.typography.fontSize150
             font.weight: Theme.typography.weightRegular
             color: root.canApply ? Theme.colors.white500 : Theme.colors.textMuted
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            enabled: root.canApply
-            cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-
-            onClicked: {
-                if (enabled) {
-                    root.applyClicked()
-                }
-            }
-        }
-
-        // Smooth color transitions
-        Behavior on color {
-            ColorAnimation {
-                duration: 150
-                easing.type: Easing.OutCubic
-            }
         }
     }
 }

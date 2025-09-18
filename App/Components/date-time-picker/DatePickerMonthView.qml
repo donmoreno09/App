@@ -23,12 +23,25 @@ GridView {
     cellWidth: width / 3
     cellHeight: height / 4
 
+    Repeater {
+        model: 4 // 4 rows of months
+        Rectangle {
+            x: 0
+            y: index * (root.height / 4)
+            width: root.width
+            height: (root.height / 4) - Theme.spacing.s2 // Add some spacing between rows
+            color: Qt.lighter(Theme.colors.primary800, 1.1) // Same as calendar
+            radius: Theme.radius.sm
+            z: -1
+        }
+    }
+
     delegate: Rectangle {
         width: GridView.view.cellWidth - Theme.spacing.s1
         height: GridView.view.cellHeight - Theme.spacing.s1
 
-        color: _isSelected ? Theme.colors.accent500 :
-               _mouseArea.containsMouse ? Theme.colors.secondary500 :
+        color: _isSelected ? Theme.colors.grey400 : // Light gray when selected (like "Apr" in your image)
+               _mouseArea.containsMouse ? Theme.colors.grey500 : // Slightly darker on hover
                Theme.colors.transparent
         radius: Theme.radius.sm
 

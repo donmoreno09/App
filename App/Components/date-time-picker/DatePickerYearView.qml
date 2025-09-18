@@ -21,15 +21,29 @@ GridView {
 
     // Grid configuration
     model: _getYearRange()
-    cellWidth: width / 4
-    cellHeight: height / 5
+    cellWidth: width / 3
+    cellHeight: height / 4
+
+    // Row backgrounds (4 rows for 12 years)
+    Repeater {
+        model: 4 // 4 rows of years
+        Rectangle {
+            x: 0
+            y: index * (root.height / 4)
+            width: root.width
+            height: (root.height / 4) - Theme.spacing.s2
+            color: Qt.lighter(Theme.colors.primary800, 1.1)
+            radius: Theme.radius.sm
+            z: -1
+        }
+    }
 
     delegate: Rectangle {
         width: GridView.view.cellWidth - Theme.spacing.s1
         height: GridView.view.cellHeight - Theme.spacing.s1
 
-        color: _isSelected ? Theme.colors.accent500 :
-               _mouseArea.containsMouse ? Theme.colors.secondary500 :
+        color: _isSelected ? Theme.colors.grey400 :
+               _mouseArea.containsMouse ? Theme.colors.grey500 :
                Theme.colors.transparent
         radius: Theme.radius.sm
 

@@ -9,7 +9,7 @@ import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("DatePicker Components Test"))
+    title.text: (TranslationManager.revision, qsTr("DatePicker Input Field Test"))
 
     ScrollView {
         anchors.fill: parent
@@ -17,12 +17,13 @@ PanelTemplate {
 
         ColumnLayout {
             width: parent.width
-            anchors.margins: Theme.spacing.s4
+            anchors.fill: parent
+            anchors.margins: Theme.spacing.s6
             spacing: Theme.spacing.s6
 
             // Header
             Text {
-                text: (TranslationManager.revision, qsTr("DateTimePicker vs DatePicker Test"))
+                text: (TranslationManager.revision, qsTr("DatePicker with Input Field"))
                 font.family: Theme.typography.familySans
                 font.pixelSize: Theme.typography.fontSize200
                 font.weight: Theme.typography.weightSemibold
@@ -31,296 +32,326 @@ PanelTemplate {
 
             UI.HorizontalDivider { Layout.fillWidth: true }
 
-            // DateTimePicker Section
+            // Single Date Input Field
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: Theme.spacing.s4
 
                 Text {
-                    text: (TranslationManager.revision, qsTr("DateTimePicker Component (Clean Architecture)"))
+                    text: (TranslationManager.revision, qsTr("Single Date Selection"))
                     font.family: Theme.typography.familySans
                     font.pixelSize: Theme.typography.fontSize175
                     font.weight: Theme.typography.weightMedium
                     color: Theme.colors.accent500
                 }
 
-                // Basic DateTimePicker
-                UI.DateTimePicker {
-                    id: dateTimePicker
-                    Layout.fillWidth: true
-                    Layout.maximumWidth: 400
-                    label: (TranslationManager.revision, qsTr("DateTimePicker - Select Date"))
-                    required: true
-                    placeholderText: "DD/MM/YYYY"
-
-                    onDateSelected: function(date) {
-                        dateTimeResult.text = (TranslationManager.revision, qsTr("DateTimePicker Selected: ")) + Qt.formatDate(date, "dd/MM/yyyy")
-                        console.log("DateTimePicker - Date selected:", Qt.formatDate(date, "dd/MM/yyyy"))
-                    }
-
-                    onCleared: {
-                        dateTimeResult.text = (TranslationManager.revision, qsTr("DateTimePicker - Selection cleared"))
-                        console.log("DateTimePicker - Selection cleared")
-                    }
-                }
-
+                // Label
                 Text {
-                    id: dateTimeResult
-                    text: (TranslationManager.revision, qsTr("No DateTimePicker selection"))
+                    text: (TranslationManager.revision, qsTr("Select Date")) + " *"
                     font.family: Theme.typography.familySans
                     font.pixelSize: Theme.typography.fontSize150
-                    color: Theme.colors.textMuted
-                    wrapMode: Text.WordWrap
-                }
-
-                // DateTimePicker with constraints
-                UI.DateTimePicker {
-                    id: constrainedDateTimePicker
-                    Layout.fillWidth: true
-                    Layout.maximumWidth: 400
-                    label: (TranslationManager.revision, qsTr("DateTimePicker - Limited Range"))
-                    minimumDate: new Date(2024, 0, 1)
-                    maximumDate: new Date(2025, 11, 31)
-                    size: "sm"
-
-                    onDateSelected: function(date) {
-                        constrainedDateTimeResult.text = (TranslationManager.revision, qsTr("Constrained DateTimePicker: ")) + Qt.formatDate(date, "dd/MM/yyyy")
-                    }
-                }
-
-                Text {
-                    id: constrainedDateTimeResult
-                    text: (TranslationManager.revision, qsTr("DateTimePicker with 2024-2025 range"))
-                    font.family: Theme.typography.familySans
-                    font.pixelSize: Theme.typography.fontSize150
-                    color: Theme.colors.textMuted
-                    wrapMode: Text.WordWrap
-                }
-            }
-
-            UI.HorizontalDivider { Layout.fillWidth: true }
-
-            // DatePicker Section
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: Theme.spacing.s4
-
-                Text {
-                    text: (TranslationManager.revision, qsTr("DatePicker Component (Multiple Modes)"))
-                    font.family: Theme.typography.familySans
-                    font.pixelSize: Theme.typography.fontSize175
-                    font.weight: Theme.typography.weightMedium
-                    color: Theme.colors.accent500
-                }
-
-                // Calendar type selector
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: Theme.spacing.s3
-
-                    Text {
-                        text: (TranslationManager.revision, qsTr("Calendar Mode:"))
-                        font.family: Theme.typography.familySans
-                        font.pixelSize: Theme.typography.fontSize150
-                        color: Theme.colors.text
-                    }
-
-                    UI.Button {
-                        text: "Single"
-                        size: "sm"
-                        variant: datePicker.calendarType === "single" ? "primary" : "secondary"
-                        onClicked: datePicker.calendarType = "single"
-                    }
-
-                    UI.Button {
-                        text: "Range"
-                        size: "sm"
-                        variant: datePicker.calendarType === "range" ? "primary" : "secondary"
-                        onClicked: datePicker.calendarType = "range"
-                    }
-
-                    UI.Button {
-                        text: "Year"
-                        size: "sm"
-                        variant: datePicker.calendarType === "year" ? "primary" : "secondary"
-                        onClicked: datePicker.calendarType = "year"
-                    }
-
-                    UI.Button {
-                        text: "Month"
-                        size: "sm"
-                        variant: datePicker.calendarType === "month" ? "primary" : "secondary"
-                        onClicked: datePicker.calendarType = "month"
-                    }
-                }
-
-                // Direct DatePicker component
-                UI.DatePicker {
-                    id: datePicker
-                    Layout.alignment: Qt.AlignHCenter
-                    calendarType: "single"
-
-                    onDateSelected: function(date) {
-                        datePickerResult.text = (TranslationManager.revision, qsTr("DatePicker Single: ")) + Qt.formatDate(date, "dd/MM/yyyy")
-                        console.log("DatePicker - Date selected:", Qt.formatDate(date, "dd/MM/yyyy"))
-                    }
-
-                    onRangeSelected: function(startDate, endDate) {
-                        datePickerResult.text = (TranslationManager.revision, qsTr("DatePicker Range: ")) +
-                                             Qt.formatDate(startDate, "dd/MM/yyyy") + " - " + Qt.formatDate(endDate, "dd/MM/yyyy")
-                        console.log("DatePicker - Range selected:", Qt.formatDate(startDate, "dd/MM/yyyy"), "to", Qt.formatDate(endDate, "dd/MM/yyyy"))
-                    }
-
-                    onYearSelected: function(year) {
-                        datePickerResult.text = (TranslationManager.revision, qsTr("DatePicker Year: ")) + year
-                        console.log("DatePicker - Year selected:", year)
-                    }
-
-                    onMonthSelected: function(month, year) {
-                        datePickerResult.text = (TranslationManager.revision, qsTr("DatePicker Month: ")) +
-                                             Qt.locale().monthName(month) + " " + year
-                        console.log("DatePicker - Month selected:", Qt.locale().monthName(month), year)
-                    }
-                }
-
-                Text {
-                    id: datePickerResult
-                    text: (TranslationManager.revision, qsTr("No DatePicker selection - Use Apply button"))
-                    font.family: Theme.typography.familySans
-                    font.pixelSize: Theme.typography.fontSize150
-                    color: Theme.colors.textMuted
-                    wrapMode: Text.WordWrap
-                }
-            }
-
-            UI.HorizontalDivider { Layout.fillWidth: true }
-
-            // Comparison Section
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: Theme.spacing.s4
-
-                Text {
-                    text: (TranslationManager.revision, qsTr("Component Comparison"))
-                    font.family: Theme.typography.familySans
-                    font.pixelSize: Theme.typography.fontSize175
                     font.weight: Theme.typography.weightMedium
                     color: Theme.colors.text
                 }
 
-                GridLayout {
+                // Input field for single date
+                Rectangle {
+                    id: singleInputField
                     Layout.fillWidth: true
-                    columns: 2
-                    columnSpacing: Theme.spacing.s6
-                    rowSpacing: Theme.spacing.s3
+                    Layout.maximumWidth: 400
+                    Layout.preferredHeight: Theme.spacing.s10
 
-                    // DateTimePicker characteristics
-                    Text {
-                        text: (TranslationManager.revision, qsTr("DateTimePicker:"))
-                        font.family: Theme.typography.familySans
-                        font.pixelSize: Theme.typography.fontSize150
-                        font.weight: Theme.typography.weightMedium
-                        color: Theme.colors.accent500
-                        Layout.alignment: Qt.AlignTop
-                    }
+                    color: Theme.colors.primary900
+                    property bool focused: singlePopup.opened
+                    property date selectedDate: new Date(NaN)
+                    property string placeholderText: "DD/MM/YYYY"
+                    property string dateFormat: "dd/MM/yyyy"
 
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: Theme.spacing.s1
+                    // Bottom border (underline effect)
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        height: singleInputField.focused ? Theme.borders.b2 : Theme.borders.b1
+                        color: "white"
 
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Clean separation of concerns"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
-                        }
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Form-integrated with label/validation"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
-                        }
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Input field + popup pattern"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
-                        }
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Size variants support"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
-                        }
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Single date selection only"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
+                        Behavior on height {
+                            NumberAnimation {
+                                duration: Theme.motion.panelTransitionMs
+                                easing.type: Theme.motion.panelTransitionEasing
+                            }
                         }
                     }
 
-                    // DatePicker characteristics
-                    Text {
-                        text: (TranslationManager.revision, qsTr("DatePicker:"))
-                        font.family: Theme.typography.familySans
-                        font.pixelSize: Theme.typography.fontSize150
-                        font.weight: Theme.typography.weightMedium
-                        color: Theme.colors.accent500
-                        Layout.alignment: Qt.AlignTop
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.leftMargin: Theme.spacing.s3
+                        anchors.rightMargin: Theme.spacing.s3
+                        anchors.topMargin: Theme.spacing.s3
+                        spacing: Theme.spacing.s2
+
+                        // Display text
+                        Text {
+                            Layout.fillWidth: true
+                            text: {
+                                if (!singleInputField.selectedDate || isNaN(singleInputField.selectedDate.getTime())) {
+                                    return singleInputField.placeholderText
+                                }
+                                return Qt.formatDate(singleInputField.selectedDate, singleInputField.dateFormat)
+                            }
+
+                            font.family: Theme.typography.familySans
+                            font.pixelSize: Theme.typography.fontSize175
+                            font.weight: Theme.typography.weightRegular
+                            color: {
+                                if (!singleInputField.selectedDate || isNaN(singleInputField.selectedDate.getTime())) {
+                                    return Theme.colors.textMuted
+                                }
+                                return Theme.colors.text
+                            }
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        // Calendar icon
+                        Image {
+                            Layout.preferredWidth: Theme.icons.sizeMd
+                            Layout.preferredHeight: Theme.icons.sizeMd
+                            source: "qrc:/App/assets/icons/calendar.svg"
+                        }
                     }
 
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: Theme.spacing.s1
+                    // Click handler
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
 
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Multiple selection modes"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
-                        }
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Direct calendar component"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
-                        }
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Range, year, month selection"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
-                        }
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Apply/Clear button pattern"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
-                        }
-                        Text {
-                            text: "• " + (TranslationManager.revision, qsTr("Self-contained calendar"))
-                            font.family: Theme.typography.familySans
-                            font.pixelSize: Theme.typography.fontSize125
-                            color: Theme.colors.text
-                            wrapMode: Text.WordWrap
+                        onClicked: {
+                            singleInputField.focused = true
+                            singlePopup.toggle()
                         }
                     }
+
+                    // DatePicker popup
+                    Popup {
+                        id: singlePopup
+                        x: 0
+                        y: parent.height
+                        width: parent.width
+                        height: 400
+
+                        modal: false
+                        focus: true
+                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+                        background: Rectangle {
+                            color: Theme.colors.transparent
+                        }
+
+                        UI.DatePicker {
+                            anchors.fill: parent
+                            mode: "single"
+                            selectedDate: singleInputField.selectedDate
+
+                            onDateSelected: function(date) {
+                                singleInputField.selectedDate = date
+                                singleResult.text = (TranslationManager.revision, qsTr("Single Date: ")) + Qt.formatDate(date, "dd/MM/yyyy")
+                                singlePopup.close()
+                            }
+                        }
+
+                        function toggle() {
+                            if (opened) {
+                                close()
+                            } else {
+                                open()
+                            }
+                        }
+
+                        onClosed: {
+                            singleInputField.focused = false
+                        }
+                    }
+                }
+
+                Text {
+                    id: singleResult
+                    text: (TranslationManager.revision, qsTr("No single date selected"))
+                    font.family: Theme.typography.familySans
+                    font.pixelSize: Theme.typography.fontSize150
+                    color: Theme.colors.textMuted
                 }
             }
 
             UI.HorizontalDivider { Layout.fillWidth: true }
 
-            // Control buttons
+            // Range Date Input Field
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: Theme.spacing.s4
+
+                Text {
+                    text: (TranslationManager.revision, qsTr("Date Range Selection"))
+                    font.family: Theme.typography.familySans
+                    font.pixelSize: Theme.typography.fontSize175
+                    font.weight: Theme.typography.weightMedium
+                    color: Theme.colors.accent500
+                }
+
+                // Label
+                Text {
+                    text: (TranslationManager.revision, qsTr("Select Date Range")) + " *"
+                    font.family: Theme.typography.familySans
+                    font.pixelSize: Theme.typography.fontSize150
+                    font.weight: Theme.typography.weightMedium
+                    color: Theme.colors.text
+                }
+
+                // Input field for range
+                Rectangle {
+                    id: rangeInputField
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: 400
+                    Layout.preferredHeight: Theme.spacing.s10
+
+                    color: Theme.colors.primary900
+                    property bool focused: rangePopup.opened
+                    property date startDate: new Date(NaN)
+                    property date endDate: new Date(NaN)
+                    property string placeholderText: "DD/MM/YYYY - DD/MM/YYYY"
+                    property string dateFormat: "dd/MM/yyyy"
+
+                    // Bottom border (underline effect)
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        height: rangeInputField.focused ? Theme.borders.b2 : Theme.borders.b1
+                        color: "white"
+
+                        Behavior on height {
+                            NumberAnimation {
+                                duration: Theme.motion.panelTransitionMs
+                                easing.type: Theme.motion.panelTransitionEasing
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.leftMargin: Theme.spacing.s3
+                        anchors.rightMargin: Theme.spacing.s3
+                        anchors.topMargin: Theme.spacing.s3
+                        anchors.bottomMargin: 0
+                        spacing: Theme.spacing.s2
+
+                        // Display text
+                        Text {
+                            Layout.fillWidth: true
+                            text: {
+                                const hasStart = rangeInputField.startDate && !isNaN(rangeInputField.startDate.getTime())
+                                const hasEnd = rangeInputField.endDate && !isNaN(rangeInputField.endDate.getTime())
+
+                                if (!hasStart && !hasEnd) {
+                                    return rangeInputField.placeholderText
+                                } else if (hasStart && hasEnd) {
+                                    return Qt.formatDate(rangeInputField.startDate, rangeInputField.dateFormat) +
+                                           " - " + Qt.formatDate(rangeInputField.endDate, rangeInputField.dateFormat)
+                                } else if (hasStart) {
+                                    return Qt.formatDate(rangeInputField.startDate, rangeInputField.dateFormat) + " - ..."
+                                }
+                                return rangeInputField.placeholderText
+                            }
+
+                            font.family: Theme.typography.familySans
+                            font.pixelSize: Theme.typography.fontSize175
+                            font.weight: Theme.typography.weightRegular
+                            color: {
+                                const hasStart = rangeInputField.startDate && !isNaN(rangeInputField.startDate.getTime())
+                                const hasEnd = rangeInputField.endDate && !isNaN(rangeInputField.endDate.getTime())
+                                if (!hasStart && !hasEnd) {
+                                    return Theme.colors.textMuted
+                                }
+                                return Theme.colors.text
+                            }
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        // Calendar icon
+                        Image {
+                            Layout.preferredWidth: Theme.icons.sizeMd
+                            Layout.preferredHeight: Theme.icons.sizeMd
+                            source: "qrc:/App/assets/icons/calendar.svg"
+                        }
+                    }
+
+                    // Click handler
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+
+                        onClicked: {
+                            rangeInputField.focused = true
+                            rangePopup.toggle()
+                        }
+                    }
+
+                    // DatePicker popup for range
+                    Popup {
+                        id: rangePopup
+                        x: 0
+                        y: parent.height
+                        width: parent.width
+                        height: 400
+
+                        modal: false
+                        focus: true
+                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+                        background: Rectangle {
+                            color: Theme.colors.transparent
+                        }
+
+                        UI.DatePicker {
+                            anchors.fill: parent
+                            mode: "range"
+                            startDate: rangeInputField.startDate
+                            endDate: rangeInputField.endDate
+
+                            onRangeSelected: function(startDate, endDate) {
+                                rangeInputField.startDate = startDate
+                                rangeInputField.endDate = endDate
+                                rangeResult.text = (TranslationManager.revision, qsTr("Date Range: ")) +
+                                                  Qt.formatDate(startDate, "dd/MM/yyyy") + " - " + Qt.formatDate(endDate, "dd/MM/yyyy")
+                                rangePopup.close()
+                            }
+                        }
+
+                        function toggle() {
+                            if (opened) {
+                                close()
+                            } else {
+                                open()
+                            }
+                        }
+
+                        onClosed: {
+                            rangeInputField.focused = false
+                        }
+                    }
+                }
+
+                Text {
+                    id: rangeResult
+                    text: (TranslationManager.revision, qsTr("No date range selected"))
+                    font.family: Theme.typography.familySans
+                    font.pixelSize: Theme.typography.fontSize150
+                    color: Theme.colors.textMuted
+                }
+            }
+
+            UI.HorizontalDivider { Layout.fillWidth: true }
+
+            // Test Controls
             RowLayout {
                 Layout.fillWidth: true
                 spacing: Theme.spacing.s3
@@ -339,9 +370,26 @@ PanelTemplate {
                     variant: "secondary"
                     onClicked: {
                         const today = new Date()
-                        dateTimePicker.selectedDate = today
-                        constrainedDateTimePicker.selectedDate = today
-                        datePicker.selectedDate = today
+                        singleInputField.selectedDate = today
+                        singleResult.text = (TranslationManager.revision, qsTr("Single Date: ")) + Qt.formatDate(today, "dd/MM/yyyy")
+                    }
+                }
+
+                UI.Button {
+                    text: (TranslationManager.revision, qsTr("Set This Week"))
+                    size: "sm"
+                    variant: "secondary"
+                    onClicked: {
+                        const today = new Date()
+                        const startOfWeek = new Date(today)
+                        startOfWeek.setDate(today.getDate() - today.getDay())
+                        const endOfWeek = new Date(startOfWeek)
+                        endOfWeek.setDate(startOfWeek.getDate() + 6)
+
+                        rangeInputField.startDate = startOfWeek
+                        rangeInputField.endDate = endOfWeek
+                        rangeResult.text = (TranslationManager.revision, qsTr("Date Range: ")) +
+                                          Qt.formatDate(startOfWeek, "dd/MM/yyyy") + " - " + Qt.formatDate(endOfWeek, "dd/MM/yyyy")
                     }
                 }
 
@@ -350,43 +398,16 @@ PanelTemplate {
                     size: "sm"
                     variant: "ghost"
                     onClicked: {
-                        dateTimePicker.selectedDate = new Date(NaN)
-                        constrainedDateTimePicker.selectedDate = new Date(NaN)
-                        datePicker.selectedDate = new Date(NaN)
-                        datePicker.startDate = new Date(NaN)
-                        datePicker.endDate = new Date(NaN)
+                        singleInputField.selectedDate = new Date(NaN)
+                        rangeInputField.startDate = new Date(NaN)
+                        rangeInputField.endDate = new Date(NaN)
 
-                        dateTimeResult.text = (TranslationManager.revision, qsTr("All selections cleared"))
-                        constrainedDateTimeResult.text = (TranslationManager.revision, qsTr("All selections cleared"))
-                        datePickerResult.text = (TranslationManager.revision, qsTr("All selections cleared"))
-                    }
-                }
-
-                UI.Button {
-                    text: (TranslationManager.revision, qsTr("Log Comparison"))
-                    size: "sm"
-                    variant: "primary"
-                    onClicked: {
-                        console.log("=== Component Comparison ===")
-                        console.log("DateTimePicker:")
-                        console.log("  - isEmpty:", dateTimePicker.isEmpty, "isValid:", dateTimePicker.isValid)
-                        console.log("  - selectedDate:", dateTimePicker.selectedDate)
-                        console.log("  - errorMessage:", dateTimePicker.errorMessage)
-
-                        console.log("DatePicker:")
-                        console.log("  - calendarType:", datePicker.calendarType)
-                        console.log("  - selectedDate:", datePicker.selectedDate)
-                        console.log("  - startDate:", datePicker.startDate)
-                        console.log("  - endDate:", datePicker.endDate)
-                        console.log("  - selectedYear:", datePicker.selectedYear)
-                        console.log("  - selectedMonth:", datePicker.selectedMonth)
-                        console.log("=============================")
+                        singleResult.text = (TranslationManager.revision, qsTr("All selections cleared"))
+                        rangeResult.text = (TranslationManager.revision, qsTr("All selections cleared"))
                     }
                 }
             }
 
-            // Spacer
-            Item { Layout.fillHeight: true }
         }
     }
 }
