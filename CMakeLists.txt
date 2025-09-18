@@ -10,6 +10,7 @@ find_package(Qt6 6.8 REQUIRED
         Gui
         Qml
         Quick
+        Location
         Positioning
         WebEngineQuick
         Mqtt
