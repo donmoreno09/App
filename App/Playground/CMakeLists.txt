@@ -2,6 +2,7 @@ set(qml_files
     ButtonGroupTest.qml
     IconButtonsTest.qml
     DateTimeTest.qml
+    DateTimePickerPanel.qml
     WizardPageTest.qml
     FontTest.qml
 )

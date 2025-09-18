@@ -64,6 +64,17 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/calendar.svg"
+                text: (TranslationManager.revision, qsTr("DateTime"))
+                active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("DateTimePicker Test")
+                    SidePanelController.toggle("datetime-test")
+                }
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 text: (TranslationManager.revision, qsTr("Language"))
