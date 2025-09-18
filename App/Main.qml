@@ -29,26 +29,6 @@ ApplicationWindow {
     // Apparently Qt's ApplicationWindow does not have a flag for it.
     property bool appLoaded: false
 
-    readonly property Plugin osm: Plugin {
-        name: "osm"
-        locales: "it"
-    }
-
-    readonly property Plugin osmDefault: Plugin {
-        name: "osm"
-        locales: "it"
-
-        PluginParameter {
-            name: "osm.mapping.providersrepository.disabled"
-            value: true
-        }
-
-        PluginParameter {
-            name: "osm.mapping.cache.directory"
-            value: "osm_cache"
-        }
-    }
-
     Component.onCompleted: {
         WindowsNcController.attachToWindow(app)
         appLoaded = true
@@ -62,7 +42,7 @@ ApplicationWindow {
 
     MapHost {
         anchors.fill: parent
-        initialPlugin: osmDefault
+        initialPlugin: MapPlugins.osmDefault
 
         onLoaded: {
             map.center = QtPositioning.coordinate(44.4071, 8.9347)
