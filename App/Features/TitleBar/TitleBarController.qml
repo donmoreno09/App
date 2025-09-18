@@ -22,6 +22,7 @@ QtObject {
             case "Mission": return qsTr("Mission")
             case "Pod": return qsTr("Pod")
             case "Notifications": return qsTr("Notifications")
+            case "Map Tilesets": return qsTr("Map Tilesets")
             default: return key
         }
     }
