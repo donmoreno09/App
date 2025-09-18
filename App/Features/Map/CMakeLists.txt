@@ -1,5 +1,5 @@
 set(qml_files
-    Map.qml
+    internals/Map.qml
 )
 
 set(qml_singletons
