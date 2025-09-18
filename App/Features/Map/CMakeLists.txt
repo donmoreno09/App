@@ -1,5 +1,7 @@
 set(qml_files
+    MapHost.qml
     internals/Map.qml
+    internals/MapState.qml
 )
 
 set(qml_singletons

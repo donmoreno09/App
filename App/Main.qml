@@ -1,7 +1,9 @@
-import QtQuick
-import QtQuick.Controls.Fusion
-import QtQuick.Controls
-import QtQuick.Layouts
+import QtQuick 6.8
+import QtQuick.Controls.Fusion 6.8
+import QtQuick.Controls 6.8
+import QtQuick.Layouts 6.8
+import QtLocation 6.8
+import QtPositioning 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
@@ -27,6 +29,26 @@ ApplicationWindow {
     // Apparently Qt's ApplicationWindow does not have a flag for it.
     property bool appLoaded: false
 
+    readonly property Plugin osm: Plugin {
+        name: "osm"
+        locales: "it"
+    }
+
+    readonly property Plugin osmDefault: Plugin {
+        name: "osm"
+        locales: "it"
+
+        PluginParameter {
+            name: "osm.mapping.providersrepository.disabled"
+            value: true
+        }
+
+        PluginParameter {
+            name: "osm.mapping.cache.directory"
+            value: "osm_cache"
+        }
+    }
+
     Component.onCompleted: {
         WindowsNcController.attachToWindow(app)
         appLoaded = true
@@ -38,9 +60,13 @@ ApplicationWindow {
         visible: false
     }
 
-    Map {
+    MapHost {
         anchors.fill: parent
-        anchors.bottomMargin: -Theme.spacing.s4 // Hides OSM's bottom label
+        initialPlugin: osmDefault
+
+        onLoaded: {
+            map.center = QtPositioning.coordinate(44.4071, 8.9347)
+        }
     }
 
     RowLayout {
