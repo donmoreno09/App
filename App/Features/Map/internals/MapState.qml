@@ -80,6 +80,7 @@ QtObject {
 
             // Only copy if the destination actually exposes that property
             if (!(key in fromObj) || !(key in toObj)) continue
+            if (key === "objectName") continue
 
             // Skip private & signals
             if (key.startsWith("_") || key.endsWith("Changed")) continue
