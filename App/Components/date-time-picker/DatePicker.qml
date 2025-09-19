@@ -37,8 +37,8 @@ Rectangle {
     signal rangeSelected(date startDate, date endDate)
 
     // Fixed dimensions from design
-    width: 312
-    height: 404
+    Layout.preferredWidth: 312
+    Layout.preferredHeight: 404
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
     border.width: Theme.borders.b1
@@ -117,18 +117,20 @@ Rectangle {
             }
         }
 
-        // Action buttons
-        UI.DatePickerActions {
-            Layout.fillWidth: true
-            Layout.topMargin: Theme.spacing.s4
+        // Action buttons - this is needed when using the time picker as a lone-component,
+        // But when Date Picker and Time Picker are used in a single container
+        // This should be commented out
+        // UI.DatePickerActions {
+        //     Layout.fillWidth: true
+        //     Layout.topMargin: Theme.spacing.s4
 
-            mode: root.mode
-            canClear: root._canClear()
-            canApply: root._canApply()
+        //     mode: root.mode
+        //     canClear: root._canClear()
+        //     canApply: root._canApply()
 
-            onClearClicked: root._clearSelection()
-            onApplyClicked: root._applySelection()
-        }
+        //     onClearClicked: root._clearSelection()
+        //     onApplyClicked: root._applySelection()
+        // }
     }
 
     // Private functions - keep minimal, delegate complex logic to child components

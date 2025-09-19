@@ -23,8 +23,8 @@ Rectangle {
     signal timeSelected(int hour, int minute, bool isAM)
 
     // Exact dimensions from design
-    width: 312
-    height: 200
+    width: 280
+    height: 120
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
     border.width: Theme.borders.b1
@@ -156,15 +156,18 @@ Rectangle {
             }
         }
 
-        // Action buttons
-        UI.DatePickerActions {
-            Layout.fillWidth: true
-            mode: "single"
-            canClear: true
-            canApply: true
-            onClearClicked: root._clearSelection()
-            onApplyClicked: root._applySelection()
-        }
+        // Action buttons - this is needed when using the time picker as a lone-component,
+        // But when Date Picker and Time Picker are used in a single container
+        // This should be commented out
+
+        // UI.DatePickerActions {
+        //     Layout.fillWidth: true
+        //     mode: "single"
+        //     canClear: true
+        //     canApply: true
+        //     onClearClicked: root._clearSelection()
+        //     onApplyClicked: root._applySelection()
+        // }
     }
 
     Component.onCompleted: {
