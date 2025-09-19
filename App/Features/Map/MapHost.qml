@@ -17,9 +17,9 @@ Item {
 
     readonly property Map map: loader.item
 
-    property bool _firstLoad: true
+    property bool _initialLoad: true
 
-    signal firstLoaded()
+    signal initialLoaded()
     signal loaded()
 
     Loader {
@@ -37,9 +37,9 @@ Item {
         target: MapController
 
         function onMapLoaded() {
-            if (_firstLoad) {
-                firstLoaded()
-                _firstLoad = false
+            if (_initialLoad) {
+                initialLoaded()
+                _initialLoad = false
                 return
             }
 

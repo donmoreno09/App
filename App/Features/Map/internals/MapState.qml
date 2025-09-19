@@ -12,7 +12,7 @@ QtObject {
     id: mapState
 
     property Map _map: null
-    property bool _firstLoad: true
+    property bool _initialLoad: true
 
     signal captured()
     signal restored()
@@ -65,8 +65,8 @@ QtObject {
     // ----------------- INTERNAL METHODS ----------------- //
 
     function _mapReadyChangedListener() {
-        if (_firstLoad) {
-            _firstLoad = false
+        if (_initialLoad) {
+            _initialLoad = false
             return
         }
 

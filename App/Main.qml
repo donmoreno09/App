@@ -44,7 +44,7 @@ ApplicationWindow {
         anchors.fill: parent
         initialPlugin: MapPlugins.osmDefault
 
-        onFirstLoaded: {
+        onInitialLoaded: {
             map.center = QtPositioning.coordinate(44.4071, 8.9347)
             map.copyrightsVisible = false // Hide the copyright label from the bottom left
         }
