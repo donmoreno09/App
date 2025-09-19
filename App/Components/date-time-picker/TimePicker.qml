@@ -7,12 +7,6 @@ import App.Components 1.0 as UI
 
 /*!
     \qmltype TimePicker
-    \brief Flexible TimePicker that adapts to container size
-
-    FIXED: Made height flexible for use in different contexts:
-    - Standalone: uses preferred 110px height
-    - In containers: adapts to available space
-    - Maintains 120px time selection area as per Figma when used in DateTimePicker
 */
 
 Rectangle {
@@ -56,6 +50,12 @@ Rectangle {
             variant: "ghost"
             display: AbstractButton.IconOnly
 
+            background: Rectangle {
+                color: parent._currentBackground
+                radius: parent.radius
+                border.width: 0
+            }
+
             icon.source: "qrc:/App/assets/icons/chevron-up.svg"
             icon.width: 14
             icon.height: 8
@@ -89,6 +89,12 @@ Rectangle {
             Layout.minimumHeight: 30  // Minimum for usability
             variant: "ghost"
             display: AbstractButton.IconOnly
+
+            background: Rectangle {
+                color: parent._currentBackground
+                radius: parent.radius
+                border.width: 0
+            }
 
             icon.source: "qrc:/App/assets/icons/chevron-down.svg"
             icon.width: 14

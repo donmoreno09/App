@@ -7,12 +7,6 @@ import App.Components 1.0 as UI
 
 /*!
     \qmltype DateTimePicker
-    \brief Optimized DateTimePicker with strict 540px height adherence
-
-    FIXED: Range mode layout optimized to fit within 540px total height
-    - Removed label spacing overhead
-    - Compressed time picker containers
-    - Maintains 120px time picker area as per Figma
 */
 
 Rectangle {

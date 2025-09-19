@@ -8,12 +8,6 @@ import App.Components 1.0 as UI
 /*!
     \qmltype DatePicker
     \brief Clean, optimized DatePicker with micro-component architecture
-
-    Features:
-    - Single date selection
-    - Date range selection
-    - Year → Month → Calendar navigation flow
-    - Micro-component architecture for maintainability
 */
 
 Rectangle {

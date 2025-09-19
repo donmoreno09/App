@@ -16,8 +16,6 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCE_PREFIX "/" # For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
     RESOURCES
         ${APP_ASSETS}
-        RESOURCES assets/icons/chevron-up.svg
-        RESOURCES assets/icons/chevron-down.svg
 )
 
 add_subdirectory(Components)

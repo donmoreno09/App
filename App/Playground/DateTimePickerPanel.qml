@@ -529,20 +529,11 @@ PanelTemplate {
 
                                     // Live update as user selects dates/time
                                     onSelectionChanged: {
-                                        console.log("=== RANGE SELECTION CHANGED ===")
-                                        console.log("hasValidSelection:", hasValidSelection)
-                                        console.log("startDate:", startDate)
-                                        console.log("endDate:", endDate)
-                                        console.log("selectedHour:", selectedHour, "selectedMinute:", selectedMinute)
-                                        console.log("endHour:", endHour, "endMinute:", endMinute)
 
                                         if (hasValidSelection) {
                                             // Use the DateTimePicker's built-in currentDateTime for start
                                             const startDT = _combineDateTime(startDate, selectedHour, selectedMinute, selectedAMPM)
                                             const endDT = _combineDateTime(endDate, endHour, endMinute, endAMPM)
-
-                                            console.log("Computed startDT:", startDT)
-                                            console.log("Computed endDT:", endDT)
 
                                             if (!isNaN(startDT.getTime()) && !isNaN(endDT.getTime())) {
                                                 dateTimeRangeInput.startDateTime = startDT

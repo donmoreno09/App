@@ -7,7 +7,7 @@ import App.Components 1.0 as UI
 
 /*!
     \qmltype DatePickerActions
-    \brief Action buttons for DatePicker (Clear/Apply)
+    \brief Action buttons (Clear/Apply)
 */
 
 RowLayout {

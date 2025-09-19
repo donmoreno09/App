@@ -2,15 +2,6 @@ set(qml_files
     Avatar.qml
     Button.qml
     DateTime.qml
-    date-time-picker/DatePicker.qml
-    date-time-picker/DatePickerHeader.qml
-    date-time-picker/DatePickerYearView.qml
-    date-time-picker/DatePickerMonthView.qml
-    date-time-picker/DatePickerCalendarView.qml
-    date-time-picker/DatePickerDay.qml
-    date-time-picker/DatePickerActions.qml
-    date-time-picker/TimePicker.qml
-    date-time-picker/DateTimePicker.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml
@@ -22,6 +13,15 @@ set(qml_files
     VerticalPadding.qml
     HorizontalSpacer.qml
     VerticalSpacer.qml
+    date-time-picker/DatePicker.qml
+    date-time-picker/DatePickerHeader.qml
+    date-time-picker/DatePickerYearView.qml
+    date-time-picker/DatePickerMonthView.qml
+    date-time-picker/DatePickerCalendarView.qml
+    date-time-picker/DatePickerDay.qml
+    date-time-picker/DatePickerActions.qml
+    date-time-picker/TimePicker.qml
+    date-time-picker/DateTimePicker.qml
     wizard-page/WizardPage.qml
     wizard-page/constants/StepDefinitions.qml
     wizard-page/test-pages/MissionOverview.qml

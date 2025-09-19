@@ -1,7 +1,9 @@
-import QtQuick
-import QtQuick.Controls.Fusion
-import QtQuick.Controls
-import QtQuick.Layouts
+import QtQuick 6.8
+import QtQuick.Controls.Fusion 6.8
+import QtQuick.Controls 6.8
+import QtQuick.Layouts 6.8
+import QtLocation 6.8
+import QtPositioning 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
@@ -23,11 +25,6 @@ ApplicationWindow {
     visible: true
     title: qsTr("IRIDESS FE")
 
-    palette {
-        placeholderText: Theme.colors.text
-        buttonText: Theme.colors.text
-    }
-
     // Used for listeners that needs for the app to be fully loaded first.
     // Apparently Qt's ApplicationWindow does not have a flag for it.
     property bool appLoaded: false
@@ -43,9 +40,14 @@ ApplicationWindow {
         visible: false
     }
 
-    Map {
+    MapHost {
         anchors.fill: parent
-        anchors.bottomMargin: -Theme.spacing.s4 // Hides OSM's bottom label
+        initialPlugin: MapPlugins.osmDefault
+
+        onInitialLoaded: {
+            map.center = QtPositioning.coordinate(44.4071, 8.9347)
+            map.copyrightsVisible = false // Hide the copyright label from the bottom left
+        }
     }
 
     RowLayout {
@@ -171,23 +173,6 @@ ApplicationWindow {
                         size: "sm"
                         onClicked: LanguageController.currentLanguage = "it"
                     }
-                }
-
-                Switch {
-                    anchors.right: parent.right
-                    anchors.top: languageButtons.bottom
-                    anchors.rightMargin: Theme.spacing.s2
-                    anchors.topMargin: Theme.spacing.s4
-
-                    checked: MapController.backgroundOverlayEnabled
-
-                    onToggled: {
-                        MapController.toggleBackgroundOverlay()
-                        console.log("Background overlay toggled:", checked)
-                    }
-
-                    palette.highlight: Theme.colors.primary
-                    palette.base: Theme.colors.glass
                 }
             }
         }

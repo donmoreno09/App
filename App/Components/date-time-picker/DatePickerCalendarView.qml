@@ -7,7 +7,6 @@ import App.Components 1.0 as UI
 
 /*!
     \qmltype DatePickerCalendarView
-    \brief Calendar grid view with continuous pill-like range background
 */
 
 ColumnLayout {

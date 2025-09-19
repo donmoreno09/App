@@ -5,7 +5,6 @@ import App.Themes 1.0
 
 /*!
     \qmltype DatePickerDay
-    \brief Individual day cell optimized for range selection
 */
 
 Item {

@@ -64,17 +64,6 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
-                source: "qrc:/App/assets/icons/calendar.svg"
-                text: (TranslationManager.revision, qsTr("DateTime"))
-                active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
-
-                onClicked: {
-                    TitleBarController.setTitle("DateTimePicker Test")
-                    SidePanelController.toggle("datetime-test")
-                }
-            }
-
-            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 text: (TranslationManager.revision, qsTr("Language"))
@@ -83,6 +72,29 @@ UI.GlobalBackgroundConsumer {
                 onClicked: {
                     TitleBarController.setTitle("Languages")
                     SidePanelController.toggle("language")
+                }
+            }
+
+            SideRailItem {
+                visible: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
+                source: "qrc:/App/assets/icons/map.svg"
+                text: (TranslationManager.revision, qsTr("Tilesets"))
+                active: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Map Tilesets")
+                    SidePanelController.toggle("maptilesets")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/calendar.svg"
+                text: (TranslationManager.revision, qsTr("DateTime"))
+                active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("DateTimePicker Test")
+                    SidePanelController.toggle("datetime-test")
                 }
             }
         }
