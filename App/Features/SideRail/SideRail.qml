@@ -86,17 +86,6 @@ UI.GlobalBackgroundConsumer {
                     SidePanelController.toggle("maptilesets")
                 }
             }
-
-            SideRailItem {
-                source: "qrc:/App/assets/icons/calendar.svg"
-                text: (TranslationManager.revision, qsTr("DateTime"))
-                active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
-
-                onClicked: {
-                    TitleBarController.setTitle("DateTimePicker Test")
-                    SidePanelController.toggle("datetime-test")
-                }
-            }
         }
 
         UI.VerticalSpacer { }
