@@ -23,6 +23,11 @@ ApplicationWindow {
     visible: true
     title: qsTr("IRIDESS FE")
 
+    palette {
+        placeholderText: Theme.colors.text
+        buttonText: Theme.colors.text
+    }
+
     // Used for listeners that needs for the app to be fully loaded first.
     // Apparently Qt's ApplicationWindow does not have a flag for it.
     property bool appLoaded: false

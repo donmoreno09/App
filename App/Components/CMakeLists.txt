@@ -9,6 +9,7 @@ set(qml_files
     date-time-picker/DatePickerCalendarView.qml
     date-time-picker/DatePickerDay.qml
     date-time-picker/DatePickerActions.qml
+    date-time-picker/TimePicker.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml

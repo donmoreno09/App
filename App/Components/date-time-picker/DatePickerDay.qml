@@ -4,16 +4,12 @@ import QtQuick.Controls 6.8
 import App.Themes 1.0
 
 /*!
-    \qmltype DateTimePickerDay
-    \brief Individual day cell in the calendar grid
-
-    Micro-component for calendar days. Follows your design system patterns.
-    Similar to how you might structure a notification item or button state.
+    \qmltype DatePickerDay
+    \brief Individual day cell optimized for range selection
 */
 
 Item {
     id: root
-    anchors.margins: Theme.spacing.s1
 
     // Props
     property date date
@@ -43,6 +39,7 @@ Item {
 
     // Day cell background
     Rectangle {
+        id: dayCircle
         width: Theme.spacing.s8  // 32px
         height: Theme.spacing.s8 // 32px
         anchors.centerIn: parent
@@ -50,12 +47,19 @@ Item {
         color: root._backgroundColor
         radius: Theme.radius.circle(width, height) // Always circular like the design
 
-        // Remove today indicator border since we use background color
-        border.width: root.isToday && root.isCurrentMonth ? Theme.borders.b1 : Theme.borders.b0
-        border.color: root.isToday && root.isCurrentMonth ? "white" : "transparent"
+        // Today indicator border
+        border.width: root.isToday && root.isCurrentMonth && !root.isSelected ? Theme.borders.b1 : Theme.borders.b0
+        border.color: root.isToday && root.isCurrentMonth && !root.isSelected ? Theme.colors.accent500 : "transparent"
 
         // Smooth transitions
         Behavior on color {
+            ColorAnimation {
+                duration: 150
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        Behavior on border.color {
             ColorAnimation {
                 duration: 150
                 easing.type: Easing.OutCubic
@@ -69,8 +73,16 @@ Item {
 
             font.family: Theme.typography.familySans
             font.pixelSize: Theme.typography.fontSize150
-            font.weight: Theme.typography.weightRegular
+            font.weight: root.isSelected ? Theme.typography.weightMedium : Theme.typography.weightRegular
             color: root._textColor
+
+            // Smooth color transitions
+            Behavior on color {
+                ColorAnimation {
+                    duration: 150
+                    easing.type: Easing.OutCubic
+                }
+            }
         }
     }
 

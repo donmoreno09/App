@@ -7,7 +7,7 @@ import App.Components 1.0 as UI
 
 /*!
     \qmltype DatePickerCalendarView
-    \brief Calendar grid view for DatePicker
+    \brief Calendar grid view with continuous pill-like range background
 */
 
 ColumnLayout {
@@ -59,10 +59,17 @@ ColumnLayout {
         month: root.currentMonth
         year: root.currentYear
 
-
         delegate: Item {
             required property var model
 
+            property bool isRangeStart: root.mode === "range" && !_isEmpty(root.startDate) &&
+                                       model.date.toDateString() === root.startDate.toDateString()
+            property bool isRangeEnd: root.mode === "range" && !_isEmpty(root.endDate) &&
+                                     model.date.toDateString() === root.endDate.toDateString()
+            property bool isInRange: root.mode === "range" && root._isInRange(model.date)
+            property bool isSingleDayRange: isRangeStart && isRangeEnd
+
+            // Week background (Sunday highlight)
             Rectangle {
                 visible: model.date.getDay() === 0 // Only show on Sundays (start of week)
                 x: -parent.x // Extend to start of grid
@@ -74,38 +81,21 @@ ColumnLayout {
                 z: -1
             }
 
-            // Range background
+            // THE WORKING SOLUTION: Smart margin technique
             Rectangle {
-                anchors.fill: parent
-                visible: root.mode === "range" && root._isInRange(model.date)
+                anchors {
+                    fill: parent
+                    // Key technique: reduce width on ends to create pill shape
+                    leftMargin: isRangeStart ? parent.width / 2 : 0
+                    rightMargin: isRangeEnd ? parent.width / 2 : 0
+                }
+                visible: isInRange
                 color: Theme.colors.accent100
                 opacity: 0.3
-                radius: 0
-
-                // Flags
-                property bool isRangeStart: !_isEmpty(root.startDate) && model.date.toDateString() === root.startDate.toDateString()
-                property bool isRangeEnd: !_isEmpty(root.endDate) && model.date.toDateString() === root.endDate.toDateString()
-
-                // Middle cells: flat
-                // Start cell: round left corners
-                // End cell: round right corners
-                Rectangle {
-                    anchors.fill: parent
-                    color: parent.color
-                    opacity: parent.opacity
-                    radius: Theme.radius.sm
-
-                    visible: parent.isRangeStart || parent.isRangeEnd
-
-                    // Clip to only left or right side
-                    anchors.rightMargin: parent.isRangeStart && !parent.isRangeEnd ? parent.width / 2 : 0
-                    anchors.leftMargin: parent.isRangeEnd && !parent.isRangeStart ? parent.width / 2 : 0
-                }
+                z: 0
             }
 
-
-
-            // Day cell
+            // Day cell with normal margins
             UI.DatePickerDay {
                 anchors.fill: parent
                 anchors.margins: Theme.spacing.s1
