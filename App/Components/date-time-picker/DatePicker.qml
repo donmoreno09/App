@@ -37,8 +37,8 @@ Rectangle {
     signal rangeSelected(date startDate, date endDate)
 
     // Fixed dimensions from design
-    Layout.preferredWidth: 312
-    Layout.preferredHeight: 404
+    width: 312
+    height: 404
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
     border.width: Theme.borders.b1
@@ -205,7 +205,11 @@ Rectangle {
 
     function _handleDateClick(date) {
         if (mode === "single") {
-            selectedDate = date
+            console.log("DatePicker: Setting selectedDate to:", date)
+                    selectedDate = date
+                    console.log("DatePicker: selectedDate is now:", selectedDate)
+                    console.log("DatePicker: About to emit dateSelected signal")
+                    dateSelected(selectedDate)  // This should fire the signal
         } else if (mode === "range") {
             if (_isEmpty(_rangeStartTemp)) {
                 _rangeStartTemp = date
@@ -220,6 +224,7 @@ Rectangle {
                     endDate = _rangeStartTemp
                 }
                 _rangeStartTemp = new Date(NaN)
+                rangeSelected(startDate, endDate)
             }
         }
     }

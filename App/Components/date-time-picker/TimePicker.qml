@@ -24,7 +24,7 @@ Rectangle {
 
     // Exact dimensions from design
     width: 280
-    height: 120
+    height: 110
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
     border.width: Theme.borders.b1
@@ -39,7 +39,7 @@ Rectangle {
         signal downClicked()
 
         Layout.preferredWidth: 40
-        Layout.preferredHeight: 120
+        Layout.preferredHeight: 110
         spacing: 0
 
         // Up arrow
@@ -61,7 +61,7 @@ Rectangle {
         Rectangle {
             Layout.preferredWidth: 40
             Layout.preferredHeight: 40
-            color: Theme.colors.grey600
+            color: Qt.darker(Theme.colors.grey500, 1.5)
             radius: Theme.radius.sm
 
             Text {

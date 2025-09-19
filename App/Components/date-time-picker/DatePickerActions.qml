@@ -24,9 +24,12 @@ RowLayout {
 
     spacing: Theme.spacing.s3
 
+     Item { Layout.fillWidth: true }
+
     // Clear button
     UI.Button {
-        Layout.fillWidth: true
+        Layout.preferredWidth: 86
+        Layout.alignment: Qt.AlignHCenter
         size: "md"
         variant: "ghost"
         enabled: root.canClear
@@ -54,7 +57,7 @@ RowLayout {
 
     // Apply button
     UI.Button {
-        Layout.fillWidth: true
+        Layout.preferredWidth: 86
         size: "md"
         variant: "primary"
         enabled: root.canApply
@@ -77,4 +80,6 @@ RowLayout {
             color: root.canApply ? Theme.colors.white500 : Theme.colors.textMuted
         }
     }
+
+     Item { Layout.fillWidth: true }
 }

@@ -121,7 +121,7 @@ PanelTemplate {
         x: 0
         y: parent.height
         width: parent.width
-        height: 450 // Accommodate DateTimePicker height
+        height: 540 // Accommodate DateTimePicker height
 
         modal: false
         focus: true
@@ -441,11 +441,30 @@ PanelTemplate {
                                 mode: "single"
                                 is24Hour: true
 
-                                onDateTimeSelected: function(dateTime) {
+                                // NEW: Use the optimized signals
+                                onSelectionChanged: {
+                                    // Live update as user selects date/time
+                                    if (hasValidSelection) {
+                                        dateTimeInput.selectedDateTime = currentDateTime
+                                        dateTimeResult.result = (TranslationManager.revision, qsTr("Live Preview: ")) +
+                                                              Qt.formatDateTime(currentDateTime, "dd/MM/yyyy hh:mm")
+                                    } else {
+                                        dateTimeResult.result = (TranslationManager.revision, qsTr("Select date and time..."))
+                                    }
+                                }
+
+                                // Final confirmation when Apply is clicked
+                                onDateTimeApplied: function(dateTime) {
                                     dateTimeInput.selectedDateTime = dateTime
-                                    dateTimeResult.result = (TranslationManager.revision, qsTr("DateTime: ")) +
+                                    dateTimeResult.result = (TranslationManager.revision, qsTr("Applied: ")) +
                                                           Qt.formatDateTime(dateTime, "dd/MM/yyyy hh:mm")
                                     dateTimePopup.close()
+                                }
+
+                                // When user clears selection
+                                onSelectionCleared: {
+                                    dateTimeInput.selectedDateTime = new Date(NaN)
+                                    dateTimeResult.result = (TranslationManager.revision, qsTr("Selection cleared"))
                                 }
                             }
                         }
@@ -459,7 +478,117 @@ PanelTemplate {
                 }
             }
 
-            UI.HorizontalDivider { Layout.fillWidth: true }
+                // Replace the DateTime Range Selection section in your test page:
+
+                // 6. DateTime Range Selection (Combined)
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: Theme.spacing.s4
+
+                    SectionHeader {
+                        title: (TranslationManager.revision, qsTr("DateTime Range Selection (Combined)"))
+                    }
+
+                    FieldLabel {
+                        title: (TranslationManager.revision, qsTr("Select Date & Time Range"))
+                        required: true
+                    }
+
+                    PickerInputField {
+                        id: dateTimeRangeInput
+                        placeholder: "DD/MM/YYYY HH:MM - DD/MM/YYYY HH:MM"
+                        iconSource: "qrc:/App/assets/icons/calendar.svg"
+                        focused: dateTimeRangePopup.opened
+
+                        property date startDateTime: new Date(NaN)
+                        property date endDateTime: new Date(NaN)
+
+                        displayText: {
+                            const hasStart = !isNaN(startDateTime.getTime())
+                            const hasEnd = !isNaN(endDateTime.getTime())
+
+                            if (!hasStart && !hasEnd) return ""
+                            if (hasStart && hasEnd) {
+                                return Qt.formatDateTime(startDateTime, "dd/MM/yyyy hh:mm") + " - " +
+                                       Qt.formatDateTime(endDateTime, "dd/MM/yyyy hh:mm")
+                            }
+                            if (hasStart) return Qt.formatDateTime(startDateTime, "dd/MM/yyyy hh:mm") + " - ..."
+                            return ""
+                        }
+
+                        onClicked: dateTimeRangePopup.toggle()
+
+                        PickerPopup {
+                            id: dateTimeRangePopup
+                            height: 500 // DateTimePicker height
+                            pickerContent: Component {
+                                UI.DateTimePicker {
+                                    id: rangeDateTime
+                                    mode: "range"
+                                    is24Hour: true
+
+                                    // Live update as user selects dates/time
+                                    onSelectionChanged: {
+                                        console.log("=== RANGE SELECTION CHANGED ===")
+                                        console.log("hasValidSelection:", hasValidSelection)
+                                        console.log("startDate:", startDate)
+                                        console.log("endDate:", endDate)
+                                        console.log("selectedHour:", selectedHour, "selectedMinute:", selectedMinute)
+                                        console.log("endHour:", endHour, "endMinute:", endMinute)
+
+                                        if (hasValidSelection) {
+                                            // Use the DateTimePicker's built-in currentDateTime for start
+                                            const startDT = _combineDateTime(startDate, selectedHour, selectedMinute, selectedAMPM)
+                                            const endDT = _combineDateTime(endDate, endHour, endMinute, endAMPM)
+
+                                            console.log("Computed startDT:", startDT)
+                                            console.log("Computed endDT:", endDT)
+
+                                            if (!isNaN(startDT.getTime()) && !isNaN(endDT.getTime())) {
+                                                dateTimeRangeInput.startDateTime = startDT
+                                                dateTimeRangeInput.endDateTime = endDT
+
+                                                dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Live Preview: ")) +
+                                                                           Qt.formatDateTime(startDT, "dd/MM/yyyy hh:mm") + " - " +
+                                                                           Qt.formatDateTime(endDT, "dd/MM/yyyy hh:mm")
+                                            }
+                                        } else {
+                                            // Show partial selection feedback
+                                            if (!isNaN(startDate.getTime()) && isNaN(endDate.getTime())) {
+                                                dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Start date selected, choose end date..."))
+                                            } else {
+                                                dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Select date range and time..."))
+                                            }
+                                        }
+                                    }
+
+                                    // Final confirmation when Apply is clicked
+                                    onRangeApplied: function(startDateTime, endDateTime) {
+                                        dateTimeRangeInput.startDateTime = startDateTime
+                                        dateTimeRangeInput.endDateTime = endDateTime
+                                        dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Applied Range: ")) +
+                                                                   Qt.formatDateTime(startDateTime, "dd/MM/yyyy hh:mm") + " - " +
+                                                                   Qt.formatDateTime(endDateTime, "dd/MM/yyyy hh:mm")
+                                        dateTimeRangePopup.close()
+                                    }
+
+                                    // When user clears selection
+                                    onSelectionCleared: {
+                                        dateTimeRangeInput.startDateTime = new Date(NaN)
+                                        dateTimeRangeInput.endDateTime = new Date(NaN)
+                                        dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Range selection cleared"))
+                                    }
+                                }
+                            }
+                            onClosed: dateTimeRangeInput.focused = false
+                        }
+                    }
+
+                    ResultText {
+                        id: dateTimeRangeResult
+                        result: (TranslationManager.revision, qsTr("No datetime range selected"))
+                    }
+                }
 
             // Test Controls
             ColumnLayout {
