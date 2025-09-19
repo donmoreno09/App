@@ -27,6 +27,8 @@ Rectangle {
     property date startDate: new Date(NaN)
     property date endDate: new Date(NaN)
 
+    property bool standalone: true  // Set to false when used inside containers
+
     // Constraints
     property date minimumDate: new Date(1900, 0, 1)
     property date maximumDate: new Date(2100, 11, 31)
@@ -120,17 +122,18 @@ Rectangle {
         // Action buttons - this is needed when using the time picker as a lone-component,
         // But when Date Picker and Time Picker are used in a single container
         // This should be commented out
-        // UI.DatePickerActions {
-        //     Layout.fillWidth: true
-        //     Layout.topMargin: Theme.spacing.s4
+        UI.DatePickerActions {
+            visible: standalone
+            Layout.fillWidth: true
+            Layout.topMargin: Theme.spacing.s4
 
-        //     mode: root.mode
-        //     canClear: root._canClear()
-        //     canApply: root._canApply()
+            mode: root.mode
+            canClear: root._canClear()
+            canApply: root._canApply()
 
-        //     onClearClicked: root._clearSelection()
-        //     onApplyClicked: root._applySelection()
-        // }
+            onClearClicked: root._clearSelection()
+            onApplyClicked: root._applySelection()
+        }
     }
 
     // Private functions - keep minimal, delegate complex logic to child components

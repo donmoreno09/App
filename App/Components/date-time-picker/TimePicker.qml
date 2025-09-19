@@ -7,7 +7,12 @@ import App.Components 1.0 as UI
 
 /*!
     \qmltype TimePicker
-    \brief Optimized TimePicker with exact dimensions and proper arrow controls
+    \brief Flexible TimePicker that adapts to container size
+
+    FIXED: Made height flexible for use in different contexts:
+    - Standalone: uses preferred 110px height
+    - In containers: adapts to available space
+    - Maintains 120px time selection area as per Figma when used in DateTimePicker
 */
 
 Rectangle {
@@ -19,18 +24,19 @@ Rectangle {
     property int selectedMinute: 0
     property bool selectedAMPM: true // true = AM, false = PM
 
+    property bool standalone: true  // Set to false when used inside containers
+
     // Signals
     signal timeSelected(int hour, int minute, bool isAM)
 
-    // Exact dimensions from design
-    width: 280
-    height: 110
+    width: standalone ? 280 : parent.width
+    height: standalone ? 110 : parent.height
     color: Theme.colors.primary800
-    border.color: Theme.colors.secondary500
-    border.width: Theme.borders.b1
-    radius: Theme.radius.md
+    border.color: standalone ? Theme.colors.secondary500 : Theme.colors.transparent
+    border.width: standalone ? Theme.borders.b1 : Theme.borders.b0
+    radius: standalone ? Theme.radius.md : 0
 
-    // Time column component
+    // Time column component - made more compact
     component TimeColumn: ColumnLayout {
         property string label: ""
         property string displayValue: ""
@@ -39,13 +45,14 @@ Rectangle {
         signal downClicked()
 
         Layout.preferredWidth: 40
-        Layout.preferredHeight: 110
+        Layout.fillHeight: true  // CHANGED: flexible height
         spacing: 0
 
-        // Up arrow
+        // Up arrow - flexible size
         UI.Button {
             Layout.preferredWidth: 40
-            Layout.preferredHeight: 40
+            Layout.fillHeight: true  // CHANGED: flexible height
+            Layout.minimumHeight: 30  // Minimum for usability
             variant: "ghost"
             display: AbstractButton.IconOnly
 
@@ -57,11 +64,12 @@ Rectangle {
             onClicked: upClicked()
         }
 
-        // Display value
+        // Display value - flexible size
         Rectangle {
             Layout.preferredWidth: 40
-            Layout.preferredHeight: 40
-            color: Qt.darker(Theme.colors.grey500, 1.5)
+            Layout.fillHeight: true  // CHANGED: flexible height
+            Layout.minimumHeight: 30  // Minimum for readability
+            color: Theme.colors.transparent
             radius: Theme.radius.sm
 
             Text {
@@ -74,10 +82,11 @@ Rectangle {
             }
         }
 
-        // Down arrow
+        // Down arrow - flexible size
         UI.Button {
             Layout.preferredWidth: 40
-            Layout.preferredHeight: 40
+            Layout.fillHeight: true  // CHANGED: flexible height
+            Layout.minimumHeight: 30  // Minimum for usability
             variant: "ghost"
             display: AbstractButton.IconOnly
 
@@ -105,15 +114,13 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: Theme.spacing.s4
-        spacing: Theme.spacing.s3
+        anchors.margins: standalone ? Theme.spacing.s4 : 0  // No margins when embedded
+        spacing: standalone ? Theme.spacing.s3 : 0  // No extra spacing when embedded
 
-        // Time selection area
+        // Time selection area - flexible height
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredWidth: 280
-            Layout.preferredHeight: 168
             color: Theme.colors.transparent
 
             RowLayout {
@@ -156,25 +163,22 @@ Rectangle {
             }
         }
 
-        // Action buttons - this is needed when using the time picker as a lone-component,
-        // But when Date Picker and Time Picker are used in a single container
-        // This should be commented out
-
-        // UI.DatePickerActions {
-        //     Layout.fillWidth: true
-        //     mode: "single"
-        //     canClear: true
-        //     canApply: true
-        //     onClearClicked: root._clearSelection()
-        //     onApplyClicked: root._applySelection()
-        // }
+        UI.DatePickerActions {
+            visible: standalone
+            Layout.fillWidth: true
+            mode: "single"
+            canClear: true
+            canApply: true
+            onClearClicked: root._clearSelection()
+            onApplyClicked: root._applySelection()
+        }
     }
 
     Component.onCompleted: {
         setCurrentTime()
     }
 
-    // Helper functions - grouped by functionality
+    // Helper functions - unchanged
     function _incrementHour() {
         selectedHour = is24Hour ? (selectedHour + 1) % 24 :
                      selectedHour >= 12 ? 1 : selectedHour + 1

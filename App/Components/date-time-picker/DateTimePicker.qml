@@ -7,14 +7,12 @@ import App.Components 1.0 as UI
 
 /*!
     \qmltype DateTimePicker
-    \brief Optimized combined date and time picker with robust time picker integration
+    \brief Optimized DateTimePicker with strict 540px height adherence
 
-    Features:
-    - Single/range date selection with immediate validation
-    - 24H/12H time support with proper defaults
-    - Clean signal architecture with both intermediate and final events
-    - Robust time picker integration that handles missing signals
-    - Independent time pickers for range mode
+    FIXED: Range mode layout optimized to fit within 540px total height
+    - Removed label spacing overhead
+    - Compressed time picker containers
+    - Maintains 120px time picker area as per Figma
 */
 
 Rectangle {
@@ -77,7 +75,6 @@ Rectangle {
         return wrappedHour24 < 12
     }
 
-    // Styling
     width: 312
     height: 540
     color: Theme.colors.primary800
@@ -88,13 +85,13 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: Theme.spacing.s4
-        spacing: Theme.spacing.s4
+        spacing: Theme.spacing.s1
 
-        // Date picker
         UI.DatePicker {
             id: datePicker
             Layout.fillWidth: true
-            Layout.preferredHeight:  276
+            Layout.preferredHeight: 276
+            standalone: false
             mode: root.mode
 
             selectedDate: root.selectedDate
@@ -122,148 +119,165 @@ Rectangle {
             color: Theme.colors.grey400
         }
 
-        // Time picker for single mode
-        UI.TimePicker {
-            id: timePicker
+        Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 120
-            visible: root.mode === "single"
+            color: Theme.colors.transparent
 
-            is24Hour: root.is24Hour
+            // Single mode time picker
+            UI.TimePicker {
+                id: timePicker
+                standalone: false
+                anchors.fill: parent
+                visible: root.mode === "single"
+                is24Hour: root.is24Hour
 
-            Component.onCompleted: {
-                selectedHour = root.selectedHour
-                selectedMinute = root.selectedMinute
-                selectedAMPM = root.selectedAMPM
-            }
-
-            onTimeSelected: (hour, minute, isAM) => {
-                root.selectedHour = hour
-                root.selectedMinute = minute
-                root.selectedAMPM = isAM
-                root.selectionChanged()
-            }
-
-            // Monitor property changes directly
-            onSelectedHourChanged: {
-                root.selectedHour = selectedHour
-                root.selectionChanged()
-            }
-            onSelectedMinuteChanged: {
-                root.selectedMinute = selectedMinute
-                root.selectionChanged()
-            }
-            onSelectedAMPMChanged: {
-                root.selectedAMPM = selectedAMPM
-                root.selectionChanged()
-            }
-        }
-
-        // Two independent TimePickers for range mode with polling fallback
-        RowLayout {
-            visible: root.mode === "range"
-            Layout.fillWidth: true
-            Layout.preferredHeight: 110
-            spacing: Theme.spacing.s3
-
-            // Start Time Picker Container
-            ColumnLayout {
-                Layout.fillWidth: true
-
-                Text {
-                    text: qsTr("Start Time")
-                    font.family: Theme.typography.familySans
-                    font.pixelSize: Theme.typography.fontSize125
-                    font.weight: Theme.typography.weightMedium
-                    color: Theme.colors.textMuted
-                    Layout.alignment: Qt.AlignHCenter
+                Component.onCompleted: {
+                    selectedHour = root.selectedHour
+                    selectedMinute = root.selectedMinute
+                    selectedAMPM = root.selectedAMPM
                 }
 
-                UI.TimePicker {
-                    id: startTimePicker
+                onTimeSelected: (hour, minute, isAM) => {
+                    root.selectedHour = hour
+                    root.selectedMinute = minute
+                    root.selectedAMPM = isAM
+                    root.selectionChanged()
+                }
+
+                onSelectedHourChanged: {
+                    root.selectedHour = selectedHour
+                    root.selectionChanged()
+                }
+                onSelectedMinuteChanged: {
+                    root.selectedMinute = selectedMinute
+                    root.selectionChanged()
+                }
+                onSelectedAMPMChanged: {
+                    root.selectedAMPM = selectedAMPM
+                    root.selectionChanged()
+                }
+            }
+
+            RowLayout {
+                anchors.fill: parent
+                visible: root.mode === "range"
+                spacing: Theme.spacing.s2
+
+                Rectangle {
                     Layout.fillWidth: true
-                    is24Hour: root.is24Hour
+                    Layout.fillHeight: true
+                    color: Theme.colors.transparent
 
-                    Component.onCompleted: {
-                        selectedHour = root.selectedHour
-                        selectedMinute = root.selectedMinute
-                        selectedAMPM = root.selectedAMPM
-                    }
+                    ColumnLayout {
+                        anchors.fill: parent
+                        spacing: 2
 
-                    onTimeSelected: (hour, minute, isAM) => {
-                        root.selectedHour = hour
-                        root.selectedMinute = minute
-                        root.selectedAMPM = isAM
-                        root.selectionChanged()
-                    }
+                        Text {
+                            text: qsTr("Start")
+                            font.family: Theme.typography.familySans
+                            font.pixelSize: Theme.typography.fontSize100
+                            font.weight: Theme.typography.weightMedium
+                            color: Theme.colors.textMuted
+                            Layout.alignment: Qt.AlignHCenter
+                        }
 
-                    // Monitor property changes directly
-                    onSelectedHourChanged: {
-                        root.selectedHour = selectedHour
-                        root.selectionChanged()
-                    }
-                    onSelectedMinuteChanged: {
-                        root.selectedMinute = selectedMinute
-                        root.selectionChanged()
-                    }
-                    onSelectedAMPMChanged: {
-                        root.selectedAMPM = selectedAMPM
-                        root.selectionChanged()
+                        // Time picker fits in remaining space
+                        UI.TimePicker {
+                            id: startTimePicker
+                            standalone: false
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            is24Hour: root.is24Hour
+
+                            Component.onCompleted: {
+                                selectedHour = root.selectedHour
+                                selectedMinute = root.selectedMinute
+                                selectedAMPM = root.selectedAMPM
+                            }
+
+                            onTimeSelected: (hour, minute, isAM) => {
+                                root.selectedHour = hour
+                                root.selectedMinute = minute
+                                root.selectedAMPM = isAM
+                                root.selectionChanged()
+                            }
+
+                            onSelectedHourChanged: {
+                                root.selectedHour = selectedHour
+                                root.selectionChanged()
+                            }
+                            onSelectedMinuteChanged: {
+                                root.selectedMinute = selectedMinute
+                                root.selectionChanged()
+                            }
+                            onSelectedAMPMChanged: {
+                                root.selectedAMPM = selectedAMPM
+                                root.selectionChanged()
+                            }
+                        }
                     }
                 }
-            }
 
-            // Visual separator
-            Rectangle {
-                Layout.preferredWidth: 2
-                Layout.preferredHeight: Theme.spacing.s12
-                color: Theme.colors.secondary500
-                radius: 1
-            }
-
-            // End Time Picker Container with polling fallback
-            ColumnLayout {
-                Layout.fillWidth: true
-
-                Text {
-                    text: qsTr("End Time")
-                    font.family: Theme.typography.familySans
-                    font.pixelSize: Theme.typography.fontSize125
-                    font.weight: Theme.typography.weightMedium
-                    color: Theme.colors.textMuted
-                    Layout.alignment: Qt.AlignHCenter
+                // Minimal visual separator
+                Rectangle {
+                    Layout.preferredWidth: 1
+                    Layout.preferredHeight: Theme.spacing.s10
+                    color: Theme.colors.secondary500
+                    radius: 1
                 }
 
-                UI.TimePicker {
-                    id: endTimePicker
+                Rectangle {
                     Layout.fillWidth: true
-                    is24Hour: root.is24Hour
+                    Layout.fillHeight: true
+                    color: Theme.colors.transparent
 
-                    Component.onCompleted: {
-                        selectedHour = root.endHour
-                        selectedMinute = root.endMinute
-                        selectedAMPM = root.endAMPM
-                    }
+                    ColumnLayout {
+                        anchors.fill: parent
+                        spacing: 2
 
-                    onTimeSelected: (hour, minute, isAM) => {
-                        root.endHour = hour
-                        root.endMinute = minute
-                        root.endAMPM = isAM
-                        root.selectionChanged()
-                    }
+                        Text {
+                            text: qsTr("End")
+                            font.family: Theme.typography.familySans
+                            font.pixelSize: Theme.typography.fontSize100
+                            font.weight: Theme.typography.weightMedium
+                            color: Theme.colors.textMuted
+                            Layout.alignment: Qt.AlignHCenter
+                        }
 
-                    // Monitor property changes directly
-                    onSelectedHourChanged: {
-                        root.endHour = selectedHour
-                        root.selectionChanged()
-                    }
-                    onSelectedMinuteChanged: {
-                        root.endMinute = selectedMinute
-                        root.selectionChanged()
-                    }
-                    onSelectedAMPMChanged: {
-                        root.endAMPM = selectedAMPM
-                        root.selectionChanged()
+                        UI.TimePicker {
+                            id: endTimePicker
+                            standalone: false
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            is24Hour: root.is24Hour
+
+                            Component.onCompleted: {
+                                selectedHour = root.endHour
+                                selectedMinute = root.endMinute
+                                selectedAMPM = root.endAMPM
+                            }
+
+                            onTimeSelected: (hour, minute, isAM) => {
+                                root.endHour = hour
+                                root.endMinute = minute
+                                root.endAMPM = isAM
+                                root.selectionChanged()
+                            }
+
+                            onSelectedHourChanged: {
+                                root.endHour = selectedHour
+                                root.selectionChanged()
+                            }
+                            onSelectedMinuteChanged: {
+                                root.endMinute = selectedMinute
+                                root.selectionChanged()
+                            }
+                            onSelectedAMPMChanged: {
+                                root.endAMPM = selectedAMPM
+                                root.selectionChanged()
+                            }
+                        }
                     }
                 }
             }
@@ -281,18 +295,16 @@ Rectangle {
         }
     }
 
-    // Public API methods
+    // Public API methods - unchanged
     function clearSelection() {
         selectedDate = new Date(NaN)
         startDate = new Date(NaN)
         endDate = new Date(NaN)
 
-        // Reset start time to current time
         selectedHour = _currentHour
         selectedMinute = _currentMinute
         selectedAMPM = _currentAMPM
 
-        // Reset end time to next hour (different from start)
         endHour = _nextHour
         endMinute = _currentMinute
         endAMPM = _nextAMPM
@@ -332,7 +344,7 @@ Rectangle {
         selectionChanged()
     }
 
-    // Private helpers - clean and focused
+    // Private helpers - unchanged
     function _combineDateTime(date, hour, minute, isAM) {
         if (_isEmpty(date)) return new Date(NaN)
 
