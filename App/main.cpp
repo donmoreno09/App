@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QDir>
 #include <App/Logger/app_logger.h>
+#include <App/Features/Map/PluginProbe.h>
 #include <QFontDatabase>
 #include <QDebug>
 
@@ -48,6 +49,13 @@ int main(int argc, char *argv[])
 
     engine.addImportPath("qrc:/"); // For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
     engine.loadFromModule("App", "Main");
+
+    // Uncomment the block below to list available map plugins to use
+    // const auto& plugins = probeGeoPlugins();
+    // qDebug() << "Listing available map plugins:";
+    // for (const auto& plugin : plugins) {
+    //     qDebug() << plugin.name;
+    // }
 
     return app.exec();
 }

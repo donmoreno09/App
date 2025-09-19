@@ -169,7 +169,7 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../App/Main.qml" line="24"/>
+        <location filename="../App/Main.qml" line="26"/>
         <source>IRIDESS FE</source>
         <translation>IRIDESS FE</translation>
     </message>
@@ -183,84 +183,102 @@
     </message>
 </context>
 <context>
+    <name>MapTilesetsPanel</name>
+    <message>
+        <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="11"/>
+        <source>Map Tilesets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="24"/>
+        <source>OSM (Online)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="33"/>
+        <source>OSM (Default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MissionOverview</name>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="16"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="17"/>
         <source>Mission Name (*)</source>
         <translation>Mission Name (*)</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="17"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="18"/>
         <source>Enter mission name</source>
         <translation>Enter mission name</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="19"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="20"/>
         <source>Mission Domain</source>
         <translation>Mission Domain</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="20"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="21"/>
         <source>Select Domain</source>
         <translation>Select Domain</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="20"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="21"/>
         <source>Land</source>
         <translation>Land</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="20"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="21"/>
         <source>Sea</source>
         <translation>Sea</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="20"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="21"/>
         <source>Air</source>
         <translation>Air</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="20"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="21"/>
         <source>Space</source>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="22"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="23"/>
         <source>Mission Type</source>
         <translation>Mission Type</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="23"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="24"/>
         <source>Select Type</source>
         <translation>Select Type</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="23"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="24"/>
         <source>Recon</source>
         <translation>Recon</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="23"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="24"/>
         <source>Surveillance</source>
         <translation>Surveillance</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="23"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="24"/>
         <source>Search &amp; Rescue</source>
         <translation>Search &amp; Rescue</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="23"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="24"/>
         <source>Combat</source>
         <translation>Combat</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="23"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="24"/>
         <source>Transport</source>
         <translation>Transport</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="25"/>
+        <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="26"/>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
@@ -307,57 +325,57 @@
 <context>
     <name>OperationalArea</name>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="26"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="27"/>
         <source>Area Type</source>
         <translation>Area Type</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="37"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="39"/>
         <source>Ellipse</source>
         <translation>Ellipse</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="38"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="40"/>
         <source>Rectangle</source>
         <translation>Rectangle</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="39"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="41"/>
         <source>Sector</source>
         <translation>Sector</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="40"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="42"/>
         <source>Polygon</source>
         <translation>Polygon</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="41"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="43"/>
         <source>Arc</source>
         <translation>Arc</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="90"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="94"/>
         <source>Area Details</source>
         <translation>Area Details</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="106"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="111"/>
         <source>Latitude</source>
         <translation>Latitude</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="128"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="133"/>
         <source>Longitude</source>
         <translation>Longitude</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="150"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="155"/>
         <source>Radius (m)</source>
         <translation>Radius (m)</translation>
     </message>
     <message>
-        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="172"/>
+        <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="177"/>
         <source>Rotation (°)</source>
         <translation>Rotation (°)</translation>
     </message>
@@ -380,7 +398,7 @@
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="69"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="57"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
@@ -424,7 +442,7 @@
         <translation type="obsolete">Languages</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBar.qml" line="53"/>
+        <location filename="../App/Features/TitleBar/TitleBar.qml" line="57"/>
         <source>Search here...</source>
         <translation>Search here...</translation>
     </message>
@@ -455,6 +473,11 @@
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="24"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="25"/>
+        <source>Map Tilesets</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
