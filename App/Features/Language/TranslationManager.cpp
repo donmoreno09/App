@@ -6,7 +6,7 @@ TranslationManager::TranslationManager(QObject *parent)
     : QObject(parent)
     , m_retranslateTimer(new QTimer(this))
 {
-    qDebug() << "TranslationManager: Initializing...";
+    // qDebug() << "TranslationManager: Initializing...";
 
     // Connect to your existing LanguageController
     connect(LanguageController::instance(), &LanguageController::languageChanged,
