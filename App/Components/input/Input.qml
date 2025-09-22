@@ -66,6 +66,11 @@ Item {
             Label {
                 id: label
                 color: input.enabled ? _style.textColor : _style.textColorDisabled
+                font {
+                    family: Theme.typography.bodySans25Family
+                    pointSize: Theme.typography.bodySans25Size
+                    weight: Theme.typography.bodySans25Weight
+                }
             }
 
             InfoBadge {
@@ -100,6 +105,12 @@ Item {
                     color: input.enabled ? _style.textColor : _style.textColorDisabled
                     placeholderTextColor: input.enabled ? _style.placeholderTextColor : _style.placeholderTextColorDisabled
                     background: Rectangle { color: Theme.colors.transparent }
+
+                    font {
+                        family: Theme.typography.bodySans25Family
+                        pointSize: Theme.typography.bodySans25Size
+                        weight: Theme.typography.bodySans25Weight
+                    }
 
                     Accessible.name: placeholderText
                     Accessible.role: Accessible.EditableText
@@ -158,6 +169,12 @@ Item {
             Text {
                 id: messageText
                 color:  _style.borderColor
+
+                font {
+                    family: Theme.typography.bodySans25Family
+                    pointSize: Theme.typography.bodySans25Size
+                    weight: Theme.typography.bodySans25Weight
+                }
             }
         }
     }
