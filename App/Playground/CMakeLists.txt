@@ -5,6 +5,7 @@ set(qml_files
     DateTimeTest.qml
     WizardPageTest.qml
     FontTest.qml
+    TogglePanel.qml
 )
 
 qt_add_qml_module(app_playground
