@@ -15,7 +15,6 @@ PanelTemplate {
 
         ColumnLayout {
             width: parent.width
-            anchors.margins: Theme.spacing.s6
             spacing: Theme.spacing.s8
 
             // Header

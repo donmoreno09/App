@@ -99,7 +99,7 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
-                source: "qrc:/App/assets/icons/calendar.svg"
+                source: "qrc:/App/assets/icons/toggle-icon.svg"
                 text: (TranslationManager.revision, qsTr("Toggle Test"))
                 active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
 
