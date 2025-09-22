@@ -42,7 +42,9 @@ set_source_files_properties(
 qt_add_qml_module(app_components
     URI App.Components
     VERSION 1.0
-    QML_FILES ${qml_files}
+    QML_FILES
+        ${qml_files}
+        ${qml_singletons}
     RESOURCE_PREFIX "/"
     RESOURCES ${icon_resources}
 )

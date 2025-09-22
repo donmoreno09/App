@@ -176,13 +176,6 @@ PanelTemplate {
                         checked: false
                     }
 
-                    // Both labels (like Figma shows)
-                    UI.Toggle {
-                        leftLabel: (TranslationManager.revision, qsTr("Label"))
-                        rightLabel: (TranslationManager.revision, qsTr("Label"))
-                        checked: true
-                    }
-
                     // Settings style labels
                     UI.Toggle {
                         leftLabel: (TranslationManager.revision, qsTr("Dark mode"))
