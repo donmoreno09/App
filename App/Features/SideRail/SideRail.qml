@@ -97,6 +97,17 @@ UI.GlobalBackgroundConsumer {
                     SidePanelController.toggle("datetime-test")
                 }
             }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/calendar.svg"
+                text: (TranslationManager.revision, qsTr("Toggle Test"))
+                active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Toggle Test")
+                    SidePanelController.toggle("toggle-test")
+                }
+            }
         }
 
         UI.VerticalSpacer { }

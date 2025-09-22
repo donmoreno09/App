@@ -26,6 +26,17 @@ set(qml_files
     wizard-page/constants/StepDefinitions.qml
     wizard-page/test-pages/MissionOverview.qml
     wizard-page/test-pages/OperationalArea.qml
+    toggle/ToggleStyle.qml
+    toggle/Toggle.qml
+)
+
+set(qml_singletons
+    toggle/ToggleStyles.qml
+)
+
+set_source_files_properties(
+    ${qml_singletons}
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE
 )
 
 qt_add_qml_module(app_components
