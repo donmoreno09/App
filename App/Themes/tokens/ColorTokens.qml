@@ -29,15 +29,31 @@ QtObject {
 
     // Surfaces
     readonly property color transparent: "transparent"
-    readonly property color background: primary900 // App base layer; behind all content
-    readonly property color surface: primary800    // Elevated containers (cards, panels, sheets)
-    readonly property color overlay: grey500       // Transparent/dim layer above background/surface
+    readonly property color background: white500 // App base layer; behind all content
+    readonly property color surface: white600    // Elevated containers (cards, panels, sheets)
+    readonly property color overlay: grey500     // Transparent/dim layer above background/surface
     readonly property color glass: blackA10
     readonly property color glassWhite: whiteA10
 
+    // Color Defaults
+    readonly property color black: black500
+    readonly property color white: white500
+    readonly property color grey: grey500
+    readonly property color primary: primary500
+    readonly property color secondary: secondary500
+    readonly property color accent: accent500
+    readonly property color success: success500
+    readonly property color error: error500
+    readonly property color warning: warning500
+    readonly property color caution: caution500
+
+    // Semantics
+    readonly property color input: grey25 // this is for bg
+    readonly property color placeholder: blackA60
+
     // Text
-    readonly property color text: white500
-    readonly property color textMuted: grey300
+    readonly property color text: black500
+    readonly property color textMuted: grey200
 
     // Borders
     readonly property color border: secondary500
@@ -57,6 +73,7 @@ QtObject {
 
     // White
     readonly property color white500: "#FFFFFF"
+    readonly property color white600: "#F5F5F5"
     readonly property color whiteA80: hexWithAlpha(white500, 0.8)
     readonly property color whiteA60: hexWithAlpha(white500, 0.6)
     readonly property color whiteA40: hexWithAlpha(white500, 0.4)
