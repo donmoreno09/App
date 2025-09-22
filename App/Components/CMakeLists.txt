@@ -13,6 +13,8 @@ set(qml_files
     VerticalPadding.qml
     HorizontalSpacer.qml
     VerticalSpacer.qml
+    input/Input.qml
+    input/InputStyle.qml
     date-time-picker/DatePicker.qml
     date-time-picker/DatePickerHeader.qml
     date-time-picker/DatePickerYearView.qml
@@ -32,6 +34,15 @@ set(qml_files
 
 set(qml_singletons
     toggle/ToggleStyles.qml
+)
+
+set_source_files_properties(
+    ${qml_singletons}
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE
+)
+
+set(qml_singletons
+    input/InputStyles.qml
 )
 
 set_source_files_properties(

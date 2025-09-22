@@ -29,13 +29,10 @@ Button {
     property string size: "md"
     property int radius: Theme.radius.md
 
-    readonly property bool focused: visualFocus && enabled
-
     readonly property string currentState: {
         if (!enabled) return "disabled"
         if (pressed) return "pressed"
         if (hovered) return "hovered"
-        if (focused) return "focused"
         if (active) return "active"
         return "normal"
     }
@@ -166,7 +163,7 @@ Button {
             ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
         }
 
-        OutlineRect { visible: focused }
+        OutlineRect { target: root }
     }
 
     padding: _sizeStyles.padding
