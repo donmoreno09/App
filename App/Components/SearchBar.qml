@@ -9,8 +9,6 @@ Rectangle {
 
     property alias textField: textField
 
-    readonly property bool visualFocus: textField.activeFocus && (textField.focusReason === Qt.TabFocusReason || textField.focusReason === Qt.BacktabFocusReason)
-
     radius: Theme.radius.sm
     color: Theme.colors.glassWhite
 
@@ -25,7 +23,7 @@ Rectangle {
         }
     }
 
-    OutlineRect { visible: visualFocus }
+    OutlineRect { target: textField }
 
     // Content
     RowLayout {

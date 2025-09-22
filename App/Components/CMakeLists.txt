@@ -13,6 +13,8 @@ set(qml_files
     VerticalPadding.qml
     HorizontalSpacer.qml
     VerticalSpacer.qml
+    input/Input.qml
+    input/InputStyle.qml
     date-time-picker/DatePicker.qml
     date-time-picker/DatePickerHeader.qml
     date-time-picker/DatePickerYearView.qml
@@ -28,10 +30,21 @@ set(qml_files
     wizard-page/test-pages/OperationalArea.qml
 )
 
+set(qml_singletons
+    input/InputStyles.qml
+)
+
+set_source_files_properties(
+    ${qml_singletons}
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE
+)
+
 qt_add_qml_module(app_components
     URI App.Components
     VERSION 1.0
-    QML_FILES ${qml_files}
+    QML_FILES
+        ${qml_files}
+        ${qml_singletons}
     RESOURCE_PREFIX "/"
     RESOURCES ${icon_resources}
 )
