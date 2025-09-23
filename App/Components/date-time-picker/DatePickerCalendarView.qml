@@ -5,15 +5,11 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-/*!
-    \qmltype DatePickerCalendarView
-*/
-
 ColumnLayout {
     id: root
 
     // Props
-    property string mode: "single" // "single", "range"
+    property string mode: "single"
     property int currentMonth: 0
     property int currentYear: 2025
 

@@ -5,16 +5,11 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-/*!
-    \qmltype DatePicker
-    \brief Clean, optimized DatePicker with micro-component architecture
-*/
-
 Rectangle {
     id: root
 
     // Public API
-    property string mode: "single" // "single", "range"
+    property string mode: "single"
 
     // Date properties
     property date selectedDate: new Date(NaN)
@@ -29,7 +24,7 @@ Rectangle {
     property var disabledDates: []
 
     // Internal state - navigation flow
-    property string _currentView: "calendar" // "year", "month", "calendar"
+    property string _currentView: "calendar"
     property int _currentMonth: _getInitialMonth()
     property int _currentYear: _getInitialYear()
     property date _rangeStartTemp: new Date(NaN)
@@ -118,9 +113,6 @@ Rectangle {
             }
         }
 
-        // Action buttons - this is needed when using the time picker as a lone-component,
-        // But when Date Picker and Time Picker are used in a single container
-        // This should be commented out
         UI.DatePickerActions {
             visible: standalone
             Layout.fillWidth: true
@@ -134,7 +126,7 @@ Rectangle {
         }
     }
 
-    // Private functions - keep minimal, delegate complex logic to child components
+    // Private functions
     function _getInitialMonth() {
         if (!_isEmpty(selectedDate)) return selectedDate.getMonth()
         return new Date().getMonth()
@@ -200,7 +192,6 @@ Rectangle {
             case "month":
                 _currentView = "year"
                 break
-            // Year view doesn't have higher level
         }
     }
 

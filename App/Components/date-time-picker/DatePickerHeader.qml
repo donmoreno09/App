@@ -5,11 +5,6 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-/*!
-    \qmltype DatePickerHeader
-    \brief Navigation header for DatePicker with view-aware title and navigation
-*/
-
 Item {
     id: root
 
@@ -81,7 +76,6 @@ Item {
                 }
             }
 
-            // Smooth hover effect
             Behavior on color {
                 ColorAnimation {
                     duration: 150

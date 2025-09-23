@@ -4,11 +4,6 @@ import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 
-/*!
-    \qmltype DatePickerMonthView
-    \brief Month selection grid for DatePicker
-*/
-
 GridView {
     id: root
 
@@ -24,16 +19,16 @@ GridView {
 
     model: 12
     cellWidth: Math.floor(width / 3)
-    cellHeight: 46
+    cellHeight: 36
 
     Repeater {
-        model: 4 // 4 rows of months
+        model: 4
         Rectangle {
             x: 0
-            y: index * (root.height / 4)
+            y: index * root.cellHeight
             width: root.width
-            height: (root.height / 4) - Theme.spacing.s2 // Add some spacing between rows
-            color: Qt.lighter(Theme.colors.primary800, 1.1) // Same as calendar
+            height: root.cellHeight- Theme.spacing.s2
+            color: Qt.lighter(Theme.colors.primary800, 1.1)
             radius: Theme.radius.sm
             z: -1
         }
@@ -43,8 +38,8 @@ GridView {
         width: GridView.view.cellWidth - Theme.spacing.s1
         height: GridView.view.cellHeight - Theme.spacing.s1
 
-        color: _isSelected ? Theme.colors.grey400 : // Light gray when selected (like "Apr" in your image)
-               _mouseArea.containsMouse ? Theme.colors.grey500 : // Slightly darker on hover
+        color: _isSelected ? Theme.colors.grey400 :
+               _mouseArea.containsMouse ? Theme.colors.grey500 :
                Theme.colors.transparent
         radius: Theme.radius.sm
 
@@ -70,7 +65,6 @@ GridView {
             }
         }
 
-        // Smooth color transitions
         Behavior on color {
             ColorAnimation {
                 duration: 150
