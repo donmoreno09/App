@@ -5,6 +5,21 @@ import "../tokens"
 
 BaseTheme {
     colors: ColorTokens {
+        // Surfaces
+        readonly property color background: primary900 // App base layer; behind all content
+        readonly property color surface: primary800    // Elevated containers (cards, panels, sheets)
+        readonly property color overlay: grey500       // Transparent/dim layer above background/surface
+        readonly property color glass: blackA10
+        readonly property color glassWhite: whiteA10
+
+        // Semantics
+        readonly property color input: whiteA5
+        readonly property color placeholder: whiteA60
+
+        // Text
+        readonly property color text: white500
+        readonly property color textMuted: whiteA60
+
         // Accent
         readonly property color accent700: "#2438D1"
         readonly property color accent600: "#2C4BE4"

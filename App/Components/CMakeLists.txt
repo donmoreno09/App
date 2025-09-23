@@ -16,6 +16,7 @@ set(qml_files
     input/Input.qml
     input/InputStyle.qml
     InputCoordinate.qml
+    TextArea.qml
     date-time-picker/DatePicker.qml
     date-time-picker/DatePickerHeader.qml
     date-time-picker/DatePickerYearView.qml
