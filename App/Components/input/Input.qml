@@ -13,6 +13,7 @@ Item {
     width: container.implicitWidth
     height: container.implicitHeight
 
+    // Public properties
     property alias enabled: textField.enabled
     property alias text: textField.text
     property alias labelText: label.text
@@ -22,6 +23,10 @@ Item {
 
     property string iconSource: ""
     property int variant: InputStyles.Default
+
+    property alias textField: textField
+
+    // Internals
     property InputStyle _style: InputStyles.fromVariant(variant)
 
     component InfoBadge: Button {
