@@ -32,17 +32,10 @@ set(qml_files
     toggle/Toggle.qml
 )
 
-set(qml_singletons
-    toggle/ToggleStyles.qml
-)
-
-set_source_files_properties(
-    ${qml_singletons}
-    PROPERTIES QT_QML_SINGLETON_TYPE TRUE
-)
 
 set(qml_singletons
     input/InputStyles.qml
+    toggle/ToggleStyles.qml
 )
 
 set_source_files_properties(
