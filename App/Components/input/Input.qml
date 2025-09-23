@@ -26,6 +26,9 @@ Item {
 
     property alias textField: textField
 
+    signal textEdited()
+    signal textEditingFinished()
+
     // Internals
     property InputStyle _style: InputStyles.fromVariant(variant)
 
@@ -119,6 +122,9 @@ Item {
 
                     Accessible.name: placeholderText
                     Accessible.role: Accessible.EditableText
+
+                    onTextEdited: input.textEdited()
+                    onEditingFinished: input.textEditingFinished()
                 }
 
                 Button {
