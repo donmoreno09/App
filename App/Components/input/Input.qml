@@ -13,6 +13,7 @@ Item {
     width: container.implicitWidth
     height: container.implicitHeight
 
+    // Public properties
     property alias enabled: textField.enabled
     property alias text: textField.text
     property alias labelText: label.text
@@ -22,6 +23,19 @@ Item {
 
     property string iconSource: ""
     property int variant: InputStyles.Default
+
+    property alias textField: textField
+
+    signal textEdited()
+    signal textEditingFinished()
+
+    // Forward other TextField's properties for convenience
+    property alias echoMode: textField.echoMode
+    property alias inputMask: textField.inputMaskde
+    property alias maximumLength: textField.maximumLength
+    property alias validator: textField.validator
+
+    // Internals
     property InputStyle _style: InputStyles.fromVariant(variant)
 
     component InfoBadge: Button {
@@ -114,6 +128,9 @@ Item {
 
                     Accessible.name: placeholderText
                     Accessible.role: Accessible.EditableText
+
+                    onTextEdited: input.textEdited()
+                    onEditingFinished: input.textEditingFinished()
                 }
 
                 Button {

@@ -5,25 +5,29 @@ set(qml_files
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml
-    VerticalDivider.qml
+    HorizontalPadding.qml
+    HorizontalSpacer.qml
+    InputCoordinate.qml
     OutlineRect.qml
     SearchBar.qml
     Title.qml
-    HorizontalPadding.qml
+    VerticalDivider.qml
     VerticalPadding.qml
-    HorizontalSpacer.qml
     VerticalSpacer.qml
-    input/Input.qml
-    input/InputStyle.qml
+
     date-time-picker/DatePicker.qml
-    date-time-picker/DatePickerHeader.qml
-    date-time-picker/DatePickerYearView.qml
-    date-time-picker/DatePickerMonthView.qml
+    date-time-picker/DatePickerActions.qml
     date-time-picker/DatePickerCalendarView.qml
     date-time-picker/DatePickerDay.qml
-    date-time-picker/DatePickerActions.qml
-    date-time-picker/TimePicker.qml
+    date-time-picker/DatePickerHeader.qml
+    date-time-picker/DatePickerMonthView.qml
+    date-time-picker/DatePickerYearView.qml
     date-time-picker/DateTimePicker.qml
+    date-time-picker/TimePicker.qml
+
+    input/Input.qml
+    input/InputStyle.qml
+
     wizard-page/WizardPage.qml
     wizard-page/constants/StepDefinitions.qml
     wizard-page/test-pages/MissionOverview.qml
