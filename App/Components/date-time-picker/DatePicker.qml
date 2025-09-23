@@ -28,27 +28,27 @@ Rectangle {
     property date maximumDate: new Date(2100, 11, 31)
     property var disabledDates: []
 
+    // Internal state - navigation flow
+    property string _currentView: "calendar" // "year", "month", "calendar"
+    property int _currentMonth: _getInitialMonth()
+    property int _currentYear: _getInitialYear()
+    property date _rangeStartTemp: new Date(NaN)
+
+    readonly property alias currentView: root._currentView
+
     // Signals
     signal dateSelected(date date)
     signal rangeSelected(date startDate, date endDate)
 
     Layout.minimumWidth: 312
     Layout.preferredWidth: 312
-    Layout.minimumHeight: 296
-    Layout.preferredHeight: 296
-    Layout.maximumWidth: 400
-    Layout.maximumHeight: 350
+    Layout.minimumHeight: 404
+    Layout.preferredHeight: 404
 
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
     border.width: Theme.borders.b1
     radius: Theme.radius.md
-
-    // Internal state - navigation flow
-    property string _currentView: "calendar" // "year", "month", "calendar"
-    property int _currentMonth: _getInitialMonth()
-    property int _currentYear: _getInitialYear()
-    property date _rangeStartTemp: new Date(NaN)
 
     ColumnLayout {
         anchors.fill: parent

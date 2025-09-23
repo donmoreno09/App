@@ -18,7 +18,7 @@ GridView {
     signal monthSelected(int month)
 
     Layout.preferredWidth: 280
-    Layout.preferredHeight: 184
+    Layout.preferredHeight: 176
     Layout.minimumWidth: 240
     Layout.minimumHeight: 144
 

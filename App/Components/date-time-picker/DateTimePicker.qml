@@ -69,8 +69,9 @@ Rectangle {
         return wrappedHour24 < 12
     }
 
-    width: 312
-    height: 540
+    Layout.preferredWidth: 312
+    Layout.preferredHeight: 540
+    Layout.minimumHeight: 540
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
     border.width: Theme.borders.b1

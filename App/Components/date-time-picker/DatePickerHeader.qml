@@ -25,8 +25,7 @@ Item {
 
     Layout.preferredWidth: 280
     Layout.preferredHeight: 40
-    Layout.minimumHeight: 32
-    Layout.maximumHeight: 48
+    Layout.minimumHeight: 40
 
     RowLayout {
         anchors.fill: parent

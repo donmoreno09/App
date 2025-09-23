@@ -24,8 +24,7 @@ RowLayout {
 
     Layout.preferredWidth: 280
     Layout.preferredHeight: 32
-    Layout.minimumHeight: 28
-    Layout.maximumHeight: 40
+    Layout.minimumHeight: 32
 
     spacing: Theme.spacing.s3
 

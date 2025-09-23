@@ -117,11 +117,19 @@ PanelTemplate {
     // Micro-component: Picker Popup
     component PickerPopup: Popup {
         property alias pickerContent: contentLoader.sourceComponent
+        property string currentView: "calendar"
 
         x: 0
         y: parent.height
         width: parent.width
-        height: 540
+        height: {
+            switch(currentView){
+            case "calendar": return 540
+            case "year": return 296
+            case "month": return 296
+            default: return 540
+            }
+        }
 
         modal: false
         focus: true
@@ -195,6 +203,7 @@ PanelTemplate {
                         id: singleDatePopup
                         pickerContent: Component {
                             UI.DatePicker {
+                                id: picker
                                 mode: "single"
                                 selectedDate: singleDateInput.selectedDate
 
@@ -203,6 +212,10 @@ PanelTemplate {
                                     singleDateResult.result = (TranslationManager.revision, qsTr("Single Date: ")) +
                                                             Qt.formatDate(date, "dd/MM/yyyy")
                                     singleDatePopup.close()
+                                }
+
+                                onCurrentViewChanged: {
+                                    singleDatePopup.currentView = currentView
                                 }
                             }
                         }
@@ -269,6 +282,10 @@ PanelTemplate {
                                                            Qt.formatDate(startDate, "dd/MM/yyyy") + " - " +
                                                            Qt.formatDate(endDate, "dd/MM/yyyy")
                                     dateRangePopup.close()
+                                }
+
+                                onCurrentViewChanged: {
+                                    dateRangePopup.currentView = currentView
                                 }
                             }
                         }
