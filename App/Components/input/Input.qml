@@ -29,6 +29,12 @@ Item {
     signal textEdited()
     signal textEditingFinished()
 
+    // Forward other TextField's properties for convenience
+    property alias echoMode: textField.echoMode
+    property alias inputMask: textField.inputMaskde
+    property alias maximumLength: textField.maximumLength
+    property alias validator: textField.validator
+
     // Internals
     property InputStyle _style: InputStyles.fromVariant(variant)
 
