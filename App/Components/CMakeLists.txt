@@ -28,10 +28,14 @@ set(qml_files
     wizard-page/constants/StepDefinitions.qml
     wizard-page/test-pages/MissionOverview.qml
     wizard-page/test-pages/OperationalArea.qml
+    toggle/ToggleStyle.qml
+    toggle/Toggle.qml
 )
+
 
 set(qml_singletons
     input/InputStyles.qml
+    toggle/ToggleStyles.qml
 )
 
 set_source_files_properties(
