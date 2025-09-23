@@ -22,6 +22,11 @@ RowLayout {
     signal clearClicked()
     signal applyClicked()
 
+    Layout.preferredWidth: 280
+    Layout.preferredHeight: 32
+    Layout.minimumHeight: 28
+    Layout.maximumHeight: 40
+
     spacing: Theme.spacing.s3
 
      Item { Layout.fillWidth: true }

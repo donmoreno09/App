@@ -1,5 +1,6 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
+import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 
@@ -19,10 +20,15 @@ GridView {
     // Signals
     signal yearSelected(int year)
 
+    Layout.preferredWidth: 280
+    Layout.preferredHeight: 184
+    Layout.minimumWidth: 240
+    Layout.minimumHeight: 144
+
     // Grid configuration
     model: _getYearRange()
-    cellWidth: width / 3
-    cellHeight: height / 4
+    cellWidth: Math.floor(width / 3)
+    cellHeight: 46
 
     // Row backgrounds (4 rows for 12 years)
     Repeater {

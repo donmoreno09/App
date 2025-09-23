@@ -23,6 +23,11 @@ Item {
     signal nextClicked()
     signal headerClicked()
 
+    Layout.preferredWidth: 280
+    Layout.preferredHeight: 40
+    Layout.minimumHeight: 32
+    Layout.maximumHeight: 48
+
     RowLayout {
         anchors.fill: parent
         spacing: Theme.spacing.s3

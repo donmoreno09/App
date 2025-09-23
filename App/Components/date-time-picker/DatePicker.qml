@@ -32,9 +32,13 @@ Rectangle {
     signal dateSelected(date date)
     signal rangeSelected(date startDate, date endDate)
 
-    // Fixed dimensions from design
-    width: 312
-    height: 404
+    Layout.minimumWidth: 312
+    Layout.preferredWidth: 312
+    Layout.minimumHeight: 296
+    Layout.preferredHeight: 296
+    Layout.maximumWidth: 400
+    Layout.maximumHeight: 350
+
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
     border.width: Theme.borders.b1
@@ -49,12 +53,11 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: Theme.spacing.s4
-        spacing: Theme.spacing.s3
+        spacing: Theme.spacing.s2
 
         // Header with navigation
         UI.DatePickerHeader {
             Layout.fillWidth: true
-            Layout.preferredHeight: Theme.spacing.s10
 
             currentView: root._currentView
             currentMonth: root._currentMonth
@@ -96,6 +99,8 @@ Rectangle {
 
             // Calendar view
             UI.DatePickerCalendarView {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 mode: root.mode
                 currentMonth: root._currentMonth
                 currentYear: root._currentYear
@@ -119,7 +124,6 @@ Rectangle {
         UI.DatePickerActions {
             visible: standalone
             Layout.fillWidth: true
-            Layout.topMargin: Theme.spacing.s4
 
             mode: root.mode
             canClear: root._canClear()
@@ -202,11 +206,8 @@ Rectangle {
 
     function _handleDateClick(date) {
         if (mode === "single") {
-            console.log("DatePicker: Setting selectedDate to:", date)
-                    selectedDate = date
-                    console.log("DatePicker: selectedDate is now:", selectedDate)
-                    console.log("DatePicker: About to emit dateSelected signal")
-                    dateSelected(selectedDate)  // This should fire the signal
+                selectedDate = date
+                dateSelected(selectedDate)
         } else if (mode === "range") {
             if (_isEmpty(_rangeStartTemp)) {
                 _rangeStartTemp = date

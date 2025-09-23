@@ -1,5 +1,6 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
+import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 
@@ -11,17 +12,19 @@ import App.Themes 1.0
 GridView {
     id: root
 
-    // Props
     property int currentMonth: new Date().getMonth()
     property int currentYear: new Date().getFullYear()
 
-    // Signals
     signal monthSelected(int month)
 
-    // Grid configuration
+    Layout.preferredWidth: 280
+    Layout.preferredHeight: 184
+    Layout.minimumWidth: 240
+    Layout.minimumHeight: 144
+
     model: 12
-    cellWidth: width / 3
-    cellHeight: height / 4
+    cellWidth: Math.floor(width / 3)
+    cellHeight: 46
 
     Repeater {
         model: 4 // 4 rows of months
