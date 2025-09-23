@@ -5,15 +5,12 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-/*!
-    \qmltype DateTimePicker
-*/
 
 Rectangle {
     id: root
 
     // Public API
-    property string mode: "single" // "single" or "range"
+    property string mode: "single"
     property bool is24Hour: true
 
     // Date properties - these update immediately when user selects
@@ -37,10 +34,10 @@ Rectangle {
     property var disabledDates: []
 
     // Signals - clean separation of concerns
-    signal selectionChanged() // Fires on any selection change (immediate feedback)
-    signal dateTimeApplied(date dateTime) // Final confirmation for single mode
-    signal rangeApplied(date startDateTime, date endDateTime) // Final confirmation for range mode
-    signal selectionCleared() // When user clears selection
+    signal selectionChanged()
+    signal dateTimeApplied(date dateTime)
+    signal rangeApplied(date startDateTime, date endDateTime)
+    signal selectionCleared()
 
     // Read-only computed properties for external binding
     readonly property bool hasValidSelection: mode === "single" ? !_isEmpty(selectedDate) : (!_isEmpty(startDate) && !_isEmpty(endDate))
@@ -69,8 +66,9 @@ Rectangle {
         return wrappedHour24 < 12
     }
 
-    width: 312
-    height: 540
+    Layout.preferredWidth: 312
+    Layout.preferredHeight: 540
+    Layout.minimumHeight: 540
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
     border.width: Theme.borders.b1
@@ -118,7 +116,6 @@ Rectangle {
             Layout.preferredHeight: 120
             color: Theme.colors.transparent
 
-            // Single mode time picker
             UI.TimePicker {
                 id: timePicker
                 standalone: false
@@ -289,7 +286,6 @@ Rectangle {
         }
     }
 
-    // Public API methods - unchanged
     function clearSelection() {
         selectedDate = new Date(NaN)
         startDate = new Date(NaN)
@@ -338,7 +334,6 @@ Rectangle {
         selectionChanged()
     }
 
-    // Private helpers - unchanged
     function _combineDateTime(date, hour, minute, isAM) {
         if (_isEmpty(date)) return new Date(NaN)
 

@@ -6,6 +6,7 @@ set(qml_files
     WizardPageTest.qml
     FontTest.qml
     TogglePanel.qml
+    TextAreaPanel.qml
 )
 
 qt_add_qml_module(app_playground
@@ -14,4 +15,3 @@ qt_add_qml_module(app_playground
     QML_FILES ${qml_files}
     RESOURCE_PREFIX "/"
 )
-

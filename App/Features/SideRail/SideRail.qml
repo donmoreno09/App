@@ -64,6 +64,40 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/calendar.svg"
+                text: (TranslationManager.revision, qsTr("DateTime"))
+                active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("DateTimePicker Test")
+                    SidePanelController.toggle("datetime-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("TextArea Test"))
+                active: PanelRouter.currentPath === "textarea-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("TextArea Test")
+                    SidePanelController.toggle("textarea-test")
+                }
+            }
+
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Toggle Test"))
+                active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Toggle Test")
+                    SidePanelController.toggle("toggle-test")
+                }
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 text: (TranslationManager.revision, qsTr("Language"))
@@ -84,28 +118,6 @@ UI.GlobalBackgroundConsumer {
                 onClicked: {
                     TitleBarController.setTitle("Map Tilesets")
                     SidePanelController.toggle("maptilesets")
-                }
-            }
-
-            SideRailItem {
-                source: "qrc:/App/assets/icons/calendar.svg"
-                text: (TranslationManager.revision, qsTr("DateTime"))
-                active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
-
-                onClicked: {
-                    TitleBarController.setTitle("DateTimePicker Test")
-                    SidePanelController.toggle("datetime-test")
-                }
-            }
-
-            SideRailItem {
-                source: "qrc:/App/assets/icons/toggle-icon.svg"
-                text: (TranslationManager.revision, qsTr("Toggle Test"))
-                active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
-
-                onClicked: {
-                    TitleBarController.setTitle("Toggle Test")
-                    SidePanelController.toggle("toggle-test")
                 }
             }
         }

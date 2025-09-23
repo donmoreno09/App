@@ -5,15 +5,11 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-/*!
-    \qmltype DatePickerCalendarView
-*/
-
 ColumnLayout {
     id: root
 
     // Props
-    property string mode: "single" // "single", "range"
+    property string mode: "single"
     property int currentMonth: 0
     property int currentYear: 2025
 
@@ -68,23 +64,9 @@ ColumnLayout {
             property bool isInRange: root.mode === "range" && root._isInRange(model.date)
             property bool isSingleDayRange: isRangeStart && isRangeEnd
 
-            // Week background (Sunday highlight)
-            Rectangle {
-                visible: model.date.getDay() === 0 // Only show on Sundays (start of week)
-                x: -parent.x // Extend to start of grid
-                y: 0
-                width: monthGrid.width
-                height: parent.height
-                color: Qt.lighter(Theme.colors.primary800, 1.1)
-                radius: Theme.radius.sm
-                z: -1
-            }
-
-            // THE WORKING SOLUTION: Smart margin technique
             Rectangle {
                 anchors {
                     fill: parent
-                    // Key technique: reduce width on ends to create pill shape
                     leftMargin: isRangeStart ? parent.width / 2 : 0
                     rightMargin: isRangeEnd ? parent.width / 2 : 0
                 }
@@ -94,7 +76,6 @@ ColumnLayout {
                 z: 0
             }
 
-            // Day cell with normal margins
             UI.DatePickerDay {
                 anchors.fill: parent
                 anchors.margins: Theme.spacing.s1
