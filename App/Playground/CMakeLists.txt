@@ -5,6 +5,7 @@ set(qml_files
     DateTimeTest.qml
     WizardPageTest.qml
     FontTest.qml
+    TextAreaPanel.qml
     TogglePanel.qml
 )
 
