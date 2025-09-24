@@ -9,7 +9,6 @@
 5. [Usage Examples](#usage-examples)
 6. [Best Practices](#best-practices)
 7. [Technical Implementation](#technical-implementation)
-8. [Performance Considerations](#performance-considerations)
 9. [Accessibility](#accessibility)
 10. [Troubleshooting](#troubleshooting)
 
@@ -38,15 +37,7 @@ The `Overlay` component leverages Qt's `Popup` as its foundation rather than bas
 | **Focus Management** | ✅ Built-in focus trapping and restoration | ❌ Complex manual implementation needed |
 | **Event Handling** | ✅ Sophisticated `closePolicy` system | ❌ Global event handling complexity |
 | **Accessibility** | ✅ Screen reader and keyboard navigation | ❌ Manual accessibility implementation |
-| **Platform Integration** | ✅ Native behavior on different platforms | ❌ Generic behavior everywhere |
 | **Backdrop System** | ✅ `Overlay.modal` automatic management | ❌ Manual backdrop coordination |
-
-### Production Benefits
-
-- **Reduced Code Complexity**: Hundreds of lines of event handling, focus management, and accessibility code eliminated
-- **Battle-tested Foundation**: Built on Qt's mature popup infrastructure used by thousands of applications
-- **Future-proof**: Continues to receive Qt team improvements and platform optimizations
-- **Professional Quality**: Enterprise-grade accessibility and platform integration out-of-the-box
 
 ## Architecture
 
@@ -352,29 +343,6 @@ enter: Transition {
     }
 }
 ```
-
-## Performance Considerations
-
-### Backdrop Blur Performance
-
-- **GPU Intensive**: Blur effects require significant GPU resources
-- **Live Updates**: `live: true` on ShaderEffectSource updates in real-time
-- **Mobile Impact**: Consider simpler backdrop on mobile devices
-
-### Optimization Strategies
-
-1. **Conditional Blur**:
-   ```qml
-   property bool enableBlur: !Qt.platform.os === "android"
-   showBackdrop: enableBlur
-   ```
-
-2. **Blur Quality Control**:
-   ```qml
-   blur: Qt.platform.os === "ios" ? 0.4 : 0.6  // Lower on mobile
-   ```
-
-3. **Memory Management**: Overlay automatically destroys backdrop when closed
 
 ## Accessibility
 
