@@ -10,6 +10,7 @@ set(qml_files
     InputCoordinate.qml
     OutlineRect.qml
     SearchBar.qml
+    TextArea.qml
     Title.qml
     VerticalDivider.qml
     VerticalPadding.qml
