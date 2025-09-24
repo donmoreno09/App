@@ -35,10 +35,8 @@ Rectangle {
     signal dateSelected(date date)
     signal rangeSelected(date startDate, date endDate)
 
-    Layout.minimumWidth: 312
-    Layout.preferredWidth: 312
-    Layout.minimumHeight: 404
-    Layout.preferredHeight: 404
+    width: 312
+    height: 404
 
     color: Theme.colors.primary800
     border.color: Theme.colors.secondary500
@@ -94,8 +92,6 @@ Rectangle {
 
             // Calendar view
             UI.DatePickerCalendarView {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
                 mode: root.mode
                 currentMonth: root._currentMonth
                 currentYear: root._currentYear
