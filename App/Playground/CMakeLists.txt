@@ -7,6 +7,8 @@ set(qml_files
     FontTest.qml
     TextAreaPanel.qml
     TogglePanel.qml
+    OverlayPanel.qml
+
 )
 
 qt_add_qml_module(app_playground

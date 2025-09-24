@@ -9,6 +9,7 @@ set(qml_files
     HorizontalSpacer.qml
     InputCoordinate.qml
     OutlineRect.qml
+    Overlay.qml
     SearchBar.qml
     TextArea.qml
     Title.qml
