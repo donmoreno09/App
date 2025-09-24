@@ -32,6 +32,7 @@ set(qml_files
     wizard-page/test-pages/OperationalArea.qml
     toggle/ToggleStyle.qml
     toggle/Toggle.qml
+    Overlay.qml
 )
 
 
