@@ -8,14 +8,77 @@ file(GLOB_RECURSE APP_ASSETS
     "${CMAKE_CURRENT_SOURCE_DIR}/assets/*.*"
 )
 
+set(qml_files
+    Main.qml
+)
+
+set(cpp_sources
+    # Config
+    config/mqtt_config.json
+
+    # Connections
+    connections/mqtt/parser/imessageparser.h
+    connections/mqtt/parser/simpletrackparser.h
+    connections/mqtt/mqttclientservice.cpp
+    connections/mqtt/mqttclientservice.h
+    connections/apiendpoints.h
+    connections/httpclient.cpp
+    connections/httpclient.h
+
+    # Core
+    core/geoselectionutils.h
+    core/interactionmodemanager.cpp
+    core/interactionmodemanager.h
+    core/layermanager.cpp
+    core/layermanager.h
+    core/popupmanager.cpp
+    core/popupmanager.h
+    core/trackmanager.cpp
+    core/trackmanager.h
+    core/variantlistmodel.cpp
+    core/variantlistmodel.h
+
+    # Events
+    events/selectionboxbus.h
+
+    # Layers
+    layers/annotationmaplayer.cpp
+    layers/annotationmaplayer.h
+    layers/baselayer.cpp
+    layers/baselayer.h
+    layers/basemaplayer.cpp
+    layers/basemaplayer.h
+    layers/staticpoimaplayer.cpp
+    layers/staticpoimaplayer.h
+    layers/trackmaplayer.cpp
+    layers/trackmaplayer.h
+
+    # Models
+    models/metadata/metadataentry.h
+    models/metadata/notemetadataentry.h
+    models/details.h
+    models/geometry.h
+    models/poi.h
+    models/shape.h
+
+    # Persistence
+    persistence/ipersistable.h
+    persistence/ipersistencemanager.h
+    persistence/persistencemanagerbase.cpp
+    persistence/persistencemanagerbase.h
+    persistence/poipersistencemanager.cpp
+    persistence/poipersistencemanager.h
+    persistence/shapepersistencemanager.cpp
+    persistence/shapepersistencemanager.h
+)
+
 qt_add_qml_module(${PROJECT_NAME}
     URI App
     VERSION 1.0
-    QML_FILES
-        Main.qml
+    QML_FILES ${qml_files}
+    SOURCES ${cpp_sources}
     RESOURCE_PREFIX "/" # For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
-    RESOURCES
-        ${APP_ASSETS}
+    RESOURCES ${APP_ASSETS}
 )
 
 add_subdirectory(Components)
@@ -36,6 +99,15 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Qml
         Qt6::Quick
         Qt6::Sql
+        Qt6::Mqtt
+        Qt6::Location
+        Qt6::Positioning
+)
+
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/core
+        ${CMAKE_CURRENT_SOURCE_DIR}/events
 )
 
 # Translation setup
