@@ -1,10 +1,11 @@
 #ifndef APP_LOGGER_H
 #define APP_LOGGER_H
 
+#include "app_logger_export.h"
 #include "logger.h"
 #include "sqlite_sink.h"
 
-class AppLogger {
+class APP_LOGGER_EXPORT AppLogger {
 public:
     // Singleton accessor.
     // Creates the Logger on first call and returns the same instance thereafter.
