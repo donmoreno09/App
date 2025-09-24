@@ -31,7 +31,7 @@ Item {
 
     // Forward other TextField's properties for convenience
     property alias echoMode: textField.echoMode
-    property alias inputMask: textField.inputMaskde
+    property alias inputMask: textField.inputMask
     property alias maximumLength: textField.maximumLength
     property alias validator: textField.validator
 
