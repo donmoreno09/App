@@ -98,6 +98,17 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Overlay Test"))
+                active: PanelRouter.currentPath === "overlay-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Overlay Test")
+                    SidePanelController.toggle("overlay-test")
+                }
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 text: (TranslationManager.revision, qsTr("Language"))
