@@ -174,253 +174,253 @@ PanelTemplate {
 
             UI.HorizontalDivider { Layout.fillWidth: true }
 
-            // 1. Single Date Selection
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: Theme.spacing.s4
+            // // 1. Single Date Selection
+            // ColumnLayout {
+            //     Layout.fillWidth: true
+            //     spacing: Theme.spacing.s4
 
-                SectionHeader {
-                    title: (TranslationManager.revision, qsTr("Single Date Selection"))
-                }
+            //     SectionHeader {
+            //         title: (TranslationManager.revision, qsTr("Single Date Selection"))
+            //     }
 
-                FieldLabel {
-                    title: (TranslationManager.revision, qsTr("Select Date"))
-                    required: true
-                }
+            //     FieldLabel {
+            //         title: (TranslationManager.revision, qsTr("Select Date"))
+            //         required: true
+            //     }
 
-                PickerInputField {
-                    id: singleDateInput
-                    placeholder: "DD/MM/YYYY"
-                    focused: singleDatePopup.opened
+            //     PickerInputField {
+            //         id: singleDateInput
+            //         placeholder: "DD/MM/YYYY"
+            //         focused: singleDatePopup.opened
 
-                    property date selectedDate: new Date(NaN)
-                    displayText: !isNaN(selectedDate.getTime()) ?
-                               Qt.formatDate(selectedDate, "dd/MM/yyyy") : ""
+            //         property date selectedDate: new Date(NaN)
+            //         displayText: !isNaN(selectedDate.getTime()) ?
+            //                    Qt.formatDate(selectedDate, "dd/MM/yyyy") : ""
 
-                    onClicked: singleDatePopup.toggle()
+            //         onClicked: singleDatePopup.toggle()
 
-                    PickerPopup {
-                        id: singleDatePopup
-                        pickerContent: Component {
-                            UI.DatePicker {
-                                id: picker
-                                mode: "single"
-                                selectedDate: singleDateInput.selectedDate
+            //         PickerPopup {
+            //             id: singleDatePopup
+            //             pickerContent: Component {
+            //                 UI.DatePicker {
+            //                     id: picker
+            //                     mode: "single"
+            //                     selectedDate: singleDateInput.selectedDate
 
-                                onDateSelected: function(date) {
-                                    singleDateInput.selectedDate = date
-                                    singleDateResult.result = (TranslationManager.revision, qsTr("Single Date: ")) +
-                                                            Qt.formatDate(date, "dd/MM/yyyy")
-                                    singleDatePopup.close()
-                                }
+            //                     onDateSelected: function(date) {
+            //                         singleDateInput.selectedDate = date
+            //                         singleDateResult.result = (TranslationManager.revision, qsTr("Single Date: ")) +
+            //                                                 Qt.formatDate(date, "dd/MM/yyyy")
+            //                         singleDatePopup.close()
+            //                     }
 
-                                onCurrentViewChanged: {
-                                    singleDatePopup.currentView = currentView
-                                }
-                            }
-                        }
-                        onClosed: singleDateInput.focused = false
-                    }
-                }
+            //                     onCurrentViewChanged: {
+            //                         singleDatePopup.currentView = currentView
+            //                     }
+            //                 }
+            //             }
+            //             onClosed: singleDateInput.focused = false
+            //         }
+            //     }
 
-                ResultText {
-                    id: singleDateResult
-                    result: (TranslationManager.revision, qsTr("No single date selected"))
-                }
-            }
+            //     ResultText {
+            //         id: singleDateResult
+            //         result: (TranslationManager.revision, qsTr("No single date selected"))
+            //     }
+            // }
 
-            UI.HorizontalDivider { Layout.fillWidth: true }
+            // UI.HorizontalDivider { Layout.fillWidth: true }
 
-            // 2. Date Range Selection
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: Theme.spacing.s4
+            // // 2. Date Range Selection
+            // ColumnLayout {
+            //     Layout.fillWidth: true
+            //     spacing: Theme.spacing.s4
 
-                SectionHeader {
-                    title: (TranslationManager.revision, qsTr("Date Range Selection"))
-                }
+            //     SectionHeader {
+            //         title: (TranslationManager.revision, qsTr("Date Range Selection"))
+            //     }
 
-                FieldLabel {
-                    title: (TranslationManager.revision, qsTr("Select Date Range"))
-                    required: true
-                }
+            //     FieldLabel {
+            //         title: (TranslationManager.revision, qsTr("Select Date Range"))
+            //         required: true
+            //     }
 
-                PickerInputField {
-                    id: dateRangeInput
-                    placeholder: "DD/MM/YYYY - DD/MM/YYYY"
-                    focused: dateRangePopup.opened
+            //     PickerInputField {
+            //         id: dateRangeInput
+            //         placeholder: "DD/MM/YYYY - DD/MM/YYYY"
+            //         focused: dateRangePopup.opened
 
-                    property date startDate: new Date(NaN)
-                    property date endDate: new Date(NaN)
-                    displayText: {
-                        const hasStart = !isNaN(startDate.getTime())
-                        const hasEnd = !isNaN(endDate.getTime())
+            //         property date startDate: new Date(NaN)
+            //         property date endDate: new Date(NaN)
+            //         displayText: {
+            //             const hasStart = !isNaN(startDate.getTime())
+            //             const hasEnd = !isNaN(endDate.getTime())
 
-                        if (!hasStart && !hasEnd) return ""
-                        if (hasStart && hasEnd) {
-                            return Qt.formatDate(startDate, "dd/MM/yyyy") + " - " +
-                                   Qt.formatDate(endDate, "dd/MM/yyyy")
-                        }
-                        if (hasStart) return Qt.formatDate(startDate, "dd/MM/yyyy") + " - ..."
-                        return ""
-                    }
+            //             if (!hasStart && !hasEnd) return ""
+            //             if (hasStart && hasEnd) {
+            //                 return Qt.formatDate(startDate, "dd/MM/yyyy") + " - " +
+            //                        Qt.formatDate(endDate, "dd/MM/yyyy")
+            //             }
+            //             if (hasStart) return Qt.formatDate(startDate, "dd/MM/yyyy") + " - ..."
+            //             return ""
+            //         }
 
-                    onClicked: dateRangePopup.toggle()
+            //         onClicked: dateRangePopup.toggle()
 
-                    PickerPopup {
-                        id: dateRangePopup
-                        pickerContent: Component {
-                            UI.DatePicker {
-                                mode: "range"
-                                startDate: dateRangeInput.startDate
-                                endDate: dateRangeInput.endDate
+            //         PickerPopup {
+            //             id: dateRangePopup
+            //             pickerContent: Component {
+            //                 UI.DatePicker {
+            //                     mode: "range"
+            //                     startDate: dateRangeInput.startDate
+            //                     endDate: dateRangeInput.endDate
 
-                                onRangeSelected: function(startDate, endDate) {
-                                    dateRangeInput.startDate = startDate
-                                    dateRangeInput.endDate = endDate
-                                    dateRangeResult.result = (TranslationManager.revision, qsTr("Date Range: ")) +
-                                                           Qt.formatDate(startDate, "dd/MM/yyyy") + " - " +
-                                                           Qt.formatDate(endDate, "dd/MM/yyyy")
-                                    dateRangePopup.close()
-                                }
+            //                     onRangeSelected: function(startDate, endDate) {
+            //                         dateRangeInput.startDate = startDate
+            //                         dateRangeInput.endDate = endDate
+            //                         dateRangeResult.result = (TranslationManager.revision, qsTr("Date Range: ")) +
+            //                                                Qt.formatDate(startDate, "dd/MM/yyyy") + " - " +
+            //                                                Qt.formatDate(endDate, "dd/MM/yyyy")
+            //                         dateRangePopup.close()
+            //                     }
 
-                                onCurrentViewChanged: {
-                                    dateRangePopup.currentView = currentView
-                                }
-                            }
-                        }
-                        onClosed: dateRangeInput.focused = false
-                    }
-                }
+            //                     onCurrentViewChanged: {
+            //                         dateRangePopup.currentView = currentView
+            //                     }
+            //                 }
+            //             }
+            //             onClosed: dateRangeInput.focused = false
+            //         }
+            //     }
 
-                ResultText {
-                    id: dateRangeResult
-                    result: (TranslationManager.revision, qsTr("No date range selected"))
-                }
-            }
+            //     ResultText {
+            //         id: dateRangeResult
+            //         result: (TranslationManager.revision, qsTr("No date range selected"))
+            //     }
+            // }
 
-            UI.HorizontalDivider { Layout.fillWidth: true }
+            // UI.HorizontalDivider { Layout.fillWidth: true }
 
-            // 3. Time Selection (24H)
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: Theme.spacing.s4
+            // // 3. Time Selection (24H)
+            // ColumnLayout {
+            //     Layout.fillWidth: true
+            //     spacing: Theme.spacing.s4
 
-                SectionHeader {
-                    title: (TranslationManager.revision, qsTr("Time Selection (24H)"))
-                }
+            //     SectionHeader {
+            //         title: (TranslationManager.revision, qsTr("Time Selection (24H)"))
+            //     }
 
-                FieldLabel {
-                    title: (TranslationManager.revision, qsTr("Select Time"))
-                    required: true
-                }
+            //     FieldLabel {
+            //         title: (TranslationManager.revision, qsTr("Select Time"))
+            //         required: true
+            //     }
 
-                PickerInputField {
-                    id: time24Input
-                    placeholder: "HH:MM"
-                    iconSource: "qrc:/App/assets/icons/clock.svg"
-                    focused: time24Popup.opened
+            //     PickerInputField {
+            //         id: time24Input
+            //         placeholder: "HH:MM"
+            //         iconSource: "qrc:/App/assets/icons/clock.svg"
+            //         focused: time24Popup.opened
 
-                    property int selectedHour: -1
-                    property int selectedMinute: -1
-                    displayText: (selectedHour !== -1 && selectedMinute !== -1) ?
-                               selectedHour.toString().padStart(2, '0') + ":" +
-                               selectedMinute.toString().padStart(2, '0') : ""
+            //         property int selectedHour: -1
+            //         property int selectedMinute: -1
+            //         displayText: (selectedHour !== -1 && selectedMinute !== -1) ?
+            //                    selectedHour.toString().padStart(2, '0') + ":" +
+            //                    selectedMinute.toString().padStart(2, '0') : ""
 
-                    onClicked: time24Popup.toggle()
+            //         onClicked: time24Popup.toggle()
 
-                    PickerPopup {
-                        id: time24Popup
-                        height: 200 // TimePicker height
-                        pickerContent: Component {
-                            UI.TimePicker {
-                                is24Hour: true
-                                selectedHour: time24Input.selectedHour === -1 ? 0 : time24Input.selectedHour
-                                selectedMinute: time24Input.selectedMinute === -1 ? 0 : time24Input.selectedMinute
+            //         PickerPopup {
+            //             id: time24Popup
+            //             height: 200 // TimePicker height
+            //             pickerContent: Component {
+            //                 UI.TimePicker {
+            //                     is24Hour: true
+            //                     selectedHour: time24Input.selectedHour === -1 ? 0 : time24Input.selectedHour
+            //                     selectedMinute: time24Input.selectedMinute === -1 ? 0 : time24Input.selectedMinute
 
-                                onTimeSelected: function(hour, minute, isAM) {
-                                    time24Input.selectedHour = hour
-                                    time24Input.selectedMinute = minute
-                                    time24Result.result = (TranslationManager.revision, qsTr("24H Time: ")) +
-                                                        hour.toString().padStart(2, '0') + ":" +
-                                                        minute.toString().padStart(2, '0')
-                                    time24Popup.close()
-                                }
-                            }
-                        }
-                        onClosed: time24Input.focused = false
-                    }
-                }
+            //                     onTimeSelected: function(hour, minute, isAM) {
+            //                         time24Input.selectedHour = hour
+            //                         time24Input.selectedMinute = minute
+            //                         time24Result.result = (TranslationManager.revision, qsTr("24H Time: ")) +
+            //                                             hour.toString().padStart(2, '0') + ":" +
+            //                                             minute.toString().padStart(2, '0')
+            //                         time24Popup.close()
+            //                     }
+            //                 }
+            //             }
+            //             onClosed: time24Input.focused = false
+            //         }
+            //     }
 
-                ResultText {
-                    id: time24Result
-                    result: (TranslationManager.revision, qsTr("No time selected"))
-                }
-            }
+            //     ResultText {
+            //         id: time24Result
+            //         result: (TranslationManager.revision, qsTr("No time selected"))
+            //     }
+            // }
 
-            UI.HorizontalDivider { Layout.fillWidth: true }
+            // UI.HorizontalDivider { Layout.fillWidth: true }
 
-            // 4. Time Selection (12H)
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: Theme.spacing.s4
+            // // 4. Time Selection (12H)
+            // ColumnLayout {
+            //     Layout.fillWidth: true
+            //     spacing: Theme.spacing.s4
 
-                SectionHeader {
-                    title: (TranslationManager.revision, qsTr("Time Selection (12H AM/PM)"))
-                }
+            //     SectionHeader {
+            //         title: (TranslationManager.revision, qsTr("Time Selection (12H AM/PM)"))
+            //     }
 
-                FieldLabel {
-                    title: (TranslationManager.revision, qsTr("Select Time"))
-                    required: true
-                }
+            //     FieldLabel {
+            //         title: (TranslationManager.revision, qsTr("Select Time"))
+            //         required: true
+            //     }
 
-                PickerInputField {
-                    id: time12Input
-                    placeholder: "HH:MM AM/PM"
-                    iconSource: "qrc:/App/assets/icons/clock.svg"
-                    focused: time12Popup.opened
+            //     PickerInputField {
+            //         id: time12Input
+            //         placeholder: "HH:MM AM/PM"
+            //         iconSource: "qrc:/App/assets/icons/clock.svg"
+            //         focused: time12Popup.opened
 
-                    property int selectedHour: -1
-                    property int selectedMinute: -1
-                    property bool selectedAMPM: true
-                    displayText: (selectedHour !== -1 && selectedMinute !== -1) ?
-                               selectedHour.toString().padStart(2, '0') + ":" +
-                               selectedMinute.toString().padStart(2, '0') + " " +
-                               (selectedAMPM ? "AM" : "PM") : ""
+            //         property int selectedHour: -1
+            //         property int selectedMinute: -1
+            //         property bool selectedAMPM: true
+            //         displayText: (selectedHour !== -1 && selectedMinute !== -1) ?
+            //                    selectedHour.toString().padStart(2, '0') + ":" +
+            //                    selectedMinute.toString().padStart(2, '0') + " " +
+            //                    (selectedAMPM ? "AM" : "PM") : ""
 
-                    onClicked: time12Popup.toggle()
+            //         onClicked: time12Popup.toggle()
 
-                    PickerPopup {
-                        id: time12Popup
-                        height: 200 // TimePicker height
-                        pickerContent: Component {
-                            UI.TimePicker {
-                                is24Hour: false
-                                selectedHour: time12Input.selectedHour === -1 ? 12 : time12Input.selectedHour
-                                selectedMinute: time12Input.selectedMinute === -1 ? 0 : time12Input.selectedMinute
-                                selectedAMPM: time12Input.selectedAMPM
+            //         PickerPopup {
+            //             id: time12Popup
+            //             height: 200 // TimePicker height
+            //             pickerContent: Component {
+            //                 UI.TimePicker {
+            //                     is24Hour: false
+            //                     selectedHour: time12Input.selectedHour === -1 ? 12 : time12Input.selectedHour
+            //                     selectedMinute: time12Input.selectedMinute === -1 ? 0 : time12Input.selectedMinute
+            //                     selectedAMPM: time12Input.selectedAMPM
 
-                                onTimeSelected: function(hour, minute, isAM) {
-                                    time12Input.selectedHour = hour
-                                    time12Input.selectedMinute = minute
-                                    time12Input.selectedAMPM = isAM
-                                    time12Result.result = (TranslationManager.revision, qsTr("12H Time: ")) +
-                                                        hour.toString().padStart(2, '0') + ":" +
-                                                        minute.toString().padStart(2, '0') + " " +
-                                                        (isAM ? "AM" : "PM")
-                                    time12Popup.close()
-                                }
-                            }
-                        }
-                        onClosed: time12Input.focused = false
-                    }
-                }
+            //                     onTimeSelected: function(hour, minute, isAM) {
+            //                         time12Input.selectedHour = hour
+            //                         time12Input.selectedMinute = minute
+            //                         time12Input.selectedAMPM = isAM
+            //                         time12Result.result = (TranslationManager.revision, qsTr("12H Time: ")) +
+            //                                             hour.toString().padStart(2, '0') + ":" +
+            //                                             minute.toString().padStart(2, '0') + " " +
+            //                                             (isAM ? "AM" : "PM")
+            //                         time12Popup.close()
+            //                     }
+            //                 }
+            //             }
+            //             onClosed: time12Input.focused = false
+            //         }
+            //     }
 
-                ResultText {
-                    id: time12Result
-                    result: (TranslationManager.revision, qsTr("No time selected"))
-                }
-            }
+            //     ResultText {
+            //         id: time12Result
+            //         result: (TranslationManager.revision, qsTr("No time selected"))
+            //     }
+            // }
 
             UI.HorizontalDivider { Layout.fillWidth: true }
 
