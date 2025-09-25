@@ -33,6 +33,7 @@ set(qml_files
     toggle/ToggleStyle.qml
     toggle/Toggle.qml
     Overlay.qml
+    Switcher.qml
 )
 
 
