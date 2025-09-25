@@ -7,6 +7,7 @@ const routes = {
   "toggle-test" : "qrc:/App/Playground/TogglePanel.qml",
   "textarea-test": "qrc:/App/Playground/TextAreaPanel.qml",
   "overlay-test": "qrc:/App/Playground/OverlayPanel.qml",
+  "switcher-test": "qrc:/App/Playground/SwitcherPanel.qml",
   "*":      "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
 };
 
