@@ -1,13 +1,3 @@
-/*!
-    \qmltype Slider
-    \inqmlmodule App.Components
-    \brief A customizable slider component supporting both single-value and range modes.
-
-    Enhanced slider component that can work as a traditional single-value slider or
-    as a range slider with two handles for selecting minimum and maximum values.
-    Built with Qt Quick's RangeSlider and Slider controls for optimal performance.
-*/
-
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
@@ -26,9 +16,7 @@ Item {
     property string valueSuffix: ""
     property int decimalPlaces: 0
     property bool isRange: false
-    // Inizio Modifica
     property bool isDotted: false
-    // Fine Modifica
 
     // Single value properties
     property real value: 50
@@ -46,27 +34,9 @@ Item {
 
     // Size configuration
     readonly property var _sizeConfig: ({
-        "sm": {
-            height: 32,
-            handleSize: 16,
-            trackHeight: 4,
-            fontSize: Theme.typography.fontSize125,
-            spacing: Theme.spacing.s2
-        },
-        "md": {
-            height: 36,
-            handleSize: 20,
-            trackHeight: 6,
-            fontSize: Theme.typography.fontSize150,
-            spacing: Theme.spacing.s3
-        },
-        "lg": {
-            height: 40,
-            handleSize: 24,
-            trackHeight: 8,
-            fontSize: Theme.typography.fontSize175,
-            spacing: Theme.spacing.s3
-        }
+        "sm": { height: 32, handleSize: 16, trackHeight: 4, fontSize: Theme.typography.fontSize125, spacing: Theme.spacing.s2 },
+        "md": { height: 36, handleSize: 20, trackHeight: 6, fontSize: Theme.typography.fontSize150, spacing: Theme.spacing.s3 },
+        "lg": { height: 40, handleSize: 24, trackHeight: 8, fontSize: Theme.typography.fontSize175, spacing: Theme.spacing.s3 }
     })
 
     readonly property var _currentSize: _sizeConfig[size] || _sizeConfig["md"]
@@ -74,18 +44,135 @@ Item {
     implicitWidth: 200
     implicitHeight: _layout.implicitHeight
 
+    // Micro-components
+    component ValueDisplay: RowLayout {
+        property bool isRange
+        property real value
+        property real firstValue
+        property real secondValue
+        property real fontSize
+        property color color
+        property string valuePrefix
+        property string valueSuffix
+        property int decimalPlaces
+
+        spacing: Theme.spacing.s1
+
+        Text {
+            text: isRange ? _formatValue(firstValue) : _formatValue(value)
+            font.family: Theme.typography.familySans
+            font.pixelSize: fontSize
+            font.weight: Theme.typography.weightMedium
+            color: parent.color
+
+            Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
+        }
+
+        Text {
+            visible: isRange
+            text: " - " + _formatValue(secondValue)
+            font.family: Theme.typography.familySans
+            font.pixelSize: fontSize
+            font.weight: Theme.typography.weightMedium
+            color: parent.color
+
+            Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
+        }
+
+        function _formatValue(val) {
+            return valuePrefix + val.toFixed(decimalPlaces) + valueSuffix
+        }
+    }
+
+    component SliderTrack: Item {
+        property var slider
+        property real trackHeight
+        property color accentColor
+        property bool isDotted
+        property bool isRange
+
+        x: slider.leftPadding
+        y: slider.topPadding + (slider.availableHeight - trackHeight) / 2
+        width: slider.availableWidth
+        height: trackHeight
+
+        Rectangle {
+            anchors.fill: parent
+            radius: height / 2
+            color: slider.enabled ? Theme.colors.grey300 : Theme.colors.grey200
+            visible: !isDotted
+
+            Rectangle {
+                x: isRange ? slider.first.visualPosition * parent.width : 0
+                width: isRange ?
+                    (slider.second.visualPosition - slider.first.visualPosition) * parent.width :
+                    slider.visualPosition * parent.width
+                height: parent.height
+                radius: height / 2
+                color: slider.enabled ? accentColor : Theme.colors.grey400
+            }
+        }
+
+        Repeater {
+            model: isDotted ? Math.floor(parent.width / 6) : 0
+            delegate: Rectangle {
+                width: 4
+                height: parent.height
+                x: index * 6
+                color: {
+                    if (isRange) {
+                        return (x >= slider.first.visualPosition * parent.width &&
+                                x <= slider.second.visualPosition * parent.width) ?
+                            accentColor : (slider.enabled ? Theme.colors.grey300 : Theme.colors.grey200)
+                    } else {
+                        return x <= slider.visualPosition * parent.width ?
+                            accentColor : (slider.enabled ? Theme.colors.grey300 : Theme.colors.grey200)
+                    }
+                }
+            }
+        }
+    }
+
+    component SliderHandle: Rectangle {
+        property var slider
+        property bool isFirst: true
+        property real handleSize
+        property color accentColor
+
+        x: slider.leftPadding + (isFirst ? slider.first?.visualPosition ?? slider.visualPosition : slider.second.visualPosition) * (slider.availableWidth - width)
+        y: slider.topPadding + (slider.availableHeight - height) / 2
+        width: handleSize
+        height: handleSize
+        radius: width / 2
+        color: slider.enabled ? Theme.colors.white500 : Theme.colors.grey100
+        border.width: 2
+        border.color: slider.enabled ? accentColor : Theme.colors.grey400
+
+        Rectangle {
+            anchors.centerIn: parent
+            width: parent.width + 2
+            height: parent.height + 2
+            radius: width / 2
+            color: "#00000015"
+            z: -1
+            visible: slider.enabled
+        }
+
+        Behavior on border.color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
+        Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
+    }
+
     ColumnLayout {
         id: _layout
         anchors.fill: parent
         spacing: _currentSize.spacing
 
-        // Header with label and values
+        // Header
         RowLayout {
             Layout.fillWidth: true
             visible: root.label || root.showValues
             spacing: Theme.spacing.s2
 
-            // Label
             Text {
                 visible: root.label
                 text: root.label
@@ -95,40 +182,20 @@ Item {
                 color: root.enabled ? Theme.colors.text : Theme.colors.textMuted
                 Layout.fillWidth: true
 
-                Behavior on color {
-                    ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                }
+                Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
             }
 
-            // Value(s) display
-            RowLayout {
+            ValueDisplay {
                 visible: root.showValues
-                spacing: Theme.spacing.s1
-
-                Text {
-                    text: root.isRange ? _formatValue(root.firstValue) : _formatValue(root.value)
-                    font.family: Theme.typography.familySans
-                    font.pixelSize: _currentSize.fontSize
-                    font.weight: Theme.typography.weightMedium
-                    color: root.enabled ? root.accentColor : Theme.colors.textMuted
-
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
-                }
-
-                Text {
-                    visible: root.isRange
-                    text: " - " + _formatValue(root.secondValue)
-                    font.family: Theme.typography.familySans
-                    font.pixelSize: _currentSize.fontSize
-                    font.weight: Theme.typography.weightMedium
-                    color: root.enabled ? root.accentColor : Theme.colors.textMuted
-
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
-                }
+                isRange: root.isRange
+                value: root.value
+                firstValue: root.firstValue
+                secondValue: root.secondValue
+                fontSize: _currentSize.fontSize
+                color: root.enabled ? root.accentColor : Theme.colors.textMuted
+                valuePrefix: root.valuePrefix
+                valueSuffix: root.valueSuffix
+                decimalPlaces: root.decimalPlaces
             }
         }
 
@@ -137,98 +204,37 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: _currentSize.height
 
-            // Single value slider
             Slider {
                 id: singleSlider
                 visible: !root.isRange
                 anchors.fill: parent
-
                 from: root.from
                 to: root.to
                 value: root.value
                 stepSize: root.stepSize
                 enabled: root.enabled
 
-                onValueChanged: {
-                    root.value = value
+                onValueChanged: root.value = value
+
+                background: SliderTrack {
+                    slider: singleSlider
+                    trackHeight: _currentSize.trackHeight
+                    accentColor: root.accentColor
+                    isDotted: root.isDotted
+                    isRange: false
                 }
 
-                // Inizio Modifica
-                background: Item {
-                    x: singleSlider.leftPadding
-                    y: singleSlider.topPadding + (singleSlider.availableHeight - _currentSize.trackHeight) / 2
-                    width: singleSlider.availableWidth
-                    height: _currentSize.trackHeight
-
-                    // Solid track
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: height / 2
-                        color: singleSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200
-                        visible: !root.isDotted
-
-                        Rectangle {
-                            width: singleSlider.visualPosition * parent.width
-                            height: parent.height
-                            radius: height / 2
-                            color: singleSlider.enabled ? root.accentColor : Theme.colors.grey400
-                        }
-                    }
-
-                    // Dotted track
-                    Repeater {
-                        model: Math.floor(parent.width / 6)
-                        delegate: Rectangle {
-                            width: 4
-                            height: parent.height
-                            radius: 2
-                            x: index * 6
-                            color: (index * 6) <= (singleSlider.visualPosition * parent.width)
-                                   ? root.accentColor
-                                   : (singleSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200)
-                            visible: root.isDotted
-                        }
-                    }
-                }
-                // Fine Modifica
-
-                handle: Rectangle {
-                    x: singleSlider.leftPadding + singleSlider.visualPosition * (singleSlider.availableWidth - width)
-                    y: singleSlider.topPadding + (singleSlider.availableHeight - height) / 2
-                    width: _currentSize.handleSize
-                    height: _currentSize.handleSize
-                    radius: width / 2
-                    color: singleSlider.enabled ? Theme.colors.white500 : Theme.colors.grey100
-                    border.width: 2
-                    border.color: singleSlider.enabled ? root.accentColor : Theme.colors.grey400
-
-                    // Shadow effect
-                    Rectangle {
-                        anchors.centerIn: parent
-                        width: parent.width + 2
-                        height: parent.height + 2
-                        radius: width / 2
-                        color: "#00000015"
-                        z: -1
-                        visible: singleSlider.enabled
-                    }
-
-                    Behavior on border.color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
+                handle: SliderHandle {
+                    slider: singleSlider
+                    handleSize: _currentSize.handleSize
+                    accentColor: root.accentColor
                 }
             }
 
-            // Range slider
             RangeSlider {
                 id: rangeSlider
                 visible: root.isRange
                 anchors.fill: parent
-
                 from: root.from
                 to: root.to
                 first.value: root.firstValue
@@ -236,126 +242,35 @@ Item {
                 stepSize: root.stepSize
                 enabled: root.enabled
 
-                first.onValueChanged: {
-                    root.firstValue = first.value
+                first.onValueChanged: root.firstValue = first.value
+                second.onValueChanged: root.secondValue = second.value
+
+                background: SliderTrack {
+                    slider: rangeSlider
+                    trackHeight: _currentSize.trackHeight
+                    accentColor: root.accentColor
+                    isDotted: root.isDotted
+                    isRange: true
                 }
 
-                second.onValueChanged: {
-                    root.secondValue = second.value
+                first.handle: SliderHandle {
+                    slider: rangeSlider
+                    isFirst: true
+                    handleSize: _currentSize.handleSize
+                    accentColor: root.accentColor
                 }
 
-                // Inizio Modifica
-                background: Item {
-                    x: rangeSlider.leftPadding
-                    y: rangeSlider.topPadding + (rangeSlider.availableHeight - _currentSize.trackHeight) / 2
-                    width: rangeSlider.availableWidth
-                    height: _currentSize.trackHeight
-
-                    // Solid track
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: height / 2
-                        color: rangeSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200
-                        visible: !root.isDotted
-
-                        Rectangle {
-                            x: rangeSlider.first.visualPosition * parent.width
-                            width: (rangeSlider.second.visualPosition - rangeSlider.first.visualPosition) * parent.width
-                            height: parent.height
-                            radius: height / 2
-                            color: rangeSlider.enabled ? root.accentColor : Theme.colors.grey400
-                        }
-                    }
-
-                    // Dotted track
-                    Repeater {
-                        model: Math.floor(parent.width / 6)
-                        delegate: Rectangle {
-                            width: 4
-                            height: parent.height
-                            radius: 2
-                            x: index * 6
-                            color: (x >= rangeSlider.first.visualPosition * parent.width &&
-                                    x <= rangeSlider.second.visualPosition * parent.width)
-                                   ? root.accentColor
-                                   : (rangeSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200)
-                            visible: root.isDotted
-                        }
-                    }
-                }
-                // Fine Modifica
-
-                first.handle: Rectangle {
-                    x: rangeSlider.leftPadding + rangeSlider.first.visualPosition * (rangeSlider.availableWidth - width)
-                    y: rangeSlider.topPadding + (rangeSlider.availableHeight - height) / 2
-                    width: _currentSize.handleSize
-                    height: _currentSize.handleSize
-                    radius: width / 2
-                    color: rangeSlider.enabled ? Theme.colors.white500 : Theme.colors.grey100
-                    border.width: 2
-                    border.color: rangeSlider.enabled ? root.accentColor : Theme.colors.grey400
-
-                    Rectangle {
-                        anchors.centerIn: parent
-                        width: parent.width + 2
-                        height: parent.height + 2
-                        radius: width / 2
-                        color: "#00000015"
-                        z: -1
-                        visible: rangeSlider.enabled
-                    }
-
-                    Behavior on border.color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
-                }
-
-                second.handle: Rectangle {
-                    x: rangeSlider.leftPadding + rangeSlider.second.visualPosition * (rangeSlider.availableWidth - width)
-                    y: rangeSlider.topPadding + (rangeSlider.availableHeight - height) / 2
-                    width: _currentSize.handleSize
-                    height: _currentSize.handleSize
-                    radius: width / 2
-                    color: rangeSlider.enabled ? Theme.colors.white500 : Theme.colors.grey100
-                    border.width: 2
-                    border.color: rangeSlider.enabled ? root.accentColor : Theme.colors.grey400
-
-                    Rectangle {
-                        anchors.centerIn: parent
-                        width: parent.width + 2
-                        height: parent.height + 2
-                        radius: width / 2
-                        color: "#00000015"
-                        z: -1
-                        visible: rangeSlider.enabled
-                    }
-
-                    Behavior on border.color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
-
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
+                second.handle: SliderHandle {
+                    slider: rangeSlider
+                    isFirst: false
+                    handleSize: _currentSize.handleSize
+                    accentColor: root.accentColor
                 }
             }
         }
     }
 
-    // Helper function
     function _formatValue(val) {
-        const formattedNumber = val.toFixed(root.decimalPlaces)
-        return root.valuePrefix + formattedNumber + root.valueSuffix
+        return root.valuePrefix + val.toFixed(root.decimalPlaces) + root.valueSuffix
     }
-
-    // Accessibility
-    Accessible.role: Accessible.Slider
-    Accessible.name: root.label || (root.isRange ? "Range Slider" : "Slider")
-    Accessible.description: root.isRange ?
-        "Range: " + _formatValue(root.firstValue) + " to " + _formatValue(root.secondValue) :
-        "Value: " + _formatValue(root.value)
 }
