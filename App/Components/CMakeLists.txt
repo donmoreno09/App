@@ -10,6 +10,7 @@ set(qml_files
     InputCoordinate.qml
     OutlineRect.qml
     Overlay.qml
+    Slider.qml
     SearchBar.qml
     Switcher.qml
     TextArea.qml
