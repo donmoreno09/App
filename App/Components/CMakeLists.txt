@@ -34,6 +34,7 @@ set(qml_files
     toggle/Toggle.qml
     Overlay.qml
     Switcher.qml
+    Slider.qml
 )
 
 

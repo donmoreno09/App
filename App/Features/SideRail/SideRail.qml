@@ -120,6 +120,17 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Slider Test"))
+                active: PanelRouter.currentPath === "slider-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Slider Test")
+                    SidePanelController.toggle("slider-test")
+                }
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 text: (TranslationManager.revision, qsTr("Language"))
