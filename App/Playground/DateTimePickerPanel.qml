@@ -598,104 +598,104 @@ PanelTemplate {
                     }
                 }
 
-            // Test Controls
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: Theme.spacing.s4
+            // // Test Controls
+            // ColumnLayout {
+            //     Layout.fillWidth: true
+            //     spacing: Theme.spacing.s4
 
-                Text {
-                    text: (TranslationManager.revision, qsTr("Test Controls"))
-                    font.family: Theme.typography.familySans
-                    font.pixelSize: Theme.typography.fontSize175
-                    font.weight: Theme.typography.weightMedium
-                    color: Theme.colors.accent500
-                }
+            //     Text {
+            //         text: (TranslationManager.revision, qsTr("Test Controls"))
+            //         font.family: Theme.typography.familySans
+            //         font.pixelSize: Theme.typography.fontSize175
+            //         font.weight: Theme.typography.weightMedium
+            //         color: Theme.colors.accent500
+            //     }
 
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: Theme.spacing.s3
+            //     RowLayout {
+            //         Layout.fillWidth: true
+            //         spacing: Theme.spacing.s3
 
-                    UI.Button {
-                        text: (TranslationManager.revision, qsTr("Set Today/Now"))
-                        size: "md"
-                        variant: "secondary"
-                        onClicked: {
-                            const now = new Date()
+            //         UI.Button {
+            //             text: (TranslationManager.revision, qsTr("Set Today/Now"))
+            //             size: "md"
+            //             variant: "secondary"
+            //             onClicked: {
+            //                 const now = new Date()
 
-                            // Single date
-                            singleDateInput.selectedDate = now
-                            singleDateResult.result = (TranslationManager.revision, qsTr("Single Date: ")) +
-                                                    Qt.formatDate(now, "dd/MM/yyyy")
+            //                 // Single date
+            //                 singleDateInput.selectedDate = now
+            //                 singleDateResult.result = (TranslationManager.revision, qsTr("Single Date: ")) +
+            //                                         Qt.formatDate(now, "dd/MM/yyyy")
 
-                            // Time inputs
-                            time24Input.selectedHour = now.getHours()
-                            time24Input.selectedMinute = now.getMinutes()
-                            time24Result.result = (TranslationManager.revision, qsTr("24H Time: ")) +
-                                                now.getHours().toString().padStart(2, '0') + ":" +
-                                                now.getMinutes().toString().padStart(2, '0')
+            //                 // Time inputs
+            //                 time24Input.selectedHour = now.getHours()
+            //                 time24Input.selectedMinute = now.getMinutes()
+            //                 time24Result.result = (TranslationManager.revision, qsTr("24H Time: ")) +
+            //                                     now.getHours().toString().padStart(2, '0') + ":" +
+            //                                     now.getMinutes().toString().padStart(2, '0')
 
-                            const hour24 = now.getHours()
-                            const isAM = hour24 < 12
-                            const hour12 = hour24 === 0 ? 12 : (hour24 > 12 ? hour24 - 12 : hour24)
-                            time12Input.selectedHour = hour12
-                            time12Input.selectedMinute = now.getMinutes()
-                            time12Input.selectedAMPM = isAM
-                            time12Result.result = (TranslationManager.revision, qsTr("12H Time: ")) +
-                                                hour12.toString().padStart(2, '0') + ":" +
-                                                now.getMinutes().toString().padStart(2, '0') + " " +
-                                                (isAM ? "AM" : "PM")
+            //                 const hour24 = now.getHours()
+            //                 const isAM = hour24 < 12
+            //                 const hour12 = hour24 === 0 ? 12 : (hour24 > 12 ? hour24 - 12 : hour24)
+            //                 time12Input.selectedHour = hour12
+            //                 time12Input.selectedMinute = now.getMinutes()
+            //                 time12Input.selectedAMPM = isAM
+            //                 time12Result.result = (TranslationManager.revision, qsTr("12H Time: ")) +
+            //                                     hour12.toString().padStart(2, '0') + ":" +
+            //                                     now.getMinutes().toString().padStart(2, '0') + " " +
+            //                                     (isAM ? "AM" : "PM")
 
-                            // DateTime
-                            dateTimeInput.selectedDateTime = now
-                            dateTimeResult.result = (TranslationManager.revision, qsTr("DateTime: ")) +
-                                                  Qt.formatDateTime(now, "dd/MM/yyyy hh:mm")
-                        }
-                    }
+            //                 // DateTime
+            //                 dateTimeInput.selectedDateTime = now
+            //                 dateTimeResult.result = (TranslationManager.revision, qsTr("DateTime: ")) +
+            //                                       Qt.formatDateTime(now, "dd/MM/yyyy hh:mm")
+            //             }
+            //         }
 
-                    UI.Button {
-                        text: (TranslationManager.revision, qsTr("Set This Week"))
-                        size: "md"
-                        variant: "secondary"
-                        onClicked: {
-                            const today = new Date()
-                            const startOfWeek = new Date(today)
-                            startOfWeek.setDate(today.getDate() - today.getDay())
-                            const endOfWeek = new Date(startOfWeek)
-                            endOfWeek.setDate(startOfWeek.getDate() + 6)
+            //         UI.Button {
+            //             text: (TranslationManager.revision, qsTr("Set This Week"))
+            //             size: "md"
+            //             variant: "secondary"
+            //             onClicked: {
+            //                 const today = new Date()
+            //                 const startOfWeek = new Date(today)
+            //                 startOfWeek.setDate(today.getDate() - today.getDay())
+            //                 const endOfWeek = new Date(startOfWeek)
+            //                 endOfWeek.setDate(startOfWeek.getDate() + 6)
 
-                            dateRangeInput.startDate = startOfWeek
-                            dateRangeInput.endDate = endOfWeek
-                            dateRangeResult.result = (TranslationManager.revision, qsTr("Date Range: ")) +
-                                                   Qt.formatDate(startOfWeek, "dd/MM/yyyy") + " - " +
-                                                   Qt.formatDate(endOfWeek, "dd/MM/yyyy")
-                        }
-                    }
+            //                 dateRangeInput.startDate = startOfWeek
+            //                 dateRangeInput.endDate = endOfWeek
+            //                 dateRangeResult.result = (TranslationManager.revision, qsTr("Date Range: ")) +
+            //                                        Qt.formatDate(startOfWeek, "dd/MM/yyyy") + " - " +
+            //                                        Qt.formatDate(endOfWeek, "dd/MM/yyyy")
+            //             }
+            //         }
 
-                    UI.Button {
-                        text: (TranslationManager.revision, qsTr("Clear All"))
-                        size: "md"
-                        variant: "ghost"
-                        onClicked: {
-                            // Clear all inputs
-                            singleDateInput.selectedDate = new Date(NaN)
-                            dateRangeInput.startDate = new Date(NaN)
-                            dateRangeInput.endDate = new Date(NaN)
-                            time24Input.selectedHour = -1
-                            time24Input.selectedMinute = -1
-                            time12Input.selectedHour = -1
-                            time12Input.selectedMinute = -1
-                            dateTimeInput.selectedDateTime = new Date(NaN)
+            //         UI.Button {
+            //             text: (TranslationManager.revision, qsTr("Clear All"))
+            //             size: "md"
+            //             variant: "ghost"
+            //             onClicked: {
+            //                 // Clear all inputs
+            //                 singleDateInput.selectedDate = new Date(NaN)
+            //                 dateRangeInput.startDate = new Date(NaN)
+            //                 dateRangeInput.endDate = new Date(NaN)
+            //                 time24Input.selectedHour = -1
+            //                 time24Input.selectedMinute = -1
+            //                 time12Input.selectedHour = -1
+            //                 time12Input.selectedMinute = -1
+            //                 dateTimeInput.selectedDateTime = new Date(NaN)
 
-                            // Clear all results
-                            singleDateResult.result = (TranslationManager.revision, qsTr("All selections cleared"))
-                            dateRangeResult.result = (TranslationManager.revision, qsTr("All selections cleared"))
-                            time24Result.result = (TranslationManager.revision, qsTr("All selections cleared"))
-                            time12Result.result = (TranslationManager.revision, qsTr("All selections cleared"))
-                            dateTimeResult.result = (TranslationManager.revision, qsTr("All selections cleared"))
-                        }
-                    }
-                }
-            }
+            //                 // Clear all results
+            //                 singleDateResult.result = (TranslationManager.revision, qsTr("All selections cleared"))
+            //                 dateRangeResult.result = (TranslationManager.revision, qsTr("All selections cleared"))
+            //                 time24Result.result = (TranslationManager.revision, qsTr("All selections cleared"))
+            //                 time12Result.result = (TranslationManager.revision, qsTr("All selections cleared"))
+            //                 dateTimeResult.result = (TranslationManager.revision, qsTr("All selections cleared"))
+            //             }
+            //         }
+            //     }
+            // }
 
             // Spacer
             Item { Layout.preferredHeight: Theme.spacing.s6 }
