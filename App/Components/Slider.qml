@@ -78,10 +78,6 @@ Item {
 
             Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
         }
-
-        function _formatValue(val) {
-            return valuePrefix + val.toFixed(decimalPlaces) + valueSuffix
-        }
     }
 
     component SliderTrack: Item {
