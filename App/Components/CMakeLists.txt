@@ -11,6 +11,7 @@ set(qml_files
     OutlineRect.qml
     Overlay.qml
     SearchBar.qml
+    Switcher.qml
     TextArea.qml
     Title.qml
     VerticalDivider.qml

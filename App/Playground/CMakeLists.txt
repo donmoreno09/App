@@ -8,7 +8,7 @@ set(qml_files
     TextAreaPanel.qml
     TogglePanel.qml
     OverlayPanel.qml
-
+    SwitcherPanel.qml
 )
 
 qt_add_qml_module(app_playground
