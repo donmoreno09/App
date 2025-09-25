@@ -44,7 +44,6 @@ PanelTemplate {
                         color: Theme.colors.accent500
                     }
 
-                    // Basic slider with label and value on top
                     UI.Slider {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 400
@@ -55,7 +54,6 @@ PanelTemplate {
                         showValues: true
                     }
 
-                    // Slider with label, no value display
                     UI.Slider {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 400
@@ -66,7 +64,6 @@ PanelTemplate {
                         showValues: false
                     }
 
-                    // Slider without label, value only
                     UI.Slider {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 400
@@ -75,6 +72,20 @@ PanelTemplate {
                         to: 100
                         showValues: true
                     }
+
+                    // Inizio Modifica
+                    // Dotted single slider example
+                    UI.Slider {
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 400
+                        value: 60
+                        from: 0
+                        to: 100
+                        label: "Dotted Track"
+                        isDotted: true
+                        showValues: true
+                    }
+                    // Fine Modifica
                 }
 
                 // Section 2: Range Sliders
@@ -89,7 +100,6 @@ PanelTemplate {
                         color: Theme.colors.accent500
                     }
 
-                    // Range slider with min/max labels
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s2
@@ -106,40 +116,17 @@ PanelTemplate {
                             showValues: true
                         }
 
-                        // Min/Max labels below
                         RowLayout {
                             Layout.fillWidth: true
                             Layout.maximumWidth: 400
-
-                            Text {
-                                text: "Min."
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
-
-                            Text {
-                                text: "Value"
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
-
+                            Text { text: "Min."; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
+                            Text { text: "Value"; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
                             Item { Layout.fillWidth: true }
-
-                            Text {
-                                text: "Max."
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
-
-                            Text {
-                                text: "Value"
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
+                            Text { text: "Max."; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
+                            Text { text: "Value"; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
                         }
                     }
 
-                    // Another range slider example
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s2
@@ -159,36 +146,14 @@ PanelTemplate {
                         RowLayout {
                             Layout.fillWidth: true
                             Layout.maximumWidth: 400
-
-                            Text {
-                                text: "Min."
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
-
-                            Text {
-                                text: "Value"
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
-
+                            Text { text: "Min."; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
+                            Text { text: "Value"; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
                             Item { Layout.fillWidth: true }
-
-                            Text {
-                                text: "Max."
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
-
-                            Text {
-                                text: "Value"
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
+                            Text { text: "Max."; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
+                            Text { text: "Value"; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
                         }
                     }
 
-                    // Range slider with close values
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s2
@@ -208,34 +173,29 @@ PanelTemplate {
                         RowLayout {
                             Layout.fillWidth: true
                             Layout.maximumWidth: 400
-
-                            Text {
-                                text: "Min."
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
-
-                            Text {
-                                text: "Value"
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
-
+                            Text { text: "Min."; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
+                            Text { text: "Value"; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
                             Item { Layout.fillWidth: true }
-
-                            Text {
-                                text: "Max."
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
-
-                            Text {
-                                text: "Value"
-                                font.pixelSize: Theme.typography.fontSize125
-                                color: Theme.colors.textMuted
-                            }
+                            Text { text: "Max."; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
+                            Text { text: "Value"; font.pixelSize: Theme.typography.fontSize125; color: Theme.colors.textMuted }
                         }
                     }
+
+                    // Inizio Modifica
+                    // Dotted range slider example
+                    UI.Slider {
+                        Layout.fillWidth: true
+                        Layout.maximumWidth: 400
+                        isRange: true
+                        firstValue: 25
+                        secondValue: 75
+                        from: 0
+                        to: 100
+                        label: "Dotted Range"
+                        showValues: true
+                        isDotted: true
+                    }
+                    // Fine Modifica
                 }
 
                 // Section 3: Different Sizes and Configurations
@@ -250,7 +210,6 @@ PanelTemplate {
                         color: Theme.colors.accent500
                     }
 
-                    // Small size
                     UI.Slider {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 300
@@ -261,7 +220,6 @@ PanelTemplate {
                         label: "Small Size"
                     }
 
-                    // Medium size
                     UI.Slider {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 300
@@ -272,7 +230,6 @@ PanelTemplate {
                         label: "Medium Size"
                     }
 
-                    // Large size
                     UI.Slider {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 300
@@ -283,7 +240,6 @@ PanelTemplate {
                         label: "Large Size"
                     }
 
-                    // With percentage
                     UI.Slider {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 300
@@ -294,7 +250,6 @@ PanelTemplate {
                         valueSuffix: "%"
                     }
 
-                    // With currency
                     UI.Slider {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 300
@@ -306,7 +261,6 @@ PanelTemplate {
                         valuePrefix: "$"
                     }
 
-                    // Disabled state
                     UI.Slider {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 300
@@ -318,7 +272,7 @@ PanelTemplate {
                     }
                 }
 
-                // Section 4: Interactive Controls (matching Figma bottom section)
+                // Section 4: Interactive Controls
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: Theme.spacing.s5
@@ -330,7 +284,6 @@ PanelTemplate {
                         color: Theme.colors.accent500
                     }
 
-                    // Two simple sliders like in Figma
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 400
@@ -361,6 +314,9 @@ PanelTemplate {
                                 from: 0
                                 to: 100
                                 showValues: false
+                                // Inizio Modifica
+                                isDotted: true
+                                // Fine Modifica
                             }
                         }
                     }
@@ -376,7 +332,6 @@ PanelTemplate {
                         size: "sm"
                         variant: "secondary"
                         onClicked: {
-                            // Reset functionality would go here
                             console.log("Reset all sliders")
                         }
                     }
@@ -386,13 +341,11 @@ PanelTemplate {
                         size: "sm"
                         variant: "ghost"
                         onClicked: {
-                            // Random values functionality would go here
                             console.log("Set random values")
                         }
                     }
                 }
 
-                // Spacer
                 Item { Layout.preferredHeight: Theme.spacing.s6 }
             }
         }

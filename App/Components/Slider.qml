@@ -26,6 +26,9 @@ Item {
     property string valueSuffix: ""
     property int decimalPlaces: 0
     property bool isRange: false
+    // Inizio Modifica
+    property bool isDotted: false
+    // Fine Modifica
 
     // Single value properties
     property real value: 50
@@ -150,29 +153,44 @@ Item {
                     root.value = value
                 }
 
-                background: Rectangle {
+                // Inizio Modifica
+                background: Item {
                     x: singleSlider.leftPadding
-                    y: singleSlider.topPadding + (singleSlider.availableHeight - height) / 2
+                    y: singleSlider.topPadding + (singleSlider.availableHeight - _currentSize.trackHeight) / 2
                     width: singleSlider.availableWidth
                     height: _currentSize.trackHeight
-                    radius: height / 2
-                    color: singleSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200
 
+                    // Solid track
                     Rectangle {
-                        width: singleSlider.visualPosition * parent.width
-                        height: parent.height
+                        anchors.fill: parent
                         radius: height / 2
-                        color: singleSlider.enabled ? root.accentColor : Theme.colors.grey400
+                        color: singleSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200
+                        visible: !root.isDotted
 
-                        Behavior on color {
-                            ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
+                        Rectangle {
+                            width: singleSlider.visualPosition * parent.width
+                            height: parent.height
+                            radius: height / 2
+                            color: singleSlider.enabled ? root.accentColor : Theme.colors.grey400
                         }
                     }
 
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
+                    // Dotted track
+                    Repeater {
+                        model: Math.floor(parent.width / 6)
+                        delegate: Rectangle {
+                            width: 4
+                            height: parent.height
+                            radius: 2
+                            x: index * 6
+                            color: (index * 6) <= (singleSlider.visualPosition * parent.width)
+                                   ? root.accentColor
+                                   : (singleSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200)
+                            visible: root.isDotted
+                        }
                     }
                 }
+                // Fine Modifica
 
                 handle: Rectangle {
                     x: singleSlider.leftPadding + singleSlider.visualPosition * (singleSlider.availableWidth - width)
@@ -226,30 +244,46 @@ Item {
                     root.secondValue = second.value
                 }
 
-                background: Rectangle {
+                // Inizio Modifica
+                background: Item {
                     x: rangeSlider.leftPadding
-                    y: rangeSlider.topPadding + (rangeSlider.availableHeight - height) / 2
+                    y: rangeSlider.topPadding + (rangeSlider.availableHeight - _currentSize.trackHeight) / 2
                     width: rangeSlider.availableWidth
                     height: _currentSize.trackHeight
-                    radius: height / 2
-                    color: rangeSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200
 
+                    // Solid track
                     Rectangle {
-                        x: rangeSlider.first.visualPosition * parent.width
-                        width: (rangeSlider.second.visualPosition - rangeSlider.first.visualPosition) * parent.width
-                        height: parent.height
+                        anchors.fill: parent
                         radius: height / 2
-                        color: rangeSlider.enabled ? root.accentColor : Theme.colors.grey400
+                        color: rangeSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200
+                        visible: !root.isDotted
 
-                        Behavior on color {
-                            ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
+                        Rectangle {
+                            x: rangeSlider.first.visualPosition * parent.width
+                            width: (rangeSlider.second.visualPosition - rangeSlider.first.visualPosition) * parent.width
+                            height: parent.height
+                            radius: height / 2
+                            color: rangeSlider.enabled ? root.accentColor : Theme.colors.grey400
                         }
                     }
 
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
+                    // Dotted track
+                    Repeater {
+                        model: Math.floor(parent.width / 6)
+                        delegate: Rectangle {
+                            width: 4
+                            height: parent.height
+                            radius: 2
+                            x: index * 6
+                            color: (x >= rangeSlider.first.visualPosition * parent.width &&
+                                    x <= rangeSlider.second.visualPosition * parent.width)
+                                   ? root.accentColor
+                                   : (rangeSlider.enabled ? Theme.colors.grey300 : Theme.colors.grey200)
+                            visible: root.isDotted
+                        }
                     }
                 }
+                // Fine Modifica
 
                 first.handle: Rectangle {
                     x: rangeSlider.leftPadding + rangeSlider.first.visualPosition * (rangeSlider.availableWidth - width)
