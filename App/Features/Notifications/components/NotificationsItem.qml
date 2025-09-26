@@ -34,8 +34,8 @@ AbstractButton {
     }
 
     contentItem: Rectangle {
-        implicitWidth: 18
-        implicitHeight: 18
+        implicitWidth: Theme.layout.notificationsBarItemWidth
+        implicitHeight: Theme.layout.notificationsBarItemHeight
         radius: Theme.radius.circle(width, height)
         color: _bgColor
 
@@ -56,8 +56,8 @@ AbstractButton {
             running: root.visible
             loops: Animation.Infinite
 
-            NumberAnimation { to: Theme.opacity.o40; duration: 1000 }
-            NumberAnimation { to: Theme.opacity.o10; duration: 1000 }
+            NumberAnimation { to: Theme.opacity.o40; duration: Theme.motion.pulseMs }
+            NumberAnimation { to: Theme.opacity.o10; duration: Theme.motion.pulseMs }
         }
     }
 }

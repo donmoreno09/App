@@ -64,6 +64,83 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/calendar.svg"
+                text: (TranslationManager.revision, qsTr("DateTime"))
+                active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("DateTimePicker Test")
+                    SidePanelController.toggle("datetime-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Modal Dialog Test"))
+                active: PanelRouter.currentPath === "modal-dialog-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Modal Dialog Test")
+                    SidePanelController.toggle("modal-dialog-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("TextArea Test"))
+                active: PanelRouter.currentPath === "textarea-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("TextArea Test")
+                    SidePanelController.toggle("textarea-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Toggle Test"))
+                active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Toggle Test")
+                    SidePanelController.toggle("toggle-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Overlay Test"))
+                active: PanelRouter.currentPath === "overlay-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Overlay Test")
+                    SidePanelController.toggle("overlay-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Switcher Test"))
+                active: PanelRouter.currentPath === "switcher-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Switcher Test")
+                    SidePanelController.toggle("switcher-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Slider Test"))
+                active: PanelRouter.currentPath === "slider-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Slider Test")
+                    SidePanelController.toggle("slider-test")
+                }
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 text: (TranslationManager.revision, qsTr("Language"))
@@ -72,6 +149,18 @@ UI.GlobalBackgroundConsumer {
                 onClicked: {
                     TitleBarController.setTitle("Languages")
                     SidePanelController.toggle("language")
+                }
+            }
+
+            SideRailItem {
+                visible: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
+                source: "qrc:/App/assets/icons/map.svg"
+                text: (TranslationManager.revision, qsTr("Tilesets"))
+                active: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Map Tilesets")
+                    SidePanelController.toggle("maptilesets")
                 }
             }
         }

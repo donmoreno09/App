@@ -17,7 +17,7 @@ Item {
         // Header
         Text {
             text: (TranslationManager.revision, qsTr("Icon Button Components"))
-            font.pixelSize: Theme.typography.size2xl
+            font.pixelSize: Theme.typography.fontSize300
             font.weight: Theme.typography.weightBold
             color: Theme.colors.text
             Layout.fillWidth: true
@@ -30,14 +30,14 @@ Item {
 
             Text {
                 text: (TranslationManager.revision, qsTr("1. Core Icon Set (6 Icons)"))
-                font.pixelSize: Theme.typography.sizeXl
+                font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
                 text: (TranslationManager.revision, qsTr("Primary set of icons using base Button component with proper theme sizing"))
-                font.pixelSize: Theme.typography.sizeSm
+                font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
             }
@@ -54,7 +54,7 @@ Item {
                     icon.source: "icons/clipboard.svg"
                     icon.width: Theme.icons.sizeLg    // 24px from theme
                     icon.height: Theme.icons.sizeLg   // 24px from theme
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
                     text: (TranslationManager.revision, qsTr("Mission"))
 
@@ -134,7 +134,7 @@ Item {
                     icon.source: "icons/plus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Add clicked")
@@ -154,7 +154,7 @@ Item {
                     icon.source: "icons/minus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Remove clicked")
@@ -176,14 +176,14 @@ Item {
 
             Text {
                 text: (TranslationManager.revision, qsTr("2. Icon Button Sizes"))
-                font.pixelSize: Theme.typography.sizeXl
+                font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
                 text: (TranslationManager.revision, qsTr("Using theme icon sizes: sm (16px), md (20px), lg (24px)"))
-                font.pixelSize: Theme.typography.sizeSm
+                font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
             }
@@ -259,14 +259,14 @@ Item {
 
             Text {
                 text: (TranslationManager.revision, qsTr("3. Mission Interface Navigation"))
-                font.pixelSize: Theme.typography.sizeXl
+                font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
                 text: (TranslationManager.revision, qsTr("Vertical navigation rail (80x80px as per Figma specs)"))
-                font.pixelSize: Theme.typography.sizeSm
+                font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
             }
@@ -274,7 +274,7 @@ Item {
             Rectangle {
                 width: 80  // Fixed width from Figma
                 height: 380
-                color: Theme.colors.surface
+                color: Theme.colors.grey600
                 border.color: Theme.colors.text
                 border.width: Theme.borders.b1
                 radius: Theme.radius.md
@@ -294,7 +294,7 @@ Item {
                         icon.source: "icons/clipboard.svg"
                         icon.width: Theme.icons.sizeLg
                         icon.height: Theme.icons.sizeLg
-                        icon.color: Theme.colors.primaryText
+                        icon.color: Theme.colors.text
 
 
 
@@ -435,14 +435,14 @@ Item {
 
             Text {
                 text: (TranslationManager.revision, qsTr("4. Icon Button States"))
-                font.pixelSize: Theme.typography.sizeXl
+                font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
                 text: (TranslationManager.revision, qsTr("Testing enabled, disabled, and interactive states"))
-                font.pixelSize: Theme.typography.sizeSm
+                font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
             }
@@ -459,7 +459,7 @@ Item {
                     icon.source: "icons/send.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Enabled button clicked")
@@ -480,7 +480,7 @@ Item {
                     icon.source: "icons/send.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.primaryText
+                    icon.color: Theme.colors.text
 
 
                     ToolTip {
@@ -500,7 +500,7 @@ Item {
                     icon.source: isActive ? "icons/minus.svg" : "icons/plus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: isActive ? Theme.colors.primaryText : Theme.colors.text
+                    icon.color: isActive ? Theme.colors.text : Theme.colors.text
 
 
                     onClicked: {

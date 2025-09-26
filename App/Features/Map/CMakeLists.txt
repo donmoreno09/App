@@ -1,9 +1,13 @@
 set(qml_files
-    Map.qml
+    MapHost.qml
+    MapTilesetsPanel.qml
+    internals/Map.qml
+    internals/MapState.qml
 )
 
 set(qml_singletons
     MapController.qml
+    MapPlugins.qml
 )
 
 set_source_files_properties(
@@ -11,16 +15,31 @@ set_source_files_properties(
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
 )
 
+set(cpp_files
+    PluginProbe.h
+)
+
+# Since this is now a STATIC library which enables us
+# to use this module's C++ sources in other modules,
+# don't forget to link the QML plugin `app_features_mapplugin`
+# in `App/Features/CMakeLists.txt`.
+qt_add_library(app_features_map STATIC)
+
 qt_add_qml_module(app_features_map
     URI App.Features.Map
     VERSION 1.0
     QML_FILES
         ${qml_files}
         ${qml_singletons}
+    SOURCES ${cpp_files}
     RESOURCE_PREFIX "/"
 )
 
 target_link_libraries(app_features_map
     PRIVATE
+        Qt6::Gui
+        Qt6::Qml
         Qt6::Quick
+        Qt6::Location
+        Qt6::Positioning
 )

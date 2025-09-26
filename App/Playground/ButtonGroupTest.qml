@@ -9,10 +9,10 @@ Rectangle {
     width: childrenRect.width + 16
     height: childrenRect.height + 16
     anchors.centerIn: parent
-    color: Theme.colors.surface
+    color: Theme.colors.grey600
     radius: 5
     border.width: 1
-    border.color: Qt.lighter(Theme.colors.surface, 1.2)
+    border.color: Qt.lighter(Theme.colors.grey600, 1.2)
 
     // ButtonGroup
     ButtonGroup {
@@ -31,7 +31,7 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/map.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.primaryText
+                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
                 variant: "ghost"
                 checkable: true
@@ -53,7 +53,7 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/home.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.primaryText
+                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
                 variant: "ghost"
                 checkable: true
@@ -80,7 +80,7 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/send.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.primaryText
+                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
                 variant: "ghost"
                 checkable: true
@@ -102,7 +102,7 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/plus.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.primaryText
+                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
                 variant: "ghost"
                 checkable: true
@@ -124,7 +124,7 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/minus.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.primaryText
+                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
                 variant: "ghost"
                 checkable: true

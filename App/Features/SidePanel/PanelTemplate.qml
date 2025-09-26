@@ -22,9 +22,9 @@ BasePanel {
             // Title
             Text {
                 id: title
-                color: Theme.colors.primaryText
+                color: Theme.colors.text
                 font.family: Theme.typography.familySans
-                font.pixelSize: Theme.typography.sizeXl
+                font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
                 Layout.fillWidth: true
             }
@@ -41,8 +41,8 @@ BasePanel {
                 Text {
                     anchors.centerIn: parent
                     text: "✕"
-                    color: Theme.colors.primaryText
-                    font.pixelSize: Theme.typography.sizeLg
+                    color: Theme.colors.text
+                    font.pixelSize: Theme.typography.fontSize200
                 }
 
                 onClicked: SidePanelController.close(true)
