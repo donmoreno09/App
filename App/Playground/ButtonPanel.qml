@@ -25,26 +25,26 @@ PanelTemplate {
 
                 // Header
                 Text {
-                    text: "Button Component Variants"
+                    text: "Button Component - Figma Design System"
                     font.pixelSize: Theme.typography.fontSize300
                     font.weight: Theme.typography.weightBold
                     color: Theme.colors.text
                     Layout.fillWidth: true
                 }
 
-                // Section 1: Text Buttons with Label & Icon
+                // Section 1: Text + Icon Buttons (All States)
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: Theme.spacing.s5
 
                     Text {
-                        text: "1. Text Buttons (Label + Icon)"
+                        text: "1. Text + Icon Buttons (Label + Icon)"
                         font.pixelSize: Theme.typography.fontSize200
                         font.weight: Theme.typography.weightSemibold
                         color: Theme.colors.accent500
                     }
 
-                    // Primary variant row
+                    // Primary - All States
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s3
@@ -53,7 +53,7 @@ PanelTemplate {
                             text: "Primary:"
                             font.pixelSize: Theme.typography.fontSize150
                             color: Theme.colors.textMuted
-                            Layout.preferredWidth: 80
+                            Layout.preferredWidth: 100
                         }
 
                         UI.Button {
@@ -62,6 +62,34 @@ PanelTemplate {
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
                             icon.width: Theme.icons.sizeMd
                             icon.height: Theme.icons.sizeMd
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            text: "Label"
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            hoverEnabled: true
+                            palette.buttonText: Qt.lighter(_currentTextColor, 1.1)
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            text: "Label"
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            opacity: 0.7
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            text: "Label"
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            opacity: 0.5
                         }
 
                         UI.Button {
@@ -70,11 +98,11 @@ PanelTemplate {
                             enabled: false
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
                             icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeSm
                         }
                     }
 
-                    // Secondary variant row
+                    // Secondary - All States
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s3
@@ -83,15 +111,42 @@ PanelTemplate {
                             text: "Secondary:"
                             font.pixelSize: Theme.typography.fontSize150
                             color: Theme.colors.textMuted
-                            Layout.preferredWidth: 80
+                            Layout.preferredWidth: 100
                         }
 
                         UI.Button {
                             variant: UI.ButtonStyles.Secondary
                             text: "Label"
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Secondary
+                            text: "Label"
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Secondary
+                            text: "Label"
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Secondary
+                            text: "Label"
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            opacity: 0.4
                         }
 
                         UI.Button {
@@ -99,12 +154,12 @@ PanelTemplate {
                             text: "Label"
                             enabled: false
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
                         }
                     }
 
-                    // Danger variant row
+                    // Danger - All States
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s3
@@ -113,15 +168,42 @@ PanelTemplate {
                             text: "Danger:"
                             font.pixelSize: Theme.typography.fontSize150
                             color: Theme.colors.textMuted
-                            Layout.preferredWidth: 80
+                            Layout.preferredWidth: 100
                         }
 
                         UI.Button {
                             variant: UI.ButtonStyles.Danger
                             text: "Label"
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            text: "Label"
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            text: "Label"
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            text: "Label"
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            opacity: 0.4
                         }
 
                         UI.Button {
@@ -129,27 +211,27 @@ PanelTemplate {
                             text: "Label"
                             enabled: false
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
                         }
                     }
                 }
 
                 UI.HorizontalDivider { Layout.fillWidth: true }
 
-                // Section 2: Icon-Only Buttons (Square)
+                // Section 2: Icon Only Square Buttons
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: Theme.spacing.s5
 
                     Text {
-                        text: "2. Icon-Only Buttons (Square)"
+                        text: "2. Icon Only (Square) - 32x32px"
                         font.pixelSize: Theme.typography.fontSize200
                         font.weight: Theme.typography.weightSemibold
                         color: Theme.colors.accent500
                     }
 
-                    // Primary icons
+                    // Primary Square Icons
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s3
@@ -158,17 +240,50 @@ PanelTemplate {
                             text: "Primary:"
                             font.pixelSize: Theme.typography.fontSize150
                             color: Theme.colors.textMuted
-                            Layout.preferredWidth: 80
+                            Layout.preferredWidth: 100
                         }
 
                         UI.Button {
                             variant: UI.ButtonStyles.Primary
                             display: AbstractButton.IconOnly
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
                             Layout.preferredWidth: Theme.spacing.s8
                             Layout.preferredHeight: Theme.spacing.s8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.4
                         }
 
                         UI.Button {
@@ -176,14 +291,14 @@ PanelTemplate {
                             display: AbstractButton.IconOnly
                             enabled: false
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
                             Layout.preferredWidth: Theme.spacing.s8
                             Layout.preferredHeight: Theme.spacing.s8
                         }
                     }
 
-                    // Secondary icons
+                    // Secondary Square Icons
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s3
@@ -192,17 +307,50 @@ PanelTemplate {
                             text: "Secondary:"
                             font.pixelSize: Theme.typography.fontSize150
                             color: Theme.colors.textMuted
-                            Layout.preferredWidth: 80
+                            Layout.preferredWidth: 100
                         }
 
                         UI.Button {
                             variant: UI.ButtonStyles.Secondary
                             display: AbstractButton.IconOnly
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
                             Layout.preferredWidth: Theme.spacing.s8
                             Layout.preferredHeight: Theme.spacing.s8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Secondary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Secondary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Secondary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.4
                         }
 
                         UI.Button {
@@ -210,14 +358,14 @@ PanelTemplate {
                             display: AbstractButton.IconOnly
                             enabled: false
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
                             Layout.preferredWidth: Theme.spacing.s8
                             Layout.preferredHeight: Theme.spacing.s8
                         }
                     }
 
-                    // Danger icons
+                    // Danger Square Icons
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s3
@@ -226,15 +374,15 @@ PanelTemplate {
                             text: "Danger:"
                             font.pixelSize: Theme.typography.fontSize150
                             color: Theme.colors.textMuted
-                            Layout.preferredWidth: 80
+                            Layout.preferredWidth: 100
                         }
 
                         UI.Button {
                             variant: UI.ButtonStyles.Danger
                             display: AbstractButton.IconOnly
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
                             Layout.preferredWidth: Theme.spacing.s8
                             Layout.preferredHeight: Theme.spacing.s8
                         }
@@ -242,10 +390,43 @@ PanelTemplate {
                         UI.Button {
                             variant: UI.ButtonStyles.Danger
                             display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.4
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
                             enabled: false
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
-                            icon.width: Theme.icons.sizeMd
-                            icon.height: Theme.icons.sizeMd
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
                             Layout.preferredWidth: Theme.spacing.s8
                             Layout.preferredHeight: Theme.spacing.s8
                         }
@@ -254,18 +435,19 @@ PanelTemplate {
 
                 UI.HorizontalDivider { Layout.fillWidth: true }
 
-                // Section 3: Icon-Only Buttons (Circle)
+                // Section 3: Icon Only Circle Buttons
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: Theme.spacing.s5
 
                     Text {
-                        text: "3. Icon-Only Buttons (Circle)"
+                        text: "3. Icon Only (Circle) - 32x32px"
                         font.pixelSize: Theme.typography.fontSize200
                         font.weight: Theme.typography.weightSemibold
                         color: Theme.colors.accent500
                     }
 
+                    // Primary Circle
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: Theme.spacing.s3
@@ -274,13 +456,378 @@ PanelTemplate {
                             text: "Primary:"
                             font.pixelSize: Theme.typography.fontSize150
                             color: Theme.colors.textMuted
-                            Layout.preferredWidth: 80
+                            Layout.preferredWidth: 100
                         }
 
                         UI.Button {
                             variant: UI.ButtonStyles.Primary
                             display: AbstractButton.IconOnly
                             icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.4
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            enabled: false
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                        }
+                    }
+
+                    // Danger Circle
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: Theme.spacing.s3
+
+                        Text {
+                            text: "Danger:"
+                            font.pixelSize: Theme.typography.fontSize150
+                            color: Theme.colors.textMuted
+                            Layout.preferredWidth: 100
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.4
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            enabled: false
+                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.width: Theme.icons.sizeSm
+                            icon.height: Theme.icons.sizeSm
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                        }
+                    }
+                }
+
+                UI.HorizontalDivider { Layout.fillWidth: true }
+
+                // Section 3.5: Diamond Star Icon Buttons
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: Theme.spacing.s5
+
+                    Text {
+                        text: "3.5. Diamond Star Icon Buttons"
+                        font.pixelSize: Theme.typography.fontSize200
+                        font.weight: Theme.typography.weightSemibold
+                        color: Theme.colors.accent500
+                    }
+
+                    // Primary Diamond Stars - Square
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: Theme.spacing.s3
+
+                        Text {
+                            text: "Primary (Square):"
+                            font.pixelSize: Theme.typography.fontSize150
+                            color: Theme.colors.textMuted
+                            Layout.preferredWidth: 120
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.4
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            enabled: false
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                        }
+                    }
+
+                    // Primary Diamond Stars - Circle
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: Theme.spacing.s3
+
+                        Text {
+                            text: "Primary (Circle):"
+                            font.pixelSize: Theme.typography.fontSize150
+                            color: Theme.colors.textMuted
+                            Layout.preferredWidth: 120
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.4
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Primary
+                            display: AbstractButton.IconOnly
+                            enabled: false
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                        }
+                    }
+
+                    // Danger Diamond Stars - Square
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: Theme.spacing.s3
+
+                        Text {
+                            text: "Danger (Square):"
+                            font.pixelSize: Theme.typography.fontSize150
+                            color: Theme.colors.textMuted
+                            Layout.preferredWidth: 120
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            opacity: 0.4
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            enabled: false
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                        }
+                    }
+
+                    // Danger Diamond Stars - Circle
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: Theme.spacing.s3
+
+                        Text {
+                            text: "Danger (Circle):"
+                            font.pixelSize: Theme.typography.fontSize150
+                            color: Theme.colors.textMuted
+                            Layout.preferredWidth: 120
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
                             icon.width: Theme.icons.sizeMd
                             icon.height: Theme.icons.sizeMd
                             Layout.preferredWidth: Theme.spacing.s8
@@ -291,7 +838,44 @@ PanelTemplate {
                         UI.Button {
                             variant: UI.ButtonStyles.Danger
                             display: AbstractButton.IconOnly
-                            icon.source: "qrc:/App/assets/icons/x-close.svg"
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.8
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.6
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
+                            icon.width: Theme.icons.sizeMd
+                            icon.height: Theme.icons.sizeMd
+                            Layout.preferredWidth: Theme.spacing.s8
+                            Layout.preferredHeight: Theme.spacing.s8
+                            radius: Theme.radius.circle(Theme.spacing.s8, Theme.spacing.s8)
+                            opacity: 0.4
+                        }
+
+                        UI.Button {
+                            variant: UI.ButtonStyles.Danger
+                            display: AbstractButton.IconOnly
+                            enabled: false
+                            icon.source: "qrc:/App/assets/icons/diamond-star.svg"
                             icon.width: Theme.icons.sizeMd
                             icon.height: Theme.icons.sizeMd
                             Layout.preferredWidth: Theme.spacing.s8
@@ -301,140 +885,152 @@ PanelTemplate {
                     }
                 }
 
-                UI.HorizontalDivider { Layout.fillWidth: true }
-
-                // Section 4: Size Variants
+                // Section 4: Pill Buttons (Figma Image 3)
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: Theme.spacing.s5
 
                     Text {
-                        text: "4. Size Variants"
+                        text: "4. Pill Buttons (Secondary Variant)"
                         font.pixelSize: Theme.typography.fontSize200
                         font.weight: Theme.typography.weightSemibold
                         color: Theme.colors.accent500
                     }
 
-                    RowLayout {
+                    ColumnLayout {
                         Layout.fillWidth: true
-                        spacing: Theme.spacing.s3
+                        spacing: Theme.spacing.s2
 
-                        UI.Button {
-                            variant: UI.ButtonStyles.Primary
-                            text: "Small"
-                            size: "sm"
+                        // Row 1
+                        RowLayout {
+                            Layout.alignment: Qt.AlignHCenter
+                            spacing: Theme.spacing.s2
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                            }
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                            }
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                            }
                         }
 
-                        UI.Button {
-                            variant: UI.ButtonStyles.Primary
-                            text: "Medium"
-                            size: "md"
+                        // Row 2 - with active state
+                        RowLayout {
+                            Layout.alignment: Qt.AlignHCenter
+                            spacing: Theme.spacing.s2
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Primary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                                active: true
+                            }
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                                enabled: false
+                            }
                         }
 
-                        UI.Button {
-                            variant: UI.ButtonStyles.Primary
-                            text: "Large"
-                            size: "lg"
-                        }
-                    }
-                }
+                        // Row 3
+                        RowLayout {
+                            Layout.alignment: Qt.AlignHCenter
+                            spacing: Theme.spacing.s2
 
-                UI.HorizontalDivider { Layout.fillWidth: true }
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                            }
 
-                // Section 5: Pill Buttons
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: Theme.spacing.s5
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                            }
 
-                    Text {
-                        text: "5. Pill Buttons"
-                        font.pixelSize: Theme.typography.fontSize200
-                        font.weight: Theme.typography.weightSemibold
-                        color: Theme.colors.accent500
-                    }
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: Theme.spacing.s3
-
-                        UI.Button {
-                            variant: UI.ButtonStyles.Secondary
-                            text: "Label"
-                            radius: Theme.radius.full(height)
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                            }
                         }
 
-                        UI.Button {
-                            variant: UI.ButtonStyles.Secondary
-                            text: "Label"
-                            radius: Theme.radius.full(height)
+                        // Row 4 - with active state
+                        RowLayout {
+                            Layout.alignment: Qt.AlignHCenter
+                            spacing: Theme.spacing.s2
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Primary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                                active: true
+                            }
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                                enabled: false
+                            }
                         }
 
-                        UI.Button {
-                            variant: UI.ButtonStyles.Secondary
-                            text: "Label"
-                            radius: Theme.radius.full(height)
+                        // Row 5
+                        RowLayout {
+                            Layout.alignment: Qt.AlignHCenter
+                            spacing: Theme.spacing.s2
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                            }
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                            }
+
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                            }
                         }
 
-                        UI.Button {
-                            variant: UI.ButtonStyles.Primary
-                            text: "Label"
-                            radius: Theme.radius.full(height)
-                        }
+                        // Row 6 - with active state
+                        RowLayout {
+                            Layout.alignment: Qt.AlignHCenter
+                            spacing: Theme.spacing.s2
 
-                        UI.Button {
-                            variant: UI.ButtonStyles.Secondary
-                            text: "Label"
-                            enabled: false
-                            radius: Theme.radius.full(height)
-                        }
-                    }
-                }
+                            UI.Button {
+                                variant: UI.ButtonStyles.Primary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                                active: true
+                            }
 
-                UI.HorizontalDivider { Layout.fillWidth: true }
-
-                // Section 6: Interactive State Test
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: Theme.spacing.s5
-
-                    Text {
-                        text: "6. Interactive State Test"
-                        font.pixelSize: Theme.typography.fontSize200
-                        font.weight: Theme.typography.weightSemibold
-                        color: Theme.colors.accent500
-                    }
-
-                    Text {
-                        text: "Hover, press, and focus these buttons to test states"
-                        font.pixelSize: Theme.typography.fontSize150
-                        color: Theme.colors.textMuted
-                    }
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: Theme.spacing.s3
-
-                        UI.Button {
-                            variant: UI.ButtonStyles.Primary
-                            text: "Hover Me"
-                        }
-
-                        UI.Button {
-                            variant: UI.ButtonStyles.Secondary
-                            text: "Press Me"
-                        }
-
-                        UI.Button {
-                            variant: UI.ButtonStyles.Success
-                            text: "Focus Me"
-                        }
-
-                        UI.Button {
-                            id: activeButton
-                            variant: UI.ButtonStyles.Primary
-                            text: activeButton.active ? "Active" : "Inactive"
-                            active: activeButton.checked
-                            checkable: true
+                            UI.Button {
+                                variant: UI.ButtonStyles.Secondary
+                                text: "Label"
+                                radius: Theme.radius.full(height)
+                                enabled: false
+                            }
                         }
                     }
                 }
