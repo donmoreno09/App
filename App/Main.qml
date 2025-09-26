@@ -166,7 +166,7 @@ ApplicationWindow {
                     UI.Button {
                         id: englishButton
                         text: "English"
-                        variant: LanguageController.currentLanguage === "en" ? "primary" : "secondary"
+                        variant: LanguageController.currentLanguage === "en" ? UI.ButtonStyles.Primary : UI.ButtonStyles.Secondary
                         size: "sm"
                         onClicked: LanguageController.currentLanguage = "en"
                     }
@@ -174,7 +174,7 @@ ApplicationWindow {
                     UI.Button {
                         id: italianButton
                         text: "Italian"
-                        variant: LanguageController.currentLanguage === "it" ? "primary" : "secondary"
+                        variant: LanguageController.currentLanguage === "it" ? UI.ButtonStyles.Primary : UI.ButtonStyles.Secondary
                         size: "sm"
                         onClicked: LanguageController.currentLanguage = "it"
                     }

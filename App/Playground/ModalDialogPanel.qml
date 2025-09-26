@@ -57,7 +57,7 @@ PanelTemplate {
                     UI.Button {
                         Layout.fillWidth: true
                         text: "Change Password"
-                        variant: "secondary"
+                        variant: UI.ButtonStyles.Secondary
                         onClicked: dialogStack.push(passwordDialog)
                     }
 
@@ -68,14 +68,14 @@ PanelTemplate {
                         UI.Button {
                             Layout.fillWidth: true
                             text: "Save"
-                            variant: "primary"
+                            variant: UI.ButtonStyles.Primary
                             onClicked: closed()
                         }
 
                         UI.Button {
                             Layout.fillWidth: true
                             text: "Cancel"
-                            variant: "ghost"
+                            variant: UI.ButtonStyles.Ghost
                             onClicked: closed()
                         }
                     }
@@ -129,14 +129,14 @@ PanelTemplate {
                         UI.Button {
                             Layout.fillWidth: true
                             text: "Update"
-                            variant: "primary"
+                            variant: UI.ButtonStyles.Primary
                             onClicked: closed()
                         }
 
                         UI.Button {
                             Layout.fillWidth: true
                             text: "Cancel"
-                            variant: "ghost"
+                            variant: UI.ButtonStyles.Ghost
                             onClicked: closed()
                         }
                     }
@@ -207,7 +207,7 @@ PanelTemplate {
                 UI.Button {
                     Layout.fillWidth: true
                     text: "Edit Profile Settings"
-                    variant: "primary"
+                    variant: UI.ButtonStyles.Primary
                     size: "lg"
                     onClicked: dialogStack.push(profileDialog)
                 }

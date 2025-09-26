@@ -10,6 +10,7 @@ const routes = {
   "switcher-test": "qrc:/App/Playground/SwitcherPanel.qml",
   "slider-test": "qrc:/App/Playground/SliderPanel.qml",
   "modal-dialog-test": "qrc:/App/Playground/ModalDialogPanel.qml",
+  "button-test": "qrc:/App/Playground/ButtonPanel.qml",
   "*":      "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
 };
 

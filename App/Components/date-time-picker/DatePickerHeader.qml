@@ -30,7 +30,7 @@ Item {
         UI.Button {
             Layout.preferredWidth: Theme.spacing.s8
             Layout.preferredHeight: Theme.spacing.s8
-            variant: "ghost"
+            variant: UI.ButtonStyles.Ghost
             display: AbstractButton.IconOnly
             backgroundRect.color: Theme.colors.transparent
             backgroundRect.border.width: Theme.borders.b0
@@ -88,7 +88,7 @@ Item {
         UI.Button {
             Layout.preferredWidth: Theme.spacing.s8
             Layout.preferredHeight: Theme.spacing.s8
-            variant: "ghost"
+            variant: UI.ButtonStyles.Ghost
             display: AbstractButton.IconOnly
             backgroundRect.color: Theme.colors.transparent
             backgroundRect.border.width: Theme.borders.b0

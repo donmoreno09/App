@@ -48,13 +48,12 @@ Item {
 
                 // Clipboard/Mission icon with text (vertical layout like Figma)
                 UI.Button {
-                    variant: "primary"
+                    variant: UI.ButtonStyles.Primary
                     display: AbstractButton.TextUnderIcon  // Icon on top, text below
 
                     icon.source: "icons/clipboard.svg"
                     icon.width: Theme.icons.sizeLg    // 24px from theme
                     icon.height: Theme.icons.sizeLg   // 24px from theme
-                    icon.color: Theme.colors.text
 
                     text: (TranslationManager.revision, qsTr("Mission"))
 
@@ -69,13 +68,12 @@ Item {
 
                 // Map icon
                 UI.Button {
-                    variant: "secondary"
+                    variant: UI.ButtonStyles.Secondary
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/map.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
 
                     onClicked: console.log("Map clicked")
 
@@ -88,13 +86,12 @@ Item {
 
                 // Home icon
                 UI.Button {
-                    variant: "ghost"
+                    variant: UI.ButtonStyles.Ghost
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/home.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Home clicked")
@@ -108,13 +105,12 @@ Item {
 
                 // Send icon
                 UI.Button {
-                    variant: "ghost"
+                    variant: UI.ButtonStyles.Ghost
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/send.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Send clicked")
@@ -128,13 +124,12 @@ Item {
 
                 // Plus icon
                 UI.Button {
-                    variant: "success"
+                    variant: UI.ButtonStyles.Success
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/plus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Add clicked")
@@ -148,13 +143,12 @@ Item {
 
                 // Minus icon
                 UI.Button {
-                    variant: "danger"
+                    variant: UI.ButtonStyles.Danger
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/minus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Remove clicked")
@@ -194,14 +188,13 @@ Item {
 
                 // Small (32px button, 16px icon)
                 UI.Button {
-                    variant: "secondary"
+                    variant: UI.ButtonStyles.Secondary
                     size: "sm"
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/plus.svg"
                     icon.width: Theme.icons.sizeSm   // 16px
                     icon.height: Theme.icons.sizeSm
-                    icon.color: Theme.colors.text
 
                     ToolTip {
                         visible: parent.hovered
@@ -212,14 +205,13 @@ Item {
 
                 // Medium (36px button, 20px icon)
                 UI.Button {
-                    variant: "secondary"
+                    variant: UI.ButtonStyles.Secondary
                     size: "md"
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/plus.svg"
                     icon.width: Theme.icons.sizeMd   // 20px
                     icon.height: Theme.icons.sizeMd
-                    icon.color: Theme.colors.text
 
                     implicitWidth: 36                // Custom size
                     implicitHeight: 36
@@ -233,14 +225,13 @@ Item {
 
                 // Large (40px button, 24px icon)
                 UI.Button {
-                    variant: "secondary"
+                    variant: UI.ButtonStyles.Secondary
                     size: "lg"
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/plus.svg"
                     icon.width: Theme.icons.sizeLg   // 24px
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
 
                     ToolTip {
                         visible: parent.hovered
@@ -288,14 +279,13 @@ Item {
 
                     // Mission clipboard (active)
                     UI.Button {
-                        variant: "primary"
+                        variant: UI.ButtonStyles.Primary
                         display: AbstractButton.IconOnly
 
                         icon.source: "icons/clipboard.svg"
                         icon.width: Theme.icons.sizeLg
                         icon.height: Theme.icons.sizeLg
-                        icon.color: Theme.colors.text
-
+    
 
 
                         radius: Theme.radius.md
@@ -311,14 +301,13 @@ Item {
 
                     // Map
                     UI.Button {
-                        variant: "ghost"
+                        variant: UI.ButtonStyles.Ghost
                         display: AbstractButton.IconOnly
 
                         icon.source: "icons/map.svg"
                         icon.width: Theme.icons.sizeLg
                         icon.height: Theme.icons.sizeLg
-                        icon.color: Theme.colors.text
-
+    
 
 
                         radius: Theme.radius.md
@@ -334,14 +323,13 @@ Item {
 
                     // Home
                     UI.Button {
-                        variant: "ghost"
+                        variant: UI.ButtonStyles.Ghost
                         display: AbstractButton.IconOnly
 
                         icon.source: "icons/home.svg"
                         icon.width: Theme.icons.sizeLg
                         icon.height: Theme.icons.sizeLg
-                        icon.color: Theme.colors.text
-
+    
 
 
                         radius: Theme.radius.md
@@ -357,14 +345,13 @@ Item {
 
                     // Send
                     UI.Button {
-                        variant: "ghost"
+                        variant: UI.ButtonStyles.Ghost
                         display: AbstractButton.IconOnly
 
                         icon.source: "icons/send.svg"
                         icon.width: Theme.icons.sizeLg
                         icon.height: Theme.icons.sizeLg
-                        icon.color: Theme.colors.text
-
+    
 
 
                         radius: Theme.radius.md
@@ -380,14 +367,13 @@ Item {
 
                     // Plus
                     UI.Button {
-                        variant: "ghost"
+                        variant: UI.ButtonStyles.Ghost
                         display: AbstractButton.IconOnly
 
                         icon.source: "icons/plus.svg"
                         icon.width: Theme.icons.sizeLg
                         icon.height: Theme.icons.sizeLg
-                        icon.color: Theme.colors.text
-
+    
 
 
                         radius: Theme.radius.md
@@ -403,14 +389,13 @@ Item {
 
                     // Minus
                     UI.Button {
-                        variant: "ghost"
+                        variant: UI.ButtonStyles.Ghost
                         display: AbstractButton.IconOnly
 
                         icon.source: "icons/minus.svg"
                         icon.width: Theme.icons.sizeLg
                         icon.height: Theme.icons.sizeLg
-                        icon.color: Theme.colors.text
-
+    
 
 
                         radius: Theme.radius.md
@@ -453,13 +438,12 @@ Item {
 
                 // Enabled
                 UI.Button {
-                    variant: "primary"
+                    variant: UI.ButtonStyles.Primary
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/send.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
 
 
                     onClicked: console.log("Enabled button clicked")
@@ -473,14 +457,13 @@ Item {
 
                 // Disabled
                 UI.Button {
-                    variant: "primary"
+                    variant: UI.ButtonStyles.Primary
                     enabled: false
                     display: AbstractButton.IconOnly
 
                     icon.source: "icons/send.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: Theme.colors.text
 
 
                     ToolTip {
@@ -493,14 +476,13 @@ Item {
                 // Toggle state
                 UI.Button {
                     id: toggleButton
-                    variant: isActive ? "success" : "secondary"
+                    variant: isActive ? UI.ButtonStyles.Success : UI.ButtonStyles.Secondary
                     display: AbstractButton.IconOnly
                     property bool isActive: false
 
                     icon.source: isActive ? "icons/minus.svg" : "icons/plus.svg"
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
-                    icon.color: isActive ? Theme.colors.text : Theme.colors.text
 
 
                     onClicked: {

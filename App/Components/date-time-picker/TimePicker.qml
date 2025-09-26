@@ -43,7 +43,7 @@ Rectangle {
             Layout.preferredWidth: 40
             Layout.fillHeight: true
             Layout.minimumHeight: 30
-            variant: "ghost"
+            variant: UI.ButtonStyles.Ghost
             display: AbstractButton.IconOnly
 
             background: Rectangle {
@@ -55,7 +55,6 @@ Rectangle {
             icon.source: "qrc:/App/assets/icons/chevron-up.svg"
             icon.width: 14
             icon.height: 8
-            icon.color: Theme.colors.text
 
             onClicked: upClicked()
         }
@@ -83,7 +82,7 @@ Rectangle {
             Layout.preferredWidth: 40
             Layout.fillHeight: true
             Layout.minimumHeight: 30
-            variant: "ghost"
+            variant: UI.ButtonStyles.Ghost
             display: AbstractButton.IconOnly
 
             background: Rectangle {
@@ -95,7 +94,6 @@ Rectangle {
             icon.source: "qrc:/App/assets/icons/chevron-down.svg"
             icon.width: 14
             icon.height: 8
-            icon.color: Theme.colors.text
 
             onClicked: downClicked()
         }

@@ -11,6 +11,7 @@ set(qml_files
     SwitcherPanel.qml
     SliderPanel.qml
     ModalDialogPanel.qml
+    ButtonPanel.qml
 )
 
 qt_add_qml_module(app_playground
