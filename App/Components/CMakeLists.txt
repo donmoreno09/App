@@ -35,6 +35,7 @@ set(qml_files
     Overlay.qml
     Switcher.qml
     Slider.qml
+    ModalDialogStack.qml
 )
 
 

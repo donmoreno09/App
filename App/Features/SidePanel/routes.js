@@ -9,6 +9,7 @@ const routes = {
   "overlay-test": "qrc:/App/Playground/OverlayPanel.qml",
   "switcher-test": "qrc:/App/Playground/SwitcherPanel.qml",
   "slider-test": "qrc:/App/Playground/SliderPanel.qml",
+  "modal-dialog-test": "qrc:/App/Playground/ModalDialogPanel.qml",
   "*":      "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
 };
 

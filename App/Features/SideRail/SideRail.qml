@@ -76,6 +76,17 @@ UI.GlobalBackgroundConsumer {
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Modal Dialog Test"))
+                active: PanelRouter.currentPath === "modal-dialog-test" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Modal Dialog Test")
+                    SidePanelController.toggle("modal-dialog-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
                 text: (TranslationManager.revision, qsTr("TextArea Test"))
                 active: PanelRouter.currentPath === "textarea-test" && SidePanelController.isOpen
 
@@ -84,7 +95,6 @@ UI.GlobalBackgroundConsumer {
                     SidePanelController.toggle("textarea-test")
                 }
             }
-
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/test.svg"
