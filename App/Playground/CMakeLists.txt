@@ -10,6 +10,8 @@ set(qml_files
     OverlayPanel.qml
     SwitcherPanel.qml
     SliderPanel.qml
+    ModalPanel.qml
+
 )
 
 qt_add_qml_module(app_playground

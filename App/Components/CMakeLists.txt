@@ -8,6 +8,7 @@ set(qml_files
     HorizontalPadding.qml
     HorizontalSpacer.qml
     InputCoordinate.qml
+    Modal.qml
     OutlineRect.qml
     Overlay.qml
     Slider.qml

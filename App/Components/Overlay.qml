@@ -22,12 +22,11 @@ Popup {
         MultiEffect {
             source: ShaderEffectSource {
                 sourceItem: (Overlay.overlay && Overlay.overlay.parent) ? Overlay.overlay.parent : null
-                live: true
                 hideSource: false
             }
 
             blurEnabled: true
-            blur: 0.6
+            blur: 0.4
             autoPaddingEnabled: false
         }
     }
