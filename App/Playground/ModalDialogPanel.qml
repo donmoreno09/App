@@ -99,7 +99,7 @@ PanelTemplate {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: Theme.colors.surface
+                color: Qt.lighter(Theme.colors.surface, 1.5)
                 radius: Theme.radius.lg
                 border.color: Theme.colors.border
                 border.width: 1
