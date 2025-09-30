@@ -29,11 +29,6 @@ ApplicationWindow {
     // Apparently Qt's ApplicationWindow does not have a flag for it.
     property bool appLoaded: false
 
-    palette {
-        placeholderText: "white"
-        buttonText: "white"
-    }
-
     Component.onCompleted: {
         WindowsNcController.attachToWindow(app)
         appLoaded = true

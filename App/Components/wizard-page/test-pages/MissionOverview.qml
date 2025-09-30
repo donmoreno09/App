@@ -1,7 +1,9 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+
 import App.Themes 1.0
+import App.Components 1.0 as UI
 import App.Features.Language 1.0
 
 Item {
@@ -14,8 +16,11 @@ Item {
         anchors.margins: 24
         spacing: 24
 
-        Text { text: (TranslationManager.revision, qsTr("Mission Name (*)")); color: "#fff"; font.family: Theme.typography.familySans; font.pixelSize: Theme.typography.fontSize175; font.weight: Theme.typography.weightMedium }
-        TextField { id: missionNameField; placeholderText: (TranslationManager.revision, qsTr("Enter mission name")); Layout.fillWidth: true; Layout.preferredHeight: 48 }
+        UI.Input {
+            Layout.fillWidth: true
+            labelText: (TranslationManager.revision, qsTr("Mission Name (*)"))
+            placeholderText: (TranslationManager.revision, qsTr("Enter mission name"))
+        }
 
         Text { text: (TranslationManager.revision, qsTr("Mission Domain")); color: "#fff"; font.family: Theme.typography.familySans; font.pixelSize: Theme.typography.fontSize175; font.weight: Theme.typography.weightMedium }
         ComboBox { Layout.fillWidth: true; Layout.preferredHeight: 48; model: [(TranslationManager.revision, qsTr("Select Domain")),(TranslationManager.revision, qsTr("Land")),(TranslationManager.revision, qsTr("Sea")),(TranslationManager.revision, qsTr("Air")),(TranslationManager.revision, qsTr("Space"))]; currentIndex: 0 }

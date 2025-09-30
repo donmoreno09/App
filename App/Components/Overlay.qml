@@ -1,36 +1,7 @@
-/*!
-    \qmltype Overlay
-    \inqmlmodule App.Components
-    \brief Simple, essential overlay component for modals and dialogs.
-
-    Minimal overlay implementation focusing on core functionality:
-    - Modal behavior with backdrop
-    - Center positioning
-    - ESC key and click-outside dismissal
-    - Smooth animations
-    - Theme integration
-
-    Usage:
-    \code
-    UI.Overlay {
-        id: dialog
-        width: 400
-        height: 300
-
-        Rectangle {
-            anchors.fill: parent
-            color: Theme.colors.surface
-            radius: Theme.radius.lg
-
-            // Your content here
-        }
-    }
-    \endcode
-*/
-
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Effects
+
 import App.Themes 1.0
 
 Popup {
@@ -51,12 +22,11 @@ Popup {
         MultiEffect {
             source: ShaderEffectSource {
                 sourceItem: (Overlay.overlay && Overlay.overlay.parent) ? Overlay.overlay.parent : null
-                live: true
                 hideSource: false
             }
 
             blurEnabled: true
-            blur: 0.6
+            blur: 0.4
             autoPaddingEnabled: false
         }
     }

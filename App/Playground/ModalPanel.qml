@@ -58,7 +58,7 @@ PanelTemplate {
                         Layout.fillWidth: true
                         text: "Change Password"
                         variant: "secondary"
-                        onClicked: dialogStack.push(passwordDialog)
+                        onClicked: modal.push(passwordDialog)
                     }
 
                     RowLayout {
@@ -99,7 +99,7 @@ PanelTemplate {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: Qt.lighter(Theme.colors.surface, 1.5)
+                color: Qt.lighter(Theme.colors.surface, 1.8)
                 radius: Theme.radius.lg
                 border.color: Theme.colors.border
                 border.width: 1
@@ -209,11 +209,11 @@ PanelTemplate {
                     text: "Edit Profile Settings"
                     variant: "primary"
                     size: "lg"
-                    onClicked: dialogStack.push(profileDialog)
+                    onClicked: modal.push(profileDialog)
                 }
 
                 Text {
-                    text: "Active Dialogs: " + dialogStack.count
+                    text: "Active Dialogs: " + modal.count
                     font.pixelSize: 16
                     color: Theme.colors.textMuted
                 }
@@ -231,8 +231,8 @@ PanelTemplate {
     }
 
     // The Modal Dialog Stack
-    UI.ModalDialogStack {
-        id: dialogStack
+    UI.Modal {
+        id: modal
 
         onDialogOpened: (dialog) => {
             console.log("Dialog opened:", dialog.id)

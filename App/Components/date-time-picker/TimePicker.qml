@@ -5,6 +5,10 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
+/*!
+    \qmltype TimePicker
+*/
+
 Rectangle {
     id: root
 
@@ -26,7 +30,7 @@ Rectangle {
     border.width: standalone ? Theme.borders.b1 : Theme.borders.b0
     radius: standalone ? Theme.radius.md : 0
 
-    // Time column component
+    // Time column component - made more compact
     component TimeColumn: ColumnLayout {
         property string label: ""
         property string displayValue: ""
@@ -35,14 +39,14 @@ Rectangle {
         signal downClicked()
 
         Layout.preferredWidth: 40
-        Layout.fillHeight: true
+        Layout.fillHeight: true  // CHANGED: flexible height
         spacing: 0
 
-        // Up arrow
+        // Up arrow - flexible size
         UI.Button {
             Layout.preferredWidth: 40
-            Layout.fillHeight: true
-            Layout.minimumHeight: 30
+            Layout.fillHeight: true  // CHANGED: flexible height
+            Layout.minimumHeight: 30  // Minimum for usability
             variant: "ghost"
             display: AbstractButton.IconOnly
 
@@ -60,11 +64,11 @@ Rectangle {
             onClicked: upClicked()
         }
 
-        // Display value
+        // Display value - flexible size
         Rectangle {
             Layout.preferredWidth: 40
-            Layout.fillHeight: true
-            Layout.minimumHeight: 30
+            Layout.fillHeight: true  // CHANGED: flexible height
+            Layout.minimumHeight: 30  // Minimum for readability
             color: Theme.colors.transparent
             radius: Theme.radius.sm
 
@@ -78,11 +82,11 @@ Rectangle {
             }
         }
 
-        // Down arrow
+        // Down arrow - flexible size
         UI.Button {
             Layout.preferredWidth: 40
-            Layout.fillHeight: true
-            Layout.minimumHeight: 30
+            Layout.fillHeight: true  // CHANGED: flexible height
+            Layout.minimumHeight: 30  // Minimum for usability
             variant: "ghost"
             display: AbstractButton.IconOnly
 
@@ -116,10 +120,10 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: standalone ? Theme.spacing.s4 : 0
-        spacing: standalone ? Theme.spacing.s3 : 0
+        anchors.margins: standalone ? Theme.spacing.s4 : 0  // No margins when embedded
+        spacing: standalone ? Theme.spacing.s3 : 0  // No extra spacing when embedded
 
-        // Time selection area
+        // Time selection area - flexible height
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -180,7 +184,7 @@ Rectangle {
         setCurrentTime()
     }
 
-    // Helper functions
+    // Helper functions - unchanged
     function _incrementHour() {
         selectedHour = is24Hour ? (selectedHour + 1) % 24 :
                      selectedHour >= 12 ? 1 : selectedHour + 1

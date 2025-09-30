@@ -1,12 +1,3 @@
-/*!
-    \qmltype ToggleStyle
-    \inqmlmodule App.Components
-    \brief Style contract/interface for Toggle component variants.
-
-    Defines the required color properties that each toggle variant must provide.
-    This ensures consistent theming and enables autocomplete for variant styles.
-*/
-
 import QtQuick 6.8
 
 QtObject {

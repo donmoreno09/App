@@ -1,12 +1,3 @@
-/*!
-    \qmltype ToggleStyles
-    \inqmlmodule App.Components
-    \brief Singleton providing Toggle style variants.
-
-    Defines the two main style states for the Toggle component as shown in Figma:
-    Primary (active blue state) and the standard off/disabled states.
-*/
-
 pragma Singleton
 
 import QtQuick 6.8
@@ -31,7 +22,7 @@ QtObject {
         "lg": { width: Theme.spacing.s12, height: 26, knobSize: 22 }
     })
 
-    function fromVariant(variant) : ToggleStyle {
+    function fromVariant(variant){
         switch (variant) {
         case ToggleStyles.Primary: return _primary
         default: {

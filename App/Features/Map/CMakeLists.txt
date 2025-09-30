@@ -19,12 +19,6 @@ set(cpp_files
     PluginProbe.h
 )
 
-# Since this is now a STATIC library which enables us
-# to use this module's C++ sources in other modules,
-# don't forget to link the QML plugin `app_features_mapplugin`
-# in `App/Features/CMakeLists.txt`.
-qt_add_library(app_features_map STATIC)
-
 qt_add_qml_module(app_features_map
     URI App.Features.Map
     VERSION 1.0
@@ -34,6 +28,10 @@ qt_add_qml_module(app_features_map
     SOURCES ${cpp_files}
     RESOURCE_PREFIX "/"
 )
+
+include(GenerateExportHeader)
+generate_export_header(app_features_map
+  EXPORT_FILE_NAME ${CMAKE_CURRENT_SOURCE_DIR}/app_features_map_export.h)
 
 target_link_libraries(app_features_map
     PRIVATE

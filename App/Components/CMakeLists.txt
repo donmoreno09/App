@@ -5,37 +5,40 @@ set(qml_files
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml
-    VerticalDivider.qml
-    OutlineRect.qml
-    SearchBar.qml
-    Title.qml
     HorizontalPadding.qml
-    VerticalPadding.qml
     HorizontalSpacer.qml
-    VerticalSpacer.qml
-    input/Input.qml
-    input/InputStyle.qml
     InputCoordinate.qml
+    Modal.qml
+    OutlineRect.qml
+    Overlay.qml
+    Slider.qml
+    SearchBar.qml
+    Switcher.qml
     TextArea.qml
+    Title.qml
+    VerticalDivider.qml
+    VerticalPadding.qml
+    VerticalSpacer.qml
+
     date-time-picker/DatePicker.qml
-    date-time-picker/DatePickerHeader.qml
-    date-time-picker/DatePickerYearView.qml
-    date-time-picker/DatePickerMonthView.qml
+    date-time-picker/DatePickerActions.qml
     date-time-picker/DatePickerCalendarView.qml
     date-time-picker/DatePickerDay.qml
-    date-time-picker/DatePickerActions.qml
-    date-time-picker/TimePicker.qml
+    date-time-picker/DatePickerHeader.qml
+    date-time-picker/DatePickerMonthView.qml
+    date-time-picker/DatePickerYearView.qml
     date-time-picker/DateTimePicker.qml
+    date-time-picker/TimePicker.qml
+
+    input/Input.qml
+    input/InputStyle.qml
+
     wizard-page/WizardPage.qml
     wizard-page/constants/StepDefinitions.qml
     wizard-page/test-pages/MissionOverview.qml
     wizard-page/test-pages/OperationalArea.qml
     toggle/ToggleStyle.qml
     toggle/Toggle.qml
-    Overlay.qml
-    Switcher.qml
-    Slider.qml
-    ModalDialogStack.qml
 )
 
 

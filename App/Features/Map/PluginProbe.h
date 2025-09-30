@@ -4,8 +4,9 @@
 #include <QtCore/QVariantMap>
 #include <QtCore/QStringList>
 #include <QtCore/QDebug>
+#include "app_features_map_export.h"
 
-struct PluginInfo {
+struct APP_FEATURES_MAP_EXPORT PluginInfo {
     QString name;
     QGeoServiceProvider::Error error = QGeoServiceProvider::NoError;
     QString errorString;
@@ -14,7 +15,7 @@ struct PluginInfo {
     QGeoServiceProvider::GeocodingFeatures geocoding = QGeoServiceProvider::NoGeocodingFeatures;
 };
 
-inline QList<PluginInfo> probeGeoPlugins(const QVariantMap& commonParams = {}) {
+inline APP_FEATURES_MAP_EXPORT QList<PluginInfo> probeGeoPlugins(const QVariantMap& commonParams = {}) {
     QList<PluginInfo> out;
     const QStringList names = QGeoServiceProvider::availableServiceProviders(); // discover installed plugins
     for (const QString& n : names) {

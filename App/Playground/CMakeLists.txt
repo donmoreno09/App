@@ -5,12 +5,13 @@ set(qml_files
     DateTimeTest.qml
     WizardPageTest.qml
     FontTest.qml
-    TogglePanel.qml
     TextAreaPanel.qml
+    TogglePanel.qml
     OverlayPanel.qml
     SwitcherPanel.qml
     SliderPanel.qml
-    ModalDialogPanel.qml
+    ModalPanel.qml
+
 )
 
 qt_add_qml_module(app_playground

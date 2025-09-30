@@ -5,6 +5,11 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
+/*!
+    \qmltype DatePickerActions
+    \brief Action buttons (Clear/Apply)
+*/
+
 RowLayout {
     id: root
 
@@ -16,10 +21,6 @@ RowLayout {
     // Signals
     signal clearClicked()
     signal applyClicked()
-
-    Layout.preferredWidth: 280
-    Layout.preferredHeight: 32
-    Layout.minimumHeight: 32
 
     spacing: Theme.spacing.s3
 

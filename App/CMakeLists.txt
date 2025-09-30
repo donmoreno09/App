@@ -27,6 +27,11 @@ add_subdirectory(Logger)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
+        app_logger
+)
+
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
         Qt6::Gui
         Qt6::Qml
         Qt6::Quick

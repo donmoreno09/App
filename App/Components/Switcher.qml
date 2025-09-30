@@ -36,7 +36,7 @@ Item {
         id: container
         anchors.fill: parent
         color: "transparent"
-        border.color: Theme.colors.text
+        border.color: Theme.colors.grey500
         border.width: Theme.borders.b1
         radius: Theme.radius.md
     }

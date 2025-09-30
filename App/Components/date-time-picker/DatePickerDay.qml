@@ -3,6 +3,10 @@ import QtQuick.Controls 6.8
 
 import App.Themes 1.0
 
+/*!
+    \qmltype DatePickerDay
+*/
+
 Item {
     id: root
 
@@ -19,8 +23,8 @@ Item {
     // Visual state - matching the design colors
     readonly property color _backgroundColor: {
         if (isDisabled) return Theme.colors.transparent
-        if (isSelected) return Theme.colors.accent500
-        if (isToday && isCurrentMonth && !isSelected) return "transparent"
+        if (isSelected) return Theme.colors.accent500  // Blue selection
+        if (isToday && isCurrentMonth && !isSelected) return "transparent"  // Transparent for today
         if (mouseArea.containsMouse && isCurrentMonth && !isDisabled) return Theme.colors.secondary500
         return Theme.colors.transparent
     }
@@ -35,8 +39,8 @@ Item {
     // Day cell background
     Rectangle {
         id: dayCircle
-        width: Theme.spacing.s8
-        height: Theme.spacing.s8
+        width: Theme.spacing.s8  // 32px
+        height: Theme.spacing.s8 // 32px
         anchors.centerIn: parent
 
         color: root._backgroundColor
