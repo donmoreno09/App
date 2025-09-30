@@ -63,16 +63,16 @@ UI.GlobalBackgroundConsumer {
                 }
             }
 
-            SideRailItem {
-                source: "qrc:/App/assets/icons/test.svg"
-                text: (TranslationManager.revision, qsTr("Buttons Test"))
-                active: PanelRouter.currentPath === "button-test" && SidePanelController.isOpen
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/test.svg"
+            //     text: (TranslationManager.revision, qsTr("Buttons Test"))
+            //     active: PanelRouter.currentPath === "button-test" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Buttons Test")
-                    SidePanelController.toggle("button-test")
-                }
-            }
+            //     onClicked: {
+            //         TitleBarController.setTitle("Buttons Test")
+            //         SidePanelController.toggle("button-test")
+            //     }
+            // }
 
             // SideRailItem {
             //     source: "qrc:/App/assets/icons/calendar.svg"
