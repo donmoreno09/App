@@ -42,8 +42,8 @@ set(cpp_sources
     events/selectionboxbus.h
 
     # Layers
-    layers/annotationmaplayer.cpp
-    layers/annotationmaplayer.h
+    layers/AnnotationMapLayer.cpp
+    layers/AnnotationMapLayer.h
     layers/BaseLayer.cpp
     layers/BaseLayer.h
     layers/BaseMapLayer.cpp

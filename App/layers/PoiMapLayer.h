@@ -24,9 +24,6 @@ public:
     Q_INVOKABLE void selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight) override;
     Q_INVOKABLE void clearSelection() override;
 
-    // NOTE: What do we need this for?
-    // Q_INVOKABLE void syncSelectedObject(const QVariant& object, bool isToRemove = false);
-
     void loadData() override;
     void handleLoadedObjects(const QList<IPersistable*>& objects) override;
 

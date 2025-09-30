@@ -12,6 +12,7 @@ class AnnotationMapLayer : public BaseMapLayer
 {
     Q_OBJECT
     Q_PROPERTY(VariantListModel *annotationModel READ annotationModel CONSTANT)
+    QML_ELEMENT
 
 public:
     explicit AnnotationMapLayer(QObject* parent = nullptr);
@@ -20,8 +21,8 @@ public:
 
     Q_INVOKABLE void initialize() override;
 
-    // NOTE: To be refactored.
-    // Q_INVOKABLE void syncSelectedObject(const QVariant& object, bool isToRemove = false);
+    Q_INVOKABLE void selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight) override;
+    Q_INVOKABLE void clearSelection() override;
 
     void loadData() override;
     void handleLoadedObjects(const QList<IPersistable*>& objects) override;
@@ -30,15 +31,6 @@ public:
 
 signals:
     void annotationsChanged();
-
-// NOTE: To be refactored.
-// protected slots:
-//     void handleSelectionBoxSelected(const QString& target,
-//                                     const QGeoCoordinate& topLeft,
-//                                     const QGeoCoordinate& bottomRight,
-//                                     int mode) override;
-
-//     void handleSelectionBoxDeselected(const QString& target, int mode) override;
 
 private:
     VariantListModel *m_annotationModel = nullptr;

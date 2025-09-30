@@ -31,20 +31,6 @@ void PoiMapLayer::clearSelection()
     emit clearedSelection();
 }
 
-// NOTE: What do we need this for?
-// void PoiMapLayer::syncSelectedObject(const QVariant &object, bool isToRemove)
-// {
-//     for (int i = 0; i < m_selectedPois.length(); i++) {
-//         if (m_selectedPois[i].toMap().value("id") == object.toMap().value("id")) {
-//             if (isToRemove) m_selectedPois.removeAt(i);
-//             else m_selectedPois[i] = object;
-//             break;
-//         }
-//     }
-
-//     emit selectedObjectsChanged();
-// }
-
 void PoiMapLayer::loadData()
 {
     if (!m_loader) {
