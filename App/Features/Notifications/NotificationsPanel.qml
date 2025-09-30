@@ -19,7 +19,7 @@ PanelTemplate {
 
         UI.Button {
             Layout.fillWidth: true
-            variant: "danger"
+            variant: UI.ButtonStyles.Danger
             text: (TranslationManager.revision, qsTr("Generate Urgent Notification"))
 
             onClicked: NotificationsController.urgent.push({ message: "Urgent!" })
@@ -27,7 +27,7 @@ PanelTemplate {
 
         UI.Button {
             Layout.fillWidth: true
-            variant: "warning"
+            variant: UI.ButtonStyles.Warning
             text: (TranslationManager.revision, qsTr("Generate Warning Notification"))
 
             onClicked: NotificationsController.warning.push({ message: "Warning!" })
@@ -35,7 +35,7 @@ PanelTemplate {
 
         UI.Button {
             Layout.fillWidth: true
-            variant: "primary"
+            variant: UI.ButtonStyles.Primary
             text: (TranslationManager.revision, qsTr("Generate Info Notification"))
 
             onClicked: NotificationsController.info.push({ message: "Info!" })

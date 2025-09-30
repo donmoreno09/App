@@ -31,7 +31,7 @@ RowLayout {
         Layout.preferredWidth: 86
         Layout.alignment: Qt.AlignHCenter
         size: "md"
-        variant: "ghost"
+        variant: UI.ButtonStyles.Ghost
         enabled: root.canClear
 
         onClicked: root.clearClicked()
@@ -59,7 +59,7 @@ RowLayout {
     UI.Button {
         Layout.preferredWidth: 86
         size: "md"
-        variant: "primary"
+        variant: UI.ButtonStyles.Primary
         enabled: root.canApply
 
         onClicked: root.applyClicked()

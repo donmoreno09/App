@@ -54,10 +54,10 @@ Item {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 60
                 Layout.margins: 4
-                variant: index === root.currentIndex ? "primary" : "ghost"
+                variant: index === root.currentIndex ? UI.ButtonStyles.Primary : UI.ButtonStyles.Ghost
 
                 background: Rectangle {
-                    color: variant === "primary" ? Theme.colors.primary500 : "transparent"
+                    color: variant === UI.ButtonStyles.Primary ? Theme.colors.primary500 : "transparent"
                     border.width: 0
                     radius: Theme.radius.sm
                 }
