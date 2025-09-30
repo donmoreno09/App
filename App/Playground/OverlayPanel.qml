@@ -38,11 +38,13 @@ PanelTemplate {
                         spacing: Theme.spacing.s4
 
                         UI.Button {
+                            variant: UI.ButtonStyles.Secondary
                             text: "With Backdrop"
                             onClicked: withBackdrop.open()
                         }
 
                         UI.Button {
+                            variant: UI.ButtonStyles.Secondary
                             text: "No Backdrop"
                             onClicked: noBackdrop.open()
                         }
@@ -65,16 +67,19 @@ PanelTemplate {
                         spacing: Theme.spacing.s4
 
                         UI.Button {
+                            variant: UI.ButtonStyles.Secondary
                             text: "Small"
                             onClicked: smallOverlay.open()
                         }
 
                         UI.Button {
+                            variant: UI.ButtonStyles.Secondary
                             text: "Medium"
                             onClicked: mediumOverlay.open()
                         }
 
                         UI.Button {
+                            variant: UI.ButtonStyles.Secondary
                             text: "Large"
                             onClicked: largeOverlay.open()
                         }
@@ -116,6 +121,7 @@ PanelTemplate {
                     }
 
                     UI.Button {
+                        variant: UI.ButtonStyles.Secondary
                         text: "Test Focus Management"
                         onClicked: focusTest.open()
                     }
@@ -255,6 +261,7 @@ PanelTemplate {
                 }
 
                 UI.Button {
+                    variant: UI.ButtonStyles.Secondary
                     text: "Close"
                     Layout.alignment: Qt.AlignRight
                     onClicked: focusTest.close()

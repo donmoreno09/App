@@ -330,7 +330,7 @@ PanelTemplate {
                     UI.Button {
                         text: "Reset All"
                         size: "sm"
-                        variant: "secondary"
+                        variant: UI.ButtonStyles.Secondary
                         onClicked: {
                             console.log("Reset all sliders")
                         }
@@ -339,7 +339,7 @@ PanelTemplate {
                     UI.Button {
                         text: "Random Values"
                         size: "sm"
-                        variant: "ghost"
+                        variant: UI.ButtonStyles.Ghost
                         onClicked: {
                             console.log("Set random values")
                         }
