@@ -1,26 +1,31 @@
-#ifndef STATICPOIMAPLAYER_H
-#define STATICPOIMAPLAYER_H
+#ifndef POIMAPLAYER_H
+#define POIMAPLAYER_H
 
-#include "./basemaplayer.h"
+#include "./BaseMapLayer.h"
 #include <QGeoCoordinate>
 #include <QVariantList>
 
 #include "../persistence/ipersistencemanager.h"
 #include "../core/variantlistmodel.h"
 
-class StaticPoiMapLayer : public BaseMapLayer
+class PoiMapLayer : public BaseMapLayer
 {
     Q_OBJECT
     Q_PROPERTY(VariantListModel *poiModel READ poiModel CONSTANT)
+    QML_ELEMENT
 
 public:
-    explicit StaticPoiMapLayer(QObject* parent = nullptr);
+    explicit PoiMapLayer(QObject* parent = nullptr);
 
     QVariantList selectedObjects() const override { return m_selectedPois; }
 
     Q_INVOKABLE void initialize() override;
 
-    Q_INVOKABLE void syncSelectedObject(const QVariant& object, bool isToRemove = false);
+    Q_INVOKABLE void selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight) override;
+    Q_INVOKABLE void clearSelection() override;
+
+    // NOTE: What do we need this for?
+    // Q_INVOKABLE void syncSelectedObject(const QVariant& object, bool isToRemove = false);
 
     void loadData() override;
     void handleLoadedObjects(const QList<IPersistable*>& objects) override;
@@ -30,18 +35,10 @@ public:
 signals:
     void poisChanged();
 
-protected slots:
-    void handleSelectionBoxSelected(const QString& target,
-                                    const QGeoCoordinate& topLeft,
-                                    const QGeoCoordinate& bottomRight,
-                                    int mode) override;
-
-    void handleSelectionBoxDeselected(const QString& target, int mode) override;
-
 private:
     VariantListModel* m_poiModel = nullptr;
     QVariantList m_selectedPois;
     IPersistenceManager* m_loader = nullptr;
 };
 
-#endif // STATICPOIMAPLAYER_H
+#endif // POIMAPLAYER_H

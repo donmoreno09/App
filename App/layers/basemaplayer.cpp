@@ -1,5 +1,6 @@
-#include "basemaplayer.h"
+#include "BaseMapLayer.h"
 #include <QDebug>
+#include <QQmlProperty>
 
 BaseMapLayer::BaseMapLayer(QObject* parent)
     : BaseLayer(parent)
@@ -8,18 +9,25 @@ BaseMapLayer::BaseMapLayer(QObject* parent)
 }
 
 double BaseMapLayer::zoomLevel() const {
-    return m_zoomLevel;
+    return QQmlProperty(m_map, "zoomLevel").read().toDouble();
 }
 
 void BaseMapLayer::setZoomLevel(double zoom) {
-    if (!qFuzzyCompare(m_zoomLevel, zoom)) {
-        m_zoomLevel = zoom;
-        emit zoomLevelChanged();
+    if (!qFuzzyCompare(zoomLevel(), zoom)) {
+        QQmlProperty(m_map, "zoomLevel").write(zoom);
         qDebug() << "[BaseMapLayer]" << layerName() << "→ zoom level changed to:" << zoom;
     }
 }
 
-void BaseMapLayer::handleMapClick(const QGeoCoordinate& coordinate) {
-    qDebug() << "[BaseMapLayer]" << layerName() << "→ map click received at:" << coordinate;
-    // Subclasses can override this method to provide custom map click behavior
+QObject *BaseMapLayer::map() const
+{
+    return m_map.data();
+}
+
+void BaseMapLayer::setMap(QObject *newMap)
+{
+    if (m_map == newMap)
+        return;
+    m_map = newMap;
+    emit mapChanged();
 }

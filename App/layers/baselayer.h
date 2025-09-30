@@ -3,53 +3,44 @@
 
 #include <QObject>
 #include <QString>
-#include <QMap>
 
 class BaseLayer : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool isVisible READ isVisible WRITE setVisible NOTIFY visibleChanged)
-    Q_PROPERTY(bool isEnabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
-    Q_PROPERTY(bool onFocus READ onFocus WRITE setFocus NOTIFY focusChanged)
-    Q_PROPERTY(QString layerName READ layerName WRITE setLayerName NOTIFY layerNameChanged)
+    Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged FINAL)
+    Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged FINAL)
+    Q_PROPERTY(QString layerName READ layerName WRITE setLayerName NOTIFY layerNameChanged FINAL)
 
 public:
     explicit BaseLayer(QObject* parent = nullptr);
+
     virtual ~BaseLayer();
 
-
-    // Stato
-    bool isVisible() const;
-    void setVisible(bool visible);
-
-    bool isEnabled() const;
-    void setEnabled(bool enabled);
-
-    bool onFocus() const;
-    void setFocus(bool focus);
-
-    bool isActive() const;
-    void setActive(bool active);
+    Q_INVOKABLE virtual void initialize();
 
     QString layerName() const;
     void setLayerName(const QString& name);
 
-    Q_INVOKABLE virtual void initialize();
+    bool active() const;
+    void setActive(bool newActive);
+
+    bool visible() const;
+    void setVisible(bool newVisible);
 
 signals:
     void layerReady();
-    void visibleChanged();
-    void enabledChanged();
-    void activeChanged();
-    void focusChanged();
     void layerNameChanged();
+    void activeChanged();
+    void itemChanged();
+
+    void visibleChanged();
 
 protected:
     QString m_layerName;
-    bool m_isVisible = true;
-    bool m_isEnabled = true;
-    bool m_isActive = false;
-    bool m_onFocus = false;
+
+private:
+    bool m_active = false;
+    bool m_visible = true;
 };
 
 #endif // BASELAYER_H

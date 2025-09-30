@@ -1,7 +1,7 @@
 #ifndef TRACKMAPLAYER_H
 #define TRACKMAPLAYER_H
 
-#include "./basemaplayer.h"
+#include "./BaseMapLayer.h"
 #include <QGeoCoordinate>
 #include <QVariantList>
 #include <QTimer>
@@ -28,13 +28,14 @@ signals:
     void activated();
     void deactivated();
 
-protected slots:
-    void handleSelectionBoxSelected(const QString& target,
-                                    const QGeoCoordinate& topLeft,
-                                    const QGeoCoordinate& bottomRight,
-                                    int mode) override;
+// NOTE: To be refactored.
+// protected slots:
+//     void handleSelectionBoxSelected(const QString& target,
+//                                     const QGeoCoordinate& topLeft,
+//                                     const QGeoCoordinate& bottomRight,
+//                                     int mode) override;
 
-    void handleSelectionBoxDeselected(const QString& target, int mode) override;
+//     void handleSelectionBoxDeselected(const QString& target, int mode) override;
 
 private:
     QVariantList m_tracks;

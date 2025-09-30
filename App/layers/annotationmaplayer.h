@@ -1,7 +1,7 @@
 #ifndef ANNOTATIONMAPLAYER_H
 #define ANNOTATIONMAPLAYER_H
 
-#include "./basemaplayer.h"
+#include "./BaseMapLayer.h"
 #include <QGeoCoordinate>
 #include <QVariantList>
 
@@ -20,7 +20,8 @@ public:
 
     Q_INVOKABLE void initialize() override;
 
-    Q_INVOKABLE void syncSelectedObject(const QVariant& object, bool isToRemove = false);
+    // NOTE: To be refactored.
+    // Q_INVOKABLE void syncSelectedObject(const QVariant& object, bool isToRemove = false);
 
     void loadData() override;
     void handleLoadedObjects(const QList<IPersistable*>& objects) override;
@@ -30,13 +31,14 @@ public:
 signals:
     void annotationsChanged();
 
-protected slots:
-    void handleSelectionBoxSelected(const QString& target,
-                                    const QGeoCoordinate& topLeft,
-                                    const QGeoCoordinate& bottomRight,
-                                    int mode) override;
+// NOTE: To be refactored.
+// protected slots:
+//     void handleSelectionBoxSelected(const QString& target,
+//                                     const QGeoCoordinate& topLeft,
+//                                     const QGeoCoordinate& bottomRight,
+//                                     int mode) override;
 
-    void handleSelectionBoxDeselected(const QString& target, int mode) override;
+//     void handleSelectionBoxDeselected(const QString& target, int mode) override;
 
 private:
     VariantListModel *m_annotationModel = nullptr;

@@ -44,12 +44,12 @@ set(cpp_sources
     # Layers
     layers/annotationmaplayer.cpp
     layers/annotationmaplayer.h
-    layers/baselayer.cpp
-    layers/baselayer.h
-    layers/basemaplayer.cpp
-    layers/basemaplayer.h
-    layers/staticpoimaplayer.cpp
-    layers/staticpoimaplayer.h
+    layers/BaseLayer.cpp
+    layers/BaseLayer.h
+    layers/BaseMapLayer.cpp
+    layers/BaseMapLayer.h
+    layers/PoiMapLayer.cpp
+    layers/PoiMapLayer.h
     layers/trackmaplayer.cpp
     layers/trackmaplayer.h
 
@@ -108,6 +108,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/core
         ${CMAKE_CURRENT_SOURCE_DIR}/events
+        ${CMAKE_CURRENT_SOURCE_DIR}/layers
 )
 
 # Translation setup

@@ -5,9 +5,7 @@
 #include <QSet>
 #include <QStringList>
 #include <QVariantList>
-#include "../layers/basemaplayer.h"
-
-class BaseLayer;
+#include "../layers/BaseMapLayer.h"
 
 class LayerManager : public QObject
 {

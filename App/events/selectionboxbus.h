@@ -1,3 +1,5 @@
+// NOTE: Probably this class will be deleted later.
+
 #ifndef SELECTIONBOXBUS_H
 #define SELECTIONBOXBUS_H
 

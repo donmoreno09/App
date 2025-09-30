@@ -1,5 +1,4 @@
 #include "annotationmaplayer.h"
-#include "../events/selectionboxbus.h"
 #include "../core/geoselectionutils.h"
 #include "../persistence/shapepersistencemanager.h"
 #include "../models/shape.h"
@@ -10,9 +9,6 @@ AnnotationMapLayer::AnnotationMapLayer(QObject* parent)
 {
     setObjectName("AnnotationMapLayer");
     m_annotationModel = new VariantListModel(this);
-
-    connect(SelectionBoxBus::instance(), &SelectionBoxBus::selected, this, &AnnotationMapLayer::handleSelectionBoxSelected);
-    connect(SelectionBoxBus::instance(), &SelectionBoxBus::deselected, this, &AnnotationMapLayer::handleSelectionBoxDeselected);
 }
 
 void AnnotationMapLayer::initialize() {
@@ -21,38 +17,39 @@ void AnnotationMapLayer::initialize() {
     loadData();
 }
 
-void AnnotationMapLayer::syncSelectedObject(const QVariant &object, bool isToRemove)
-{
-    for (int i = 0; i < m_selectedAnnotations.length(); i++) {
-        if (m_selectedAnnotations[i].toMap().value("id") == object.toMap().value("id")) {
-            if (isToRemove) m_selectedAnnotations.removeAt(i);
-            else m_selectedAnnotations[i] = object;
-            break;
-        }
-    }
+// NOTE: To be refactored.
+// void AnnotationMapLayer::syncSelectedObject(const QVariant &object, bool isToRemove)
+// {
+//     for (int i = 0; i < m_selectedAnnotations.length(); i++) {
+//         if (m_selectedAnnotations[i].toMap().value("id") == object.toMap().value("id")) {
+//             if (isToRemove) m_selectedAnnotations.removeAt(i);
+//             else m_selectedAnnotations[i] = object;
+//             break;
+//         }
+//     }
 
-    emit selectedObjectsChanged();
-}
+//     emit selectedObjectsChanged();
+// }
 
-void AnnotationMapLayer::handleSelectionBoxSelected(const QString &target, const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight, int mode)
-{
-    if (target != layerName())
-        return;
+// void AnnotationMapLayer::handleSelectionBoxSelected(const QString &target, const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight, int mode)
+// {
+//     if (target != layerName())
+//         return;
 
-    QVariantList selectedAnnots = GeoSelection::selectInRect(m_annotationModel->data(), topLeft, bottomRight);
-    qDebug() << "elek: selectedShapes: " << selectedAnnots;
-    m_selectedAnnotations = selectedAnnots;
-    emit selectedObjectsChanged();
-}
+//     QVariantList selectedAnnots = GeoSelection::selectInRect(m_annotationModel->data(), topLeft, bottomRight);
+//     qDebug() << "elek: selectedShapes: " << selectedAnnots;
+//     m_selectedAnnotations = selectedAnnots;
+//     emit selectedObjectsChanged();
+// }
 
-void AnnotationMapLayer::handleSelectionBoxDeselected(const QString &target, int mode)
-{
-    if (target != layerName())
-        return;
+// void AnnotationMapLayer::handleSelectionBoxDeselected(const QString &target, int mode)
+// {
+//     if (target != layerName())
+//         return;
 
-    m_selectedAnnotations.clear();
-    emit selectedObjectsChanged();
-}
+//     m_selectedAnnotations.clear();
+//     emit selectedObjectsChanged();
+// }
 
 void AnnotationMapLayer::loadData()
 {

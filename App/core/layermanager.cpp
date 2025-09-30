@@ -1,6 +1,6 @@
 #include "layermanager.h"
-#include "../layers/baselayer.h"
-#include "../layers/basemaplayer.h"
+#include "../layers/BaseLayer.h"
+#include "../layers/BaseMapLayer.h"
 
 #include <QDebug>
 
@@ -91,23 +91,24 @@ void LayerManager::setFocusLayer(const QString& layerName) {
     if (m_focusedLayer == layerName)
         return;
 
-    if (BaseMapLayer* oldMapLayer = focusedMapLayer()) {
-        disconnect(oldMapLayer, &BaseMapLayer::selectedObjectsChanged,
-                   this, &LayerManager::selectedObjectsChanged);
-        oldMapLayer->setFocus(false);
-    }
+    // NOTE: To be refactored.
+    // if (BaseMapLayer* oldMapLayer = focusedMapLayer()) {
+    //     disconnect(oldMapLayer, &BaseMapLayer::selectedObjectsChanged,
+    //                this, &LayerManager::selectedObjectsChanged);
+    //     oldMapLayer->setFocus(false);
+    // }
 
-    m_focusedLayer = layerName;
-    qDebug() << "[LayerManager] Focus set to layer:" << layerName;
-    emit focusChanged(layerName);
+    // m_focusedLayer = layerName;
+    // qDebug() << "[LayerManager] Focus set to layer:" << layerName;
+    // emit focusChanged(layerName);
 
-    if (BaseMapLayer* newMapLayer = focusedMapLayer()) {
-        connect(newMapLayer, &BaseMapLayer::selectedObjectsChanged,
-                this, &LayerManager::selectedObjectsChanged);
-        newMapLayer->setFocus(true);
-    }
+    // if (BaseMapLayer* newMapLayer = focusedMapLayer()) {
+    //     connect(newMapLayer, &BaseMapLayer::selectedObjectsChanged,
+    //             this, &LayerManager::selectedObjectsChanged);
+    //     newMapLayer->setFocus(true);
+    // }
 
-    emit selectedObjectsChanged();
+    // emit selectedObjectsChanged();
 }
 
 QString LayerManager::focusedLayerName() const {

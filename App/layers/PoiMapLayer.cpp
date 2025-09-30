@@ -1,60 +1,51 @@
-#include "staticpoimaplayer.h"
-#include "../events/selectionboxbus.h"
+#include "PoiMapLayer.h"
 #include "../core/geoselectionutils.h"
 #include "../persistence/poipersistencemanager.h"
 #include "../models/poi.h"
 #include <QDebug>
 
-StaticPoiMapLayer::StaticPoiMapLayer(QObject* parent)
+PoiMapLayer::PoiMapLayer(QObject* parent)
     : BaseMapLayer(parent)
 {
-    setObjectName("StaticPoiMapLayer");
+    setObjectName("PoiMapLayer");
     m_poiModel = new VariantListModel(this);
-
-    connect(SelectionBoxBus::instance(), &SelectionBoxBus::selected, this, &StaticPoiMapLayer::handleSelectionBoxSelected);
-    connect(SelectionBoxBus::instance(), &SelectionBoxBus::deselected, this, &StaticPoiMapLayer::handleSelectionBoxDeselected);
 }
 
-void StaticPoiMapLayer::initialize() {
-    qDebug() << "[StaticPoiMapLayer:initialize] polling ...";
+void PoiMapLayer::initialize() {
+    qDebug() << "[PoiMapLayer:initialize] polling ...";
     BaseMapLayer::initialize();
     loadData();
 }
 
-void StaticPoiMapLayer::syncSelectedObject(const QVariant &object, bool isToRemove)
+void PoiMapLayer::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight)
 {
-    for (int i = 0; i < m_selectedPois.length(); i++) {
-        if (m_selectedPois[i].toMap().value("id") == object.toMap().value("id")) {
-            if (isToRemove) m_selectedPois.removeAt(i);
-            else m_selectedPois[i] = object;
-            break;
-        }
-    }
-
-    emit selectedObjectsChanged();
-}
-
-void StaticPoiMapLayer::handleSelectionBoxSelected(const QString &target, const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight, int mode)
-{
-    if (target != layerName())
-        return;
-
     QVariantList selectedPois = GeoSelection::selectInRect(m_poiModel->data(), topLeft, bottomRight);
-    qDebug() << "[StaticPoiMapLayer] selectedPois: " << selectedPois;
+    qDebug() << "[PoiMapLayer] selectedPois: " << selectedPois;
     m_selectedPois = selectedPois;
-    emit selectedObjectsChanged();
+    emit selectedInRect();
 }
 
-void StaticPoiMapLayer::handleSelectionBoxDeselected(const QString &target, int mode)
+void PoiMapLayer::clearSelection()
 {
-    if (target != layerName())
-        return;
-
     m_selectedPois.clear();
-    emit selectedObjectsChanged();
+    emit clearedSelection();
 }
 
-void StaticPoiMapLayer::loadData()
+// NOTE: What do we need this for?
+// void PoiMapLayer::syncSelectedObject(const QVariant &object, bool isToRemove)
+// {
+//     for (int i = 0; i < m_selectedPois.length(); i++) {
+//         if (m_selectedPois[i].toMap().value("id") == object.toMap().value("id")) {
+//             if (isToRemove) m_selectedPois.removeAt(i);
+//             else m_selectedPois[i] = object;
+//             break;
+//         }
+//     }
+
+//     emit selectedObjectsChanged();
+// }
+
+void PoiMapLayer::loadData()
 {
     if (!m_loader) {
         m_loader = new PoiPersistenceManager(this);
@@ -66,7 +57,7 @@ void StaticPoiMapLayer::loadData()
     m_loader->load();
 }
 
-void StaticPoiMapLayer::handleLoadedObjects(const QList<IPersistable*>& objects)
+void PoiMapLayer::handleLoadedObjects(const QList<IPersistable*>& objects)
 {
     QVariantList pois;
 
@@ -96,7 +87,7 @@ void StaticPoiMapLayer::handleLoadedObjects(const QList<IPersistable*>& objects)
     emit poisChanged();
 }
 
-VariantListModel *StaticPoiMapLayer::poiModel() const
+VariantListModel *PoiMapLayer::poiModel() const
 {
     return m_poiModel;
 }

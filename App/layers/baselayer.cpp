@@ -1,4 +1,4 @@
-#include "baselayer.h"
+#include "BaseLayer.h"
 #include <QDebug>
 #include <QTimer>
 
@@ -11,46 +11,6 @@ BaseLayer::BaseLayer(QObject* parent)
 BaseLayer::~BaseLayer()
 {
     qDebug() << "[BaseLayer] Destroyed:" << m_layerName;
-}
-
-bool BaseLayer::isVisible() const { return m_isVisible; }
-
-void BaseLayer::setVisible(bool visible) {
-    if (m_isVisible != visible) {
-        m_isVisible = visible;
-        emit visibleChanged();
-        qDebug() << "[BaseLayer]" << m_layerName << "→ visibility changed to:" << visible;
-    }
-}
-
-bool BaseLayer::isEnabled() const { return m_isEnabled; }
-
-void BaseLayer::setEnabled(bool enabled) {
-    if (m_isEnabled != enabled) {
-        m_isEnabled = enabled;
-        emit enabledChanged();
-        qDebug() << "[BaseLayer]" << m_layerName << "→ enabled state changed to:" << enabled;
-    }
-}
-
-bool BaseLayer::isActive() const { return m_isActive; }
-
-void BaseLayer::setActive(bool active) {
-    if (m_isActive != active) {
-        m_isActive = active;
-        emit activeChanged();
-        qDebug() << "[BaseLayer]" << m_layerName << "→ active state changed to:" << active;
-    }
-}
-
-bool BaseLayer::onFocus() const { return m_onFocus; }
-
-void BaseLayer::setFocus(bool focus) {
-    if (m_onFocus != focus) {
-        m_onFocus = focus;
-        emit focusChanged();
-        qDebug() << "[BaseLayer]" << m_layerName << "→ focus state changed to:" << focus;
-    }
 }
 
 QString BaseLayer::layerName() const { return m_layerName; }
@@ -68,4 +28,30 @@ void BaseLayer::initialize() {
         qDebug() << "[BaseLayer:initialize] Layer is ready:" << layerName();
         emit layerReady();
     });
+}
+
+bool BaseLayer::active() const
+{
+    return m_active;
+}
+
+void BaseLayer::setActive(bool newActive)
+{
+    if (m_active == newActive)
+        return;
+    m_active = newActive;
+    emit activeChanged();
+}
+
+bool BaseLayer::visible() const
+{
+    return m_visible;
+}
+
+void BaseLayer::setVisible(bool newVisible)
+{
+    if (m_visible == newVisible)
+        return;
+    m_visible = newVisible;
+    emit visibleChanged();
 }
