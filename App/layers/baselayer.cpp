@@ -30,19 +30,6 @@ void BaseLayer::initialize() {
     });
 }
 
-bool BaseLayer::active() const
-{
-    return m_active;
-}
-
-void BaseLayer::setActive(bool newActive)
-{
-    if (m_active == newActive)
-        return;
-    m_active = newActive;
-    emit activeChanged();
-}
-
 bool BaseLayer::visible() const
 {
     return m_visible;

@@ -50,8 +50,8 @@ set(cpp_sources
     layers/BaseMapLayer.h
     layers/PoiMapLayer.cpp
     layers/PoiMapLayer.h
-    layers/trackmaplayer.cpp
-    layers/trackmaplayer.h
+    layers/TrackMapLayer.cpp
+    layers/TrackMapLayer.h
 
     # Models
     models/metadata/metadataentry.h

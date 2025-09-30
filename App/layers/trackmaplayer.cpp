@@ -1,4 +1,4 @@
-#include "trackmaplayer.h"
+#include "TrackMapLayer.h"
 #include "../core/geoselectionutils.h"
 #include <QDebug>
 
@@ -39,6 +39,39 @@ void TrackMapLayer::initialize() {
     BaseMapLayer::initialize();
 }
 
+void TrackMapLayer::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight)
+{
+    // In order for selection to work, I'll mutate the tracks
+    // for now to include geometry with the coordinate property so
+    // that it'll conform to GeoSelection::selectInRect()'s selection logic.
+    QVariantList geoTracks;
+    for (const auto& track : std::as_const(m_tracks)) {
+        QVariantMap editableTrack = track.toMap();
+
+        QVariantMap coordinate;
+        coordinate["x"] = editableTrack["longitude"];
+        coordinate["y"] = editableTrack["latitude"];
+
+        QVariantMap geometry;
+        geometry["shapeTypeId"] = static_cast<int>(GeoSelection::ShapeType::Point);
+        geometry["coordinate"] = coordinate;
+
+        editableTrack["geometry"] = geometry;
+        geoTracks.append(editableTrack);
+    }
+
+    QVariantList selectedTracks = GeoSelection::selectInRect(geoTracks, topLeft, bottomRight);
+    qDebug() << "[TrackMapLayer] selectedTracks: " << selectedTracks;
+    m_selectedTracks = selectedTracks;
+    emit selectedInRect();
+}
+
+void TrackMapLayer::clearSelection()
+{
+    m_selectedTracks.clear();
+    emit clearedSelection();
+}
+
 void TrackMapLayer::loadData() {
 }
 
@@ -48,42 +81,15 @@ void TrackMapLayer::handleLoadedObjects(const QList<IPersistable*>& objects) {
     }
 }
 
-// NOTE: To be refactored.
-// void TrackMapLayer::handleSelectionBoxSelected(const QString &target, const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight, int mode)
-// {
-//     if (target != layerName())
-//         return;
+bool TrackMapLayer::active() const
+{
+    return m_active;
+}
 
-//     // In order for selection to work, I'll mutate the tracks
-//     // for now to include geometry with the coordinate property so
-//     // that it'll conform to GeoSelection::selectInRect()'s selection logic.
-//     QVariantList geoTracks;
-//     for (const auto& track : m_tracks) {
-//         QVariantMap editableTrack = track.toMap();
-
-//         QVariantMap coordinate;
-//         coordinate["x"] = editableTrack["longitude"];
-//         coordinate["y"] = editableTrack["latitude"];
-
-//         QVariantMap geometry;
-//         geometry["shapeTypeId"] = static_cast<int>(GeoSelection::ShapeType::Point);
-//         geometry["coordinate"] = coordinate;
-
-//         editableTrack["geometry"] = geometry;
-//         geoTracks.append(editableTrack);
-//     }
-
-//     QVariantList selectedTracks = GeoSelection::selectInRect(geoTracks, topLeft, bottomRight);
-//     qDebug() << "[TrackMapLayer] selectedTracks: " << selectedTracks;
-//     m_selectedTracks = selectedTracks;
-//     emit selectedObjectsChanged();
-// }
-
-// void TrackMapLayer::handleSelectionBoxDeselected(const QString &target, int mode)
-// {
-//     if (target != layerName())
-//         return;
-
-//     m_selectedTracks.clear();
-//     emit selectedObjectsChanged();
-// }
+void TrackMapLayer::setActive(bool newActive)
+{
+    if (m_active == newActive)
+        return;
+    m_active = newActive;
+    emit activeChanged();
+}

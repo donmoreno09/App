@@ -5,11 +5,14 @@
 #include <QGeoCoordinate>
 #include <QVariantList>
 #include <QTimer>
+#include <QQmlEngine>
 
 class TrackMapLayer : public BaseMapLayer
 {
     Q_OBJECT
+    Q_PROPERTY(bool active READ active NOTIFY activeChanged FINAL)
     Q_PROPERTY(QVariantList tracks READ tracks WRITE setTracks NOTIFY tracksChanged)
+    QML_ELEMENT
 
 public:
     explicit TrackMapLayer(QObject* parent = nullptr);
@@ -20,27 +23,25 @@ public:
 
     Q_INVOKABLE void initialize() override;
 
+    Q_INVOKABLE void selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight) override;
+    Q_INVOKABLE void clearSelection() override;
+
     void loadData() override;
     void handleLoadedObjects(const QList<IPersistable*>& objects) override;
 
+    bool active() const;
+    void setActive(bool newActive);
+
 signals:
+    void activeChanged();
+
     void tracksChanged();
-    void activated();
-    void deactivated();
-
-// NOTE: To be refactored.
-// protected slots:
-//     void handleSelectionBoxSelected(const QString& target,
-//                                     const QGeoCoordinate& topLeft,
-//                                     const QGeoCoordinate& bottomRight,
-//                                     int mode) override;
-
-//     void handleSelectionBoxDeselected(const QString& target, int mode) override;
 
 private:
     QVariantList m_tracks;
     QVariantList m_selectedTracks;
     QTimer* m_clearTracksTimer = nullptr;
+    bool m_active = false;
 };
 
 #endif // TRACKMAPLAYER_H

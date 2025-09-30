@@ -45,7 +45,7 @@ void TrackManager::activate(const QString &track)
         }
 
         if (m_trackToLayer.contains(track)) {
-            emit m_trackToLayer.value(track)->activated();
+            m_trackToLayer.value(track)->setActive(true);
             emit activated(track);
         }
     });
@@ -65,7 +65,7 @@ void TrackManager::deactivate(const QString &track)
         }
 
         if (m_trackToLayer.contains(track)) {
-            emit m_trackToLayer.value(track)->deactivated();
+            m_trackToLayer.value(track)->setActive(false);
             emit deactivated(track);
         }
     });
@@ -91,7 +91,7 @@ void TrackManager::deactivateSync(const QString &track)
         qWarning() << "[TrackManager] Failed to deactivate track '" << track << "':" << reply->errorString();
     } else {
         if (m_trackToLayer.contains(track)) {
-            emit m_trackToLayer.value(track)->deactivated();
+            m_trackToLayer.value(track)->setActive(false);
             emit deactivated(track);
         }
     }
