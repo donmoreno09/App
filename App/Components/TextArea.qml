@@ -30,7 +30,6 @@ Item {
     signal textEdited()
     signal textEditingFinished()
 
-    // Forward other TextArea's properties for convenience
     property alias wrapMode: textArea.wrapMode
     property alias selectByMouse: textArea.selectByMouse
 
@@ -70,7 +69,7 @@ Item {
         propagateComposedEvents: true
         onPressed: function (mouse) {
             textArea.forceActiveFocus(Qt.MouseFocusReason)
-            mouse.accepted = false // let the text area also handle the click
+            mouse.accepted = false
         }
     }
 
@@ -85,7 +84,7 @@ Item {
             Layout.fillWidth: true
             visible: label.text !== ""
 
-            Item { Layout.preferredWidth: Theme.spacing.s2 } // TODO: Replace with HorizontalPadding
+            Item { Layout.preferredWidth: Theme.spacing.s2 }
 
             Label {
                 id: label
@@ -184,7 +183,7 @@ Item {
         RowLayout {
             visible: messageText.text
 
-            Item { Layout.preferredWidth: Theme.spacing.s2 } // TODO: Replace with HorizontalPadding
+            Item { Layout.preferredWidth: Theme.spacing.s2 }
 
             Button {
                 display: AbstractButton.IconOnly
@@ -192,7 +191,7 @@ Item {
                 icon.color: _style.borderColor
                 background: Rectangle { color: Theme.colors.transparent }
                 padding: 0
-                enabled: false // Make non-interactive
+                enabled: false
             }
 
             Text {

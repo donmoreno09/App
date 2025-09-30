@@ -11,7 +11,7 @@ UI.Button {
 
     property alias source: root.icon.source
 
-    variant: "ghost"
+    variant: UI.ButtonStyles.Ghost
     display: AbstractButton.IconOnly
     Layout.preferredWidth: Theme.spacing.s8
     Layout.preferredHeight: Theme.spacing.s8

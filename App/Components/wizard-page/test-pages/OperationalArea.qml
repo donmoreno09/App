@@ -1,8 +1,10 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+
 import App.Themes 1.0
 import App.Features.Language 1.0
+import App.Components 1.0 as UI
 
 Item {
     id: operationalAreaStep
@@ -105,47 +107,21 @@ Item {
                 Layout.fillWidth: true
 
                 // Latitude
-                TextField {
+                UI.InputCoordinate {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 40
+                    type: UI.InputCoordinate.Latitude
+                    labelText: (TranslationManager.revision, qsTr("Latitude"))
                     placeholderText: (TranslationManager.revision, qsTr("Latitude"))
-                    placeholderTextColor: "white"
-                    text: wizardData.latitude || ""
-
-                    background: Rectangle {
-                        color: "#2a2a2a"
-                        border.color: parent.activeFocus ? "#4285f4" : "#666666"
-                        border.width: 1
-                        radius: 4
-                    }
-
-                    color: "#ffffff"
-
-                    onTextChanged: {
-                        wizardData.latitude = text
-                    }
+                    onTextEdited: wizardData.latitude = text
                 }
 
                 // Longitude
-                TextField {
+                UI.InputCoordinate {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 40
+                    type: UI.InputCoordinate.Longitude
+                    labelText: (TranslationManager.revision, qsTr("Longitude"))
                     placeholderText: (TranslationManager.revision, qsTr("Longitude"))
-                    placeholderTextColor: "white"
-                    text: wizardData.longitude || ""
-
-                    background: Rectangle {
-                        color: "#2a2a2a"
-                        border.color: parent.activeFocus ? "#4285f4" : "#666666"
-                        border.width: 1
-                        radius: 4
-                    }
-
-                    color: "#ffffff"
-
-                    onTextChanged: {
-                        wizardData.longitude = text
-                    }
+                    onTextEdited: wizardData.longitude = text
                 }
 
                 // Radius

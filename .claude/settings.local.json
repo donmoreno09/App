@@ -58,7 +58,9 @@
       "Bash(del \"C:\\Users\\esis\\Documents\\Title\\App\\Components\\title\\TitleTranslations.qml\")",
       "Read(//c/Users/esis/Downloads/**)",
       "Bash(tree:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Read(//c/Users/esis/Documents/App/Components/button/**)",
+      "Read(//c/Users/esis/Documents/App/**)"
     ],
     "deny": [],
     "ask": [],

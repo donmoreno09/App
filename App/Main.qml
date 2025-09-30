@@ -25,14 +25,14 @@ ApplicationWindow {
     visible: true
     title: qsTr("IRIDESS FE")
 
-    // Used for listeners that needs for the app to be fully loaded first.
-    // Apparently Qt's ApplicationWindow does not have a flag for it.
-    property bool appLoaded: false
-
     palette {
         placeholderText: "white"
         buttonText: "white"
     }
+
+    // Used for listeners that needs for the app to be fully loaded first.
+    // Apparently Qt's ApplicationWindow does not have a flag for it.
+    property bool appLoaded: false
 
     Component.onCompleted: {
         WindowsNcController.attachToWindow(app)
@@ -166,7 +166,7 @@ ApplicationWindow {
                     UI.Button {
                         id: englishButton
                         text: "English"
-                        variant: LanguageController.currentLanguage === "en" ? "primary" : "secondary"
+                        variant: LanguageController.currentLanguage === "en" ? UI.ButtonStyles.Primary : UI.ButtonStyles.Secondary
                         size: "sm"
                         onClicked: LanguageController.currentLanguage = "en"
                     }
@@ -174,7 +174,7 @@ ApplicationWindow {
                     UI.Button {
                         id: italianButton
                         text: "Italian"
-                        variant: LanguageController.currentLanguage === "it" ? "primary" : "secondary"
+                        variant: LanguageController.currentLanguage === "it" ? UI.ButtonStyles.Primary : UI.ButtonStyles.Secondary
                         size: "sm"
                         onClicked: LanguageController.currentLanguage = "it"
                     }

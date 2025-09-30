@@ -338,19 +338,19 @@ PanelTemplate {
 
                                     UI.Button {
                                         text: "Export"
-                                        variant: "primary"
+                                        variant: UI.ButtonStyles.Primary
                                         size: "sm"
                                     }
 
                                     UI.Button {
                                         text: "Import"
-                                        variant: "secondary"
+                                        variant: UI.ButtonStyles.Secondary
                                         size: "sm"
                                     }
 
                                     UI.Button {
                                         text: "Reset"
-                                        variant: "ghost"
+                                        variant: UI.ButtonStyles.Ghost
                                         size: "sm"
                                     }
                                 }
@@ -378,7 +378,7 @@ PanelTemplate {
                         UI.Button {
                             text: "Set to Index 0"
                             size: "sm"
-                            variant: "secondary"
+                            variant: UI.ButtonStyles.Secondary
                             onClicked: {
                                 basicSwitcher.currentIndex = 0
                                 interactiveSwitcher.currentIndex = 0
@@ -388,7 +388,7 @@ PanelTemplate {
                         UI.Button {
                             text: "Set to Index 2"
                             size: "sm"
-                            variant: "secondary"
+                            variant: UI.ButtonStyles.Secondary
                             onClicked: {
                                 basicSwitcher.currentIndex = 2
                                 interactiveSwitcher.currentIndex = 2
@@ -398,7 +398,7 @@ PanelTemplate {
                         UI.Button {
                             text: "Random Index"
                             size: "sm"
-                            variant: "ghost"
+                            variant: UI.ButtonStyles.Ghost
                             onClicked: {
                                 const randomIndex = Math.floor(Math.random() * basicSwitcher.model.length)
                                 basicSwitcher.currentIndex = randomIndex

@@ -33,7 +33,7 @@ BasePanel {
             UI.Button {
                 Layout.preferredWidth: Theme.spacing.s8
                 Layout.preferredHeight: Theme.spacing.s8
-                variant: "ghost"
+                variant: UI.ButtonStyles.Ghost
                 backgroundRect.radius: Theme.radius.circle(width, height)
                 backgroundRect.border.width: Theme.borders.b0
 

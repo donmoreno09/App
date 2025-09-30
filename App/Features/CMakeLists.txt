@@ -20,9 +20,6 @@ target_link_libraries(${PROJECT_NAME}
 
         # Core UIs
         app_features_map
-        # Since the map module also contains C++ files that other modules will use,
-        # we will need to explicitly link the map plugin module in order to be able to use it.
-        app_features_mapplugin
         app_features_titlebar
         app_features_siderail
         app_features_sidepanel

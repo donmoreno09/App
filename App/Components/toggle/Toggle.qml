@@ -22,7 +22,7 @@ Switch {
 
     readonly property ToggleStyle _style: ToggleStyles.fromVariant(variant)
 
-    implicitWidth: container.implicitWidth
+    implicitWidth: _sizeStyles.width
     implicitHeight: _sizeStyles.height
 
     indicator: Item {

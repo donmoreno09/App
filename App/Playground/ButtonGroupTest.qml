@@ -31,9 +31,8 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/map.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
-                variant: "ghost"
+                variant: UI.ButtonStyles.Ghost
                 checkable: true
                 ButtonGroup.group: toolbarGroup
 
@@ -53,9 +52,8 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/home.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
-                variant: "ghost"
+                variant: UI.ButtonStyles.Ghost
                 checkable: true
                 ButtonGroup.group: toolbarGroup
 
@@ -80,9 +78,8 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/send.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
-                variant: "ghost"
+                variant: UI.ButtonStyles.Ghost
                 checkable: true
                 ButtonGroup.group: toolbarGroup
 
@@ -102,9 +99,8 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/plus.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
-                variant: "ghost"
+                variant: UI.ButtonStyles.Ghost
                 checkable: true
                 ButtonGroup.group: toolbarGroup
 
@@ -124,9 +120,8 @@ Rectangle {
                 icon.source: "qrc:/App/assets/icons/minus.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.text
                 display: AbstractButton.IconOnly
-                variant: "ghost"
+                variant: UI.ButtonStyles.Ghost
                 checkable: true
                 ButtonGroup.group: toolbarGroup
 

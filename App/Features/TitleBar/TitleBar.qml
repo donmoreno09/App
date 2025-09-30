@@ -35,7 +35,7 @@ UI.GlobalBackgroundConsumer {
             UI.Button {
                 display: AbstractButton.IconOnly
                 size: "sm"
-                variant: "ghost"
+                variant: UI.ButtonStyles.Ghost
 
                 icon.width: Theme.icons.sizeSm
                 icon.height: Theme.icons.sizeSm

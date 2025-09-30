@@ -5,6 +5,11 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
+/*!
+    \qmltype DatePickerHeader
+    \brief Navigation header for DatePicker with view-aware title and navigation
+*/
+
 Item {
     id: root
 
@@ -18,10 +23,6 @@ Item {
     signal nextClicked()
     signal headerClicked()
 
-    Layout.preferredWidth: 280
-    Layout.preferredHeight: 40
-    Layout.minimumHeight: 40
-
     RowLayout {
         anchors.fill: parent
         spacing: Theme.spacing.s3
@@ -30,7 +31,7 @@ Item {
         UI.Button {
             Layout.preferredWidth: Theme.spacing.s8
             Layout.preferredHeight: Theme.spacing.s8
-            variant: "ghost"
+            variant: UI.ButtonStyles.Ghost
             display: AbstractButton.IconOnly
             backgroundRect.color: Theme.colors.transparent
             backgroundRect.border.width: Theme.borders.b0
@@ -76,6 +77,7 @@ Item {
                 }
             }
 
+            // Smooth hover effect
             Behavior on color {
                 ColorAnimation {
                     duration: 150
@@ -88,7 +90,7 @@ Item {
         UI.Button {
             Layout.preferredWidth: Theme.spacing.s8
             Layout.preferredHeight: Theme.spacing.s8
-            variant: "ghost"
+            variant: UI.ButtonStyles.Ghost
             display: AbstractButton.IconOnly
             backgroundRect.color: Theme.colors.transparent
             backgroundRect.border.width: Theme.borders.b0

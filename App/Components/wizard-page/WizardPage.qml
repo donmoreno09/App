@@ -171,7 +171,7 @@ Item {
                 UI.Button {
                     Layout.preferredWidth: 183
                     Layout.preferredHeight: Theme.spacing.s10
-                    variant: "ghost"
+                    variant: UI.ButtonStyles.Ghost
                     enabled: wizardPage.canGoBack
                     radius: Theme.radius.xs
                     onClicked: wizardPage.goBack()
@@ -190,7 +190,7 @@ Item {
                 UI.Button {
                     Layout.preferredWidth: 183
                     Layout.preferredHeight: Theme.spacing.s10
-                    variant: "primary"
+                    variant: UI.ButtonStyles.Primary
                     enabled: wizardPage.canGoNext
                     radius: Theme.radius.xs
                     onClicked: wizardPage.goNext()

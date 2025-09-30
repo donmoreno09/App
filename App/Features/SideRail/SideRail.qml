@@ -64,71 +64,92 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
-                source: "qrc:/App/assets/icons/calendar.svg"
-                text: (TranslationManager.revision, qsTr("DateTime"))
-                active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
-
-                onClicked: {
-                    TitleBarController.setTitle("DateTimePicker Test")
-                    SidePanelController.toggle("datetime-test")
-                }
-            }
-
-            SideRailItem {
                 source: "qrc:/App/assets/icons/test.svg"
-                text: (TranslationManager.revision, qsTr("TextArea Test"))
-                active: PanelRouter.currentPath === "textarea-test" && SidePanelController.isOpen
+                text: (TranslationManager.revision, qsTr("Buttons Test"))
+                active: PanelRouter.currentPath === "button-test" && SidePanelController.isOpen
 
                 onClicked: {
-                    TitleBarController.setTitle("TextArea Test")
-                    SidePanelController.toggle("textarea-test")
+                    TitleBarController.setTitle("Buttons Test")
+                    SidePanelController.toggle("button-test")
                 }
             }
 
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/calendar.svg"
+            //     text: (TranslationManager.revision, qsTr("DateTime"))
+            //     active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
 
-            SideRailItem {
-                source: "qrc:/App/assets/icons/test.svg"
-                text: (TranslationManager.revision, qsTr("Toggle Test"))
-                active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
+            //     onClicked: {
+            //         TitleBarController.setTitle("DateTimePicker Test")
+            //         SidePanelController.toggle("datetime-test")
+            //     }
+            // }
 
-                onClicked: {
-                    TitleBarController.setTitle("Toggle Test")
-                    SidePanelController.toggle("toggle-test")
-                }
-            }
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/test.svg"
+            //     text: (TranslationManager.revision, qsTr("Modal Dialog Test"))
+            //     active: PanelRouter.currentPath === "modal-dialog-test" && SidePanelController.isOpen
 
-            SideRailItem {
-                source: "qrc:/App/assets/icons/test.svg"
-                text: (TranslationManager.revision, qsTr("Overlay Test"))
-                active: PanelRouter.currentPath === "overlay-test" && SidePanelController.isOpen
+            //     onClicked: {
+            //         TitleBarController.setTitle("Modal Dialog Test")
+            //         SidePanelController.toggle("modal-dialog-test")
+            //     }
+            // }
 
-                onClicked: {
-                    TitleBarController.setTitle("Overlay Test")
-                    SidePanelController.toggle("overlay-test")
-                }
-            }
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/test.svg"
+            //     text: (TranslationManager.revision, qsTr("TextArea Test"))
+            //     active: PanelRouter.currentPath === "textarea-test" && SidePanelController.isOpen
 
-            SideRailItem {
-                source: "qrc:/App/assets/icons/test.svg"
-                text: (TranslationManager.revision, qsTr("Switcher Test"))
-                active: PanelRouter.currentPath === "switcher-test" && SidePanelController.isOpen
+            //     onClicked: {
+            //         TitleBarController.setTitle("TextArea Test")
+            //         SidePanelController.toggle("textarea-test")
+            //     }
+            // }
 
-                onClicked: {
-                    TitleBarController.setTitle("Switcher Test")
-                    SidePanelController.toggle("switcher-test")
-                }
-            }
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/test.svg"
+            //     text: (TranslationManager.revision, qsTr("Toggle Test"))
+            //     active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
 
-            SideRailItem {
-                source: "qrc:/App/assets/icons/test.svg"
-                text: (TranslationManager.revision, qsTr("Slider Test"))
-                active: PanelRouter.currentPath === "slider-test" && SidePanelController.isOpen
+            //     onClicked: {
+            //         TitleBarController.setTitle("Toggle Test")
+            //         SidePanelController.toggle("toggle-test")
+            //     }
+            // }
 
-                onClicked: {
-                    TitleBarController.setTitle("Slider Test")
-                    SidePanelController.toggle("slider-test")
-                }
-            }
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/test.svg"
+            //     text: (TranslationManager.revision, qsTr("Overlay Test"))
+            //     active: PanelRouter.currentPath === "overlay-test" && SidePanelController.isOpen
+
+            //     onClicked: {
+            //         TitleBarController.setTitle("Overlay Test")
+            //         SidePanelController.toggle("overlay-test")
+            //     }
+            // }
+
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/test.svg"
+            //     text: (TranslationManager.revision, qsTr("Switcher Test"))
+            //     active: PanelRouter.currentPath === "switcher-test" && SidePanelController.isOpen
+
+            //     onClicked: {
+            //         TitleBarController.setTitle("Switcher Test")
+            //         SidePanelController.toggle("switcher-test")
+            //     }
+            // }
+
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/test.svg"
+            //     text: (TranslationManager.revision, qsTr("Slider Test"))
+            //     active: PanelRouter.currentPath === "slider-test" && SidePanelController.isOpen
+
+            //     onClicked: {
+            //         TitleBarController.setTitle("Slider Test")
+            //         SidePanelController.toggle("slider-test")
+            //     }
+            // }
 
             SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen

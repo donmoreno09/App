@@ -1,8 +1,12 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
-import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
+
+/*!
+    \qmltype DatePickerYearView
+    \brief Year selection grid for DatePicker
+*/
 
 GridView {
     id: root
@@ -15,24 +19,19 @@ GridView {
     // Signals
     signal yearSelected(int year)
 
-    Layout.preferredWidth: 280
-    Layout.preferredHeight: 176
-    Layout.minimumWidth: 240
-    Layout.minimumHeight: 144
-
     // Grid configuration
     model: _getYearRange()
-    cellWidth: Math.floor(width / 3)
-    cellHeight: 36
+    cellWidth: width / 3
+    cellHeight: height / 4
 
-    // Row backgrounds
+    // Row backgrounds (4 rows for 12 years)
     Repeater {
-        model: 4
+        model: 4 // 4 rows of years
         Rectangle {
             x: 0
-            y: index * root.cellHeight
+            y: index * (root.height / 4)
             width: root.width
-            height: root.cellHeight - Theme.spacing.s2
+            height: (root.height / 4) - Theme.spacing.s2
             color: Qt.lighter(Theme.colors.primary800, 1.1)
             radius: Theme.radius.sm
             z: -1
@@ -76,6 +75,7 @@ GridView {
             }
         }
 
+        // Smooth color transitions
         Behavior on color {
             ColorAnimation {
                 duration: 150
