@@ -20,7 +20,7 @@ PanelTemplate {
 
         UI.Button {
             Layout.fillWidth: true
-            variant: "primary"
+            variant: UI.ButtonStyles.Primary
             text: (TranslationManager.revision, qsTr("OSM (Online)"))
             active: MapController._currentPlugin === MapPlugins.osm
 
@@ -29,7 +29,7 @@ PanelTemplate {
 
         UI.Button {
             Layout.fillWidth: true
-            variant: "primary"
+            variant: UI.ButtonStyles.Primary
             text: (TranslationManager.revision, qsTr("OSM (Default)"))
             active: MapController._currentPlugin === MapPlugins.osmDefault
 

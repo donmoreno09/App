@@ -71,12 +71,11 @@ Item {
             anchors.bottom: parent.bottom
 
             UI.Button {
-                variant: "ghost"
+                variant: UI.ButtonStyles.Ghost
                 display: AbstractButton.IconOnly
 
                 icon.source: "qrc:/App/assets/icons/arrow-right-bar.svg"
                 icon.width: Theme.icons.sizeLg
-                icon.color: Theme.colors.text
 
                 radius: 0
                 padding: 0
@@ -84,13 +83,12 @@ Item {
             }
 
             UI.Button {
-                variant: "ghost"
+                variant: UI.ButtonStyles.Ghost
                 display: AbstractButton.IconOnly
 
                 icon.source: "qrc:/App/assets/icons/circled-check-underlined.svg"
                 icon.width: Theme.icons.sizeLg
                 icon.height: Theme.icons.sizeLg
-                icon.color: Theme.colors.text
 
                 radius: 0
                 padding: 0

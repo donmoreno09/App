@@ -1,6 +1,6 @@
 set(qml_files
     Avatar.qml
-    Button.qml
+    ButtonOld.qml
     DateTime.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
@@ -19,6 +19,10 @@ set(qml_files
     VerticalDivider.qml
     VerticalPadding.qml
     VerticalSpacer.qml
+
+
+    button/ButtonStyle.qml
+    button/Button.qml
 
     date-time-picker/DatePicker.qml
     date-time-picker/DatePickerActions.qml
@@ -45,6 +49,7 @@ set(qml_files
 set(qml_singletons
     input/InputStyles.qml
     toggle/ToggleStyles.qml
+    button/ButtonStyles.qml
 )
 
 set_source_files_properties(

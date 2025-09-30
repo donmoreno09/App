@@ -2,13 +2,13 @@ import QtQuick 6.8
 import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
-
-import "." as UI
+import App.Components 1.0 as UI
 
 RowLayout {
     spacing: Theme.spacing.s4
 
     UI.Button {
+        variant: UI.ButtonStyles.Secondary
         width: Theme.icons.sizeXl
         height: Theme.icons.sizeXl
 

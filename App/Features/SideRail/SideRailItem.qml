@@ -10,7 +10,7 @@ UI.Button {
 
     property alias source: root.icon.source
 
-    variant: "ghost"
+    variant: UI.ButtonStyles.Ghost
     Layout.fillWidth: true
     Layout.preferredHeight: width
     Layout.alignment: Qt.AlignCenter

@@ -45,9 +45,9 @@ Rectangle {
         // Up arrow - flexible size
         UI.Button {
             Layout.preferredWidth: 40
-            Layout.fillHeight: true  // CHANGED: flexible height
-            Layout.minimumHeight: 30  // Minimum for usability
-            variant: "ghost"
+            Layout.fillHeight: true
+            Layout.minimumHeight: 30
+            variant: UI.ButtonStyles.Ghost
             display: AbstractButton.IconOnly
 
             background: Rectangle {
@@ -59,7 +59,6 @@ Rectangle {
             icon.source: "qrc:/App/assets/icons/chevron-up.svg"
             icon.width: 14
             icon.height: 8
-            icon.color: Theme.colors.text
 
             onClicked: upClicked()
         }
@@ -85,9 +84,9 @@ Rectangle {
         // Down arrow - flexible size
         UI.Button {
             Layout.preferredWidth: 40
-            Layout.fillHeight: true  // CHANGED: flexible height
-            Layout.minimumHeight: 30  // Minimum for usability
-            variant: "ghost"
+            Layout.fillHeight: true
+            Layout.minimumHeight: 30
+            variant: UI.ButtonStyles.Ghost
             display: AbstractButton.IconOnly
 
             background: Rectangle {
@@ -99,7 +98,6 @@ Rectangle {
             icon.source: "qrc:/App/assets/icons/chevron-down.svg"
             icon.width: 14
             icon.height: 8
-            icon.color: Theme.colors.text
 
             onClicked: downClicked()
         }
