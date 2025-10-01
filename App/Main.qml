@@ -53,7 +53,7 @@ ApplicationWindow {
 
     TrackMapLayer {
         id: trackMapLayer
-        layerName: "TrackMapLayer"
+        layerName: Layers.aisMapLayer()
 
         Component.onCompleted: {
             LayerManager.registerLayer(trackMapLayer)

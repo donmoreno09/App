@@ -48,6 +48,7 @@ set(cpp_sources
     layers/BaseLayer.h
     layers/BaseMapLayer.cpp
     layers/BaseMapLayer.h
+    layers/Layers.h
     layers/PoiMapLayer.cpp
     layers/PoiMapLayer.h
     layers/TrackMapLayer.cpp
