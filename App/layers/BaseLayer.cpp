@@ -26,7 +26,7 @@ void BaseLayer::setLayerName(const QString& name) {
 void BaseLayer::initialize() {
     QTimer::singleShot(0, this, [this]() {
         qDebug() << "[BaseLayer:initialize] Layer is ready:" << layerName();
-        emit layerReady();
+        emit ready();
     });
 }
 

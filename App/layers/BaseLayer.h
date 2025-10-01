@@ -26,7 +26,7 @@ public:
     void setItem(QQuickItem *newItem);
 
 signals:
-    void layerReady();
+    void ready();
     void layerNameChanged();
     void itemChanged();
 

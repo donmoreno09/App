@@ -18,9 +18,10 @@ class LayerManager : public QObject
     Q_PROPERTY(QVariantList selectedObjects READ selectedObjects NOTIFY selectedObjectsChanged)
 
 public:
+    explicit LayerManager(QObject* parent = nullptr);
+
     Q_INVOKABLE void registerLayer(BaseLayer* layer);
     Q_INVOKABLE void unregisterLayer(BaseLayer* layer);
-    Q_INVOKABLE void notifyLayerReady(BaseLayer* layer);
 
     Q_INVOKABLE QVariantList listLayerNames() const;
     Q_INVOKABLE QVariantList layerList() const;
@@ -36,10 +37,11 @@ signals:
     void selectedObjectsChanged();
 
 private:
-    explicit LayerManager(QObject* parent = nullptr);
-
     QSet<BaseLayer*> m_layers;
-    QSet<BaseLayer*> m_readyLayers;
+    QSet<BaseLayer*> m_pending;
+
+private slots:
+    void onLayerReady();
 };
 
 #endif // LAYERMANAGER_H

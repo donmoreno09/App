@@ -6,12 +6,16 @@ LayerManager::LayerManager(QObject* parent)
 {}
 
 void LayerManager::registerLayer(BaseLayer* layer) {
-    if (!m_layers.contains(layer)) {
-        m_layers.insert(layer);
-        qDebug() << "[LayerManager] Registered layer:" << layer->layerName();
-        emit layerListChanged();
-        emit layerNamesChanged();
-    }
+    if (!layer) return;
+
+    m_layers.insert(layer);
+    m_pending.insert(layer);
+    connect(layer, &BaseLayer::ready, this, &LayerManager::onLayerReady, Qt::UniqueConnection);
+
+    emit layerListChanged();
+    emit layerNamesChanged();
+
+    qDebug() << "[LayerManager] Registered layer:" << layer->layerName();
 }
 
 void LayerManager::unregisterLayer(BaseLayer* layer) {
@@ -22,22 +26,13 @@ void LayerManager::unregisterLayer(BaseLayer* layer) {
     }
 }
 
-void LayerManager::notifyLayerReady(BaseLayer* layer) {
+void LayerManager::onLayerReady()
+{
+    auto* layer = qobject_cast<BaseLayer*>(sender());
     if (!layer) return;
 
-    if (m_readyLayers.contains(layer)) {
-        qDebug() << "[LayerManager] Layer already registered as ready:" << layer->layerName();
-        return;
-    }
-
-    m_readyLayers.insert(layer);
-    qDebug() << "[LayerManager] Layer ready:" << layer->layerName();
-
-    bool allReady = std::all_of(m_layers.begin(), m_layers.end(), [this](BaseLayer* l) {
-        return m_readyLayers.contains(l);
-    });
-
-    if (allReady) {
+    m_pending.remove(layer);
+    if (m_pending.empty()) {
         qDebug() << "[LayerManager] ALL LAYERS READY!";
         emit allLayersReady();
     }

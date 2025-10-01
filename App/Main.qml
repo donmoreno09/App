@@ -51,6 +51,32 @@ ApplicationWindow {
         }
     }
 
+    TrackMapLayer {
+        id: trackMapLayer
+        layerName: "TrackMapLayer"
+
+        Component.onCompleted: {
+            LayerManager.registerLayer(trackMapLayer)
+            trackMapLayer.initialize()
+        }
+    }
+
+    Connections {
+        target: MapController
+
+        function onMapLoaded() {
+            trackMapLayer.map = MapController.map
+        }
+    }
+
+    Connections {
+        target: LayerManager
+
+        function onAllLayersReady() {
+            console.log("OK!")
+        }
+    }
+
     RowLayout {
         anchors.fill: parent
         spacing: 0
