@@ -1,7 +1,4 @@
 #include "layermanager.h"
-#include "../layers/BaseLayer.h"
-#include "../layers/BaseMapLayer.h"
-
 #include <QDebug>
 
 LayerManager* LayerManager::instance = nullptr;
@@ -87,51 +84,7 @@ BaseLayer* LayerManager::findLayerByName(const QString& name) const {
     return nullptr;
 }
 
-void LayerManager::setFocusLayer(const QString& layerName) {
-    if (m_focusedLayer == layerName)
-        return;
-
-    // NOTE: To be refactored.
-    // if (BaseMapLayer* oldMapLayer = focusedMapLayer()) {
-    //     disconnect(oldMapLayer, &BaseMapLayer::selectedObjectsChanged,
-    //                this, &LayerManager::selectedObjectsChanged);
-    //     oldMapLayer->setFocus(false);
-    // }
-
-    // m_focusedLayer = layerName;
-    // qDebug() << "[LayerManager] Focus set to layer:" << layerName;
-    // emit focusChanged(layerName);
-
-    // if (BaseMapLayer* newMapLayer = focusedMapLayer()) {
-    //     connect(newMapLayer, &BaseMapLayer::selectedObjectsChanged,
-    //             this, &LayerManager::selectedObjectsChanged);
-    //     newMapLayer->setFocus(true);
-    // }
-
-    // emit selectedObjectsChanged();
-}
-
-QString LayerManager::focusedLayerName() const {
-    return m_focusedLayer;
-}
-
-BaseLayer* LayerManager::focusedLayer() const {
-    return findLayerByName(m_focusedLayer);
-}
-
-BaseMapLayer* LayerManager::focusedMapLayer() const {
-    BaseLayer* layer = nullptr;
-    for (BaseLayer* l : m_layers) {
-        if (l->layerName() == m_focusedLayer) {
-            layer = l;
-            break;
-        }
-    }
-    return qobject_cast<BaseMapLayer*>(layer);
-}
-
 QVariantList LayerManager::selectedObjects() const {
-    if (BaseMapLayer* layer = focusedMapLayer())
-        return layer->selectedObjects();
+    // TO DO: Aggregate selected objects from each layer
     return QVariantList();
 }

@@ -5,7 +5,7 @@
 #include <QSet>
 #include <QStringList>
 #include <QVariantList>
-#include "../layers/BaseMapLayer.h"
+#include "../layers/BaseLayer.h"
 
 class LayerManager : public QObject
 {
@@ -28,15 +28,9 @@ public:
 
     QList<BaseLayer*> findLayersByType(const QString& typeName) const;
     BaseLayer* findLayerByName(const QString& name) const;
-    BaseLayer* focusedLayer() const;
-    BaseMapLayer* focusedMapLayer() const;
     QVariantList selectedObjects() const;
 
-    Q_INVOKABLE void setFocusLayer(const QString& layerName);
-    Q_INVOKABLE QString focusedLayerName() const;
-
 signals:
-    void focusChanged(const QString& layerName);
     void layerNamesChanged();
     void layerListChanged();
     void allLayersReady();
@@ -48,7 +42,6 @@ private:
 
     QSet<BaseLayer*> m_layers;
     QSet<BaseLayer*> m_readyLayers;
-    QString m_focusedLayer;
 };
 
 #endif // LAYERMANAGER_H
