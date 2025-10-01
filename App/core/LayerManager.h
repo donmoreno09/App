@@ -3,22 +3,21 @@
 
 #include <QObject>
 #include <QSet>
-#include <QStringList>
 #include <QVariantList>
+#include <QQmlEngine>
 #include "../layers/BaseLayer.h"
 
 class LayerManager : public QObject
 {
     Q_OBJECT
+    QML_SINGLETON
+    QML_ELEMENT
 
     Q_PROPERTY(QVariantList layerNames READ listLayerNames NOTIFY layerNamesChanged)
     Q_PROPERTY(QVariantList layerList READ layerList NOTIFY layerListChanged)
     Q_PROPERTY(QVariantList selectedObjects READ selectedObjects NOTIFY selectedObjectsChanged)
 
-
 public:
-    static LayerManager* getInstance();
-
     Q_INVOKABLE void registerLayer(BaseLayer* layer);
     Q_INVOKABLE void unregisterLayer(BaseLayer* layer);
     Q_INVOKABLE void notifyLayerReady(BaseLayer* layer);
@@ -38,7 +37,6 @@ signals:
 
 private:
     explicit LayerManager(QObject* parent = nullptr);
-    static LayerManager* instance;
 
     QSet<BaseLayer*> m_layers;
     QSet<BaseLayer*> m_readyLayers;

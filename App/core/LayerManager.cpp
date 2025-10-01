@@ -1,17 +1,9 @@
-#include "layermanager.h"
+#include "LayerManager.h"
 #include <QDebug>
-
-LayerManager* LayerManager::instance = nullptr;
 
 LayerManager::LayerManager(QObject* parent)
     : QObject(parent)
 {}
-
-LayerManager* LayerManager::getInstance() {
-    if (!instance)
-        instance = new LayerManager();
-    return instance;
-}
 
 void LayerManager::registerLayer(BaseLayer* layer) {
     if (!m_layers.contains(layer)) {

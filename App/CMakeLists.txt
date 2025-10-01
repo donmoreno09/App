@@ -29,8 +29,8 @@ set(cpp_sources
     core/geoselectionutils.h
     core/interactionmodemanager.cpp
     core/interactionmodemanager.h
-    core/layermanager.cpp
-    core/layermanager.h
+    core/LayerManager.cpp
+    core/LayerManager.h
     core/popupmanager.cpp
     core/popupmanager.h
     core/trackmanager.cpp
