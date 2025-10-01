@@ -10,6 +10,9 @@ file(GLOB_RECURSE APP_ASSETS
 
 set(qml_files
     Main.qml
+
+    # Layerss
+    layers/AISTrackMapLayer.qml
 )
 
 set(cpp_sources

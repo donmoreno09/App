@@ -51,23 +51,7 @@ ApplicationWindow {
         }
     }
 
-    TrackMapLayer {
-        id: trackMapLayer
-        layerName: Layers.aisMapLayer()
-
-        Component.onCompleted: {
-            LayerManager.registerLayer(trackMapLayer)
-            trackMapLayer.initialize()
-        }
-    }
-
-    Connections {
-        target: MapController
-
-        function onMapLoaded() {
-            trackMapLayer.map = MapController.map
-        }
-    }
+    AISTrackMapLayer { }
 
     Connections {
         target: LayerManager
