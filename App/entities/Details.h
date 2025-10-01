@@ -7,8 +7,8 @@
 #include <QMap>
 #include <QSharedPointer>
 #include "../persistence/ipersistable.h"
-#include "metadata/metadataentry.h"
-#include "metadata/notemetadataentry.h"
+#include "metadata/MetadataEntry.h"
+#include "metadata/NoteMetadataEntry.h"
 
 class Details : public IPersistable {
 public:

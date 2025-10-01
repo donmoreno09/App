@@ -53,13 +53,17 @@ set(cpp_sources
     layers/TrackMapLayer.cpp
     layers/TrackMapLayer.h
 
-    # Models
-    entities/metadata/metadataentry.h
-    entities/metadata/notemetadataentry.h
-    entities/details.h
-    entities/geometry.h
-    entities/poi.h
+    # Entities
+    entities/metadata/MetadataEntry.h
+    entities/metadata/NoteMetadataEntry.h
+    entities/Details.h
+    entities/Geometry.h
+    entities/Poi.h
     entities/shape.h
+
+    # Qt Models
+    models/PoiModel.cpp
+    models/PoiModel.h
 
     # Persistence
     persistence/ipersistable.h
@@ -109,6 +113,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/core
         ${CMAKE_CURRENT_SOURCE_DIR}/events
         ${CMAKE_CURRENT_SOURCE_DIR}/layers
+        ${CMAKE_CURRENT_SOURCE_DIR}/models
 )
 
 # Translation setup

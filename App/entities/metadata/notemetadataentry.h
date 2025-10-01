@@ -2,7 +2,7 @@
 #define NOTEMETADATAENTRY_H
 
 #include <QString>
-#include "metadataentry.h"
+#include "MetadataEntry.h"
 
 class NoteMetadataEntry : public MetadataEntry {
 public:

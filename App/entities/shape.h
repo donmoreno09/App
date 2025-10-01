@@ -2,7 +2,7 @@
 #define SHAPE_H
 
 #include "../persistence/ipersistable.h"
-#include "geometry.h"
+#include "Geometry.h"
 
 #include <QString>
 #include <QJsonObject>

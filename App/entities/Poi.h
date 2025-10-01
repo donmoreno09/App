@@ -7,8 +7,8 @@
 #include <QMap>
 #include <QSharedPointer>
 #include "../persistence/ipersistable.h"
-#include "geometry.h"
-#include "details.h"
+#include "Geometry.h"
+#include "Details.h"
 
 class Poi : public IPersistable
 {

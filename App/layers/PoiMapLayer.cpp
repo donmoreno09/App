@@ -1,7 +1,7 @@
 #include "PoiMapLayer.h"
 #include "../core/geoselectionutils.h"
 #include "../persistence/poipersistencemanager.h"
-#include "../entities/poi.h"
+#include "../entities/Poi.h"
 #include <QDebug>
 
 PoiMapLayer::PoiMapLayer(QObject* parent)
