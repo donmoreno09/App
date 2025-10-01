@@ -54,12 +54,12 @@ set(cpp_sources
     layers/TrackMapLayer.h
 
     # Models
-    models/metadata/metadataentry.h
-    models/metadata/notemetadataentry.h
-    models/details.h
-    models/geometry.h
-    models/poi.h
-    models/shape.h
+    entities/metadata/metadataentry.h
+    entities/metadata/notemetadataentry.h
+    entities/details.h
+    entities/geometry.h
+    entities/poi.h
+    entities/shape.h
 
     # Persistence
     persistence/ipersistable.h

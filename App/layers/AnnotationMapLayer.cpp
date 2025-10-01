@@ -1,7 +1,7 @@
 #include "annotationmaplayer.h"
 #include "../core/geoselectionutils.h"
 #include "../persistence/shapepersistencemanager.h"
-#include "../models/shape.h"
+#include "../entities/shape.h"
 #include <QDebug>
 
 AnnotationMapLayer::AnnotationMapLayer(QObject* parent)

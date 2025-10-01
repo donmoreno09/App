@@ -1,7 +1,7 @@
 #include "shapepersistencemanager.h"
 #include <QJsonDocument>
 #include "../connections/apiendpoints.h"
-#include "../models/shape.h"
+#include "../entities/shape.h"
 
 ShapePersistenceManager::ShapePersistenceManager(QObject *parent)
     : PersistenceManagerBase(parent)

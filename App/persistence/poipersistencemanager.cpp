@@ -1,7 +1,7 @@
 #include <QJsonDocument>
 #include "poipersistencemanager.h"
 #include "../connections/apiendpoints.h"
-#include "../models/poi.h"
+#include "../entities/poi.h"
 
 PoiPersistenceManager::PoiPersistenceManager(QObject *parent)
     : PersistenceManagerBase(parent)
