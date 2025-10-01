@@ -63,14 +63,34 @@ UI.GlobalBackgroundConsumer {
                 }
             }
 
+
             SideRailItem {
                 source: "qrc:/App/assets/icons/test.svg"
-                text: (TranslationManager.revision, qsTr("Buttons Test"))
-                active: PanelRouter.currentPath === "button-test" && SidePanelController.isOpen
-
+                text: (TranslationManager.revision, qsTr("Arrivals • Counters"))
+                active: PanelRouter.currentPath === "truckarrivals/arr" && SidePanelController.isOpen
                 onClicked: {
-                    TitleBarController.setTitle("Buttons Test")
-                    SidePanelController.toggle("button-test")
+                    TitleBarController.setTitle("Truck Arrivals — Counters")
+                    SidePanelController.toggle("truckarrivals/arr")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Arrivals • Calendar"))
+                active: PanelRouter.currentPath === "truckarrivals/calendar" && SidePanelController.isOpen
+                onClicked: {
+                    TitleBarController.setTitle("Truck Arrivals — Calendar")
+                    SidePanelController.toggle("truckarrivals/calendar")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                text: (TranslationManager.revision, qsTr("Arrivals • Calendar+Time"))
+                active: PanelRouter.currentPath === "truckarrivals/calendartime" && SidePanelController.isOpen
+                onClicked: {
+                    TitleBarController.setTitle("Truck Arrivals — Calendar + Time")
+                    SidePanelController.toggle("truckarrivals/calendartime")
                 }
             }
 

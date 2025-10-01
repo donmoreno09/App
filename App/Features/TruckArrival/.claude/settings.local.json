@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/esis/Documents/IRIDESS_FE/App/Features/**)",
+      "Read(//c/Users/esis/Documents/IRIDESS_FE/components/SidePannel/ShipArrivalContent/**)",
+      "Read(//c/Users/esis/Documents/IRIDESS_FE/core/thirdparty/**)",
+      "Read(//c/Users/esis/Documents/IRIDESS_FE/components/SidePannel/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

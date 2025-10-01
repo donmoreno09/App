@@ -9,6 +9,7 @@ add_subdirectory(SidePanel)
 add_subdirectory(ContextPanel)
 add_subdirectory(Notifications)
 add_subdirectory(MapToolbar)
+add_subdirectory(TruckArrival)
 
 # Modules need to be linked in order to be loaded using qrc.
 # Also, make sure that the RESOURCE_PREFIX of the module is the same as App's (which is "/").
@@ -26,4 +27,5 @@ target_link_libraries(${PROJECT_NAME}
         app_features_contextpanel
         app_features_notifications
         app_features_maptoolbar
+        app_features_truckarrival
 )
