@@ -3,11 +3,13 @@
 
 #include <QObject>
 #include <QString>
+#include <QQuickItem>
+#include <QPointer>
 
 class BaseLayer : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged FINAL)
+    Q_PROPERTY(QQuickItem* item READ item WRITE setItem NOTIFY itemChanged FINAL)
     Q_PROPERTY(QString layerName READ layerName WRITE setLayerName NOTIFY layerNameChanged FINAL)
 
 public:
@@ -20,20 +22,19 @@ public:
     QString layerName() const;
     void setLayerName(const QString& name);
 
-    bool visible() const;
-    void setVisible(bool newVisible);
+    QQuickItem *item() const;
+    void setItem(QQuickItem *newItem);
 
 signals:
     void layerReady();
     void layerNameChanged();
     void itemChanged();
-    void visibleChanged();
 
 protected:
     QString m_layerName;
 
 private:
-    bool m_visible = true;
+    QPointer<QQuickItem> m_item;
 };
 
 #endif // BASELAYER_H

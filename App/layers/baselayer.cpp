@@ -30,15 +30,15 @@ void BaseLayer::initialize() {
     });
 }
 
-bool BaseLayer::visible() const
+QQuickItem *BaseLayer::item() const
 {
-    return m_visible;
+    return m_item.data();
 }
 
-void BaseLayer::setVisible(bool newVisible)
+void BaseLayer::setItem(QQuickItem *newItem)
 {
-    if (m_visible == newVisible)
+    if (m_item.data() == newItem)
         return;
-    m_visible = newVisible;
-    emit visibleChanged();
+    m_item = newItem;
+    emit itemChanged();
 }
