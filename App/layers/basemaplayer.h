@@ -4,9 +4,7 @@
 #include "./BaseLayer.h"
 
 #include <QGeoCoordinate>
-#include <QPolygonF>
-#include <QVariantList>
-#include <QList>
+#include <QQuickItem>
 #include <QPointer>
 #include "../persistence/ipersistable.h"
 
@@ -14,7 +12,10 @@ class BaseMapLayer : public BaseLayer
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* map READ map WRITE setMap NOTIFY mapChanged FINAL)
+    // Qt does not expose the C++ class of the Map QML object.
+    // Therefore, to manipulate its properties, QQmlProperty is
+    // used as shown by the zoomLevel helper methods.
+    Q_PROPERTY(QQuickItem* map READ map WRITE setMap NOTIFY mapChanged FINAL)
 
 public:
     explicit BaseMapLayer(QObject* parent = nullptr);
@@ -29,8 +30,8 @@ public:
     Q_INVOKABLE double zoomLevel() const;
     Q_INVOKABLE void setZoomLevel(double zoom);
 
-    QObject *map() const;
-    void setMap(QObject *newMap);
+    QQuickItem *map() const;
+    void setMap(QQuickItem *newMap);
 
 signals:
     void mapChanged();
@@ -38,7 +39,7 @@ signals:
     void clearedSelection();
 
 private:
-    QPointer<QObject> m_map;
+    QPointer<QQuickItem> m_map;
 };
 
 #endif // BASEMAPLAYER_H

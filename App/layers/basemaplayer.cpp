@@ -19,12 +19,12 @@ void BaseMapLayer::setZoomLevel(double zoom) {
     }
 }
 
-QObject *BaseMapLayer::map() const
+QQuickItem *BaseMapLayer::map() const
 {
     return m_map.data();
 }
 
-void BaseMapLayer::setMap(QObject *newMap)
+void BaseMapLayer::setMap(QQuickItem *newMap)
 {
     if (m_map == newMap)
         return;
