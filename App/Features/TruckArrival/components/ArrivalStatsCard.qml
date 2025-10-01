@@ -2,54 +2,58 @@ import QtQuick 6.8
 import QtQuick.Layouts 6.8
 import App.Themes 1.0
 
-Rectangle {
+// Refactored to match OLD design exactly
+Row {
     id: root
+    spacing: 10
 
     property string icon: ""
     property string title: ""
     property string value: ""
     property bool isLoading: false
 
-    implicitWidth: 280
-    implicitHeight: 80
+    // OLD DESIGN COLORS (from SidePannelStatCard.qml)
+    readonly property color cardBackgroundColor: Qt.rgba(1, 1, 1, 0.1)
+    readonly property color borderColor: Theme.colors.secondary500
+    readonly property color secondaryTextColor: Theme.colors.whiteA60
+    readonly property color textColor: Theme.colors.white500
 
-    color: Theme.colors.primary700
-    radius: Theme.radius.md
-    border.width: Theme.borders.b1
-    border.color: Theme.colors.secondary500
+    // Icon container - EXACTLY like old design
+    Rectangle {
+        width: 50
+        height: 50
+        radius: Theme.radius.md
+        color: root.cardBackgroundColor
+        border.color: root.borderColor
+        border.width: Theme.borders.b1
 
-    RowLayout {
-        anchors.fill: parent
-        anchors.margins: Theme.spacing.s4
-        spacing: Theme.spacing.s4
-
-        // Icon
         Text {
             text: root.icon
-            font.pixelSize: Theme.typography.fontSize400
-            Layout.alignment: Qt.AlignVCenter
+            font.pixelSize: 24
+            anchors.centerIn: parent
+            color: root.textColor
+        }
+    }
+
+    // Text content - EXACTLY like old design
+    Column {
+        spacing: 2
+        width: root.width - 60
+
+        Text {
+            text: root.title
+            font.pixelSize: Theme.typography.fontSize175
+            font.family: Theme.typography.familySans
+            color: root.secondaryTextColor
+            font.weight: Theme.typography.weightMedium
         }
 
-        // Content
-        ColumnLayout {
-            Layout.fillWidth: true
-            spacing: Theme.spacing.s2
-
-            Text {
-                text: root.title
-                font.family: Theme.typography.familySans
-                font.pixelSize: Theme.typography.fontSize150
-                font.weight: Theme.typography.weightMedium
-                color: Theme.colors.textMuted
-            }
-
-            Text {
-                text: root.loading ? "..." : root.value
-                font.family: Theme.typography.familySans
-                font.pixelSize: Theme.typography.fontSize250
-                font.weight: Theme.typography.weightBold
-                color: Theme.colors.text
-            }
+        Text {
+            text: root.isLoading ? "..." : root.value
+            font.pixelSize: Theme.typography.fontSize200
+            font.family: Theme.typography.familySans
+            font.weight: Theme.typography.weightBold
+            color: root.textColor
         }
     }
 }
