@@ -1,10 +1,12 @@
 #include "mqttclientservice.h"
-#include "parser/imessageparser.h"
+#include "parser/IMessageParser.h"
 #include "../../layers/trackmaplayer.h"
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
+#include <QVector>
+#include <entities/Track.h>
 
 MqttClientService* MqttClientService::getInstance() {
     static MqttClientService instance;
@@ -103,6 +105,6 @@ void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopi
         return;
     }
     IMessageParser* parser = topicToParser.value(topic);
-    QVariantList data = parser->parse(message);
+    QVector<Track> data = parser->parse(message);
     layerInstances[layerName]->setTracks(data);
 }

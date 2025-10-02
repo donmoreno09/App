@@ -14,6 +14,7 @@ MapItemGroup {
 
         Component.onCompleted: {
             LayerManager.registerLayer(trackMapLayer)
+            trackMapLayer.map = MapController.map
             trackMapLayer.initialize()
         }
     }

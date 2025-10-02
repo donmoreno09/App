@@ -11,7 +11,7 @@ file(GLOB_RECURSE APP_ASSETS
 set(qml_files
     Main.qml
 
-    # Layerss
+    # Layers
     layers/AISTrackMapLayer.qml
 )
 
@@ -20,8 +20,8 @@ set(cpp_sources
     config/mqtt_config.json
 
     # Connections
-    connections/mqtt/parser/imessageparser.h
-    connections/mqtt/parser/simpletrackparser.h
+    connections/mqtt/parser/IMessageParser.h
+    connections/mqtt/parser/TrackParser.h
     connections/mqtt/mqttclientservice.cpp
     connections/mqtt/mqttclientservice.h
     connections/apiendpoints.h
@@ -64,6 +64,7 @@ set(cpp_sources
     entities/Geometry.h
     entities/Poi.h
     entities/shape.h
+    entities/Track.h
 
     # Qt Models
     models/PoiModel.cpp
