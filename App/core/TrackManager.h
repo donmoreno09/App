@@ -5,16 +5,16 @@
 #include <QQmlEngine>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include "../layers/trackmaplayer.h"
+#include <layers/TrackMapLayer.h>
 
 class TrackManager : public  QObject
 {
     Q_OBJECT
+    QML_SINGLETON
+    QML_ELEMENT
 
 public:
-    static TrackManager *instance();
-
-    static QObject *singletonProvider(QQmlEngine*, QJSEngine*);
+    explicit TrackManager(QObject* parent = nullptr);
 
     Q_INVOKABLE void registerLayer(const QString& track, QObject* layer);
 
@@ -31,8 +31,6 @@ signals:
     void deactivated(const QString& track);
 
 private:
-    explicit TrackManager(QObject* parent = nullptr);
-
     QHash<QString, TrackMapLayer*> m_trackToLayer;
     QNetworkAccessManager m_networkManager;
 };

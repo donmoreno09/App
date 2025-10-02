@@ -6,14 +6,24 @@ import App 1.0
 import App.Features.Map 1.0
 
 MapItemGroup {
+    id: root
+
     property alias trackMapLayer: trackMapLayer
+
+    MapItemView {
+        model: trackMapLayer.trackModel
+
+        delegate: Track { }
+    }
 
     TrackMapLayer {
         id: trackMapLayer
-        layerName: Layers.aisMapLayer()
+        layerName: Layers.aisTrackMapLayer()
 
         Component.onCompleted: {
             LayerManager.registerLayer(trackMapLayer)
+            TrackManager.registerLayer(MqttClientService.getTopicFromLayer(Layers.aisTrackMapLayer()), trackMapLayer)
+            MqttClientService.registerLayer(Layers.aisTrackMapLayer(), trackMapLayer)
             trackMapLayer.map = MapController.map
             trackMapLayer.initialize()
         }
@@ -24,6 +34,7 @@ MapItemGroup {
 
         function onMapLoaded() {
             trackMapLayer.map = MapController.map
+            MapController.map.addMapItemGroup(root)
         }
     }
 }

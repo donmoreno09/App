@@ -11,14 +11,14 @@ file(GLOB_RECURSE APP_ASSETS
 set(qml_files
     Main.qml
 
+    # Map Objects
+    map-objects/Track.qml
+
     # Layers
     layers/AISTrackMapLayer.qml
 )
 
 set(cpp_sources
-    # Config
-    config/mqtt_config.json
-
     # Connections
     connections/mqtt/parser/IMessageParser.h
     connections/mqtt/parser/TrackParser.h
@@ -36,8 +36,8 @@ set(cpp_sources
     core/LayerManager.h
     core/popupmanager.cpp
     core/popupmanager.h
-    core/trackmanager.cpp
-    core/trackmanager.h
+    core/TrackManager.cpp
+    core/TrackManager.h
     core/variantlistmodel.cpp
     core/variantlistmodel.h
 
@@ -89,7 +89,9 @@ qt_add_qml_module(${PROJECT_NAME}
     QML_FILES ${qml_files}
     SOURCES ${cpp_sources}
     RESOURCE_PREFIX "/" # For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
-    RESOURCES ${APP_ASSETS}
+    RESOURCES
+        ${APP_ASSETS}
+        config/mqtt_config.json
 )
 
 add_subdirectory(Components)

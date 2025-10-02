@@ -5,6 +5,9 @@
 #include <App/Features/Map/PluginProbe.h>
 #include <QFontDatabase>
 #include <QDebug>
+#include <core/TrackManager.h>
+#include <connections/mqtt/MqttClientService.h>
+#include <connections/mqtt/parser/TrackParser.h>
 
 int main(int argc, char *argv[])
 {
@@ -48,6 +51,15 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
 
     engine.addImportPath("qrc:/"); // For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
+
+    auto *mqtt = engine.singletonInstance<MqttClientService*>("App", "MqttClientService");
+    mqtt->initialize(":/App/config/mqtt_config.json");
+    mqtt->registerParser("ais", new TrackParser());
+    mqtt->registerParser("doc-space", new TrackParser());
+
+    auto *trackManager = engine.singletonInstance<TrackManager*>("App", "TrackManager");
+    trackManager->activate("ais");
+
     engine.loadFromModule("App", "Main");
 
     // Uncomment the block below to list available map plugins to use

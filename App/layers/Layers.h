@@ -10,8 +10,8 @@ class Layers : public QObject {
     QML_ELEMENT
 
 public:
-    Q_INVOKABLE QString aisMapLayer() const { return QStringLiteral("AISMapLayer"); }
-    Q_INVOKABLE QString docSpaceMapLayer() const { return QStringLiteral("DocSpaceMapLayer"); }
+    Q_INVOKABLE QString aisTrackMapLayer() const { return QStringLiteral("AISTrackMapLayer"); }
+    Q_INVOKABLE QString docSpaceTrackMapLayer() const { return QStringLiteral("DocSpaceTrackMapLayer"); }
     Q_INVOKABLE QString poiMapLayer() const { return QStringLiteral("PoiMapLayer"); }
     Q_INVOKABLE QString annotationMapLayer() const { return QStringLiteral("AnnotationMapLayer"); }
 };

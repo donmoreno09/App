@@ -1,5 +1,5 @@
-#ifndef SIMPLETRACKPARSER_H
-#define SIMPLETRACKPARSER_H
+#ifndef TRACKPARSER_H
+#define TRACKPARSER_H
 
 #include "IMessageParser.h"
 #include <QJsonDocument>
@@ -9,7 +9,7 @@
 #include <QGeoCoordinate>
 #include <entities/Track.h>
 
-class SimpleTrackParser : public IMessageParser {
+class TrackParser : public IMessageParser {
 public:
     QVector<Track> parse(const QByteArray& message) override {
         QJsonParseError err;
@@ -29,11 +29,13 @@ public:
             track.code = trackVal["code"].toString();
             track.entity = trackVal["entity"].toString();
             track.pos = parseCoordinateArray(trackVal["pos"].toArray());
+            track.cog = trackVal["cog"].toDouble();
             track.sourceName = trackVal["source_name"].toString();
             track.time = trackVal["time"].toInt();
             track.trackUid = trackVal["track_uid"].toString();
             track.trackNumber = trackVal["tracknumber"].toInt();
             track.vel = parseCoordinateArray(trackVal["vel"].toArray());
+            track.state = trackVal["state"].toInt();
 
             tracks.append(track);
         }
@@ -42,4 +44,4 @@ public:
     }
 };
 
-#endif // SIMPLETRACKPARSER_H
+#endif // TRACKPARSER_H

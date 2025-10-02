@@ -22,11 +22,13 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
     case CodeRole: return track.code;
     case EntityRole: return track.entity;
     case PosRole: return QVariant::fromValue(track.pos);
+    case CogRole: return track.cog;
     case SourceNameRole: return track.sourceName;
     case TimeRole: return track.time;
     case TrackUidRole: return track.trackUid;
     case TrackNumberRole: return track.trackNumber;
     case VelRole: return QVariant::fromValue(track.vel);
+    case StateRole: return track.state;
     default: return {};
     }
 }
@@ -37,11 +39,13 @@ QHash<int, QByteArray> TrackModel::roleNames() const
         { CodeRole, "code" },
         { EntityRole, "entity" },
         { PosRole, "pos" },
+        { CogRole, "cog" },
         { SourceNameRole, "sourceName" },
         { TimeRole, "time" },
         { TrackUidRole, "trackUid" },
         { TrackNumberRole, "trackNumber" },
         { VelRole, "vel" },
+        { StateRole, "state" },
     };
 }
 
@@ -60,10 +64,15 @@ QVector<Track> &TrackModel::tracks()
 
 void TrackModel::setTracks(const QVector<Track> &tracks)
 {
+
+    beginResetModel();
     m_tracks = tracks;
+    endResetModel();
 }
 
 void TrackModel::clear()
 {
+    beginResetModel();
     m_tracks.clear();
+    endResetModel();
 }

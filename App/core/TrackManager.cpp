@@ -1,19 +1,8 @@
-#include "QEventLoop"
-#include "trackmanager.h"
-#include "../connections/apiendpoints.h"
+#include "TrackManager.h"
+#include <QEventLoop>
+#include <connections/apiendpoints.h>
 
 TrackManager::TrackManager(QObject* parent) : QObject(parent) {}
-
-TrackManager *TrackManager::instance()
-{
-    static TrackManager *manager = new TrackManager();
-    return manager;
-}
-
-QObject *TrackManager::singletonProvider(QQmlEngine *, QJSEngine *)
-{
-    return instance();
-}
 
 void TrackManager::registerLayer(const QString &track, QObject *layer)
 {

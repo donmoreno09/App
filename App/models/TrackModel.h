@@ -22,11 +22,13 @@ public:
         CodeRole = Qt::UserRole + 1,
         EntityRole,
         PosRole,
+        CogRole,
         SourceNameRole,
         TimeRole,
         TrackUidRole,
         TrackNumberRole,
         VelRole,
+        StateRole,
     };
 
     Q_ENUM(Roles)
