@@ -11,10 +11,9 @@ const routes = {
   "slider-test": "qrc:/App/Playground/SliderPanel.qml",
   "modal-test": "qrc:/App/Playground/ModalPanel.qml",
   "button-test": "qrc:/App/Playground/ButtonPanel.qml",
-  "truckarrivals/overview": "qrc:/App/Features/TruckArrival/TruckArrivalPanel.qml",
-  "truckarrivals/arr": "qrc:/App/Features/TruckArrival/TruckArrivalArrContent.qml",
-  "truckarrivals/calendar": "qrc:/App/Features/TruckArrival/TruckArrivalCalendarContent.qml",
-  "truckarrivals/calendartime": "qrc:/App/Features/TruckArrival/TruckArrivalCalendarTimeContent.qml",
+  "arrival-content-test":        "qrc:/App/Features/Arrivals/panels/ArrivalsCountPanel.qml",
+  "arrival-date-content-test":   "qrc:/App/Features/Arrivals/panels/ArrivalsDatePanel.qml",
+  "arrival-date-time-content-test": "qrc:/App/Features/Arrivals/panels/ArrivalsDateTimePanel.qml",
   "*":      "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
 };
 
