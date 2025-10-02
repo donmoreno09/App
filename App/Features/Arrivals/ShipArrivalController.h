@@ -47,8 +47,8 @@ private:
     // stato UI (invariato)
     int  m_todayArrivalCount = 0;
     int  m_currentHourArrivalCount = 0;
-    int  m_dateRangeArrivalCount = -1;
-    int  m_dateTimeRangeArrivalCount = -1;
+    int  m_dateRangeArrivalCount = 0;
+    int  m_dateTimeRangeArrivalCount = 0;
     bool m_loading = false;
     int  m_pendingRequests = 0;
 
@@ -57,6 +57,6 @@ private:
     QString m_host = QStringLiteral("localhost");
     int     m_port = 5002;
 
-    void setLoading(bool b);
+    void setLoading(bool loading);
     void hookUpService();
 };

@@ -7,7 +7,7 @@ PanelTemplate {
     title.text: qsTr("Date Range Selection")
 
     ColumnLayout {
-        width: parent.width
+        anchors.fill: parent
         spacing: 16
 
         ShipArrivalController { id: ctrl }
@@ -15,7 +15,7 @@ PanelTemplate {
         SidePanelDateContent {
             controller: ctrl
             Layout.fillWidth: true
-            anchors.fill: undefined   // let Layout do the sizing
+            Layout.fillHeight: true
         }
     }
 }

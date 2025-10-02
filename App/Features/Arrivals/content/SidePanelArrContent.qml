@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import Qt5Compat.GraphicalEffects
 
 import App.Components 1.0 as UI
 import App.Themes 1.0
@@ -12,17 +13,19 @@ ColumnLayout {
     id: root
     Layout.fillWidth: true
     Layout.fillHeight: true
-    spacing: 10
+    spacing: Theme.spacing.s5
 
     required property ShipArrivalController controller
 
-    onVisibleChanged: if (visible) controller.fetchAllArrivalData()
+    onVisibleChanged: if (visible && !controller.isLoading) controller.fetchAllArrivalData()
 
     BusyIndicator {
-        Layout.alignment: Qt.AlignVCenter
+        Layout.alignment: Qt.AlignCenter
         Layout.fillHeight: true
         running: controller.isLoading
         visible: controller.isLoading
+        layer.enabled: true
+        layer.effect: ColorOverlay { color: Theme.colors.text }
     }
 
     StatCard {
@@ -30,6 +33,7 @@ ColumnLayout {
         title: (TranslationManager.revision, qsTr("Next Hour"))
         value: controller.currentHourArrivalCount.toString() + (TranslationManager.revision, qsTr(" trucks"))
         Layout.fillWidth: true
+        visible: !controller.isLoading
     }
 
     StatCard {
@@ -37,10 +41,11 @@ ColumnLayout {
         title: (TranslationManager.revision, qsTr("Today"))
         value: controller.todayArrivalCount.toString() + (TranslationManager.revision, qsTr(" trucks"))
         Layout.fillWidth: true
+        visible: !controller.isLoading
     }
 
 
-    Item { Layout.fillHeight: true }
+    UI.VerticalSpacer {}
 
     UI.Button {
         Layout.fillWidth: true

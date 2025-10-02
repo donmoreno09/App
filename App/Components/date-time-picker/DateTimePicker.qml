@@ -278,15 +278,15 @@ Rectangle {
         }
 
         // Action buttons
-        UI.DatePickerActions {
-            Layout.fillWidth: true
-            mode: root.mode
-            canClear: root.canClear
-            canApply: root.hasValidSelection
+        // UI.DatePickerActions {
+        //     Layout.fillWidth: true
+        //     mode: root.mode
+        //     canClear: root.canClear
+        //     canApply: root.hasValidSelection
 
-            onClearClicked: root.clearSelection()
-            onApplyClicked: root.applySelection()
-        }
+        //     onClearClicked: root.clearSelection()
+        //     onApplyClicked: root.applySelection()
+        // }
     }
 
     // Public API methods - unchanged

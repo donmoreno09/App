@@ -1,7 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Layouts 6.8
-import App.Features.SidePanel 1.0   // PanelTemplate
-import App.Features.Arrivals 1.0    // controller + content
+import App.Features.SidePanel 1.0
+import App.Features.Arrivals 1.0
 
 PanelTemplate {
     title.text: qsTr("Truck Arrivals")

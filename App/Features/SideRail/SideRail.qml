@@ -65,6 +65,7 @@ UI.GlobalBackgroundConsumer {
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/truck.svg"
+                preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Truck Arrivals"))
                 active: PanelRouter.currentPath === "arrival-content-test" && SidePanelController.isOpen
                 onClicked: {
@@ -74,21 +75,23 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
-                source: "qrc:/App/assets/icons/calendar.svg"
-                text: (TranslationManager.revision, qsTr("Arrivals • Date"))
+                source: "qrc:/App/assets/icons/calendar-arrivals.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals Date"))
                 active: PanelRouter.currentPath === "arrival-date-content-test" && SidePanelController.isOpen
                 onClicked: {
-                    TitleBarController.setTitle("Arrivals • Date")
+                    TitleBarController.setTitle("Truck Arrivals Date")
                     SidePanelController.toggle("arrival-date-content-test")
                 }
             }
 
             SideRailItem {
-                source: "qrc:/App/assets/icons/calendar.svg"
-                text: (TranslationManager.revision, qsTr("Arrivals • Date+Time"))
+                source: "qrc:/App/assets/icons/settings.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals DT"))
                 active: PanelRouter.currentPath === "arrival-date-time-content-test" && SidePanelController.isOpen
                 onClicked: {
-                    TitleBarController.setTitle("Arrivals • Date+Time")
+                    TitleBarController.setTitle("Truck Arrivals DT")
                     SidePanelController.toggle("arrival-date-time-content-test")
                 }
             }

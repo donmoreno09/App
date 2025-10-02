@@ -10,6 +10,32 @@ ShipArrivalController::ShipArrivalController(QObject* parent)
     hookUpService();
 }
 
+int ShipArrivalController::todayArrivalCount() const {
+    return m_todayArrivalCount;
+}
+
+int ShipArrivalController::currentHourArrivalCount() const {
+    return m_currentHourArrivalCount;
+}
+
+int ShipArrivalController::dateRangeArrivalCount() const {
+    return m_dateRangeArrivalCount;
+}
+
+int ShipArrivalController::dateTimeRangeArrivalCount() const {
+    return m_dateTimeRangeArrivalCount;
+}
+
+bool ShipArrivalController::isLoading() const {
+    return m_loading;
+}
+
+void ShipArrivalController::setLoading(bool loading) {
+    if (m_loading == loading) return;
+    m_loading = loading;
+    emit loadingChanged(loading);
+}
+
 void ShipArrivalController::hookUpService() {
     connect(m_service, &ShipArrivalService::requestFailed, this, [this](const QString& e){
         emit requestFailed(e);
@@ -31,12 +57,6 @@ void ShipArrivalController::hookUpService() {
         if (m_dateTimeRangeArrivalCount != c) { m_dateTimeRangeArrivalCount = c; emit dateTimeRangeArrivalCountChanged(c); }
         setLoading(false);
     });
-}
-
-void ShipArrivalController::setLoading(bool b) {
-    if (m_loading == b) return;
-    m_loading = b;
-    emit loadingChanged(b);
 }
 
 // slot invariati: ora chiamano il service
@@ -69,24 +89,3 @@ void ShipArrivalController::fetchDateTimeRangeShipArrivals(const QDateTime& s, c
     setLoading(true);
     m_service->getDateTimeRangeArrivals(s, e);
 }
-
-int ShipArrivalController::todayArrivalCount() const {
-    return m_todayArrivalCount;
-}
-
-int ShipArrivalController::currentHourArrivalCount() const {
-    return m_currentHourArrivalCount;
-}
-
-int ShipArrivalController::dateRangeArrivalCount() const {
-    return m_dateRangeArrivalCount;
-}
-
-int ShipArrivalController::dateTimeRangeArrivalCount() const {
-    return m_dateTimeRangeArrivalCount;
-}
-
-bool ShipArrivalController::isLoading() const {
-    return m_loading;
-}
-
