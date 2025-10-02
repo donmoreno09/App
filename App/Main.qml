@@ -51,6 +51,8 @@ ApplicationWindow {
         }
 
         AISTrackMapLayer { }
+
+        DocSpaceTrackMapLayer { }
     }
 
     Connections {

@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
 
     auto *trackManager = engine.singletonInstance<TrackManager*>("App", "TrackManager");
     trackManager->activate("ais");
+    trackManager->activate("doc-space");
 
     engine.loadFromModule("App", "Main");
 

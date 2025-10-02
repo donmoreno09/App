@@ -16,6 +16,7 @@ set(qml_files
 
     # Layers
     layers/AISTrackMapLayer.qml
+    layers/DocSpaceTrackMapLayer.qml
 )
 
 set(cpp_sources
