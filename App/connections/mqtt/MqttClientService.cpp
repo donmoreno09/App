@@ -1,17 +1,9 @@
-#include "mqttclientservice.h"
-#include "parser/IMessageParser.h"
-#include "../../layers/trackmaplayer.h"
+#include "MqttClientService.h"
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
 #include <QVector>
-#include <entities/Track.h>
-
-MqttClientService* MqttClientService::getInstance() {
-    static MqttClientService instance;
-    return &instance;
-}
 
 MqttClientService::MqttClientService(QObject* parent)
     : QObject(parent), client(new QMqttClient(this)) {
@@ -45,7 +37,8 @@ void MqttClientService::loadConfiguration(const QString& path) {
     client->setPort(mqttConfig["port"].toInt());
 
     QJsonObject topics = root["topics"].toObject();
-    for (const QString &topic : topics.keys()) {
+    for (auto it = topics.begin(); it != topics.end(); it++) {
+        const QString &topic = it.key();
         QString layer = topics[topic].toString();
         topicToLayer[topic] = layer;
         layerToTopic[layer] = topic;
@@ -59,7 +52,8 @@ void MqttClientService::connectToBroker() {
 
 void MqttClientService::onConnected() {
     qDebug() << "[MQTT] Connected to broker";
-    for (const QString &topic : topicToLayer.keys()) {
+    for (auto it = topicToLayer.begin(); it != topicToLayer.end(); it++) {
+        const QString &topic = it.key();
         client->subscribe(topic);
         qDebug() << "[MQTT] Subscribed to topic:" << topic;
     }
@@ -106,5 +100,5 @@ void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopi
     }
     IMessageParser* parser = topicToParser.value(topic);
     QVector<Track> data = parser->parse(message);
-    layerInstances[layerName]->setTracks(data);
+    layerInstances[layerName]->trackModel()->setTracks(data);
 }

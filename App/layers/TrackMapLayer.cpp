@@ -1,37 +1,23 @@
 #include "TrackMapLayer.h"
-#include "../core/geoselectionutils.h"
 #include <QDebug>
+#include <core/GeoSelectionUtils.h>
 
 TrackMapLayer::TrackMapLayer(QObject* parent)
     : BaseMapLayer(parent)
 {
     setObjectName("TrackMapLayer");
+    m_trackModel = new TrackModel(this);
 
     m_clearTracksTimer = new QTimer(this);
     m_clearTracksTimer->setSingleShot(true);
     m_clearTracksTimer->setInterval(60 * 1000); // 60 seconds
 
     connect(m_clearTracksTimer, &QTimer::timeout, this, [this]() {
-        if (!m_tracks.isEmpty()) {
+        if (!m_trackModel->tracks().isEmpty()) {
             qDebug() << "[TrackMapLayer] Timeout: clearing tracks due to inactivity";
-            m_tracks.clear();
-            emit tracksChanged();
+            m_trackModel->clear();
         }
     });
-}
-
-QVariantList TrackMapLayer::tracks() const {
-    return m_tracks;
-}
-
-void TrackMapLayer::setTracks(const QVariantList& tracks) {
-    if (m_tracks != tracks) {
-        m_tracks = tracks;
-        emit tracksChanged();
-        qDebug() << "[TrackMapLayer] setting:" << tracks.size() << " tracks";
-        // Reset timer everytime tracks has been updated
-        m_clearTracksTimer->start();
-    }
 }
 
 void TrackMapLayer::initialize() {
@@ -45,12 +31,13 @@ void TrackMapLayer::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordi
     // for now to include geometry with the coordinate property so
     // that it'll conform to GeoSelection::selectInRect()'s selection logic.
     QVariantList geoTracks;
-    for (const auto& track : std::as_const(m_tracks)) {
-        QVariantMap editableTrack = track.toMap();
+    const auto& tracks = m_trackModel->tracks();
+    for (auto it = tracks.cbegin(); it != tracks.cend(); it++) {
+        QVariantMap editableTrack;
 
         QVariantMap coordinate;
-        coordinate["x"] = editableTrack["longitude"];
-        coordinate["y"] = editableTrack["latitude"];
+        coordinate["x"] = it->pos.longitude();
+        coordinate["y"] = it->pos.latitude();
 
         QVariantMap geometry;
         geometry["shapeTypeId"] = static_cast<int>(GeoSelection::ShapeType::Point);
@@ -92,4 +79,9 @@ void TrackMapLayer::setActive(bool newActive)
         return;
     m_active = newActive;
     emit activeChanged();
+}
+
+TrackModel *TrackMapLayer::trackModel() const
+{
+    return m_trackModel;
 }

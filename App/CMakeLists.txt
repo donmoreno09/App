@@ -22,14 +22,14 @@ set(cpp_sources
     # Connections
     connections/mqtt/parser/IMessageParser.h
     connections/mqtt/parser/TrackParser.h
-    connections/mqtt/mqttclientservice.cpp
-    connections/mqtt/mqttclientservice.h
+    connections/mqtt/MqttClientService.cpp
+    connections/mqtt/MqttClientService.h
     connections/apiendpoints.h
     connections/httpclient.cpp
     connections/httpclient.h
 
     # Core
-    core/geoselectionutils.h
+    core/GeoSelectionUtils.h
     core/interactionmodemanager.cpp
     core/interactionmodemanager.h
     core/LayerManager.cpp
@@ -69,6 +69,8 @@ set(cpp_sources
     # Qt Models
     models/PoiModel.cpp
     models/PoiModel.h
+    models/TrackModel.cpp
+    models/TrackModel.h
 
     # Persistence
     persistence/ipersistable.h
@@ -115,6 +117,8 @@ target_link_libraries(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/connections
+        ${CMAKE_CURRENT_SOURCE_DIR}/connections/mqtt
         ${CMAKE_CURRENT_SOURCE_DIR}/core
         ${CMAKE_CURRENT_SOURCE_DIR}/events
         ${CMAKE_CURRENT_SOURCE_DIR}/layers

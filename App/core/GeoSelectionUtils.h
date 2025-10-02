@@ -57,8 +57,9 @@ inline BBox bboxFromGeometry(const QVariantMap& geo)
         double yMin =  std::numeric_limits<double>::infinity();
         double yMax = -std::numeric_limits<double>::infinity();
 
-        for (const QVariant& coordObj : geo.value("coordinates").toList()) {
-            auto coord = coordObj.toMap();
+        const auto coordinates = geo.value("coordinates").toList();
+        for (auto it = coordinates.cbegin(); it != coordinates.cend(); it++) {
+            auto coord = it->toMap();
 
             double x = coord.value("x").toDouble();
             double y = coord.value("y").toDouble();

@@ -5,17 +5,21 @@
 #include <QMqttClient>
 #include <QMap>
 #include <QVariantList>
-
-class TrackMapLayer;
-class IMessageParser;
+#include <QQmlEngine>
+#include <entities/Track.h>
+#include <layers/TrackMapLayer.h>
+#include "parser/IMessageParser.h"
 
 class MqttClientService : public QObject {
     Q_OBJECT
+    QML_SINGLETON
+    QML_ELEMENT
+
 public:
-    static MqttClientService* getInstance();
+    explicit MqttClientService(QObject* parent = nullptr);
 
     void initialize(const QString& configPath);
-    Q_INVOKABLE void registerLayer(const QString& name, QObject* layer); // <-- AGGIUNGI QUESTO
+    Q_INVOKABLE void registerLayer(const QString& name, QObject* layer);
     void registerParser(const QString& topic, IMessageParser* parser);
     Q_INVOKABLE QString getTopicFromLayer(const QString& layer);
 
@@ -25,7 +29,6 @@ private slots:
     void onDisconnected();
 
 private:
-    explicit MqttClientService(QObject* parent = nullptr);
     void loadConfiguration(const QString& path);
     void connectToBroker();
 
