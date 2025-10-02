@@ -9,7 +9,7 @@
 #include <QGeoCoordinate>
 #include <entities/Track.h>
 
-class TrackParser : public IMessageParser {
+class TrackParser : public IMessageParser<Track> {
 public:
     QVector<Track> parse(const QByteArray& message) override {
         QJsonParseError err;

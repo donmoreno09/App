@@ -4,6 +4,10 @@
 #include <QJsonObject>
 #include <QDebug>
 #include <QVector>
+#include <layers/TrackMapLayer.h>
+#include <layers/TirMapLayer.h>
+#include "parser/TrackParser.h"
+#include "parser/TirParser.h"
 
 MqttClientService::MqttClientService(QObject* parent)
     : QObject(parent), client(new QMqttClient(this)) {
@@ -64,16 +68,16 @@ void MqttClientService::onDisconnected() {
 }
 
 void MqttClientService::registerLayer(const QString& name, QObject* layer) {
-    auto* casted = qobject_cast<TrackMapLayer*>(layer);
+    auto* casted = qobject_cast<BaseTrackMapLayer*>(layer);
     if (casted) {
         layerInstances[name] = casted;
         qDebug() << "[MQTT] Layer registered:" << name;
     } else {
-        qWarning() << "[MQTT] Error: provided object is not a valid TrackMapLayer instance";
+        qWarning() << "[MQTT] Error: provided object is not a valid BaseTrackMapLayer instance";
     }
 }
 
-void MqttClientService::registerParser(const QString& topic, IMessageParser* parser) {
+void MqttClientService::registerParser(const QString& topic, IBaseMessageParser* parser) {
     topicToParser[topic] = parser;
     qDebug() << "[MQTT] Parser registered for topic:" << topic;
 }
@@ -98,7 +102,16 @@ void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopi
         qWarning() << "[MQTT] Target layer not registered:" << layerName;
         return;
     }
-    IMessageParser* parser = topicToParser.value(topic);
-    QVector<Track> data = parser->parse(message);
-    layerInstances[layerName]->trackModel()->setTracks(data);
+
+    auto* baseParser = topicToParser.value(topic);
+
+    if (auto* trackParser = dynamic_cast<TrackParser*>(baseParser)) {
+        QVector<Track> data = trackParser->parse(message);
+        auto* layer = static_cast<TrackMapLayer*>(layerInstances[layerName]);
+        layer->trackModel()->setTracks(data);
+    } else if (auto* tirParser = dynamic_cast<TirParser*>(baseParser)) {
+        QVector<Tir> data = tirParser->parse(message);
+        auto* layer = static_cast<TirMapLayer*>(layerInstances[layerName]);
+        layer->tirModel()->setTirs(data);
+    }
 }

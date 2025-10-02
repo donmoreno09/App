@@ -5,7 +5,7 @@
 #include <QQmlEngine>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <layers/TrackMapLayer.h>
+#include <layers/BaseTrackMapLayer.h>
 
 class TrackManager : public  QObject
 {
@@ -31,7 +31,7 @@ signals:
     void deactivated(const QString& track);
 
 private:
-    QHash<QString, TrackMapLayer*> m_trackToLayer;
+    QHash<QString, BaseTrackMapLayer*> m_trackToLayer;
     QNetworkAccessManager m_networkManager;
 };
 

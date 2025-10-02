@@ -1,12 +1,13 @@
 #include "TrackManager.h"
 #include <QEventLoop>
+#include <QTimer>
 #include <connections/apiendpoints.h>
 
 TrackManager::TrackManager(QObject* parent) : QObject(parent) {}
 
 void TrackManager::registerLayer(const QString &track, QObject *layer)
 {
-    auto* casted = qobject_cast<TrackMapLayer*>(layer);
+    auto* casted = qobject_cast<BaseTrackMapLayer*>(layer);
     if (casted) {
         m_trackToLayer.insert(track, casted);
         qDebug() << "[TrackManager] Registered layer of track: " << track;

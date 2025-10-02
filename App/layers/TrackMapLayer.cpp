@@ -3,7 +3,7 @@
 #include <core/GeoSelectionUtils.h>
 
 TrackMapLayer::TrackMapLayer(QObject* parent)
-    : BaseMapLayer(parent)
+    : BaseTrackMapLayer(parent)
 {
     setObjectName("TrackMapLayer");
     m_trackModel = new TrackModel(this);
@@ -57,28 +57,6 @@ void TrackMapLayer::clearSelection()
 {
     m_selectedTracks.clear();
     emit clearedSelection();
-}
-
-void TrackMapLayer::loadData() {
-}
-
-void TrackMapLayer::handleLoadedObjects(const QList<IPersistable*>& objects) {
-    for (auto obj : objects) {
-        qDebug() << "[TrackMapLayer] Loaded object:" << obj;
-    }
-}
-
-bool TrackMapLayer::active() const
-{
-    return m_active;
-}
-
-void TrackMapLayer::setActive(bool newActive)
-{
-    if (m_active == newActive)
-        return;
-    m_active = newActive;
-    emit activeChanged();
 }
 
 TrackModel *TrackMapLayer::trackModel() const

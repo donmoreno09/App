@@ -4,13 +4,18 @@
 #include <QVariantList>
 #include <QByteArray>
 #include <QJsonArray>
-#include <QVector>
-#include <entities/Track.h>
+#include <QGeoCoordinate>
 
-class IMessageParser {
+class IBaseMessageParser {
+public:
+    virtual ~IBaseMessageParser() = default;
+};
+
+template <class T>
+class IMessageParser : public IBaseMessageParser {
 public:
     virtual ~IMessageParser() = default;
-    virtual QVector<Track> parse(const QByteArray& message) = 0;
+    virtual QVector<T> parse(const QByteArray& message) = 0;
 
 protected:
     QGeoCoordinate parseCoordinateArray(const QJsonArray &arr) {

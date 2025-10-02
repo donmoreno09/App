@@ -5,6 +5,7 @@
     },
     "topics": {
       "ais": "AISTrackMapLayer",
-      "doc-space": "DocSpaceTrackMapLayer"
+      "doc-space": "DocSpaceTrackMapLayer",
+      "tir": "TirTrackMapLayer"
     }
 }

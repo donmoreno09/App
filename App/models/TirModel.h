@@ -1,28 +1,24 @@
-#ifndef TRACKMODEL_H
-#define TRACKMODEL_H
+#ifndef TIRMODEL_H
+#define TIRMODEL_H
 
 #include <QAbstractListModel>
 #include <QVector>
 #include <QQmlEngine>
-#include <entities/Track.h>
+#include <entities/Tir.h>
 
-class TrackModel : public QAbstractListModel
+class TirModel : public QAbstractListModel
 {
     Q_OBJECT
     QML_ELEMENT
 
 public:
-    explicit TrackModel(QObject *parent = nullptr);
+    explicit TirModel(QObject *parent = nullptr);
 
     enum Roles {
-        CodeRole = Qt::UserRole + 1,
-        EntityRole,
+        OperationCodeRole = Qt::UserRole + 1,
         PosRole,
         CogRole,
-        SourceNameRole,
         TimeRole,
-        TrackUidRole,
-        TrackNumberRole,
         VelRole,
         StateRole,
     };
@@ -37,13 +33,13 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    QVector<Track> &tracks();
-    void setTracks(const QVector<Track> &tracks);
+    QVector<Tir> &tirs();
+    void setTirs(const QVector<Tir> &tirs);
 
     Q_INVOKABLE void clear();
 
 private:
-    QVector<Track> m_tracks;
+    QVector<Tir> m_tirs;
 };
 
-#endif // TRACKMODEL_H
+#endif // TIRMODEL_H

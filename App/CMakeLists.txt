@@ -13,16 +13,19 @@ set(qml_files
 
     # Map Objects
     map-objects/Track.qml
+    map-objects/Tir.qml
 
     # Layers
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
+    layers/TirTrackMapLayer.qml
 )
 
 set(cpp_sources
     # Connections
     connections/mqtt/parser/IMessageParser.h
     connections/mqtt/parser/TrackParser.h
+    connections/mqtt/parser/TirParser.h
     connections/mqtt/MqttClientService.cpp
     connections/mqtt/MqttClientService.h
     connections/apiendpoints.h
@@ -55,8 +58,12 @@ set(cpp_sources
     layers/Layers.h
     layers/PoiMapLayer.cpp
     layers/PoiMapLayer.h
+    layers/BaseTrackMapLayer.cpp
+    layers/BaseTrackMapLayer.h
     layers/TrackMapLayer.cpp
     layers/TrackMapLayer.h
+    layers/TirMapLayer.cpp
+    layers/TirMapLayer.h
 
     # Entities
     entities/metadata/MetadataEntry.h
@@ -65,13 +72,17 @@ set(cpp_sources
     entities/Geometry.h
     entities/Poi.h
     entities/shape.h
+    entities/BaseTrack.h
     entities/Track.h
+    entities/Tir.h
 
     # Qt Models
     models/PoiModel.cpp
     models/PoiModel.h
     models/TrackModel.cpp
     models/TrackModel.h
+    models/TirModel.cpp
+    models/TirModel.h
 
     # Persistence
     persistence/ipersistable.h

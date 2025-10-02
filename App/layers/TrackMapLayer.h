@@ -1,17 +1,16 @@
 #ifndef TRACKMAPLAYER_H
 #define TRACKMAPLAYER_H
 
-#include "./BaseMapLayer.h"
+#include "BaseTrackMapLayer.h"
 #include <QGeoCoordinate>
 #include <QVariantList>
 #include <QTimer>
 #include <QQmlEngine>
 #include <models/TrackModel.h>
 
-class TrackMapLayer : public BaseMapLayer
+class TrackMapLayer : public BaseTrackMapLayer
 {
     Q_OBJECT
-    Q_PROPERTY(bool active READ active NOTIFY activeChanged FINAL)
     Q_PROPERTY(TrackModel *trackModel READ trackModel CONSTANT)
     QML_ELEMENT
 
@@ -25,16 +24,7 @@ public:
     Q_INVOKABLE void selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight) override;
     Q_INVOKABLE void clearSelection() override;
 
-    void loadData() override;
-    void handleLoadedObjects(const QList<IPersistable*>& objects) override;
-
-    bool active() const;
-    void setActive(bool newActive);
-
     TrackModel *trackModel() const;
-
-signals:
-    void activeChanged();
 
 private:
     TrackModel* m_trackModel = nullptr;

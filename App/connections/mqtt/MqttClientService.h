@@ -7,7 +7,7 @@
 #include <QVariantList>
 #include <QQmlEngine>
 #include <entities/Track.h>
-#include <layers/TrackMapLayer.h>
+#include <layers/BaseTrackMapLayer.h>
 #include "parser/IMessageParser.h"
 
 class MqttClientService : public QObject {
@@ -20,7 +20,8 @@ public:
 
     void initialize(const QString& configPath);
     Q_INVOKABLE void registerLayer(const QString& name, QObject* layer);
-    void registerParser(const QString& topic, IMessageParser* parser);
+
+    void registerParser(const QString& topic, IBaseMessageParser* parser);
     Q_INVOKABLE QString getTopicFromLayer(const QString& layer);
 
 private slots:
@@ -35,7 +36,8 @@ private:
     QMqttClient* client;
     QMap<QString, QString> topicToLayer;
     QMap<QString, QString> layerToTopic;
-    QMap<QString, IMessageParser*> topicToParser;
-    QMap<QString, TrackMapLayer*> layerInstances;
+    QMap<QString, IBaseMessageParser*> topicToParser;
+    QMap<QString, BaseTrackMapLayer*> layerInstances;
 };
+
 #endif // MQTTCLIENTSERVICE_H

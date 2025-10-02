@@ -8,6 +8,7 @@
 #include <core/TrackManager.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
+#include <connections/mqtt/parser/TirParser.h>
 
 int main(int argc, char *argv[])
 {
@@ -56,10 +57,12 @@ int main(int argc, char *argv[])
     mqtt->initialize(":/App/config/mqtt_config.json");
     mqtt->registerParser("ais", new TrackParser());
     mqtt->registerParser("doc-space", new TrackParser());
+    mqtt->registerParser("tir", new TirParser());
 
     auto *trackManager = engine.singletonInstance<TrackManager*>("App", "TrackManager");
-    trackManager->activate("ais");
-    trackManager->activate("doc-space");
+    //trackManager->activate("ais");
+    //trackManager->activate("doc-space");
+    trackManager->activate("tir");
 
     engine.loadFromModule("App", "Main");
 
