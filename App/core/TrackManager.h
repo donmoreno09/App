@@ -25,6 +25,8 @@ public:
     Q_INVOKABLE void deactivate(const QString& track);
     Q_INVOKABLE void deactivateSync(const QString& track);
 
+    Q_INVOKABLE BaseTrackMapLayer* getLayer(const QString& track);
+
 
 signals:
     void activated(const QString& track);

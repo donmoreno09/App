@@ -88,3 +88,8 @@ void TrackManager::deactivateSync(const QString &track)
 
     reply->deleteLater();
 }
+
+BaseTrackMapLayer* TrackManager::getLayer(const QString &track)
+{
+    return m_trackToLayer.value(track);
+}

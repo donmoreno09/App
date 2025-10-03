@@ -37,6 +37,7 @@ PanelTemplate {
 
         LayerToggle {
             label: (TranslationManager.revision, qsTr("AIS Map Layer"))
+            toggle.checked: TrackManager.getLayer("ais").active
             toggle.onCheckedChanged: {
                 if (toggle.checked) TrackManager.activate("ais")
                 else TrackManager.deactivate("ais")
@@ -45,6 +46,7 @@ PanelTemplate {
 
         LayerToggle {
             label: (TranslationManager.revision, qsTr("Doc-Space Map Layer"))
+            toggle.checked: TrackManager.getLayer("doc-space").active
             toggle.onCheckedChanged: {
                 if (toggle.checked) TrackManager.activate("doc-space")
                 else TrackManager.deactivate("doc-space")
@@ -53,6 +55,7 @@ PanelTemplate {
 
         LayerToggle {
             label: (TranslationManager.revision, qsTr("TIR Map Layer"))
+            toggle.checked: TrackManager.getLayer("tir").active
             toggle.onCheckedChanged: {
                 if (toggle.checked) TrackManager.activate("tir")
                 else TrackManager.deactivate("tir")
