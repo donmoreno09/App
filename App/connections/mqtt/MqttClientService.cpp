@@ -112,6 +112,6 @@ void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopi
     } else if (auto* tirParser = dynamic_cast<TirParser*>(baseParser)) {
         QVector<Tir> data = tirParser->parse(message);
         auto* layer = static_cast<TirMapLayer*>(layerInstances[layerName]);
-        layer->tirModel()->upsertTirs(data);
+        layer->tirModel()->upsert(data);
     }
 }

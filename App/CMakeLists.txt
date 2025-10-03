@@ -79,6 +79,8 @@ set(cpp_sources
     # Qt Models
     models/PoiModel.cpp
     models/PoiModel.h
+    models/BaseTrackModel.cpp
+    models/BaseTrackModel.h
     models/TrackModel.cpp
     models/TrackModel.h
     models/TirModel.cpp

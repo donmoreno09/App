@@ -55,15 +55,14 @@ QVector<Tir> &TirModel::tirs()
     return m_tirs;
 }
 
-void TirModel::setTirs(const QVector<Tir> &tirs)
+void TirModel::set(const QVector<Tir> &tirs)
 {
-
     beginResetModel();
     m_tirs = tirs;
     endResetModel();
 }
 
-void TirModel::upsertTirs(const QVector<Tir> &tirs)
+void TirModel::upsert(const QVector<Tir> &tirs)
 {
     QSet<QString> seen;
 
@@ -124,7 +123,7 @@ QVector<int> TirModel::diffRoles(const Tir &a, const Tir &b) const
 
     if (a.operationCode != b.operationCode) roles << OperationCodeRole;
     if (!qFuzzyCompare(a.vel, b.vel)) roles << VelRole;
-    if (!qFuzzyCompare(a.pos.latitude(), b.pos.latitude()) || !qFuzzyCompare(a.pos.longitude(), b.pos.longitude()) || !qFuzzyCompare(a.pos.altitude(), b.pos.altitude())) roles << PosRole;
+    if (!almostEqual(a.pos, b.pos)) roles << PosRole;
     if (!qFuzzyCompare(a.cog, b.cog)) roles << CogRole;
     if (a.time != b.time) roles << TimeRole;
     if (a.state != b.state) roles << StateRole;

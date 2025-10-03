@@ -1,13 +1,13 @@
 #ifndef TIRMODEL_H
 #define TIRMODEL_H
 
-#include <QAbstractListModel>
+#include "BaseTrackModel.h"
 #include <QVector>
 #include <QHash>
 #include <QQmlEngine>
 #include <entities/Tir.h>
 
-class TirModel : public QAbstractListModel
+class TirModel : public BaseTrackModel<Tir>
 {
     Q_OBJECT
     QML_ELEMENT
@@ -35,10 +35,12 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     QVector<Tir> &tirs();
-    void setTirs(const QVector<Tir> &tirs);
 
-    void upsertTirs(const QVector<Tir> &tirs);
-    QVector<int> diffRoles(const Tir &a, const Tir &b) const;
+    void set(const QVector<Tir> &tirs) override;
+
+    void upsert(const QVector<Tir> &tirs) override;
+
+    QVector<int> diffRoles(const Tir &a, const Tir &b) const override;
 
     Q_INVOKABLE void clear();
 
