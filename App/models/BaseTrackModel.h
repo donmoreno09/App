@@ -8,10 +8,10 @@
 template <class T>
 class BaseTrackModel : public QAbstractListModel
 {
-    Q_OBJECT
-
 public:
-    explicit BaseTrackModel(QObject *parent = nullptr);
+    explicit BaseTrackModel(QObject *parent = nullptr)
+        : QAbstractListModel(parent)
+    {}
 
     virtual void set(const QVector<T> &data) = 0;
 
@@ -21,7 +21,12 @@ public:
 
 protected:
     // TODO: Export this method to a more general utility namespace
-    bool almostEqual(const QGeoCoordinate& a, const QGeoCoordinate& b, double tolerance = 1e-6) const;
+    bool almostEqual(const QGeoCoordinate &a, const QGeoCoordinate &b, double tolerance = 1e-6) const
+    {
+        return std::abs(a.latitude()  - b.latitude())  < tolerance &&
+               std::abs(a.longitude() - b.longitude()) < tolerance &&
+               std::abs(a.altitude() - b.altitude()) < tolerance;
+    }
 };
 
 #endif // BASETRACKMODEL_H

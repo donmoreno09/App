@@ -108,7 +108,7 @@ void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopi
     if (auto* trackParser = dynamic_cast<TrackParser*>(baseParser)) {
         QVector<Track> data = trackParser->parse(message);
         auto* layer = static_cast<TrackMapLayer*>(layerInstances[layerName]);
-        layer->trackModel()->setTracks(data);
+        layer->trackModel()->upsert(data);
     } else if (auto* tirParser = dynamic_cast<TirParser*>(baseParser)) {
         QVector<Tir> data = tirParser->parse(message);
         auto* layer = static_cast<TirMapLayer*>(layerInstances[layerName]);

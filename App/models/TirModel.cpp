@@ -2,7 +2,7 @@
 #include <QSet>
 
 TirModel::TirModel(QObject *parent)
-    : QAbstractListModel(parent)
+    : BaseTrackModel(parent)
 {}
 
 int TirModel::rowCount(const QModelIndex &parent) const
@@ -73,7 +73,6 @@ void TirModel::upsert(const QVector<Tir> &tirs)
 
         if (it != m_upsertMap.end()) {
             // Update tir
-            qDebug() << "Updating: " << tir.operationCode;
             const int row = it.value();
 
             QVector<int> changed = diffRoles(m_tirs[row], tir);
@@ -84,7 +83,6 @@ void TirModel::upsert(const QVector<Tir> &tirs)
             }
         } else {
             // Insert tir
-            qDebug() << "Inserting: " << tir.operationCode;
             const int row = m_tirs.size();
 
             beginInsertRows({}, row, row);
