@@ -23,7 +23,7 @@ QVariant TirModel::data(const QModelIndex &index, int role) const
     case PosRole: return QVariant::fromValue(tir.pos);
     case CogRole: return tir.cog;
     case TimeRole: return tir.time;
-    case VelRole: return QVariant::fromValue(tir.vel);
+    case VelRole: return tir.vel;
     case StateRole: return tir.state;
     default: return {};
     }

@@ -13,6 +13,7 @@ public:
     QString sourceName;       // source_name:  string
     QString trackUid;         // track_uid:    string
     int trackNumber;          // tracknumber:  number
+    QGeoCoordinate vel;       // vel:          tuple(x, y, z)
 };
 
 #endif // TRACK_H

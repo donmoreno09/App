@@ -11,7 +11,6 @@ public:
     double cog;               // cog:          number
     int time;                 // time:         number
     int state;                // state:        number
-    QGeoCoordinate vel;       // vel:          tuple(x, y, z)
 };
 
 #endif // BASETRACK_H

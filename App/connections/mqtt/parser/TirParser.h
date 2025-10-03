@@ -27,10 +27,10 @@ public:
 
             Tir tir;
             tir.operationCode = tirVal["operationCode"].toString();
-            tir.pos = parseCoordinateArray(tirVal["pos"].toArray());
+            tir.pos = parseCoordinateArray(tirVal["pos"].toArray(), true);
             tir.cog = tirVal["cog"].toDouble();
             tir.time = tirVal["time"].toInt();
-            tir.vel = parseCoordinateArray(tirVal["vel"].toArray());
+            tir.vel = tirVal["vel"].toDouble();
             tir.state = tirVal["state"].toInt();
 
             tirs.append(tir);

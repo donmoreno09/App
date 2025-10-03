@@ -18,10 +18,12 @@ public:
     virtual QVector<T> parse(const QByteArray& message) = 0;
 
 protected:
-    QGeoCoordinate parseCoordinateArray(const QJsonArray &arr) {
+    // Some store coordinate order in (lon, lat) instead of (lat, lon)
+    // Use swap to use (lon, lat).
+    QGeoCoordinate parseCoordinateArray(const QJsonArray &arr, bool swap = false) {
         QGeoCoordinate coord;
-        coord.setLatitude(arr[0].toDouble());
-        coord.setLongitude(arr[1].toDouble());
+        coord.setLatitude(arr[swap ? 1 : 0].toDouble());
+        coord.setLongitude(arr[swap ? 0 : 1].toDouble());
         coord.setAltitude(arr[2].toDouble());
         return coord;
     }

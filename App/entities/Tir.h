@@ -7,7 +7,8 @@
 class Tir : public BaseTrack
 {
 public:
-    QString operationCode; // operationCode: string
+    QString operationCode; // operationCode:  string
+    double vel;            // vel:            number
 };
 
 #endif // TIR_H
