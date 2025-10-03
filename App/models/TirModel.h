@@ -3,6 +3,7 @@
 
 #include <QAbstractListModel>
 #include <QVector>
+#include <QHash>
 #include <QQmlEngine>
 #include <entities/Tir.h>
 
@@ -36,10 +37,14 @@ public:
     QVector<Tir> &tirs();
     void setTirs(const QVector<Tir> &tirs);
 
+    void upsertTirs(const QVector<Tir> &tirs);
+    QVector<int> diffRoles(const Tir &a, const Tir &b) const;
+
     Q_INVOKABLE void clear();
 
 private:
     QVector<Tir> m_tirs;
+    QHash<QString, int> m_upsertMap;
 };
 
 #endif // TIRMODEL_H

@@ -1,4 +1,5 @@
 #include "TirModel.h"
+#include <QSet>
 
 TirModel::TirModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -60,6 +61,75 @@ void TirModel::setTirs(const QVector<Tir> &tirs)
     beginResetModel();
     m_tirs = tirs;
     endResetModel();
+}
+
+void TirModel::upsertTirs(const QVector<Tir> &tirs)
+{
+    QSet<QString> seen;
+
+    // Update existing tir or insert it
+    for (const auto& tir : tirs) {
+        seen.insert(tir.operationCode);
+        auto it = m_upsertMap.find(tir.operationCode);
+
+        if (it != m_upsertMap.end()) {
+            // Update tir
+            qDebug() << "Updating: " << tir.operationCode;
+            const int row = it.value();
+
+            QVector<int> changed = diffRoles(m_tirs[row], tir);
+            if (!changed.empty()) {
+                m_tirs[row] = tir;
+                const QModelIndex idx = index(row);
+                emit dataChanged(idx, idx, changed);
+            }
+        } else {
+            // Insert tir
+            qDebug() << "Inserting: " << tir.operationCode;
+            const int row = m_tirs.size();
+
+            beginInsertRows({}, row, row);
+            m_tirs.append(tir);
+            m_upsertMap.insert(tir.operationCode, row);
+            endInsertRows();
+        }
+    }
+
+    // Remove stale tirs
+    bool removed = false;
+    for (int row = m_tirs.size() - 1; row >= 0; row--) {
+        const auto& tir = m_tirs[row];
+        if (!seen.contains(tir.operationCode)) {
+            beginRemoveRows({}, row, row);
+            m_upsertMap.remove(tir.operationCode);
+            m_tirs.removeAt(row);
+            endRemoveRows();
+            removed = true;
+        }
+    }
+
+    // Rebuild map if removed tirs. This is because the indices are now shifted.
+    if (removed) {
+        m_upsertMap.clear();
+        m_upsertMap.reserve(m_tirs.size());
+        for (int row = 0; row < m_tirs.size(); row++) {
+            m_upsertMap.insert(m_tirs[row].operationCode, row);
+        }
+    }
+}
+
+QVector<int> TirModel::diffRoles(const Tir &a, const Tir &b) const
+{
+    QVector<int> roles;
+
+    if (a.operationCode != b.operationCode) roles << OperationCodeRole;
+    if (!qFuzzyCompare(a.vel, b.vel)) roles << VelRole;
+    if (!qFuzzyCompare(a.pos.latitude(), b.pos.latitude()) || !qFuzzyCompare(a.pos.longitude(), b.pos.longitude()) || !qFuzzyCompare(a.pos.altitude(), b.pos.altitude())) roles << PosRole;
+    if (!qFuzzyCompare(a.cog, b.cog)) roles << CogRole;
+    if (a.time != b.time) roles << TimeRole;
+    if (a.state != b.state) roles << StateRole;
+
+    return roles;
 }
 
 void TirModel::clear()
