@@ -10,6 +10,9 @@ import App.Features.TitleBar
 import App.Features.Language 1.0
 
 UI.GlobalBackgroundConsumer {
+    // TESTING PURPOSES
+    property bool devPanelsShown: false
+
     ColumnLayout {
         anchors.fill: parent
         spacing: Theme.spacing.s0
@@ -31,6 +34,7 @@ UI.GlobalBackgroundConsumer {
             spacing: Theme.spacing.s0
 
             SideRailItem {
+                visible: devPanelsShown
                 source: "qrc:/App/assets/icons/clipboard.svg"
                 text: (TranslationManager.revision, qsTr("Mission"))
                 active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
@@ -42,6 +46,7 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                visible: devPanelsShown
                 source: "qrc:/App/assets/icons/submarine.svg"
                 text: (TranslationManager.revision, qsTr("Pod"))
                 active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
