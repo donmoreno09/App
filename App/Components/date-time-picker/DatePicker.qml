@@ -36,8 +36,6 @@ Rectangle {
     width: 312
     height: 404
     color: Theme.colors.primary800
-    border.color: Theme.colors.secondary500
-    border.width: Theme.borders.b1
     radius: Theme.radius.md
 
     // Internal state - navigation flow

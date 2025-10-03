@@ -1,6 +1,5 @@
-// App/Features/Arrivals/ShipArrivalController.cpp
 #include "ShipArrivalController.h"
-#include "internals/ShipArrivalService.h"
+#include "service/ShipArrivalService.h"
 
 ShipArrivalController::ShipArrivalController(QObject* parent)
     : QObject(parent)
@@ -59,7 +58,6 @@ void ShipArrivalController::hookUpService() {
     });
 }
 
-// slot invariati: ora chiamano il service
 void ShipArrivalController::fetchAllArrivalData() {
     if (m_loading) return;
     m_pendingRequests = 2;

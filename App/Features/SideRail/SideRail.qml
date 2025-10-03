@@ -30,27 +30,27 @@ UI.GlobalBackgroundConsumer {
             Layout.fillWidth: true
             spacing: Theme.spacing.s0
 
-            SideRailItem {
-                source: "qrc:/App/assets/icons/clipboard.svg"
-                text: (TranslationManager.revision, qsTr("Mission"))
-                active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/clipboard.svg"
+            //     text: (TranslationManager.revision, qsTr("Mission"))
+            //     active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Mission")
-                    SidePanelController.toggle("mission")
-                }
-            }
+            //     onClicked: {
+            //         TitleBarController.setTitle("Mission")
+            //         SidePanelController.toggle("mission")
+            //     }
+            // }
 
-            SideRailItem {
-                source: "qrc:/App/assets/icons/submarine.svg"
-                text: (TranslationManager.revision, qsTr("Pod"))
-                active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/submarine.svg"
+            //     text: (TranslationManager.revision, qsTr("Pod"))
+            //     active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Pod")
-                    SidePanelController.toggle("pod")
-                }
-            }
+            //     onClicked: {
+            //         TitleBarController.setTitle("Pod")
+            //         SidePanelController.toggle("pod")
+            //     }
+            // }
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/notification.svg"

@@ -1,9 +1,9 @@
 set(qml_files
     components/StatCard.qml
 
-    content/SidePanelArrContent.qml
-    content/SidePanelDateContent.qml
-    content/SidePanelDateTimeContent.qml
+    contents/SidePanelArrContent.qml
+    contents/SidePanelDateContent.qml
+    contents/SidePanelDateTimeContent.qml
 
     panels/ArrivalsCountPanel.qml
     panels/ArrivalsDatePanel.qml
@@ -13,8 +13,8 @@ set(qml_files
 set(cpp_sources
     ShipArrivalController.cpp
     ShipArrivalController.h
-    internals/ShipArrivalService.cpp
-    internals/ShipArrivalService.h
+    service/ShipArrivalService.cpp
+    service/ShipArrivalService.h
 )
 
 qt_add_qml_module(app_features_arrivals

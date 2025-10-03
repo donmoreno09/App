@@ -26,8 +26,6 @@ Rectangle {
     width: standalone ? 280 : parent.width
     height: standalone ? 110 : parent.height
     color: Theme.colors.primary800
-    border.color: standalone ? Theme.colors.secondary500 : Theme.colors.transparent
-    border.width: standalone ? Theme.borders.b1 : Theme.borders.b0
     radius: standalone ? Theme.radius.md : 0
 
     // Time column component - made more compact
@@ -38,9 +36,8 @@ Rectangle {
         signal upClicked()
         signal downClicked()
 
-        Layout.preferredWidth: 40
-        Layout.fillHeight: true  // CHANGED: flexible height
-        spacing: 0
+        Layout.fillWidth: true
+        Layout.preferredHeight: 110
 
         // Up arrow - flexible size
         UI.Button {

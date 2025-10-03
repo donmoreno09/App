@@ -84,7 +84,8 @@ Rectangle {
         UI.DatePicker {
             id: datePicker
             Layout.fillWidth: true
-            Layout.preferredHeight: 276
+            Layout.fillHeight: true
+            Layout.minimumHeight: 380
             standalone: false
             mode: root.mode
 
@@ -115,14 +116,14 @@ Rectangle {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 120
+            Layout.fillHeight: true
+            Layout.minimumHeight: 120
             color: Theme.colors.transparent
 
             // Single mode time picker
             UI.TimePicker {
                 id: timePicker
                 standalone: false
-                anchors.fill: parent
                 visible: root.mode === "single"
                 is24Hour: root.is24Hour
 
@@ -158,13 +159,7 @@ Rectangle {
                 visible: root.mode === "range"
                 spacing: Theme.spacing.s2
 
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    color: Theme.colors.transparent
-
                     ColumnLayout {
-                        anchors.fill: parent
                         spacing: 2
 
                         Text {
@@ -181,7 +176,7 @@ Rectangle {
                             id: startTimePicker
                             standalone: false
                             Layout.fillWidth: true
-                            Layout.fillHeight: true
+                            Layout.minimumHeight: 120
                             is24Hour: root.is24Hour
 
                             Component.onCompleted: {
@@ -211,7 +206,6 @@ Rectangle {
                             }
                         }
                     }
-                }
 
                 // Minimal visual separator
                 Rectangle {
@@ -221,13 +215,8 @@ Rectangle {
                     radius: 1
                 }
 
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    color: Theme.colors.transparent
 
                     ColumnLayout {
-                        anchors.fill: parent
                         spacing: 2
 
                         Text {
@@ -243,7 +232,7 @@ Rectangle {
                             id: endTimePicker
                             standalone: false
                             Layout.fillWidth: true
-                            Layout.fillHeight: true
+                            Layout.minimumHeight: 120
                             is24Hour: root.is24Hour
 
                             Component.onCompleted: {
@@ -273,7 +262,6 @@ Rectangle {
                             }
                         }
                     }
-                }
             }
         }
 
