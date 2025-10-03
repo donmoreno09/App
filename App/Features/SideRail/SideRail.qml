@@ -64,6 +64,17 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/layers.svg"
+                text: (TranslationManager.revision, qsTr("Layers"))
+                active: PanelRouter.currentPath === "maplayers" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Map Layers")
+                    SidePanelController.toggle("maplayers")
+                }
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 text: (TranslationManager.revision, qsTr("Language"))

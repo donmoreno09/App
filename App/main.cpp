@@ -60,10 +60,9 @@ int main(int argc, char *argv[])
     mqtt->registerParser("tir", new TirParser());
 
     auto *trackManager = engine.singletonInstance<TrackManager*>("App", "TrackManager");
-    // Comment/Uncomment each line to activate a particular track on start up
-    trackManager->activate("ais");
-    trackManager->activate("doc-space");
-    trackManager->activate("tir");
+    trackManager->deactivate("ais");
+    trackManager->deactivate("doc-space");
+    trackManager->deactivate("tir");
 
     engine.loadFromModule("App", "Main");
 

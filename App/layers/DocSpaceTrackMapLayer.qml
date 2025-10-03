@@ -10,6 +10,8 @@ MapItemGroup {
 
     property alias trackMapLayer: trackMapLayer
 
+    visible: trackMapLayer.active
+
     MapItemView {
         model: trackMapLayer.trackModel
 

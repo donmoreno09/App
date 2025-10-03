@@ -10,6 +10,8 @@ MapItemGroup {
 
     property alias tirMapLayer: tirMapLayer
 
+    visible: tirMapLayer.active
+
     MapItemView {
         model: tirMapLayer.tirModel
 

@@ -19,6 +19,7 @@ set(qml_files
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
     layers/TirTrackMapLayer.qml
+    layers/LayersPanel.qml
 )
 
 set(cpp_sources
