@@ -190,6 +190,39 @@ UI.GlobalBackgroundConsumer {
                     SidePanelController.toggle("maptilesets")
                 }
             }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/truck.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals"))
+                active: PanelRouter.currentPath === "arrival-content-test" && SidePanelController.isOpen
+                onClicked: {
+                    TitleBarController.setTitle("Truck Arrivals")
+                    SidePanelController.toggle("arrival-content-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/calendar-arrivals.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals Date"))
+                active: PanelRouter.currentPath === "arrival-date-content-test" && SidePanelController.isOpen
+                onClicked: {
+                    TitleBarController.setTitle("Truck Arrivals Date")
+                    SidePanelController.toggle("arrival-date-content-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/settings.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals DT"))
+                active: PanelRouter.currentPath === "arrival-date-time-content-test" && SidePanelController.isOpen
+                onClicked: {
+                    TitleBarController.setTitle("Truck Arrivals DT")
+                    SidePanelController.toggle("arrival-date-time-content-test")
+                }
+            }
         }
 
         UI.VerticalSpacer { }
