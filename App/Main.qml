@@ -5,6 +5,7 @@ import QtQuick.Layouts 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
 
+import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.StubComponents 1.0 as UI
@@ -52,6 +53,20 @@ ApplicationWindow {
         onInitialLoaded: {
             map.center = QtPositioning.coordinate(44.4071, 8.9347)
             map.copyrightsVisible = false // Hide the copyright label from the bottom left
+        }
+
+        AISTrackMapLayer { }
+
+        DocSpaceTrackMapLayer { }
+
+        TirTrackMapLayer { }
+    }
+
+    Connections {
+        target: LayerManager
+
+        function onAllLayersReady() {
+            console.log("OK!")
         }
     }
 
