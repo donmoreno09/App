@@ -18,7 +18,7 @@ ColumnLayout {
 
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
-        Layout.fillHeight: true
+        Layout.topMargin: 300
         running: controller.isLoading
         visible: controller.isLoading
         layer.enabled: true
@@ -53,6 +53,20 @@ ColumnLayout {
         title: (TranslationManager.revision, qsTr("Arrivals in range"))
         value: controller.dateRangeArrivalCount.toString() + (TranslationManager.revision, qsTr(" trucks"))
         Layout.fillWidth: true
+    }
+
+    UI.VerticalSpacer {}
+
+    UI.Button {
+        visible: !controller.isLoading
+        variant: UI.ButtonStyles.Primary
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        Layout.margins: 10
+        text: (TranslationManager.revision, qsTr("Fetch Arrivals"))
+        enabled: !controller.isLoading && (rangePicker.startDate && rangePicker.endDate)
+
+        onClicked: controller.fetchDateRangeShipArrivals(rangePicker.startDate, rangePicker.endDate)
     }
 
     Component.onCompleted: {

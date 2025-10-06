@@ -10,11 +10,11 @@ class TruckArrivalController : public QObject {
     Q_OBJECT
     QML_ELEMENT
 
-    Q_PROPERTY(int  todayArrivalCount       READ todayArrivalCount       NOTIFY todayArrivalCountChanged)
-    Q_PROPERTY(int  currentHourArrivalCount READ currentHourArrivalCount NOTIFY currentHourArrivalCountChanged)
-    Q_PROPERTY(int  dateRangeArrivalCount   READ dateRangeArrivalCount   NOTIFY dateRangeArrivalCountChanged)
+    Q_PROPERTY(int  todayArrivalCount         READ todayArrivalCount         NOTIFY todayArrivalCountChanged)
+    Q_PROPERTY(int  currentHourArrivalCount   READ currentHourArrivalCount   NOTIFY currentHourArrivalCountChanged)
+    Q_PROPERTY(int  dateRangeArrivalCount     READ dateRangeArrivalCount     NOTIFY dateRangeArrivalCountChanged)
     Q_PROPERTY(int  dateTimeRangeArrivalCount READ dateTimeRangeArrivalCount NOTIFY dateTimeRangeArrivalCountChanged)
-    Q_PROPERTY(bool isLoading               READ isLoading               NOTIFY loadingChanged)
+    Q_PROPERTY(bool isLoading                 READ isLoading                 NOTIFY loadingChanged)
 
 public:
     explicit TruckArrivalController(QObject* parent=nullptr);

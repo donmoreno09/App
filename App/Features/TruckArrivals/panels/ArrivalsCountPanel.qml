@@ -9,31 +9,16 @@ import App.Components 1.0 as UI
 PanelTemplate {
     title.text: qsTr("Truck Arrivals")
 
-    ColumnLayout {
+    TruckArrivalController { id: ctrl }
+
+    ScrollView {
         anchors.fill: parent
-        spacing: 0
+        contentWidth: availableWidth
+        clip: true
 
-        TruckArrivalController { id: ctrl }
-
-        ScrollView {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            contentWidth: availableWidth
-            clip: true
-
-            SidePanelArrivalContent {
-                controller: ctrl
-                Layout.fillWidth: true
-            }
-        }
-
-        UI.Button {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 40
-            Layout.margins: 10
-            variant: UI.ButtonStyles.Primary
-            text: (TranslationManager.revision, qsTr("Fetch Arrivals"))
-            onClicked: ctrl.fetchAllArrivalData()
+        SidePanelArrivalContent {
+            anchors.fill: parent
+            controller: ctrl
         }
     }
 }
