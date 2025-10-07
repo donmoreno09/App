@@ -3,30 +3,21 @@ import QtQuick.Controls 6.8
 
 import App.Themes 1.0
 
-/*!
-    \qmltype DatePickerYearView
-    \brief Year selection grid for DatePicker
-*/
-
 GridView {
     id: root
 
-    // Props
     property int currentYear: new Date().getFullYear()
     property int minimumYear: 1900
     property int maximumYear: 2100
 
-    // Signals
     signal yearSelected(int year)
 
-    // Grid configuration
     model: _getYearRange()
     cellWidth: width / 3
     cellHeight: height / 4
 
-    // Row backgrounds (4 rows for 12 years)
     Repeater {
-        model: 4 // 4 rows of years
+        model: 4
         Rectangle {
             x: 0
             y: index * (root.height / 4)
@@ -75,7 +66,6 @@ GridView {
             }
         }
 
-        // Smooth color transitions
         Behavior on color {
             ColorAnimation {
                 duration: 150
@@ -84,7 +74,6 @@ GridView {
         }
     }
 
-    // Helper functions
     function _getYearRange() {
         const startYear = Math.floor(currentYear / 12) * 12
         const years = []

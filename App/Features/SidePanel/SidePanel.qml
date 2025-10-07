@@ -7,7 +7,7 @@ import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 import App.Features.Mission 1.0
-import App.Features.Arrivals 1.0
+import App.Features.TruckArrivals
 import App.Components 1.0 as UI
 
 UI.GlobalBackgroundConsumer {

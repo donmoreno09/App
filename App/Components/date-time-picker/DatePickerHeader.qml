@@ -5,20 +5,13 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-/*!
-    \qmltype DatePickerHeader
-    \brief Navigation header for DatePicker with view-aware title and navigation
-*/
-
 Item {
     id: root
 
-    // Props
     property string currentView: "calendar"
     property int currentMonth: 0
     property int currentYear: 2025
 
-    // Signals
     signal previousClicked()
     signal nextClicked()
     signal headerClicked()
@@ -47,7 +40,7 @@ Item {
             onClicked: root.previousClicked()
         }
 
-        // Title - clickable for navigation
+        // Title
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -77,7 +70,6 @@ Item {
                 }
             }
 
-            // Smooth hover effect
             Behavior on color {
                 ColorAnimation {
                     duration: 150
@@ -107,7 +99,6 @@ Item {
         }
     }
 
-    // Helper functions
     function _getTitleText() {
         switch (currentView) {
             case "year":
@@ -123,7 +114,6 @@ Item {
     }
 
     function _canNavigateUp() {
-        // Can navigate up from calendar and month views, but not from year view
         return currentView === "calendar" || currentView === "month"
     }
 }

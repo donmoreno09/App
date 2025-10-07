@@ -5,28 +5,21 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-/*!
-    \qmltype DateTimePicker
-*/
 
 Rectangle {
     id: root
 
-    // Public API
-    property string mode: "single" // "single" or "range"
+    property string mode: "single"
     property bool is24Hour: true
 
-    // Date properties - these update immediately when user selects
     property date selectedDate: new Date(NaN)
     property date startDate: new Date(NaN)
     property date endDate: new Date(NaN)
 
-    // Time properties - always valid, initialized to current time
     property int selectedHour: _currentHour
     property int selectedMinute: _currentMinute
     property bool selectedAMPM: _currentAMPM
 
-    // End time properties with guaranteed different initial values
     property int endHour: _nextHour
     property int endMinute: _currentMinute
     property bool endAMPM: _nextAMPM
@@ -36,18 +29,15 @@ Rectangle {
     property date maximumDate: new Date(2100, 11, 31)
     property var disabledDates: []
 
-    // Signals - clean separation of concerns
-    signal selectionChanged() // Fires on any selection change (immediate feedback)
-    signal dateTimeApplied(date dateTime) // Final confirmation for single mode
-    signal rangeApplied(date startDateTime, date endDateTime) // Final confirmation for range mode
-    signal selectionCleared() // When user clears selection
+    signal selectionChanged()
+    signal dateTimeApplied(date dateTime)
+    signal rangeApplied(date startDateTime, date endDateTime)
+    signal selectionCleared()
 
-    // Read-only computed properties for external binding
     readonly property bool hasValidSelection: mode === "single" ? !_isEmpty(selectedDate) : (!_isEmpty(startDate) && !_isEmpty(endDate))
     readonly property bool canClear: mode === "single" ? !_isEmpty(selectedDate) : (!_isEmpty(startDate) || !_isEmpty(endDate))
     readonly property date currentDateTime: hasValidSelection ? _combineDateTime(selectedDate, selectedHour, selectedMinute, selectedAMPM) : new Date(NaN)
 
-    // Private properties for current time initialization
     readonly property int _currentHour: {
         const now = new Date()
         return is24Hour ? now.getHours() : _to12Hour(now.getHours())
@@ -55,7 +45,6 @@ Rectangle {
     readonly property int _currentMinute: new Date().getMinutes()
     readonly property bool _currentAMPM: new Date().getHours() < 12
 
-    // Private properties for end time (always 1 hour ahead)
     readonly property int _nextHour: {
         const now = new Date()
         const nextHour24 = now.getHours() + 1
@@ -120,7 +109,6 @@ Rectangle {
             Layout.minimumHeight: 120
             color: Theme.colors.transparent
 
-            // Single mode time picker
             UI.TimePicker {
                 id: timePicker
                 standalone: false
@@ -171,7 +159,6 @@ Rectangle {
                             Layout.alignment: Qt.AlignHCenter
                         }
 
-                        // Time picker fits in remaining space
                         UI.TimePicker {
                             id: startTimePicker
                             standalone: false
@@ -207,7 +194,6 @@ Rectangle {
                         }
                     }
 
-                // Minimal visual separator
                 Rectangle {
                     Layout.preferredWidth: 1
                     Layout.preferredHeight: Theme.spacing.s10
@@ -277,7 +263,6 @@ Rectangle {
         // }
     }
 
-    // Public API methods - unchanged
     function clearSelection() {
         selectedDate = new Date(NaN)
         startDate = new Date(NaN)
@@ -326,7 +311,6 @@ Rectangle {
         selectionChanged()
     }
 
-    // Private helpers - unchanged
     function _combineDateTime(date, hour, minute, isAM) {
         if (_isEmpty(date)) return new Date(NaN)
 
