@@ -10,6 +10,9 @@ import App.Features.TitleBar
 import App.Features.Language 1.0
 
 UI.GlobalBackgroundConsumer {
+    // TESTING PURPOSES
+    property bool devPanelsShown: false
+
     ColumnLayout {
         anchors.fill: parent
         spacing: Theme.spacing.s0
@@ -31,6 +34,7 @@ UI.GlobalBackgroundConsumer {
             spacing: Theme.spacing.s0
 
             SideRailItem {
+                visible: devPanelsShown
                 source: "qrc:/App/assets/icons/clipboard.svg"
                 text: (TranslationManager.revision, qsTr("Mission"))
                 active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
@@ -42,6 +46,7 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                visible: devPanelsShown
                 source: "qrc:/App/assets/icons/submarine.svg"
                 text: (TranslationManager.revision, qsTr("Pod"))
                 active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
@@ -63,16 +68,16 @@ UI.GlobalBackgroundConsumer {
                 }
             }
 
-            SideRailItem {
-                source: "qrc:/App/assets/icons/test.svg"
-                text: (TranslationManager.revision, qsTr("Buttons Test"))
-                active: PanelRouter.currentPath === "button-test" && SidePanelController.isOpen
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/test.svg"
+            //     text: (TranslationManager.revision, qsTr("Buttons Test"))
+            //     active: PanelRouter.currentPath === "button-test" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Buttons Test")
-                    SidePanelController.toggle("button-test")
-                }
-            }
+            //     onClicked: {
+            //         TitleBarController.setTitle("Buttons Test")
+            //         SidePanelController.toggle("button-test")
+            //     }
+            // }
 
             // SideRailItem {
             //     source: "qrc:/App/assets/icons/calendar.svg"
@@ -152,6 +157,17 @@ UI.GlobalBackgroundConsumer {
             // }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/layers.svg"
+                text: (TranslationManager.revision, qsTr("Layers"))
+                active: PanelRouter.currentPath === "maplayers" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Map Layers")
+                    SidePanelController.toggle("maplayers")
+                }
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 text: (TranslationManager.revision, qsTr("Language"))
@@ -172,6 +188,39 @@ UI.GlobalBackgroundConsumer {
                 onClicked: {
                     TitleBarController.setTitle("Map Tilesets")
                     SidePanelController.toggle("maptilesets")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/truck.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals"))
+                active: PanelRouter.currentPath === "arrival-content-test" && SidePanelController.isOpen
+                onClicked: {
+                    TitleBarController.setTitle("Truck Arrivals")
+                    SidePanelController.toggle("arrival-content-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/calendar-arrivals.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals Date"))
+                active: PanelRouter.currentPath === "arrival-date-content-test" && SidePanelController.isOpen
+                onClicked: {
+                    TitleBarController.setTitle("Truck Arrivals Date")
+                    SidePanelController.toggle("arrival-date-content-test")
+                }
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/settings.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals DT"))
+                active: PanelRouter.currentPath === "arrival-date-time-content-test" && SidePanelController.isOpen
+                onClicked: {
+                    TitleBarController.setTitle("Truck Arrivals DT")
+                    SidePanelController.toggle("arrival-date-time-content-test")
                 }
             }
         }

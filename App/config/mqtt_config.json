@@ -1,0 +1,11 @@
+{
+    "mqtt": {
+      "host": "localhost",
+      "port": 1883
+    },
+    "topics": {
+      "ais": "AISTrackMapLayer",
+      "doc-space": "DocSpaceTrackMapLayer",
+      "tir": "TirTrackMapLayer"
+    }
+}
