@@ -58,6 +58,7 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                visible: devPanelsShown
                 source: "qrc:/App/assets/icons/notification.svg"
                 text: (TranslationManager.revision, qsTr("Notifications"))
                 active: PanelRouter.currentPath === "notifications" && SidePanelController.isOpen
@@ -168,32 +169,6 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
-                visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
-                source: "qrc:/App/assets/icons/world.svg"
-                icon.width: Theme.icons.sizeMd
-                icon.height: Theme.icons.sizeMd
-                text: (TranslationManager.revision, qsTr("Languages"))
-                active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
-
-                onClicked: {
-                    TitleBarController.setTitle("Languages")
-                    SidePanelController.toggle("language")
-                }
-            }
-
-            SideRailItem {
-                visible: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
-                source: "qrc:/App/assets/icons/map.svg"
-                text: (TranslationManager.revision, qsTr("Tilesets"))
-                active: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
-
-                onClicked: {
-                    TitleBarController.setTitle("Map Tilesets")
-                    SidePanelController.toggle("maptilesets")
-                }
-            }
-
-            SideRailItem {
                 source: "qrc:/App/assets/icons/truck.svg"
                 preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Truck Arrivals"))
@@ -223,6 +198,34 @@ UI.GlobalBackgroundConsumer {
                 onClicked: {
                     TitleBarController.setTitle("Truck Arrivals DT")
                     SidePanelController.toggle("arrival-date-time-content-test")
+                }
+            }
+
+            SideRailItem {
+                visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
+                source: "qrc:/App/assets/icons/world.svg"
+                icon.width: Theme.icons.sizeMd
+                icon.height: Theme.icons.sizeMd
+                text: (TranslationManager.revision, qsTr("Languages"))
+                active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Languages")
+                    SidePanelController.toggle("language")
+                }
+            }
+
+            SideRailItem {
+                visible: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
+                source: "qrc:/App/assets/icons/map.svg"
+                icon.width: Theme.icons.sizeMd
+                icon.height: Theme.icons.sizeMd
+                text: (TranslationManager.revision, qsTr("Tilesets"))
+                active: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
+
+                onClicked: {
+                    TitleBarController.setTitle("Map Tilesets")
+                    SidePanelController.toggle("maptilesets")
                 }
             }
         }
