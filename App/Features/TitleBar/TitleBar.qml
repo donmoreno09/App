@@ -49,14 +49,15 @@ UI.GlobalBackgroundConsumer {
                 }
             }
 
-            UI.SearchBar {
-                Layout.preferredWidth: Theme.layout.searchBarWidth
-                Layout.preferredHeight: Theme.layout.searchBarHeight
-                textField.placeholderText: {
-                    TranslationManager.revision
-                    return qsTr("Search here...")
-                }
-            }
+            // NOTE: Commented for now since it is currently unused
+            // UI.SearchBar {
+            //     Layout.preferredWidth: Theme.layout.searchBarWidth
+            //     Layout.preferredHeight: Theme.layout.searchBarHeight
+            //     textField.placeholderText: {
+            //         TranslationManager.revision
+            //         return qsTr("Search here...")
+            //     }
+            // }
 
             RowLayout {
                 visible: WindowsNcController.isWindows()
