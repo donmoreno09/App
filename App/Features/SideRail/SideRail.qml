@@ -186,24 +186,41 @@ UI.GlobalBackgroundConsumer {
 
         UI.VerticalSpacer { }
 
-        UI.Button {
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:/App/assets/icons/panel-chevron.svg"
-            icon.width: Theme.icons.sizeMd
-            icon.height: Theme.icons.sizeMd
-            padding: Theme.spacing.s2
-
-            Layout.preferredWidth: Theme.spacing.s9
-            Layout.preferredHeight: Theme.spacing.s9
+        ColumnLayout {
             Layout.alignment: Qt.AlignCenter
 
-            onClicked: {
-                if (SidePanelController.isOpen) SidePanelController.close()
-                else SidePanelController.open()
-            }
-        }
+            // Stay visible while fading out, hide only when fully transparent
+            property bool shouldBeVisible: PanelRouter.currentPath !== ""
+            opacity: shouldBeVisible ? 1 : 0
+            visible: shouldBeVisible || opacity > 0
 
-        UI.VerticalPadding { }
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Theme.motion.panelTransitionMs
+                    easing.type: Theme.motion.panelTransitionEasing
+                }
+            }
+
+            UI.Button {
+                display: AbstractButton.IconOnly
+                icon.source: "qrc:/App/assets/icons/panel-chevron.svg"
+                icon.width: Theme.icons.sizeMd
+                icon.height: Theme.icons.sizeMd
+                padding: Theme.spacing.s2
+
+                Layout.preferredWidth: Theme.spacing.s9
+                Layout.preferredHeight: Theme.spacing.s9
+
+                onClicked: {
+                    if (SidePanelController.isOpen) SidePanelController.close()
+                    else SidePanelController.open()
+                }
+
+                rotation: SidePanelController.isOpen ? 0 : 180
+            }
+
+            UI.VerticalPadding { }
+        }
 
         UI.Avatar {
             Layout.preferredWidth: Theme.spacing.s9
