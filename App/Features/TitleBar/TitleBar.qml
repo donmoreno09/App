@@ -65,13 +65,13 @@ UI.GlobalBackgroundConsumer {
                 SystemButton {
                     source: "qrc:/App/assets/icons/minus.svg"
 
-                    onClicked: WindowsNcController.window.showMinimized()
+                    onClicked: WindowsNcController.minimize()
                 }
 
                 SystemButton {
                     source: "qrc:/App/assets/icons/maximize.svg"
 
-                    onClicked: WindowsNcController.window.visibility = (WindowsNcController.window.visibility === Window.Maximized) ? Window.Windowed : Window.Maximized
+                    onClicked: WindowsNcController.toggleMaximize()
                 }
 
                 SystemButton {
@@ -89,6 +89,6 @@ UI.GlobalBackgroundConsumer {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
         onPressed: WindowsNcController.window.startSystemMove()
-        onDoubleClicked: WindowsNcController.window.visibility = (WindowsNcController.window.visibility === Window.Maximized) ? Window.Windowed : Window.Maximized
+        onDoubleClicked: WindowsNcController.toggleMaximize()
     }
 }
