@@ -43,7 +43,6 @@ ApplicationWindow {
     UI.GlobalBackground {
         id: globalBackground
         anchors.fill: parent
-        visible: false
     }
 
     MapHost {
