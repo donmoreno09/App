@@ -13,6 +13,12 @@ import App.Components 1.0 as UI
 import "components"
 
 UI.GlobalBackgroundConsumer {
+    // Move out from layout the title to center it
+    UI.Title {
+        anchors.centerIn: parent
+        z: Theme.elevation.panel
+    }
+
     RowLayout {
         anchors.fill: parent
         spacing: Theme.spacing.s2
@@ -21,10 +27,6 @@ UI.GlobalBackgroundConsumer {
         UI.HorizontalPadding { padding: Theme.spacing.s8 }
 
         UI.DateTime { }
-
-        UI.HorizontalSpacer { }
-
-        UI.Title { }
 
         UI.HorizontalSpacer { }
 
