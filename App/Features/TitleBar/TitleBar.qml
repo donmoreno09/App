@@ -13,12 +13,6 @@ import App.Components 1.0 as UI
 import "components"
 
 UI.GlobalBackgroundConsumer {
-    // Move out from layout the title to center it
-    UI.Title {
-        anchors.centerIn: parent
-        z: Theme.elevation.panel
-    }
-
     RowLayout {
         anchors.fill: parent
         spacing: Theme.spacing.s2
@@ -27,6 +21,10 @@ UI.GlobalBackgroundConsumer {
         UI.HorizontalPadding { padding: Theme.spacing.s8 }
 
         UI.DateTime { }
+
+        UI.HorizontalSpacer { }
+
+        UI.Title { }
 
         UI.HorizontalSpacer { }
 
@@ -51,15 +49,14 @@ UI.GlobalBackgroundConsumer {
                 }
             }
 
-            // NOTE: Commented for now since it is currently unused
-            // UI.SearchBar {
-            //     Layout.preferredWidth: Theme.layout.searchBarWidth
-            //     Layout.preferredHeight: Theme.layout.searchBarHeight
-            //     textField.placeholderText: {
-            //         TranslationManager.revision
-            //         return qsTr("Search here...")
-            //     }
-            // }
+            UI.SearchBar {
+                Layout.preferredWidth: Theme.layout.searchBarWidth
+                Layout.preferredHeight: Theme.layout.searchBarHeight
+                textField.placeholderText: {
+                    TranslationManager.revision
+                    return qsTr("Search here...")
+                }
+            }
 
             RowLayout {
                 visible: WindowsNcController.isWindows()
