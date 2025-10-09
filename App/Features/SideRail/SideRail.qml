@@ -170,7 +170,9 @@ UI.GlobalBackgroundConsumer {
             SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
-                text: (TranslationManager.revision, qsTr("Language"))
+                icon.width: Theme.icons.sizeMd
+                icon.height: Theme.icons.sizeMd
+                text: (TranslationManager.revision, qsTr("Languages"))
                 active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
 
                 onClicked: {
