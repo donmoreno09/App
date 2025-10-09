@@ -172,7 +172,7 @@ UI.GlobalBackgroundConsumer {
                 source: "qrc:/App/assets/icons/world.svg"
                 icon.width: Theme.icons.sizeMd
                 icon.height: Theme.icons.sizeMd
-                text: (TranslationManager.revision, qsTr("Language"))
+                text: (TranslationManager.revision, qsTr("Languages"))
                 active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
 
                 onClicked: {

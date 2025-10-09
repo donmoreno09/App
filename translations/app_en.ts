@@ -567,12 +567,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="173"/>
-        <source>Language</source>
-        <translation>Language</translation>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="175"/>
+        <source>Languages</source>
+        <translation type="unfinished">Languages</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="185"/>
+        <source>Language</source>
+        <translation type="vanished">Language</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="187"/>
         <source>Tilesets</source>
         <translation type="unfinished"></translation>
     </message>

@@ -564,17 +564,21 @@
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="161"/>
         <source>Layers</source>
-        <translation type="unfinished">Layers</translation>
+        <translation>Layers</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="173"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="175"/>
+        <source>Languages</source>
+        <translation>Lingue</translation>
+    </message>
+    <message>
         <source>Language</source>
-        <translation>Lingua</translation>
+        <translation type="vanished">Lingue</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="185"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="187"/>
         <source>Tilesets</source>
-        <translation type="unfinished">Tilesets</translation>
+        <translation>Tilesets</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="62"/>
