@@ -10,7 +10,7 @@ import App.Features.Language 1.0
 import App.StubComponents 1.0 as UI
 import App.Components 1.0 as UI
 
-import "components"
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 UI.GlobalBackgroundConsumer {
     RowLayout {
@@ -43,10 +43,7 @@ UI.GlobalBackgroundConsumer {
                 backgroundRect.color: Theme.colors.whiteA20
                 backgroundRect.border.width: Theme.borders.b0
 
-                onClicked: {
-                    SidePanelController.toggle("language")
-                    TitleBarController.setTitle("Languages")
-                }
+                onClicked: SidePanelController.toggle(Routes.Languages)
             }
 
             UI.SearchBar {

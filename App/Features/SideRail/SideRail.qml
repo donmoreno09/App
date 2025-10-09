@@ -9,6 +9,8 @@ import App.Features.SidePanel
 import App.Features.TitleBar
 import App.Features.Language 1.0
 
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
+
 UI.GlobalBackgroundConsumer {
     // TESTING PURPOSES
     property bool devPanelsShown: false
@@ -39,10 +41,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Mission"))
                 active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Mission")
-                    SidePanelController.toggle("mission")
-                }
+                onClicked: SidePanelController.toggle(Routes.Mission)
             }
 
             SideRailItem {
@@ -51,10 +50,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Pod"))
                 active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Pod")
-                    SidePanelController.toggle("pod")
-                }
+                onClicked: SidePanelController.toggle(Routes.Pod)
             }
 
             SideRailItem {
@@ -63,10 +59,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Notifications"))
                 active: PanelRouter.currentPath === "notifications" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Notifications")
-                    SidePanelController.toggle("notifications")
-                }
+                onClicked: SidePanelController.toggle(Routes.Notifications)
             }
 
             // SideRailItem {
@@ -74,10 +67,7 @@ UI.GlobalBackgroundConsumer {
             //     text: (TranslationManager.revision, qsTr("Buttons Test"))
             //     active: PanelRouter.currentPath === "button-test" && SidePanelController.isOpen
 
-            //     onClicked: {
-            //         TitleBarController.setTitle("Buttons Test")
-            //         SidePanelController.toggle("button-test")
-            //     }
+            //     onClicked: SidePanelController.toggle(Routes.ButtonTest)
             // }
 
             // SideRailItem {
@@ -85,10 +75,7 @@ UI.GlobalBackgroundConsumer {
             //     text: (TranslationManager.revision, qsTr("DateTime"))
             //     active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
 
-            //     onClicked: {
-            //         TitleBarController.setTitle("DateTimePicker Test")
-            //         SidePanelController.toggle("datetime-test")
-            //     }
+            //     onClicked: SidePanelController.toggle(Routes.DateTimeTest)
             // }
 
             // SideRailItem {
@@ -96,10 +83,7 @@ UI.GlobalBackgroundConsumer {
             //     text: (TranslationManager.revision, qsTr("Modal Dialog Test"))
             //     active: PanelRouter.currentPath === "modal-dialog-test" && SidePanelController.isOpen
 
-            //     onClicked: {
-            //         TitleBarController.setTitle("Modal Dialog Test")
-            //         SidePanelController.toggle("modal-dialog-test")
-            //     }
+            //     onClicked: SidePanelController.toggle(Routes.ModalTest)
             // }
 
             // SideRailItem {
@@ -107,10 +91,7 @@ UI.GlobalBackgroundConsumer {
             //     text: (TranslationManager.revision, qsTr("TextArea Test"))
             //     active: PanelRouter.currentPath === "textarea-test" && SidePanelController.isOpen
 
-            //     onClicked: {
-            //         TitleBarController.setTitle("TextArea Test")
-            //         SidePanelController.toggle("textarea-test")
-            //     }
+            //     onClicked: SidePanelController.toggle(Routes.TextAreaTest)
             // }
 
             // SideRailItem {
@@ -118,10 +99,7 @@ UI.GlobalBackgroundConsumer {
             //     text: (TranslationManager.revision, qsTr("Toggle Test"))
             //     active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
 
-            //     onClicked: {
-            //         TitleBarController.setTitle("Toggle Test")
-            //         SidePanelController.toggle("toggle-test")
-            //     }
+            //     onClicked: SidePanelController.toggle(Routes.ToggleTest)
             // }
 
             // SideRailItem {
@@ -129,10 +107,7 @@ UI.GlobalBackgroundConsumer {
             //     text: (TranslationManager.revision, qsTr("Overlay Test"))
             //     active: PanelRouter.currentPath === "overlay-test" && SidePanelController.isOpen
 
-            //     onClicked: {
-            //         TitleBarController.setTitle("Overlay Test")
-            //         SidePanelController.toggle("overlay-test")
-            //     }
+            //     onClicked: SidePanelController.toggle(Routes.OverlayTest)
             // }
 
             // SideRailItem {
@@ -140,10 +115,7 @@ UI.GlobalBackgroundConsumer {
             //     text: (TranslationManager.revision, qsTr("Switcher Test"))
             //     active: PanelRouter.currentPath === "switcher-test" && SidePanelController.isOpen
 
-            //     onClicked: {
-            //         TitleBarController.setTitle("Switcher Test")
-            //         SidePanelController.toggle("switcher-test")
-            //     }
+            //     onClicked: SidePanelController.toggle(Routes.SwitcherTest)
             // }
 
             // SideRailItem {
@@ -151,10 +123,7 @@ UI.GlobalBackgroundConsumer {
             //     text: (TranslationManager.revision, qsTr("Slider Test"))
             //     active: PanelRouter.currentPath === "slider-test" && SidePanelController.isOpen
 
-            //     onClicked: {
-            //         TitleBarController.setTitle("Slider Test")
-            //         SidePanelController.toggle("slider-test")
-            //     }
+            //     onClicked: SidePanelController.toggle(Routes.SliderTest)
             // }
 
             SideRailItem {
@@ -162,10 +131,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Layers"))
                 active: PanelRouter.currentPath === "maplayers" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Map Layers")
-                    SidePanelController.toggle("maplayers")
-                }
+                onClicked: SidePanelController.toggle(Routes.MapLayers)
             }
 
             SideRailItem {
@@ -173,10 +139,8 @@ UI.GlobalBackgroundConsumer {
                 preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Truck Arrivals"))
                 active: PanelRouter.currentPath === "arrival-content-test" && SidePanelController.isOpen
-                onClicked: {
-                    TitleBarController.setTitle("Truck Arrivals")
-                    SidePanelController.toggle("arrival-content-test")
-                }
+
+                onClicked: SidePanelController.toggle(Routes.ArrivalContentTest)
             }
 
             SideRailItem {
@@ -184,10 +148,8 @@ UI.GlobalBackgroundConsumer {
                 preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Truck Arrivals Date"))
                 active: PanelRouter.currentPath === "arrival-date-content-test" && SidePanelController.isOpen
-                onClicked: {
-                    TitleBarController.setTitle("Truck Arrivals Date")
-                    SidePanelController.toggle("arrival-date-content-test")
-                }
+
+                onClicked: SidePanelController.toggle(Routes.ArrivalDateContentTest)
             }
 
             SideRailItem {
@@ -195,10 +157,8 @@ UI.GlobalBackgroundConsumer {
                 preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Truck Arrivals DT"))
                 active: PanelRouter.currentPath === "arrival-date-time-content-test" && SidePanelController.isOpen
-                onClicked: {
-                    TitleBarController.setTitle("Truck Arrivals DT")
-                    SidePanelController.toggle("arrival-date-time-content-test")
-                }
+
+                onClicked: SidePanelController.toggle(Routes.ArrivalDateTimeContentTest)
             }
 
             SideRailItem {
@@ -209,10 +169,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Languages"))
                 active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Languages")
-                    SidePanelController.toggle("language")
-                }
+                onClicked: SidePanelController.toggle(Routes.Languages)
             }
 
             SideRailItem {
@@ -223,10 +180,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Tilesets"))
                 active: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Map Tilesets")
-                    SidePanelController.toggle("maptilesets")
-                }
+                onClicked: SidePanelController.toggle(Routes.MapTilesets)
             }
         }
 

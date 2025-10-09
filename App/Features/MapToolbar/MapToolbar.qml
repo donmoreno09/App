@@ -4,11 +4,12 @@ import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.MapToolbar 1.0
 import App.Features.Map 1.0
 import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 
-import "components"
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 RowLayout {
     spacing: Theme.spacing.s3
@@ -18,10 +19,7 @@ RowLayout {
             source: "qrc:/App/assets/icons/map.svg"
             checkable: true
 
-            onClicked: {
-                TitleBarController.setTitle("Map Tilesets")
-                SidePanelController.toggle("maptilesets")
-            }
+            onClicked: SidePanelController.toggle(Routes.MapTilesets)
         }
 
         MapToolbarItem {
