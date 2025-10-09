@@ -9,6 +9,7 @@ UI.Button {
     id: root
 
     property alias source: root.icon.source
+    property bool preserveIconColor: false
 
     variant: UI.ButtonStyles.Ghost
     Layout.fillWidth: true
@@ -19,7 +20,7 @@ UI.Button {
     icon.source: source
     icon.width: Theme.icons.sizeLg
     icon.height: Theme.icons.sizeLg
-    icon.color: Theme.colors.text
+    icon.color: preserveIconColor ? "transparent" : Theme.colors.text
 
     radius: 0
     backgroundRect.border.width: Theme.borders.b0

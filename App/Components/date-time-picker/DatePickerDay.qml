@@ -3,24 +3,17 @@ import QtQuick.Controls 6.8
 
 import App.Themes 1.0
 
-/*!
-    \qmltype DatePickerDay
-*/
-
 Item {
     id: root
 
-    // Props
     property date date
     property bool isCurrentMonth: false
     property bool isToday: false
     property bool isSelected: false
     property bool isDisabled: false
 
-    // Signals
     signal clicked(date date)
 
-    // Visual state - matching the design colors
     readonly property color _backgroundColor: {
         if (isDisabled) return Theme.colors.transparent
         if (isSelected) return Theme.colors.accent500  // Blue selection
@@ -36,21 +29,18 @@ Item {
         return Theme.colors.text
     }
 
-    // Day cell background
     Rectangle {
         id: dayCircle
-        width: Theme.spacing.s8  // 32px
-        height: Theme.spacing.s8 // 32px
+        width: Theme.spacing.s8
+        height: Theme.spacing.s8
         anchors.centerIn: parent
 
         color: root._backgroundColor
-        radius: Theme.radius.circle(width, height) // Always circular like the design
+        radius: Theme.radius.circle(width, height)
 
-        // Today indicator border
         border.width: root.isToday && root.isCurrentMonth && !root.isSelected ? Theme.borders.b1 : Theme.borders.b0
         border.color: root.isToday && root.isCurrentMonth && !root.isSelected ? Theme.colors.accent500 : "transparent"
 
-        // Smooth transitions
         Behavior on color {
             ColorAnimation {
                 duration: 150
@@ -65,17 +55,15 @@ Item {
             }
         }
 
-        // Day number text
         Text {
             anchors.centerIn: parent
-            text: root.date.getDate().toString().padStart(2, '0') // Always 2 digits like design
+            text: root.date.getDate().toString().padStart(2, '0')
 
             font.family: Theme.typography.familySans
             font.pixelSize: Theme.typography.fontSize150
             font.weight: root.isSelected ? Theme.typography.weightMedium : Theme.typography.weightRegular
             color: root._textColor
 
-            // Smooth color transitions
             Behavior on color {
                 ColorAnimation {
                     duration: 150
@@ -85,7 +73,6 @@ Item {
         }
     }
 
-    // Click handling
     MouseArea {
         id: mouseArea
         anchors.fill: parent

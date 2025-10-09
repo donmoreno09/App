@@ -5,43 +5,30 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-/*!
-    \qmltype DatePicker
-    \brief Clean, optimized DatePicker with micro-component architecture
-*/
-
 Rectangle {
     id: root
 
-    // Public API
-    property string mode: "single" // "single", "range"
+    property string mode: "single"
 
-    // Date properties
     property date selectedDate: new Date(NaN)
     property date startDate: new Date(NaN)
     property date endDate: new Date(NaN)
 
     property bool standalone: true  // Set to false when used inside containers
 
-    // Constraints
     property date minimumDate: new Date(1900, 0, 1)
     property date maximumDate: new Date(2100, 11, 31)
     property var disabledDates: []
 
-    // Signals
     signal dateSelected(date date)
     signal rangeSelected(date startDate, date endDate)
 
-    // Fixed dimensions from design
     width: 312
     height: 404
     color: Theme.colors.primary800
-    border.color: Theme.colors.secondary500
-    border.width: Theme.borders.b1
     radius: Theme.radius.md
 
-    // Internal state - navigation flow
-    property string _currentView: "calendar" // "year", "month", "calendar"
+    property string _currentView: "calendar"
     property int _currentMonth: _getInitialMonth()
     property int _currentYear: _getInitialYear()
     property date _rangeStartTemp: new Date(NaN)
@@ -51,7 +38,6 @@ Rectangle {
         anchors.margins: Theme.spacing.s4
         spacing: Theme.spacing.s3
 
-        // Header with navigation
         UI.DatePickerHeader {
             Layout.fillWidth: true
             Layout.preferredHeight: Theme.spacing.s10
@@ -65,7 +51,6 @@ Rectangle {
             onHeaderClicked: root._handleHeaderClick()
         }
 
-        // Content area - different views
         StackLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -113,9 +98,6 @@ Rectangle {
             }
         }
 
-        // Action buttons - this is needed when using the time picker as a lone-component,
-        // But when Date Picker and Time Picker are used in a single container
-        // This should be commented out
         UI.DatePickerActions {
             visible: standalone
             Layout.fillWidth: true
@@ -130,7 +112,6 @@ Rectangle {
         }
     }
 
-    // Private functions - keep minimal, delegate complex logic to child components
     function _getInitialMonth() {
         if (!_isEmpty(selectedDate)) return selectedDate.getMonth()
         return new Date().getMonth()
@@ -196,17 +177,12 @@ Rectangle {
             case "month":
                 _currentView = "year"
                 break
-            // Year view doesn't have higher level
         }
     }
 
     function _handleDateClick(date) {
         if (mode === "single") {
-            console.log("DatePicker: Setting selectedDate to:", date)
-                    selectedDate = date
-                    console.log("DatePicker: selectedDate is now:", selectedDate)
-                    console.log("DatePicker: About to emit dateSelected signal")
-                    dateSelected(selectedDate)  // This should fire the signal
+            dateSelected(selectedDate)
         } else if (mode === "range") {
             if (_isEmpty(_rangeStartTemp)) {
                 _rangeStartTemp = date

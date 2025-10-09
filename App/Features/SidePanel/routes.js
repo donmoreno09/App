@@ -12,6 +12,9 @@ const routes = {
   "slider-test": "qrc:/App/Playground/SliderPanel.qml",
   "modal-test": "qrc:/App/Playground/ModalPanel.qml",
   "button-test": "qrc:/App/Playground/ButtonPanel.qml",
+  "arrival-content-test":        "qrc:/App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml",
+  "arrival-date-content-test":   "qrc:/App/Features/TruckArrivals/panels/ArrivalsDatePanel.qml",
+  "arrival-date-time-content-test": "qrc:/App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml",
   "*":      "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
 };
 

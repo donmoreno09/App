@@ -1,0 +1,77 @@
+#include "TruckArrivalController.h"
+#include "services/TruckArrivalService.h"
+
+TruckArrivalController::TruckArrivalController(QObject* parent)
+    : QObject(parent)
+{
+    m_service = new TruckArrivalService(this);
+    m_service->setHostPort(m_host, m_port);
+    hookUpService();
+}
+
+int TruckArrivalController::todayArrivalCount() const {
+    return m_todayArrivalCount;
+}
+
+int TruckArrivalController::currentHourArrivalCount() const {
+    return m_currentHourArrivalCount;
+}
+
+int TruckArrivalController::dateRangeArrivalCount() const {
+    return m_dateRangeArrivalCount;
+}
+
+int TruckArrivalController::dateTimeRangeArrivalCount() const {
+    return m_dateTimeRangeArrivalCount;
+}
+
+bool TruckArrivalController::isLoading() const {
+    return m_loading;
+}
+
+void TruckArrivalController::setLoading(bool loading) {
+    if (m_loading == loading) return;
+    m_loading = loading;
+    emit loadingChanged(loading);
+}
+
+void TruckArrivalController::hookUpService() {
+    connect(m_service, &TruckArrivalService::requestFailed, this, [this](const QString& e){
+        emit requestFailed(e);
+        if (--m_pendingRequests <= 0) { m_pendingRequests = 0; setLoading(false); }
+    });
+    connect(m_service, &TruckArrivalService::todayArrivalsReady, this, [this](int c){
+        if (m_todayArrivalCount != c) { m_todayArrivalCount = c; emit todayArrivalCountChanged(c); }
+        if (--m_pendingRequests <= 0) { m_pendingRequests = 0; setLoading(false); }
+    });
+    connect(m_service, &TruckArrivalService::currentHourArrivalsReady, this, [this](int c){
+        if (m_currentHourArrivalCount != c) { m_currentHourArrivalCount = c; emit currentHourArrivalCountChanged(c); }
+        if (--m_pendingRequests <= 0) { m_pendingRequests = 0; setLoading(false); }
+    });
+    connect(m_service, &TruckArrivalService::dateRangeArrivalsReady, this, [this](int c){
+        if (m_dateRangeArrivalCount != c) { m_dateRangeArrivalCount = c; emit dateRangeArrivalCountChanged(c); }
+        setLoading(false);
+    });
+    connect(m_service, &TruckArrivalService::dateTimeRangeArrivalsReady, this, [this](int c){
+        if (m_dateTimeRangeArrivalCount != c) { m_dateTimeRangeArrivalCount = c; emit dateTimeRangeArrivalCountChanged(c); }
+        setLoading(false);
+    });
+}
+
+void TruckArrivalController::fetchAllArrivalData() {
+    if (m_loading) return;
+    m_pendingRequests = 2;
+    setLoading(true);
+    m_service->getTodayArrivals();
+    m_service->getCurrentHourArrivals();
+}
+void TruckArrivalController::fetchDateRangeShipArrivals(const QDate& s, const QDate& e) {
+    if (m_loading) return;
+    setLoading(true);
+    m_service->getDateRangeArrivals(s, e);
+}
+void TruckArrivalController::fetchDateTimeRangeShipArrivals(const QDateTime& s, const QDateTime& e) {
+    if (m_loading) return;
+    setLoading(true);
+    m_service->getDateTimeRangeArrivals(s, e);
+}
