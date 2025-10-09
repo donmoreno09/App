@@ -23,7 +23,7 @@ UI.Button {
 
         Image {
             id: image
-            width: Theme.icons.size2Xl
+            width: Theme.icons.sizeLg
             fillMode: Image.PreserveAspectFit
             visible: root.icon.source !== ""
         }
