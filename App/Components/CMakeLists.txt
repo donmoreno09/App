@@ -8,6 +8,7 @@ set(qml_files
     HorizontalPadding.qml
     HorizontalSpacer.qml
     InputCoordinate.qml
+    InputShield.qml
     Modal.qml
     OutlineRect.qml
     Overlay.qml
@@ -19,7 +20,6 @@ set(qml_files
     VerticalDivider.qml
     VerticalPadding.qml
     VerticalSpacer.qml
-
 
     button/ButtonStyle.qml
     button/Button.qml
@@ -50,6 +50,8 @@ set(qml_singletons
     input/InputStyles.qml
     toggle/ToggleStyles.qml
     button/ButtonStyles.qml
+
+
 )
 
 set_source_files_properties(

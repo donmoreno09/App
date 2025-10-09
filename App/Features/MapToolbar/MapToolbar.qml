@@ -16,7 +16,6 @@ RowLayout {
     ButtonGroup { id: navigationGroup; exclusive: true }
     ButtonGroup { id: toolsGroup; exclusive: true }
 
-
     MapToolbarContainer {
         MapToolbarItem {
             source: "qrc:/App/assets/icons/map.svg"

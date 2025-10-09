@@ -6,14 +6,8 @@ Item {
 
     property alias maskRect: maskRect
 
-    // NOTE: To be analyzed where should we pull from the
-    //       global background component, right now it's
-    //       being pulled through the "context tree" meaning
-    //       this consumer component must be under a component
-    //       instantiating the GlobalBackground component.
-    //       I am thinking of a singleton-controller solution but
-    //       needs to be properly assessed.
-    property GlobalBackground bg: globalBackground
+    // Forward background instance here for quick access
+    readonly property GlobalBackground bg: globalBackground
 
     // Certain actions like animations need manual intervention
     // to update the background so it does not come off bugged.
@@ -26,6 +20,10 @@ Item {
         return Qt.rect(p.x, p.y, root.width, root.height)
     }
 
+    // Prevent map interactions below this component
+    InputShield { anchors.fill: parent }
+
+    // Render background
     Rectangle {
         id: maskRect
         anchors.fill: parent

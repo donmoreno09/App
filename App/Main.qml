@@ -26,10 +26,7 @@ ApplicationWindow {
     visible: true
     title: qsTr("IRIDESS FE")
 
-    palette {
-        placeholderText: "white"
-        buttonText: "white"
-    }
+    palette: AppPalette { }
 
     // Used for listeners that needs for the app to be fully loaded first.
     // Apparently Qt's ApplicationWindow does not have a flag for it.
@@ -43,7 +40,6 @@ ApplicationWindow {
     UI.GlobalBackground {
         id: globalBackground
         anchors.fill: parent
-        visible: false
     }
 
     MapHost {
