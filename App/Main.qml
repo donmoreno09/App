@@ -168,32 +168,6 @@ ApplicationWindow {
                     anchors.rightMargin: Theme.spacing.s7
                     anchors.bottomMargin: Theme.spacing.s5
                 }
-
-                // Language switching buttons
-                Row {
-                    id: languageButtons
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.rightMargin: Theme.spacing.s4
-                    anchors.topMargin: Theme.spacing.s4
-                    spacing: Theme.spacing.s2
-
-                    UI.Button {
-                        id: englishButton
-                        text: "English"
-                        variant: LanguageController.currentLanguage === "en" ? UI.ButtonStyles.Primary : UI.ButtonStyles.Secondary
-                        size: "sm"
-                        onClicked: LanguageController.currentLanguage = "en"
-                    }
-
-                    UI.Button {
-                        id: italianButton
-                        text: "Italian"
-                        variant: LanguageController.currentLanguage === "it" ? UI.ButtonStyles.Primary : UI.ButtonStyles.Secondary
-                        size: "sm"
-                        onClicked: LanguageController.currentLanguage = "it"
-                    }
-                }
             }
         }
     }
