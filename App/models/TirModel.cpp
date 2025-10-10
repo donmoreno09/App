@@ -135,3 +135,8 @@ void TirModel::clear()
     m_tirs.clear();
     endResetModel();
 }
+
+QVariant TirModel::getRoleData(int idx, int role) const
+{
+    return data(index(idx), role);
+}

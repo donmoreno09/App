@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Layouts 6.8
 import QtQuick.Controls 6.8
 
+import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Playground 1.0
@@ -130,8 +131,8 @@ PanelTemplate {
                         onClicked: function() {
                             console.log("[TrackPanel] center clicked!")
                             MapController.setMapCenter()
-                            var idx = SelectedTrackState.model.index(SelectedTrackState.index, 0)
-                            console.log(SelectedTrackState.model.data(idx, SelectedTrackState.model.CodeRole))
+
+                            console.log(SelectedTrackState.model.getRoleData(SelectedTrackState.index, TrackModel.CodeRole))
                         }
                     }
 

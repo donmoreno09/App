@@ -2,6 +2,11 @@ import QtQuick 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
 
+import App 1.0
+import App.Features.TitleBar 1.0
+import App.Features.SidePanel 1.0
+import App.Features.TrackPanel 1.0
+
 MapQuickItem {
     id: tir
 
@@ -9,6 +14,10 @@ MapQuickItem {
     required property geoCoordinate pos
     required property double cog
     required property int state
+
+    // Index Data
+    required property int index
+    required property TirModel tirModel
 
     coordinate: tir.pos
 
@@ -53,6 +62,21 @@ MapQuickItem {
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             wrapMode: Text.Wrap
+        }
+
+        TapHandler {
+            id: tapHandler
+            acceptedButtons: Qt.LeftButton
+            onTapped: (event) => {
+                console.log("Tir tapped -> index:", tir.index)
+                console.log("Tir tapped -> code:", tir.code, "Tir Number:", tir.trackNumber, "cog:", tir.cog)
+                TitleBarController.setTitle("Tir Details")
+                SidePanelController.toggle("trackpanel")
+                SelectedTrackState.select(tir.tirModel, tir.index)
+
+                // chiamata a controller C++/singleton se vuoi aprire dettagli
+                // TrackDetailsController.request(track.code)
+            }
         }
     }
 }

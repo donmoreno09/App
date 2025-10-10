@@ -16,12 +16,12 @@ public:
     explicit TirModel(QObject *parent = nullptr);
 
     enum Roles {
-        OperationCodeRole = Qt::UserRole + 1,
-        PosRole,
+        PosRole = Qt::UserRole + 1,
         CogRole,
         TimeRole,
         VelRole,
         StateRole,
+        OperationCodeRole,
     };
 
     Q_ENUM(Roles)
@@ -43,6 +43,8 @@ public:
     QVector<int> diffRoles(const Tir &a, const Tir &b) const override;
 
     Q_INVOKABLE void clear();
+
+    Q_INVOKABLE QVariant getRoleData(int idx, int role) const;
 
 private:
     QVector<Tir> m_tirs;

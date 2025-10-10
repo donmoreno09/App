@@ -1,10 +1,11 @@
 import QtQuick 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
+
+import App 1.0
 import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.TrackPanel 1.0
-import App
 
 
 MapQuickItem {
@@ -17,7 +18,7 @@ MapQuickItem {
     required property int trackNumber
 
     // Index Data
-    required property int index             // <-- index vector
+    required property int index
     required property TrackModel trackModel
 
 

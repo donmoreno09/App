@@ -147,3 +147,8 @@ void TrackModel::clear()
     m_tracks.clear();
     endResetModel();
 }
+
+QVariant TrackModel::getRoleData(int idx, int role) const
+{
+    return data(index(idx), role);
+}
