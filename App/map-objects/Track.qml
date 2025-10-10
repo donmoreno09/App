@@ -1,6 +1,11 @@
 import QtQuick 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
+import App.Features.TitleBar 1.0
+import App.Features.SidePanel 1.0
+import App.Features.TrackPanel 1.0
+import App
+
 
 MapQuickItem {
     id: track
@@ -10,6 +15,11 @@ MapQuickItem {
     required property double cog
     required property int state
     required property int trackNumber
+
+    // Index Data
+    required property int index             // <-- index vector
+    required property TrackModel trackModel
+
 
     coordinate: track.pos
 
@@ -54,6 +64,21 @@ MapQuickItem {
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             wrapMode: Text.Wrap
+        }
+
+        TapHandler {
+            id: tapHandler
+            acceptedButtons: Qt.LeftButton
+            onTapped: (event) => {
+                console.log("Track tapped -> index:", track.index)
+                console.log("Track tapped -> code:", track.code, "trackNumber:", track.trackNumber, "cog:", track.cog)
+                TitleBarController.setTitle("Track Details")
+                SidePanelController.toggle("trackpanel")
+                SelectedTrackState.select(track.trackModel, track.index)
+
+                // chiamata a controller C++/singleton se vuoi aprire dettagli
+                // TrackDetailsController.request(track.code)
+            }
         }
     }
 }
