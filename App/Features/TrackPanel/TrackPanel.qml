@@ -11,7 +11,44 @@ import App.Features.Language 1.0
 import App.Features.Map 1.0
 
 
+
+
 PanelTemplate {
+
+    function formatValue(label, value) {
+        switch (label) {
+        case "Latitude":
+            return value ? value.latitude.toFixed(6) : "-"
+        case "Longitude":
+            return value ? value.longitude.toFixed(6) : "-"
+        case "Speed":
+            return value ? value + " km/h" : "-"
+        case "Heading":
+            return value ? value + "°" : "-"
+        case "Timestamp":
+            return formatTimestamp(value)
+        default:
+            return value || "-"
+        }
+    }
+
+    function formatTimestamp(value) {
+        if (!value)
+            return "-"
+
+        // Gestisce sia stringhe ISO (es. "2025-10-10T14:32:00Z") che epoch (es. 1696948320000)
+        const d = new Date(value)
+        const pad = n => (n < 10 ? "0" + n : n)
+
+        const day = pad(d.getDate())
+        const month = pad(d.getMonth() + 1)
+        const year = d.getFullYear()
+        const hours = pad(d.getHours())
+        const minutes = pad(d.getMinutes())
+
+        return `${day}/${month}/${year} ${hours}:${minutes}`
+    }
+
     title.text: "Track Details"
 
     ScrollView {
@@ -51,44 +88,33 @@ PanelTemplate {
                     spacing: Theme.spacing.s2
 
                     Repeater {
-                        model: ListModel {
-                            ListElement {
-                                label: "Name"
-                                value: "Orange TIR pin"
-                            }
-                            ListElement {
-                                label: "Latitude"
-                                value: "47.7654321"
-                            }
-                            ListElement {
-                                label: "Longitude"
-                                value: "13.7654321"
-                            }
-                            ListElement {
-                                label: "Timestamp"
-                                value: "29/09/2025 11:40"
-                            }
-                            ListElement {
-                                label: "Heading"
-                                value: "0%"
-                            }
-                            ListElement {
-                                label: "Speed"
-                                value: "92 Km/h"
-                            }
-                        }
+                        model: [
+                            { label: "Name", role: TrackModel.CodeRole },
+                            { label: "Latitude", role: TrackModel.PosRole },
+                            { label: "Longitude", role: TrackModel.PosRole },
+                            { label: "Timestamp", role: TrackModel.TimeRole },
+                            { label: "Heading", role: TrackModel.CogRole },
+                            { label: "Speed", role: TrackModel.VelRole }
+                        ]
 
                         delegate: ColumnLayout {
                             Layout.fillWidth: true
                             spacing: Theme.spacing.s1
 
                             Label {
-                                text: label.toUpperCase()
+                                text: modelData.label.toUpperCase()
                                 font.bold: true
                             }
 
                             Label {
-                                text: value
+                                text: {
+                                    if (!SelectedTrackState.model)
+                                        return "-"
+                                    const v = SelectedTrackState.model.getRoleData(
+                                                SelectedTrackState.index,
+                                                modelData.role)
+                                    return formatValue(modelData.label, v)
+                                }
                             }
                         }
                     }
@@ -128,11 +154,10 @@ PanelTemplate {
                         icon.width: 16
                         icon.height: 16
 
-                        onClicked: function() {
+                        onClicked: function () {
                             console.log("[TrackPanel] center clicked!")
-                            MapController.setMapCenter()
-
-                            console.log(SelectedTrackState.model.getRoleData(SelectedTrackState.index, TrackModel.CodeRole))
+                            var position = SelectedTrackState.model.getRoleData(SelectedTrackState.index, TrackModel.PosRole)
+                            MapController.setMapCenter(position)
                         }
                     }
 

@@ -63,10 +63,10 @@ QtObject {
         }
     }
 
-    function setMapCenter(x, y) {
-        if (!x) x = 44.4071
-        if (!y) y = 8.9347
-        map.center = QtPositioning.coordinate(x, y)
+    function setMapCenter(coord) {
+        if(!coord)
+            coord = QtPositioning.coordinate(44.4071, 8.9347)
+        map.center = coord
     }
 
     // ----------------- INTERNAL METHODS ----------------- //
