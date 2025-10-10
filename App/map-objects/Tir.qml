@@ -11,6 +11,8 @@ MapQuickItem {
     required property int state
 
     coordinate: tir.pos
+    anchorPoint.x: sourceItem.width / 2
+    anchorPoint.y: sourceItem.height / 2
 
     sourceItem: Item {
         id: tirRect

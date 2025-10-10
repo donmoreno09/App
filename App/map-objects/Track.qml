@@ -12,6 +12,8 @@ MapQuickItem {
     required property int trackNumber
 
     coordinate: track.pos
+    anchorPoint.x: sourceItem.width / 2
+    anchorPoint.y: sourceItem.height / 2
 
     sourceItem: Item {
         id: trackRect
