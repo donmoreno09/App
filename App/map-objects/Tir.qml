@@ -40,7 +40,7 @@ MapQuickItem {
             font.pixelSize: 12
             color: "black"
             anchors.left: parent.right
-            anchors.leftMargin: 10
+            anchors.leftMargin: 0
             anchors.verticalCenter: parent.verticalCenter
             wrapMode: Text.Wrap
         }
