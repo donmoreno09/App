@@ -60,8 +60,13 @@ ColumnLayout {
             property bool isInRange: root.mode === "range" && root._isInRange(model.date)
             property bool isSingleDayRange: isRangeStart && isRangeEnd
 
+            function isWeekStart(d) {
+                const first = monthGrid.locale.firstDayOfWeek;
+                return ((d.getDay() - first + 7) % 7) === 0;
+            }
+
             Rectangle {
-                visible: model.date.getDay() === 0
+                visible: isWeekStart(model.date)
                 x: -parent.x
                 y: 0
                 width: monthGrid.width
