@@ -14,6 +14,7 @@ set(qml_files
     # Map Objects
     map-objects/Track.qml
     map-objects/Tir.qml
+    map-objects/TriangleHeading.qml
 
     # Layers
     layers/AISTrackMapLayer.qml

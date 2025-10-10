@@ -18,20 +18,10 @@ MapQuickItem {
         height: 40
         opacity: tir.state === 1 ? 0.5 : 1.0
 
-        // COG direction vector (track heading line)
-        Rectangle {
-            id: cogLine
-            width: 2
-            height: 40  // Length of the heading vector
-            color: "black"
-            x: tirRect.width / 2 - width / 2
-            y: tirRect.height / 2 - height
-
-            transform: Rotation {
-                origin.x: cogLine.width / 2
-                origin.y: cogLine.height
-                angle: tir.cog
-            }
+        TriangleHeading {
+            heading: tir.cog
+            centerItem: image
+            gap: -10
         }
 
         Image {
