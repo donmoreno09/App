@@ -26,10 +26,7 @@ ApplicationWindow {
     visible: true
     title: qsTr("IRIDESS FE")
 
-    palette {
-        placeholderText: "white"
-        buttonText: "white"
-    }
+    palette: AppPalette { }
 
     // Used for listeners that needs for the app to be fully loaded first.
     // Apparently Qt's ApplicationWindow does not have a flag for it.
@@ -43,7 +40,6 @@ ApplicationWindow {
     UI.GlobalBackground {
         id: globalBackground
         anchors.fill: parent
-        visible: false
     }
 
     MapHost {
@@ -121,7 +117,7 @@ ApplicationWindow {
                         function recalculateMaskedBgs() {
                             if (!appLoaded) return
                             sidePanel.recalculateMaskedBg()
-                            notificationsBar.background.recalculateMaskedBg()
+                            //notificationsBar.background.recalculateMaskedBg()
                         }
 
                         Connections {
@@ -148,16 +144,15 @@ ApplicationWindow {
 
                         UI.VerticalDivider { }
 
-                        UI.HorizontalPadding { padding: Theme.spacing.s5 }
+                        // NOTE: NotificationsBar is hidden since it is currently unused.
+                        // UI.HorizontalPadding { padding: Theme.spacing.s5 }
+                        // ColumnLayout {
+                        //     Layout.alignment: Qt.AlignBottom
 
-                        ColumnLayout {
-                            Layout.alignment: Qt.AlignBottom
+                        //     NotificationsBar { id: notificationsBar }
 
-                            NotificationsBar { id: notificationsBar }
-
-                            UI.VerticalPadding { padding: Theme.spacing.s5 }
-                        }
-
+                        //     UI.VerticalPadding { padding: Theme.spacing.s5 }
+                        // }
                     }
                 }
 
@@ -167,32 +162,6 @@ ApplicationWindow {
                     anchors.bottom: parent.bottom
                     anchors.rightMargin: Theme.spacing.s7
                     anchors.bottomMargin: Theme.spacing.s5
-                }
-
-                // Language switching buttons
-                Row {
-                    id: languageButtons
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.rightMargin: Theme.spacing.s4
-                    anchors.topMargin: Theme.spacing.s4
-                    spacing: Theme.spacing.s2
-
-                    UI.Button {
-                        id: englishButton
-                        text: "English"
-                        variant: LanguageController.currentLanguage === "en" ? UI.ButtonStyles.Primary : UI.ButtonStyles.Secondary
-                        size: "sm"
-                        onClicked: LanguageController.currentLanguage = "en"
-                    }
-
-                    UI.Button {
-                        id: italianButton
-                        text: "Italian"
-                        variant: LanguageController.currentLanguage === "it" ? UI.ButtonStyles.Primary : UI.ButtonStyles.Secondary
-                        size: "sm"
-                        onClicked: LanguageController.currentLanguage = "it"
-                    }
                 }
             }
         }

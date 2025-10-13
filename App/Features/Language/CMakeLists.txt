@@ -1,5 +1,6 @@
 set(qml_files
     LanguagePanel.qml
+    components/LanguageItem.qml
 )
 
 set(cpp_files

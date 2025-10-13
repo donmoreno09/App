@@ -53,7 +53,6 @@ QtObject {
 
         closing()
         isOpen = false
-        TitleBarController.setTitle("Overview")
         if (destroy) PanelRouter.clear()
         closed()
     }

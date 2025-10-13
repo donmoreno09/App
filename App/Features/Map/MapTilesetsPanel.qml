@@ -18,19 +18,19 @@ PanelTemplate {
 
         spacing: Theme.spacing.s4
 
-        UI.Button {
+        MapTilesetsItem {
             Layout.fillWidth: true
-            variant: UI.ButtonStyles.Primary
-            text: (TranslationManager.revision, qsTr("OSM (Online)"))
+            text: (TranslationManager.revision, qsTr("Online OSM"))
+            source: "qrc:/App/assets/images/street-map.png"
             active: MapController._currentPlugin === MapPlugins.osm
 
             onClicked: MapController.setPlugin(MapPlugins.osm)
         }
 
-        UI.Button {
+        MapTilesetsItem {
             Layout.fillWidth: true
-            variant: UI.ButtonStyles.Primary
-            text: (TranslationManager.revision, qsTr("OSM (Default)"))
+            text: (TranslationManager.revision, qsTr("Default OSM"))
+            source: "qrc:/App/assets/images/street-map.png"
             active: MapController._currentPlugin === MapPlugins.osmDefault
 
             onClicked: MapController.setPlugin(MapPlugins.osmDefault)

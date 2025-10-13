@@ -16,9 +16,9 @@ PanelTemplate {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Theme.spacing.s4
+        anchors.margins: Theme.spacing.s8
 
-        spacing: Theme.spacing.s4
+        spacing: Theme.spacing.s6
 
         component LayerToggle : RowLayout {
             required property string label

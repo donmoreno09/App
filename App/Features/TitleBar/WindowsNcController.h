@@ -33,6 +33,10 @@ public:
 
     Q_INVOKABLE static bool isWindows();
 
+    Q_INVOKABLE void minimize();
+
+    Q_INVOKABLE void toggleMaximize();
+
     // Note: If the window is an ApplicationWindow, it is possible to get the
     //       main window through ApplicationWindow.window in QML.
     QQuickWindow *window() const;

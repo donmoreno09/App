@@ -23,8 +23,8 @@ Rectangle {
     signal dateSelected(date date)
     signal rangeSelected(date startDate, date endDate)
 
-    width: 312
-    height: 404
+    Layout.minimumWidth: 312
+    Layout.minimumHeight:  404
     color: Theme.colors.primary800
     radius: Theme.radius.md
 

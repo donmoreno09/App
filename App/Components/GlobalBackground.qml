@@ -3,6 +3,7 @@ import QtQuick.Shapes
 
 Shape {
     id: root
+    visible: false
 
     ShapePath {
         strokeWidth: 0
