@@ -2,8 +2,6 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QUrl>
-#include <QDate>
-#include <QDateTime>
 
 class TrailerPredictionService : public QObject
 {
@@ -18,15 +16,15 @@ public:
 signals:
     void predictionReady(int minutes);
     void requestFailed(const QString& error);
+    void notFound();
 
 private:
-    enum class RequestKind { ByTrailerId };
 
     QNetworkAccessManager m_manager;
     QString m_host = QStringLiteral("localhost");
     int m_port = 5002;
 
-    void performGet(RequestKind kind, const QUrl& url);
+    void performGet(const QUrl& url);
     static QUrl makeUrl(const QString& host, int port,
                         const QString& path,
                         const std::function<void(QUrlQuery&)>& addQuery = nullptr);

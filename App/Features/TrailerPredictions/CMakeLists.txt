@@ -1,5 +1,4 @@
 set(qml_files
-    components/MessageBanner.qml
     components/StatCard.qml
 
     contents/TrailersPredictionsContent.qml

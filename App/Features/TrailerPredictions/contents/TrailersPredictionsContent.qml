@@ -56,7 +56,6 @@ ColumnLayout {
         }
     }
 
-
     // Results Section
     ColumnLayout {
         visible: !controller.isLoading && controller.prediction !== -1
@@ -74,22 +73,38 @@ ColumnLayout {
             value: formatMinutes(controller.prediction)
         }
 
-        MessageBanner {
-            visible: !controller.isLoading && controller.prediction !== -1
-            message: getStatusText(controller.prediction)
-            messageColor: Theme.colors.text
-            bgColor: getStatusColor(controller.prediction)
+        Text {
+            text: getStatusText(controller.prediction)
+            color: getStatusColor(controller.prediction)
+            wrapMode: Text.WordWrap
+            Layout.fillWidth: true
+            Layout.leftMargin: Theme.spacing.s4
+            Layout.rightMargin: Theme.spacing.s4
+            horizontalAlignment: Text.AlignHCenter
+            font {
+                family: Theme.typography.bodySans25Family
+                pointSize: Theme.typography.bodySans25Size
+                weight: Theme.typography.bodySans25Weight
+            }
         }
-
-        MessageBanner {
-            visible: controller.prediction === -1 && !controller.isLoading && trailerIdInput.text
-            message: (TranslationManager.revision, qsTr("No data available"))
-            messageColor: Theme.colors.error500
-            bgColor: Theme.colors.error500
-        }
-
-        UI.VerticalSpacer {}
     }
+
+
+    // Error Message
+    Text {
+        visible: !controller.isLoading && !controller.hasPrediction && trailerIdInput.text && controller.hasError
+        text: (TranslationManager.revision, qsTr("No data available"))
+        color: Theme.colors.error
+        Layout.alignment: Qt.AlignHCenter
+        Layout.topMargin: Theme.spacing.s4
+        font {
+            family: Theme.typography.bodySans25Family
+            pointSize: Theme.typography.bodySans25Size
+            weight: Theme.typography.bodySans25Weight
+        }
+    }
+
+    UI.VerticalSpacer {}
 
     function formatMinutes(minutes) {
         if (minutes === 0) return (TranslationManager.revision, qsTr("Ready"))
