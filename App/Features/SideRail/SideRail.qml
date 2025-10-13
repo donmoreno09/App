@@ -62,70 +62,6 @@ UI.GlobalBackgroundConsumer {
                 onClicked: SidePanelController.toggle(Routes.Notifications)
             }
 
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Buttons Test"))
-            //     active: PanelRouter.currentPath === "button-test" && SidePanelController.isOpen
-
-            //     onClicked: SidePanelController.toggle(Routes.ButtonTest)
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/calendar.svg"
-            //     text: (TranslationManager.revision, qsTr("DateTime"))
-            //     active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
-
-            //     onClicked: SidePanelController.toggle(Routes.DateTimeTest)
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Modal Dialog Test"))
-            //     active: PanelRouter.currentPath === "modal-dialog-test" && SidePanelController.isOpen
-
-            //     onClicked: SidePanelController.toggle(Routes.ModalTest)
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("TextArea Test"))
-            //     active: PanelRouter.currentPath === "textarea-test" && SidePanelController.isOpen
-
-            //     onClicked: SidePanelController.toggle(Routes.TextAreaTest)
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Toggle Test"))
-            //     active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
-
-            //     onClicked: SidePanelController.toggle(Routes.ToggleTest)
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Overlay Test"))
-            //     active: PanelRouter.currentPath === "overlay-test" && SidePanelController.isOpen
-
-            //     onClicked: SidePanelController.toggle(Routes.OverlayTest)
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Switcher Test"))
-            //     active: PanelRouter.currentPath === "switcher-test" && SidePanelController.isOpen
-
-            //     onClicked: SidePanelController.toggle(Routes.SwitcherTest)
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Slider Test"))
-            //     active: PanelRouter.currentPath === "slider-test" && SidePanelController.isOpen
-
-            //     onClicked: SidePanelController.toggle(Routes.SliderTest)
-            // }
-
             SideRailItem {
                 source: "qrc:/App/assets/icons/layers.svg"
                 text: (TranslationManager.revision, qsTr("Layers"))
@@ -159,6 +95,15 @@ UI.GlobalBackgroundConsumer {
                 active: PanelRouter.currentPath === "arrival-date-time-content-test" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle(Routes.ArrivalDateTimeContentTest)
+            }
+
+            SideRailItem {
+                        source: "qrc:/App/assets/icons/compass.svg"
+                        preserveIconColor: true
+                        text: (TranslationManager.revision, qsTr("Trailer Prediction"))
+                        active: PanelRouter.currentPath === "trailer-prediction-test" && SidePanelController.isOpen
+
+                        onClicked: SidePanelController.toggle(Routes.TrailerPredictionTest)
             }
 
             SideRailItem {

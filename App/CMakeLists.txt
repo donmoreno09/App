@@ -1,6 +1,12 @@
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
 qt_add_executable(${PROJECT_NAME}
     main.cpp
 )
+
+target_link_libraries(IRIDESS_FE PRIVATE Qt6::Core)
+target_link_libraries(IRIDESS_FE PRIVATE Qt6::Core)
 
 file(GLOB_RECURSE APP_ASSETS
     RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
