@@ -28,6 +28,7 @@ ColumnLayout {
     UI.Input {
         id: trailerIdInput
         visible: !controller.isLoading
+        variant: UI.InputStyles.Success
         Layout.fillWidth: true
         Layout.margins: 10
         labelText: (TranslationManager.revision, qsTr("Trailer ID"))
