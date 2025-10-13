@@ -129,6 +129,11 @@ QVector<int> TirModel::diffRoles(const Tir &a, const Tir &b) const
     return roles;
 }
 
+QQmlPropertyMap *TirModel::getEditableTir(int index)
+{
+    return m_helper->map(index);
+}
+
 void TirModel::clear()
 {
     beginResetModel();

@@ -6,6 +6,7 @@
 #include <QHash>
 #include <QQmlEngine>
 #include <entities/Track.h>
+#include "ModelHelper.h"
 
 class TrackModel : public BaseTrackModel<Track>
 {
@@ -45,6 +46,8 @@ public:
     void upsert(const QVector<Track> &tracks) override;
 
     QVector<int> diffRoles(const Track &a, const Track &b) const override;
+
+    Q_INVOKABLE QQmlPropertyMap* getEditableTrack(int index);
 
     Q_INVOKABLE void clear();
 

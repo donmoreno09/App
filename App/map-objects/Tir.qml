@@ -72,7 +72,7 @@ MapQuickItem {
                 console.log("Tir tapped -> code:", tir.code, "Tir Number:", tir.trackNumber, "cog:", tir.cog)
                 TitleBarController.setTitle("Tir Details")
                 SidePanelController.toggle("trackpanel")
-                SelectedTrackState.select(tir.tirModel, tir.index)
+                SelectedTrackState.select(tir.tirModel.getEditableTir(tir.index))
 
                 // chiamata a controller C++/singleton se vuoi aprire dettagli
                 // TrackDetailsController.request(track.code)

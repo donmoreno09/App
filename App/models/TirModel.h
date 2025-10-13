@@ -42,6 +42,8 @@ public:
 
     QVector<int> diffRoles(const Tir &a, const Tir &b) const override;
 
+    Q_INVOKABLE QQmlPropertyMap* getEditableTir(int index);
+
     Q_INVOKABLE void clear();
 
     Q_INVOKABLE QVariant getRoleData(int idx, int role) const;

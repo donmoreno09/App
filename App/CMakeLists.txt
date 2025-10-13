@@ -78,6 +78,8 @@ set(cpp_sources
     entities/Tir.h
 
     # Qt Models
+    models/ModelHelper.h
+    models/ModelHelper.cpp
     models/PoiModel.cpp
     models/PoiModel.h
     models/BaseTrackModel.h
