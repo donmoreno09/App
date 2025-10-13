@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 
 import App.Themes 1.0
+import App.Features.Language 1.0
 
 
 GridView {
@@ -11,6 +12,8 @@ GridView {
     property int currentYear: new Date().getFullYear()
 
     signal monthSelected(int month)
+
+    readonly property var appLocale: Qt.locale(LanguageController.currentLanguage)
 
     model: 12
     cellWidth: width / 3
@@ -42,7 +45,7 @@ GridView {
 
         Text {
             anchors.centerIn: parent
-            text: Qt.locale().monthName(index, Locale.ShortFormat)
+            text: root.appLocale.monthName(index, Locale.ShortFormat)
             font.family: Theme.typography.familySans
             font.pixelSize: Theme.typography.fontSize150
             font.weight: Theme.typography.weightRegular

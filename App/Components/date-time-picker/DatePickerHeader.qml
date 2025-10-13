@@ -4,6 +4,7 @@ import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.Language 1.0
 
 Item {
     id: root
@@ -15,6 +16,8 @@ Item {
     signal previousClicked()
     signal nextClicked()
     signal headerClicked()
+
+    readonly property var appLocale: Qt.locale(LanguageController.currentLanguage)
 
     RowLayout {
         anchors.fill: parent
@@ -107,7 +110,7 @@ Item {
             case "month":
                 return currentYear.toString()
             case "calendar":
-                return Qt.locale().monthName(currentMonth) + " " + currentYear
+                return root.appLocale.monthName(currentMonth) + " " + currentYear
             default:
                 return ""
         }
