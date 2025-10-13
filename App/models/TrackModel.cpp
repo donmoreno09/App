@@ -76,8 +76,8 @@ void TrackModel::upsert(const QVector<Track> &tracks)
 
     // Update existing track or insert it
     for (const auto& track : tracks) {
-        seen.insert(track.code);
-        auto it = m_upsertMap.find(track.code);
+        seen.insert(track.trackUid);
+        auto it = m_upsertMap.find(track.trackUid);
 
         if (it != m_upsertMap.end()) {
             // Update track
@@ -95,7 +95,7 @@ void TrackModel::upsert(const QVector<Track> &tracks)
 
             beginInsertRows({}, row, row);
             m_tracks.append(track);
-            m_upsertMap.insert(track.code, row);
+            m_upsertMap.insert(track.trackUid, row);
             endInsertRows();
         }
     }
@@ -104,9 +104,9 @@ void TrackModel::upsert(const QVector<Track> &tracks)
     bool removed = false;
     for (int row = m_tracks.size() - 1; row >= 0; row--) {
         const auto& track = m_tracks[row];
-        if (!seen.contains(track.code)) {
+        if (!seen.contains(track.trackUid)) {
             beginRemoveRows({}, row, row);
-            m_upsertMap.remove(track.code);
+            m_upsertMap.remove(track.trackUid);
             m_tracks.removeAt(row);
             endRemoveRows();
             removed = true;
@@ -118,7 +118,7 @@ void TrackModel::upsert(const QVector<Track> &tracks)
         m_upsertMap.clear();
         m_upsertMap.reserve(m_tracks.size());
         for (int row = 0; row < m_tracks.size(); row++) {
-            m_upsertMap.insert(m_tracks[row].code, row);
+            m_upsertMap.insert(m_tracks[row].trackUid, row);
         }
     }
 }
