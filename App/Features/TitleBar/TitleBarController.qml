@@ -29,9 +29,11 @@ QtObject {
             case Routes.SliderTest: return qsTr("Slider Test")
             case Routes.ModalTest: return qsTr("Modal Test")
             case Routes.ButtonTest: return qsTr("Button Test")
-            case Routes.ArrivalContentTest: return qsTr("Arrival Content Test")
-            case Routes.ArrivalDateContentTest: return qsTr("Arrival Date Content Test")
-            case Routes.ArrivalDateTimeContentTest: return qsTr("Arrival DateTime Content Test")
+            case Routes.ArrivalContentTest: return qsTr("Arrival Content")
+            case Routes.ArrivalDateContentTest: return qsTr("Arrival Date Content")
+            case Routes.ArrivalDateTimeContentTest: return qsTr("Arrival DateTime Content")
+            case Routes.TrailerPredictionTest: return qsTr("Trailer Prediction")
+            case Routes.ViGateServicesTest: return qsTr("Leonardo Vi Gate Services")
             case Routes.NotFound: return qsTr("Not Found")
             }
         }
