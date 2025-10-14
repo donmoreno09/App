@@ -165,6 +165,8 @@ Rectangle {
                             Layout.fillWidth: true
                             Layout.minimumHeight: 120
                             is24Hour: root.is24Hour
+                            canIncrementHour: root._canIncrementStartHour()
+                            canIncrementMinute: root._canIncrementStartMinute()
 
                             Component.onCompleted: {
                                 selectedHour = root.selectedHour
@@ -220,6 +222,8 @@ Rectangle {
                             Layout.fillWidth: true
                             Layout.minimumHeight: 120
                             is24Hour: root.is24Hour
+                            canDecrementHour: root._canDecrementEndHour()
+                            canDecrementMinute: root._canDecrementEndMinute()
 
                             Component.onCompleted: {
                                 selectedHour = root.endHour
@@ -339,5 +343,49 @@ Rectangle {
 
     function _isEmpty(date) {
         return !date || isNaN(date.getTime())
+    }
+
+    function _canDecrementEndHour() {
+        if (mode !== "range") return true
+        if (_isEmpty(startDate) || _isEmpty(endDate)) return true
+        if (startDate.toDateString() !== endDate.toDateString()) return true
+
+        const startTime24 = is24Hour ? selectedHour : _to24Hour(selectedHour, selectedAMPM)
+        const endTime24 = is24Hour ? endHour : _to24Hour(endHour, endAMPM)
+
+        return (endTime24 * 60 + endMinute) > (startTime24 * 60 + selectedMinute + 1)
+    }
+
+    function _canDecrementEndMinute() {
+        if (mode !== "range") return true
+        if (_isEmpty(startDate) || _isEmpty(endDate)) return true
+        if (startDate.toDateString() !== endDate.toDateString()) return true
+
+        const startTime24 = is24Hour ? selectedHour : _to24Hour(selectedHour, selectedAMPM)
+        const endTime24 = is24Hour ? endHour : _to24Hour(endHour, endAMPM)
+
+        return (endTime24 * 60 + endMinute) > (startTime24 * 60 + selectedMinute)
+    }
+
+    function _canIncrementStartHour() {
+        if (mode !== "range") return true
+        if (_isEmpty(startDate) || _isEmpty(endDate)) return true
+        if (startDate.toDateString() !== endDate.toDateString()) return true
+
+        const startTime24 = is24Hour ? selectedHour : _to24Hour(selectedHour, selectedAMPM)
+        const endTime24 = is24Hour ? endHour : _to24Hour(endHour, endAMPM)
+
+        return (startTime24 * 60 + selectedMinute) < (endTime24 * 60 + endMinute - 1)
+    }
+
+    function _canIncrementStartMinute() {
+        if (mode !== "range") return true
+        if (_isEmpty(startDate) || _isEmpty(endDate)) return true
+        if (startDate.toDateString() !== endDate.toDateString()) return true
+
+        const startTime24 = is24Hour ? selectedHour : _to24Hour(selectedHour, selectedAMPM)
+        const endTime24 = is24Hour ? endHour : _to24Hour(endHour, endAMPM)
+
+        return (startTime24 * 60 + selectedMinute) < (endTime24 * 60 + endMinute)
     }
 }

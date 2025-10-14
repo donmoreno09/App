@@ -4,6 +4,7 @@ import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.Language 1.0
 
 ColumnLayout {
     id: root
@@ -25,9 +26,12 @@ ColumnLayout {
 
     spacing: Theme.spacing.s3
 
+    readonly property var appLocale: Qt.locale(LanguageController.currentLanguage)
+
     DayOfWeekRow {
         Layout.fillWidth: true
         Layout.preferredHeight: Theme.spacing.s6
+        locale: root.appLocale
 
         delegate: Text {
             text: shortName.substring(0, 3)
@@ -46,6 +50,7 @@ ColumnLayout {
         id: monthGrid
         Layout.fillWidth: true
         Layout.fillHeight: true
+        locale: root.appLocale
 
         month: root.currentMonth
         year: root.currentYear
