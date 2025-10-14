@@ -18,6 +18,7 @@ const ButtonTest = "button-test";
 const ArrivalContentTest = "arrival-content-test";
 const ArrivalDateContentTest = "arrival-date-content-test";
 const ArrivalDateTimeContentTest = "arrival-date-time-content-test";
+const TrailerPredictionTest = "trailer-prediction-test"
 const NotFound = "*";
 
 // Build the map using the constants
@@ -38,6 +39,7 @@ const routes = {
   [ArrivalContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml",
   [ArrivalDateContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDatePanel.qml",
   [ArrivalDateTimeContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml",
+  [TrailerPredictionTest] : "qrc:/App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml",
   [NotFound]: "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
 };
 

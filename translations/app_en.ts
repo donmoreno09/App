@@ -6,7 +6,7 @@
     <message>
         <location filename="../App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml" line="10"/>
         <source>Truck Arrivals</source>
-        <translation type="unfinished"></translation>
+        <translation>Truck Arrivals</translation>
     </message>
 </context>
 <context>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../App/Features/TruckArrivals/panels/ArrivalsDatePanel.qml" line="10"/>
         <source>Date Range Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Date Range Selection</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml" line="10"/>
         <source>Date Time Range Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Date Time Range Selection</translation>
     </message>
 </context>
 <context>
@@ -30,7 +30,7 @@
     <message>
         <location filename="../App/Playground/ButtonPanel.qml" line="11"/>
         <source>Button Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Button Test</translation>
     </message>
 </context>
 <context>
@@ -38,12 +38,12 @@
     <message>
         <location filename="../App/Components/date-time-picker/DatePickerActions.qml" line="40"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Clear</translation>
     </message>
     <message>
         <location filename="../App/Components/date-time-picker/DatePickerActions.qml" line="65"/>
         <source>Apply</source>
-        <translation type="unfinished">Apply</translation>
+        <translation>Apply</translation>
     </message>
 </context>
 <context>
@@ -64,12 +64,12 @@
     <message>
         <location filename="../App/Components/date-time-picker/DateTimePicker.qml" line="154"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Start</translation>
     </message>
     <message>
         <location filename="../App/Components/date-time-picker/DateTimePicker.qml" line="209"/>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>End</translation>
     </message>
 </context>
 <context>
@@ -77,83 +77,83 @@
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="12"/>
         <source>Date &amp; Time Picker Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Date &amp; Time Picker Test</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="168"/>
         <source>Date &amp; Time Picker Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Date &amp; Time Picker Components</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="433"/>
         <source>DateTime Selection (Combined)</source>
-        <translation type="unfinished"></translation>
+        <translation>DateTime Selection (Combined)</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="437"/>
         <source>Select Date &amp; Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Select Date &amp; Time</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="466"/>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="559"/>
         <source>Live Preview: </source>
-        <translation type="unfinished"></translation>
+        <translation>Live Preview: </translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="469"/>
         <source>Select date and time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Select date and time...</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="476"/>
         <source>Applied: </source>
-        <translation type="unfinished"></translation>
+        <translation>Applied: </translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="484"/>
         <source>Selection cleared</source>
-        <translation type="unfinished"></translation>
+        <translation>Selection cleared</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="494"/>
         <source>No datetime selected</source>
-        <translation type="unfinished"></translation>
+        <translation>No datetime selected</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="506"/>
         <source>DateTime Range Selection (Combined)</source>
-        <translation type="unfinished"></translation>
+        <translation>DateTime Range Selection (Combined)</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="510"/>
         <source>Select Date &amp; Time Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Select Date &amp; Time Range</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="566"/>
         <source>Start date selected, choose end date...</source>
-        <translation type="unfinished"></translation>
+        <translation>Start date selected, choose end date...</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="568"/>
         <source>Select date range and time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Select date range and time...</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="577"/>
         <source>Applied Range: </source>
-        <translation type="unfinished"></translation>
+        <translation>Applied Range: </translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="587"/>
         <source>Range selection cleared</source>
-        <translation type="unfinished"></translation>
+        <translation>Range selection cleared</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="597"/>
         <source>No datetime range selected</source>
-        <translation type="unfinished"></translation>
+        <translation>No datetime range selected</translation>
     </message>
 </context>
 <context>
@@ -310,12 +310,12 @@
     <message>
         <location filename="../App/Features/Language/LanguagePanel.qml" line="24"/>
         <source>Italian</source>
-        <translation type="unfinished">Italian</translation>
+        <translation>Italian</translation>
     </message>
     <message>
         <location filename="../App/Features/Language/LanguagePanel.qml" line="32"/>
         <source>English</source>
-        <translation type="unfinished">English</translation>
+        <translation>English</translation>
     </message>
 </context>
 <context>
@@ -323,22 +323,22 @@
     <message>
         <location filename="../App/layers/LayersPanel.qml" line="13"/>
         <source>Map Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Map Layers</translation>
     </message>
     <message>
         <location filename="../App/layers/LayersPanel.qml" line="39"/>
         <source>AIS Map Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>AIS Map Layer</translation>
     </message>
     <message>
         <location filename="../App/layers/LayersPanel.qml" line="48"/>
         <source>Doc-Space Map Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Doc-Space Map Layer</translation>
     </message>
     <message>
         <location filename="../App/layers/LayersPanel.qml" line="57"/>
         <source>TIR Map Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>TIR Map Layer</translation>
     </message>
 </context>
 <context>
@@ -362,17 +362,17 @@
     <message>
         <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="11"/>
         <source>Map Tilesets</source>
-        <translation type="unfinished"></translation>
+        <translation>Map Tilesets</translation>
     </message>
     <message>
         <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="23"/>
         <source>Online OSM</source>
-        <translation type="unfinished"></translation>
+        <translation>Online OSM</translation>
     </message>
     <message>
         <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="32"/>
         <source>Default OSM</source>
-        <translation type="unfinished"></translation>
+        <translation>Default OSM</translation>
     </message>
 </context>
 <context>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../App/Playground/ModalPanel.qml" line="11"/>
         <source>Modal Dialog Stack Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Modal Dialog Stack Test</translation>
     </message>
 </context>
 <context>
@@ -570,7 +570,7 @@
     <message>
         <location filename="../App/Playground/OverlayPanel.qml" line="11"/>
         <source>Overlay Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Overlay Test</translation>
     </message>
 </context>
 <context>
@@ -578,23 +578,23 @@
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="33"/>
         <source>Next Hour</source>
-        <translation type="unfinished"></translation>
+        <translation>Next Hour</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="34"/>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="42"/>
         <source> trucks</source>
-        <translation type="unfinished"></translation>
+        <translation> trucks</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="41"/>
         <source>Today</source>
-        <translation type="unfinished"></translation>
+        <translation>Today</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="56"/>
         <source>Fetch Arrivals</source>
-        <translation type="unfinished"></translation>
+        <translation>Fetch Arrivals</translation>
     </message>
 </context>
 <context>
@@ -602,27 +602,27 @@
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateContent.qml" line="43"/>
         <source>Selected: %1 — %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Selected: %1 — %2</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateContent.qml" line="46"/>
         <source>Select a date range</source>
-        <translation type="unfinished"></translation>
+        <translation>Select a date range</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateContent.qml" line="53"/>
         <source>Arrivals in range</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrivals in range</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateContent.qml" line="54"/>
         <source> trucks</source>
-        <translation type="unfinished"></translation>
+        <translation> trucks</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateContent.qml" line="66"/>
         <source>Fetch Arrivals</source>
-        <translation type="unfinished"></translation>
+        <translation>Fetch Arrivals</translation>
     </message>
 </context>
 <context>
@@ -630,27 +630,27 @@
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="47"/>
         <source>Selected: %1 — %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Selected: %1 — %2</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="50"/>
         <source>Select a date &amp; time range</source>
-        <translation type="unfinished"></translation>
+        <translation>Select a date &amp; time range</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="56"/>
         <source>Arriving Trucks</source>
-        <translation type="unfinished"></translation>
+        <translation>Arriving Trucks</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="57"/>
         <source> trucks</source>
-        <translation type="unfinished"></translation>
+        <translation> trucks</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="66"/>
         <source>Fetch Arrivals</source>
-        <translation type="unfinished"></translation>
+        <translation>Fetch Arrivals</translation>
     </message>
 </context>
 <context>
@@ -666,38 +666,43 @@
         <translation>Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="131"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="67"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Layers</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="140"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="76"/>
         <source>Truck Arrivals</source>
-        <translation type="unfinished"></translation>
+        <translation>Truck Arrivals</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="149"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="85"/>
         <source>Truck Arrivals Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Truck Arrivals Date</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="158"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="94"/>
         <source>Truck Arrivals DT</source>
-        <translation type="unfinished"></translation>
+        <translation>Truck Arrivals DT</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="169"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="103"/>
+        <source>Trailer Prediction</source>
+        <translation>Trailer Prediction</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="114"/>
         <source>Languages</source>
-        <translation type="unfinished">Languages</translation>
+        <translation>Languages</translation>
     </message>
     <message>
         <source>Language</source>
         <translation type="vanished">Language</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="180"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="125"/>
         <source>Tilesets</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilesets</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="59"/>
@@ -710,7 +715,7 @@
     <message>
         <location filename="../App/Playground/SliderPanel.qml" line="11"/>
         <source>Slider Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Slider Test</translation>
     </message>
 </context>
 <context>
@@ -731,7 +736,7 @@
     <message>
         <location filename="../App/Playground/SwitcherPanel.qml" line="11"/>
         <source>Switcher Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Switcher Test</translation>
     </message>
 </context>
 <context>
@@ -739,7 +744,7 @@
     <message>
         <location filename="../App/Playground/TextAreaPanel.qml" line="11"/>
         <source>TextArea Test</source>
-        <translation type="unfinished"></translation>
+        <translation>TextArea Test</translation>
     </message>
 </context>
 <context>
@@ -747,17 +752,17 @@
     <message>
         <location filename="../App/Components/date-time-picker/TimePicker.qml" line="133"/>
         <source>Hour</source>
-        <translation type="unfinished"></translation>
+        <translation>Hour</translation>
     </message>
     <message>
         <location filename="../App/Components/date-time-picker/TimePicker.qml" line="144"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>Min</translation>
     </message>
     <message>
         <location filename="../App/Components/date-time-picker/TimePicker.qml" line="158"/>
         <source>AM/PM</source>
-        <translation type="unfinished"></translation>
+        <translation>AM/PM</translation>
     </message>
 </context>
 <context>
@@ -794,99 +799,104 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="40"/>
         <source>Overview</source>
         <translation>Overview</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="22"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="18"/>
         <source>Languages</source>
         <translation>Languages</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="23"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="19"/>
         <source>Mission</source>
         <translation>Mission</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="24"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="20"/>
         <source>Pod</source>
         <translation>Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="25"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="21"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="26"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="22"/>
         <source>Map Tilesets</source>
-        <translation type="unfinished"></translation>
+        <translation>Map Tilesets</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="23"/>
+        <source>Map Layers</source>
+        <translation>Map Layers</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="24"/>
+        <source>DateTime Test</source>
+        <translation>DateTime Test</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="25"/>
+        <source>Toggle Test</source>
+        <translation>Toggle Test</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="26"/>
+        <source>TextArea Test</source>
+        <translation>TextArea Test</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="27"/>
-        <source>Map Layers</source>
-        <translation type="unfinished"></translation>
+        <source>Overlay Test</source>
+        <translation>Overlay Test</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="28"/>
-        <source>DateTime Test</source>
-        <translation type="unfinished"></translation>
+        <source>Switcher Test</source>
+        <translation>Switcher Test</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="29"/>
-        <source>Toggle Test</source>
-        <translation type="unfinished"></translation>
+        <source>Slider Test</source>
+        <translation>Slider Test</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="30"/>
-        <source>TextArea Test</source>
-        <translation type="unfinished"></translation>
+        <source>Modal Test</source>
+        <translation>Modal Test</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="31"/>
-        <source>Overlay Test</source>
-        <translation type="unfinished"></translation>
+        <source>Button Test</source>
+        <translation>Button Test</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="32"/>
-        <source>Switcher Test</source>
-        <translation type="unfinished"></translation>
+        <source>Arrival Content</source>
+        <translation>Arrival Content</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="33"/>
-        <source>Slider Test</source>
-        <translation type="unfinished"></translation>
+        <source>Arrival Date Content</source>
+        <translation>Arrival Date Content</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="34"/>
-        <source>Modal Test</source>
-        <translation type="unfinished"></translation>
+        <source>Arrival DateTime Content</source>
+        <translation>Arrival DateTime Content</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="35"/>
-        <source>Button Test</source>
-        <translation type="unfinished"></translation>
+        <source>Trailer Predictions</source>
+        <translation>Trailer Predictions</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="36"/>
-        <source>Arrival Content Test</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="37"/>
-        <source>Arrival Date Content Test</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="38"/>
-        <source>Arrival DateTime Content Test</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="39"/>
         <source>Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>Not Found</translation>
     </message>
 </context>
 <context>
@@ -913,7 +923,83 @@
     <message>
         <location filename="../App/Playground/TogglePanel.qml" line="11"/>
         <source>Toggle Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Toggle Test</translation>
+    </message>
+</context>
+<context>
+    <name>TrailersPredictionsContent</name>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="34"/>
+        <source>Trailer ID</source>
+        <translation>Trailer ID</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="35"/>
+        <source>Enter ID</source>
+        <translation>Enter ID</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="51"/>
+        <source>Calculate Prediction</source>
+        <translation>Calculate Prediction</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="73"/>
+        <source>Estimated Time</source>
+        <translation>Estimated Time</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="97"/>
+        <source>No data available</source>
+        <translation>No data available</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="111"/>
+        <source>Ready</source>
+        <translation>Ready</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="112"/>
+        <source> min</source>
+        <translation> min</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="119"/>
+        <source> hours</source>
+        <translation> hours</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="120"/>
+        <source> hour</source>
+        <translation> hour</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="126"/>
+        <source>Immediate access to the bay</source>
+        <translation>Immediate access to the bay</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="127"/>
+        <source>Short wait - entry soon</source>
+        <translation>Short wait - entry soon</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="128"/>
+        <source>In queue - moderate wait</source>
+        <translation>In queue - moderate wait</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="129"/>
+        <source>Extended wait - consider alternatives</source>
+        <translation>Extended wait - consider alternatives</translation>
+    </message>
+</context>
+<context>
+    <name>TrailersPredictionsPanel</name>
+    <message>
+        <location filename="../App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml" line="10"/>
+        <source>Waiting Time Prediction</source>
+        <translation>Waiting Time Prediction</translation>
     </message>
 </context>
 <context>

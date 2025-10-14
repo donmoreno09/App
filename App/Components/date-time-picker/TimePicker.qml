@@ -5,30 +5,28 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-/*!
-    \qmltype TimePicker
-*/
-
 Rectangle {
     id: root
 
-    // Public API
     property bool is24Hour: true
     property int selectedHour: 12
     property int selectedMinute: 0
-    property bool selectedAMPM: true // true = AM, false = PM
+    property bool selectedAMPM: true
 
-    property bool standalone: true  // Set to false when used inside containers
+    property bool standalone: true
 
-    // Signals
     signal timeSelected(int hour, int minute, bool isAM)
 
-    width: standalone ? 280 : parent.width
-    height: standalone ? 110 : parent.height
+    property bool canDecrementHour: true
+    property bool canDecrementMinute: true
+    property bool canIncrementHour: true
+    property bool canIncrementMinute: true
+
+    Layout.minimumWidth: standalone ? 280 : parent.width
+    Layout.minimumHeight: standalone ? 110 : parent.height
     color: Theme.colors.primary800
     radius: standalone ? Theme.radius.md : 0
 
-    // Time column component - made more compact
     component TimeColumn: ColumnLayout {
         property string label: ""
         property string displayValue: ""
@@ -39,7 +37,6 @@ Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 110
 
-        // Up arrow - flexible size
         UI.Button {
             Layout.preferredWidth: 40
             Layout.fillHeight: true
@@ -60,11 +57,10 @@ Rectangle {
             onClicked: upClicked()
         }
 
-        // Display value - flexible size
         Rectangle {
             Layout.preferredWidth: 40
-            Layout.fillHeight: true  // CHANGED: flexible height
-            Layout.minimumHeight: 30  // Minimum for readability
+            Layout.fillHeight: true
+            Layout.minimumHeight: 30
             color: Theme.colors.transparent
             radius: Theme.radius.sm
 
@@ -78,7 +74,6 @@ Rectangle {
             }
         }
 
-        // Down arrow - flexible size
         UI.Button {
             Layout.preferredWidth: 40
             Layout.fillHeight: true
@@ -100,7 +95,6 @@ Rectangle {
         }
     }
 
-    // Separator component
     component TimeSeparator: Text {
         Layout.preferredWidth: 8
         Layout.alignment: Qt.AlignVCenter
@@ -115,10 +109,9 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: standalone ? Theme.spacing.s4 : 0  // No margins when embedded
-        spacing: standalone ? Theme.spacing.s3 : 0  // No extra spacing when embedded
+        anchors.margins: standalone ? Theme.spacing.s4 : 0
+        spacing: standalone ? Theme.spacing.s3 : 0
 
-        // Time selection area - flexible height
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -128,31 +121,26 @@ Rectangle {
                 anchors.centerIn: parent
                 spacing: root.is24Hour ? Theme.spacing.s4 : Theme.spacing.s2
 
-                // Hour column
                 TimeColumn {
                     label: qsTr("Hour")
                     displayValue: root.selectedHour.toString().padStart(2, '0')
-                    onUpClicked: root._incrementHour()
-                    onDownClicked: root._decrementHour()
+                    onUpClicked: if(root.canIncrementHour) root._incrementHour()
+                    onDownClicked: if (root.canDecrementHour) root._decrementHour()
                 }
 
-                // First separator
                 TimeSeparator {}
 
-                // Minute column
                 TimeColumn {
                     label: qsTr("Min")
                     displayValue: root.selectedMinute.toString().padStart(2, '0')
-                    onUpClicked: root._incrementMinute()
-                    onDownClicked: root._decrementMinute()
+                    onUpClicked: if(root.canIncrementMinute) root._incrementMinute()
+                    onDownClicked: if (root.canDecrementMinute) root._decrementMinute()
                 }
 
-                // Second separator (12H mode only)
                 TimeSeparator {
                     visible: !root.is24Hour
                 }
 
-                // AM/PM column (12H mode only)
                 TimeColumn {
                     visible: !root.is24Hour
                     label: qsTr("AM/PM")
@@ -179,7 +167,6 @@ Rectangle {
         setCurrentTime()
     }
 
-    // Helper functions - unchanged
     function _incrementHour() {
         selectedHour = is24Hour ? (selectedHour + 1) % 24 :
                      selectedHour >= 12 ? 1 : selectedHour + 1
