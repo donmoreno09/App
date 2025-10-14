@@ -85,41 +85,35 @@ PanelTemplate {
                     anchors.margins: Theme.spacing.s4
                     spacing: Theme.spacing.s2
 
-                    Label {
-                        text: track.cog
+
+                    Repeater {
+                        model: [
+                            { label: "Name", value: track.code },
+                            { label: "Latitude", value: track.pos },
+                            { label: "Longitude", value: track.pos },
+                            { label: "Timestamp", value: track.time },
+                            { label: "Heading", value: track.cog },
+                            { label: "Speed", value: track.vel }
+                        ]
+
+                        delegate: ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: Theme.spacing.s1
+
+                            Label {
+                                text: modelData.label.toUpperCase()
+                                font.bold: true
+                            }
+
+                            Label {
+                                text: {
+                                    if (!modelData.value)
+                                        return "-"
+                                    return formatValue(modelData.label, modelData.value)
+                                }
+                            }
+                        }
                     }
-
-                    // Repeater {
-                    //     model: [
-                    //         { label: "Name", role: TrackModel.CodeRole },
-                    //         { label: "Latitude", role: TrackModel.PosRole },
-                    //         { label: "Longitude", role: TrackModel.PosRole },
-                    //         { label: "Timestamp", role: TrackModel.TimeRole },
-                    //         { label: "Heading", role: TrackModel.CogRole },
-                    //         { label: "Speed", role: TrackModel.VelRole }
-                    //     ]
-
-                    //     delegate: ColumnLayout {
-                    //         Layout.fillWidth: true
-                    //         spacing: Theme.spacing.s1
-
-                    //         Label {
-                    //             text: modelData.label.toUpperCase()
-                    //             font.bold: true
-                    //         }
-
-                    //         Label {
-                    //             text: {
-                    //                 if (!SelectedTrackState.model)
-                    //                     return "-"
-                    //                 const v = SelectedTrackState.model.getRoleData(
-                    //                             SelectedTrackState.index,
-                    //                             modelData.role)
-                    //                 return formatValue(modelData.label, v)
-                    //             }
-                    //         }
-                    //     }
-                    // }
                 }
                 height: infoColumn.implicitHeight + Theme.spacing.s8 * 2
             }
