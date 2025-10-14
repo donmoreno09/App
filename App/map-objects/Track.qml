@@ -12,6 +12,8 @@ MapQuickItem {
     required property int trackNumber
 
     coordinate: track.pos
+    anchorPoint.x: sourceItem.width / 2
+    anchorPoint.y: sourceItem.height / 2
 
     sourceItem: Item {
         id: trackRect
@@ -19,20 +21,9 @@ MapQuickItem {
         height: 40
         opacity: track.state === 1 ? 0.5 : 1.0
 
-        // COG direction vector (track heading line)
-        Rectangle {
-            id: cogLine
-            width: 2
-            height: 40  // Length of the heading vector
-            color: "black"
-            x: trackRect.width / 2 - width / 2
-            y: trackRect.height / 2 - height
-
-            transform: Rotation {
-                origin.x: cogLine.width / 2
-                origin.y: cogLine.height
-                angle: track.cog
-            }
+        TriangleHeading {
+            heading: track.cog
+            centerItem: image
         }
 
         Image {
