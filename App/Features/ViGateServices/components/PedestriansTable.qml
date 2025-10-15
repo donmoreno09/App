@@ -22,92 +22,84 @@ GroupBox {
             color: Theme.colors.surface
             radius: Theme.radius.sm
 
-            Row {
+            RowLayout {
                 anchors.fill: parent
                 anchors.margins: Theme.spacing.s2
-                spacing: 0
+                spacing: Theme.spacing.s2
 
                 Text {
-                    width: 200
                     text: qsTr("Start Date")
                     font.family: Theme.typography.familySans
                     font.weight: Theme.typography.weightSemibold
                     color: Theme.colors.text
                     verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 2
                 }
+
                 Text {
-                    width: parent.width - 200 // remaining space
                     text: qsTr("Direction")
                     font.family: Theme.typography.familySans
                     font.weight: Theme.typography.weightSemibold
                     color: Theme.colors.text
                     verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1
                 }
             }
         }
 
         // TableView
-        TableView {
-            id: tableView
+        ScrollView {
             Layout.fillWidth: true
             Layout.preferredHeight: 180
             clip: true
 
-            model: root.model
+            ListView {
+                model: root.model
+                spacing: Theme.spacing.s0_5
 
-            columnSpacing: 0
-            rowSpacing: Theme.spacing.s0_5
+                delegate: Rectangle {
+                    required property int index
+                    required property string startDate
+                    required property string direction
 
-            // Column widths
-            columnWidthProvider: function(column) {
-                switch(column) {
-                    case 0: return 200  // Start Date
-                    case 1: return tableView.width - 200  // Direction (fill remaining)
-                    default: return 100
-                }
-            }
+                    width: ListView.view.width
+                    height: Theme.spacing.s8
+                    color: Theme.colors.transparent
+                    radius: Theme.radius.xs
 
-            rowHeightProvider: function(row) {
-                return Theme.spacing.s8
-            }
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.margins: Theme.spacing.s2
+                        spacing: Theme.spacing.s2
 
-            delegate: Rectangle {
-                required property int row
-                required property int column
-                required property var model
+                        Text {
+                            text: startDate || "-"
+                            font.family: Theme.typography.familySans
+                            color: Theme.colors.text
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            elide: Text.ElideRight
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 2
+                        }
 
-                implicitWidth: tableView.columnWidthProvider(column)
-                implicitHeight: Theme.spacing.s8
-
-                color: row % 2 === 0 ? Theme.colors.surface : Theme.colors.transparent
-                radius: Theme.radius.xs
-
-                Text {
-                    anchors.fill: parent
-                    anchors.leftMargin: Theme.spacing.s2
-                    verticalAlignment: Text.AlignVCenter
-
-                    text: {
-                        switch(column) {
-                            case 0: return model.startDate || "-"
-                            case 1: return model.direction || "-"
-                            default: return ""
+                        Text {
+                            text: direction || "-"
+                            font.family: Theme.typography.familySans
+                            font.weight: Theme.typography.weightMedium
+                            color: direction === "IN" ? Theme.colors.success : Theme.colors.warning
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            elide: Text.ElideRight
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 1
                         }
                     }
-
-                    font.family: Theme.typography.familySans
-                    color: column === 1
-                        ? (model.direction === "IN" ? Theme.colors.success : Theme.colors.warning)
-                        : Theme.colors.text
-                    font.weight: column === 1
-                        ? Theme.typography.weightMedium
-                        : Theme.typography.weightRegular
-                    elide: Text.ElideRight
                 }
-            }
-
-            ScrollBar.vertical: ScrollBar {
-                policy: ScrollBar.AsNeeded
             }
         }
     }

@@ -9,89 +9,107 @@ GroupBox {
 
     required property var controller
 
-    GridLayout {
+    ScrollView {
         anchors.fill: parent
         anchors.margins: Theme.spacing.s3
-        columns: 2
-        rowSpacing: Theme.spacing.s2
-        columnSpacing: Theme.spacing.s4
+        clip: true
 
-        // Total Entries
-        Text {
-            text: qsTr("Total Entries")
-            font.family: Theme.typography.familySans
-            color: Theme.colors.textMuted
-        }
-        Text {
-            text: controller.totalEntries
-            font.family: Theme.typography.familySans
-            font.weight: Theme.typography.weightSemibold
-            color: Theme.colors.text
-        }
+        GridLayout {
+            anchors.fill: parent
+            anchors.margins: Theme.spacing.s3
+            columns: 2
+            rowSpacing: Theme.spacing.s2
+            columnSpacing: Theme.spacing.s4
 
-        // Total Exits
-        Text {
-            text: qsTr("Total Exits")
-            font.family: Theme.typography.familySans
-            color: Theme.colors.textMuted
-        }
-        Text {
-            text: controller.totalExits
-            font.family: Theme.typography.familySans
-            font.weight: Theme.typography.weightSemibold
-            color: Theme.colors.text
-        }
-
-        // Vehicle Entries
-        Text {
-            text: qsTr("Vehicle Entries")
-            font.family: Theme.typography.familySans
-            color: Theme.colors.textMuted
-        }
-        Text {
-            text: controller.totalVehicleEntries
-            font.family: Theme.typography.familySans
-            font.weight: Theme.typography.weightSemibold
-            color: Theme.colors.text
-        }
-
-        // Vehicle Exits
-        Text {
-            text: qsTr("Vehicle Exits")
-            font.family: Theme.typography.familySans
-            color: Theme.colors.textMuted
-        }
-        Text {
-            text: controller.totalVehicleExits
-            font.family: Theme.typography.familySans
-            font.weight: Theme.typography.weightSemibold
-            color: Theme.colors.text
-        }
-
-        // Pedestrian Entries
-        Text {
-            text: qsTr("Pedestrian Entries")
-            font.family: Theme.typography.familySans
-            color: Theme.colors.textMuted
-                    }
-                    Text {
-                        text: controller.totalPedestrianEntries
-                        font.family: Theme.typography.familySans
-                        font.weight: Theme.typography.weightSemibold
-                        color: Theme.colors.text
-                    }
-
-                    // Pedestrian Exits
-                    Text {
-                        text: qsTr("Pedestrian Exits")
-                        font.family: Theme.typography.familySans
-                        color: Theme.colors.textMuted
-                    }
-                    Text {
-                        text: controller.totalPedestrianExits
-                        font.family: Theme.typography.familySans
-                        font.weight: Theme.typography.weightSemibold
-                        color: Theme.colors.text
-                    }
-                }
+            // Total Entries
+            Text {
+                text: qsTr("Total Entries")
+                font.family: Theme.typography.familySans
+                color: Theme.colors.textMuted
+                Layout.fillWidth: true
             }
+            Text {
+                text: controller.totalEntries
+                font.family: Theme.typography.familySans
+                font.weight: Theme.typography.weightSemibold
+                color: Theme.colors.text
+                Layout.alignment: Qt.AlignRight
+            }
+
+            // Total Exits
+            Text {
+                text: qsTr("Total Exits")
+                font.family: Theme.typography.familySans
+                color: Theme.colors.textMuted
+                Layout.fillWidth: true
+            }
+            Text {
+                text: controller.totalExits
+                font.family: Theme.typography.familySans
+                font.weight: Theme.typography.weightSemibold
+                color: Theme.colors.text
+                Layout.alignment: Qt.AlignRight
+            }
+
+            // Vehicle Entries
+            Text {
+                text: qsTr("Vehicle Entries")
+                font.family: Theme.typography.familySans
+                color: Theme.colors.textMuted
+                Layout.fillWidth: true
+            }
+            Text {
+                text: controller.totalVehicleEntries
+                font.family: Theme.typography.familySans
+                font.weight: Theme.typography.weightSemibold
+                color: Theme.colors.text
+                Layout.alignment: Qt.AlignRight
+            }
+
+            // Vehicle Exits
+            Text {
+                text: qsTr("Vehicle Exits")
+                font.family: Theme.typography.familySans
+                color: Theme.colors.textMuted
+                Layout.fillWidth: true
+            }
+            Text {
+                text: controller.totalVehicleExits
+                font.family: Theme.typography.familySans
+                font.weight: Theme.typography.weightSemibold
+                color: Theme.colors.text
+                Layout.alignment: Qt.AlignRight
+            }
+
+            // Pedestrian Entries
+            Text {
+                text: qsTr("Pedestrian Entries")
+                font.family: Theme.typography.familySans
+                color: Theme.colors.textMuted
+                Layout.fillWidth: true
+            }
+            Text {
+                text: controller.totalPedestrianEntries
+                font.family: Theme.typography.familySans
+                font.weight: Theme.typography.weightSemibold
+                color: Theme.colors.text
+                Layout.alignment: Qt.AlignRight
+            }
+
+            // Pedestrian Exits
+            Text {
+                text: qsTr("Pedestrian Exits")
+                font.family: Theme.typography.familySans
+                color: Theme.colors.textMuted
+                Layout.fillWidth: true
+            }
+            Text {
+                text: controller.totalPedestrianExits
+                font.family: Theme.typography.familySans
+                font.weight: Theme.typography.weightSemibold
+                color: Theme.colors.text
+                Layout.alignment: Qt.AlignRight
+            }
+        }
+    }
+}
