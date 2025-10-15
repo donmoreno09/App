@@ -148,13 +148,13 @@ ColumnLayout {
         }
 
         VehiclesTable {
-            visible: vehiclesToggle.checked && root.controller.vehiclesModel.rowCount() > 0
+            visible: vehiclesToggle.checked
             Layout.fillWidth: true
             model: root.controller.vehiclesModel
         }
 
         PedestriansTable {
-            visible:  pedestriansToggle.checked && root.controller.pedestriansModel.rowCount() > 0
+            visible:  pedestriansToggle.checked
             Layout.fillWidth: true
             model: root.controller.pedestriansModel
         }
