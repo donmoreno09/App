@@ -1,96 +1,97 @@
 import QtQuick 6.8
 import QtQuick.Layouts 6.8
 import QtQuick.Controls 6.8
-import App.Features.ViGateServices 1.0
+import App.Themes 1.0
 
 GroupBox {
     title: qsTr("Summary")
     Layout.fillWidth: true
 
+    required property var controller
+
     GridLayout {
         anchors.fill: parent
-        anchors.margins: 8
+        anchors.margins: Theme.spacing.s3
         columns: 2
-        columnSpacing: 12
-        rowSpacing: 4
+        rowSpacing: Theme.spacing.s2
+        columnSpacing: Theme.spacing.s4
 
-        // Header
-        Label {
-            text: qsTr("Metric")
-            font.bold: true
-            Layout.fillWidth: true
-        }
-        Label {
-            text: qsTr("Value")
-            font.bold: true
-            Layout.fillWidth: true
-        }
-
-        // Rows
-        Label {
+        // Total Entries
+        Text {
             text: qsTr("Total Entries")
-            opacity: 0.7
-            Layout.fillWidth: true
+            font.family: Theme.typography.familySans
+            color: Theme.colors.textMuted
         }
-        Label {
-            text: ViGateStore.totalEntries
-            font.bold: true
-            Layout.fillWidth: true
+        Text {
+            text: controller.totalEntries
+            font.family: Theme.typography.familySans
+            font.weight: Theme.typography.weightSemibold
+            color: Theme.colors.text
         }
 
-        Label {
+        // Total Exits
+        Text {
             text: qsTr("Total Exits")
-            opacity: 0.7
-            Layout.fillWidth: true
+            font.family: Theme.typography.familySans
+            color: Theme.colors.textMuted
         }
-        Label {
-            text: ViGateStore.totalExits
-            font.bold: true
-            Layout.fillWidth: true
+        Text {
+            text: controller.totalExits
+            font.family: Theme.typography.familySans
+            font.weight: Theme.typography.weightSemibold
+            color: Theme.colors.text
         }
 
-        Label {
+        // Vehicle Entries
+        Text {
             text: qsTr("Vehicle Entries")
-            opacity: 0.7
-            Layout.fillWidth: true
+            font.family: Theme.typography.familySans
+            color: Theme.colors.textMuted
         }
-        Label {
-            text: ViGateStore.totalVehicleEntries
-            font.bold: true
-            Layout.fillWidth: true
+        Text {
+            text: controller.totalVehicleEntries
+            font.family: Theme.typography.familySans
+            font.weight: Theme.typography.weightSemibold
+            color: Theme.colors.text
         }
 
-        Label {
+        // Vehicle Exits
+        Text {
             text: qsTr("Vehicle Exits")
-            opacity: 0.7
-            Layout.fillWidth: true
+            font.family: Theme.typography.familySans
+            color: Theme.colors.textMuted
         }
-        Label {
-            text: ViGateStore.totalVehicleExits
-            font.bold: true
-            Layout.fillWidth: true
-        }
-
-        Label {
-            text: qsTr("Ped Entries")
-            opacity: 0.7
-            Layout.fillWidth: true
-        }
-        Label {
-            text: ViGateStore.totalPedestrianEntries
-            font.bold: true
-            Layout.fillWidth: true
+        Text {
+            text: controller.totalVehicleExits
+            font.family: Theme.typography.familySans
+            font.weight: Theme.typography.weightSemibold
+            color: Theme.colors.text
         }
 
-        Label {
-            text: qsTr("Ped Exits")
-            opacity: 0.7
-            Layout.fillWidth: true
-        }
-        Label {
-            text: ViGateStore.totalPedestrianExits
-            font.bold: true
-            Layout.fillWidth: true
-        }
-    }
-}
+        // Pedestrian Entries
+        Text {
+            text: qsTr("Pedestrian Entries")
+            font.family: Theme.typography.familySans
+            color: Theme.colors.textMuted
+                    }
+                    Text {
+                        text: controller.totalPedestrianEntries
+                        font.family: Theme.typography.familySans
+                        font.weight: Theme.typography.weightSemibold
+                        color: Theme.colors.text
+                    }
+
+                    // Pedestrian Exits
+                    Text {
+                        text: qsTr("Pedestrian Exits")
+                        font.family: Theme.typography.familySans
+                        color: Theme.colors.textMuted
+                    }
+                    Text {
+                        text: controller.totalPedestrianExits
+                        font.family: Theme.typography.familySans
+                        font.weight: Theme.typography.weightSemibold
+                        color: Theme.colors.text
+                    }
+                }
+            }

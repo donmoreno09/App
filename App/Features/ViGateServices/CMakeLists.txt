@@ -9,7 +9,7 @@ set(qml_files
 )
 
 set(qml_singletons
-    store/ViGateStore.qml
+    # store/ViGateStore.qml - replaced by C++ controller
 )
 
 set_source_files_properties(
@@ -18,6 +18,14 @@ set_source_files_properties(
 )
 
 set(cpp_sources
+    ViGateController.cpp
+    ViGateController.h
+    services/ViGateService.cpp
+    services/ViGateService.h
+    models/VehicleModel.cpp
+    models/VehicleModel.h
+    models/PedestrianModel.cpp
+    models/PedestrianModel.h
 )
 
 qt_add_qml_module(app_features_vigateservices
@@ -29,4 +37,12 @@ qt_add_qml_module(app_features_vigateservices
     SOURCES ${cpp_sources}
     RESOURCE_PREFIX "/"
     RESOURCES ${icon_resources}
+    SOURCES models/VehicleModel.h models/VehicleModel.cpp
+    SOURCES models/PedestrianModel.h models/PedestrianModel.cpp
+    SOURCES ViGateController.h ViGateController.cpp
+)
+
+target_link_libraries(app_features_vigateservices
+    PRIVATE
+        Qt6::Network
 )

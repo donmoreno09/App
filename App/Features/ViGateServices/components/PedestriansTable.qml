@@ -1,69 +1,113 @@
 import QtQuick 6.8
 import QtQuick.Layouts 6.8
 import QtQuick.Controls 6.8
-import App.Features.ViGateServices 1.0
+import App.Themes 1.0
 
 GroupBox {
     id: root
     title: qsTr("Pedestrians")
     Layout.fillWidth: true
 
+    required property var model
+
     ColumnLayout {
-        id: mainLayout
         anchors.fill: parent
-        anchors.margins: 8
-        spacing: 0
+        anchors.margins: Theme.spacing.s2
+        spacing: Theme.spacing.s2
 
         // Header
-        GridLayout {
-            id: headerGrid
+        Rectangle {
             Layout.fillWidth: true
-            columns: 2
-            columnSpacing: 12
-            rowSpacing: 4
+            height: Theme.spacing.s8
+            color: Theme.colors.surface
+            radius: Theme.radius.sm
 
-            Label {
-                text: qsTr("Start Date")
-                font.bold: true
-                Layout.preferredWidth: 200
-            }
-            Label {
-                text: qsTr("Direction")
-                font.bold: true
-                Layout.fillWidth: true
+            Row {
+                anchors.fill: parent
+                anchors.margins: Theme.spacing.s2
+                spacing: 0
+
+                Text {
+                    width: 200
+                    text: qsTr("Start Date")
+                    font.family: Theme.typography.familySans
+                    font.weight: Theme.typography.weightSemibold
+                    color: Theme.colors.text
+                    verticalAlignment: Text.AlignVCenter
+                }
+                Text {
+                    width: parent.width - 200 // remaining space
+                    text: qsTr("Direction")
+                    font.family: Theme.typography.familySans
+                    font.weight: Theme.typography.weightSemibold
+                    color: Theme.colors.text
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
         }
 
-        // Scrollable content
-        ScrollView {
+        // TableView
+        TableView {
+            id: tableView
             Layout.fillWidth: true
-            Layout.fillHeight: true
             Layout.preferredHeight: 180
             clip: true
 
-            ListView {
-                spacing: 2
-                model: ViGateStore.pedestrians
+            model: root.model
 
-                delegate: GridLayout {
-                    width: ListView.view.width
-                    columns: 2
-                    columnSpacing: 12
-                    rowSpacing: 4
+            columnSpacing: 0
+            rowSpacing: Theme.spacing.s0_5
 
-                    required property var modelData
-
-                    Label {
-                        text: modelData.startDate
-                        Layout.preferredWidth: 200
-                        elide: Text.ElideRight
-                    }
-                    Label {
-                        text: modelData.direction
-                        Layout.fillWidth: true
-                        elide: Text.ElideRight
-                    }
+            // Column widths
+            columnWidthProvider: function(column) {
+                switch(column) {
+                    case 0: return 200  // Start Date
+                    case 1: return tableView.width - 200  // Direction (fill remaining)
+                    default: return 100
                 }
+            }
+
+            rowHeightProvider: function(row) {
+                return Theme.spacing.s8
+            }
+
+            delegate: Rectangle {
+                required property int row
+                required property int column
+                required property var model
+
+                implicitWidth: tableView.columnWidthProvider(column)
+                implicitHeight: Theme.spacing.s8
+
+                color: row % 2 === 0 ? Theme.colors.surface : Theme.colors.transparent
+                radius: Theme.radius.xs
+
+                Text {
+                    anchors.fill: parent
+                    anchors.leftMargin: Theme.spacing.s2
+                    verticalAlignment: Text.AlignVCenter
+
+                    text: {
+                        switch(column) {
+                            case 0: return model.startDate || "-"
+                            case 1: return model.direction || "-"
+                            default: return ""
+                        }
+                    }
+
+                    font.family: Theme.typography.familySans
+                    color: column === 1
+                        ? (model.direction === "IN" ? Theme.colors.success : Theme.colors.warning)
+                        : Theme.colors.text
+                    font.weight: column === 1
+                        ? Theme.typography.weightMedium
+                        : Theme.typography.weightRegular
+                    elide: Text.ElideRight
+                }
+            }
+
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AsNeeded
             }
         }
     }
