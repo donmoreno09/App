@@ -1,6 +1,6 @@
 set(qml_files
     components/PedestriansTable.qml
-    components/SummaryCard.qml
+    components/SummaryTable.qml
     components/VehiclesTable.qml
 
     contents/ViGateContent.qml
@@ -9,7 +9,7 @@ set(qml_files
 )
 
 set(qml_singletons
-    # store/ViGateStore.qml - replaced by C++ controller
+    # store/ViGateStore.qml
 )
 
 set_source_files_properties(

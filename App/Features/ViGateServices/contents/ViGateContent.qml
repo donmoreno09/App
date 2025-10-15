@@ -142,19 +142,19 @@ ColumnLayout {
         Layout.margins: Theme.spacing.s4
         spacing: Theme.spacing.s4
 
-        SummaryCard {
+        SummaryTable {
             Layout.fillWidth: true
             controller: root.controller
         }
 
         VehiclesTable {
-            visible: vehiclesToggle.checked
+            visible: vehiclesToggle.checked && root.controller.vehiclesModel.rowCount() > 0
             Layout.fillWidth: true
             model: root.controller.vehiclesModel
         }
 
         PedestriansTable {
-            visible:  pedestriansToggle.checked
+            visible:  pedestriansToggle.checked && root.controller.pedestriansModel.rowCount() > 0
             Layout.fillWidth: true
             model: root.controller.pedestriansModel
         }

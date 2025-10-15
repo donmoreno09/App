@@ -96,54 +96,137 @@ void ViGateService::getGateData(int gateId,
                                 bool includeVehicles,
                                 bool includePedestrians)
 {
+
+    static const QSet<int> VALID_GATE_IDS = {1, 2, 3, 4, 5};
+    if (!VALID_GATE_IDS.contains(gateId)) {
+        QTimer::singleShot(100, this, [this]() {
+            emit notFound();
+        });
+        return;
+    }
+
     // MOCK DATA FOR TESTING
     QJsonObject mockResponse;
 
     // Summary
-    QJsonObject summary;
-    summary["total_entries"] = 150;
-    summary["total_exits"] = 142;
-    summary["total_vehicle_entries"] = 100;
-    summary["total_vehicle_exits"] = 98;
-    summary["total_pedestrian_entries"] = 50;
-    summary["total_pedestrian_exits"] = 44;
-    mockResponse["summary"] = summary;
+    // QJsonObject summary;
+    // summary["total_entries"] = 150;
+    // summary["total_exits"] = 142;
+    // summary["total_vehicle_entries"] = 100;
+    // summary["total_vehicle_exits"] = 98;
+    // summary["total_pedestrian_entries"] = 50;
+    // summary["total_pedestrian_exits"] = 44;
+    // mockResponse["summary"] = summary;
 
     // Vehicles
     QJsonArray vehicles;
     if (includeVehicles) {
+        // Gate 1 vehicles
         QJsonObject v1;
-        v1["idGate"] = gateId;
+        v1["idGate"] = 1;
         v1["startDate"] = "2025-09-06T00:29:00Z";
         v1["plate"] = QJsonArray{"EF162WW"};
         v1["direction"] = "IN";
         vehicles.append(v1);
 
         QJsonObject v2;
-        v2["idGate"] = gateId;
+        v2["idGate"] = 1;
         v2["startDate"] = "2025-09-06T01:15:00Z";
         v2["plate"] = QJsonArray{"AB123CD"};
         v2["direction"] = "OUT";
         vehicles.append(v2);
+
+        // Gate 2 vehicles
+        QJsonObject v3;
+        v3["idGate"] = 2;
+        v3["startDate"] = "2025-09-06T02:30:00Z";
+        v3["plate"] = QJsonArray{"XY999ZZ"};
+        v3["direction"] = "IN";
+        vehicles.append(v3);
+
+        // Gate 3 vehicles
+        QJsonObject v4;
+        v4["idGate"] = 3;
+        v4["startDate"] = "2025-09-06T03:45:00Z";
+        v4["plate"] = QJsonArray{"LM456OP"};
+        v4["direction"] = "OUT";
+        vehicles.append(v4);
     }
-    mockResponse["vehicles"] = vehicles;
 
     // Pedestrians
     QJsonArray pedestrians;
     if (includePedestrians) {
+        // Gate 1 pedestrians
         QJsonObject p1;
-        p1["idGate"] = gateId;
+        p1["idGate"] = 1;
         p1["startDate"] = "2025-09-01T07:03:00Z";
         p1["direction"] = "IN";
         pedestrians.append(p1);
 
         QJsonObject p2;
-        p2["idGate"] = gateId;
+        p2["idGate"] = 1;
         p2["startDate"] = "2025-09-01T08:22:00Z";
         p2["direction"] = "OUT";
         pedestrians.append(p2);
+
+        // Gate 2 pedestrians
+        QJsonObject p3;
+        p3["idGate"] = 2;
+        p3["startDate"] = "2025-09-01T09:15:00Z";
+        p3["direction"] = "IN";
+        pedestrians.append(p3);
+
+        // Gate 3 pedestrians
+        QJsonObject p4;
+        p4["idGate"] = 3;
+        p4["startDate"] = "2025-09-01T10:30:00Z";
+        p4["direction"] = "OUT";
+        pedestrians.append(p4);
     }
-    mockResponse["pedestrian"] = pedestrians;
+
+    QJsonArray filteredVehicles;
+    for (const auto& v : vehicles) {
+        QJsonObject obj = v.toObject();
+        QDateTime entryDate = QDateTime::fromString(obj["startDate"].toString(), Qt::ISODate);
+        if (obj["idGate"].toInt() == gateId && entryDate >= startDate && entryDate <= endDate) {
+            filteredVehicles.append(v);
+        }
+    }
+
+    QJsonArray filteredPedestrians;
+    for (const auto& p : pedestrians) {
+        QJsonObject obj = p.toObject();
+        QDateTime entryDate = QDateTime::fromString(obj["startDate"].toString(), Qt::ISODate);
+        if (obj["idGate"].toInt() == gateId  && entryDate >= startDate && entryDate <= endDate) {
+            filteredPedestrians.append(p);
+        }
+    }
+
+    int vehicleEntries = 0, vehicleExits = 0;
+    for (const auto& v : filteredVehicles) {
+        QJsonObject obj = v.toObject();
+        if (obj["direction"].toString() == "IN") vehicleEntries++;
+        else vehicleExits++;
+    }
+
+    int pedestrianEntries = 0, pedestrianExits = 0;
+    for (const auto& p : filteredPedestrians) {
+        QJsonObject obj = p.toObject();
+        if (obj["direction"].toString() == "IN") pedestrianEntries++;
+        else pedestrianExits++;
+    }
+
+    QJsonObject summary;
+    summary["total_vehicle_entries"] = vehicleEntries;
+    summary["total_vehicle_exits"] = vehicleExits;
+    summary["total_pedestrian_entries"] = pedestrianEntries;
+    summary["total_pedestrian_exits"] = pedestrianExits;
+    summary["total_entries"] = vehicleEntries + pedestrianEntries;
+    summary["total_exits"] = vehicleExits + pedestrianExits;
+
+    mockResponse["summary"] = summary;
+    mockResponse["vehicles"] = filteredVehicles;
+    mockResponse["pedestrian"] = filteredPedestrians;
 
     // Simulate network delay
     QTimer::singleShot(1000, this, [this, mockResponse]() {
