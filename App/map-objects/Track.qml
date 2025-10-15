@@ -14,7 +14,7 @@ MapQuickItem {
     required property string code
     required property geoCoordinate pos
     required property double cog
-    required property int state
+    required property string state
     required property int trackNumber
 
     // Index Data
@@ -28,7 +28,7 @@ MapQuickItem {
         id: trackRect
         width: 40
         height: 40
-        opacity: track.state === 1 ? 0.5 : 1.0
+        opacity: track.state === 'STALE' ? 0.5 : 1.0
 
         // COG direction vector (track heading line)
         Rectangle {
@@ -53,7 +53,7 @@ MapQuickItem {
             source: "qrc:/App/assets/icons/track/smartport/" + track.code.substring(0,2) + "/" + track.code.substring(2,4) + "/" + track.code.substring(4,6) + "/" + track.code + ".svg"
             fillMode: Image.PreserveAspectFit
             smooth: true
-            opacity: track.state === 1 ? 0.5 : 1.0
+            opacity: track.state === 'STALE' ? 0.5 : 1.0
         }
 
         Text {
@@ -76,9 +76,6 @@ MapQuickItem {
                 TitleBarController.setTitle("Track Details")
                 SidePanelController.open("trackpanel")
                 SelectedTrackState.select(track.trackModel.getEditableTrack(track.index))
-
-                // chiamata a controller C++/singleton se vuoi aprire dettagli
-                // TrackDetailsController.request(track.code)
             }
         }
     }

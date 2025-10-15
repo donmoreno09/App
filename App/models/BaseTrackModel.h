@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QGeoCoordinate>
 #include "ModelHelper.h"
+#include <entities/Velocity.h>
 
 template <class T>
 class BaseTrackModel : public QAbstractListModel
@@ -29,6 +30,14 @@ protected:
         return std::abs(a.latitude()  - b.latitude())  < tolerance &&
                std::abs(a.longitude() - b.longitude()) < tolerance &&
                std::abs(a.altitude() - b.altitude()) < tolerance;
+    }
+
+    // TODO: Export this method to a more general utility namespace
+    bool almostEqual(const Velocity &a, const Velocity &b, double epsilon = 1e-3) const
+    {
+        return std::abs(a.vx - b.vx) < epsilon &&
+               std::abs(a.vy - b.vy) < epsilon &&
+               std::abs(a.vz - b.vz) < epsilon;
     }
 };
 

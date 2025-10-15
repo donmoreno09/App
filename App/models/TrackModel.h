@@ -25,6 +25,7 @@ public:
         CodeRole,
         EntityRole,
         SourceNameRole,
+        NameRole,
         TrackUidRole,
         TrackNumberRole,
     };

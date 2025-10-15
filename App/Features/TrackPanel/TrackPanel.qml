@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Layouts 6.8
 import QtQuick.Controls 6.8
+import QtPositioning 6.8
 
 import App 1.0
 import App.Themes 1.0
@@ -20,9 +21,16 @@ PanelTemplate {
         case "Longitude":
             return value ? value.longitude.toFixed(6) : "-"
         case "Speed":
-            return value ? value + " km/h" : "-"
+            if (!value)
+                return "-"
+
+            const isTir = track.sourceName && track.sourceName.toLowerCase() === "tir"
+            const speed = isTir ? value : value.speedKnots
+            const unit = isTir ? "km/h" : "kn"
+
+            return `${speed.toFixed(1)} ${unit}`
         case "Heading":
-            return value ? value + "°" : "-"
+            return value ? value + "°" : "0°"
         case "Timestamp":
             return formatTimestamp(value)
         default:
@@ -30,22 +38,33 @@ PanelTemplate {
         }
     }
 
+
     function formatTimestamp(value) {
+        // If the input value is null, undefined, or 0 → return a placeholder
         if (!value)
             return "-"
 
-        // Gestisce sia stringhe ISO (es. "2025-10-10T14:32:00Z") che epoch (es. 1696948320000)
-        const d = new Date(value)
+        // Detect whether the timestamp is in seconds (10 digits) or milliseconds (13 digits)
+        // If it's in seconds, multiply by 1000 to convert to milliseconds (used by JS Date)
+        const timestamp = value < 1e11 ? value * 1000 : value
+
+        // Create a JavaScript Date object from the timestamp
+        const date = new Date(timestamp)
+
+        // Helper function to pad single digits with a leading zero (e.g. "7" → "07")
         const pad = n => (n < 10 ? "0" + n : n)
 
-        const day = pad(d.getDate())
-        const month = pad(d.getMonth() + 1)
-        const year = d.getFullYear()
-        const hours = pad(d.getHours())
-        const minutes = pad(d.getMinutes())
+        // Extract and format date/time components in UTC
+        const day = pad(date.getUTCDate())
+        const month = pad(date.getUTCMonth() + 1) // Months are 0-based (0 = January)
+        const year = date.getUTCFullYear()
+        const hours = pad(date.getUTCHours())
+        const minutes = pad(date.getUTCMinutes())
 
-        return `${day}/${month}/${year} ${hours}:${minutes}`
+        // Return formatted string in Italian style but UTC timezone: "DD/MM/YYYY HH:mm UTC"
+        return `${day}/${month}/${year} ${hours}:${minutes} UTC`
     }
+
 
     title.text: "Track Details"
 
@@ -88,12 +107,16 @@ PanelTemplate {
 
                     Repeater {
                         model: [
-                            { label: "Name", value: track.code },
+                            // { label: "Entity", value: track.entity },
+                            // { label: "Source Name", value: track.sourceName },
+                            // { label: "Name", value: track.code },
+                            { label: "Name", value: track.name },
                             { label: "Latitude", value: track.pos },
                             { label: "Longitude", value: track.pos },
                             { label: "Timestamp", value: track.time },
                             { label: "Heading", value: track.cog },
-                            { label: "Speed", value: track.vel }
+                            { label: "Speed", value: track.vel },
+                            { label: "State", value: track.state }
                         ]
 
                         delegate: ColumnLayout {
@@ -107,8 +130,6 @@ PanelTemplate {
 
                             Label {
                                 text: {
-                                    if (!modelData.value)
-                                        return "-"
                                     return formatValue(modelData.label, modelData.value)
                                 }
                             }
@@ -130,7 +151,7 @@ PanelTemplate {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 88
+            Layout.preferredHeight: 58
             color: "transparent"
 
             RowLayout {
@@ -146,25 +167,25 @@ PanelTemplate {
                     UI.Button {
                         id: centerTrackIcon
                         variant: UI.ButtonStyles.Ghost
-                        icon.source: "qrc:/App/assets/icons/world.svg"
-                        icon.width: 16
-                        icon.height: 16
+                        icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
+                        icon.width: 14
+                        icon.height: 14
+                        text: "Center View"
 
                         onClicked: function () {
-                            console.log("[TrackPanel] center clicked!")
-                            var position = SelectedTrackState.model.getRoleData(SelectedTrackState.index, TrackModel.PosRole)
-                            MapController.setMapCenter(position)
+                            let trackPosition = QtPositioning.coordinate(track.pos.latitude, track.pos.longitude)
+                            MapController.setMapCenter(trackPosition)
                         }
                     }
 
-                    Text {
-                        id: centerTrackText
-                        text: "Center View"
-                        color: Theme.colors.text
-                        font.family: Theme.typography.familySans
-                        font.pixelSize: Theme.typography.fontSize150
-                        font.weight: Theme.typography.weightRegular
-                    }
+                    // Text {
+                    //     id: centerTrackText
+                    //     text: "Center View"
+                    //     color: Theme.colors.text
+                    //     font.family: Theme.typography.familySans
+                    //     font.pixelSize: Theme.typography.fontSize150
+                    //     font.weight: Theme.typography.weightRegular
+                    // }
                 }
 
                 // Track History Functionality
@@ -179,8 +200,8 @@ PanelTemplate {
                         text: "Track History"
                         color: Theme.colors.text
                         font.family: Theme.typography.familySans
-                        font.pixelSize: Theme.typography.fontSize150
-                        font.weight: Theme.typography.weightRegular
+                        font.pixelSize: 13
+                        font.weight: Theme.typography.weightSemibold
                     }
                 }
             }

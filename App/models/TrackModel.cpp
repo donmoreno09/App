@@ -29,6 +29,7 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
     case TrackNumberRole: return track.trackNumber;
     case VelRole: return QVariant::fromValue(track.vel);
     case StateRole: return track.state;
+    case NameRole: return track.name;
     default: return {};
     }
 }
@@ -36,6 +37,7 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> TrackModel::roleNames() const
 {
     return {
+        { NameRole, "name"},
         { CodeRole, "code" },
         { EntityRole, "entity" },
         { PosRole, "pos" },
@@ -137,6 +139,7 @@ QVector<int> TrackModel::diffRoles(const Track &a, const Track &b) const
     if (!qFuzzyCompare(a.cog, b.cog)) roles << CogRole;
     if (a.time != b.time) roles << TimeRole;
     if (a.state != b.state) roles << StateRole;
+    if (a.name != b.name) roles << NameRole;
 
     return roles;
 }

@@ -76,6 +76,8 @@ set(cpp_sources
     entities/BaseTrack.h
     entities/Track.h
     entities/Tir.h
+    entities/Velocity.h
+
 
     # Qt Models
     models/ModelHelper.h

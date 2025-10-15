@@ -13,7 +13,7 @@ MapQuickItem {
     required property string operationCode
     required property geoCoordinate pos
     required property double cog
-    required property int state
+    required property string state
 
     // Index Data
     required property int index
@@ -25,7 +25,7 @@ MapQuickItem {
         id: tirRect
         width: 40
         height: 40
-        opacity: tir.state === 1 ? 0.5 : 1.0
+        opacity: tir.state === 'STALE' ? 0.5 : 1.0
 
         // COG direction vector (track heading line)
         Rectangle {
@@ -50,7 +50,7 @@ MapQuickItem {
             source: "qrc:/App/assets/icons/track/smartport/smart_tir.svg"
             fillMode: Image.PreserveAspectFit
             smooth: true
-            opacity: tir.state === 1 ? 0.5 : 1.0
+            opacity: tir.state === 'STALE' ? 0.5 : 1.0
         }
 
         Text {
@@ -68,14 +68,9 @@ MapQuickItem {
             id: tapHandler
             acceptedButtons: Qt.LeftButton
             onTapped: (event) => {
-                console.log("Tir tapped -> index:", tir.index)
-                console.log("Tir tapped -> code:", tir.code, "Tir Number:", tir.trackNumber, "cog:", tir.cog)
                 TitleBarController.setTitle("Tir Details")
-                SidePanelController.toggle("trackpanel")
+                SidePanelController.open("trackpanel")
                 SelectedTrackState.select(tir.tirModel.getEditableTir(tir.index))
-
-                // chiamata a controller C++/singleton se vuoi aprire dettagli
-                // TrackDetailsController.request(track.code)
             }
         }
     }

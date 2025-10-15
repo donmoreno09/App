@@ -21,7 +21,9 @@ public:
         TimeRole,
         VelRole,
         StateRole,
+        NameRole,
         OperationCodeRole,
+        SourceNameRole,
     };
 
     Q_ENUM(Roles)
