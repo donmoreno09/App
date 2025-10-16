@@ -6,6 +6,7 @@
 #include <QHash>
 #include <QQmlEngine>
 #include <entities/Track.h>
+#include "ModelHelper.h"
 
 class TrackModel : public BaseTrackModel<Track>
 {
@@ -16,16 +17,17 @@ public:
     explicit TrackModel(QObject *parent = nullptr);
 
     enum Roles {
-        CodeRole = Qt::UserRole + 1,
-        EntityRole,
-        PosRole,
+        PosRole = Qt::UserRole + 1,
         CogRole,
-        SourceNameRole,
         TimeRole,
-        TrackUidRole,
-        TrackNumberRole,
         VelRole,
         StateRole,
+        CodeRole,
+        EntityRole,
+        SourceNameRole,
+        NameRole,
+        TrackUidRole,
+        TrackNumberRole,
     };
 
     Q_ENUM(Roles)
@@ -46,7 +48,11 @@ public:
 
     QVector<int> diffRoles(const Track &a, const Track &b) const override;
 
+    Q_INVOKABLE QQmlPropertyMap* getEditableTrack(int index);
+
     Q_INVOKABLE void clear();
+
+    Q_INVOKABLE QVariant getRoleData(int idx, int role) const;
 
 private:
     QVector<Track> m_tracks;

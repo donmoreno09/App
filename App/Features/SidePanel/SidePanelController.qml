@@ -56,4 +56,22 @@ QtObject {
         if (destroy) PanelRouter.clear()
         closed()
     }
+
+    function openOrRefresh(path, props) {
+        if (!path)
+            path = PanelRouter.currentPath ?? ""
+
+        if (!isOpen) {
+            open(path, props)
+            return
+        }
+
+        if (PanelRouter.currentPath === path) {
+            return
+        }
+
+        close()
+        open(path, props)
+    }
+
 }
