@@ -88,7 +88,7 @@ PanelTemplate {
             spacing: Theme.spacing.s4
 
             Label {
-                text: "GENERAL INFO"
+                text: (TranslationManager.revision, qsTr("General Info"))
                 font.family: Theme.typography.familySans
                 font.bold: true
                 font.pixelSize: Theme.typography.fontSize200
@@ -110,15 +110,14 @@ PanelTemplate {
                     anchors.margins: Theme.spacing.s4
                     spacing: Theme.spacing.s2
 
-
                     Repeater {
                         model: [
-                            { label: "Name", value: track ? track.name : '-' },
-                            { label: "Latitude", value: track ? track.pos : '-' },
-                            { label: "Longitude", value: track ? track.pos : '-' },
-                            { label: "Timestamp", value: track ? track.time : '-' },
-                            { label: "Heading", value: track ? track.cog : '-' },
-                            { label: "Speed", value: track ? track.vel : '-' },
+                            { label: (TranslationManager.revision, qsTr("Name")), value: track ? track.name : '-' },
+                            { label: (TranslationManager.revision, qsTr("Latitude")), value: track ? track.pos : '-' },
+                            { label: (TranslationManager.revision, qsTr("Longitude")), value: track ? track.pos : '-' },
+                            { label: (TranslationManager.revision, qsTr("Timestamp")), value: track ? track.time : '-' },
+                            { label: (TranslationManager.revision, qsTr("Heading")), value: track ? track.cog : '-' },
+                            { label: (TranslationManager.revision, qsTr("Speed")), value: track ? track.vel : '-' },
                         ]
 
                         delegate: ColumnLayout {
@@ -173,7 +172,7 @@ PanelTemplate {
                     icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
                     icon.width: 16
                     icon.height: 16
-                    text: "Center View"
+                    text: (TranslationManager.revision, qsTr("Center View"))
 
                     onClicked: function () {
                         let trackPosition = QtPositioning.coordinate(track.pos.latitude, track.pos.longitude)
@@ -195,7 +194,7 @@ PanelTemplate {
 
                     Text {
                         Layout.leftMargin: Theme.spacing.s2
-                        text: "Track History"
+                        text: (TranslationManager.revision, qsTr("Track History"))
                         color: Theme.colors.text
                         font.family: Theme.typography.familySans
                         font.pixelSize: Theme.typography.fontSize150
