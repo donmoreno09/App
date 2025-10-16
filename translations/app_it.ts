@@ -67,7 +67,7 @@
         <translation>Inizio</translation>
     </message>
     <message>
-        <location filename="../App/Components/date-time-picker/DateTimePicker.qml" line="209"/>
+        <location filename="../App/Components/date-time-picker/DateTimePicker.qml" line="211"/>
         <source>End</source>
         <translation>Fine</translation>
     </message>
@@ -620,7 +620,7 @@
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateContent.qml" line="53"/>
         <source>Arrivals in range</source>
-        <translation>Arrivi nell'intervallo</translation>
+        <translation>Arrivi nell&apos;intervallo</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateContent.qml" line="54"/>
@@ -758,17 +758,17 @@
 <context>
     <name>TimePicker</name>
     <message>
-        <location filename="../App/Components/date-time-picker/TimePicker.qml" line="133"/>
+        <location filename="../App/Components/date-time-picker/TimePicker.qml" line="125"/>
         <source>Hour</source>
         <translation>Ora</translation>
     </message>
     <message>
-        <location filename="../App/Components/date-time-picker/TimePicker.qml" line="144"/>
+        <location filename="../App/Components/date-time-picker/TimePicker.qml" line="134"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../App/Components/date-time-picker/TimePicker.qml" line="158"/>
+        <location filename="../App/Components/date-time-picker/TimePicker.qml" line="146"/>
         <source>AM/PM</source>
         <translation>AM/PM</translation>
     </message>
@@ -807,7 +807,7 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="40"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="42"/>
         <source>Overview</source>
         <translation>Panoramica</translation>
     </message>
@@ -903,6 +903,16 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="36"/>
+        <source>Track Details</source>
+        <translation>Dettaglio Traccia</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="37"/>
+        <source>Tir Details</source>
+        <translation>Dettaglio Tir</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="38"/>
         <source>Not Found</source>
         <translation>Non Trovato</translation>
     </message>
@@ -932,6 +942,59 @@
         <location filename="../App/Playground/TogglePanel.qml" line="11"/>
         <source>Toggle Test</source>
         <translation>Test Toggle</translation>
+    </message>
+</context>
+<context>
+    <name>TrackPanel</name>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="73"/>
+        <source>Track Details</source>
+        <translation>Dettaglio Traccia</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="91"/>
+        <source>General Info</source>
+        <translation>Informazioni Generali</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="115"/>
+        <source>Name</source>
+        <translation>Nome</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="116"/>
+        <source>Latitude</source>
+        <translation>Latitudine</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="117"/>
+        <source>Longitude</source>
+        <translation>Longitudine</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="118"/>
+        <source>Timestamp</source>
+        <translation>Timestamp</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="119"/>
+        <source>Heading</source>
+        <translation>Orientamento</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="120"/>
+        <source>Speed</source>
+        <translation>Velocità</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="175"/>
+        <source>Center View</source>
+        <translation>Centra Vista</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="197"/>
+        <source>Track History</source>
+        <translation>Storico Traccia</translation>
     </message>
 </context>
 <context>

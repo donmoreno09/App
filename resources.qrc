@@ -371,5 +371,6 @@
         <file>components/ui/RectanglePoiPopup.qml</file>
         <file>components/ui/EllipsePoiPopup.qml</file>
         <file>components/ui/PolygonPoiPopup.qml</file>
+        <file>App/assets/icons/icona_centra_clean.svg</file>
     </qresource>
 </RCC>

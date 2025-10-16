@@ -7,6 +7,7 @@ import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 import App.Features.Mission 1.0
+import App.Features.TrackPanel 1.0
 import App.Features.TruckArrivals 1.0
 import App.Features.TrailerPredictions 1.0
 import App.Features.ViGateServices 1.0

@@ -20,6 +20,8 @@ const ArrivalDateContentTest = "arrival-date-content-test";
 const ArrivalDateTimeContentTest = "arrival-date-time-content-test";
 const TrailerPredictionTest = "trailer-prediction-test"
 const ViGateServicesTest = "viGate-services-test"
+const TrackPanel = "trackpanel"
+const TirPanel = "tirpanel"
 const NotFound = "*";
 
 // Build the map using the constants
@@ -29,6 +31,8 @@ const routes = {
   [Notifications]: "qrc:/App/Features/Notifications/NotificationsPanel.qml",
   [MapTilesets]: "qrc:/App/Features/Map/MapTilesetsPanel.qml",
   [MapLayers]: "qrc:/App/layers/LayersPanel.qml",
+  [TrackPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
+  [TirPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
   [DateTimeTest]: "qrc:/App/Playground/DateTimePickerPanel.qml",
   [ToggleTest]: "qrc:/App/Playground/TogglePanel.qml",
   [TextAreaTest]: "qrc:/App/Playground/TextAreaPanel.qml",

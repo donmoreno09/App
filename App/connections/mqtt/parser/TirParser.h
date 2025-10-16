@@ -26,12 +26,14 @@ public:
             auto tirVal = rawTir.toObject();
 
             Tir tir;
+            tir.name = tirVal["operationCode"].toString();
             tir.operationCode = tirVal["operationCode"].toString();
             tir.pos = parseCoordinateArray(tirVal["pos"].toArray(), true);
+            tir.sourceName = "Tir";
             tir.cog = tirVal["cog"].toDouble();
             tir.time = tirVal["time"].toInt();
             tir.vel = tirVal["vel"].toDouble();
-            tir.state = tirVal["state"].toInt();
+            tir.state = tirVal["state"].toString();
 
             tirs.append(tir);
         }

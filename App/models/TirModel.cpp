@@ -26,6 +26,8 @@ QVariant TirModel::data(const QModelIndex &index, int role) const
     case TimeRole: return tir.time;
     case VelRole: return tir.vel;
     case StateRole: return tir.state;
+    case SourceNameRole: return tir.sourceName;
+    case NameRole: return tir.name;
     default: return {};
     }
 }
@@ -33,12 +35,14 @@ QVariant TirModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> TirModel::roleNames() const
 {
     return {
+        { NameRole, "name"},
         { OperationCodeRole, "operationCode" },
         { PosRole, "pos" },
         { CogRole, "cog" },
         { TimeRole, "time" },
         { VelRole, "vel" },
         { StateRole, "state" },
+        { SourceNameRole, "sourceName"}
     };
 }
 
@@ -125,8 +129,15 @@ QVector<int> TirModel::diffRoles(const Tir &a, const Tir &b) const
     if (!qFuzzyCompare(a.cog, b.cog)) roles << CogRole;
     if (a.time != b.time) roles << TimeRole;
     if (a.state != b.state) roles << StateRole;
+    if (a.sourceName != b.sourceName) roles << SourceNameRole;
+    if (a.name != b.name) roles << NameRole;
 
     return roles;
+}
+
+QQmlPropertyMap *TirModel::getEditableTir(int index)
+{
+    return m_helper->map(index);
 }
 
 void TirModel::clear()
@@ -134,4 +145,9 @@ void TirModel::clear()
     beginResetModel();
     m_tirs.clear();
     endResetModel();
+}
+
+QVariant TirModel::getRoleData(int idx, int role) const
+{
+    return data(index(idx), role);
 }

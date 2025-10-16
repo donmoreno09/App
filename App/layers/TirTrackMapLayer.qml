@@ -15,7 +15,9 @@ MapItemGroup {
     MapItemView {
         model: tirMapLayer.tirModel
 
-        delegate: Tir { }
+        delegate: Tir {
+            tirModel: tirMapLayer.tirModel
+        }
     }
 
     TirMapLayer {
