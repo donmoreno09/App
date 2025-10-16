@@ -6,7 +6,7 @@ import App.Features.ViGateServices 1.0
 import App.Features.Language 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("ViGate Services"))
+    title.text: (TranslationManager.revision, qsTr("Leonardo Vi Gate Services"))
 
     ViGateController { id: ctrl }
 

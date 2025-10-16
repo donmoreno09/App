@@ -574,6 +574,24 @@
     </message>
 </context>
 <context>
+    <name>PedestriansTable</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/PedestriansTable.qml" line="8"/>
+        <source>Pedestrians</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/PedestriansTable.qml" line="31"/>
+        <source>Start Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/PedestriansTable.qml" line="42"/>
+        <source>Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SidePanelArrivalContent</name>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="33"/>
@@ -691,7 +709,12 @@
         <translation>Trailer Prediction</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="114"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="112"/>
+        <source>Leonardo Vi Gate Services</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="123"/>
         <source>Languages</source>
         <translation>Languages</translation>
     </message>
@@ -700,7 +723,7 @@
         <translation type="vanished">Language</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="125"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="134"/>
         <source>Tilesets</source>
         <translation>Tilesets</translation>
     </message>
@@ -729,6 +752,39 @@
         <location filename="../App/Components/wizard-page/constants/StepDefinitions.qml" line="13"/>
         <source>Operational Area</source>
         <translation>Operational Area</translation>
+    </message>
+</context>
+<context>
+    <name>SummaryTable</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="8"/>
+        <source>Summary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="24"/>
+        <source>Entries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="30"/>
+        <source>Exits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="36"/>
+        <source>Vehicles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="50"/>
+        <source>Pedestrians</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="67"/>
+        <source>Total</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -799,7 +855,7 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="42"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
         <source>Overview</source>
         <translation>Overview</translation>
     </message>
@@ -895,16 +951,21 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="36"/>
-        <source>Track Details</source>
+        <source>Leonardo Vi Gate Services</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="37"/>
-        <source>Tir Details</source>
+        <source>Track Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="38"/>
+        <source>Tir Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="39"/>
         <source>Not Found</source>
         <translation>Not Found</translation>
     </message>
@@ -954,26 +1015,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="23"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="116"/>
         <source>Latitude</source>
         <translation type="unfinished">Latitude</translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="25"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="117"/>
         <source>Longitude</source>
         <translation type="unfinished">Longitude</translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="38"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="118"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="36"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="119"/>
         <source>Heading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="27"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="120"/>
         <source>Speed</source>
         <translation type="unfinished"></translation>
@@ -1063,6 +1129,100 @@
         <location filename="../App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml" line="10"/>
         <source>Waiting Time Prediction</source>
         <translation>Waiting Time Prediction</translation>
+    </message>
+</context>
+<context>
+    <name>VehiclesTable</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/VehiclesTable.qml" line="8"/>
+        <source>Vehicles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/VehiclesTable.qml" line="31"/>
+        <source>Start Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/VehiclesTable.qml" line="42"/>
+        <source>Plate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/VehiclesTable.qml" line="53"/>
+        <source>Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ViGateContent</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="37"/>
+        <source>Gate ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="38"/>
+        <source>Enter gate ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="62"/>
+        <source>Date Range: %1 - %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="66"/>
+        <source>Select Date Range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="77"/>
+        <source>Filters:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="85"/>
+        <source>Vehicles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="92"/>
+        <source>Pedestrians</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="101"/>
+        <source>Fetch Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="165"/>
+        <source>No data available. Please select filters and fetch.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="178"/>
+        <source>Error loading data. Please try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="220"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="227"/>
+        <source>Apply</source>
+        <translation type="unfinished">Apply</translation>
+    </message>
+</context>
+<context>
+    <name>ViGatePanel</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/panels/ViGatePanel.qml" line="9"/>
+        <source>Leonardo Vi Gate Services</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
