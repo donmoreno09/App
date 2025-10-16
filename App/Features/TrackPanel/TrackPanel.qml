@@ -20,11 +20,11 @@ PanelTemplate {
         }
 
         switch (label) {
-        case "Latitude":
+        case (TranslationManager.revision, qsTr("Latitude")):
             return value ? value.latitude.toFixed(6) : "-"
-        case "Longitude":
+        case (TranslationManager.revision, qsTr("Longitude")):
             return value ? value.longitude.toFixed(6) : "-"
-        case "Speed":
+        case (TranslationManager.revision, qsTr("Speed")):
             if (!value || !track)
                 return "-"
 
@@ -33,9 +33,9 @@ PanelTemplate {
             const unit = isTir ? "km/h" : "kn"
 
             return `${speed.toFixed(1)} ${unit}`
-        case "Heading":
+        case (TranslationManager.revision, qsTr("Heading")):
             return value ? value + "°" : "0°"
-        case "Timestamp":
+        case (TranslationManager.revision, qsTr("Timestamp")):
             return formatTimestamp(value)
         default:
             return value || "-"
@@ -88,7 +88,7 @@ PanelTemplate {
             spacing: Theme.spacing.s4
 
             Label {
-                text: (TranslationManager.revision, qsTr("General Info"))
+                text: (TranslationManager.revision, qsTr("General Info")).toUpperCase()
                 font.family: Theme.typography.familySans
                 font.bold: true
                 font.pixelSize: Theme.typography.fontSize200
