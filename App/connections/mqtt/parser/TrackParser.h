@@ -43,7 +43,6 @@ public:
                 trackVal["vel"].toArray().at(2).toDouble()
             );
             track.state = trackVal["state"].toString();
-
             tracks.append(track);
         }
 

@@ -15,13 +15,17 @@ PanelTemplate {
     property QtObject track: SelectedTrackState.selectedItem
 
     function formatValue(label, value) {
+        if (value === '-') {
+            return value
+        }
+
         switch (label) {
         case "Latitude":
             return value ? value.latitude.toFixed(6) : "-"
         case "Longitude":
             return value ? value.longitude.toFixed(6) : "-"
         case "Speed":
-            if (!value)
+            if (!value || !track)
                 return "-"
 
             const isTir = track.sourceName && track.sourceName.toLowerCase() === "tir"
@@ -66,7 +70,7 @@ PanelTemplate {
     }
 
 
-    title.text: "TRACK DETAILS"
+    title.text: (TranslationManager.revision, qsTr("Track Details"))
 
     ScrollView {
         id: scrollView
@@ -109,12 +113,12 @@ PanelTemplate {
 
                     Repeater {
                         model: [
-                            { label: "Name", value: track.name },
-                            { label: "Latitude", value: track.pos },
-                            { label: "Longitude", value: track.pos },
-                            { label: "Timestamp", value: track.time },
-                            { label: "Heading", value: track.cog },
-                            { label: "Speed", value: track.vel },
+                            { label: "Name", value: track ? track.name : '-' },
+                            { label: "Latitude", value: track ? track.pos : '-' },
+                            { label: "Longitude", value: track ? track.pos : '-' },
+                            { label: "Timestamp", value: track ? track.time : '-' },
+                            { label: "Heading", value: track ? track.cog : '-' },
+                            { label: "Speed", value: track ? track.vel : '-' },
                         ]
 
                         delegate: ColumnLayout {

@@ -4,16 +4,12 @@ import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
-
-/*!
-    \qmltype DatePickerCalendarView
-*/
+import App.Features.Language 1.0
 
 ColumnLayout {
     id: root
 
-    // Props
-    property string mode: "single" // "single", "range"
+    property string mode: "single"
     property int currentMonth: 0
     property int currentYear: 2025
 
@@ -26,15 +22,16 @@ ColumnLayout {
     property date maximumDate
     property var disabledDates: []
 
-    // Signals
     signal dateClicked(date date)
 
     spacing: Theme.spacing.s3
 
-    // Day headers
+    readonly property var appLocale: Qt.locale(LanguageController.currentLanguage)
+
     DayOfWeekRow {
         Layout.fillWidth: true
         Layout.preferredHeight: Theme.spacing.s6
+        locale: root.appLocale
 
         delegate: Text {
             text: shortName.substring(0, 3)
@@ -49,11 +46,11 @@ ColumnLayout {
         }
     }
 
-    // Calendar grid
     MonthGrid {
         id: monthGrid
         Layout.fillWidth: true
         Layout.fillHeight: true
+        locale: root.appLocale
 
         month: root.currentMonth
         year: root.currentYear
@@ -68,10 +65,14 @@ ColumnLayout {
             property bool isInRange: root.mode === "range" && root._isInRange(model.date)
             property bool isSingleDayRange: isRangeStart && isRangeEnd
 
-            // Week background (Sunday highlight)
+            function isWeekStart(d) {
+                const first = monthGrid.locale.firstDayOfWeek;
+                return ((d.getDay() - first + 7) % 7) === 0;
+            }
+
             Rectangle {
-                visible: model.date.getDay() === 0 // Only show on Sundays (start of week)
-                x: -parent.x // Extend to start of grid
+                visible: isWeekStart(model.date)
+                x: -parent.x
                 y: 0
                 width: monthGrid.width
                 height: parent.height
@@ -80,11 +81,9 @@ ColumnLayout {
                 z: -1
             }
 
-            // THE WORKING SOLUTION: Smart margin technique
             Rectangle {
                 anchors {
                     fill: parent
-                    // Key technique: reduce width on ends to create pill shape
                     leftMargin: isRangeStart ? parent.width / 2 : 0
                     rightMargin: isRangeEnd ? parent.width / 2 : 0
                 }
@@ -94,7 +93,6 @@ ColumnLayout {
                 z: 0
             }
 
-            // Day cell with normal margins
             UI.DatePickerDay {
                 anchors.fill: parent
                 anchors.margins: Theme.spacing.s1
@@ -112,7 +110,6 @@ ColumnLayout {
         }
     }
 
-    // Helper functions
     function _isDaySelected(date) {
         if (mode === "single") {
             return !_isEmpty(selectedDate) &&

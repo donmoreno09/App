@@ -31,6 +31,29 @@ bool WindowsNcController::isWindows()
 #endif
 }
 
+void WindowsNcController::minimize() {
+#ifdef Q_OS_WIN
+    if (!m_window) return;
+    auto s = m_window->windowStates();
+    // Preserve Qt::WindowMaximized (if set) and add Minimized
+    m_window->setWindowStates(s | Qt::WindowMinimized);
+#endif
+}
+
+void WindowsNcController::toggleMaximize() {
+#ifdef Q_OS_WIN
+    if (!m_window) return;
+    auto s = m_window->windowStates();
+    if (s.testFlag(Qt::WindowMaximized)) {
+        // Back to normal, ensure Minimized is cleared
+        m_window->setWindowStates(Qt::WindowNoState);
+    } else {
+        // Go maximized, ensure Minimized is cleared
+        m_window->setWindowStates((s | Qt::WindowMaximized) & ~Qt::WindowMinimized);
+    }
+#endif
+}
+
 QQuickWindow *WindowsNcController::window() const
 {
     return m_window;

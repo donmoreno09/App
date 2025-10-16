@@ -3,7 +3,7 @@ pragma Singleton
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 
-import "routes.js" as Routes
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 QtObject {
     id: root

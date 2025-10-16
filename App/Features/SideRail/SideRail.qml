@@ -9,6 +9,8 @@ import App.Features.SidePanel
 import App.Features.TitleBar
 import App.Features.Language 1.0
 
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
+
 UI.GlobalBackgroundConsumer {
     // TESTING PURPOSES
     property bool devPanelsShown: false
@@ -39,10 +41,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Mission"))
                 active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Mission")
-                    SidePanelController.toggle("mission")
-                }
+                onClicked: SidePanelController.toggle(Routes.Mission)
             }
 
             SideRailItem {
@@ -51,167 +50,122 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Pod"))
                 active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Pod")
-                    SidePanelController.toggle("pod")
-                }
+                onClicked: SidePanelController.toggle(Routes.Pod)
             }
 
             SideRailItem {
+                visible: devPanelsShown
                 source: "qrc:/App/assets/icons/notification.svg"
                 text: (TranslationManager.revision, qsTr("Notifications"))
                 active: PanelRouter.currentPath === "notifications" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Notifications")
-                    SidePanelController.toggle("notifications")
-                }
+                onClicked: SidePanelController.toggle(Routes.Notifications)
             }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Buttons Test"))
-            //     active: PanelRouter.currentPath === "button-test" && SidePanelController.isOpen
-
-            //     onClicked: {
-            //         TitleBarController.setTitle("Buttons Test")
-            //         SidePanelController.toggle("button-test")
-            //     }
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/calendar.svg"
-            //     text: (TranslationManager.revision, qsTr("DateTime"))
-            //     active: PanelRouter.currentPath === "datetime-test" && SidePanelController.isOpen
-
-            //     onClicked: {
-            //         TitleBarController.setTitle("DateTimePicker Test")
-            //         SidePanelController.toggle("datetime-test")
-            //     }
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Modal Dialog Test"))
-            //     active: PanelRouter.currentPath === "modal-dialog-test" && SidePanelController.isOpen
-
-            //     onClicked: {
-            //         TitleBarController.setTitle("Modal Dialog Test")
-            //         SidePanelController.toggle("modal-dialog-test")
-            //     }
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("TextArea Test"))
-            //     active: PanelRouter.currentPath === "textarea-test" && SidePanelController.isOpen
-
-            //     onClicked: {
-            //         TitleBarController.setTitle("TextArea Test")
-            //         SidePanelController.toggle("textarea-test")
-            //     }
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Toggle Test"))
-            //     active: PanelRouter.currentPath === "toggle-test" && SidePanelController.isOpen
-
-            //     onClicked: {
-            //         TitleBarController.setTitle("Toggle Test")
-            //         SidePanelController.toggle("toggle-test")
-            //     }
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Overlay Test"))
-            //     active: PanelRouter.currentPath === "overlay-test" && SidePanelController.isOpen
-
-            //     onClicked: {
-            //         TitleBarController.setTitle("Overlay Test")
-            //         SidePanelController.toggle("overlay-test")
-            //     }
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Switcher Test"))
-            //     active: PanelRouter.currentPath === "switcher-test" && SidePanelController.isOpen
-
-            //     onClicked: {
-            //         TitleBarController.setTitle("Switcher Test")
-            //         SidePanelController.toggle("switcher-test")
-            //     }
-            // }
-
-            // SideRailItem {
-            //     source: "qrc:/App/assets/icons/test.svg"
-            //     text: (TranslationManager.revision, qsTr("Slider Test"))
-            //     active: PanelRouter.currentPath === "slider-test" && SidePanelController.isOpen
-
-            //     onClicked: {
-            //         TitleBarController.setTitle("Slider Test")
-            //         SidePanelController.toggle("slider-test")
-            //     }
-            // }
 
             SideRailItem {
                 source: "qrc:/App/assets/icons/layers.svg"
                 text: (TranslationManager.revision, qsTr("Layers"))
                 active: PanelRouter.currentPath === "maplayers" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Map Layers")
-                    SidePanelController.toggle("maplayers")
-                }
+                onClicked: SidePanelController.toggle(Routes.MapLayers)
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/truck.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals"))
+                active: PanelRouter.currentPath === "arrival-content-test" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle(Routes.ArrivalContentTest)
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/calendar-arrivals.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals Date"))
+                active: PanelRouter.currentPath === "arrival-date-content-test" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle(Routes.ArrivalDateContentTest)
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/settings.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Truck Arrivals DT"))
+                active: PanelRouter.currentPath === "arrival-date-time-content-test" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle(Routes.ArrivalDateTimeContentTest)
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/compass.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Trailer Prediction"))
+                active: PanelRouter.currentPath === "trailer-prediction-test" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle(Routes.TrailerPredictionTest)
             }
 
             SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
-                text: (TranslationManager.revision, qsTr("Language"))
+                icon.width: Theme.icons.sizeMd
+                icon.height: Theme.icons.sizeMd
+                text: (TranslationManager.revision, qsTr("Languages"))
                 active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Languages")
-                    SidePanelController.toggle("language")
-                }
+                onClicked: SidePanelController.toggle(Routes.Languages)
             }
 
             SideRailItem {
                 visible: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/map.svg"
+                icon.width: Theme.icons.sizeMd
+                icon.height: Theme.icons.sizeMd
                 text: (TranslationManager.revision, qsTr("Tilesets"))
                 active: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
 
-                onClicked: {
-                    TitleBarController.setTitle("Map Tilesets")
-                    SidePanelController.toggle("maptilesets")
-                }
+                onClicked: SidePanelController.toggle(Routes.MapTilesets)
             }
         }
 
         UI.VerticalSpacer { }
 
-        UI.Button {
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:/App/assets/icons/panel-chevron.svg"
-            icon.width: Theme.icons.sizeMd
-            icon.height: Theme.icons.sizeMd
-            padding: Theme.spacing.s2
-
-            Layout.preferredWidth: Theme.spacing.s9
-            Layout.preferredHeight: Theme.spacing.s9
+        ColumnLayout {
             Layout.alignment: Qt.AlignCenter
 
-            onClicked: {
-                if (SidePanelController.isOpen) SidePanelController.close()
-                else SidePanelController.open()
-            }
-        }
+            // Stay visible while fading out, hide only when fully transparent
+            property bool shouldBeVisible: PanelRouter.currentPath !== ""
+            opacity: shouldBeVisible ? 1 : 0
+            visible: shouldBeVisible || opacity > 0
 
-        UI.VerticalPadding { }
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Theme.motion.panelTransitionMs
+                    easing.type: Theme.motion.panelTransitionEasing
+                }
+            }
+
+            UI.Button {
+                display: AbstractButton.IconOnly
+                icon.source: "qrc:/App/assets/icons/panel-chevron.svg"
+                icon.width: Theme.icons.sizeMd
+                icon.height: Theme.icons.sizeMd
+                padding: Theme.spacing.s2
+
+                Layout.preferredWidth: Theme.spacing.s9
+                Layout.preferredHeight: Theme.spacing.s9
+
+                onClicked: {
+                    if (SidePanelController.isOpen) SidePanelController.close()
+                    else SidePanelController.open()
+                }
+
+                rotation: SidePanelController.isOpen ? 0 : 180
+            }
+
+            UI.VerticalPadding { }
+        }
 
         UI.Avatar {
             Layout.preferredWidth: Theme.spacing.s9

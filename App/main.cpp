@@ -73,8 +73,5 @@ int main(int argc, char *argv[])
     //     qDebug() << plugin.name;
     // }
 
-    //qmlRegisterUncreatableType<Velocity>("App.Types", 1, 0, "Velocity", "Struct type");
-
-
     return app.exec();
 }

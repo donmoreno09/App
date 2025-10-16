@@ -1,4 +1,5 @@
 set(qml_files
+    AppPalette.qml
     BaseTheme.qml
     tokens/BorderTokens.qml
     tokens/ColorTokens.qml

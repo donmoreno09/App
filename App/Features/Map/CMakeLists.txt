@@ -1,6 +1,7 @@
 set(qml_files
     MapHost.qml
     MapTilesetsPanel.qml
+    MapTilesetsItem.qml
     internals/Map.qml
     internals/MapState.qml
 )
