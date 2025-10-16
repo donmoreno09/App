@@ -107,6 +107,15 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Leonardo Vi Gate Services"))
+                active: PanelRouter.currentPath === "viGate-services-test" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle(Routes.ViGateServicesTest)
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 icon.width: Theme.icons.sizeMd
