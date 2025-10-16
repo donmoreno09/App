@@ -71,10 +71,8 @@ MapQuickItem {
             id: tapHandler
             acceptedButtons: Qt.LeftButton
             onTapped: (event) => {
-                console.log("Track tapped -> index:", track.index)
-                console.log("Track tapped -> code:", track.code, "trackNumber:", track.trackNumber, "cog:", track.cog)
                 TitleBarController.setTitle("Track Details")
-                SidePanelController.open("trackpanel")
+                SidePanelController.openOrRefresh("trackpanel")
                 SelectedTrackState.select(track.trackModel.getEditableTrack(track.index))
             }
         }

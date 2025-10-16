@@ -66,7 +66,7 @@ PanelTemplate {
     }
 
 
-    title.text: "Track Details"
+    title.text: "TRACK DETAILS"
 
     ScrollView {
         id: scrollView
@@ -85,7 +85,9 @@ PanelTemplate {
 
             Label {
                 text: "GENERAL INFO"
+                font.family: Theme.typography.familySans
                 font.bold: true
+                font.pixelSize: Theme.typography.fontSize200
                 Layout.leftMargin: Theme.spacing.s2
             }
 
@@ -107,16 +109,12 @@ PanelTemplate {
 
                     Repeater {
                         model: [
-                            // { label: "Entity", value: track.entity },
-                            // { label: "Source Name", value: track.sourceName },
-                            // { label: "Name", value: track.code },
                             { label: "Name", value: track.name },
                             { label: "Latitude", value: track.pos },
                             { label: "Longitude", value: track.pos },
                             { label: "Timestamp", value: track.time },
                             { label: "Heading", value: track.cog },
                             { label: "Speed", value: track.vel },
-                            { label: "State", value: track.state }
                         ]
 
                         delegate: ColumnLayout {
@@ -126,9 +124,14 @@ PanelTemplate {
                             Label {
                                 text: modelData.label.toUpperCase()
                                 font.bold: true
+                                font.family: Theme.typography.familySans
+                                font.pixelSize: Theme.typography.fontSize175
                             }
 
                             Label {
+                                font.family: Theme.typography.familySans
+                                font.pixelSize: Theme.typography.fontSize150
+                                font.weight: Theme.typography.weightMedium
                                 text: {
                                     return formatValue(modelData.label, modelData.value)
                                 }
@@ -154,56 +157,49 @@ PanelTemplate {
             Layout.preferredHeight: 58
             color: "transparent"
 
+
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: Theme.spacing.s16
-                anchors.rightMargin: Theme.spacing.s16
-                spacing: 0
 
-                // Center View Functionality
-                RowLayout {
-                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                UI.HorizontalSpacer {}
 
-                    UI.Button {
-                        id: centerTrackIcon
-                        variant: UI.ButtonStyles.Ghost
-                        icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
-                        icon.width: 14
-                        icon.height: 14
-                        text: "Center View"
+                UI.Button {
+                    id: centerTrackIcon
+                    variant: UI.ButtonStyles.Ghost
+                    icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
+                    icon.width: 16
+                    icon.height: 16
+                    text: "Center View"
 
-                        onClicked: function () {
-                            let trackPosition = QtPositioning.coordinate(track.pos.latitude, track.pos.longitude)
-                            MapController.setMapCenter(trackPosition)
-                        }
+                    onClicked: function () {
+                        let trackPosition = QtPositioning.coordinate(track.pos.latitude, track.pos.longitude)
+                        MapController.setMapCenter(trackPosition)
                     }
-
-                    // Text {
-                    //     id: centerTrackText
-                    //     text: "Center View"
-                    //     color: Theme.colors.text
-                    //     font.family: Theme.typography.familySans
-                    //     font.pixelSize: Theme.typography.fontSize150
-                    //     font.weight: Theme.typography.weightRegular
-                    // }
                 }
+
+                UI.HorizontalSpacer {}
+
 
                 // Track History Functionality
                 RowLayout {
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.preferredWidth: 1
+                    Layout.rightMargin: Theme.spacing.s4    //TODO: Investigate to solve this ugly fix.
 
                     UI.Toggle {
                         id: toggle
                     }
 
                     Text {
+                        Layout.leftMargin: Theme.spacing.s2
                         text: "Track History"
                         color: Theme.colors.text
                         font.family: Theme.typography.familySans
-                        font.pixelSize: 13
-                        font.weight: Theme.typography.weightSemibold
+                        font.pixelSize: Theme.typography.fontSize150
                     }
                 }
+
+                UI.HorizontalSpacer {}
+
             }
         }
     }

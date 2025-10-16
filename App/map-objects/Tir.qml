@@ -69,7 +69,7 @@ MapQuickItem {
             acceptedButtons: Qt.LeftButton
             onTapped: (event) => {
                 TitleBarController.setTitle("Tir Details")
-                SidePanelController.open("trackpanel")
+                SidePanelController.openOrRefresh("trackpanel")
                 SelectedTrackState.select(tir.tirModel.getEditableTir(tir.index))
             }
         }
