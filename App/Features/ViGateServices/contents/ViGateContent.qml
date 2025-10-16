@@ -18,7 +18,7 @@ ColumnLayout {
 
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
-        Layout.topMargin: 200
+        Layout.topMargin: 300
         running: controller.isLoading
         visible: controller.isLoading
         layer.enabled: true

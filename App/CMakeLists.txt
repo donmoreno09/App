@@ -135,6 +135,7 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Mqtt
         Qt6::Location
         Qt6::Positioning
+        Qt6::Network
 )
 
 target_include_directories(${PROJECT_NAME}

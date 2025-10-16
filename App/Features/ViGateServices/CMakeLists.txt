@@ -37,12 +37,4 @@ qt_add_qml_module(app_features_vigateservices
     SOURCES ${cpp_sources}
     RESOURCE_PREFIX "/"
     RESOURCES ${icon_resources}
-    SOURCES models/VehicleModel.h models/VehicleModel.cpp
-    SOURCES models/PedestrianModel.h models/PedestrianModel.cpp
-    SOURCES ViGateController.h ViGateController.cpp
-)
-
-target_link_libraries(app_features_vigateservices
-    PRIVATE
-        Qt6::Network
 )
