@@ -7,6 +7,7 @@ import App.Components 1.0 as UI
 GroupBox {
     title: qsTr("Summary")
     Layout.fillWidth: true
+
     required property var controller
 
     contentItem: ScrollView {

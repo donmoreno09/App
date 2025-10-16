@@ -63,6 +63,12 @@ QtObject {
         }
     }
 
+    function setMapCenter(coord) {
+        if(!coord)
+            coord = QtPositioning.coordinate(44.4071, 8.9347)
+        map.center = coord
+    }
+
     // ----------------- INTERNAL METHODS ----------------- //
 
     function _onLoadedMap() {

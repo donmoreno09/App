@@ -8,6 +8,8 @@
 #include <QVector>
 #include <QGeoCoordinate>
 #include <entities/Track.h>
+#include <entities/Velocity.h>
+
 
 class TrackParser : public IMessageParser<Track> {
 public:
@@ -26,6 +28,7 @@ public:
             auto trackVal = rawTrack.toObject();
 
             Track track;
+            track.name = trackVal["name"].toString();
             track.code = trackVal["code"].toString();
             track.entity = trackVal["entity"].toString();
             track.pos = parseCoordinateArray(trackVal["pos"].toArray());
@@ -34,9 +37,12 @@ public:
             track.time = trackVal["time"].toInt();
             track.trackUid = trackVal["track_uid"].toString();
             track.trackNumber = trackVal["tracknumber"].toInt();
-            track.vel = parseCoordinateArray(trackVal["vel"].toArray());
-            track.state = trackVal["state"].toInt();
-
+            track.vel = Velocity(
+                trackVal["vel"].toArray().at(0).toDouble(),
+                trackVal["vel"].toArray().at(1).toDouble(),
+                trackVal["vel"].toArray().at(2).toDouble()
+            );
+            track.state = trackVal["state"].toString();
             tracks.append(track);
         }
 

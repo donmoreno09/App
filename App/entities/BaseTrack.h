@@ -10,7 +10,8 @@ public:
     QGeoCoordinate pos;       // pos:          tuple(x, y, z)
     double cog;               // cog:          number
     int time;                 // time:         number
-    int state;                // state:        number
+    QString state;            // state:        string
+    QString name;             // name:         string
 };
 
 #endif // BASETRACK_H

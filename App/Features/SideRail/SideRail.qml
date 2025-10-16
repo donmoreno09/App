@@ -98,12 +98,12 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
-                        source: "qrc:/App/assets/icons/compass.svg"
-                        preserveIconColor: true
-                        text: (TranslationManager.revision, qsTr("Trailer Prediction"))
-                        active: PanelRouter.currentPath === "trailer-prediction-test" && SidePanelController.isOpen
+                source: "qrc:/App/assets/icons/compass.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Trailer Prediction"))
+                active: PanelRouter.currentPath === "trailer-prediction-test" && SidePanelController.isOpen
 
-                        onClicked: SidePanelController.toggle(Routes.TrailerPredictionTest)
+                onClicked: SidePanelController.toggle(Routes.TrailerPredictionTest)
             }
 
             SideRailItem {

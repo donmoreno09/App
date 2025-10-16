@@ -1,12 +1,6 @@
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-
 qt_add_executable(${PROJECT_NAME}
     main.cpp
 )
-
-target_link_libraries(IRIDESS_FE PRIVATE Qt6::Core)
-target_link_libraries(IRIDESS_FE PRIVATE Qt6::Core)
 
 file(GLOB_RECURSE APP_ASSETS
     RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -20,6 +14,7 @@ set(qml_files
     # Map Objects
     map-objects/Track.qml
     map-objects/Tir.qml
+    map-objects/TriangleHeading.qml
 
     # Layers
     layers/AISTrackMapLayer.qml
@@ -82,8 +77,12 @@ set(cpp_sources
     entities/BaseTrack.h
     entities/Track.h
     entities/Tir.h
+    entities/Velocity.h
+
 
     # Qt Models
+    models/ModelHelper.h
+    models/ModelHelper.cpp
     models/PoiModel.cpp
     models/PoiModel.h
     models/BaseTrackModel.h
