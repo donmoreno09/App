@@ -1,6 +1,7 @@
 set(qml_files
     Avatar.qml
     ButtonOld.qml
+    ComboBox.qml
     DateTime.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml

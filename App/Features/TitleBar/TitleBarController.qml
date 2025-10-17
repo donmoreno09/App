@@ -30,6 +30,7 @@ QtObject {
             case Routes.SliderTest: return qsTr("Slider Test")
             case Routes.ModalTest: return qsTr("Modal Test")
             case Routes.ButtonTest: return qsTr("Button Test")
+            case Routes.ComboBoxTest: return qsTr("ComboBox Test")
             case Routes.ArrivalContentTest: return qsTr("Arrival Content")
             case Routes.ArrivalDateContentTest: return qsTr("Arrival Date Content")
             case Routes.ArrivalDateTimeContentTest: return qsTr("Arrival DateTime Content")
