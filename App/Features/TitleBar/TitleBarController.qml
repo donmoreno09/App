@@ -33,6 +33,8 @@ QtObject {
             case Routes.ArrivalDateContentTest: return qsTr("Arrival Date Content")
             case Routes.ArrivalDateTimeContentTest: return qsTr("Arrival DateTime Content")
             case Routes.TrailerPredictionTest: return qsTr("Trailer Predictions")
+            case Routes.TrackPanel: return qsTr("Track Details")
+            case Routes.TirPanel: return qsTr("Tir Details")
             case Routes.NotFound: return qsTr("Not Found")
             }
         }

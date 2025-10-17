@@ -31,6 +31,7 @@ Button {
     flat: true
     focusPolicy: Qt.StrongFocus
     padding: _currentSize.padding
+    font.family: Theme.typography.familySans
 
     background: Rectangle {
         id: backgroundRect
