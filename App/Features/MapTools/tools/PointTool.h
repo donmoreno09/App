@@ -2,6 +2,7 @@
 #define POINTTOOL_H
 
 #include <QObject>
+#include <QtPositioning/QGeoCoordinate>
 #include "BaseTool.h"
 
 class PointTool : public BaseTool
@@ -15,13 +16,13 @@ class PointTool : public BaseTool
 public:
     explicit PointTool(QObject *parent = nullptr);
 
-    QGeoCoordinate coord() const;
+    Q_INVOKABLE void setLatitude(double latitude);
 
-    Q_INVOKABLE void setLatitude(double lat);
-    Q_INVOKABLE void setLongitude(double lon);
-    Q_INVOKABLE void setAltitude(double altitude);
+    Q_INVOKABLE void setLongitude(double longitude);
 
     void clear();
+
+    QGeoCoordinate coord() const;
 
 public slots:
     void onTapped(const QVariant &rawEvent);

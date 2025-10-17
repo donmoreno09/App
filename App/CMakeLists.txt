@@ -83,6 +83,7 @@ set(cpp_sources
     # Qt Models
     models/ModelHelper.h
     models/ModelHelper.cpp
+    models/CoordinatesModel.h
     models/PoiModel.cpp
     models/PoiModel.h
     models/BaseTrackModel.h

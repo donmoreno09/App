@@ -1,3 +1,17 @@
+/**
+ * WARNING!!
+ *
+ * This component is currently buggy and needs rework.
+ *
+ * When changing the value inside the input, it often
+ * jumps to the end because onValueChanged is also being
+ * invoked. I tried putting up a flag but that does not
+ * solve it nor was it a nice solution.
+ *
+ * I think the best way here is to control everything
+ * instead of using TextField.inputMask.
+ */
+
 import QtQuick 6.8
 
 import App.Components 1.0 as UI
@@ -10,11 +24,16 @@ UI.Input {
 
     property int type: InputCoordinate.Latitude
 
-    readonly property real value: {
-        const text = textField.text
-        const deg = parseFloat(text.slice(0, text.indexOf("°")));
-        const hemi = text.slice(-1);
-        return (hemi === "S" || hemi === "W") ? -deg : deg;
+    property real value: 0
+
+    onValueChanged: {
+        const absVal = Math.abs(value).toFixed(6)
+        const hemi = (type === InputCoordinate.Latitude)
+            ? (value < 0 ? "S" : "N")
+            : (value < 0 ? "W" : "E")
+        textField.text = (type === InputCoordinate.Latitude)
+            ? `${absVal.padStart(8, "0")}° ${hemi}`
+            : `${absVal.padStart(9, "0")}° ${hemi}`
     }
 
     textField.inputMask: (type === InputCoordinate.Latitude) ? "99.999999° >A; " : "999.999999° >A; "
@@ -38,13 +57,23 @@ UI.Input {
         const last = text.slice(-1);
         if (!_getHemiRegex().test(last)) {
             const hemi = _hemiRemembered || _getDefaultHemi();
-            textField.text = text.slice(0, -1) + hemi; // put back valid hemi
+            textField.text = text.slice(0, -1) + hemi;
         }
     }
 
     // Update the remembered hemisphere before the input
     // becomes invalid, i.e. missing hemisphere
-    textField.onTextChanged: if (textField.acceptableInput) _hemiRemembered = textField.text.slice(-1)
+    textField.onTextChanged: {
+        if (textField.acceptableInput) {
+            _hemiRemembered = textField.text.slice(-1)
+
+            const deg = parseFloat(textField.text.slice(0, textField.text.indexOf("°")));
+            const hemi = textField.text.slice(-1);
+
+            _manualChanged = true
+            value = (hemi === "S" || hemi === "W") ? -deg : deg;
+        }
+    }
 
     textField.onEditingFinished: _fixHemisphere()
     textField.onFocusChanged: if (!textField.focus) _fixHemisphere();

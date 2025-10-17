@@ -1,14 +1,14 @@
-/**
- * This file is currently in progress.
- */
-
 #ifndef POIMODEL_H
 #define POIMODEL_H
 
 #include <QAbstractListModel>
 #include <QVector>
+#include <QHash>
+#include <QPointer>
 #include <QQmlEngine>
-#include "../entities/Poi.h"
+#include <entities/Poi.h>
+#include "ModelHelper.h"
+#include "CoordinatesModel.h"
 
 class PoiModel : public QAbstractListModel
 {
@@ -22,7 +22,7 @@ public:
         // Poi
         IdRole = Qt::UserRole + 1,
         LabelRole,
-        LabelIdRole,
+        LayerIdRole,
         LayerNameRole,
         TypeIdRole,
         TypeNameRole,
@@ -32,19 +32,22 @@ public:
         HealthStatusNameRole,
         OperationalStateIdRole,
         OperationalStateNameRole,
+
         // Geometry
         ShapeTypeIdRole,
         SurfaceRole,
         HeightRole,
-        CoordinatesRole, // Perhaps this is better as a model?
-        CoordinateRole,
+        LatitudeRole,   // coordinate.x
+        LongitudeRole,  // coordinate.y
+        CoordinatesRole,
         RadiusARole,
         RadiusBRole,
-        // Details
-        NoteRole
+
+        // Details/Metadata
+        NoteRole,
     };
 
-    Q_ENUM(Roles)
+    Q_ENUM(Roles);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -56,8 +59,22 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+    Q_INVOKABLE QQmlPropertyMap* getEditablePoi(int index);
+
+    Q_INVOKABLE void printData();
+
 private:
     QVector<Poi> m_pois;
+    QPointer<ModelHelper> m_helper;
+    QHash<QString, CoordinatesModel*> m_coordsModels;
+
+    static QList<QVector2D> parseCoordinatesVariant(const QVariant& v);
+
+    static bool compareCoords(const QList<QVector2D>& a, const QList<QVector2D>& b);
+
+    CoordinatesModel* getCoordsModel(const QString& id, const QList<QVector2D>& pts);
+
+    void removeCoordsModel(const QString& id);
 };
 
 #endif // POIMODEL_H
