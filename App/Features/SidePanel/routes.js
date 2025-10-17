@@ -15,6 +15,7 @@ const SwitcherTest = "switcher-test";
 const SliderTest = "slider-test";
 const ModalTest = "modal-test";
 const ButtonTest = "button-test";
+const ComboBoxTest = "combobox-test";
 const ArrivalContentTest = "arrival-content-test";
 const ArrivalDateContentTest = "arrival-date-content-test";
 const ArrivalDateTimeContentTest = "arrival-date-time-content-test";
@@ -41,6 +42,7 @@ const routes = {
   [SliderTest]: "qrc:/App/Playground/SliderPanel.qml",
   [ModalTest]: "qrc:/App/Playground/ModalPanel.qml",
   [ButtonTest]: "qrc:/App/Playground/ButtonPanel.qml",
+  [ComboBoxTest] : "qrc:/App/Playground/ComboBoxPanel.qml",
   [ArrivalContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml",
   [ArrivalDateContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDatePanel.qml",
   [ArrivalDateTimeContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml",
