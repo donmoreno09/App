@@ -33,12 +33,4 @@ private:
     static QUrl makeUrl(const QString& host, int port,
                         const QString& path,
                         const std::function<void(QUrlQuery&)>& addQuery = nullptr);
-
-#ifdef USE_MOCK_DATA
-    void useMockData(int gateId,
-                     const QDateTime& startDate,
-                     const QDateTime& endDate,
-                     bool includeVehicles,
-                     bool includePedestrians);
-#endif
 };
