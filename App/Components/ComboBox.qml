@@ -12,6 +12,8 @@ Item {
     implicitWidth: container.implicitWidth
     implicitHeight: container.implicitHeight
 
+    property int variant: UI.InputStyles.Default
+
     property alias enabled: comboBox.enabled
     property alias labelText: label.text
     property alias currentIndex: comboBox.currentIndex
@@ -22,6 +24,9 @@ Item {
     property alias model: comboBox.model
 
     signal activated(int index)
+
+    // Internals
+    property UI.InputStyle _style: UI.InputStyles.fromVariant(variant)
 
     ColumnLayout {
         id: container
@@ -58,12 +63,7 @@ Item {
 
             // Background
             background: Rectangle {
-                color: {
-                    if (!comboBox.enabled) return Theme.colors.textMuted
-                    if (comboBox.pressed) return Qt.darker(Theme.colors.surface, 1.5)
-                    if (comboBox.hovered) return Theme.colors.surface
-                    return Theme.colors.transparent
-                }
+                color: _style.background
                 radius: Theme.radius.sm
 
                 UI.OutlineRect { target: comboBox }
@@ -75,18 +75,16 @@ Item {
                     anchors.bottom: parent.bottom
                     height: Theme.spacing.s0_5
                     color: {
-                        if (!comboBox.enabled) return Theme.colors.grey300
-                        if (comboBox.activeFocus) return Theme.colors.primary500
-                        if (comboBox.hovered) return Theme.colors.grey400
-                        return Theme.colors.grey300
+                        if (!comboBox.enabled) return _style.borderColorDisabled
+                        if (comboBox.activeFocus) return _style.borderColor
+                        return _style.borderColor
                     }
                 }
             }
 
             // Content Item
             contentItem: RowLayout {
-
-                Item { Layout.preferredWidth: Theme.spacing.s2}
+                Item { Layout.preferredWidth: Theme.spacing.s4 }
 
                 Text {
                     text: comboBox.displayText
@@ -105,7 +103,7 @@ Item {
                     rotation: comboBox.popup.visible ? 180 : 0
                 }
 
-                Item { Layout.preferredWidth: Theme.spacing.s2}
+                Item { Layout.preferredWidth: Theme.spacing.s4 }
             }
 
             // Popup

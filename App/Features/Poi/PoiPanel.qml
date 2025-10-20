@@ -15,21 +15,72 @@ PanelTemplate {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Theme.spacing.s4
-        spacing: Theme.spacing.s1
+        anchors.margins: Theme.spacing.s8
+        spacing: Theme.spacing.s4
 
         UI.Input {
             id: nameInput
             Layout.fillWidth: true
-            labelText: "Name(*)"
+            labelText: qsTr("Name(*)")
             placeholderText: qsTr("Name")
+        }
+
+        UI.ComboBox {
+            id: categoryComboBox
+            Layout.fillWidth: true
+            labelText: qsTr("Category(*)")
+            model: ListModel {
+                id: categoryModel
+                ListElement { name: "Buildings" }
+                ListElement { name: "Docking" }
+                ListElement { name: "Terminals" }
+            }
+
+            function getKey() {
+                return currentIndex + 1
+            }
+        }
+
+        UI.ComboBox {
+            id: typeComboBox
+            Layout.fillWidth: true
+            labelText: qsTr("Type")
+            model: [buildingsModel, dockingModel, terminalsModel][categoryComboBox.currentIndex]
+
+            ListModel {
+                id: buildingsModel
+                readonly property int keyStart: 1
+                ListElement { value: "Office" }
+                ListElement { value: "Fuel station" }
+                ListElement { value: "Mechanical workshop" }
+                ListElement { value: "Maintenance Building" }
+                ListElement { value: "Worksite" }
+            }
+
+            ListModel {
+                id: dockingModel
+                readonly property int keyStart: 6
+                ListElement { value: "Dock A" }
+                ListElement { value: "Dock B" }
+            }
+
+            ListModel {
+                id: terminalsModel
+                readonly property int keyStart: 8
+                ListElement { value: "Container Terminal" }
+                ListElement { value: "Ro-Ro Terminal" }
+            }
+
+            function getKey() {
+                return model.keyStart + currentIndex
+            }
         }
 
         UI.Input {
             id: latitudeInput
             Layout.fillWidth: true
-            labelText: "Latitude(*)"
-            placeholderText: "0.000000"
+            labelText: qsTr("Latitude(*)")
+            placeholderText: qsTr("0.000000")
 
             Binding {
                 target: latitudeInput
@@ -50,8 +101,8 @@ PanelTemplate {
         UI.Input {
             id: longitudeInput
             Layout.fillWidth: true
-            labelText: "Longitude(*)"
-            placeholderText: "0.000000"
+            labelText: qsTr("Longitude(*)")
+            placeholderText: qsTr("0.000000")
 
             Binding {
                 target: longitudeInput
@@ -67,6 +118,41 @@ PanelTemplate {
             }
 
             onTextEdited: ToolRegistry.pointTool.setLongitude(parseFloat(text) || 0)
+        }
+    }
+
+    footer: ColumnLayout {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        spacing: Theme.spacing.s0
+
+        UI.HorizontalDivider {
+            color: Theme.colors.whiteA10
+        }
+
+        Pane {
+            Layout.fillWidth: true
+            padding: Theme.spacing.s8
+            background: Rectangle { color: Theme.colors.transparent }
+
+            RowLayout {
+                anchors.fill: parent
+                spacing: Theme.spacing.s4
+
+                UI.Button {
+                    Layout.preferredWidth: 1
+                    Layout.fillWidth: true
+                    variant: UI.ButtonStyles.Ghost
+                    backgroundRect.border.width: Theme.borders.b0
+                    text: qsTr("Back")
+                }
+
+                UI.Button {
+                    Layout.preferredWidth: 1
+                    Layout.fillWidth: true
+                    text: qsTr("Save")
+                }
+            }
         }
     }
 }
