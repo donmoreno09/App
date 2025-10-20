@@ -28,6 +28,7 @@ public:
         NameRole,
         TrackUidRole,
         TrackNumberRole,
+        UidForHistoryRole
     };
 
     Q_ENUM(Roles)

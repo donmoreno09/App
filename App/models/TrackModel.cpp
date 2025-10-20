@@ -30,6 +30,7 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
     case VelRole: return QVariant::fromValue(track.vel);
     case StateRole: return track.state;
     case NameRole: return track.name;
+    case UidForHistoryRole: return track.uidForHistory;
     default: return {};
     }
 }
@@ -48,6 +49,7 @@ QHash<int, QByteArray> TrackModel::roleNames() const
         { TrackNumberRole, "trackNumber" },
         { VelRole, "vel" },
         { StateRole, "state" },
+        { UidForHistoryRole, "uidForHistory" },
     };
 }
 
@@ -140,6 +142,7 @@ QVector<int> TrackModel::diffRoles(const Track &a, const Track &b) const
     if (a.time != b.time) roles << TimeRole;
     if (a.state != b.state) roles << StateRole;
     if (a.name != b.name) roles << NameRole;
+    if (a.uidForHistory != b.uidForHistory) roles << UidForHistoryRole;
 
     return roles;
 }

@@ -118,6 +118,7 @@ PanelTemplate {
                             { label: (TranslationManager.revision, qsTr("Timestamp")), value: track ? track.time : '-' },
                             { label: (TranslationManager.revision, qsTr("Heading")), value: track ? track.cog : '-' },
                             { label: (TranslationManager.revision, qsTr("Speed")), value: track ? track.vel : '-' },
+                            { label: "UID History", value: track ? track.uidForHistory : '-' },
                         ]
 
                         delegate: ColumnLayout {
@@ -190,6 +191,12 @@ PanelTemplate {
 
                     UI.Toggle {
                         id: toggle
+                        //checked: TrackManager.getLayer("ais").active
+                        onCheckedChanged: {
+                            console.log("History checked");
+                            console.log(track.uidForHistory);
+                            TrackManager.activateHistory("doc-space", track.uidForHistory)
+                        }
                     }
 
                     Text {

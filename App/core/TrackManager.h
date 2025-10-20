@@ -20,9 +20,12 @@ public:
 
     Q_INVOKABLE void unregisterLayer(const QString& track);
 
-    Q_INVOKABLE void activate(const QString& track);
+    Q_INVOKABLE void activate(const QString& topic);
+    Q_INVOKABLE void activateHistory(const QString& topic, const QString& track_iridess_uid);
 
     Q_INVOKABLE void deactivate(const QString& track);
+    Q_INVOKABLE void deactivateHistory(const QString& topic, const QString& track_iridess_uid);
+
     Q_INVOKABLE void deactivateSync(const QString& track);
 
     Q_INVOKABLE BaseTrackMapLayer* getLayer(const QString& track);
@@ -31,6 +34,8 @@ public:
 signals:
     void activated(const QString& track);
     void deactivated(const QString& track);
+    void activatedHistory(const QString& topic, const QString& track_iridess_uid);
+    void deactivatedHistory(const QString& topic, const QString& track_iridess_uid);
 
 private:
     QHash<QString, BaseTrackMapLayer*> m_trackToLayer;

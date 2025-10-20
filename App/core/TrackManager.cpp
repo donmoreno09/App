@@ -41,6 +41,25 @@ void TrackManager::activate(const QString &track)
     });
 }
 
+void TrackManager::activateHistory(const QString &topic, const QString &track_iridess_uidd)
+{
+    const QUrl url(ApiEndpoints::TrackHistorySenderStart(topic, track_iridess_uidd));
+    QNetworkReply* reply = m_networkManager.post(QNetworkRequest(url), QByteArray{});
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, topic, track_iridess_uidd]() {
+        reply->deleteLater();
+
+        if (reply->error() != QNetworkReply::NoError) {
+            qWarning() << "[TrackManager] Failed to activate track history for '" << topic << "':" << reply->errorString();
+            return;
+        }
+
+        //TODO: Do here code block once track history it's started.
+        qDebug() << "[TrackManager] Activate History started successfully";
+        emit activatedHistory(topic, track_iridess_uidd);
+    });
+}
+
 void TrackManager::deactivate(const QString &track)
 {
     const QUrl url(ApiEndpoints::TrackSenderStop(track));
@@ -58,6 +77,25 @@ void TrackManager::deactivate(const QString &track)
             m_trackToLayer.value(track)->setActive(false);
             emit deactivated(track);
         }
+    });
+}
+
+void TrackManager::deactivateHistory(const QString &topic, const QString &track_iridess_uid)
+{
+    const QUrl url(ApiEndpoints::TrackHistorySenderStop(topic, track_iridess_uid));
+    QNetworkReply* reply = m_networkManager.post(QNetworkRequest(url), QByteArray{});
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, topic, track_iridess_uid]() {
+        reply->deleteLater();
+
+        if (reply->error() != QNetworkReply::NoError) {
+            qWarning() << "[TrackManager] Failed to deactivate track history for '" << topic << "':" << reply->errorString();
+            return;
+        }
+
+        //TODO: Do here code block once track history it's started.
+        qDebug() << "[TrackManager] Deactivate History started successfully";
+        emit deactivatedHistory(topic, track_iridess_uid);
     });
 }
 

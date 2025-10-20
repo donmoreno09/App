@@ -28,6 +28,7 @@ public:
             auto trackVal = rawTrack.toObject();
 
             Track track;
+            track.uidForHistory = trackVal["iridess_uid"].toString();
             track.name = trackVal["name"].toString();
             track.code = trackVal["code"].toString();
             track.entity = trackVal["entity"].toString();
@@ -37,12 +38,24 @@ public:
             track.time = trackVal["time"].toInt();
             track.trackUid = trackVal["track_uid"].toString();
             track.trackNumber = trackVal["tracknumber"].toInt();
-            track.vel = Velocity(
+             track.vel = Velocity(
                 trackVal["vel"].toArray().at(0).toDouble(),
                 trackVal["vel"].toArray().at(1).toDouble(),
                 trackVal["vel"].toArray().at(2).toDouble()
             );
             track.state = trackVal["state"].toString();
+
+            if (trackVal.contains("history")) {
+                const QJsonValue historyVal = trackVal["history"];
+                if (historyVal.isArray()) {
+                    const QJsonArray historyArr = historyVal.toArray();
+                    if (!historyArr.isEmpty()) {
+                        qDebug().noquote() << "history:\n"
+                                           << QJsonDocument(historyArr).toJson(QJsonDocument::Indented);
+                    }
+                }
+            }
+
             tracks.append(track);
         }
 

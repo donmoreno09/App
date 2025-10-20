@@ -1,0 +1,6 @@
+#ifndef HISTORYPOINT_H
+#define HISTORYPOINT_H
+
+
+
+#endif // HISTORYPOINT_H
