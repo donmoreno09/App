@@ -6,7 +6,9 @@
 #include <QJsonObject>
 #include <QScopeGuard>
 #include <QJsonArray>
-#include <QTimer>
+#include <QDebug>
+
+// #define USE_MOCK_DATA
 
 ViGateService::ViGateService(QObject* parent)
     : QObject(parent)
@@ -33,6 +35,8 @@ QUrl ViGateService::makeUrl(const QString& host, int port,
 
 void ViGateService::performGet(const QUrl& url)
 {
+    qDebug() << "ViGateService: Fetching" << url.toString();
+
     QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -41,54 +45,65 @@ void ViGateService::performGet(const QUrl& url)
         const auto finish = qScopeGuard([&]{ reply->deleteLater(); });
 
         if (reply->error() != QNetworkReply::NoError) {
+            qWarning() << "ViGateService: Network error:" << reply->errorString();
             emit requestFailed(reply->errorString());
             return;
         }
 
         const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qDebug() << "ViGateService: HTTP status" << status;
+
         if (status == 404) {
+            qDebug() << "ViGateService: Data not found (404)";
             emit notFound();
             return;
         }
         if (status < 200 || status >= 300) {
-            emit requestFailed(QStringLiteral("HTTP %1").arg(status));
+            QString error = QStringLiteral("HTTP %1").arg(status);
+            qWarning() << "ViGateService: HTTP error:" << error;
+            emit requestFailed(error);
             return;
         }
 
         // Parse JSON response
+        QByteArray responseData = reply->readAll();
         QJsonParseError parseError;
-        QJsonDocument doc = QJsonDocument::fromJson(reply->readAll(), &parseError);
+        QJsonDocument doc = QJsonDocument::fromJson(responseData, &parseError);
 
         if (parseError.error != QJsonParseError::NoError) {
-            emit requestFailed(QStringLiteral("JSON parse error: %1").arg(parseError.errorString()));
+            QString error = QStringLiteral("JSON parse error: %1").arg(parseError.errorString());
+            qWarning() << "ViGateService:" << error;
+            qWarning() << "Response data:" << responseData;
+            emit requestFailed(error);
             return;
         }
 
         if (!doc.isObject()) {
+            qWarning() << "ViGateService: Invalid response format (not an object)";
             emit requestFailed(QStringLiteral("Invalid response format"));
             return;
         }
 
-        emit dataReady(doc.object());
+        QJsonObject response = doc.object();
+        qDebug() << "ViGateService: Successfully parsed response";
+
+        // Log what we received
+        if (response.contains("summary")) {
+            QJsonObject summary = response["summary"].toObject();
+            qDebug() << "  - Total entries:" << summary["total_entries"].toInt();
+        }
+        if (response.contains("vehicles")) {
+            int vCount = response["vehicles"].toArray().size();
+            qDebug() << "  - Vehicles:" << vCount;
+        }
+        if (response.contains("pedestrian")) {
+            int pCount = response["pedestrian"].toArray().size();
+            qDebug() << "  - Pedestrians:" << pCount;
+        }
+
+        emit dataReady(response);
     });
 }
-
-// void ViGateService::getGateData(int gateId,
-//                                 const QDateTime& startDate,
-//                                 const QDateTime& endDate,
-//                                 bool includeVehicles,
-//                                 bool includePedestrians)
-// {
-//     auto url = makeUrl(m_host, m_port, QStringLiteral("/ViGate/GetGateData"),
-//                        [&](QUrlQuery& q) {
-//                            q.addQueryItem(QStringLiteral("gateId"), QString::number(gateId));
-//                            q.addQueryItem(QStringLiteral("startDate"), startDate.toString(Qt::ISODate));
-//                            q.addQueryItem(QStringLiteral("endDate"), endDate.toString(Qt::ISODate));
-//                            q.addQueryItem(QStringLiteral("includeVehicles"), includeVehicles ? "true" : "false");
-//                            q.addQueryItem(QStringLiteral("includePedestrians"), includePedestrians ? "true" : "false");
-//                        });
-//     performGet(url);
-// }
 
 void ViGateService::getGateData(int gateId,
                                 const QDateTime& startDate,
@@ -96,99 +111,97 @@ void ViGateService::getGateData(int gateId,
                                 bool includeVehicles,
                                 bool includePedestrians)
 {
+    qDebug() << "ViGateService::getGateData called";
+    qDebug() << "  - Gate ID:" << gateId;
+    qDebug() << "  - Date range:" << startDate.toString(Qt::ISODate)
+             << "to" << endDate.toString(Qt::ISODate);
+    qDebug() << "  - Include vehicles:" << includeVehicles;
+    qDebug() << "  - Include pedestrians:" << includePedestrians;
 
-    static const QSet<int> VALID_GATE_IDS = {1, 2, 3, 4, 5};
+#ifdef USE_MOCK_DATA
+    qDebug() << "ViGateService: Using MOCK DATA";
+    useMockData(gateId, startDate, endDate, includeVehicles, includePedestrians);
+#else
+    qDebug() << "ViGateService: Making real API call";
+    auto url = makeUrl(m_host, m_port, QStringLiteral("/ViGate/GetGateData"),
+                       [&](QUrlQuery& q) {
+                           q.addQueryItem(QStringLiteral("gateId"), QString::number(gateId));
+                           q.addQueryItem(QStringLiteral("startDate"), startDate.toString(Qt::ISODate));
+                           q.addQueryItem(QStringLiteral("endDate"), endDate.toString(Qt::ISODate));
+                           q.addQueryItem(QStringLiteral("includeVehicles"), includeVehicles ? "true" : "false");
+                           q.addQueryItem(QStringLiteral("includePedestrians"), includePedestrians ? "true" : "false");
+                       });
+    performGet(url);
+#endif
+}
+
+#ifdef USE_MOCK_DATA
+void ViGateService::useMockData(int gateId,
+                                const QDateTime& startDate,
+                                const QDateTime& endDate,
+                                bool includeVehicles,
+                                bool includePedestrians)
+{
+    // Validate gate ID
+    static const QSet<int> VALID_GATE_IDS = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 26};
     if (!VALID_GATE_IDS.contains(gateId)) {
         QTimer::singleShot(100, this, [this]() {
+            qDebug() << "Mock: Gate not found";
             emit notFound();
         });
         return;
     }
 
-    // MOCK DATA FOR TESTING
     QJsonObject mockResponse;
-
-    // Summary
-    // QJsonObject summary;
-    // summary["total_entries"] = 150;
-    // summary["total_exits"] = 142;
-    // summary["total_vehicle_entries"] = 100;
-    // summary["total_vehicle_exits"] = 98;
-    // summary["total_pedestrian_entries"] = 50;
-    // summary["total_pedestrian_exits"] = 44;
-    // mockResponse["summary"] = summary;
 
     // Vehicles
     QJsonArray vehicles;
     if (includeVehicles) {
-        // Gate 1 vehicles
         QJsonObject v1;
-        v1["idGate"] = 1;
-        v1["startDate"] = "2025-09-06T00:29:00Z";
+        v1["idGate"] = gateId;
+        v1["startDate"] = "2025-09-01T08:00:00Z";
         v1["plate"] = QJsonArray{"EF162WW"};
         v1["direction"] = "IN";
+        v1["idPeople"] = 3986;
+        v1["idTitle"] = 4916;
         vehicles.append(v1);
 
         QJsonObject v2;
-        v2["idGate"] = 1;
-        v2["startDate"] = "2025-09-06T01:15:00Z";
+        v2["idGate"] = gateId;
+        v2["startDate"] = "2025-09-01T09:15:00Z";
         v2["plate"] = QJsonArray{"AB123CD"};
         v2["direction"] = "OUT";
+        v2["idPeople"] = 1234;
+        v2["idTitle"] = 5678;
         vehicles.append(v2);
-
-        // Gate 2 vehicles
-        QJsonObject v3;
-        v3["idGate"] = 2;
-        v3["startDate"] = "2025-09-06T02:30:00Z";
-        v3["plate"] = QJsonArray{"XY999ZZ"};
-        v3["direction"] = "IN";
-        vehicles.append(v3);
-
-        // Gate 3 vehicles
-        QJsonObject v4;
-        v4["idGate"] = 3;
-        v4["startDate"] = "2025-09-06T03:45:00Z";
-        v4["plate"] = QJsonArray{"LM456OP"};
-        v4["direction"] = "OUT";
-        vehicles.append(v4);
     }
 
     // Pedestrians
     QJsonArray pedestrians;
     if (includePedestrians) {
-        // Gate 1 pedestrians
         QJsonObject p1;
-        p1["idGate"] = 1;
+        p1["idGate"] = gateId;
         p1["startDate"] = "2025-09-01T07:03:00Z";
         p1["direction"] = "IN";
+        p1["idPeople"] = 87;
+        p1["idTitle"] = 1043;
         pedestrians.append(p1);
 
         QJsonObject p2;
-        p2["idGate"] = 1;
+        p2["idGate"] = gateId;
         p2["startDate"] = "2025-09-01T08:22:00Z";
         p2["direction"] = "OUT";
+        p2["idPeople"] = 431;
+        p2["idTitle"] = 1187;
         pedestrians.append(p2);
-
-        // Gate 2 pedestrians
-        QJsonObject p3;
-        p3["idGate"] = 2;
-        p3["startDate"] = "2025-09-01T09:15:00Z";
-        p3["direction"] = "IN";
-        pedestrians.append(p3);
-
-        // Gate 3 pedestrians
-        QJsonObject p4;
-        p4["idGate"] = 3;
-        p4["startDate"] = "2025-09-01T10:30:00Z";
-        p4["direction"] = "OUT";
-        pedestrians.append(p4);
     }
 
+    // Filter by date
     QJsonArray filteredVehicles;
     for (const auto& v : vehicles) {
         QJsonObject obj = v.toObject();
         QDateTime entryDate = QDateTime::fromString(obj["startDate"].toString(), Qt::ISODate);
-        if (obj["idGate"].toInt() == gateId && entryDate >= startDate && entryDate <= endDate) {
+        if (entryDate >= startDate && entryDate <= endDate) {
             filteredVehicles.append(v);
         }
     }
@@ -197,11 +210,12 @@ void ViGateService::getGateData(int gateId,
     for (const auto& p : pedestrians) {
         QJsonObject obj = p.toObject();
         QDateTime entryDate = QDateTime::fromString(obj["startDate"].toString(), Qt::ISODate);
-        if (obj["idGate"].toInt() == gateId  && entryDate >= startDate && entryDate <= endDate) {
+        if (entryDate >= startDate && entryDate <= endDate) {
             filteredPedestrians.append(p);
         }
     }
 
+    // Calculate summary
     int vehicleEntries = 0, vehicleExits = 0;
     for (const auto& v : filteredVehicles) {
         QJsonObject obj = v.toObject();
@@ -229,7 +243,9 @@ void ViGateService::getGateData(int gateId,
     mockResponse["pedestrian"] = filteredPedestrians;
 
     // Simulate network delay
-    QTimer::singleShot(1000, this, [this, mockResponse]() {
+    QTimer::singleShot(500, this, [this, mockResponse]() {
+        qDebug() << "Mock: Emitting data";
         emit dataReady(mockResponse);
     });
 }
+#endif

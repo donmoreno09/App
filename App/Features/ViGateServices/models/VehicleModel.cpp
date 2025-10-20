@@ -1,6 +1,7 @@
 #include "VehicleModel.h"
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QDebug>
 
 VehicleModel::VehicleModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -25,7 +26,7 @@ QVariant VehicleModel::data(const QModelIndex& index, int role) const
     case StartDateRole:
         return entry.startDate.toString("dd/MM/yyyy HH:mm");
     case PlateRole:
-        return entry.plates.isEmpty() ? QString() : entry.plates.first();
+        return entry.plates.join(", ");
     case DirectionRole:
         return entry.direction;
     default:
@@ -56,22 +57,45 @@ void VehicleModel::setData(const QJsonArray& vehiclesArray)
     m_entries.clear();
 
     for (const auto& value : vehiclesArray) {
-        if (!value.isObject()) continue;
+        if (!value.isObject()) {
+            qWarning() << "VehicleModel: Skipping non-object entry";
+            continue;
+        }
 
         QJsonObject obj = value.toObject();
         VehicleEntry entry;
 
-        entry.idGate = obj["idGate"].toInt();
-        entry.startDate = QDateTime::fromString(obj["startDate"].toString(), Qt::ISODate);
+        entry.idGate = obj.value("idGate").toInt(0);
 
-        // Parse arrays
-        for (const auto& plate : obj["plate"].toArray())
-            entry.plates.append(plate.toString());
+        QString dateStr = obj.value("startDate").toString();
+        entry.startDate = QDateTime::fromString(dateStr, Qt::ISODate);
 
-        entry.direction = obj["direction"].toString();
+        if (!entry.startDate.isValid()) {
+            qWarning() << "VehicleModel: Invalid date format:" << dateStr;
+            entry.startDate = QDateTime::currentDateTime(); // Fallback
+        }
+
+        QJsonArray plateArray = obj.value("plate").toArray();
+        if (plateArray.isEmpty()) {
+            qWarning() << "VehicleModel: Empty plate array for gate" << entry.idGate;
+            entry.plates.append("N/A");
+        } else {
+            for (int i = 0; i < plateArray.size(); ++i) {
+                QString plateStr = plateArray[i].toString().trimmed();
+                if (!plateStr.isEmpty()) {
+                    entry.plates.append(plateStr);
+                }
+            }
+        }
+
+        entry.direction = obj.value("direction").toString("UNKNOWN");
+        if (entry.direction != "IN" && entry.direction != "OUT") {
+            qWarning() << "VehicleModel: Unknown direction:" << entry.direction;
+        }
 
         m_entries.append(entry);
     }
 
+    qDebug() << "VehicleModel: Loaded" << m_entries.size() << "vehicles";
     endResetModel();
 }

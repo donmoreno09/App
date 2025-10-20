@@ -23,17 +23,14 @@ void ViGateController::setLoading(bool loading)
 void ViGateController::hookUpService()
 {
     connect(m_service, &ViGateService::dataReady, this, [this](const QJsonObject& data) {
-        // Process summary
         if (data.contains("summary")) {
             processSummary(data["summary"].toObject());
         }
 
-        // Process vehicles
         if (data.contains("vehicles")) {
             m_vehiclesModel->setData(data["vehicles"].toArray());
         }
 
-        // Process pedestrians
         if (data.contains("pedestrian")) {
             m_pedestriansModel->setData(data["pedestrian"].toArray());
         }
