@@ -23,5 +23,4 @@ qt_add_qml_module(app_features_truckarrivals
     QML_FILES ${qml_files}
     SOURCES ${cpp_sources}
     RESOURCE_PREFIX "/"
-    RESOURCES ${icon_resources}
 )

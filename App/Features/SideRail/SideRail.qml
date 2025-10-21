@@ -107,6 +107,15 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/test.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Web Component"))
+                active: PanelRouter.currentPath === "web-component" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle(Routes.WebComponent)
+            }
+
+            SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
                 source: "qrc:/App/assets/icons/world.svg"
                 icon.width: Theme.icons.sizeMd
