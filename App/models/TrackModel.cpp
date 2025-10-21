@@ -29,6 +29,7 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
     case TrackNumberRole: return track.trackNumber;
     case VelRole: return QVariant::fromValue(track.vel);
     case StateRole: return track.state;
+    case NameRole: return track.name;
     default: return {};
     }
 }
@@ -36,6 +37,7 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> TrackModel::roleNames() const
 {
     return {
+        { NameRole, "name"},
         { CodeRole, "code" },
         { EntityRole, "entity" },
         { PosRole, "pos" },
@@ -76,8 +78,8 @@ void TrackModel::upsert(const QVector<Track> &tracks)
 
     // Update existing track or insert it
     for (const auto& track : tracks) {
-        seen.insert(track.code);
-        auto it = m_upsertMap.find(track.code);
+        seen.insert(track.trackUid);
+        auto it = m_upsertMap.find(track.trackUid);
 
         if (it != m_upsertMap.end()) {
             // Update track
@@ -95,7 +97,7 @@ void TrackModel::upsert(const QVector<Track> &tracks)
 
             beginInsertRows({}, row, row);
             m_tracks.append(track);
-            m_upsertMap.insert(track.code, row);
+            m_upsertMap.insert(track.trackUid, row);
             endInsertRows();
         }
     }
@@ -104,9 +106,9 @@ void TrackModel::upsert(const QVector<Track> &tracks)
     bool removed = false;
     for (int row = m_tracks.size() - 1; row >= 0; row--) {
         const auto& track = m_tracks[row];
-        if (!seen.contains(track.code)) {
+        if (!seen.contains(track.trackUid)) {
             beginRemoveRows({}, row, row);
-            m_upsertMap.remove(track.code);
+            m_upsertMap.remove(track.trackUid);
             m_tracks.removeAt(row);
             endRemoveRows();
             removed = true;
@@ -118,7 +120,7 @@ void TrackModel::upsert(const QVector<Track> &tracks)
         m_upsertMap.clear();
         m_upsertMap.reserve(m_tracks.size());
         for (int row = 0; row < m_tracks.size(); row++) {
-            m_upsertMap.insert(m_tracks[row].code, row);
+            m_upsertMap.insert(m_tracks[row].trackUid, row);
         }
     }
 }
@@ -137,8 +139,14 @@ QVector<int> TrackModel::diffRoles(const Track &a, const Track &b) const
     if (!qFuzzyCompare(a.cog, b.cog)) roles << CogRole;
     if (a.time != b.time) roles << TimeRole;
     if (a.state != b.state) roles << StateRole;
+    if (a.name != b.name) roles << NameRole;
 
     return roles;
+}
+
+QQmlPropertyMap *TrackModel::getEditableTrack(int index)
+{
+    return m_helper->map(index);
 }
 
 void TrackModel::clear()
@@ -146,4 +154,9 @@ void TrackModel::clear()
     beginResetModel();
     m_tracks.clear();
     endResetModel();
+}
+
+QVariant TrackModel::getRoleData(int idx, int role) const
+{
+    return data(index(idx), role);
 }

@@ -28,6 +28,7 @@ ColumnLayout {
     UI.Input {
         id: trailerIdInput
         visible: !controller.isLoading
+        variant: UI.InputStyles.Success
         Layout.fillWidth: true
         Layout.margins: 10
         labelText: (TranslationManager.revision, qsTr("Trailer ID"))
@@ -75,7 +76,7 @@ ColumnLayout {
 
         Text {
             text: getStatusText(controller.prediction)
-            color: getStatusColor(controller.prediction)
+            color: Theme.colors.text
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
             Layout.leftMargin: Theme.spacing.s4
@@ -126,12 +127,5 @@ ColumnLayout {
         if (minutes < 30) return (TranslationManager.revision, qsTr("Short wait - entry soon"))
         if (minutes < 120) return (TranslationManager.revision, qsTr("In queue - moderate wait"))
         return (TranslationManager.revision, qsTr("Extended wait - consider alternatives"))
-    }
-
-    function getStatusColor(minutes) {
-        if (minutes === 0) return Theme.colors.success500
-        if (minutes < 30) return Theme.colors.success500
-        if (minutes < 120) return Theme.colors.warning500
-        return Theme.colors.error500
     }
 }

@@ -31,7 +31,7 @@ QUrl TrailerPredictionService::makeUrl(const QString& host, int port,
 void TrailerPredictionService::performGet(const QUrl& url)
 {
     QNetworkRequest req(url);
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    req.setRawHeader("Accept", "application/json");
 
     QNetworkReply* reply = m_manager.get(req);
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
@@ -43,11 +43,8 @@ void TrailerPredictionService::performGet(const QUrl& url)
         }
 
         const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        if(status == 404){
-            emit notFound();
-            return;
-        }
-        if(status < 202 || status >= 300) {
+        if(status < 200 || status >= 300) {
+            if(status == 404){ emit notFound(); return; }
             emit requestFailed(QStringLiteral("HTTP %1").arg(status));
             return;
         }

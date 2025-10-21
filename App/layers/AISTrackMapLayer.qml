@@ -15,7 +15,9 @@ MapItemGroup {
     MapItemView {
         model: trackMapLayer.trackModel
 
-        delegate: Track { }
+        delegate: Track {
+            trackModel: trackMapLayer.trackModel
+        }
     }
 
     TrackMapLayer {

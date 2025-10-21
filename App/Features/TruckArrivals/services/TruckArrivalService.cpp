@@ -32,7 +32,7 @@ QUrl TruckArrivalService::makeUrl(const QString& host, int port,
 void TruckArrivalService::performGet(RequestKind kind, const QUrl& url)
 {
     QNetworkRequest req(url);
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    req.setRawHeader("Accept", "application/json");
 
     QNetworkReply* reply = m_manager.get(req);
     connect(reply, &QNetworkReply::finished, this, [this, reply, kind]() {
