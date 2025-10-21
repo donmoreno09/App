@@ -201,4 +201,7 @@ PanelTemplate {
             }
         }
     }
+
+    Component.onCompleted: ToolController.activeTool = ToolRegistry.pointTool
+    Component.onDestruction: ToolController.activeTool = null
 }

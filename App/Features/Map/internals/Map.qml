@@ -158,10 +158,7 @@ Map {
         id: inputHandler
         anchors.fill: parent
         map: map
-        Component.onCompleted: {
-            ToolController.inputHandler = inputHandler
-            ToolController.activeTool = ToolRegistry.pointTool
-        }
+        Component.onCompleted: ToolController.inputHandler = inputHandler
     }
 
     MapQuickItem {
