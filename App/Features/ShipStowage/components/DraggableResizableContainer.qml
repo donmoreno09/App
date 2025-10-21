@@ -1,12 +1,18 @@
 import QtQuick 6.8
+import QtQuick.Layouts 6.8
 import QtQuick.Controls 6.8
 
 import App.Themes 1.0
 
 Rectangle {
     id: container
-    width: 400
-    height: 300
+    // Use the same numbers for both logical min and Layout min (avoid conflicts)
+    property real minWidth: 800
+    property real minHeight: 600
+
+    Layout.minimumWidth: minWidth
+    Layout.minimumHeight: minHeight
+
     radius: Theme.radius.sm
     color: Theme.colors.primary900
     border.color: Theme.colors.secondary500
@@ -15,33 +21,27 @@ Rectangle {
 
     signal closeRequested()
 
-    // Minimum position and size constraints
-    property real minPosX: 0
-    property real minPosY: 0
-    property real minWidth: 200
-    property real minHeight: 150
-
-    // These must be set from outside (main window)
+    // Window bounds (set from outside)
     property real windowWidth: 800
     property real windowHeight: 600
 
-    // Maximum allowed position based on window size and current width/height
+    // Max position based on current size
     property real maxPosX: windowWidth - width
     property real maxPosY: windowHeight - height
 
-    // Initial position
-    Component.onCompleted: {
-        x = 100
-        y = 100
+    // Keep inside window
+    onXChanged: x = Math.max(0, Math.min(x, maxPosX))
+    onYChanged: y = Math.max(0, Math.min(y, maxPosY))
+
+    // Clamp size if something external assigns width/height
+    onWidthChanged: {
+        if (width < minWidth) width = minWidth
+        if (x + width > windowWidth) width = windowWidth - x
     }
-
-    // Clamp position within window bounds
-    onXChanged: x = Math.max(minPosX, Math.min(x, maxPosX))
-    onYChanged: y = Math.max(minPosY, Math.min(y, maxPosY))
-
-    // Clamp size within min size and available window space
-    onWidthChanged: width = Math.max(minWidth, Math.min(width, windowWidth - x))
-    onHeightChanged: height = Math.max(minHeight, Math.min(height, windowHeight - y))
+    onHeightChanged: {
+        if (height < minHeight) height = minHeight
+        if (y + height > windowHeight) height = windowHeight - y
+    }
 
     // Default alias to add content inside container
     default property alias content: contentArea.data
@@ -65,10 +65,9 @@ Rectangle {
             anchors.fill: parent
             drag.target: container
             drag.axis: Drag.XAndYAxis
-
-            // Limit dragging inside window bounds dynamically
-            drag.minimumX: container.minPosX
-            drag.minimumY: container.minPosY
+            // Limit dragging within window bounds
+            drag.minimumX: 0
+            drag.minimumY: 0
             drag.maximumX: container.maxPosX
             drag.maximumY: container.maxPosY
 
@@ -78,7 +77,7 @@ Rectangle {
             hoverEnabled: true
         }
 
-        // Close button on drag bar
+        // Close button
         Rectangle {
             id: closeButton
             width: Theme.spacing.s6
@@ -93,9 +92,7 @@ Rectangle {
             border.color: Theme.colors.secondary500
             border.width: Theme.borders.b1
 
-            Behavior on color {
-                ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-            }
+            Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
 
             Text {
                 text: "✕"
@@ -115,7 +112,7 @@ Rectangle {
         }
     }
 
-    // Content area inside container, below drag handle
+    // Content area
     Item {
         id: contentArea
         anchors {
@@ -128,57 +125,52 @@ Rectangle {
         clip: true
     }
 
-    // Resize handle at bottom-right corner
+    // Resize handle (doesn't move; only resizes container)
     Rectangle {
         id: resizeHandle
         width: Theme.spacing.s4
         height: Theme.spacing.s4
         radius: Theme.radius.sm
-        color: resizeMouseArea.drag.active ? Theme.colors.secondary400 : Theme.colors.secondary500
+        color: resizeMouseArea.pressed ? Theme.colors.secondary400 : Theme.colors.secondary500
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: Theme.spacing.s1
         z: 100
 
-        Behavior on color {
-            ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-        }
+        Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
 
         MouseArea {
             id: resizeMouseArea
             anchors.fill: parent
             hoverEnabled: true
+            preventStealing: true
+            acceptedButtons: Qt.LeftButton
             cursorShape: Qt.SizeFDiagCursor
-            drag.target: resizeHandle
-            drag.axis: Drag.XAndYAxis
 
-            // Minimum resize constraints relative to current size
-            drag.minimumX: container.minWidth - container.width
-            drag.minimumY: container.minHeight - container.height
+            // Remember starting state
+            property real startW: 0
+            property real startH: 0
+            property real startX: 0
+            property real startY: 0
 
-            // Maximum resize constrained by window size and current position
-            drag.maximumX: container.windowWidth - container.width - container.x
-            drag.maximumY: container.windowHeight - container.height - container.y
+            onPressed: function(mouse) {
+                startW = container.width
+                startH = container.height
+                startX = mouse.x
+                startY = mouse.y
+            }
 
-            onEntered: resizeHandle.color = Theme.colors.secondary300
-            onExited: resizeHandle.color = drag.active ? Theme.colors.secondary400 : Theme.colors.secondary500
+            onPositionChanged: function(mouse) {
+                if (!(mouse.buttons & Qt.LeftButton)) return
 
-            onPositionChanged: {
-                if (drag.active) {
-                    var newWidth = container.width + mouseX
-                    var newHeight = container.height + mouseY
+                var dx = mouse.x - startX
+                var dy = mouse.y - startY
 
-                    // Apply min size
-                    newWidth = Math.max(container.minWidth, newWidth)
-                    newHeight = Math.max(container.minHeight, newHeight)
+                var newW = Math.max(container.minWidth,  Math.min(startW + dx, container.windowWidth  - container.x))
+                var newH = Math.max(container.minHeight, Math.min(startH + dy, container.windowHeight - container.y))
 
-                    // Apply max size based on window bounds
-                    newWidth = Math.min(newWidth, container.windowWidth - container.x)
-                    newHeight = Math.min(newHeight, container.windowHeight - container.y)
-
-                    container.width = newWidth
-                    container.height = newHeight
-                }
+                container.width  = newW
+                container.height = newH
             }
         }
     }
