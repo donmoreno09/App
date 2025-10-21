@@ -234,6 +234,62 @@ Qt::ItemFlags PoiModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEditable | Qt::ItemIsSelectable;
 }
 
+void PoiModel::append(const QVariantMap &data)
+{
+    Poi poi;
+
+    poi.label = data.value("label").toString();
+    poi.layerId = data.value("layerId").toInt();
+    poi.typeId = data.value("typeId").toInt();
+    poi.categoryId = data.value("categoryId").toInt();
+    poi.healthStatusId = data.value("healthStatusId").toInt();
+    poi.operationalStateId = data.value("operationalStateId").toInt();
+
+    // Geometry
+    QVariantMap geomMap = data.value("geometry").toMap();
+    Geometry geom;
+    geom.shapeTypeId = geomMap.value("shapeTypeId").toInt();
+    geom.surface = geomMap.value("surface").toDouble();
+    geom.height = geomMap.value("height").toDouble();
+
+    QVariantMap centerCoordMap = geomMap.value("coordinate").toMap();
+    geom.coordinate.setX(centerCoordMap.value("x").toDouble());
+    geom.coordinate.setY(centerCoordMap.value("y").toDouble());
+
+    geom.radiusA = geomMap.value("radiusA").toDouble();
+    geom.radiusB = geomMap.value("radiusB").toDouble();
+
+    QVariantList coordList = geomMap.value("coordinates").toList();
+    QList<QVector2D> coords;
+    for (const QVariant &coordVar : std::as_const(coordList)) {
+        QVariantMap coordMap = coordVar.toMap();
+        float x = static_cast<float>(coordMap.value("x").toDouble());
+        float y = static_cast<float>(coordMap.value("y").toDouble());
+        coords.append(QVector2D(x, y));
+    }
+
+    if (!coords.isEmpty())
+        geom.coordinates = coords;
+    poi.geometry = geom;
+
+    poi.details.metadata.clear();
+
+    QVariantMap detailsMap = data.value("details").toMap(); // maps to JSON field "details"
+    QVariantMap metadataMap = detailsMap.value("metadata").toMap(); // maps to "details.metadata"
+
+    for (auto it = metadataMap.begin(); it != metadataMap.end(); ++it) {
+        QString key = it.key();
+
+        if (key == "note") {
+            auto entry = QSharedPointer<NoteMetadataEntry>::create();
+            entry->note = it.value().toString();
+            poi.details.metadata.insert(key, entry);
+        }
+    }
+
+    m_persistenceManager.save(poi);
+}
+
 QQmlPropertyMap *PoiModel::getEditablePoi(int index)
 {
     return m_helper->map(index, 0);

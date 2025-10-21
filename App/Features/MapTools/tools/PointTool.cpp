@@ -21,7 +21,7 @@ void PointTool::onTapped(const QVariant &rawEvent)
     auto event = parseEvent(rawEvent);
     m_coord = event.coord;
     emit coordChanged();
-    qDebug() << "Point coordinate: " << m_coord.latitude() << ", " << m_coord.longitude();
+    emit mapInputted();
 }
 
 void PointTool::onCancelled()

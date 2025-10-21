@@ -7,6 +7,7 @@
 #include <QPointer>
 #include <QQmlEngine>
 #include <entities/Poi.h>
+#include <persistence/poipersistencemanager.h>
 #include "ModelHelper.h"
 #include "CoordinatesModel.h"
 
@@ -14,6 +15,8 @@ class PoiModel : public QAbstractListModel
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("Not intended for instantiation. Use it as a singleton.")
+    QML_SINGLETON
 
 public:
     explicit PoiModel(QObject *parent = nullptr);
@@ -59,11 +62,14 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+    Q_INVOKABLE void append(const QVariantMap &data);
+
     Q_INVOKABLE QQmlPropertyMap* getEditablePoi(int index);
 
     Q_INVOKABLE void printData();
 
 private:
+    PoiPersistenceManager m_persistenceManager;
     QVector<Poi> m_pois;
     QPointer<ModelHelper> m_helper;
     QHash<QString, CoordinatesModel*> m_coordsModels;

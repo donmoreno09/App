@@ -21,6 +21,7 @@ Item {
     property alias placeholderText: textField.placeholderText
     property alias messageText: messageText.text
     property alias hasFocus: textField.activeFocus
+    property alias acceptableInput: textField.acceptableInput
 
     property string iconSource: ""
     property int variant: InputStyles.Default

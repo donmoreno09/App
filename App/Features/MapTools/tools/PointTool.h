@@ -30,6 +30,8 @@ public slots:
     void onCancelled();
 
 signals:
+    void mapInputted();
+
     void coordChanged();
 
 private:

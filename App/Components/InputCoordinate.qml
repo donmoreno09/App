@@ -10,6 +10,9 @@
  *
  * I think the best way here is to control everything
  * instead of using TextField.inputMask.
+ *
+ * UPDATE: For now, the input should be controlled by
+ * this component. Use the setText method to set the text.
  */
 
 import QtQuick 6.8
@@ -24,16 +27,11 @@ UI.Input {
 
     property int type: InputCoordinate.Latitude
 
-    property real value: 0
-
-    onValueChanged: {
-        const absVal = Math.abs(value).toFixed(6)
-        const hemi = (type === InputCoordinate.Latitude)
-            ? (value < 0 ? "S" : "N")
-            : (value < 0 ? "W" : "E")
-        textField.text = (type === InputCoordinate.Latitude)
-            ? `${absVal.padStart(8, "0")}° ${hemi}`
-            : `${absVal.padStart(9, "0")}° ${hemi}`
+    readonly property real value: {
+        const text = textField.text
+        const deg = parseFloat(text.slice(0, text.indexOf("°")));
+        const hemi = text.slice(-1);
+        return (hemi === "S" || hemi === "W") ? -deg : deg;
     }
 
     textField.inputMask: (type === InputCoordinate.Latitude) ? "99.999999° >A; " : "999.999999° >A; "
@@ -57,24 +55,45 @@ UI.Input {
         const last = text.slice(-1);
         if (!_getHemiRegex().test(last)) {
             const hemi = _hemiRemembered || _getDefaultHemi();
-            textField.text = text.slice(0, -1) + hemi;
+            textField.text = text.slice(0, -1) + hemi; // put back valid hemi
         }
     }
 
     // Update the remembered hemisphere before the input
     // becomes invalid, i.e. missing hemisphere
-    textField.onTextChanged: {
-        if (textField.acceptableInput) {
-            _hemiRemembered = textField.text.slice(-1)
-
-            const deg = parseFloat(textField.text.slice(0, textField.text.indexOf("°")));
-            const hemi = textField.text.slice(-1);
-
-            _manualChanged = true
-            value = (hemi === "S" || hemi === "W") ? -deg : deg;
-        }
-    }
+    textField.onTextChanged: if (textField.acceptableInput) _hemiRemembered = textField.text.slice(-1)
 
     textField.onEditingFinished: _fixHemisphere()
     textField.onFocusChanged: if (!textField.focus) _fixHemisphere();
+
+    /**
+     * Formats and sets the field given a numeric coordinate.
+     * - Clamps to valid ranges (lat: [-90, 90], lon: [-180, 180]).
+     * - Pads integer part (lat: 2, lon: 3).
+     * - Uses N/S for latitude, E/W for longitude; 0 uses the positive hemisphere.
+     */
+    function setText(num) {
+        if (num === null || num === undefined || !isFinite(num))
+            return
+
+        const isLat = (type === InputCoordinate.Latitude)
+        const maxAbs = isLat ? 90 : 180
+        const hemi = (num < 0)
+                     ? (isLat ? "S" : "W")
+                     : (isLat ? "N" : "E")
+
+        let absDeg = Math.min(Math.abs(num), maxAbs)
+        // Force 6 decimals as string
+        const fixed = absDeg.toFixed(6)
+        const dot = fixed.indexOf(".")
+        const intPart = dot === -1 ? fixed : fixed.slice(0, dot)
+        const fracPart = dot === -1 ? "000000" : fixed.slice(dot + 1)
+
+        const pad = isLat ? 2 : 3
+        const paddedInt = intPart.padStart(pad, "0")
+
+        const formatted = paddedInt + "." + fracPart + "° " + hemi
+        textField.text = formatted
+        _hemiRemembered = hemi
+    }
 }
