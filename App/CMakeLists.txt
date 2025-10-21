@@ -48,6 +48,8 @@ set(cpp_sources
     core/TrackManager.h
     core/variantlistmodel.cpp
     core/variantlistmodel.h
+    core/PoiOptions.h
+    core/PoiOptions.cpp
 
     # Events
     events/selectionboxbus.h

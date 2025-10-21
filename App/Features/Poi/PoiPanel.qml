@@ -43,85 +43,40 @@ PanelTemplate {
                 id: categoryComboBox
                 Layout.fillWidth: true
                 labelText: qsTr("Category(*)")
-                model: ListModel {
-                    id: categoryModel
-                    ListElement { name: "Buildings" }
-                    ListElement { name: "Docking" }
-                    ListElement { name: "Terminals" }
-                }
 
-                function getKey() {
-                    return currentIndex + 1
-                }
+                model: PoiOptions.categories
+                textRole: "name"
+                valueRole: "key"
             }
 
             UI.ComboBox {
                 id: typeComboBox
                 Layout.fillWidth: true
-                labelText: qsTr("Type")
-                model: [buildingsModel, dockingModel, terminalsModel][categoryComboBox.currentIndex]
+                labelText: qsTr("Type(*)")
 
-                ListModel {
-                    id: buildingsModel
-                    readonly property int keyStart: 1
-                    ListElement { value: "Office" }
-                    ListElement { value: "Fuel station" }
-                    ListElement { value: "Mechanical workshop" }
-                    ListElement { value: "Maintenance Building" }
-                    ListElement { value: "Worksite" }
-                }
-
-                ListModel {
-                    id: dockingModel
-                    readonly property int keyStart: 6
-                    ListElement { value: "Dock A" }
-                    ListElement { value: "Dock B" }
-                }
-
-                ListModel {
-                    id: terminalsModel
-                    readonly property int keyStart: 8
-                    ListElement { value: "Container Terminal" }
-                    ListElement { value: "Ro-Ro Terminal" }
-                }
-
-                function getKey() {
-                    return model.keyStart + currentIndex
-                }
+                model: PoiOptions.typesForCategory(categoryComboBox.currentValue)
+                textRole: "value"
+                valueRole: "key"
             }
 
             UI.ComboBox {
                 id: healthStatusComboBox
                 Layout.fillWidth: true
                 labelText: qsTr("Health Status(*)")
-                model: ListModel {
-                    id: healthStatusModel
-                    ListElement { name: "Active" }
-                    ListElement { name: "Off" }
-                    ListElement { name: "Degraded" }
-                    ListElement { name: "Maintenance" }
-                }
 
-                function getKey() {
-                    return currentIndex + 1
-                }
+                model: PoiOptions.healthStatuses
+                textRole: "value"
+                valueRole: "key"
             }
 
             UI.ComboBox {
                 id: operationalStateComboBox
                 Layout.fillWidth: true
                 labelText: qsTr("Operational State(*)")
-                model: ListModel {
-                    id: operationalStateModel
-                    ListElement { name: "Standby" }
-                    ListElement { name: "Operating" }
-                    ListElement { name: "In transit" }
-                    ListElement { name: "Waiting" }
-                }
 
-                function getKey() {
-                    return currentIndex + 1
-                }
+                model: PoiOptions.operationalStates
+                textRole: "value"
+                valueRole: "key"
             }
 
             UI.InputCoordinate {
@@ -199,14 +154,14 @@ PanelTemplate {
                         },
                         layerId: 1,
                         layerName: Layers.poiMapLayer(),
-                        categoryId: categoryComboBox.getKey(),
-                        categoryName: categoryComboBox.currentValue,
-                        typeId: typeComboBox.getKey(),
-                        typeName: typeComboBox.currentValue,
-                        healthStatusId: healthStatusComboBox.getKey(),
-                        healthStatusName: healthStatusComboBox.currentValue,
-                        operationalStateId: operationalStateComboBox.getKey(),
-                        operationalStateName: operationalStateComboBox.currentValue,
+                        categoryId: categoryComboBox.currentValue,
+                        categoryName: categoryComboBox.currentText,
+                        typeId: typeComboBox.currentValue,
+                        typeName: typeComboBox.currentText,
+                        healthStatusId: healthStatusComboBox.currentValue,
+                        healthStatusName: healthStatusComboBox.currentText,
+                        operationalStateId: operationalStateComboBox.currentValue,
+                        operationalStateName: operationalStateComboBox.currentText,
                         details: {
                             metadata: { note: noteTextArea.text }
                         }

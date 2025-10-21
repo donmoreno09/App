@@ -17,9 +17,12 @@ Item {
     property alias enabled: comboBox.enabled
     property alias labelText: label.text
     property alias currentIndex: comboBox.currentIndex
+    property alias currentText: comboBox.currentText
     property alias currentValue: comboBox.currentValue
     property alias displayText: comboBox.displayText
     property alias comboBox: comboBox
+    property alias textRole: comboBox.textRole
+    property alias valueRole: comboBox.valueRole
 
     property alias model: comboBox.model
 
@@ -137,7 +140,7 @@ Item {
                 height: Theme.spacing.s10
 
                 contentItem: Text {
-                    text: modelData
+                    text: comboBox.textAt(index)
                     color: Theme.colors.text
                     font: comboBox.font
                     elide: Text.ElideRight
