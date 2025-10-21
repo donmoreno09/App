@@ -16,11 +16,12 @@ const SliderTest = "slider-test";
 const ModalTest = "modal-test";
 const ButtonTest = "button-test";
 const ComboBoxTest = "combobox-test";
-const ArrivalContentTest = "arrival-content-test";
-const ArrivalDateContentTest = "arrival-date-content-test";
-const ArrivalDateTimeContentTest = "arrival-date-time-content-test";
-const TrailerPredictionTest = "trailer-prediction-test"
+const ArrivalContent = "arrival-content";
+const ArrivalDateContent = "arrival-date-content";
+const ArrivalDateTimeContent = "arrival-date-time-content";
+const TrailerPrediction = "trailer-prediction-test"
 const TrackPanel = "trackpanel"
+const ShipStowage = "shipstowage"
 const TirPanel = "tirpanel"
 const NotFound = "*";
 
@@ -42,10 +43,11 @@ const routes = {
   [ModalTest]: "qrc:/App/Playground/ModalPanel.qml",
   [ButtonTest]: "qrc:/App/Playground/ButtonPanel.qml",
   [ComboBoxTest] : "qrc:/App/Playground/ComboBoxPanel.qml",
-  [ArrivalContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml",
-  [ArrivalDateContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDatePanel.qml",
-  [ArrivalDateTimeContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml",
-  [TrailerPredictionTest] : "qrc:/App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml",
+  [ArrivalContent]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml",
+  [ArrivalDateContent]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDatePanel.qml",
+  [ArrivalDateTimeContent]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml",
+  [TrailerPrediction] : "qrc:/App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml",
+  [ShipStowage] : "qrc:/App/Features/ShipStowage/panels/ShipStowagePanel.qml",
   [NotFound]: "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
 };
 

@@ -74,7 +74,7 @@ UI.GlobalBackgroundConsumer {
                 source: "qrc:/App/assets/icons/truck.svg"
                 preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Truck Arrivals"))
-                active: PanelRouter.currentPath === "arrival-content-test" && SidePanelController.isOpen
+                active: PanelRouter.currentPath === "arrival-content" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle(Routes.ArrivalContentTest)
             }
@@ -83,7 +83,7 @@ UI.GlobalBackgroundConsumer {
                 source: "qrc:/App/assets/icons/calendar-arrivals.svg"
                 preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Truck Arrivals Date"))
-                active: PanelRouter.currentPath === "arrival-date-content-test" && SidePanelController.isOpen
+                active: PanelRouter.currentPath === "arrival-date-content" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle(Routes.ArrivalDateContentTest)
             }
@@ -92,7 +92,7 @@ UI.GlobalBackgroundConsumer {
                 source: "qrc:/App/assets/icons/settings.svg"
                 preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Truck Arrivals DT"))
-                active: PanelRouter.currentPath === "arrival-date-time-content-test" && SidePanelController.isOpen
+                active: PanelRouter.currentPath === "arrival-date-time-content" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle(Routes.ArrivalDateTimeContentTest)
             }
@@ -101,9 +101,18 @@ UI.GlobalBackgroundConsumer {
                 source: "qrc:/App/assets/icons/compass.svg"
                 preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Trailer Prediction"))
-                active: PanelRouter.currentPath === "trailer-prediction-test" && SidePanelController.isOpen
+                active: PanelRouter.currentPath === "trailer-prediction" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle(Routes.TrailerPredictionTest)
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/monitor.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("Ship Stowage"))
+                active: PanelRouter.currentPath === "shipstowage" && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle(Routes.ShipStowage)
             }
 
             SideRailItem {
