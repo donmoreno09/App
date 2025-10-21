@@ -17,6 +17,7 @@ import QtLocation 6.8
 import QtPositioning 6.8
 import Qt.labs.animation 6.8
 
+import App.Themes 1.0
 import App.Features.MapTools 1.0
 
 Map {
@@ -164,6 +165,7 @@ Map {
     MapQuickItem {
         visible: ToolController.activeTool === ToolRegistry.pointTool
         onVisibleChanged: console.log("Preview is now", visible ? "active" : "hidden")
+        z: Theme.elevation.z100
 
         coordinate: ToolRegistry.pointTool.coord
         anchorPoint.x: sourceItem.width / 2

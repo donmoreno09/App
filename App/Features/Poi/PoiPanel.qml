@@ -12,14 +12,25 @@ import App.Features.Language 1.0
 PanelTemplate {
     title.text: (TranslationManager.revision, qsTr("Point of Interest"))
 
+    Connections {
+        target: PoiModel
+
+        function onAppended() { SidePanelController.close(true) }
+    }
+
     ScrollView {
         anchors.fill: parent
         contentWidth: availableWidth
-        padding: Theme.spacing.s8
+        // I have no idea why top/bottom padding
+        // don't have scrollbars all the way there.
+        leftPadding: Theme.spacing.s8
+        rightPadding: Theme.spacing.s8
 
         ColumnLayout {
             width: parent.width
             spacing: Theme.spacing.s4
+
+            UI.VerticalPadding { }
 
             UI.Input {
                 id: nameInput
@@ -143,6 +154,8 @@ PanelTemplate {
                 Layout.fillWidth: true
                 labelText: qsTr("Note")
             }
+
+            UI.VerticalPadding { }
         }
     }
 
@@ -177,6 +190,7 @@ PanelTemplate {
                     Layout.preferredWidth: 1
                     Layout.fillWidth: true
                     text: qsTr("Save")
+                    enabled: !PoiModel.saving
                     onClicked: PoiModel.append({
                         label: nameInput.text,
                         geometry: {

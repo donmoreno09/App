@@ -18,6 +18,8 @@ class PoiModel : public QAbstractListModel
     QML_UNCREATABLE("Not intended for instantiation. Use it as a singleton.")
     QML_SINGLETON
 
+    Q_PROPERTY(bool saving READ saving WRITE setSaving NOTIFY savingChanged FINAL)
+
 public:
     explicit PoiModel(QObject *parent = nullptr);
 
@@ -70,7 +72,17 @@ public:
 
     Q_INVOKABLE void printData();
 
+    bool saving() const;
+    void setSaving(bool newSaving);
+
+signals:
+    void appended();
+
+    void savingChanged();
+
 private:
+    bool m_saving = false;
+    std::unique_ptr<Poi> m_poiSave = nullptr;
     QPointer<PoiPersistenceManager> m_persistenceManager;
     QVector<Poi> m_pois;
     QPointer<ModelHelper> m_helper;
@@ -85,6 +97,8 @@ private:
     void removeCoordsModel(const QString& id);
 
 private slots:
+    void handlePoiSaved(bool success, const QString &uuid);
+
     void handleObjectsLoaded(const QList<IPersistable*> &objects);
 };
 

@@ -4,7 +4,8 @@
 PoiModel::PoiModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this)), m_persistenceManager(new PoiPersistenceManager(this))
 {
-    connect(m_persistenceManager, &PoiPersistenceManager::objectsLoaded, this, &PoiModel::handleObjectsLoaded);
+    connect(m_persistenceManager, &PoiPersistenceManager::objectsLoaded, this, &PoiModel::handleObjectsLoaded, Qt::UniqueConnection);
+    connect(m_persistenceManager, &PoiPersistenceManager::objectSaved, this, &PoiModel::handlePoiSaved, Qt::UniqueConnection);
 
     m_persistenceManager->load();
 }
@@ -237,14 +238,16 @@ QVector<Poi> &PoiModel::pois()
 
 void PoiModel::append(const QVariantMap &data)
 {
-    Poi poi;
+    setSaving(true);
 
-    poi.label = data.value("label").toString();
-    poi.layerId = data.value("layerId").toInt();
-    poi.typeId = data.value("typeId").toInt();
-    poi.categoryId = data.value("categoryId").toInt();
-    poi.healthStatusId = data.value("healthStatusId").toInt();
-    poi.operationalStateId = data.value("operationalStateId").toInt();
+    m_poiSave = std::make_unique<Poi>();
+
+    m_poiSave->label = data.value("label").toString();
+    m_poiSave->layerId = data.value("layerId").toInt();
+    m_poiSave->typeId = data.value("typeId").toInt();
+    m_poiSave->categoryId = data.value("categoryId").toInt();
+    m_poiSave->healthStatusId = data.value("healthStatusId").toInt();
+    m_poiSave->operationalStateId = data.value("operationalStateId").toInt();
 
     // Geometry
     QVariantMap geomMap = data.value("geometry").toMap();
@@ -271,9 +274,9 @@ void PoiModel::append(const QVariantMap &data)
 
     if (!coords.isEmpty())
         geom.coordinates = coords;
-    poi.geometry = geom;
+    m_poiSave->geometry = geom;
 
-    poi.details.metadata.clear();
+    m_poiSave->details.metadata.clear();
 
     QVariantMap detailsMap = data.value("details").toMap(); // maps to JSON field "details"
     QVariantMap metadataMap = detailsMap.value("metadata").toMap(); // maps to "details.metadata"
@@ -284,11 +287,11 @@ void PoiModel::append(const QVariantMap &data)
         if (key == "note") {
             auto entry = QSharedPointer<NoteMetadataEntry>::create();
             entry->note = it.value().toString();
-            poi.details.metadata.insert(key, entry);
+            m_poiSave->details.metadata.insert(key, entry);
         }
     }
 
-    m_persistenceManager->save(poi);
+    m_persistenceManager->save(*m_poiSave);
 }
 
 QQmlPropertyMap *PoiModel::getEditablePoi(int index)
@@ -375,6 +378,24 @@ void PoiModel::removeCoordsModel(const QString &id)
         m->deleteLater();
 }
 
+void PoiModel::handlePoiSaved(bool success, const QString &uuid)
+{
+    if (!success) {
+        qWarning() << "Error: Could not save PoI with label '" << m_poiSave->label << "'. Check logs.";
+    } else {
+        const int index = m_pois.size();
+        beginInsertRows(QModelIndex(), index, index);
+
+        m_poiSave->id = uuid;
+        m_pois.push_back(*m_poiSave);
+
+        endInsertRows();
+        emit appended();
+    }
+
+    setSaving(false);
+}
+
 void PoiModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
 {
     beginResetModel();
@@ -391,8 +412,22 @@ void PoiModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
     for (IPersistable* obj : objects) {
         if (auto* poi = dynamic_cast<Poi*>(obj)) {
             m_pois.push_back(*poi); // copy value object
+            delete poi; // free this here since it's copied above anyway and it isn't freed elsewhere
         }
     }
 
     endResetModel();
+}
+
+bool PoiModel::saving() const
+{
+    return m_saving;
+}
+
+void PoiModel::setSaving(bool newSaving)
+{
+    if (m_saving == newSaving)
+        return;
+    m_saving = newSaving;
+    emit savingChanged();
 }
