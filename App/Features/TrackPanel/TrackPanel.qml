@@ -191,7 +191,7 @@ PanelTemplate {
 
                     UI.Toggle {
                         id: toggle
-                        //checked: TrackManager.getLayer("ais").active
+                        checked: Array.isArray(track.history) && track.history.length > 0
                         onCheckedChanged: {
                             console.log("History checked");
                             console.log(track.uidForHistory);

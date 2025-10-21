@@ -1,4 +1,6 @@
 #include "TrackModel.h"
+#include <limits>
+
 
 TrackModel::TrackModel(QObject *parent)
     : BaseTrackModel(parent)
@@ -31,6 +33,7 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
     case StateRole: return track.state;
     case NameRole: return track.name;
     case UidForHistoryRole: return track.uidForHistory;
+    case HistoryRole: return historyToVariant(track.history);
     default: return {};
     }
 }
@@ -50,6 +53,7 @@ QHash<int, QByteArray> TrackModel::roleNames() const
         { VelRole, "vel" },
         { StateRole, "state" },
         { UidForHistoryRole, "uidForHistory" },
+        { HistoryRole, "history" },
     };
 }
 
@@ -143,6 +147,15 @@ QVector<int> TrackModel::diffRoles(const Track &a, const Track &b) const
     if (a.state != b.state) roles << StateRole;
     if (a.name != b.name) roles << NameRole;
     if (a.uidForHistory != b.uidForHistory) roles << UidForHistoryRole;
+
+    // History: check if it's updated
+    const int asz   = a.history.size();
+    const int bsz   = b.history.size();
+    const int alast = asz ? a.history.constLast().time : std::numeric_limits<int>::min();
+    const int blast = bsz ? b.history.constLast().time : std::numeric_limits<int>::min();
+
+    if (asz != bsz || alast != blast)
+        roles << HistoryRole;
 
     return roles;
 }
