@@ -62,6 +62,8 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+    QVector<Poi>& pois();
+
     Q_INVOKABLE void append(const QVariantMap &data);
 
     Q_INVOKABLE QQmlPropertyMap* getEditablePoi(int index);
@@ -69,7 +71,7 @@ public:
     Q_INVOKABLE void printData();
 
 private:
-    PoiPersistenceManager m_persistenceManager;
+    QPointer<PoiPersistenceManager> m_persistenceManager;
     QVector<Poi> m_pois;
     QPointer<ModelHelper> m_helper;
     QHash<QString, CoordinatesModel*> m_coordsModels;
@@ -81,6 +83,9 @@ private:
     CoordinatesModel* getCoordsModel(const QString& id, const QList<QVector2D>& pts);
 
     void removeCoordsModel(const QString& id);
+
+private slots:
+    void handleObjectsLoaded(const QList<IPersistable*> &objects);
 };
 
 #endif // POIMODEL_H

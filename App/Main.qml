@@ -56,6 +56,8 @@ ApplicationWindow {
         DocSpaceTrackMapLayer { }
 
         TirTrackMapLayer { }
+
+        PoiMapLayer { }
     }
 
     Connections {

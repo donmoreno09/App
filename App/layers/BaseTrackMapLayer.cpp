@@ -8,10 +8,6 @@ BaseTrackMapLayer::BaseTrackMapLayer(QObject* parent)
     setObjectName("BaseTrackMapLayer");
 }
 
-void BaseTrackMapLayer::loadData() { }
-
-void BaseTrackMapLayer::handleLoadedObjects(const QList<IPersistable*>& objects) { }
-
 bool BaseTrackMapLayer::active() const
 {
     return m_active;

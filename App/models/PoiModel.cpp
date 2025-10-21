@@ -2,15 +2,11 @@
 #include <QDebug>
 
 PoiModel::PoiModel(QObject *parent)
-    : QAbstractListModel(parent), m_helper(new ModelHelper(this))
+    : QAbstractListModel(parent), m_helper(new ModelHelper(this)), m_persistenceManager(new PoiPersistenceManager(this))
 {
-    Poi poi;
+    connect(m_persistenceManager, &PoiPersistenceManager::objectsLoaded, this, &PoiModel::handleObjectsLoaded);
 
-    for (int i = 1; i <= 100; i++) {
-        poi.id = QString::number(i);
-        poi.label = "Test";
-        m_pois.append(poi);
-    }
+    m_persistenceManager->load();
 }
 
 int PoiModel::rowCount(const QModelIndex &parent) const
@@ -201,30 +197,30 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
 QHash<int, QByteArray> PoiModel::roleNames() const
 {
     return {
-            { IdRole, "id" },
-            { LabelRole, "label" },
-            { LayerIdRole, "layerId" },
-            { LayerNameRole, "layerName" },
-            { TypeIdRole, "typeId" },
-            { TypeNameRole, "typeName" },
-            { CategoryIdRole, "categoryId" },
-            { CategoryNameRole, "categoryName" },
-            { HealthStatusIdRole, "healthStatusId" },
-            { HealthStatusNameRole, "healthStatusName" },
-            { OperationalStateIdRole, "operationalStateId" },
-            { OperationalStateNameRole, "operationalStateName" },
+        { IdRole, "id" },
+        { LabelRole, "label" },
+        { LayerIdRole, "layerId" },
+        { LayerNameRole, "layerName" },
+        { TypeIdRole, "typeId" },
+        { TypeNameRole, "typeName" },
+        { CategoryIdRole, "categoryId" },
+        { CategoryNameRole, "categoryName" },
+        { HealthStatusIdRole, "healthStatusId" },
+        { HealthStatusNameRole, "healthStatusName" },
+        { OperationalStateIdRole, "operationalStateId" },
+        { OperationalStateNameRole, "operationalStateName" },
 
-            { ShapeTypeIdRole, "shapeTypeId" },
-            { SurfaceRole, "surface" },
-            { HeightRole, "height" },
-            { LatitudeRole, "latitude" },
-            { LongitudeRole, "longitude" },
-            { CoordinatesRole, "coordinates" },
-            { RadiusARole, "radiusA" },
-            { RadiusBRole, "radiusB" },
+        { ShapeTypeIdRole, "shapeTypeId" },
+        { SurfaceRole, "surface" },
+        { HeightRole, "height" },
+        { LatitudeRole, "latitude" },
+        { LongitudeRole, "longitude" },
+        { CoordinatesRole, "coordinates" },
+        { RadiusARole, "radiusA" },
+        { RadiusBRole, "radiusB" },
 
-            { NoteRole, "note" },
-            };
+        { NoteRole, "note" },
+    };
 }
 
 Qt::ItemFlags PoiModel::flags(const QModelIndex &index) const
@@ -232,6 +228,11 @@ Qt::ItemFlags PoiModel::flags(const QModelIndex &index) const
     if (!index.isValid()) return Qt::NoItemFlags;
 
     return Qt::ItemIsEditable | Qt::ItemIsSelectable;
+}
+
+QVector<Poi> &PoiModel::pois()
+{
+    return m_pois;
 }
 
 void PoiModel::append(const QVariantMap &data)
@@ -287,7 +288,7 @@ void PoiModel::append(const QVariantMap &data)
         }
     }
 
-    m_persistenceManager.save(poi);
+    m_persistenceManager->save(poi);
 }
 
 QQmlPropertyMap *PoiModel::getEditablePoi(int index)
@@ -372,4 +373,26 @@ void PoiModel::removeCoordsModel(const QString &id)
 {
     if (auto* m = m_coordsModels.take(id))
         m->deleteLater();
+}
+
+void PoiModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
+{
+    beginResetModel();
+
+    // Drop cached per-POI coordinate models
+    for (auto it = m_coordsModels.begin(); it != m_coordsModels.end(); ++it) {
+        if (it.value()) it.value()->deleteLater();
+    }
+    m_coordsModels.clear();
+
+    // Rebuild backing store
+    m_pois.clear();
+    m_pois.reserve(objects.size());
+    for (IPersistable* obj : objects) {
+        if (auto* poi = dynamic_cast<Poi*>(obj)) {
+            m_pois.push_back(*poi); // copy value object
+        }
+    }
+
+    endResetModel();
 }
