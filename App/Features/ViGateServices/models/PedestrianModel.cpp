@@ -1,6 +1,7 @@
 #include "PedestrianModel.h"
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QDebug>
 
 PedestrianModel::PedestrianModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -53,17 +54,32 @@ void PedestrianModel::setData(const QJsonArray& pedestriansArray)
     m_entries.clear();
 
     for (const auto& value : pedestriansArray) {
-        if (!value.isObject()) continue;
+        if (!value.isObject()) {
+            qWarning() << "PedestrianModel: Skipping non-object entry";
+            continue;
+        }
 
         QJsonObject obj = value.toObject();
         PedestrianEntry entry;
 
-        entry.idGate = obj["idGate"].toInt();
-        entry.startDate = QDateTime::fromString(obj["startDate"].toString(), Qt::ISODate);
-        entry.direction = obj["direction"].toString();
+        entry.idGate = obj.value("idGate").toInt(0);
+
+        QString dateStr = obj.value("startDate").toString();
+        entry.startDate = QDateTime::fromString(dateStr, Qt::ISODate);
+
+        if (!entry.startDate.isValid()) {
+            qWarning() << "PedestrianModel: Invalid date format:" << dateStr;
+            entry.startDate = QDateTime::currentDateTime();
+        }
+
+        entry.direction = obj.value("direction").toString("UNKNOWN");
+        if (entry.direction != "IN" && entry.direction != "OUT") {
+            qWarning() << "PedestrianModel: Unknown direction:" << entry.direction;
+        }
 
         m_entries.append(entry);
     }
 
+    qDebug() << "PedestrianModel: Loaded" << m_entries.size() << "pedestrians";
     endResetModel();
 }
