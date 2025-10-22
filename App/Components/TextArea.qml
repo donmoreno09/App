@@ -9,7 +9,6 @@ import App.Components 1.0 as UI
 Item {
     id: textAreaInput
 
-    width: container.implicitWidth
     height: container.implicitHeight
 
     // Public properties

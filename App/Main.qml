@@ -33,6 +33,7 @@ ApplicationWindow {
     property bool appLoaded: false
 
     Component.onCompleted: {
+        PoiOptions.fetchAll()
         WindowsNcController.attachToWindow(app)
         appLoaded = true
     }
@@ -56,6 +57,8 @@ ApplicationWindow {
         DocSpaceTrackMapLayer { }
 
         TirTrackMapLayer { }
+
+        PoiMapLayer { }
     }
 
     Connections {

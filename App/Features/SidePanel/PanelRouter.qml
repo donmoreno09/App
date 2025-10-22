@@ -71,6 +71,8 @@ QtObject {
             return
         }
 
+        if (path === currentPath) return;
+
         const url = Routes.resolve(path)
         if (!url) {
             routeMissing(path)

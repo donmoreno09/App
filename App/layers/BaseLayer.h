@@ -17,8 +17,6 @@ public:
 
     virtual ~BaseLayer();
 
-    Q_INVOKABLE virtual void initialize();
-
     QString layerName() const;
     void setLayerName(const QString& name);
 
