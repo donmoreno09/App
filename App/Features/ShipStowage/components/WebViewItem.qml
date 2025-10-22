@@ -10,6 +10,7 @@ Item {
     anchors.fill: parent
 
     property string urlPath
+    property alias webView: webView
     property alias loading: webView.loading
 
     // Loading indicator
@@ -47,18 +48,28 @@ Item {
         settings.localStorageEnabled: true
         settings.localContentCanAccessRemoteUrls: true
 
-        // Suppress console errors in Qt
         onJavaScriptConsoleMessage: function(level, message, lineNumber, sourceID) {
-            // Only log errors, ignore warnings and info
-            if (level === WebEngineView.ErrorMessageLevel) {
-                console.log("WebView Error:", message)
+            // Filtering out known website warnings/errors
+            var ignoredMessages = [
+                "useDefaultLang",
+                "defaultLanguage",
+                "sessionChecksEnabled",
+                "error loading user info",
+                "fallbackLang"
+            ]
+
+            // Checking if message should be ignored
+            for (var i = 0; i < ignoredMessages.length; i++) {
+                if (message.indexOf(ignoredMessages[i]) !== -1) {
+                    return // Ignore this message
+                }
             }
         }
 
-        onLoadingChanged: function(loadRequest) {
-            if (loadRequest.status === WebEngineView.LoadFailedStatus) {
-                console.error("WebView failed to load:", loadRequest.errorString)
-            }
+        // Cleanup when the component is being destroyed
+        Component.onDestruction: {
+            stop()
+            url = "about:blank"
         }
     }
 }
