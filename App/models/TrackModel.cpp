@@ -1,4 +1,5 @@
 #include "TrackModel.h"
+#include <core/TrackManager.h>
 #include <limits>
 
 
@@ -91,12 +92,22 @@ void TrackModel::upsert(const QVector<Track> &tracks)
             // Update track
             const int row = it.value();
 
+            // history bool check
+            const bool historyWasEmpty = m_tracks[row].history.isEmpty();
+            const bool historyWillBeNonEmpty = !track.history.isEmpty();
+
             QVector<int> changed = diffRoles(m_tracks[row], track);
             if (!changed.empty()) {
                 m_tracks[row] = track;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
             }
+
+            // Check history update
+            if (historyWasEmpty && historyWillBeNonEmpty) {
+                emit historyPayloadArrived(m_tracks[row].sourceName, m_tracks[row].uidForHistory);
+            }
+
         } else {
             // Insert track
             const int row = m_tracks.size();
@@ -105,6 +116,10 @@ void TrackModel::upsert(const QVector<Track> &tracks)
             m_tracks.append(track);
             m_upsertMap.insert(track.trackUid, row);
             endInsertRows();
+
+            if (!track.history.isEmpty()) {
+                emit historyPayloadArrived(track.sourceName, track.uidForHistory);
+            }
         }
     }
 

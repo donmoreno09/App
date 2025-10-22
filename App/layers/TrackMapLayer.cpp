@@ -1,12 +1,21 @@
 #include "TrackMapLayer.h"
 #include <QDebug>
 #include <core/GeoSelectionUtils.h>
+#include <core/TrackManager.h>
+
 
 TrackMapLayer::TrackMapLayer(QObject* parent)
     : BaseTrackMapLayer(parent)
 {
     setObjectName("TrackMapLayer");
     m_trackModel = new TrackModel(this);
+
+    if (auto* tm = TrackManager::instance()) {
+        QObject::connect(m_trackModel, &TrackModel::historyPayloadArrived,
+                         tm, &TrackManager::onHistoryPayloadArrived);
+    } else {
+        qWarning() << "[TrackModel] TrackManager singleton not yet constructed.";
+    }
 
     m_clearTracksTimer = new QTimer(this);
     m_clearTracksTimer->setSingleShot(true);

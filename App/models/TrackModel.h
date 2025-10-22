@@ -69,6 +69,8 @@ public:
         return out;
     }
 
+signals:
+    void historyPayloadArrived(const QString& topic, const QString& uid);
 private:
     QVector<Track> m_tracks;
     QHash<QString, int> m_upsertMap;

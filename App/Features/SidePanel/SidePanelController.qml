@@ -67,11 +67,14 @@ QtObject {
         }
 
         if (PanelRouter.currentPath === path) {
+            // force a refresh of props even if route is the same
+            PanelRouter.replace(path, props || {})
             return
         }
 
         close()
         open(path, props)
     }
+
 
 }
