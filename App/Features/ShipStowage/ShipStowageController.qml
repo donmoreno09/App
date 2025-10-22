@@ -10,8 +10,8 @@ QtObject {
     signal windowOpened()
     signal windowClosed()
 
-    function openStowageWindow(parentWindow, parentItem) {
-        if(!parentWindow || !parentItem) {
+    function openStowageWindow(parentWindow) {
+        if(!parentWindow) {
             console.error("[ShipStowageController] No parent window provided")
             return
         }
@@ -23,7 +23,7 @@ QtObject {
         var component = Qt.createComponent("qrc:/App/Features/ShipStowage/components/WebViewContainer.qml")
 
         if(component.status === Component.Ready) {
-            var webView = component.createObject(parentItem, {
+            var webView = component.createObject(parentWindow, {
                 parentWindow: parentWindow
             })
 

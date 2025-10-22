@@ -113,12 +113,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Ship Stowage"))
                 active: PanelRouter.currentPath === "shipstowage" && SidePanelController.isOpen
 
-                onClicked: {
-                    var appWindow = Window.window
-                    if (appWindow) {
-                        ShipStowageController.openStowageWindow(appWindow, appWindow.contentItem)
-                    }
-                }
+                onClicked: ShipStowageController.openStowageWindow(Window.window)
             }
 
             SideRailItem {
