@@ -72,6 +72,15 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
+                source: "qrc:/App/assets/icons/poi.svg"
+                preserveIconColor: true
+                text: (TranslationManager.revision, qsTr("PoI"))
+                active: PanelRouter.currentPath === Routes.Poi && SidePanelController.isOpen
+
+                onClicked: SidePanelController.toggle(Routes.Poi)
+            }
+
+            SideRailItem {
                 source: "qrc:/App/assets/icons/truck.svg"
                 preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("Truck Arrivals"))

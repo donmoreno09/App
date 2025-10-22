@@ -7,6 +7,7 @@ const Pod = "pod";
 const Notifications = "notifications";
 const MapTilesets = "maptilesets";
 const MapLayers = "maplayers";
+const Poi = "poi";
 const DateTimeTest = "datetime-test";
 const ToggleTest = "toggle-test";
 const TextAreaTest = "textarea-test";
@@ -31,6 +32,7 @@ const routes = {
   [Notifications]: "qrc:/App/Features/Notifications/NotificationsPanel.qml",
   [MapTilesets]: "qrc:/App/Features/Map/MapTilesetsPanel.qml",
   [MapLayers]: "qrc:/App/layers/LayersPanel.qml",
+  [Poi]: "qrc:/App/Features/Poi/PoiPanel.qml",
   [TrackPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
   [TirPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
   [DateTimeTest]: "qrc:/App/Playground/DateTimePickerPanel.qml",

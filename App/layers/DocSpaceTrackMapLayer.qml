@@ -29,7 +29,6 @@ MapItemGroup {
             TrackManager.registerLayer(MqttClientService.getTopicFromLayer(Layers.docSpaceTrackMapLayer()), trackMapLayer)
             MqttClientService.registerLayer(Layers.docSpaceTrackMapLayer(), trackMapLayer)
             trackMapLayer.map = MapController.map
-            trackMapLayer.initialize()
         }
     }
 
