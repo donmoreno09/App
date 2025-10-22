@@ -163,7 +163,7 @@ Map {
     }
 
     MapQuickItem {
-        visible: ToolController.activeTool === ToolRegistry.pointTool
+        visible: ToolController.activeTool === ToolRegistry.pointTool && ToolRegistry.pointTool.editingId === ""
         onVisibleChanged: console.log("Preview is now", visible ? "active" : "hidden")
         z: Theme.elevation.z100
 

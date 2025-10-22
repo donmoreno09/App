@@ -62,11 +62,6 @@ QVariant PoiModel::data(const QModelIndex &index, int role) const
         }
         return {};
     }
-
-    // Internals
-    case PersistentIndexRole: {
-        return QVariant::fromValue(QPersistentModelIndex(index));
-    }
     }
 
     return {};
@@ -89,7 +84,6 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
     case HealthStatusIdRole:
     case OperationalStateIdRole:
     case ShapeTypeIdRole:
-    case PersistentIndexRole:
         break;
 
     // Poi
@@ -227,8 +221,6 @@ QHash<int, QByteArray> PoiModel::roleNames() const
         { RadiusBRole, "radiusB" },
 
         { NoteRole, "note" },
-
-        { PersistentIndexRole, "persistentIndex" },
     };
 }
 

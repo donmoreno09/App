@@ -18,6 +18,8 @@ class BaseTool : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString editingId READ editingId WRITE setEditingId NOTIFY editingIdChanged FINAL)
+
 public:
     explicit BaseTool(QString id = "BaseTool", QObject* parent = nullptr) : QObject(parent), m_id(id) { qDebug() << "Created: " << m_id; }
 
@@ -30,12 +32,32 @@ public:
 
     virtual void clear() = 0;
 
+
+    QString editingId() const
+    {
+        return m_editingId;
+    }
+
+    void setEditingId(const QString &newEditingId)
+    {
+        if (m_editingId == newEditingId)
+            return;
+        m_editingId = newEditingId;
+        emit editingIdChanged();
+    }
+
 public slots:
     virtual void onTapped(const QVariant &rawEvent) {}
 
-    virtual void onCancelled() {}
+    virtual void onCancelled() { m_editingId = ""; }
+
+signals:
+    void editingIdChanged();
 
 protected:
+    QString m_id;
+    QString m_editingId = "";
+
     ToolEvent parseEvent(const QVariant &rawEvent) {
         const auto map = rawEvent.toMap();
         return {
@@ -63,7 +85,6 @@ protected:
     }
 
 private:
-    QString m_id;
     QObject* m_inputHandler = nullptr;
 };
 

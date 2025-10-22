@@ -3,8 +3,13 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 import App.Themes 1.0
+import App.Features.SidePanel 1.0
+import App.Features.MapTools 1.0
+
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 MapQuickItem {
+    required property string id
     required property string label
     required property real latitude
     required property real longitude
@@ -49,6 +54,18 @@ MapQuickItem {
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.Wrap
             }
+        }
+    }
+
+    TapHandler {
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+        onTapped: {
+            ToolRegistry.pointTool.editingId = id
+            ToolRegistry.pointTool.setLatitude(latitude)
+            ToolRegistry.pointTool.setLongitude(longitude)
+            ToolRegistry.pointTool.mapInputted()
+            ToolController.activeTool = ToolRegistry.pointTool
+            SidePanelController.openOrRefresh(Routes.Poi)
         }
     }
 }

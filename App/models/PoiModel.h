@@ -50,9 +50,6 @@ public:
 
         // Details/Metadata
         NoteRole,
-
-        // Internals
-        PersistentIndexRole
     };
 
     Q_ENUM(Roles);

@@ -18,6 +18,9 @@ void PointTool::setLongitude(double longitude)
 
 void PointTool::onTapped(const QVariant &rawEvent)
 {
+    if (m_editingId != "")
+        return;
+
     auto event = parseEvent(rawEvent);
     m_coord = event.coord;
     emit coordChanged();
@@ -26,6 +29,7 @@ void PointTool::onTapped(const QVariant &rawEvent)
 
 void PointTool::onCancelled()
 {
+    BaseTool::onCancelled();
     clear();
 }
 
