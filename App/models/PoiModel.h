@@ -50,6 +50,9 @@ public:
 
         // Details/Metadata
         NoteRole,
+
+        // Internals
+        PersistentIndexRole
     };
 
     Q_ENUM(Roles);
@@ -82,6 +85,8 @@ signals:
 
 private:
     bool m_saving = false;
+    // TODO: The PoiModel shouldn't really know about what poi is being saved,
+    //       perhaps modify the httpclient class to give back the poi on response.
     std::unique_ptr<Poi> m_poiSave = nullptr;
     QPointer<PoiPersistenceManager> m_persistenceManager;
     QVector<Poi> m_pois;

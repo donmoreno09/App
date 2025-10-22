@@ -2,6 +2,8 @@ import QtQuick 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
 
+import App.Themes 1.0
+
 MapQuickItem {
     required property string label
     required property real latitude
@@ -26,16 +28,27 @@ MapQuickItem {
             cache: true
         }
 
-        Text {
+        Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: svgIcon.bottom
             anchors.topMargin: 4
-            text: label
-            font.pixelSize: 12
-            color: "black"
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            wrapMode: Text.Wrap
+            width: text.width + 12
+            height: text.height + 4
+            radius: 4
+            color: Theme.colors.hexWithAlpha("#539E07", 0.6)
+            border.color: "white"
+            border.width: 1
+
+            Text {
+                anchors.centerIn: parent
+                id: text
+                text: label
+                font.pixelSize: 12
+                color: "white"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.Wrap
+            }
         }
     }
 }
