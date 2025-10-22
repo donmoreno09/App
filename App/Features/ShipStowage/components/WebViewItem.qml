@@ -49,44 +49,27 @@ Item {
         settings.localContentCanAccessRemoteUrls: true
 
         onJavaScriptConsoleMessage: function(level, message, lineNumber, sourceID) {
-            // ← MIGLIORA: log più dettagliati
-            var levelStr = ""
-            switch(level) {
-                case WebEngineView.InfoMessageLevel: levelStr = "INFO"; break
-                case WebEngineView.WarningMessageLevel: levelStr = "WARN"; break
-                case WebEngineView.ErrorMessageLevel: levelStr = "ERROR"; break
-            }
+            // Filtering out known website warnings/errors
+            var ignoredMessages = [
+                "useDefaultLang",
+                "defaultLanguage",
+                "sessionChecksEnabled",
+                "error loading user info",
+                "fallbackLang"
+            ]
 
-            if (level === WebEngineView.ErrorMessageLevel) {
-                console.error("[WebView " + levelStr + "]", message, "at line", lineNumber, "in", sourceID)
-            }
-        }
-
-        onLoadingChanged: function(loadRequest) {
-            if (loadRequest.status === WebEngineView.LoadFailedStatus) {
-                console.error("[WebView] Failed to load:", loadRequest.errorString, "URL:", loadRequest.url)
-            } else if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
-                // console.log("[WebView] Successfully loaded:", loadRequest.url)
-            } else if (loadRequest.status === WebEngineView.LoadStartedStatus) {
-                // console.log("[WebView] Loading started:", loadRequest.url)
+            // Checking if message should be ignored
+            for (var i = 0; i < ignoredMessages.length; i++) {
+                if (message.indexOf(ignoredMessages[i]) !== -1) {
+                    return // Ignore this message
+                }
             }
         }
 
-        // Cleanup quando il componente viene distrutto
+        // Cleanup when the component is being destroyed
         Component.onDestruction: {
             stop()
             url = "about:blank"
-        }
-
-        // Handler per certificati SSL
-        onCertificateError: function(error) {
-            console.error("[WebView] Certificate error:", error.description)
-            // error.ignoreCertificateError() // ← Uncomment se vuoi ignorare errori SSL (solo dev!)
-        }
-
-        // Handler per render process crashes
-        onRenderProcessTerminated: function(terminationStatus, exitCode) {
-            console.error("[WebView] Render process terminated:", terminationStatus, "exit code:", exitCode)
         }
     }
 }

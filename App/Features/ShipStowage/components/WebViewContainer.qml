@@ -29,13 +29,13 @@ DraggableResizableContainer {
     onCloseRequested: {
         console.log("WebView container close requested")
 
-        // Ferma il webview prima di distruggere
+        // This stops the webview first before destroying it
         if (webViewItem && webViewItem.webView) {
             webViewItem.webView.stop()
             webViewItem.webView.url = "about:blank"
         }
 
-        // Usa un timer per dare tempo al WebEngine di pulire
+        // Uses a timer to give time to WebEngine to clean
         Qt.callLater(function() {
             destroy()
         })

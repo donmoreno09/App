@@ -29,20 +29,6 @@ Rectangle {
     property real maxPosX: windowWidth - width
     property real maxPosY: windowHeight - height
 
-    // Keep inside window
-    onXChanged: x = Math.max(0, Math.min(x, maxPosX))
-    onYChanged: y = Math.max(0, Math.min(y, maxPosY))
-
-    // Clamp size if something external assigns width/height
-    onWidthChanged: {
-        if (width < minWidth) width = minWidth
-        if (x + width > windowWidth) width = windowWidth - x
-    }
-    onHeightChanged: {
-        if (height < minHeight) height = minHeight
-        if (y + height > windowHeight) height = windowHeight - y
-    }
-
     // Default alias to add content inside container
     default property alias content: contentArea.data
 
