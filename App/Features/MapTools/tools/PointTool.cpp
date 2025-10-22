@@ -18,7 +18,7 @@ void PointTool::setLongitude(double longitude)
 
 void PointTool::onTapped(const QVariant &rawEvent)
 {
-    if (m_editingId != "")
+    if (m_editable)
         return;
 
     auto event = parseEvent(rawEvent);

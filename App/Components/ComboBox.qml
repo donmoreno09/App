@@ -36,14 +36,22 @@ Item {
         anchors.fill: parent
         spacing: Theme.spacing.s3
 
-        Label {
-            id: label
+        // Label Section
+        RowLayout {
+            Layout.fillWidth: true
             visible: label.text !== ""
-            color: root.enabled ? Theme.colors.text : Theme.colors.textMuted
-            font {
-                family: Theme.typography.bodySans25Family
-                pointSize: Theme.typography.bodySans25Size
-                weight: Theme.typography.bodySans25Weight
+
+            Item { Layout.preferredWidth: Theme.spacing.s2 } // TODO: Replace with HorizontalPadding
+
+            Label {
+                id: label
+                visible: label.text !== ""
+                color: root.enabled ? Theme.colors.text : Theme.colors.textMuted
+                font {
+                    family: Theme.typography.bodySans25Family
+                    pointSize: Theme.typography.bodySans25Size
+                    weight: Theme.typography.bodySans25Weight
+                }
             }
         }
 

@@ -18,7 +18,7 @@ class PoiModel : public QAbstractListModel
     QML_UNCREATABLE("Not intended for instantiation. Use it as a singleton.")
     QML_SINGLETON
 
-    Q_PROPERTY(bool saving READ saving WRITE setSaving NOTIFY savingChanged FINAL)
+    Q_PROPERTY(bool loading READ loading WRITE setLoading NOTIFY loadingChanged FINAL)
 
 public:
     explicit PoiModel(QObject *parent = nullptr);
@@ -68,23 +68,33 @@ public:
 
     Q_INVOKABLE void append(const QVariantMap &data);
 
+    Q_INVOKABLE void update(const QVariantMap &data);
+
+    Q_INVOKABLE void remove(const QString &id);
+
     Q_INVOKABLE QQmlPropertyMap* getEditablePoi(int index);
+
+    Q_INVOKABLE void discardChanges();
 
     Q_INVOKABLE void printData();
 
-    bool saving() const;
-    void setSaving(bool newSaving);
+    bool loading() const;
+    void setLoading(bool newLoading);
 
 signals:
     void appended();
+    void updated();
+    void removed();
+    void fetched(const QString &id);
 
-    void savingChanged();
+    void loadingChanged();
 
 private:
-    bool m_saving = false;
+    bool m_loading = false;
     // TODO: The PoiModel shouldn't really know about what poi is being saved,
     //       perhaps modify the httpclient class to give back the poi on response.
     std::unique_ptr<Poi> m_poiSave = nullptr;
+    std::unique_ptr<Poi> m_oldPoi = nullptr;
     QPointer<PoiPersistenceManager> m_persistenceManager;
     QVector<Poi> m_pois;
     QPointer<ModelHelper> m_helper;
@@ -98,10 +108,14 @@ private:
 
     void removeCoordsModel(const QString& id);
 
-private slots:
-    void handlePoiSaved(bool success, const QString &uuid);
+    void buildPoiSave(const QVariantMap &data);
 
+private slots:
     void handleObjectsLoaded(const QList<IPersistable*> &objects);
+    void handlePoiSaved(bool success, const QString &uuid);
+    void handlePoiUpdated(bool success);
+    void handlePoiGot(const IPersistable *object);
+    void handlePoiRemoved(bool success);
 };
 
 #endif // POIMODEL_H

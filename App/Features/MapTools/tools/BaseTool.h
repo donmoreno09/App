@@ -8,6 +8,7 @@
 #include <QtPositioning/QGeoCoordinate>
 #include <QVariant>
 #include <QQmlEngine>
+#include <QQmlPropertyMap>
 
 struct ToolEvent {
     QGeoCoordinate coord;
@@ -18,7 +19,7 @@ class BaseTool : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString editingId READ editingId WRITE setEditingId NOTIFY editingIdChanged FINAL)
+    Q_PROPERTY(QQmlPropertyMap* editable READ editable WRITE setEditable NOTIFY editableChanged FINAL)
 
 public:
     explicit BaseTool(QString id = "BaseTool", QObject* parent = nullptr) : QObject(parent), m_id(id) { qDebug() << "Created: " << m_id; }
@@ -32,31 +33,30 @@ public:
 
     virtual void clear() = 0;
 
-
-    QString editingId() const
+    QQmlPropertyMap *editable() const
     {
-        return m_editingId;
+        return m_editable;
     }
 
-    void setEditingId(const QString &newEditingId)
+    void setEditable(QQmlPropertyMap *newEditable)
     {
-        if (m_editingId == newEditingId)
+        if (m_editable == newEditable)
             return;
-        m_editingId = newEditingId;
-        emit editingIdChanged();
+        m_editable = newEditable;
+        emit editableChanged();
     }
 
 public slots:
     virtual void onTapped(const QVariant &rawEvent) {}
 
-    virtual void onCancelled() { m_editingId = ""; }
+    virtual void onCancelled() { m_editable = nullptr; }
 
 signals:
-    void editingIdChanged();
+    void editableChanged();
 
 protected:
     QString m_id;
-    QString m_editingId = "";
+    QQmlPropertyMap *m_editable = nullptr;
 
     ToolEvent parseEvent(const QVariant &rawEvent) {
         const auto map = rawEvent.toMap();

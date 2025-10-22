@@ -20,7 +20,7 @@ void PoiOptions::fetchAll() {
         const QJsonDocument doc = QJsonDocument::fromJson(data);
         if (doc.isArray()) {
             const QJsonArray arr = doc.array();
-            for (int i = 0; i < arr.size(); ++i) {
+            for (int i = 0; i < 2/*arr.size()*/; ++i) {
                 const QJsonObject cat = arr.at(i).toObject();
                 const int catKey = cat.value("key").toInt();
                 const QString catName = cat.value("name").toString();

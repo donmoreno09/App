@@ -6,6 +6,9 @@ PoiModel::PoiModel(QObject *parent)
 {
     connect(m_persistenceManager, &PoiPersistenceManager::objectsLoaded, this, &PoiModel::handleObjectsLoaded, Qt::UniqueConnection);
     connect(m_persistenceManager, &PoiPersistenceManager::objectSaved, this, &PoiModel::handlePoiSaved, Qt::UniqueConnection);
+    connect(m_persistenceManager, &PoiPersistenceManager::objectGot, this, &PoiModel::handlePoiGot, Qt::UniqueConnection);
+    connect(m_persistenceManager, &PoiPersistenceManager::objectUpdated, this, &PoiModel::handlePoiUpdated, Qt::UniqueConnection);
+    connect(m_persistenceManager, &PoiPersistenceManager::objectRemoved, this, &PoiModel::handlePoiRemoved, Qt::UniqueConnection);
 
     m_persistenceManager->load();
 }
@@ -238,65 +241,54 @@ QVector<Poi> &PoiModel::pois()
 
 void PoiModel::append(const QVariantMap &data)
 {
-    setSaving(true);
-
-    m_poiSave = std::make_unique<Poi>();
-
-    m_poiSave->label = data.value("label").toString();
-    m_poiSave->layerId = data.value("layerId").toInt();
-    m_poiSave->typeId = data.value("typeId").toInt();
-    m_poiSave->categoryId = data.value("categoryId").toInt();
-    m_poiSave->healthStatusId = data.value("healthStatusId").toInt();
-    m_poiSave->operationalStateId = data.value("operationalStateId").toInt();
-
-    // Geometry
-    QVariantMap geomMap = data.value("geometry").toMap();
-    Geometry geom;
-    geom.shapeTypeId = geomMap.value("shapeTypeId").toInt();
-    geom.surface = geomMap.value("surface").toDouble();
-    geom.height = geomMap.value("height").toDouble();
-
-    QVariantMap centerCoordMap = geomMap.value("coordinate").toMap();
-    geom.coordinate.setX(centerCoordMap.value("x").toDouble());
-    geom.coordinate.setY(centerCoordMap.value("y").toDouble());
-
-    geom.radiusA = geomMap.value("radiusA").toDouble();
-    geom.radiusB = geomMap.value("radiusB").toDouble();
-
-    QVariantList coordList = geomMap.value("coordinates").toList();
-    QList<QVector2D> coords;
-    for (const QVariant &coordVar : std::as_const(coordList)) {
-        QVariantMap coordMap = coordVar.toMap();
-        float x = static_cast<float>(coordMap.value("x").toDouble());
-        float y = static_cast<float>(coordMap.value("y").toDouble());
-        coords.append(QVector2D(x, y));
-    }
-
-    if (!coords.isEmpty())
-        geom.coordinates = coords;
-    m_poiSave->geometry = geom;
-
-    m_poiSave->details.metadata.clear();
-
-    QVariantMap detailsMap = data.value("details").toMap(); // maps to JSON field "details"
-    QVariantMap metadataMap = detailsMap.value("metadata").toMap(); // maps to "details.metadata"
-
-    for (auto it = metadataMap.begin(); it != metadataMap.end(); ++it) {
-        QString key = it.key();
-
-        if (key == "note") {
-            auto entry = QSharedPointer<NoteMetadataEntry>::create();
-            entry->note = it.value().toString();
-            m_poiSave->details.metadata.insert(key, entry);
-        }
-    }
-
+    setLoading(true);
+    buildPoiSave(data);
     m_persistenceManager->save(*m_poiSave);
+}
+
+void PoiModel::update(const QVariantMap &data)
+{
+    setLoading(true);
+    buildPoiSave(data);
+    m_poiSave->id = data.value("id").toString();
+    m_persistenceManager->update(*m_poiSave);
+}
+
+void PoiModel::remove(const QString &id)
+{
+    setLoading(true);
+    m_persistenceManager->remove(id);
 }
 
 QQmlPropertyMap *PoiModel::getEditablePoi(int index)
 {
+    if (index < 0 || index >= m_pois.size())
+        return nullptr;
+
+    m_oldPoi = std::make_unique<Poi>(m_pois[index]);
+    m_persistenceManager->get(m_oldPoi->id);
+
     return m_helper->map(index, 0);
+}
+
+void PoiModel::discardChanges()
+{
+    if (m_oldPoi == nullptr)
+        return;
+
+    int row = -1;
+    for (int i = 0; i < m_pois.size(); ++i) {
+        if (m_pois[i].id == m_oldPoi->id) {
+            row = i;
+            break;
+        }
+    }
+
+    if (row >= 0) {
+        m_pois[row] = *m_oldPoi;
+        QModelIndex idx = index(row, 0);
+        emit dataChanged(idx, idx);
+    }
 }
 
 void PoiModel::printData()
@@ -307,6 +299,19 @@ void PoiModel::printData()
         qDebug() << "Latitude: " << poi.geometry.coordinate.y();
         qDebug() << "Longitude: " << poi.geometry.coordinate.x();
     }
+}
+
+bool PoiModel::loading() const
+{
+    return m_loading;
+}
+
+void PoiModel::setLoading(bool newLoading)
+{
+    if (m_loading == newLoading)
+        return;
+    m_loading = newLoading;
+    emit loadingChanged();
 }
 
 QList<QVector2D> PoiModel::parseCoordinatesVariant(const QVariant &v)
@@ -378,6 +383,60 @@ void PoiModel::removeCoordsModel(const QString &id)
         m->deleteLater();
 }
 
+void PoiModel::buildPoiSave(const QVariantMap &data)
+{
+    m_poiSave = std::make_unique<Poi>();
+
+    m_poiSave->label = data.value("label").toString();
+    m_poiSave->layerId = data.value("layerId").toInt();
+    m_poiSave->typeId = data.value("typeId").toInt();
+    m_poiSave->categoryId = data.value("categoryId").toInt();
+    m_poiSave->healthStatusId = data.value("healthStatusId").toInt();
+    m_poiSave->operationalStateId = data.value("operationalStateId").toInt();
+
+    // Geometry
+    QVariantMap geomMap = data.value("geometry").toMap();
+    Geometry geom;
+    geom.shapeTypeId = geomMap.value("shapeTypeId").toInt();
+    geom.surface = geomMap.value("surface").toDouble();
+    geom.height = geomMap.value("height").toDouble();
+
+    QVariantMap centerCoordMap = geomMap.value("coordinate").toMap();
+    geom.coordinate.setX(centerCoordMap.value("x").toDouble());
+    geom.coordinate.setY(centerCoordMap.value("y").toDouble());
+
+    geom.radiusA = geomMap.value("radiusA").toDouble();
+    geom.radiusB = geomMap.value("radiusB").toDouble();
+
+    QVariantList coordList = geomMap.value("coordinates").toList();
+    QList<QVector2D> coords;
+    for (const QVariant &coordVar : std::as_const(coordList)) {
+        QVariantMap coordMap = coordVar.toMap();
+        float x = static_cast<float>(coordMap.value("x").toDouble());
+        float y = static_cast<float>(coordMap.value("y").toDouble());
+        coords.append(QVector2D(x, y));
+    }
+
+    if (!coords.isEmpty())
+        geom.coordinates = coords;
+    m_poiSave->geometry = geom;
+
+    m_poiSave->details.metadata.clear();
+
+    QVariantMap detailsMap = data.value("details").toMap(); // maps to JSON field "details"
+    QVariantMap metadataMap = detailsMap.value("metadata").toMap(); // maps to "details.metadata"
+
+    for (auto it = metadataMap.begin(); it != metadataMap.end(); ++it) {
+        QString key = it.key();
+
+        if (key == "note") {
+            auto entry = QSharedPointer<NoteMetadataEntry>::create();
+            entry->note = it.value().toString();
+            m_poiSave->details.metadata.insert(key, entry);
+        }
+    }
+}
+
 void PoiModel::handlePoiSaved(bool success, const QString &uuid)
 {
     if (!success) {
@@ -393,7 +452,19 @@ void PoiModel::handlePoiSaved(bool success, const QString &uuid)
         emit appended();
     }
 
-    setSaving(false);
+    setLoading(false);
+}
+
+void PoiModel::handlePoiUpdated(bool success)
+{
+    if (!success) {
+        qWarning() << "Error: Could not update PoI with id '" << m_poiSave->id << "'. Check logs.";
+    } else {
+        m_oldPoi = nullptr;
+        emit updated();
+    }
+
+    setLoading(false);
 }
 
 void PoiModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
@@ -419,15 +490,50 @@ void PoiModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
     endResetModel();
 }
 
-bool PoiModel::saving() const
+void PoiModel::handlePoiGot(const IPersistable *object)
 {
-    return m_saving;
+    const Poi* poi = dynamic_cast<const Poi*>(object);
+    if (!poi) return;
+
+    // Find the corresponding row in the model
+    int row = -1;
+    for (int i = 0; i < m_pois.size(); ++i) {
+        if (m_pois[i].id == poi->id) {
+            row = i;
+            break;
+        }
+    }
+
+    // If the POI exists in our model, update it
+    if (row >= 0) {
+        m_pois[row] = *poi;
+        QModelIndex idx = index(row, 0);
+        emit dataChanged(idx, idx);
+        emit fetched(poi->id);
+    }
 }
 
-void PoiModel::setSaving(bool newSaving)
+void PoiModel::handlePoiRemoved(bool success)
 {
-    if (m_saving == newSaving)
-        return;
-    m_saving = newSaving;
-    emit savingChanged();
+    if (!success) {
+        qWarning() << "Error: Could not remove PoI with id '" << m_poiSave->id << "'. Check logs.";
+    } else {
+        int row = -1;
+        for (int i = 0; i < m_pois.size(); ++i) {
+            if (m_pois[i].id == m_oldPoi->id) {
+                row = i;
+                break;
+            }
+        }
+
+        beginRemoveRows(QModelIndex(), row, row);
+        m_pois.remove(row);
+        endRemoveRows();
+
+        m_oldPoi = nullptr;
+        emit removed();
+    }
+
+    setLoading(false);
 }
+

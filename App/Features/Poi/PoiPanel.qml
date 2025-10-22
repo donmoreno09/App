@@ -10,107 +10,132 @@ import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
 PanelTemplate {
+    id: root
+
     title.text: (TranslationManager.revision, qsTr("Point of Interest"))
+
+    function updateTexts() {
+        latitudeInput.updateText()
+        longitudeInput.updateText()
+        if (ToolRegistry.pointTool.editable) {
+            nameInput.text = ToolRegistry.pointTool.editable.label
+            noteTextArea.text = ToolRegistry.pointTool.editable.note ?? ""
+            categoryComboBox.currentIndex = categoryComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.categoryId)
+            typeComboBox.currentIndex = typeComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.typeId)
+            healthStatusComboBox.currentIndex = healthStatusComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.healthStatusId)
+            operationalStateComboBox.currentIndex = operationalStateComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.operationalStateId)
+        }
+    }
 
     Connections {
         target: PoiModel
 
         function onAppended() { SidePanelController.close(true) }
+        function onUpdated() { SidePanelController.close(true) }
+        function onRemoved() { SidePanelController.close(true) }
+        function onFetched() { root.updateTexts() }
+    }
+
+    Connections {
+        target: ToolRegistry.pointTool
+
+        function onMapInputted() { root.updateTexts() }
     }
 
     ScrollView {
         anchors.fill: parent
         contentWidth: availableWidth
-        // I have no idea why top/bottom padding
-        // don't have scrollbars all the way there.
-        leftPadding: Theme.spacing.s8
-        rightPadding: Theme.spacing.s8
+        Component.onCompleted: updateTexts()
 
-        ColumnLayout {
-            width: parent.width
-            spacing: Theme.spacing.s4
+        Pane {
+            anchors.fill: parent
+            padding: Theme.spacing.s8
+            background: Rectangle { color: Theme.colors.transparent }
 
-            UI.VerticalPadding { }
+            ColumnLayout {
+                width: parent.width
+                spacing: Theme.spacing.s4
 
-            UI.Input {
-                id: nameInput
-                Layout.fillWidth: true
-                labelText: qsTr("Name(*)")
-                placeholderText: qsTr("Name")
+                UI.Input {
+                    id: nameInput
+                    Layout.fillWidth: true
+                    labelText: qsTr("Name(*)")
+                    placeholderText: qsTr("Name")
+
+                    onTextEdited: if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.label = text
+                }
+
+                UI.ComboBox {
+                    id: categoryComboBox
+                    Layout.fillWidth: true
+                    labelText: qsTr("Category(*)")
+
+                    model: PoiOptions.categories
+                    textRole: "name"
+                    valueRole: "key"
+                }
+
+                UI.ComboBox {
+                    id: typeComboBox
+                    Layout.fillWidth: true
+                    labelText: qsTr("Type(*)")
+
+                    model: PoiOptions.typesForCategory(categoryComboBox.currentValue)
+                    textRole: "value"
+                    valueRole: "key"
+                }
+
+                UI.ComboBox {
+                    id: healthStatusComboBox
+                    Layout.fillWidth: true
+                    labelText: qsTr("Health Status(*)")
+
+                    model: PoiOptions.healthStatuses
+                    textRole: "value"
+                    valueRole: "key"
+                }
+
+                UI.ComboBox {
+                    id: operationalStateComboBox
+                    Layout.fillWidth: true
+                    labelText: qsTr("Operational State(*)")
+
+                    model: PoiOptions.operationalStates
+                    textRole: "value"
+                    valueRole: "key"
+                }
+
+                UI.InputCoordinate {
+                    id: latitudeInput
+                    Layout.fillWidth: true
+                    labelText: qsTr("Latitude(*)")
+
+                    onValueChanged: ToolRegistry.pointTool.setLatitude(value)
+
+                    function updateText() { latitudeInput.setText(ToolRegistry.pointTool.coord.latitude) }
+                    Component.onCompleted: updateText()
+                }
+
+                UI.InputCoordinate {
+                    id: longitudeInput
+                    Layout.fillWidth: true
+                    labelText: qsTr("Longitude(*)")
+                    type: UI.InputCoordinate.Longitude
+
+                    onValueChanged: ToolRegistry.pointTool.setLongitude(value)
+
+                    function updateText() { longitudeInput.setText(ToolRegistry.pointTool.coord.longitude) }
+                    Component.onCompleted: updateText()
+                }
+
+                UI.TextArea {
+                    id: noteTextArea
+                    Layout.fillWidth: true
+                    labelText: qsTr("Note")
+
+                    onTextEdited: if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.note = text
+                }
             }
-
-            UI.ComboBox {
-                id: categoryComboBox
-                Layout.fillWidth: true
-                labelText: qsTr("Category(*)")
-
-                model: PoiOptions.categories
-                textRole: "name"
-                valueRole: "key"
-            }
-
-            UI.ComboBox {
-                id: typeComboBox
-                Layout.fillWidth: true
-                labelText: qsTr("Type(*)")
-
-                model: PoiOptions.typesForCategory(categoryComboBox.currentValue)
-                textRole: "value"
-                valueRole: "key"
-            }
-
-            UI.ComboBox {
-                id: healthStatusComboBox
-                Layout.fillWidth: true
-                labelText: qsTr("Health Status(*)")
-
-                model: PoiOptions.healthStatuses
-                textRole: "value"
-                valueRole: "key"
-            }
-
-            UI.ComboBox {
-                id: operationalStateComboBox
-                Layout.fillWidth: true
-                labelText: qsTr("Operational State(*)")
-
-                model: PoiOptions.operationalStates
-                textRole: "value"
-                valueRole: "key"
-            }
-
-            UI.InputCoordinate {
-                id: latitudeInput
-                Layout.fillWidth: true
-                labelText: qsTr("Latitude(*)")
-
-                onValueChanged: ToolRegistry.pointTool.setLatitude(value)
-
-                function updateText() { latitudeInput.setText(ToolRegistry.pointTool.coord.latitude) }
-                Component.onCompleted: updateText()
-                Connections { target: ToolRegistry.pointTool; function onMapInputted() { latitudeInput.updateText() }}
-            }
-
-            UI.InputCoordinate {
-                id: longitudeInput
-                Layout.fillWidth: true
-                labelText: qsTr("Longitude(*)")
-                type: UI.InputCoordinate.Longitude
-
-                onValueChanged: ToolRegistry.pointTool.setLongitude(value)
-
-                function updateText() { longitudeInput.setText(ToolRegistry.pointTool.coord.longitude) }
-                Component.onCompleted: updateText()
-                Connections { target: ToolRegistry.pointTool; function onMapInputted() { longitudeInput.updateText() }}
-            }
-
-            UI.TextArea {
-                id: noteTextArea
-                Layout.fillWidth: true
-                labelText: qsTr("Note")
-            }
-
-            UI.VerticalPadding { }
         }
     }
 
@@ -142,35 +167,59 @@ PanelTemplate {
                 }
 
                 UI.Button {
+                    visible: !!ToolRegistry.pointTool.editable
+                    enabled: !PoiModel.loading
+                    Layout.preferredWidth: 1
+                    Layout.fillWidth: true
+                    variant: UI.ButtonStyles.Danger
+                    backgroundRect.border.width: Theme.borders.b0
+                    text: qsTr("Remove")
+                    onClicked: PoiModel.remove(ToolRegistry.pointTool.editable.id)
+                }
+
+                UI.Button {
                     Layout.preferredWidth: 1
                     Layout.fillWidth: true
                     text: qsTr("Save")
-                    enabled: !PoiModel.saving
-                    onClicked: PoiModel.append({
-                        label: nameInput.text,
-                        geometry: {
-                           shapeTypeId: 1,
-                           coordinate: { x: ToolRegistry.pointTool.coord.longitude, y: ToolRegistry.pointTool.coord.latitude },
-                        },
-                        layerId: 1,
-                        layerName: Layers.poiMapLayer(),
-                        categoryId: categoryComboBox.currentValue,
-                        categoryName: categoryComboBox.currentText,
-                        typeId: typeComboBox.currentValue,
-                        typeName: typeComboBox.currentText,
-                        healthStatusId: healthStatusComboBox.currentValue,
-                        healthStatusName: healthStatusComboBox.currentText,
-                        operationalStateId: operationalStateComboBox.currentValue,
-                        operationalStateName: operationalStateComboBox.currentText,
-                        details: {
-                            metadata: { note: noteTextArea.text }
+                    enabled: !PoiModel.loading
+                    onClicked: {
+                        const data = {
+                            label: nameInput.text,
+                            geometry: {
+                               shapeTypeId: 1,
+                               coordinate: { x: ToolRegistry.pointTool.coord.longitude, y: ToolRegistry.pointTool.coord.latitude },
+                            },
+                            layerId: 1,
+                            layerName: Layers.poiMapLayer(),
+                            categoryId: categoryComboBox.currentValue,
+                            categoryName: categoryComboBox.currentText,
+                            typeId: typeComboBox.currentValue,
+                            typeName: typeComboBox.currentText,
+                            healthStatusId: healthStatusComboBox.currentValue,
+                            healthStatusName: healthStatusComboBox.currentText,
+                            operationalStateId: operationalStateComboBox.currentValue,
+                            operationalStateName: operationalStateComboBox.currentText,
+                            details: {
+                                metadata: { note: noteTextArea.text }
+                            }
                         }
-                    })
+
+                        if (ToolRegistry.pointTool.editable) {
+                            data.id = ToolRegistry.pointTool.editable.id
+                            PoiModel.update(data)
+                        } else {
+                            PoiModel.append(data)
+                        }
+                    }
                 }
             }
         }
     }
 
     Component.onCompleted: ToolController.activeTool = ToolRegistry.pointTool
-    Component.onDestruction: ToolController.activeTool = null
+    Component.onDestruction: {
+        ToolRegistry.pointTool.editable = null
+        ToolController.activeTool = null
+        PoiModel.discardChanges()
+    }
 }
