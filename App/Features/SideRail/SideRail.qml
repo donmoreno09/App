@@ -8,6 +8,7 @@ import App.Components 1.0 as UI
 import App.Features.SidePanel
 import App.Features.TitleBar
 import App.Features.Language 1.0
+import App.Features.ShipStowage 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
@@ -112,7 +113,12 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Ship Stowage"))
                 active: PanelRouter.currentPath === "shipstowage" && SidePanelController.isOpen
 
-                onClicked: SidePanelController.toggle(Routes.ShipStowage)
+                onClicked: {
+                    var appWindow = Window.window
+                    if (appWindow) {
+                        ShipStowageController.openStowageWindow(appWindow, appWindow.contentItem)
+                    }
+                }
             }
 
             SideRailItem {

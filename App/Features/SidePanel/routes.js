@@ -21,7 +21,6 @@ const ArrivalDateContent = "arrival-date-content";
 const ArrivalDateTimeContent = "arrival-date-time-content";
 const TrailerPrediction = "trailer-prediction-test"
 const TrackPanel = "trackpanel"
-const ShipStowage = "shipstowage"
 const TirPanel = "tirpanel"
 const NotFound = "*";
 
@@ -47,7 +46,6 @@ const routes = {
   [ArrivalDateContent]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDatePanel.qml",
   [ArrivalDateTimeContent]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml",
   [TrailerPrediction] : "qrc:/App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml",
-  [ShipStowage] : "qrc:/App/Features/ShipStowage/panels/ShipStowagePanel.qml",
   [NotFound]: "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
 };
 

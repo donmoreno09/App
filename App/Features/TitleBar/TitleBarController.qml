@@ -4,6 +4,7 @@ import QtQuick 6.8
 
 import App.Features.Language 1.0
 import App.Features.SidePanel 1.0
+import App.Features.ShipStowage 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
@@ -12,6 +13,10 @@ QtObject {
 
     property string currentTitle: {
         TranslationManager.revision; // Update title on language changed.
+
+        if(ShipStowageController.hasActiveWindow) {
+            return qsTr("Ship Stowage")
+        }
 
         if (SidePanelController.isOpen) {
             switch(PanelRouter.currentPath) {
@@ -34,7 +39,6 @@ QtObject {
             case Routes.ArrivalDateContent: return qsTr("Arrival Date Content")
             case Routes.ArrivalDateTimeContent: return qsTr("Arrival DateTime Content")
             case Routes.TrailerPrediction: return qsTr("Trailer Predictions")
-            case Routes.ShipStowage: return qsTr("Ship Stowage")
             case Routes.TrackPanel: return qsTr("Track Details")
             case Routes.TirPanel: return qsTr("Tir Details")
             case Routes.NotFound: return qsTr("Not Found")
