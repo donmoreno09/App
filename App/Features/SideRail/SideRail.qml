@@ -71,7 +71,8 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
-                source: "qrc:/App/assets/icons/layers.svg"
+                source: "qrc:/App/assets/icons/poi.svg"
+                preserveIconColor: true
                 text: (TranslationManager.revision, qsTr("PoI"))
                 active: PanelRouter.currentPath === Routes.Poi && SidePanelController.isOpen
 
