@@ -35,5 +35,14 @@ PanelTemplate {
 
             onClicked: MapController.setPlugin(MapPlugins.osmDefault)
         }
+
+        MapTilesetsItem {
+            Layout.fillWidth: true
+            text: "Toner"
+            source: "qrc:/App/assets/images/street-map.png"
+            active: MapController._currentPlugin === MapPlugins.toner
+
+            onClicked: MapController.setPlugin(MapPlugins.toner)
+        }
     }
 }

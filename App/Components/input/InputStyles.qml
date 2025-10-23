@@ -15,19 +15,19 @@ QtObject {
     }
 
     property InputStyle _success: InputStyle {
-        borderColor: Theme.colors.success
+        borderColor: Theme.colors.textMuted
         borderColorFocused: Theme.colors.success
         msgIconSource: "qrc:/App/assets/icons/circle-check.svg"
     }
 
     property InputStyle _warning: InputStyle {
-        borderColor: Theme.colors.warning
+        borderColor: Theme.colors.textMuted
         borderColorFocused: Theme.colors.warning
         msgIconSource: "qrc:/App/assets/icons/triangle-exclamation.svg"
     }
 
     property InputStyle _error: InputStyle {
-        borderColor: Theme.colors.error
+        borderColor: Theme.colors.textMuted
         borderColorFocused: Theme.colors.error
         msgIconSource: "qrc:/App/assets/icons/circle-xmark.svg"
     }

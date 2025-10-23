@@ -21,8 +21,8 @@ import App.Features.Language 1.0
 
 ApplicationWindow {
     id: app
-    width: Theme.layout.appWindowWidth
-    height: Theme.layout.appWindowHeight
+    minimumWidth: Theme.layout.appWindowWidth
+    minimumHeight: Theme.layout.appWindowHeight
     visible: true
     title: qsTr("IRIDESS FE")
 

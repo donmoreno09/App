@@ -15,10 +15,13 @@ const SwitcherTest = "switcher-test";
 const SliderTest = "slider-test";
 const ModalTest = "modal-test";
 const ButtonTest = "button-test";
+const ComboBoxTest = "combobox-test";
 const ArrivalContentTest = "arrival-content-test";
 const ArrivalDateContentTest = "arrival-date-content-test";
 const ArrivalDateTimeContentTest = "arrival-date-time-content-test";
 const TrailerPredictionTest = "trailer-prediction-test"
+const TrackPanel = "trackpanel"
+const TirPanel = "tirpanel"
 const NotFound = "*";
 
 // Build the map using the constants
@@ -28,6 +31,8 @@ const routes = {
   [Notifications]: "qrc:/App/Features/Notifications/NotificationsPanel.qml",
   [MapTilesets]: "qrc:/App/Features/Map/MapTilesetsPanel.qml",
   [MapLayers]: "qrc:/App/layers/LayersPanel.qml",
+  [TrackPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
+  [TirPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
   [DateTimeTest]: "qrc:/App/Playground/DateTimePickerPanel.qml",
   [ToggleTest]: "qrc:/App/Playground/TogglePanel.qml",
   [TextAreaTest]: "qrc:/App/Playground/TextAreaPanel.qml",
@@ -36,6 +41,7 @@ const routes = {
   [SliderTest]: "qrc:/App/Playground/SliderPanel.qml",
   [ModalTest]: "qrc:/App/Playground/ModalPanel.qml",
   [ButtonTest]: "qrc:/App/Playground/ButtonPanel.qml",
+  [ComboBoxTest] : "qrc:/App/Playground/ComboBoxPanel.qml",
   [ArrivalContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml",
   [ArrivalDateContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDatePanel.qml",
   [ArrivalDateTimeContentTest]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml",

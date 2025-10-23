@@ -10,8 +10,29 @@
 #include <connections/mqtt/parser/TrackParser.h>
 #include <connections/mqtt/parser/TirParser.h>
 
+#include <QSurfaceFormat>
+#include <QQuickWindow>
+
 int main(int argc, char *argv[])
 {
+    qputenv("QML_IMPORT_TRACE","1");
+    //qputenv("QT_DEBUG_PLUGINS", "1");
+    qputenv("QT_OPENGL", "software");   // già fatto
+    qputenv("QSG_RENDER_LOOP", "basic");
+
+
+    // Forza uso di software rendering (per test)
+    qputenv("QT_OPENGL_ALWAYS_SOFTWARE", "0");
+
+    // Imposta versione OpenGL minima
+    QSurfaceFormat format;
+    format.setVersion(2, 0);
+    format.setProfile(QSurfaceFormat::NoProfile);
+    format.setRenderableType(QSurfaceFormat::OpenGL);
+    QSurfaceFormat::setDefaultFormat(format);
+
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+
     QGuiApplication app(argc, argv);
 
     QCoreApplication::setOrganizationName("IRIDESS");
@@ -22,6 +43,7 @@ int main(int argc, char *argv[])
     logger.info("App start", {kv("version", "1.0.0")});
 
     QQmlApplicationEngine engine;
+    engine.addImportPath("C:/Qt/6.8.3/msvc2022_64/qml");
 
     const QStringList fontFiles = {
         ":/App/assets/fonts/PPFraktionSans-Light.otf",

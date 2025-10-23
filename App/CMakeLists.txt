@@ -1,12 +1,44 @@
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
+
+cmake_minimum_required(VERSION 3.16)
+project(${PROJECT_NAME} VERSION 0.1 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+
+# Imposta Release come default
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
+find_package(Qt6 REQUIRED COMPONENTS Quick Location)
+qt_standard_project_setup(REQUIRES 6.8)
+
+# Percorsi MapLibre
+set(MAPLIBRE_ROOT "C:/Qt/maplibre-native-qt")
+set(MAPLIBRE_INCLUDE_DIR "${MAPLIBRE_ROOT}/vendor/maplibre-native/include")
+
+# Usa Release o Debug in base alla configurazione
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(MAPLIBRE_LIB_DIR "${MAPLIBRE_ROOT}/build/src/core/Debug")
+    set(MAPLIBRE_LIB_NAME "QMapLibred")
+    set(MAPLIBRE_DLL_NAME "QMapLibred.dll")
+else()
+    set(MAPLIBRE_LIB_DIR "${MAPLIBRE_ROOT}/build/src/core")
+    set(MAPLIBRE_LIB_NAME "QMapLibre")
+    set(MAPLIBRE_DLL_NAME "QMapLibre.dll")
+endif()
+
+# Trova la libreria
+find_library(MAPLIBRE_LIB
+    NAMES ${MAPLIBRE_LIB_NAME}
+    PATHS "${MAPLIBRE_LIB_DIR}"
+    NO_DEFAULT_PATH
+)
+
 
 qt_add_executable(${PROJECT_NAME}
     main.cpp
 )
-
-target_link_libraries(IRIDESS_FE PRIVATE Qt6::Core)
-target_link_libraries(IRIDESS_FE PRIVATE Qt6::Core)
 
 file(GLOB_RECURSE APP_ASSETS
     RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -20,6 +52,7 @@ set(qml_files
     # Map Objects
     map-objects/Track.qml
     map-objects/Tir.qml
+    map-objects/TriangleHeading.qml
 
     # Layers
     layers/AISTrackMapLayer.qml
@@ -82,8 +115,12 @@ set(cpp_sources
     entities/BaseTrack.h
     entities/Track.h
     entities/Tir.h
+    entities/Velocity.h
+
 
     # Qt Models
+    models/ModelHelper.h
+    models/ModelHelper.cpp
     models/PoiModel.cpp
     models/PoiModel.h
     models/BaseTrackModel.h
@@ -135,6 +172,7 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Mqtt
         Qt6::Location
         Qt6::Positioning
+        ${MAPLIBRE_LIB}
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -145,6 +183,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/events
         ${CMAKE_CURRENT_SOURCE_DIR}/layers
         ${CMAKE_CURRENT_SOURCE_DIR}/models
+        ${MAPLIBRE_INCLUDE_DIR}
 )
 
 # Translation setup
@@ -167,4 +206,58 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
+)
+
+
+
+# Copia DLL MapLibre
+if(WIN32 AND EXISTS "${MAPLIBRE_LIB_DIR}/${MAPLIBRE_DLL_NAME}")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${MAPLIBRE_LIB_DIR}/${MAPLIBRE_DLL_NAME}"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+    message(STATUS "Will copy ${MAPLIBRE_DLL_NAME}")
+
+    # Copia anche tutte le altre DLL nella cartella
+    file(GLOB MAPLIBRE_DLLS "${MAPLIBRE_LIB_DIR}/*.dll")
+    foreach(dll_file ${MAPLIBRE_DLLS})
+        get_filename_component(dll_name ${dll_file} NAME)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${dll_file}"
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        )
+    endforeach()
+endif()
+
+# Verifica e copia il plugin geoservices se esiste
+set(MAPLIBRE_PLUGIN_DIR "${MAPLIBRE_ROOT}/build/src/location/plugins/geoservices")
+if(EXISTS "${MAPLIBRE_PLUGIN_DIR}")
+    message(STATUS "MapLibre plugin directory found: ${MAPLIBRE_PLUGIN_DIR}")
+
+    # Crea la directory per i plugin
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/geoservices
+    )
+
+    # Copia i plugin
+    file(GLOB PLUGIN_DLLS "${MAPLIBRE_PLUGIN_DIR}/*.dll")
+    foreach(plugin_dll ${PLUGIN_DLLS})
+        get_filename_component(plugin_name ${plugin_dll} NAME)
+        message(STATUS "Will copy plugin: ${plugin_name}")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${plugin_dll}"
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/geoservices/
+        )
+    endforeach()
+endif()
+
+include(GNUInstallDirs)
+install(TARGETS ${PROJECT_NAME}
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
