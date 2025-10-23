@@ -5,22 +5,19 @@ import QtPositioning 6.8
 
 import App 1.0
 import App.Themes 1.0
-import App.Features.SidePanel 1.0
-import App.Features.MapTools 1.0
-
-import "qrc:/App/Features/SidePanel/routes.js" as Routes
+import App.Features.MapModes 1.0
 
 MapQuickItem {
+    id: root
+
     required property int index
     required property var model
     required property string id
     required property string label
-    required property real latitude
-    required property real longitude
 
-    readonly property bool isEditing: ToolRegistry.pointTool.editable && id === ToolRegistry.pointTool.editable.id
+    readonly property bool isEditing: MapModeController.poi && id === MapModeController.poi.id
 
-    coordinate: QtPositioning.coordinate(latitude, longitude)
+    coordinate: model.coordinate
     anchorPoint.x: svgIcon.width / 2
     anchorPoint.y: svgIcon.height / 2
 
@@ -76,15 +73,7 @@ MapQuickItem {
     TapHandler {
         enabled: !isEditing
         gesturePolicy: TapHandler.ReleaseWithinBounds
-        onTapped: {
-            PoiModel.discardChanges()
-            ToolRegistry.pointTool.editable = PoiModel.getEditablePoi(index)
-            ToolRegistry.pointTool.setLatitude(latitude)
-            ToolRegistry.pointTool.setLongitude(longitude)
-            ToolRegistry.pointTool.mapInputted()
-            ToolController.activeTool = ToolRegistry.pointTool
-            SidePanelController.openOrRefresh(Routes.Poi)
-        }
+        onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
     }
 
     DragHandler {
@@ -92,11 +81,8 @@ MapQuickItem {
         enabled: isEditing
 
         onTranslationChanged: {
-            model.latitude = coordinate.latitude
-            model.longitude = coordinate.longitude
-            ToolRegistry.pointTool.setLatitude(latitude)
-            ToolRegistry.pointTool.setLongitude(longitude)
-            ToolRegistry.pointTool.mapInputted()
+            model.coordinate = coordinate
+            MapModeRegistry.editPointMode.coordChanged()
         }
     }
 }

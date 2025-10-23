@@ -2,7 +2,11 @@ pragma Singleton
 
 import QtQuick 6.8
 
+import App 1.0
 import App.Features.MapModes 1.0
+import App.Features.SidePanel 1.0
+
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 QtObject {
     id: root
@@ -10,26 +14,39 @@ QtObject {
     // Properties
     property var poi: null
     // TODO: Handle discarding changes by containing the "old" poi
+    //       For now, I'm using PoiModel.discardChanges().
 
     property BaseMode activeMode: null
 
-    // Signals
-    // signal mapInputted(int eventType)
-
-    // enum EventType {
-    //     // Point events
-    //     PointLatitudeMoved,
-    //     PointLongitudeMoved
-    // }
+    enum ShapeType {
+        PointType = 1,
+        LineStringType,
+        PolygonType,
+        CircleType,
+        EllipseType
+    }
 
     // Methods
     function setActiveMode(mode: BaseMode) {
-        if (poi) poi = null // TODO: Handle discarding changes
+        // TODO: Handle discarding changes
+        if (poi) {
+            poi = null
+            PoiModel.discardChanges()
+        }
 
         activeMode = mode
     }
 
     function editPoi(editablePoi) {
+        PoiModel.discardChanges()
         poi = editablePoi
+        switch (poi.shapeTypeId) {
+        case MapModeController.PointType:
+            activeMode = MapModeRegistry.editPointMode
+            break;
+        default:
+            console.error("Editing PoI with unknown shape type")
+        }
+        SidePanelController.openOrRefresh(Routes.Poi)
     }
 }

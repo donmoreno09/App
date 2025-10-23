@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import QtPositioning 6.8
 
 import App 1.0
 import App.Themes 1.0
@@ -17,14 +18,14 @@ PanelTemplate {
     function updateTexts() {
         latitudeInput.updateText()
         longitudeInput.updateText()
-        // if (ToolRegistry.pointTool.editable) {
-        //     nameInput.text = ToolRegistry.pointTool.editable.label
-        //     noteTextArea.text = ToolRegistry.pointTool.editable.note ?? ""
-        //     categoryComboBox.currentIndex = categoryComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.categoryId)
-        //     typeComboBox.currentIndex = typeComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.typeId)
-        //     healthStatusComboBox.currentIndex = healthStatusComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.healthStatusId)
-        //     operationalStateComboBox.currentIndex = operationalStateComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.operationalStateId)
-        // }
+        if (MapModeController.poi) {
+            nameInput.text = MapModeController.poi.label
+            noteTextArea.text = MapModeController.poi.note ?? ""
+            categoryComboBox.currentIndex = categoryComboBox.comboBox.indexOfValue(MapModeController.poi.categoryId)
+            typeComboBox.currentIndex = typeComboBox.comboBox.indexOfValue(MapModeController.poi.typeId)
+            healthStatusComboBox.currentIndex = healthStatusComboBox.comboBox.indexOfValue(MapModeController.poi.healthStatusId)
+            operationalStateComboBox.currentIndex = operationalStateComboBox.comboBox.indexOfValue(MapModeController.poi.operationalStateId)
+        }
     }
 
     Connections {
@@ -37,7 +38,9 @@ PanelTemplate {
     }
 
     Connections {
-        target: MapModeRegistry.createPointMode
+        target: MapModeController.activeMode
+        ignoreUnknownSignals: true
+
         function onCoordChanged() {
             latitudeInput.updateText()
             longitudeInput.updateText()
@@ -64,7 +67,7 @@ PanelTemplate {
                     labelText: qsTr("Name(*)")
                     placeholderText: qsTr("Name")
 
-                    // onTextEdited: if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.label = text
+                    onTextEdited: if (MapModeController.poi) MapModeController.poi.label = text
                 }
 
                 UI.ComboBox {
@@ -113,11 +116,11 @@ PanelTemplate {
                     labelText: qsTr("Latitude(*)")
 
                     onValueChanged: {
-                        MapModeRegistry.createPointMode.coord.latitude = value
-                        //if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.latitude = value
+                        if (MapModeController.activeMode === MapModeRegistry.createPointMode) MapModeRegistry.createPointMode.coord.latitude = value
+                        else MapModeController.poi.coordinate = QtPositioning.coordinate(value, MapModeController.poi.coordinate.longitude)
                     }
 
-                    function updateText() { latitudeInput.setText(MapModeRegistry.createPointMode.coord.latitude) }
+                    function updateText() { latitudeInput.setText((MapModeController.activeMode === MapModeRegistry.createPointMode) ? MapModeRegistry.createPointMode.coord.latitude : MapModeController.poi.coordinate.latitude) }
                     Component.onCompleted: updateText()
                 }
 
@@ -128,11 +131,11 @@ PanelTemplate {
                     type: UI.InputCoordinate.Longitude
 
                     onValueChanged: {
-                        MapModeRegistry.createPointMode.coord.longitude = value
-                        // if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.longitude = value
+                        if (MapModeController.activeMode === MapModeRegistry.createPointMode) MapModeRegistry.createPointMode.coord.longitude = value
+                        else MapModeController.poi.coordinate = QtPositioning.coordinate(MapModeController.poi.coordinate.latitude, value)
                     }
 
-                    function updateText() { longitudeInput.setText(MapModeRegistry.createPointMode.coord.longitude) }
+                    function updateText() { longitudeInput.setText((MapModeController.activeMode === MapModeRegistry.createPointMode) ? MapModeRegistry.createPointMode.coord.longitude : MapModeController.poi.coordinate.longitude) }
                     Component.onCompleted: updateText()
                 }
 
@@ -141,7 +144,7 @@ PanelTemplate {
                     Layout.fillWidth: true
                     labelText: qsTr("Note")
 
-                    // onTextEdited: if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.note = text
+                    onTextEdited: if (MapModeController.poi) MapModeController.poi.note = text
                 }
             }
         }
@@ -175,14 +178,14 @@ PanelTemplate {
                 }
 
                 UI.Button {
-                    // visible: !!ToolRegistry.pointTool.editable
+                    visible: !!MapModeController.poi
                     enabled: !PoiModel.loading
                     Layout.preferredWidth: 1
                     Layout.fillWidth: true
                     variant: UI.ButtonStyles.Danger
                     backgroundRect.border.width: Theme.borders.b0
                     text: qsTr("Remove")
-                    onClicked: PoiModel.remove(ToolRegistry.pointTool.editable.id)
+                    onClicked: PoiModel.remove(MapModeController.poi.id)
                 }
 
                 UI.Button {
@@ -191,11 +194,13 @@ PanelTemplate {
                     text: qsTr("Save")
                     enabled: !PoiModel.loading
                     onClicked: {
+                        const latitude = (MapModeController.activeMode === MapModeRegistry.createPointMode) ? MapModeRegistry.createPointMode.coord.latitude : MapModeController.poi.coordinate.latitude
+                        const longitude = (MapModeController.activeMode === MapModeRegistry.createPointMode) ? MapModeRegistry.createPointMode.coord.longitude : MapModeController.poi.coordinate.longitude
                         const data = {
                             label: nameInput.text,
                             geometry: {
                                shapeTypeId: 1,
-                               coordinate: { x: MapModeRegistry.createPointMode.coord.longitude, y: MapModeRegistry.createPointMode.coord.latitude },
+                               coordinate: { x: longitude, y: latitude },
                             },
                             layerId: 1,
                             layerName: Layers.poiMapLayer(),
@@ -215,7 +220,7 @@ PanelTemplate {
                         if (MapModeController.activeMode === MapModeRegistry.createPointMode) {
                             PoiModel.append(data)
                         } else {
-                            data.id = ToolRegistry.pointTool.editable.id
+                            data.id = MapModeController.poi.id
                             PoiModel.update(data)
                         }
                     }
@@ -232,8 +237,5 @@ PanelTemplate {
 
     Component.onDestruction: {
         MapModeController.setActiveMode(MapModeRegistry.interactionMode)
-        // ToolRegistry.pointTool.editable = null
-        // ToolController.activeTool = null
-        // PoiModel.discardChanges()
     }
 }

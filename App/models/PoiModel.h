@@ -42,8 +42,7 @@ public:
         ShapeTypeIdRole,
         SurfaceRole,
         HeightRole,
-        LatitudeRole,   // coordinate.x
-        LongitudeRole,  // coordinate.y
+        CoordinateRole,
         CoordinatesRole,
         RadiusARole,
         RadiusBRole,

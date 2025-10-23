@@ -1,5 +1,6 @@
 #include "PoiModel.h"
 #include <QDebug>
+#include <QtPositioning/QGeoCoordinate>
 
 PoiModel::PoiModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this)), m_persistenceManager(new PoiPersistenceManager(this))
@@ -45,8 +46,10 @@ QVariant PoiModel::data(const QModelIndex &index, int role) const
     case ShapeTypeIdRole:          return poi.geometry.shapeTypeId;
     case SurfaceRole:              return poi.geometry.surface;
     case HeightRole:               return poi.geometry.height;
-    case LatitudeRole:             return poi.geometry.coordinate.y(); // lat
-    case LongitudeRole:            return poi.geometry.coordinate.x(); // lon
+    case CoordinateRole: {
+        QGeoCoordinate coord(poi.geometry.coordinate.y(), poi.geometry.coordinate.x());
+        return QVariant::fromValue(coord);
+    }
     case CoordinatesRole: {
         auto* that = const_cast<PoiModel*>(this);
         auto* cm = that->getCoordsModel(poi.id, poi.geometry.coordinates);
@@ -132,18 +135,11 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
         if (!qFuzzyCompare(poi.geometry.height, v)) { poi.geometry.height = v; changed = true; }
         break;
     }
-    case LatitudeRole: {
-        const float lat = value.toFloat();
-        if (!qFuzzyCompare(poi.geometry.coordinate.y(), lat)) {
-            poi.geometry.coordinate.setY(lat);
-            changed = true;
-        }
-        break;
-    }
-    case LongitudeRole: {
-        const float lon = value.toFloat();
-        if (!qFuzzyCompare(poi.geometry.coordinate.x(), lon)) {
-            poi.geometry.coordinate.setX(lon);
+    case CoordinateRole: {
+        const QGeoCoordinate coord = value.value<QGeoCoordinate>();
+        const QVector2D point(coord.longitude(), coord.latitude());
+        if (!qFuzzyCompare(point.x(), poi.geometry.coordinate.x()) || !qFuzzyCompare(point.y(), poi.geometry.coordinate.y())) {
+            poi.geometry.coordinate = point;
             changed = true;
         }
         break;
@@ -217,8 +213,7 @@ QHash<int, QByteArray> PoiModel::roleNames() const
         { ShapeTypeIdRole, "shapeTypeId" },
         { SurfaceRole, "surface" },
         { HeightRole, "height" },
-        { LatitudeRole, "latitude" },
-        { LongitudeRole, "longitude" },
+        { CoordinateRole, "coordinate" },
         { CoordinatesRole, "coordinates" },
         { RadiusARole, "radiusA" },
         { RadiusBRole, "radiusB" },

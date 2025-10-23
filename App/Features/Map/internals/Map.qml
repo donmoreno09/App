@@ -170,4 +170,10 @@ Map {
         visible: MapModeController.activeMode === createPointMode
         Component.onCompleted: MapModeRegistry.createPointMode = createPointMode
     }
+
+    EditPointMode {
+        id: editPointMode
+        visible: MapModeController.activeMode === editPointMode
+        Component.onCompleted: MapModeRegistry.editPointMode = editPointMode
+    }
 }
