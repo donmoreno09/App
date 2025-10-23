@@ -75,14 +75,10 @@ MapItemGroup {
     MapPolyline {
         id: historyLine
 
-        property var _path: (function() {
-            if (root.history && root.history.length) {
-                return root.history.map(function(t) {
-                    return QtPositioning.coordinate(t[0], t[1], t[2])
-                })
-            }
-            return []
-        })()
+        // reactive: recomputed whenever root.history changes
+        property var _path: (root.history && root.history.length)
+                            ? root.history.map(t => QtPositioning.coordinate(t[0], t[1], t[2]))
+                            : []
 
         path: _path
         line.width: 2
@@ -91,6 +87,21 @@ MapItemGroup {
         antialiasing: true
         visible: _path.length > 1
         z: -1
+    }
+
+    // start point marker
+    MapQuickItem {
+        id: startMarker
+        coordinate: historyLine._path.length ? historyLine._path[0] : QtPositioning.coordinate()
+        visible: historyLine._path.length > 0
+        anchorPoint.x: 6; anchorPoint.y: 6
+        z: historyLine.z + 0.01
+        sourceItem: Rectangle {
+            width: 12; height: 12; radius: 6
+            color: "#2ecc71"
+            border.color: "black"; border.width: 1
+            opacity: root.state === "STALE" ? 0.5 : 1.0
+        }
     }
 }
 
