@@ -16,8 +16,6 @@ PanelTemplate {
     id: root
     title.text: (TranslationManager.revision, qsTr("Point of Interest"))
 
-    property var geometryData: ({})
-
     function syncData() {
         if (!MapModeController.isEditing) return
 
@@ -138,7 +136,7 @@ PanelTemplate {
     function save() {
         const data = {
             label: nameInput.text,
-            geometry: root.geometryData,
+            geometry: MapModeController.activeMode.buildGeometry(),
             layerId: 1,
             layerName: Layers.poiMapLayer(),
             categoryId: categoryComboBox.currentValue,

@@ -4,12 +4,20 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 import App.Themes 1.0
+import App.Features.MapModes 1.0
 
 PointMode {
     id: root
 
     // Properties
     property geoCoordinate coord: QtPositioning.coordinate()
+
+    function buildGeometry() {
+        return {
+            shapeTypeId: MapModeController.PointType,
+            coordinate: { x: coord.longitude, y: coord.latitude },
+        }
+    }
 
     // Input handlers
     TapHandler {

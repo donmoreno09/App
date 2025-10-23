@@ -5,4 +5,9 @@ import QtPositioning 6.8
 MapItemGroup {
     id: root
     anchors.fill: parent
+
+    // For now, this method lives here which
+    // helps build the geometry data needed for
+    // saving
+    function buildGeometry() { console.warn("Build geometry invoked without being overridden."); return {} }
 }
