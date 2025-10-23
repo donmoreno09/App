@@ -5,8 +5,9 @@ import QtPositioning 6.8
 import App 1.0
 import App.Features.Map 1.0
 
-MapItemGroup {
+BaseMapLayer {
     id: root
+    _mapLayer: poiMapLayer
 
     property alias poiMapLayer: poiMapLayer
 
@@ -26,15 +27,6 @@ MapItemGroup {
             LayerManager.registerLayer(poiMapLayer)
             poiMapLayer.map = MapController.map
             poiMapLayer.initialize()
-        }
-    }
-
-    Connections {
-        target: MapController
-
-        function onMapLoaded() {
-            poiMapLayer.map = MapController.map
-            MapController.map.addMapItemGroup(root)
         }
     }
 }

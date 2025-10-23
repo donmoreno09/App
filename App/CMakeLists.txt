@@ -18,6 +18,7 @@ set(qml_files
     map-objects/PoiPoint.qml
 
     # Layers
+    layers/BaseMapLayer.qml
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
     layers/TirTrackMapLayer.qml
