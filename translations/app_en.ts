@@ -34,6 +34,14 @@
     </message>
 </context>
 <context>
+    <name>ComboBoxPanel</name>
+    <message>
+        <location filename="../App/Playground/ComboBoxPanel.qml" line="11"/>
+        <source>ComboBox Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DatePickerActions</name>
     <message>
         <location filename="../App/Components/date-time-picker/DatePickerActions.qml" line="40"/>
@@ -344,7 +352,7 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../App/Main.qml" line="27"/>
+        <location filename="../App/Main.qml" line="28"/>
         <source>IRIDESS FE</source>
         <translation>IRIDESS FE</translation>
     </message>
@@ -656,42 +664,47 @@
 <context>
     <name>SideRail</name>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="41"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="42"/>
         <source>Mission</source>
         <translation>Mission</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="50"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="51"/>
         <source>Pod</source>
         <translation>Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="67"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="68"/>
         <source>Layers</source>
         <translation>Layers</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="76"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="77"/>
         <source>Truck Arrivals</source>
         <translation>Truck Arrivals</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="85"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="86"/>
         <source>Truck Arrivals Date</source>
         <translation>Truck Arrivals Date</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="94"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="95"/>
         <source>Truck Arrivals DT</source>
         <translation>Truck Arrivals DT</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="103"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="104"/>
         <source>Trailer Prediction</source>
         <translation>Trailer Prediction</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="114"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="113"/>
+        <source>Ship Stowage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="124"/>
         <source>Languages</source>
         <translation>Languages</translation>
     </message>
@@ -700,12 +713,12 @@
         <translation type="vanished">Language</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="125"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="135"/>
         <source>Tilesets</source>
         <translation>Tilesets</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="59"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="60"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
@@ -799,112 +812,122 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="42"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="48"/>
         <source>Overview</source>
         <translation>Overview</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="18"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="23"/>
         <source>Languages</source>
         <translation>Languages</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="19"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="18"/>
+        <source>Ship Stowage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="24"/>
         <source>Mission</source>
         <translation>Mission</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="20"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="25"/>
         <source>Pod</source>
         <translation>Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="21"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="26"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="22"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="27"/>
         <source>Map Tilesets</source>
         <translation>Map Tilesets</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="23"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="28"/>
         <source>Map Layers</source>
         <translation>Map Layers</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="24"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="29"/>
         <source>DateTime Test</source>
         <translation>DateTime Test</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="25"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="30"/>
         <source>Toggle Test</source>
         <translation>Toggle Test</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="26"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="31"/>
         <source>TextArea Test</source>
         <translation>TextArea Test</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="27"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="32"/>
         <source>Overlay Test</source>
         <translation>Overlay Test</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="28"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="33"/>
         <source>Switcher Test</source>
         <translation>Switcher Test</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="29"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="34"/>
         <source>Slider Test</source>
         <translation>Slider Test</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="30"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="35"/>
         <source>Modal Test</source>
         <translation>Modal Test</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="31"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="36"/>
         <source>Button Test</source>
         <translation>Button Test</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="32"/>
-        <source>Arrival Content</source>
-        <translation>Arrival Content</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="33"/>
-        <source>Arrival Date Content</source>
-        <translation>Arrival Date Content</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="34"/>
-        <source>Arrival DateTime Content</source>
-        <translation>Arrival DateTime Content</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="35"/>
-        <source>Trailer Predictions</source>
-        <translation>Trailer Predictions</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="36"/>
-        <source>Track Details</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="37"/>
-        <source>Tir Details</source>
+        <source>ComboBox Test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="38"/>
+        <source>Arrival Content</source>
+        <translation>Arrival Content</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="39"/>
+        <source>Arrival Date Content</source>
+        <translation>Arrival Date Content</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="40"/>
+        <source>Arrival DateTime Content</source>
+        <translation>Arrival DateTime Content</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="41"/>
+        <source>Trailer Predictions</source>
+        <translation>Trailer Predictions</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="42"/>
+        <source>Track Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
+        <source>Tir Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="44"/>
         <source>Not Found</source>
         <translation>Not Found</translation>
     </message>
@@ -954,26 +977,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="23"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="116"/>
         <source>Latitude</source>
         <translation type="unfinished">Latitude</translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="25"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="117"/>
         <source>Longitude</source>
         <translation type="unfinished">Longitude</translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="38"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="118"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="36"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="119"/>
         <source>Heading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="27"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="120"/>
         <source>Speed</source>
         <translation type="unfinished"></translation>
@@ -1063,6 +1091,14 @@
         <location filename="../App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml" line="10"/>
         <source>Waiting Time Prediction</source>
         <translation>Waiting Time Prediction</translation>
+    </message>
+</context>
+<context>
+    <name>WebViewItem</name>
+    <message>
+        <location filename="../App/Features/ShipStowage/components/WebViewItem.qml" line="32"/>
+        <source>Loading...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
