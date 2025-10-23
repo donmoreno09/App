@@ -110,7 +110,10 @@ PanelTemplate {
                     Layout.fillWidth: true
                     labelText: qsTr("Latitude(*)")
 
-                    onValueChanged: ToolRegistry.pointTool.setLatitude(value)
+                    onValueChanged: {
+                        ToolRegistry.pointTool.setLatitude(value)
+                        if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.latitude = value
+                    }
 
                     function updateText() { latitudeInput.setText(ToolRegistry.pointTool.coord.latitude) }
                     Component.onCompleted: updateText()
@@ -122,7 +125,10 @@ PanelTemplate {
                     labelText: qsTr("Longitude(*)")
                     type: UI.InputCoordinate.Longitude
 
-                    onValueChanged: ToolRegistry.pointTool.setLongitude(value)
+                    onValueChanged: {
+                        ToolRegistry.pointTool.setLongitude(value)
+                        if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.longitude = value
+                    }
 
                     function updateText() { longitudeInput.setText(ToolRegistry.pointTool.coord.longitude) }
                     Component.onCompleted: updateText()
