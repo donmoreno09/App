@@ -13,6 +13,7 @@ QtObject {
 
     // Properties
     property var poi: null
+    readonly property bool isEditing: poi != null
     // TODO: Handle discarding changes by containing the "old" poi
     //       For now, I'm using PoiModel.discardChanges().
 

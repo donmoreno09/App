@@ -29,6 +29,8 @@ void PoiOptions::fetchAll() {
                 catItem.insert("key", catKey);
                 catItem.insert("name", catName);
                 categories.append(catItem);
+                if (catKey >= pointCategoriesStartIndex()) m_pointCategories.append(catItem);
+                else m_areaCategories.append(catItem);
 
                 QVariantList typesForCat;
                 const QJsonArray values = cat.value("values").toArray();
@@ -88,5 +90,7 @@ int PoiOptions::pointCategoriesStartIndex() const
 }
 
 QVariantList PoiOptions::categories() const { return m_categories; }
+QVariantList PoiOptions::pointCategories() const { return m_pointCategories; }
+QVariantList PoiOptions::areaCategories() const { return m_areaCategories; }
 QVariantList PoiOptions::healthStatuses() const { return m_healthStatuses; }
 QVariantList PoiOptions::operationalStates() const { return m_operationalStates; }

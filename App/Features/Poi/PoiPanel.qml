@@ -14,8 +14,40 @@ import "components"
 
 PanelTemplate {
     id: root
-
     title.text: (TranslationManager.revision, qsTr("Point of Interest"))
+
+    property var geometryData: ({})
+
+    function syncData() {
+        if (!MapModeController.isEditing) return
+
+        nameInput.text = MapModeController.poi.label
+        noteTextArea.text = MapModeController.poi.note ?? ""
+        categoryComboBox.currentIndex = categoryComboBox.comboBox.indexOfValue(MapModeController.poi.categoryId)
+        typeComboBox.currentIndex = typeComboBox.comboBox.indexOfValue(MapModeController.poi.typeId)
+        healthStatusComboBox.currentIndex = healthStatusComboBox.comboBox.indexOfValue(MapModeController.poi.healthStatusId)
+        operationalStateComboBox.currentIndex = operationalStateComboBox.comboBox.indexOfValue(MapModeController.poi.operationalStateId)
+    }
+
+    Component.onCompleted: {
+        syncData()
+        if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
+            MapModeController.setActiveMode(MapModeRegistry.createPointMode)
+        }
+    }
+
+    Component.onDestruction: {
+        MapModeController.setActiveMode(MapModeRegistry.interactionMode)
+    }
+
+    Connections {
+        target: PoiModel
+
+        function onAppended() { SidePanelController.close(true) }
+        function onUpdated() { SidePanelController.close(true) }
+        function onRemoved() { SidePanelController.close(true) }
+        function onFetched() { root.syncData() }
+    }
 
     ScrollView {
         anchors.fill: parent
@@ -35,6 +67,8 @@ PanelTemplate {
                     Layout.fillWidth: true
                     labelText: qsTr("Name(*)")
                     placeholderText: qsTr("Name")
+
+                    onTextEdited: if (MapModeController.isEditing) MapModeController.poi.label = text
                 }
 
                 UI.ComboBox {
@@ -42,7 +76,15 @@ PanelTemplate {
                     Layout.fillWidth: true
                     labelText: qsTr("Category(*)")
 
-                    model: PoiOptions.categories
+                    model: {
+                        if (MapModeController.isEditing) {
+                            if (MapModeController.poi.categoryId >= PoiOptions.pointCategoriesStartIndex)return PoiOptions.pointCategories
+                            else return PoiOptions.areaCategories
+                        }
+
+                        return PoiOptions.categories
+                    }
+
                     textRole: "name"
                     valueRole: "key"
                 }
@@ -86,8 +128,37 @@ PanelTemplate {
                     id: noteTextArea
                     Layout.fillWidth: true
                     labelText: qsTr("Note")
+
+                    onTextEdited: if (MapModeController.isEditing) MapModeController.poi.note = text
                 }
             }
+        }
+    }
+
+    function save() {
+        const data = {
+            label: nameInput.text,
+            geometry: root.geometryData,
+            layerId: 1,
+            layerName: Layers.poiMapLayer(),
+            categoryId: categoryComboBox.currentValue,
+            categoryName: categoryComboBox.currentText,
+            typeId: typeComboBox.currentValue,
+            typeName: typeComboBox.currentText,
+            healthStatusId: healthStatusComboBox.currentValue,
+            healthStatusName: healthStatusComboBox.currentText,
+            operationalStateId: operationalStateComboBox.currentValue,
+            operationalStateName: operationalStateComboBox.currentText,
+            details: {
+                metadata: { note: noteTextArea.text }
+            }
+        }
+
+        if (MapModeController.activeMode === MapModeRegistry.createPointMode) {
+            PoiModel.append(data)
+        } else {
+            data.id = MapModeController.poi.id
+            PoiModel.update(data)
         }
     }
 
@@ -134,18 +205,9 @@ PanelTemplate {
                     Layout.fillWidth: true
                     text: qsTr("Save")
                     enabled: !PoiModel.loading
+                    onClicked: save()
                 }
             }
         }
-    }
-
-    Component.onCompleted: {
-        if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
-            MapModeController.setActiveMode(MapModeRegistry.createPointMode)
-        }
-    }
-
-    Component.onDestruction: {
-        MapModeController.setActiveMode(MapModeRegistry.interactionMode)
     }
 }
