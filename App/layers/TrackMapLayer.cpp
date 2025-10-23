@@ -29,11 +29,6 @@ TrackMapLayer::TrackMapLayer(QObject* parent)
     });
 }
 
-void TrackMapLayer::initialize() {
-    qDebug() << "[TrackMapLayer:initialize] polling ...";
-    BaseMapLayer::initialize();
-}
-
 void TrackMapLayer::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight)
 {
     // In order for selection to work, I'll mutate the tracks
