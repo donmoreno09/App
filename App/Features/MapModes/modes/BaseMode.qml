@@ -4,4 +4,5 @@ import QtPositioning 6.8
 
 MapItemGroup {
     id: root
+    anchors.fill: parent
 }

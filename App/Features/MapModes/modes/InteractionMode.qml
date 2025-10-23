@@ -6,26 +6,23 @@ import Qt.labs.animation 6.8
 BaseMode {
     id: root
 
-    // Required properties
-    required property Map map
+    property alias tiltHandler: tiltHandler
 
     // Properties
+    required property Map map
+    required property BoundaryRule br
     property bool pinchAdjustingZoom: false
 
-    // Events
+    // Events/Handlers
     Component.onCompleted: resetPinchMinMax()
 
-    map.tilt: tiltHandler.persistentTranslation.y / -5
+    Connections {
+        target: map
 
-    BoundaryRule on map.zoomLevel {
-        id: br
-        minimum: map.minimumZoomLevel
-        maximum: map.maximumZoomLevel
-    }
-
-    map.onZoomLevelChanged: {
-        br.returnToBounds();
-        if (!pinchAdjustingZoom) resetPinchMinMax()
+        function onZoomLevelChanged() {
+            br.returnToBounds();
+            if (!pinchAdjustingZoom) resetPinchMinMax()
+        }
     }
 
     function resetPinchMinMax() {
@@ -125,7 +122,7 @@ BaseMode {
 
         function restart(vel) {
             stop()
-            map.animDest = Qt.vector3d(0, 0, 0)
+            root.animDest = Qt.vector3d(0, 0, 0)
             animDestLast = Qt.vector3d(0, 0, 0)
             to = Qt.vector3d(vel.x / duration * 100, vel.y / duration * 100, 0)
             start()

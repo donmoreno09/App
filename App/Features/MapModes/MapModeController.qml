@@ -11,12 +11,13 @@ QtObject {
     property var poi: null
     // TODO: Handle discarding changes by containing the "old" poi
 
-    // Internals
-    property BaseMode _activeMode: null
+    property BaseMode activeMode: null
 
     // Methods
     function setActiveMode(mode: BaseMode) {
         if (poi) poi = null // TODO: Handle discarding changes
+
+        activeMode = mode
     }
 
     function editPoi(editablePoi) {
