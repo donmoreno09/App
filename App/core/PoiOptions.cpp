@@ -20,7 +20,7 @@ void PoiOptions::fetchAll() {
         const QJsonDocument doc = QJsonDocument::fromJson(data);
         if (doc.isArray()) {
             const QJsonArray arr = doc.array();
-            for (int i = 0; i < 2/*arr.size()*/; ++i) {
+            for (int i = 0; i < arr.size(); ++i) {
                 const QJsonObject cat = arr.at(i).toObject();
                 const int catKey = cat.value("key").toInt();
                 const QString catName = cat.value("name").toString();
@@ -78,6 +78,13 @@ void PoiOptions::fetch(const QString& endpoint, std::function<void(QVariantList)
 
 QVariantList PoiOptions::typesForCategory(int categoryKey) const {
     return m_typesByCategory.value(categoryKey);
+}
+
+int PoiOptions::pointCategoriesStartIndex() const
+{
+    // The backend gives the position of the categories
+    // for point PoI at index 5
+    return 5;
 }
 
 QVariantList PoiOptions::categories() const { return m_categories; }

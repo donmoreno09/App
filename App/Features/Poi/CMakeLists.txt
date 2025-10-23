@@ -1,5 +1,12 @@
 set(qml_files
     PoiPanel.qml
+
+    components/AreaForm.qml
+    components/AreaButton.qml
+    components/RectangleForm.qml
+    components/EllipseForm.qml
+    components/PolygonForm.qml
+    components/PointForm.qml
 )
 
 set(cpp_files

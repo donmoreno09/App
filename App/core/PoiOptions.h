@@ -13,6 +13,7 @@ class PoiOptions : public QObject
     QML_SINGLETON
     QML_UNCREATABLE("PoiOptions is not intended to be instantiated. Use it as a singleton.")
 
+    Q_PROPERTY(int pointCategoriesStartIndex READ pointCategoriesStartIndex CONSTANT)
     Q_PROPERTY(QVariantList categories READ categories NOTIFY categoriesChanged)
     Q_PROPERTY(QVariantList healthStatuses READ healthStatuses NOTIFY healthStatusesChanged)
     Q_PROPERTY(QVariantList operationalStates READ operationalStates NOTIFY operationalStatesChanged)
@@ -24,6 +25,7 @@ public:
     Q_INVOKABLE void fetchAll();
     Q_INVOKABLE QVariantList typesForCategory(int categoryKey) const;
 
+    int pointCategoriesStartIndex() const;
     QVariantList categories() const;
     QVariantList healthStatuses() const;
     QVariantList operationalStates() const;

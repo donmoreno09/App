@@ -10,47 +10,16 @@ import App.Features.MapModes 1.0
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
+import "components"
+
 PanelTemplate {
     id: root
 
     title.text: (TranslationManager.revision, qsTr("Point of Interest"))
 
-    function updateTexts() {
-        latitudeInput.updateText()
-        longitudeInput.updateText()
-        if (MapModeController.poi) {
-            nameInput.text = MapModeController.poi.label
-            noteTextArea.text = MapModeController.poi.note ?? ""
-            categoryComboBox.currentIndex = categoryComboBox.comboBox.indexOfValue(MapModeController.poi.categoryId)
-            typeComboBox.currentIndex = typeComboBox.comboBox.indexOfValue(MapModeController.poi.typeId)
-            healthStatusComboBox.currentIndex = healthStatusComboBox.comboBox.indexOfValue(MapModeController.poi.healthStatusId)
-            operationalStateComboBox.currentIndex = operationalStateComboBox.comboBox.indexOfValue(MapModeController.poi.operationalStateId)
-        }
-    }
-
-    Connections {
-        target: PoiModel
-
-        function onAppended() { SidePanelController.close(true) }
-        function onUpdated() { SidePanelController.close(true) }
-        function onRemoved() { SidePanelController.close(true) }
-        function onFetched() { root.updateTexts() }
-    }
-
-    Connections {
-        target: MapModeController.activeMode
-        ignoreUnknownSignals: true
-
-        function onCoordChanged() {
-            latitudeInput.updateText()
-            longitudeInput.updateText()
-        }
-    }
-
     ScrollView {
         anchors.fill: parent
         contentWidth: availableWidth
-        Component.onCompleted: updateTexts()
 
         Pane {
             anchors.fill: parent
@@ -66,8 +35,6 @@ PanelTemplate {
                     Layout.fillWidth: true
                     labelText: qsTr("Name(*)")
                     placeholderText: qsTr("Name")
-
-                    onTextEdited: if (MapModeController.poi) MapModeController.poi.label = text
                 }
 
                 UI.ComboBox {
@@ -110,41 +77,15 @@ PanelTemplate {
                     valueRole: "key"
                 }
 
-                UI.InputCoordinate {
-                    id: latitudeInput
+                Loader {
                     Layout.fillWidth: true
-                    labelText: qsTr("Latitude(*)")
-
-                    onValueChanged: {
-                        if (MapModeController.activeMode === MapModeRegistry.createPointMode) MapModeRegistry.createPointMode.coord.latitude = value
-                        else MapModeController.poi.coordinate = QtPositioning.coordinate(value, MapModeController.poi.coordinate.longitude)
-                    }
-
-                    function updateText() { latitudeInput.setText((MapModeController.activeMode === MapModeRegistry.createPointMode) ? MapModeRegistry.createPointMode.coord.latitude : MapModeController.poi.coordinate.latitude) }
-                    Component.onCompleted: updateText()
-                }
-
-                UI.InputCoordinate {
-                    id: longitudeInput
-                    Layout.fillWidth: true
-                    labelText: qsTr("Longitude(*)")
-                    type: UI.InputCoordinate.Longitude
-
-                    onValueChanged: {
-                        if (MapModeController.activeMode === MapModeRegistry.createPointMode) MapModeRegistry.createPointMode.coord.longitude = value
-                        else MapModeController.poi.coordinate = QtPositioning.coordinate(MapModeController.poi.coordinate.latitude, value)
-                    }
-
-                    function updateText() { longitudeInput.setText((MapModeController.activeMode === MapModeRegistry.createPointMode) ? MapModeRegistry.createPointMode.coord.longitude : MapModeController.poi.coordinate.longitude) }
-                    Component.onCompleted: updateText()
+                    source: (categoryComboBox.currentValue >= PoiOptions.pointCategoriesStartIndex) ? "components/PointForm.qml" : "components/AreaForm.qml"
                 }
 
                 UI.TextArea {
                     id: noteTextArea
                     Layout.fillWidth: true
                     labelText: qsTr("Note")
-
-                    onTextEdited: if (MapModeController.poi) MapModeController.poi.note = text
                 }
             }
         }
@@ -193,37 +134,6 @@ PanelTemplate {
                     Layout.fillWidth: true
                     text: qsTr("Save")
                     enabled: !PoiModel.loading
-                    onClicked: {
-                        const latitude = (MapModeController.activeMode === MapModeRegistry.createPointMode) ? MapModeRegistry.createPointMode.coord.latitude : MapModeController.poi.coordinate.latitude
-                        const longitude = (MapModeController.activeMode === MapModeRegistry.createPointMode) ? MapModeRegistry.createPointMode.coord.longitude : MapModeController.poi.coordinate.longitude
-                        const data = {
-                            label: nameInput.text,
-                            geometry: {
-                               shapeTypeId: 1,
-                               coordinate: { x: longitude, y: latitude },
-                            },
-                            layerId: 1,
-                            layerName: Layers.poiMapLayer(),
-                            categoryId: categoryComboBox.currentValue,
-                            categoryName: categoryComboBox.currentText,
-                            typeId: typeComboBox.currentValue,
-                            typeName: typeComboBox.currentText,
-                            healthStatusId: healthStatusComboBox.currentValue,
-                            healthStatusName: healthStatusComboBox.currentText,
-                            operationalStateId: operationalStateComboBox.currentValue,
-                            operationalStateName: operationalStateComboBox.currentText,
-                            details: {
-                                metadata: { note: noteTextArea.text }
-                            }
-                        }
-
-                        if (MapModeController.activeMode === MapModeRegistry.createPointMode) {
-                            PoiModel.append(data)
-                        } else {
-                            data.id = MapModeController.poi.id
-                            PoiModel.update(data)
-                        }
-                    }
                 }
             }
         }
