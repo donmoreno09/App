@@ -5,6 +5,18 @@ set(qml_files
     modes/point/PointMode.qml
     modes/point/CreatePointMode.qml
     modes/point/EditPointMode.qml
+
+    modes/rectangle/RectangleMode.qml
+    modes/rectangle/CreateRectangleMode.qml
+    modes/rectangle/EditRectangleMode.qml
+
+    modes/ellipse/EllipseMode.qml
+    modes/ellipse/CreateEllipseMode.qml
+    modes/ellipse/EditEllipseMode.qml
+
+    modes/polygon/PolygonMode.qml
+    modes/polygon/CreatePolygonMode.qml
+    modes/polygon/EditPolygonMode.qml
 )
 
 set(qml_singletons
