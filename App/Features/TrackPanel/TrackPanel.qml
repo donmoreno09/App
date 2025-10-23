@@ -182,7 +182,6 @@ PanelTemplate {
 
                 UI.HorizontalSpacer {}
 
-
                 // Track History Functionality
                 RowLayout {
                     Layout.preferredWidth: 1
