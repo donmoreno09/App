@@ -13,13 +13,9 @@ add_subdirectory(MapToolbar)
 add_subdirectory(TrackPanel)
 add_subdirectory(TruckArrivals)
 add_subdirectory(TrailerPredictions)
-<<<<<<< HEAD
 add_subdirectory(ViGateServices)
-
-=======
 add_subdirectory(ShipStowage)
 add_subdirectory(Poi)
->>>>>>> figma
 
 # Modules need to be linked in order to be loaded using qrc.
 # Also, make sure that the RESOURCE_PREFIX of the module is the same as App's (which is "/").
