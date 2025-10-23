@@ -5,4 +5,5 @@ import App.Features.MapModes 1.0
 
 QtObject {
     property InteractionMode interactionMode: null
+    property CreatePointMode createPointMode: null
 }

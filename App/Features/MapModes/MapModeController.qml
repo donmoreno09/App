@@ -13,6 +13,15 @@ QtObject {
 
     property BaseMode activeMode: null
 
+    // Signals
+    // signal mapInputted(int eventType)
+
+    // enum EventType {
+    //     // Point events
+    //     PointLatitudeMoved,
+    //     PointLongitudeMoved
+    // }
+
     // Methods
     function setActiveMode(mode: BaseMode) {
         if (poi) poi = null // TODO: Handle discarding changes

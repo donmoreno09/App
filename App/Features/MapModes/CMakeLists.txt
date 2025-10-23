@@ -1,6 +1,10 @@
 set(qml_files
     modes/BaseMode.qml
     modes/InteractionMode.qml
+
+    modes/point/PointMode.qml
+    modes/point/CreatePointMode.qml
+    modes/point/EditPointMode.qml
 )
 
 set(qml_singletons
