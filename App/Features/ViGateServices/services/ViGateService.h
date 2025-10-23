@@ -27,7 +27,7 @@ signals:
 private:
     QNetworkAccessManager m_manager;
     QString m_host = QStringLiteral("localhost");
-    int m_port = 5002;
+    int m_port = 5005;
 
     void performGet(const QUrl& url);
     static QUrl makeUrl(const QString& host, int port,

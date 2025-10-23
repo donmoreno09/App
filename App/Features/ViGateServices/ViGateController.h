@@ -87,5 +87,5 @@ private:
     // Service
     ViGateService* m_service = nullptr;
     QString m_host = QStringLiteral("localhost");
-    int m_port = 5002;
+    int m_port = 5005;
 };
