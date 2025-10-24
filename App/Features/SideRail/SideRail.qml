@@ -86,7 +86,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Truck Arrivals"))
                 active: PanelRouter.currentPath === "arrival-content" && SidePanelController.isOpen
 
-                onClicked: SidePanelController.toggle(Routes.ArrivalContentTest)
+                onClicked: SidePanelController.toggle(Routes.ArrivalContent)
             }
 
             SideRailItem {
@@ -95,7 +95,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Truck Arrivals Date"))
                 active: PanelRouter.currentPath === "arrival-date-content" && SidePanelController.isOpen
 
-                onClicked: SidePanelController.toggle(Routes.ArrivalDateContentTest)
+                onClicked: SidePanelController.toggle(Routes.ArrivalDateContent)
             }
 
             SideRailItem {
@@ -104,7 +104,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Truck Arrivals DT"))
                 active: PanelRouter.currentPath === "arrival-date-time-content" && SidePanelController.isOpen
 
-                onClicked: SidePanelController.toggle(Routes.ArrivalDateTimeContentTest)
+                onClicked: SidePanelController.toggle(Routes.ArrivalDateTimeContent)
             }
 
             SideRailItem {
@@ -113,7 +113,7 @@ UI.GlobalBackgroundConsumer {
                 text: (TranslationManager.revision, qsTr("Trailer Prediction"))
                 active: PanelRouter.currentPath === "trailer-prediction" && SidePanelController.isOpen
 
-                onClicked: SidePanelController.toggle(Routes.TrailerPredictionTest)
+                onClicked: SidePanelController.toggle(Routes.TrailerPrediction)
             }
 
             SideRailItem {
