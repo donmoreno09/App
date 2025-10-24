@@ -26,6 +26,7 @@ public:
             auto tirVal = rawTir.toObject();
 
             Tir tir;
+            tir.uidForHistory = tirVal["operationCode"].toString();
             tir.name = tirVal["operationCode"].toString();
             tir.operationCode = tirVal["operationCode"].toString();
             tir.pos = parseCoordinateArray(tirVal["pos"].toArray(), true);

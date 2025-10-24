@@ -23,6 +23,8 @@ namespace ApiEndpoints {
     static const QString BaseTrackSenderUrl = BaseUrl + "/tracksender";
     static const QString TrackSenderStart(const QString& topic) { return BaseTrackSenderUrl + "/" + topic + "/start"; }
     static const QString TrackSenderStop(const QString& topic) { return BaseTrackSenderUrl + "/" + topic + "/stop"; }
+    static const QString TrackHistorySenderStart(const QString& topic, const QString &track_iridess_uid) { return BaseTrackSenderUrl + "/" + topic + "/history/" + track_iridess_uid + "/start"; }
+    static const QString TrackHistorySenderStop(const QString& topic, const QString &track_iridess_uid) { return BaseTrackSenderUrl + "/" + topic + "/history/" + track_iridess_uid + "/stop"; }
 }
 
 #endif // APIENDPOINTS_H

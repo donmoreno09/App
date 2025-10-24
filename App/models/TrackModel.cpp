@@ -1,4 +1,7 @@
 #include "TrackModel.h"
+#include <core/TrackManager.h>
+#include <limits>
+
 
 TrackModel::TrackModel(QObject *parent)
     : BaseTrackModel(parent)
@@ -30,6 +33,8 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
     case VelRole: return QVariant::fromValue(track.vel);
     case StateRole: return track.state;
     case NameRole: return track.name;
+    case UidForHistoryRole: return track.uidForHistory;
+    case HistoryRole: return historyToVariant(track.history);
     default: return {};
     }
 }
@@ -48,6 +53,8 @@ QHash<int, QByteArray> TrackModel::roleNames() const
         { TrackNumberRole, "trackNumber" },
         { VelRole, "vel" },
         { StateRole, "state" },
+        { UidForHistoryRole, "uidForHistory" },
+        { HistoryRole, "history" },
     };
 }
 
@@ -85,12 +92,22 @@ void TrackModel::upsert(const QVector<Track> &tracks)
             // Update track
             const int row = it.value();
 
+            // history bool check
+            const bool historyWasEmpty = m_tracks[row].history.isEmpty();
+            const bool historyWillBeNonEmpty = !track.history.isEmpty();
+
             QVector<int> changed = diffRoles(m_tracks[row], track);
             if (!changed.empty()) {
                 m_tracks[row] = track;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
             }
+
+            // Check history update
+            if (historyWasEmpty && historyWillBeNonEmpty) {
+                emit historyPayloadArrived(m_tracks[row].sourceName, m_tracks[row].uidForHistory);
+            }
+
         } else {
             // Insert track
             const int row = m_tracks.size();
@@ -99,6 +116,10 @@ void TrackModel::upsert(const QVector<Track> &tracks)
             m_tracks.append(track);
             m_upsertMap.insert(track.trackUid, row);
             endInsertRows();
+
+            if (!track.history.isEmpty()) {
+                emit historyPayloadArrived(track.sourceName, track.uidForHistory);
+            }
         }
     }
 
@@ -140,6 +161,16 @@ QVector<int> TrackModel::diffRoles(const Track &a, const Track &b) const
     if (a.time != b.time) roles << TimeRole;
     if (a.state != b.state) roles << StateRole;
     if (a.name != b.name) roles << NameRole;
+    if (a.uidForHistory != b.uidForHistory) roles << UidForHistoryRole;
+
+    // History: check if it's updated
+    const int asz   = a.history.size();
+    const int bsz   = b.history.size();
+    const int alast = asz ? a.history.constLast().time : std::numeric_limits<int>::min();
+    const int blast = bsz ? b.history.constLast().time : std::numeric_limits<int>::min();
+
+    if (asz != bsz || alast != blast)
+        roles << HistoryRole;
 
     return roles;
 }
