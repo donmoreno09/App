@@ -5,6 +5,8 @@ import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 
 QtObject {
+    id: root
+
     // Properties
     property bool isOpen: false
 
@@ -14,7 +16,6 @@ QtObject {
     signal closing()
     signal closed()
     signal routeChanged(string path)
-    signal navigationError(string path, string reason)
 
     // Internals
     property Item _panel: null
@@ -56,4 +57,28 @@ QtObject {
         if (destroy) PanelRouter.clear()
         closed()
     }
+
+    function openOrRefresh(path, props) {
+        if (!path) {
+            path = PanelRouter.currentPath ?? ""
+        }
+
+        if (!isOpen) {
+            open(path, props)
+            return
+        }
+
+        if (PanelRouter.currentPath === path) {
+            // force a refresh of props even if route is the same
+            PanelRouter.replace(path, props || {})
+            return
+        }
+
+        close()
+        open(path, props)
+    }
+
+    Component.onCompleted: PanelRouter.stackChanged.connect(onStackChanged)
+    Component.onDestruction: PanelRouter.stackChanged.disconnect(onStackChanged)
+    function onStackChanged(depth: int, currentPath: string) { root.routeChanged(currentPath) }
 }

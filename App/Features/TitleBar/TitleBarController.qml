@@ -4,6 +4,7 @@ import QtQuick 6.8
 
 import App.Features.Language 1.0
 import App.Features.SidePanel 1.0
+import App.Features.ShipStowage 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
@@ -13,6 +14,10 @@ QtObject {
     property string currentTitle: {
         TranslationManager.revision; // Update title on language changed.
 
+        if(ShipStowageController.hasActiveWindow){
+            return qsTr("Ship Stowage")
+        }
+
         if (SidePanelController.isOpen) {
             switch(PanelRouter.currentPath) {
             case Routes.Languages: return qsTr("Languages")
@@ -21,6 +26,7 @@ QtObject {
             case Routes.Notifications: return qsTr("Notifications")
             case Routes.MapTilesets: return qsTr("Map Tilesets")
             case Routes.MapLayers: return qsTr("Map Layers")
+            case Routes.Poi: return qsTr("Point of Interest")
             case Routes.DateTimeTest: return qsTr("DateTime Test")
             case Routes.ToggleTest: return qsTr("Toggle Test")
             case Routes.TextAreaTest: return qsTr("TextArea Test")
@@ -29,9 +35,13 @@ QtObject {
             case Routes.SliderTest: return qsTr("Slider Test")
             case Routes.ModalTest: return qsTr("Modal Test")
             case Routes.ButtonTest: return qsTr("Button Test")
-            case Routes.ArrivalContentTest: return qsTr("Arrival Content Test")
-            case Routes.ArrivalDateContentTest: return qsTr("Arrival Date Content Test")
-            case Routes.ArrivalDateTimeContentTest: return qsTr("Arrival DateTime Content Test")
+            case Routes.ComboBoxTest: return qsTr("ComboBox Test")
+            case Routes.ArrivalContent: return qsTr("Arrival Content")
+            case Routes.ArrivalDateContent: return qsTr("Arrival Date Content")
+            case Routes.ArrivalDateTimeContent: return qsTr("Arrival DateTime Content")
+            case Routes.TrailerPrediction: return qsTr("Trailer Predictions")
+            case Routes.TrackPanel: return qsTr("Track Details")
+            case Routes.TirPanel: return qsTr("Tir Details")
             case Routes.NotFound: return qsTr("Not Found")
             }
         }

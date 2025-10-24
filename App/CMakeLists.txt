@@ -1,12 +1,6 @@
-find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-
 qt_add_executable(${PROJECT_NAME}
     main.cpp
 )
-
-target_link_libraries(IRIDESS_FE PRIVATE Qt6::Core)
-target_link_libraries(IRIDESS_FE PRIVATE Qt6::Core)
 
 file(GLOB_RECURSE APP_ASSETS
     RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -20,12 +14,16 @@ set(qml_files
     # Map Objects
     map-objects/Track.qml
     map-objects/Tir.qml
+    map-objects/TriangleHeading.qml
+    map-objects/PoiPoint.qml
 
     # Layers
+    layers/BaseMapLayer.qml
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
     layers/TirTrackMapLayer.qml
     layers/LayersPanel.qml
+    layers/PoiMapLayer.qml
 )
 
 set(cpp_sources
@@ -51,6 +49,8 @@ set(cpp_sources
     core/TrackManager.h
     core/variantlistmodel.cpp
     core/variantlistmodel.h
+    core/PoiOptions.h
+    core/PoiOptions.cpp
 
     # Events
     events/selectionboxbus.h
@@ -63,8 +63,8 @@ set(cpp_sources
     layers/BaseMapLayer.cpp
     layers/BaseMapLayer.h
     layers/Layers.h
-    layers/PoiMapLayer.cpp
-    layers/PoiMapLayer.h
+    layers/PoiMapLayerController.cpp
+    layers/PoiMapLayerController.h
     layers/BaseTrackMapLayer.cpp
     layers/BaseTrackMapLayer.h
     layers/TrackMapLayer.cpp
@@ -82,8 +82,13 @@ set(cpp_sources
     entities/BaseTrack.h
     entities/Track.h
     entities/Tir.h
+    entities/Velocity.h
+
 
     # Qt Models
+    models/ModelHelper.h
+    models/ModelHelper.cpp
+    models/CoordinatesModel.h
     models/PoiModel.cpp
     models/PoiModel.h
     models/BaseTrackModel.h
@@ -135,6 +140,8 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Mqtt
         Qt6::Location
         Qt6::Positioning
+        Qt6::WebEngineQuick
+        Qt6::WebEngineCore
 )
 
 target_include_directories(${PROJECT_NAME}

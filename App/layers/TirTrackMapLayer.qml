@@ -5,8 +5,9 @@ import QtPositioning 6.8
 import App 1.0
 import App.Features.Map 1.0
 
-MapItemGroup {
+BaseMapLayer {
     id: root
+    _mapLayer: tirMapLayer
 
     property alias tirMapLayer: tirMapLayer
 
@@ -15,7 +16,9 @@ MapItemGroup {
     MapItemView {
         model: tirMapLayer.tirModel
 
-        delegate: Tir { }
+        delegate: Tir {
+            tirModel: tirMapLayer.tirModel
+        }
     }
 
     TirMapLayer {
@@ -27,16 +30,6 @@ MapItemGroup {
             TrackManager.registerLayer(MqttClientService.getTopicFromLayer(Layers.tirTrackMapLayer()), tirMapLayer)
             MqttClientService.registerLayer(Layers.tirTrackMapLayer(), tirMapLayer)
             tirMapLayer.map = MapController.map
-            tirMapLayer.initialize()
-        }
-    }
-
-    Connections {
-        target: MapController
-
-        function onMapLoaded() {
-            tirMapLayer.map = MapController.map
-            MapController.map.addMapItemGroup(root)
         }
     }
 }
