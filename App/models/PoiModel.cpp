@@ -440,7 +440,7 @@ void PoiModel::buildPoiSave(const QVariantMap &data)
 void PoiModel::handlePoiSaved(bool success, const QString &uuid)
 {
     if (!success) {
-        qWarning() << "Error: Could not save PoI with label '" << m_poiSave->label << "'. Check logs.";
+        qWarning() << "Error: Could not save PoI with label. Check logs.";
     } else {
         const int index = m_pois.size();
         beginInsertRows(QModelIndex(), index, index);

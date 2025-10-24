@@ -13,21 +13,16 @@
 
 int main(int argc, char *argv[])
 {
-
-    // CRITICAL: Configure WebEngine BEFORE creating QGuiApplication
     // This tells Chromium to handle GPU gracefully
+    // This flag tells Qt to share OpenGL contexts between different components of the application.
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
-    // Fix GPU issues by running GPU in main process instead of separate process
-    // This prevents the "Failed to create command buffer" error
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS",
-            "--disable-gpu-process-crash-limit "
-            "--in-process-gpu "
-            "--disable-dev-shm-usage "
-            "--no-sandbox");
+            "--enable-gpu-rasterization " // Chromium creates a dedicated process for GPU rendering
+            "--enable-zero-copy "         // Reduces data copying between CPU and GPU
+            "--enable-hardware-overlays " // Uses hardware layers for faster composition
+            "--num-raster-threads=4 ");   // Parallelizes rendering across multiple threads
 
-    // Initialize WebEngine BEFORE QGuiApplication
-    // This ensures proper setup of Chromium backend
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);
