@@ -13,7 +13,8 @@ ColumnLayout {
 
     enum AreaType {
         Polygon = 3,
-        Rectangle, // This is actually CircleType in BE, but I'm using it for Rectangle
+        // This is actually CircleType in BE
+        Rectangle,
         Ellipse
     }
 

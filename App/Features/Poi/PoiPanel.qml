@@ -30,7 +30,7 @@ PanelTemplate {
     Component.onCompleted: {
         syncData()
         if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
-            MapModeController.setActiveMode(MapModeRegistry.createPointMode)
+            MapModeController.setActiveMode(MapModeRegistry.createRectangleMode)
         }
     }
 
@@ -152,11 +152,11 @@ PanelTemplate {
             }
         }
 
-        if (MapModeController.activeMode === MapModeRegistry.createPointMode) {
-            PoiModel.append(data)
-        } else {
+        if (MapModeController.isEditing) {
             data.id = MapModeController.poi.id
             PoiModel.update(data)
+        } else {
+            PoiModel.append(data)
         }
     }
 

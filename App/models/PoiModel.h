@@ -9,7 +9,6 @@
 #include <entities/Poi.h>
 #include <persistence/poipersistencemanager.h>
 #include "ModelHelper.h"
-#include "CoordinatesModel.h"
 
 class PoiModel : public QAbstractListModel
 {
@@ -44,8 +43,11 @@ public:
         HeightRole,
         CoordinateRole,
         CoordinatesRole,
+        TopLeftRole,
+        BottomRightRole,
         RadiusARole,
         RadiusBRole,
+        IsRectangleRole,
 
         // Details/Metadata
         NoteRole,
@@ -97,15 +99,12 @@ private:
     QPointer<PoiPersistenceManager> m_persistenceManager;
     QVector<Poi> m_pois;
     QPointer<ModelHelper> m_helper;
-    QHash<QString, CoordinatesModel*> m_coordsModels;
 
     static QList<QVector2D> parseCoordinatesVariant(const QVariant& v);
 
     static bool compareCoords(const QList<QVector2D>& a, const QList<QVector2D>& b);
 
-    CoordinatesModel* getCoordsModel(const QString& id, const QList<QVector2D>& pts);
-
-    void removeCoordsModel(const QString& id);
+    static bool isRectangle(const Geometry& geom);
 
     void buildPoiSave(const QVariantMap &data);
 

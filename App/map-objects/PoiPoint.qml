@@ -10,11 +10,6 @@ import App.Features.MapModes 1.0
 MapQuickItem {
     id: root
 
-    required property int index
-    required property var model
-    required property string id
-    required property string label
-
     readonly property bool isEditing: MapModeController.poi && id === MapModeController.poi.id
 
     coordinate: model.coordinate
@@ -73,6 +68,7 @@ MapQuickItem {
     TapHandler {
         enabled: !isEditing
         gesturePolicy: TapHandler.ReleaseWithinBounds
+        acceptedButtons: Qt.LeftButton
         onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
     }
 

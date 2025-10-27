@@ -16,6 +16,8 @@ set(qml_files
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
     map-objects/PoiPoint.qml
+    map-objects/PoiRectangle.qml
+    map-objects/PoiPolygon.qml
 
     # Layers
     layers/BaseMapLayer.qml

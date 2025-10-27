@@ -23,7 +23,7 @@ QtObject {
         PointType = 1,
         LineStringType,
         PolygonType,
-        CircleType,
+        RectangleType, // This is actually CircleType in BE
         EllipseType
     }
 
@@ -44,6 +44,10 @@ QtObject {
         switch (poi.shapeTypeId) {
         case MapModeController.PointType:
             activeMode = MapModeRegistry.editPointMode
+            break;
+        case MapModeController.PolygonType:
+            if (poi.isRectangle) activeMode = MapModeRegistry.editRectangleMode
+            else activeMode = MapModeRegistry.editPolygonMode
             break;
         default:
             console.error("Editing PoI with unknown shape type")

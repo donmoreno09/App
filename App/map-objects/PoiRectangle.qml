@@ -2,34 +2,18 @@ import QtQuick 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
 
+import App 1.0
 import App.Themes 1.0
 import App.Features.Map 1.0
 import App.Features.MapModes 1.0
 
-RectangleMode {
+MapItemGroup {
     id: root
 
-    // Final (committed) rectangle
-    property geoCoordinate topLeft: QtPositioning.coordinate()
-    property geoCoordinate bottomRight: QtPositioning.coordinate()
+    readonly property bool isEditing: MapModeController.poi && id === MapModeController.poi.id
 
     // Input state
-    property bool  dragging: drag.active
-    property point dragStart: drag.centroid.pressPosition
-    property point dragEnd: drag.centroid.position
     property bool isDraggingHandler: false
-
-    function buildGeometry() {
-        return {
-            shapeTypeId: MapModeController.PolygonType,
-            coordinates: root.rectToPoints({ topLeft, bottomRight }),
-        }
-    }
-
-    function resetPreview() {
-        topLeft = QtPositioning.coordinate()
-        bottomRight = QtPositioning.coordinate()
-    }
 
     function clampLat(v)   { return Math.max(-90, Math.min(90, v)) } // spec range
     function normLon(v) { // wrap to [-180,180]
@@ -39,20 +23,17 @@ RectangleMode {
     function setTopLeft(lat, lon) {
         const lat1 = (lat === undefined || lat === null) ? topLeft.latitude  : clampLat(Number(lat))
         const lon1 = (lon === undefined || lon === null) ? topLeft.longitude : normLon(Number(lon))
-        topLeft = QtPositioning.coordinate(lat1, lon1)
+        model.topLeft = QtPositioning.coordinate(lat1, lon1)
+        MapModeRegistry.editRectangleMode.topLeftChanged()
         normalizeCorners()
     }
     function setBottomRight(lat, lon) {
         const lat1 = (lat === undefined || lat === null) ? bottomRight.latitude  : clampLat(Number(lat))
         const lon1 = (lon === undefined || lon === null) ? bottomRight.longitude : normLon(Number(lon))
-        bottomRight = QtPositioning.coordinate(lat1, lon1)
+        model.bottomRight = QtPositioning.coordinate(lat1, lon1)
+        MapModeRegistry.editRectangleMode.bottomRightChanged()
         normalizeCorners()
     }
-
-    function setTopLeftLatitude(lat)         { setTopLeft(lat,  undefined) }
-    function setTopLeftLongitude(lon)        { setTopLeft(undefined, lon) }
-    function setBottomRightLatitude(lat)     { setBottomRight(lat,  undefined) }
-    function setBottomRightLongitude(lon)    { setBottomRight(undefined, lon) }
 
     function normalizeCorners() {
         // Keep NW -> SE ordering
@@ -64,51 +45,18 @@ RectangleMode {
         const br = QtPositioning.coordinate(s, e)
         if (tl.latitude !== topLeft.latitude || tl.longitude !== topLeft.longitude
                 || br.latitude !== bottomRight.latitude || br.longitude !== bottomRight.longitude) {
-            topLeft = tl
-            bottomRight = br
+            model.topLeft = tl
+            MapModeRegistry.editRectangleMode.topLeftChanged()
+            model.bottomRight = br
+            MapModeRegistry.editRectangleMode.bottomRightChanged()
         }
     }
 
     // Input handlers
-    TapHandler {
-        id: tap
-        acceptedButtons: Qt.LeftButton
-        onPressedChanged: if (!pressed && !drag.active && !moveRect.active) root.resetPreview()
-    }
-
-    DragHandler {
-        id: drag
-        target: null
-        acceptedButtons: Qt.LeftButton
-        cursorShape: Qt.CrossCursor
-        enabled: !moveRectTap.pressed && !isDraggingHandler
-
-        onTranslationChanged: {
-            topLeft = MapController.map.toCoordinate(Qt.point(Math.min(dragStart.x, dragEnd.x),
-                                                              Math.min(dragStart.y, dragEnd.y)))
-            bottomRight = MapController.map.toCoordinate(Qt.point(Math.max(dragStart.x, dragEnd.x),
-                                                                  Math.max(dragStart.y, dragEnd.y)))
-            root.normalizeCorners()
-        }
-    }
-
-    // Preview rectangle (geo-accurate)
-    MapRectangle {
-        visible: root.dragging
-        topLeft: root.topLeft
-        bottomRight: root.bottomRight
-        color: "#3388cc88"
-        border.color: "orange"
-        border.width: 2
-        z: Theme.elevation.z100
-    }
-
-    // Committed rectangle
     MapRectangle {
         id: committedRect
-        visible: !root.dragging
-        topLeft: root.topLeft
-        bottomRight: root.bottomRight
+        topLeft: model.topLeft
+        bottomRight: model.bottomRight
         color: "#22448888"
         border.color: "green"
         border.width: 2
@@ -119,40 +67,44 @@ RectangleMode {
         property point _startBRpx: Qt.point(0, 0)
 
         TapHandler {
-            id: moveRectTap
+            enabled: !isEditing
+            gesturePolicy: TapHandler.ReleaseWithinBounds
             acceptedButtons: Qt.LeftButton
+            onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
         }
 
         DragHandler {
             id: moveRect
             target: null
-            enabled: !isDraggingHandler
+            enabled: isEditing && !isDraggingHandler
             acceptedButtons: Qt.LeftButton
             minimumPointCount: 1
             maximumPointCount: 1
             cursorShape: Qt.SizeAllCursor
 
             onActiveChanged: if (active) {
-                committedRect._startTLpx = MapController.map.fromCoordinate(root.topLeft, false)
-                committedRect._startBRpx = MapController.map.fromCoordinate(root.bottomRight, false)
+                committedRect._startTLpx = MapController.map.fromCoordinate(topLeft, false)
+                committedRect._startBRpx = MapController.map.fromCoordinate(bottomRight, false)
             }
 
             onActiveTranslationChanged: {
                 const dx = activeTranslation.x, dy = activeTranslation.y
                 const tlPx = Qt.point(committedRect._startTLpx.x + dx, committedRect._startTLpx.y + dy)
                 const brPx = Qt.point(committedRect._startBRpx.x + dx, committedRect._startBRpx.y + dy)
-                root.topLeft     = MapController.map.toCoordinate(tlPx, false)
-                root.bottomRight = MapController.map.toCoordinate(brPx, false)
-                root.normalizeCorners()
+                model.topLeft     = MapController.map.toCoordinate(tlPx, false)
+                MapModeRegistry.editRectangleMode.topLeftChanged()
+                model.bottomRight = MapController.map.toCoordinate(brPx, false)
+                MapModeRegistry.editRectangleMode.bottomRightChanged()
+                normalizeCorners()
             }
         }
     }
 
     MapRectangle {
         id: highlight
-        visible: !root.dragging
-        topLeft: root.topLeft
-        bottomRight: root.bottomRight
+        visible: isEditing
+        topLeft: model.topLeft
+        bottomRight: model.bottomRight
         color: "transparent"
         border.color: "white"
         border.width: committedRect.border.width + 4
@@ -204,18 +156,28 @@ RectangleMode {
                 const p = h.mapToItem(MapController.map, centroid.position.x, centroid.position.y)
                 const c = MapController.map.toCoordinate(p, false)
 
-                if (h.kind === 0) topLeft = c
-                else if (h.kind === 1) {
-                    topLeft = QtPositioning.coordinate(c.latitude, topLeft.longitude)
-                    bottomRight = QtPositioning.coordinate(bottomRight.latitude, c.longitude)
+                if (h.kind === 0) {
+                    model.topLeft = c
+                    MapModeRegistry.editRectangleMode.topLeftChanged()
                 }
-                else if (h.kind === 2) bottomRight = c
+                else if (h.kind === 1) {
+                    model.topLeft = QtPositioning.coordinate(c.latitude, topLeft.longitude)
+                    MapModeRegistry.editRectangleMode.topLeftChanged()
+                    model.bottomRight = QtPositioning.coordinate(bottomRight.latitude, c.longitude)
+                    MapModeRegistry.editRectangleMode.bottomRightChanged()
+                }
+                else if (h.kind === 2) {
+                    model.bottomRight = c
+                    MapModeRegistry.editRectangleMode.bottomRightChanged()
+                }
                 else {
-                    bottomRight = QtPositioning.coordinate(c.latitude, bottomRight.longitude)
-                    topLeft = QtPositioning.coordinate(topLeft.latitude, c.longitude)
+                    model.bottomRight = QtPositioning.coordinate(c.latitude, bottomRight.longitude)
+                    MapModeRegistry.editRectangleMode.bottomRightChanged()
+                    model.topLeft = QtPositioning.coordinate(topLeft.latitude, c.longitude)
+                    MapModeRegistry.editRectangleMode.topLeftChanged()
                 }
 
-                root.normalizeCorners() // keep TL=NW, BR=SE
+                normalizeCorners() // keep TL=NW, BR=SE
 
                 // re-label by SWAPPING owners so kinds stay unique
                 const corners = [
@@ -231,13 +193,13 @@ RectangleMode {
                   const d2 = dx*dx + dy*dy
                   if (d2 < best) { best = d2; nearest = corners[i].kind }
                 }
-                root._swapKinds(h, nearest)
+                _swapKinds(h, nearest)
             }
         }
     }
 
-    VertexHandle { id: topLeftVertex; kind: 0; visible: !root.dragging; z: committedRect.z + 1 }
-    VertexHandle { id: topRightVertex; kind: 1; visible: !root.dragging; z: committedRect.z + 1 }
-    VertexHandle { id: bottomRightVertex; kind: 2; visible: !root.dragging; z: committedRect.z + 1 }
-    VertexHandle { id: bottomLeftVertex; kind: 3; visible: !root.dragging; z: committedRect.z + 1 }
+    VertexHandle { id: topLeftVertex; kind: 0; visible: isEditing; z: committedRect.z + 1 }
+    VertexHandle { id: topRightVertex; kind: 1; visible: isEditing; z: committedRect.z + 1 }
+    VertexHandle { id: bottomRightVertex; kind: 2; visible: isEditing; z: committedRect.z + 1 }
+    VertexHandle { id: bottomLeftVertex; kind: 3; visible: isEditing; z: committedRect.z + 1 }
 }

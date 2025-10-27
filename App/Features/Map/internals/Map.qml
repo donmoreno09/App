@@ -109,10 +109,9 @@ Map {
 
     DragHandler {
         id: drag
-
         target: null
-
         onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
         onActiveChanged: if (active) {
             flickAnimation.stop()
@@ -175,5 +174,41 @@ Map {
         id: editPointMode
         visible: MapModeController.activeMode === editPointMode
         Component.onCompleted: MapModeRegistry.editPointMode = editPointMode
+    }
+
+    CreateRectangleMode {
+        id: createRectangleMode
+        visible: MapModeController.activeMode === createRectangleMode
+        Component.onCompleted: MapModeRegistry.createRectangleMode = createRectangleMode
+    }
+
+    EditRectangleMode {
+        id: editRectangleMode
+        visible: MapModeController.activeMode === editRectangleMode
+        Component.onCompleted: MapModeRegistry.editRectangleMode = editRectangleMode
+    }
+
+    CreateEllipseMode {
+        id: createEllipseMode
+        visible: MapModeController.activeMode === createEllipseMode
+        Component.onCompleted: MapModeRegistry.createEllipseMode = createEllipseMode
+    }
+
+    EditEllipseMode {
+        id: editEllipseMode
+        visible: MapModeController.activeMode === editEllipseMode
+        Component.onCompleted: MapModeRegistry.editEllipseMode = editEllipseMode
+    }
+
+    CreatePolygonMode {
+        id: createPolygonMode
+        visible: MapModeController.activeMode === createPolygonMode
+        Component.onCompleted: MapModeRegistry.createPolygonMode = createPolygonMode
+    }
+
+    EditPolygonMode {
+        id: editPolygonMode
+        visible: MapModeController.activeMode === editPolygonMode
+        Component.onCompleted: MapModeRegistry.editPolygonMode = editPolygonMode
     }
 }
