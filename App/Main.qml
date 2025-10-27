@@ -53,13 +53,13 @@ ApplicationWindow {
             map.copyrightsVisible = false // Hide the copyright label from the bottom left
         }
 
-        AISTrackMapLayer { }
+        PoiMapLayer { }
 
-        DocSpaceTrackMapLayer { }
+        AISTrackMapLayer { }
 
         TirTrackMapLayer { }
 
-        PoiMapLayer { }
+        DocSpaceTrackMapLayer { }
     }
 
     Connections {

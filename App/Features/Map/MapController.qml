@@ -19,6 +19,7 @@ QtObject {
     property Plugin _currentPlugin: null
     property MapState _state: MapState { onRestored: mapRestored() }
 
+    signal mapBeforeLoad()
     signal mapLoaded()
     signal mapRestored()
 
@@ -34,6 +35,8 @@ QtObject {
     function setPlugin(plugin: Plugin) {
         if (isMapLoading) return
         if (plugin === _currentPlugin) return
+
+        mapBeforeLoad()
 
         // Destroy previous map
         _state.captureState()
@@ -83,6 +86,7 @@ QtObject {
     function _destroyMap() {
         if (map) {
             _state.detach()
+            map.clearMapItems()
             map.clearData()
         }
         map = null
