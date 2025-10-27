@@ -62,14 +62,10 @@ QVariant PoiModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(out);
     }
     case TopLeftRole: {
-        if (!isRectangle(poi.geometry)) break;
-
         QGeoCoordinate topLeft(poi.geometry.coordinates[0].y(), poi.geometry.coordinates[0].x());
         return QVariant::fromValue(topLeft);
     }
     case BottomRightRole: {
-        if (!isRectangle(poi.geometry)) break;
-
         QGeoCoordinate bottomRight(poi.geometry.coordinates[2].y(), poi.geometry.coordinates[2].x());
         return QVariant::fromValue(bottomRight);
     }
@@ -185,8 +181,6 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
         break;
     }
     case TopLeftRole: {
-        if (!isRectangle(poi.geometry)) break;
-
         const QGeoCoordinate c = value.value<QGeoCoordinate>();
         const QVector2D topLeft(c.longitude(), c.latitude()); // x=lon, y=lat
 
@@ -209,10 +203,7 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
         }
         break;
     }
-
     case BottomRightRole: {
-        if (!isRectangle(poi.geometry)) break;
-
         const QGeoCoordinate c = value.value<QGeoCoordinate>();
         const QVector2D BR(c.longitude(), c.latitude()); // x=lon, y=lat
 

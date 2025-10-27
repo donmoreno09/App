@@ -163,18 +163,20 @@ RectangleMode {
     Component.onCompleted: _handles = [topLeftVertex, topRightVertex, bottomRightVertex, bottomLeftVertex]
 
     function _swapKinds(h, newKind) {
-      if (h.kind === newKind) return
-      for (let i = 0; i < _handles.length; ++i) {
-        const other = _handles[i]
-        if (other !== h && other.kind === newKind) {
-          const t = other.kind
-          other.kind = h.kind
-          h.kind = newKind
-          return
+        if (h.kind === newKind) return
+
+        for (let i = 0; i < _handles.length; ++i) {
+            const other = _handles[i]
+            if (other !== h && other.kind === newKind) {
+                const t = other.kind
+                other.kind = h.kind
+                h.kind = newKind
+                return
+            }
         }
-      }
-      // fallback (shouldn't happen): no owner found
-      h.kind = newKind
+
+        // fallback (shouldn't happen): no owner found
+        h.kind = newKind
     }
 
     component VertexHandle: MapQuickItem {
@@ -201,37 +203,37 @@ RectangleMode {
                 grabPermissions: PointerHandler.CanTakeOverFromAnything
 
                 onTranslationChanged: {
-                const p = h.mapToItem(MapController.map, centroid.position.x, centroid.position.y)
-                const c = MapController.map.toCoordinate(p, false)
+                    const p = h.mapToItem(MapController.map, centroid.position.x, centroid.position.y)
+                    const c = MapController.map.toCoordinate(p, false)
 
-                if (h.kind === 0) topLeft = c
-                else if (h.kind === 1) {
-                    topLeft = QtPositioning.coordinate(c.latitude, topLeft.longitude)
-                    bottomRight = QtPositioning.coordinate(bottomRight.latitude, c.longitude)
-                }
-                else if (h.kind === 2) bottomRight = c
-                else {
-                    bottomRight = QtPositioning.coordinate(c.latitude, bottomRight.longitude)
-                    topLeft = QtPositioning.coordinate(topLeft.latitude, c.longitude)
-                }
+                    if (h.kind === 0) topLeft = c
+                    else if (h.kind === 1) {
+                        topLeft = QtPositioning.coordinate(c.latitude, topLeft.longitude)
+                        bottomRight = QtPositioning.coordinate(bottomRight.latitude, c.longitude)
+                    }
+                    else if (h.kind === 2) bottomRight = c
+                    else {
+                        bottomRight = QtPositioning.coordinate(c.latitude, bottomRight.longitude)
+                        topLeft = QtPositioning.coordinate(topLeft.latitude, c.longitude)
+                    }
 
-                root.normalizeCorners() // keep TL=NW, BR=SE
+                    root.normalizeCorners() // keep TL=NW, BR=SE
 
-                // re-label by SWAPPING owners so kinds stay unique
-                const corners = [
-                  { kind: 0, c: topLeft },
-                  { kind: 1, c: QtPositioning.coordinate(topLeft.latitude, bottomRight.longitude) },
-                  { kind: 2, c: bottomRight },
-                  { kind: 3, c: QtPositioning.coordinate(bottomRight.latitude, topLeft.longitude) },
-                ]
-                let nearest = h.kind, best = Infinity
-                for (let i = 0; i < corners.length; ++i) {
-                  const px = MapController.map.fromCoordinate(corners[i].c, false)
-                  const dx = px.x - p.x, dy = px.y - p.y
-                  const d2 = dx*dx + dy*dy
-                  if (d2 < best) { best = d2; nearest = corners[i].kind }
-                }
-                root._swapKinds(h, nearest)
+                    // re-label by SWAPPING owners so kinds stay unique
+                    const corners = [
+                        { kind: 0, c: topLeft },
+                        { kind: 1, c: QtPositioning.coordinate(topLeft.latitude, bottomRight.longitude) },
+                        { kind: 2, c: bottomRight },
+                        { kind: 3, c: QtPositioning.coordinate(bottomRight.latitude, topLeft.longitude) },
+                    ]
+                    let nearest = h.kind, best = Infinity
+                    for (let i = 0; i < corners.length; ++i) {
+                        const px = MapController.map.fromCoordinate(corners[i].c, false)
+                        const dx = px.x - p.x, dy = px.y - p.y
+                        const d2 = dx*dx + dy*dy
+                        if (d2 < best) { best = d2; nearest = corners[i].kind }
+                    }
+                    root._swapKinds(h, nearest)
             }
         }
     }
