@@ -116,17 +116,56 @@ QHash<int, QByteArray> TransitModel::roleNames() const
     };
 }
 
-void TransitModel::clear()
+void TransitModel::setLaneTypeFilter(const QString& filter)
+{
+    if (m_laneTypeFilter == filter) return;
+
+    qDebug() << "TransitModel::setLaneTypeFilter - New filter:" << filter;
+    m_laneTypeFilter = filter;
+    emit laneTypeFilterChanged();
+    applyFilter();
+}
+
+void TransitModel::applyFilter()
 {
     beginResetModel();
     m_entries.clear();
+
+    // Parse filter string (comma-separated list or "ALL")
+    QStringList types = m_laneTypeFilter.split(',', Qt::SkipEmptyParts);
+
+    if (types.isEmpty() || m_laneTypeFilter == "ALL" || m_laneTypeFilter.isEmpty()) {
+        // No filter, show all
+        m_entries = m_allEntries;
+        qDebug() << "TransitModel::applyFilter - No filter, showing all" << m_entries.size() << "transits";
+    } else {
+        // Filter by lane types
+        for (const auto& entry : m_allEntries) {
+            if (types.contains(entry.laneTypeId)) {
+                m_entries.append(entry);
+            }
+        }
+        qDebug() << "TransitModel::applyFilter - Filter applied, showing" << m_entries.size()
+                 << "of" << m_allEntries.size() << "transits (filter:" << m_laneTypeFilter << ")";
+    }
+
     endResetModel();
+}
+
+void TransitModel::clear()
+{
+    beginResetModel();
+    m_allEntries.clear();
+    m_entries.clear();
+    m_laneTypeFilter = "ALL";
+    endResetModel();
+
+    qDebug() << "TransitModel::clear - All data cleared";
 }
 
 void TransitModel::setData(const QJsonArray& transitsArray)
 {
-    beginResetModel();
-    m_entries.clear();
+    m_allEntries.clear();
 
     for (const auto& value : transitsArray) {
         if (!value.isObject()) {
@@ -191,9 +230,11 @@ void TransitModel::setData(const QJsonArray& transitsArray)
             entry.hasPermission = false;
         }
 
-        m_entries.append(entry);
+        m_allEntries.append(entry);
     }
 
-    qDebug() << "TransitModel: Loaded" << m_entries.size() << "transits";
-    endResetModel();
+    qDebug() << "TransitModel::setData - Loaded" << m_allEntries.size() << "transits into buffer";
+
+    // Apply current filter
+    applyFilter();
 }

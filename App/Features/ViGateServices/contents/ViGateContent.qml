@@ -16,6 +16,17 @@ ColumnLayout {
 
     required property ViGateController controller
 
+    // Function to update model filter based on toggle states
+    function updateTransitFilter() {
+        let types = []
+        if (vehiclesToggle.checked) types.push("VEHICLE")
+        if (pedestriansToggle.checked) types.push("WALK")
+
+        const filterStr = types.length > 0 ? types.join(",") : "NONE"
+        console.log("ViGateContent: Updating filter to", filterStr)
+        root.controller.transitsModel.laneTypeFilter = filterStr
+    }
+
     // Loading Indicator
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
@@ -89,6 +100,12 @@ ColumnLayout {
                 Layout.fillWidth: true
                 rightLabel: (TranslationManager.revision, qsTr("Vehicles"))
                 checked: true
+
+                onCheckedChanged: {
+                    if (controller.hasData) {
+                        updateTransitFilter()
+                    }
+                }
             }
 
             UI.Toggle {
@@ -96,6 +113,12 @@ ColumnLayout {
                 Layout.fillWidth: true
                 rightLabel: (TranslationManager.revision, qsTr("Pedestrians"))
                 checked: true
+
+                onCheckedChanged: {
+                    if (controller.hasData) {
+                        updateTransitFilter()
+                    }
+                }
             }
         }
 
@@ -256,13 +279,16 @@ ColumnLayout {
             }
         }
 
-        // Transits Table
+        // Transits Table - RIMOSSO showVehicles e showPedestrians
         TransitsTable {
             Layout.fillWidth: true
             Layout.fillHeight: true
             model: root.controller.transitsModel
-            showVehicles: vehiclesToggle.checked
-            showPedestrians: pedestriansToggle.checked
+
+            Component.onCompleted: {
+                // Set initial filter when table is created
+                updateTransitFilter()
+            }
         }
 
         // Pagination Controls
@@ -430,6 +456,17 @@ ColumnLayout {
                     enabled: dateTimePicker.hasValidSelection
                     onClicked: datePickerOverlay.close()
                 }
+            }
+        }
+    }
+
+    // Connection to update filter when data is loaded
+    Connections {
+        target: root.controller
+        function onHasDataChanged() {
+            if (root.controller.hasData) {
+                console.log("ViGateContent: Data loaded, applying initial filter")
+                updateTransitFilter()
             }
         }
     }

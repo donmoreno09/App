@@ -10,8 +10,6 @@ GroupBox {
     Layout.fillHeight: true
 
     required property var model
-    property bool showVehicles: true
-    property bool showPedestrians: true
 
     ColumnLayout {
         anchors.fill: parent
@@ -45,7 +43,6 @@ GroupBox {
                     height: parent.height
                     spacing: 0
 
-                    // Helper function for header text
                     component HeaderText: Text {
                         required property string headerText
                         required property real headerWidth
@@ -135,48 +132,28 @@ GroupBox {
             }
 
             delegate: Rectangle {
+                id: cellDelegate
+
                 required property int row
                 required property int column
-
-                // All properties from model
-                required property string gateName
-                required property string transitId
-                required property string transitStartDate
-                required property string transitEndDate
-                required property string transitStatus
-                required property string laneTypeId
-                required property string laneStatusId
-                required property string laneName
-                required property string transitDirection
-
-                // Transit Info
-                required property string color
-                required property string macroClass
-                required property string microClass
-                required property string make
-                required property string model
-                required property string country
-                required property string kemler
-                required property bool hasTransitInfo
-
-                // Permission
-                required property string auth
-                required property string authMessage
-                required property string permissionType
-                required property string vehiclePlate
-                required property string peopleFullname
-                required property string companyFullname
-                required property bool hasPermission
+                required property var model
 
                 implicitWidth: 100
                 implicitHeight: Theme.spacing.s10
                 color: row % 2 === 0 ? Theme.colors.transparent : Theme.colors.surfaceVariant
 
-                // Filter based on lane type
-                visible: {
-                    if (laneTypeId === "VEHICLE" && !root.showVehicles) return false
-                    if (laneTypeId === "WALK" && !root.showPedestrians) return false
-                    return true
+                Component.onCompleted: {
+                    if (row === 0 && column === 0) {
+                        console.log("=== FIRST CELL DEBUG ===")
+                        console.log("Model type:", typeof model)
+                        console.log("Model is valid:", model !== null && model !== undefined)
+                        if (model) {
+                            console.log("Model properties:", Object.keys(model))
+                            console.log("gateName:", model.gateName)
+                            console.log("transitId:", model.transitId)
+                            console.log("laneTypeId:", model.laneTypeId)
+                        }
+                    }
                 }
 
                 Text {
@@ -184,50 +161,54 @@ GroupBox {
                     anchors.margins: Theme.spacing.s1
 
                     text: {
+                        if (!model) return "-"
+
                         switch(column) {
-                            case 0: return gateName || "-"
-                            case 1: return transitId || "-"
-                            case 2: return transitStartDate || "-"
-                            case 3: return transitEndDate || "-"
-                            case 4: return transitStatus || "-"
-                            case 5: return laneTypeId || "-"
-                            case 6: return laneStatusId || "-"
-                            case 7: return laneName || "-"
-                            case 8: return transitDirection || "-"
+                            case 0: return model.gateName || "-"
+                            case 1: return model.transitId || "-"
+                            case 2: return model.transitStartDate || "-"
+                            case 3: return model.transitEndDate || "-"
+                            case 4: return model.transitStatus || "-"
+                            case 5: return model.laneTypeId || "-"
+                            case 6: return model.laneStatusId || "-"
+                            case 7: return model.laneName || "-"
+                            case 8: return model.transitDirection || "-"
 
                             // Transit Info (show only for VEHICLE)
-                            case 9: return hasTransitInfo ? (color || "-") : "-"
-                            case 10: return hasTransitInfo ? (macroClass || "-") : "-"
-                            case 11: return hasTransitInfo ? (microClass || "-") : "-"
-                            case 12: return hasTransitInfo ? (make || "-") : "-"
-                            case 13: return hasTransitInfo ? (model || "-") : "-"
-                            case 14: return hasTransitInfo ? (country || "-") : "-"
-                            case 15: return hasTransitInfo ? (kemler || "-") : "-"
+                            case 9: return model.hasTransitInfo ? (model.color || "-") : "-"
+                            case 10: return model.hasTransitInfo ? (model.macroClass || "-") : "-"
+                            case 11: return model.hasTransitInfo ? (model.microClass || "-") : "-"
+                            case 12: return model.hasTransitInfo ? (model.make || "-") : "-"
+                            case 13: return model.hasTransitInfo ? (model.model || "-") : "-"
+                            case 14: return model.hasTransitInfo ? (model.country || "-") : "-"
+                            case 15: return model.hasTransitInfo ? (model.kemler || "-") : "-"
 
                             // Permission
-                            case 16: return hasPermission ? (auth || "-") : "-"
-                            case 17: return hasPermission ? (authMessage || "-") : "-"
-                            case 18: return hasPermission ? (permissionType || "-") : "-"
-                            case 19: return hasPermission ? (vehiclePlate || "-") : "-"
-                            case 20: return hasPermission ? (peopleFullname || "-") : "-"
-                            case 21: return hasPermission ? (companyFullname || "-") : "-"
+                            case 16: return model.hasPermission ? (model.auth || "-") : "-"
+                            case 17: return model.hasPermission ? (model.authMessage || "-") : "-"
+                            case 18: return model.hasPermission ? (model.permissionType || "-") : "-"
+                            case 19: return model.hasPermission ? (model.vehiclePlate || "-") : "-"
+                            case 20: return model.hasPermission ? (model.peopleFullname || "-") : "-"
+                            case 21: return model.hasPermission ? (model.companyFullname || "-") : "-"
 
                             default: return "-"
                         }
                     }
 
                     color: {
+                        if (!model) return Theme.colors.text
+
                         // Direction column with colors
                         if (column === 8) {
-                            return transitDirection === "IN" ? Theme.colors.success : Theme.colors.warning
+                            return model.transitDirection === "IN" ? Theme.colors.success : Theme.colors.warning
                         }
                         // Status column with colors
                         if (column === 4) {
-                            return transitStatus === "Autorizzato" ? Theme.colors.success : Theme.colors.error
+                            return model.transitStatus === "Autorizzato" ? Theme.colors.success : Theme.colors.error
                         }
                         // Auth column with colors
                         if (column === 16) {
-                            return auth === "ACCEPT" ? Theme.colors.success : Theme.colors.error
+                            return model.auth === "ACCEPT" ? Theme.colors.success : Theme.colors.error
                         }
                         return Theme.colors.text
                     }
@@ -239,14 +220,6 @@ GroupBox {
                     elide: Text.ElideRight
                     leftPadding: Theme.spacing.s2
                     rightPadding: Theme.spacing.s2
-                }
-
-                TableView.onPooled: {
-                    // Cleanup when pooled
-                }
-
-                TableView.onReused: {
-                    // Reset state when reused
                 }
             }
 

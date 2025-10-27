@@ -40,17 +40,19 @@ struct TransitEntry {
 
     // Transit info (only for VEHICLE)
     TransitInfo transitInfo;
-    bool hasTransitInfo;  // To know if it's a vehicle
+    bool hasTransitInfo = false;
 
     // Permission (first element only)
     TransitPermission permission;
-    bool hasPermission;
+    bool hasPermission = false;
 };
 
 class TransitModel : public QAbstractListModel
 {
     Q_OBJECT
     QML_ELEMENT
+
+    Q_PROPERTY(QString laneTypeFilter READ laneTypeFilter WRITE setLaneTypeFilter NOTIFY laneTypeFilterChanged)
 
 public:
     enum Roles {
@@ -91,9 +93,19 @@ public:
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    QString laneTypeFilter() const { return m_laneTypeFilter; }
+    void setLaneTypeFilter(const QString& filter);
+
     Q_INVOKABLE void clear();
     Q_INVOKABLE void setData(const QJsonArray& transitsArray);
 
+signals:
+    void laneTypeFilterChanged();
+
 private:
-    QList<TransitEntry> m_entries;
+    void applyFilter();
+
+    QString m_laneTypeFilter = "ALL";
+    QList<TransitEntry> m_allEntries;  // All data (unfiltered)
+    QList<TransitEntry> m_entries;     // Filtered data (displayed)
 };
