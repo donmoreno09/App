@@ -30,14 +30,6 @@ GroupBox {
                 contentWidth: headerRow.width
                 clip: true
 
-                // Sync with TableView horizontal scrolling
-                Binding {
-                    target: tableView
-                    property: "contentX"
-                    value: headerFlickable.contentX
-                    when: tableView
-                }
-
                 Row {
                     id: headerRow
                     height: parent.height
@@ -68,8 +60,6 @@ GroupBox {
                     HeaderText { headerText: qsTr("Lane Status"); headerWidth: 100 }
                     HeaderText { headerText: qsTr("Lane Name"); headerWidth: 120 }
                     HeaderText { headerText: qsTr("Direction"); headerWidth: 100 }
-
-                    // Transit Info columns (for VEHICLE)
                     HeaderText { headerText: qsTr("Color"); headerWidth: 80 }
                     HeaderText { headerText: qsTr("Macro Class"); headerWidth: 100 }
                     HeaderText { headerText: qsTr("Micro Class"); headerWidth: 100 }
@@ -77,8 +67,6 @@ GroupBox {
                     HeaderText { headerText: qsTr("Model"); headerWidth: 100 }
                     HeaderText { headerText: qsTr("Country"); headerWidth: 80 }
                     HeaderText { headerText: qsTr("Kemler"); headerWidth: 80 }
-
-                    // Permission columns
                     HeaderText { headerText: qsTr("Auth"); headerWidth: 80 }
                     HeaderText { headerText: qsTr("Auth Message"); headerWidth: 150 }
                     HeaderText { headerText: qsTr("Permission Type"); headerWidth: 120 }
@@ -86,140 +74,106 @@ GroupBox {
                     HeaderText { headerText: qsTr("Person Name"); headerWidth: 150 }
                     HeaderText { headerText: qsTr("Company"); headerWidth: 200 }
                 }
+
+                // Sync scrolling with ListView below
+                Connections {
+                    target: listView
+                    function onContentXChanged() {
+                        headerFlickable.contentX = listView.contentX
+                    }
+                }
             }
         }
 
-        // TableView with all columns
-        TableView {
-            id: tableView
+        // Use ListView instead of TableView
+        ListView {
+            id: listView
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
 
-            reuseItems: true
             model: root.model
 
-            columnWidthProvider: function(column) {
-                const widths = [
-                    120,  // Gate Name
-                    200,  // Transit ID
-                    150,  // Start Date
-                    150,  // End Date
-                    120,  // Status
-                    100,  // Lane Type
-                    100,  // Lane Status
-                    120,  // Lane Name
-                    100,  // Direction
-                    80,   // Color
-                    100,  // Macro Class
-                    100,  // Micro Class
-                    100,  // Make
-                    100,  // Model
-                    80,   // Country
-                    80,   // Kemler
-                    80,   // Auth
-                    150,  // Auth Message
-                    120,  // Permission Type
-                    120,  // Vehicle Plate
-                    150,  // Person Name
-                    200   // Company
-                ];
-                return widths[column] || 100;
-            }
+            flickableDirection: Flickable.HorizontalAndVerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
 
-            rowHeightProvider: function(row) {
-                return Theme.spacing.s10
-            }
+            // Performance optimizations
+            cacheBuffer: Theme.spacing.s10 * 10  // Cache 10 extra rows
+            reuseItems: true  // Recycle delegates (crucial!)
+
+            // Smooth scrolling
+            maximumFlickVelocity: 2500
+            flickDeceleration: 1500
 
             delegate: Rectangle {
-                id: cellDelegate
+                id: rowDelegate
+                width: Math.max(contentRow.width, listView.width)
+                height: Theme.spacing.s10
+                color: index % 2 === 0 ? Theme.colors.transparent : Theme.colors.surface
 
-                required property int row
-                required property int column
-                required property var model
+                Row {
+                    id: contentRow
+                    height: parent.height
+                    spacing: 0
 
-                implicitWidth: 100
-                implicitHeight: Theme.spacing.s10
-                color: row % 2 === 0 ? Theme.colors.transparent : Theme.colors.surfaceVariant
+                    component CellText: Text {
+                        required property string cellText
+                        required property real cellWidth
+                        property color cellColor: Theme.colors.text
 
-                Component.onCompleted: {
-                    if (row === 0 && column === 0) {
-                        console.log("=== FIRST CELL DEBUG ===")
-                        console.log("Model type:", typeof model)
-                        console.log("Model is valid:", model !== null && model !== undefined)
-                        if (model) {
-                            console.log("Model properties:", Object.keys(model))
-                            console.log("gateName:", model.gateName)
-                            console.log("transitId:", model.transitId)
-                            console.log("laneTypeId:", model.laneTypeId)
-                        }
-                    }
-                }
-
-                Text {
-                    anchors.fill: parent
-                    anchors.margins: Theme.spacing.s1
-
-                    text: {
-                        if (!model) return "-"
-
-                        switch(column) {
-                            case 0: return model.gateName || "-"
-                            case 1: return model.transitId || "-"
-                            case 2: return model.transitStartDate || "-"
-                            case 3: return model.transitEndDate || "-"
-                            case 4: return model.transitStatus || "-"
-                            case 5: return model.laneTypeId || "-"
-                            case 6: return model.laneStatusId || "-"
-                            case 7: return model.laneName || "-"
-                            case 8: return model.transitDirection || "-"
-
-                            // Transit Info (show only for VEHICLE)
-                            case 9: return model.hasTransitInfo ? (model.color || "-") : "-"
-                            case 10: return model.hasTransitInfo ? (model.macroClass || "-") : "-"
-                            case 11: return model.hasTransitInfo ? (model.microClass || "-") : "-"
-                            case 12: return model.hasTransitInfo ? (model.make || "-") : "-"
-                            case 13: return model.hasTransitInfo ? (model.model || "-") : "-"
-                            case 14: return model.hasTransitInfo ? (model.country || "-") : "-"
-                            case 15: return model.hasTransitInfo ? (model.kemler || "-") : "-"
-
-                            // Permission
-                            case 16: return model.hasPermission ? (model.auth || "-") : "-"
-                            case 17: return model.hasPermission ? (model.authMessage || "-") : "-"
-                            case 18: return model.hasPermission ? (model.permissionType || "-") : "-"
-                            case 19: return model.hasPermission ? (model.vehiclePlate || "-") : "-"
-                            case 20: return model.hasPermission ? (model.peopleFullname || "-") : "-"
-                            case 21: return model.hasPermission ? (model.companyFullname || "-") : "-"
-
-                            default: return "-"
-                        }
+                        text: cellText
+                        color: cellColor
+                        font.family: Theme.typography.familySans
+                        font.weight: Theme.typography.weightRegular
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                        elide: Text.ElideRight
+                        width: cellWidth
+                        height: Theme.spacing.s10
+                        leftPadding: Theme.spacing.s2
+                        rightPadding: Theme.spacing.s2
                     }
 
-                    color: {
-                        if (!model) return Theme.colors.text
-
-                        // Direction column with colors
-                        if (column === 8) {
-                            return model.transitDirection === "IN" ? Theme.colors.success : Theme.colors.warning
-                        }
-                        // Status column with colors
-                        if (column === 4) {
-                            return model.transitStatus === "Autorizzato" ? Theme.colors.success : Theme.colors.error
-                        }
-                        // Auth column with colors
-                        if (column === 16) {
-                            return model.auth === "ACCEPT" ? Theme.colors.success : Theme.colors.error
-                        }
-                        return Theme.colors.text
+                    CellText { cellText: model.gateName || "-"; cellWidth: 120 }
+                    CellText { cellText: model.transitId || "-"; cellWidth: 200 }
+                    CellText { cellText: model.transitStartDate || "-"; cellWidth: 150 }
+                    CellText { cellText: model.transitEndDate || "-"; cellWidth: 150 }
+                    CellText {
+                        cellText: model.transitStatus || "-"
+                        cellWidth: 120
+                        cellColor: model.transitStatus === "Autorizzato" ? Theme.colors.success : Theme.colors.error
+                        font.weight: Theme.typography.weightMedium
+                    }
+                    CellText { cellText: model.laneTypeId || "-"; cellWidth: 100 }
+                    CellText { cellText: model.laneStatusId || "-"; cellWidth: 100 }
+                    CellText { cellText: model.laneName || "-"; cellWidth: 120 }
+                    CellText {
+                        cellText: model.transitDirection || "-"
+                        cellWidth: 100
+                        cellColor: model.transitDirection === "IN" ? Theme.colors.success : Theme.colors.warning
+                        font.weight: Theme.typography.weightMedium
                     }
 
-                    font.family: Theme.typography.familySans
-                    font.weight: (column === 8 || column === 4) ? Theme.typography.weightMedium : Theme.typography.weightRegular
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    elide: Text.ElideRight
-                    leftPadding: Theme.spacing.s2
-                    rightPadding: Theme.spacing.s2
+                    // Transit Info columns (only for VEHICLE)
+                    CellText { cellText: model.hasTransitInfo ? (model.color || "-") : "-"; cellWidth: 80 }
+                    CellText { cellText: model.hasTransitInfo ? (model.macroClass || "-") : "-"; cellWidth: 100 }
+                    CellText { cellText: model.hasTransitInfo ? (model.microClass || "-") : "-"; cellWidth: 100 }
+                    CellText { cellText: model.hasTransitInfo ? (model.make || "-") : "-"; cellWidth: 100 }
+                    CellText { cellText: model.hasTransitInfo ? (model.model || "-") : "-"; cellWidth: 100 }
+                    CellText { cellText: model.hasTransitInfo ? (model.country || "-") : "-"; cellWidth: 80 }
+                    CellText { cellText: model.hasTransitInfo ? (model.kemler || "-") : "-"; cellWidth: 80 }
+
+                    // Permission columns
+                    CellText {
+                        cellText: model.hasPermission ? (model.auth || "-") : "-"
+                        cellWidth: 80
+                        cellColor: model.auth === "ACCEPT" ? Theme.colors.success : Theme.colors.error
+                    }
+                    CellText { cellText: model.hasPermission ? (model.authMessage || "-") : "-"; cellWidth: 150 }
+                    CellText { cellText: model.hasPermission ? (model.permissionType || "-") : "-"; cellWidth: 120 }
+                    CellText { cellText: model.hasPermission ? (model.vehiclePlate || "-") : "-"; cellWidth: 120 }
+                    CellText { cellText: model.hasPermission ? (model.peopleFullname || "-") : "-"; cellWidth: 150 }
+                    CellText { cellText: model.hasPermission ? (model.companyFullname || "-") : "-"; cellWidth: 200 }
                 }
             }
 
