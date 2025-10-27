@@ -16,6 +16,7 @@ ColumnLayout {
 
     required property ViGateController controller
 
+    // Loading Indicator
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
         Layout.topMargin: 300
@@ -25,12 +26,14 @@ ColumnLayout {
         layer.effect: ColorOverlay { color: Theme.colors.text }
     }
 
+    // Filters and Controls Section
     ColumnLayout {
         visible: !controller.isLoading
         Layout.fillWidth: true
         Layout.margins: Theme.spacing.s4
         spacing: Theme.spacing.s3
 
+        // Gate ID Input
         UI.Input {
             id: gateIdInput
             Layout.fillWidth: true
@@ -40,6 +43,7 @@ ColumnLayout {
             textField.validator: IntValidator { bottom: 1 }
         }
 
+        // Date Range Button
         UI.Button {
             id: dateRangeButton
             Layout.fillWidth: true
@@ -69,6 +73,7 @@ ColumnLayout {
             onClicked: datePickerOverlay.open()
         }
 
+        // Filters Row
         RowLayout {
             Layout.fillWidth: true
             spacing: Theme.spacing.s3
@@ -94,6 +99,7 @@ ColumnLayout {
             }
         }
 
+        // Fetch Data Button
         UI.Button {
             Layout.fillWidth: true
             Layout.preferredHeight: Theme.spacing.s10
@@ -136,30 +142,224 @@ ColumnLayout {
         UI.HorizontalDivider { Layout.fillWidth: true }
     }
 
+    // Data Display Section
     ColumnLayout {
         visible: !controller.isLoading && controller.hasData
         Layout.fillWidth: true
+        Layout.fillHeight: true
         Layout.margins: Theme.spacing.s4
         spacing: Theme.spacing.s4
 
+        // Summary Table
         SummaryTable {
             Layout.fillWidth: true
             controller: root.controller
         }
 
-        VehiclesTable {
-            visible: vehiclesToggle.checked
+        // Pagination Info Bar
+        Rectangle {
             Layout.fillWidth: true
-            model: root.controller.vehiclesModel
+            height: Theme.spacing.s10
+            color: Theme.colors.surface
+            radius: Theme.radius.sm
+            visible: controller.totalPages > 0
+
+            RowLayout {
+                anchors.fill: parent
+                anchors.margins: Theme.spacing.s2
+                spacing: Theme.spacing.s3
+
+                Text {
+                    text: (TranslationManager.revision, qsTr("Page %1 of %2")
+                        .arg(controller.currentPage)
+                        .arg(controller.totalPages))
+                    font.family: Theme.typography.familySans
+                    font.weight: Theme.typography.weightMedium
+                    color: Theme.colors.text
+                }
+
+                UI.VerticalDivider {
+                    Layout.fillHeight: true
+                    color: Theme.colors.textMuted
+                }
+
+                Text {
+                    text: (TranslationManager.revision, qsTr("Total Items: %1")
+                        .arg(controller.totalItems))
+                    font.family: Theme.typography.familySans
+                    color: Theme.colors.textMuted
+                }
+
+                UI.VerticalDivider {
+                    Layout.fillHeight: true
+                    color: Theme.colors.textMuted
+                }
+
+                Text {
+                    text: (TranslationManager.revision, qsTr("Showing %1-%2")
+                        .arg((controller.currentPage - 1) * controller.pageSize + 1)
+                        .arg(Math.min(controller.currentPage * controller.pageSize, controller.totalItems)))
+                    font.family: Theme.typography.familySans
+                    color: Theme.colors.textMuted
+                }
+
+                Item { Layout.fillWidth: true }
+
+                // Page Size Selector
+                Text {
+                    text: (TranslationManager.revision, qsTr("Items per page:"))
+                    font.family: Theme.typography.familySans
+                    color: Theme.colors.text
+                }
+
+                ComboBox {
+                    id: pageSizeCombo
+                    Layout.preferredWidth: 80
+                    model: [25, 50, 100, 200]
+                    currentIndex: 1 // Default to 50
+
+                    onCurrentValueChanged: {
+                        if (currentValue) {
+                            controller.pageSize = currentValue
+                        }
+                    }
+
+                    delegate: ItemDelegate {
+                        width: pageSizeCombo.width
+                        contentItem: Text {
+                            text: modelData
+                            color: Theme.colors.text
+                            font: pageSizeCombo.font
+                            elide: Text.ElideRight
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        highlighted: pageSizeCombo.highlightedIndex === index
+                    }
+
+                    contentItem: Text {
+                        leftPadding: Theme.spacing.s2
+                        rightPadding: pageSizeCombo.indicator.width + pageSizeCombo.spacing
+                        text: pageSizeCombo.displayText
+                        font: pageSizeCombo.font
+                        color: Theme.colors.text
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: 80
+                        implicitHeight: Theme.spacing.s8
+                        color: Theme.colors.surface
+                        radius: Theme.radius.sm
+                    }
+                }
+            }
         }
 
-        PedestriansTable {
-            visible:  pedestriansToggle.checked
+        // Transits Table
+        TransitsTable {
             Layout.fillWidth: true
-            model: root.controller.pedestriansModel
+            Layout.fillHeight: true
+            model: root.controller.transitsModel
+            showVehicles: vehiclesToggle.checked
+            showPedestrians: pedestriansToggle.checked
+        }
+
+        // Pagination Controls
+        RowLayout {
+            visible: controller.totalPages > 1
+            Layout.fillWidth: true
+            spacing: Theme.spacing.s2
+
+            UI.Button {
+                variant: UI.ButtonStyles.Ghost
+                text: (TranslationManager.revision, qsTr("« First"))
+                enabled: controller.currentPage > 1
+                onClicked: controller.goToPage(1)
+            }
+
+            UI.Button {
+                variant: UI.ButtonStyles.Ghost
+                text: (TranslationManager.revision, qsTr("‹ Previous"))
+                enabled: controller.currentPage > 1
+                onClicked: controller.previousPage()
+            }
+
+            Item { Layout.fillWidth: true }
+
+            // Page Number Display with Quick Jump
+            RowLayout {
+                spacing: Theme.spacing.s2
+
+                Text {
+                    text: (TranslationManager.revision, qsTr("Go to page:"))
+                    font.family: Theme.typography.familySans
+                    color: Theme.colors.text
+                }
+
+                TextField {
+                    id: pageJumpInput
+                    Layout.preferredWidth: 60
+                    horizontalAlignment: Text.AlignHCenter
+                    text: controller.currentPage.toString()
+                    validator: IntValidator {
+                        bottom: 1
+                        top: controller.totalPages
+                    }
+
+                    background: Rectangle {
+                        color: Theme.colors.surface
+                        radius: Theme.radius.sm
+                        border.color: pageJumpInput.activeFocus ? Theme.colors.primary : Theme.colors.transparent
+                        border.width: 2
+                    }
+
+                    color: Theme.colors.text
+                    font.family: Theme.typography.familySans
+
+                    onAccepted: {
+                        const page = parseInt(text)
+                        if (page >= 1 && page <= controller.totalPages) {
+                            controller.goToPage(page)
+                        } else {
+                            text = controller.currentPage.toString()
+                        }
+                    }
+
+                    // Reset to current page when focus is lost
+                    onActiveFocusChanged: {
+                        if (!activeFocus) {
+                            text = controller.currentPage.toString()
+                        }
+                    }
+                }
+
+                Text {
+                    text: (TranslationManager.revision, qsTr("of %1").arg(controller.totalPages))
+                    font.family: Theme.typography.familySans
+                    color: Theme.colors.textMuted
+                }
+            }
+
+            Item { Layout.fillWidth: true }
+
+            UI.Button {
+                variant: UI.ButtonStyles.Ghost
+                text: (TranslationManager.revision, qsTr("Next ›"))
+                enabled: controller.currentPage < controller.totalPages
+                onClicked: controller.nextPage()
+            }
+
+            UI.Button {
+                variant: UI.ButtonStyles.Ghost
+                text: (TranslationManager.revision, qsTr("Last »"))
+                enabled: controller.currentPage < controller.totalPages
+                onClicked: controller.goToPage(controller.totalPages)
+            }
         }
     }
 
+    // No Data Message
     Text {
         visible: !controller.isLoading && !controller.hasData && !controller.hasError
         text: (TranslationManager.revision, qsTr("No data available. Please select filters and fetch."))
@@ -173,6 +373,7 @@ ColumnLayout {
         }
     }
 
+    // Error Message
     Text {
         visible: !controller.isLoading && controller.hasError
         text: (TranslationManager.revision, qsTr("Error loading data. Please try again."))
@@ -188,6 +389,7 @@ ColumnLayout {
 
     UI.VerticalSpacer {}
 
+    // Date Picker Overlay
     UI.Overlay {
         id: datePickerOverlay
         width: 400

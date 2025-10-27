@@ -2,8 +2,7 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QDateTime>
-#include "models/VehicleModel.h"
-#include "models/PedestrianModel.h"
+#include "models/TransitModel.h"
 
 class ViGateService;
 
@@ -20,9 +19,14 @@ class ViGateController : public QObject
     Q_PROPERTY(int totalPedestrianEntries READ totalPedestrianEntries NOTIFY summaryChanged)
     Q_PROPERTY(int totalPedestrianExits READ totalPedestrianExits NOTIFY summaryChanged)
 
-    // Models
-    Q_PROPERTY(VehicleModel* vehiclesModel READ vehiclesModel CONSTANT)
-    Q_PROPERTY(PedestrianModel* pedestriansModel READ pedestriansModel CONSTANT)
+    // Pagination properties
+    Q_PROPERTY(int currentPage READ currentPage NOTIFY paginationChanged)
+    Q_PROPERTY(int totalPages READ totalPages NOTIFY paginationChanged)
+    Q_PROPERTY(int totalItems READ totalItems NOTIFY paginationChanged)
+    Q_PROPERTY(int pageSize READ pageSize WRITE setPageSize NOTIFY pageSizeChanged)
+
+    // Model - Changed to single unified model
+    Q_PROPERTY(TransitModel* transitsModel READ transitsModel CONSTANT)
 
     // State
     Q_PROPERTY(bool isLoading READ isLoading NOTIFY loadingChanged)
@@ -40,8 +44,13 @@ public:
     int totalPedestrianEntries() const { return m_totalPedestrianEntries; }
     int totalPedestrianExits() const { return m_totalPedestrianExits; }
 
-    VehicleModel* vehiclesModel() { return m_vehiclesModel; }
-    PedestrianModel* pedestriansModel() { return m_pedestriansModel; }
+    int currentPage() const { return m_currentPage; }
+    int totalPages() const { return m_totalPages; }
+    int totalItems() const { return m_totalItems; }
+    int pageSize() const { return m_pageSize; }
+    void setPageSize(int size);
+
+    TransitModel* transitsModel() { return m_transitsModel; }
 
     bool isLoading() const { return m_loading; }
     bool hasData() const { return m_hasData; }
@@ -53,10 +62,15 @@ public slots:
                        const QDateTime& endDate,
                        bool includeVehicles,
                        bool includePedestrians);
+    void nextPage();
+    void previousPage();
+    void goToPage(int page);
     void clearData();
 
 signals:
     void summaryChanged();
+    void paginationChanged();
+    void pageSizeChanged();
     void loadingChanged(bool);
     void hasDataChanged(bool);
     void hasErrorChanged(bool);
@@ -66,6 +80,7 @@ private:
     void setLoading(bool loading);
     void hookUpService();
     void processSummary(const QJsonObject& summary);
+    void fetchCurrentPage();
 
     // Summary data
     int m_totalEntries = 0;
@@ -75,9 +90,21 @@ private:
     int m_totalPedestrianEntries = 0;
     int m_totalPedestrianExits = 0;
 
-    // Models
-    VehicleModel* m_vehiclesModel = nullptr;
-    PedestrianModel* m_pedestriansModel = nullptr;
+    // Pagination
+    int m_currentPage = 1;
+    int m_totalPages = 0;
+    int m_totalItems = 0;
+    int m_pageSize = 50;
+
+    // Query parameters (stored for pagination)
+    int m_gateId = 0;
+    QDateTime m_startDate;
+    QDateTime m_endDate;
+    bool m_includeVehicles = true;
+    bool m_includePedestrians = true;
+
+    // Model - Changed to single unified model
+    TransitModel* m_transitsModel = nullptr;
 
     // State
     bool m_loading = false;
@@ -87,5 +114,5 @@ private:
     // Service
     ViGateService* m_service = nullptr;
     QString m_host = QStringLiteral("localhost");
-    int m_port = 5002;
+    int m_port = 5005;
 };

@@ -1,7 +1,6 @@
 set(qml_files
-    components/PedestriansTable.qml
     components/SummaryTable.qml
-    components/VehiclesTable.qml
+    components/TransitsTable.qml
 
     contents/ViGateContent.qml
 
@@ -13,10 +12,8 @@ set(cpp_sources
     ViGateController.h
     services/ViGateService.cpp
     services/ViGateService.h
-    models/VehicleModel.cpp
-    models/VehicleModel.h
-    models/PedestrianModel.cpp
-    models/PedestrianModel.h
+    models/TransitModel.cpp
+    models/TransitModel.h
 )
 
 qt_add_qml_module(app_features_vigateservices

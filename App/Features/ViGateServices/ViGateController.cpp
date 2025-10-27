@@ -5,8 +5,7 @@
 
 ViGateController::ViGateController(QObject* parent)
     : QObject(parent)
-    , m_vehiclesModel(new VehicleModel(this))
-    , m_pedestriansModel(new PedestrianModel(this))
+    , m_transitsModel(new TransitModel(this))
 {
     m_service = new ViGateService(this);
     m_service->setHostPort(m_host, m_port);
@@ -20,6 +19,22 @@ void ViGateController::setLoading(bool loading)
     emit loadingChanged(loading);
 }
 
+void ViGateController::setPageSize(int size)
+{
+    if (m_pageSize == size || size < 1) return;
+    m_pageSize = size;
+    emit pageSizeChanged();
+
+    // Reset to page 1 when page size changes
+    m_currentPage = 1;
+    emit paginationChanged();
+
+    // Refetch with new page size if we have query params
+    if (m_gateId > 0) {
+        fetchCurrentPage();
+    }
+}
+
 void ViGateController::hookUpService()
 {
     connect(m_service, &ViGateService::dataReady, this, [this](const QJsonObject& data) {
@@ -27,12 +42,8 @@ void ViGateController::hookUpService()
             processSummary(data["summary"].toObject());
         }
 
-        if (data.contains("vehicles")) {
-            m_vehiclesModel->setData(data["vehicles"].toArray());
-        }
-
-        if (data.contains("pedestrian")) {
-            m_pedestriansModel->setData(data["pedestrian"].toArray());
+        if (data.contains("transits")) {
+            m_transitsModel->setData(data["transits"].toArray());
         }
 
         if (!m_hasData) {
@@ -46,7 +57,20 @@ void ViGateController::hookUpService()
         setLoading(false);
     });
 
+    connect(m_service, &ViGateService::paginationInfo, this,
+            [this](int currentPage, int totalPages, int totalItems) {
+                m_currentPage = currentPage;
+                m_totalPages = totalPages;
+                m_totalItems = totalItems;
+                emit paginationChanged();
+
+                qDebug() << "ViGateController: Pagination updated - Page" << currentPage
+                         << "of" << totalPages << "(" << totalItems << "total items)";
+            });
+
     connect(m_service, &ViGateService::notFound, this, [this] {
+        qDebug() << "ViGateController: Data not found (404)";
+
         if (m_hasData) {
             m_hasData = false;
             emit hasDataChanged(false);
@@ -59,6 +83,8 @@ void ViGateController::hookUpService()
     });
 
     connect(m_service, &ViGateService::requestFailed, this, [this](const QString& e) {
+        qDebug() << "ViGateController: Request failed:" << e;
+
         emit requestFailed(e);
         if (!m_hasError) {
             m_hasError = true;
@@ -81,6 +107,14 @@ void ViGateController::processSummary(const QJsonObject& summary)
     m_totalPedestrianEntries = summary["total_pedestrian_entries"].toInt();
     m_totalPedestrianExits = summary["total_pedestrian_exits"].toInt();
 
+    qDebug() << "ViGateController: Summary updated";
+    qDebug() << "  - Total entries:" << m_totalEntries;
+    qDebug() << "  - Total exits:" << m_totalExits;
+    qDebug() << "  - Vehicle entries:" << m_totalVehicleEntries;
+    qDebug() << "  - Vehicle exits:" << m_totalVehicleExits;
+    qDebug() << "  - Pedestrian entries:" << m_totalPedestrianEntries;
+    qDebug() << "  - Pedestrian exits:" << m_totalPedestrianExits;
+
     emit summaryChanged();
 }
 
@@ -90,7 +124,33 @@ void ViGateController::fetchGateData(int gateId,
                                      bool includeVehicles,
                                      bool includePedestrians)
 {
-    if (m_loading) return;
+    qDebug() << "ViGateController::fetchGateData called";
+    qDebug() << "  - Gate ID:" << gateId;
+    qDebug() << "  - Date range:" << startDate.toString(Qt::ISODate)
+             << "to" << endDate.toString(Qt::ISODate);
+    qDebug() << "  - Include vehicles:" << includeVehicles;
+    qDebug() << "  - Include pedestrians:" << includePedestrians;
+
+    // Store query parameters for pagination
+    m_gateId = gateId;
+    m_startDate = startDate;
+    m_endDate = endDate;
+    m_includeVehicles = includeVehicles;
+    m_includePedestrians = includePedestrians;
+    m_currentPage = 1;
+
+    fetchCurrentPage();
+}
+
+void ViGateController::fetchCurrentPage()
+{
+    if (m_loading) {
+        qDebug() << "ViGateController::fetchCurrentPage - Already loading, ignoring request";
+        return;
+    }
+
+    qDebug() << "ViGateController::fetchCurrentPage - Page" << m_currentPage
+             << "with page size" << m_pageSize;
 
     if (m_hasData) {
         m_hasData = false;
@@ -102,13 +162,56 @@ void ViGateController::fetchGateData(int gateId,
     }
 
     setLoading(true);
-    m_service->getGateData(gateId, startDate, endDate, includeVehicles, includePedestrians);
+    m_service->getGateData(m_gateId, m_startDate, m_endDate,
+                           m_includeVehicles, m_includePedestrians,
+                           m_currentPage, m_pageSize);
+}
+
+void ViGateController::nextPage()
+{
+    if (m_currentPage < m_totalPages) {
+        qDebug() << "ViGateController::nextPage - Moving from page" << m_currentPage
+                 << "to" << (m_currentPage + 1);
+        m_currentPage++;
+        emit paginationChanged();
+        fetchCurrentPage();
+    } else {
+        qDebug() << "ViGateController::nextPage - Already on last page";
+    }
+}
+
+void ViGateController::previousPage()
+{
+    if (m_currentPage > 1) {
+        qDebug() << "ViGateController::previousPage - Moving from page" << m_currentPage
+                 << "to" << (m_currentPage - 1);
+        m_currentPage--;
+        emit paginationChanged();
+        fetchCurrentPage();
+    } else {
+        qDebug() << "ViGateController::previousPage - Already on first page";
+    }
+}
+
+void ViGateController::goToPage(int page)
+{
+    if (page >= 1 && page <= m_totalPages && page != m_currentPage) {
+        qDebug() << "ViGateController::goToPage - Jumping from page" << m_currentPage
+                 << "to" << page;
+        m_currentPage = page;
+        emit paginationChanged();
+        fetchCurrentPage();
+    } else {
+        qDebug() << "ViGateController::goToPage - Invalid page" << page
+                 << "(current:" << m_currentPage << ", total:" << m_totalPages << ")";
+    }
 }
 
 void ViGateController::clearData()
 {
-    m_vehiclesModel->clear();
-    m_pedestriansModel->clear();
+    qDebug() << "ViGateController::clearData - Clearing all data";
+
+    m_transitsModel->clear();
 
     m_totalEntries = 0;
     m_totalExits = 0;
@@ -117,7 +220,13 @@ void ViGateController::clearData()
     m_totalPedestrianEntries = 0;
     m_totalPedestrianExits = 0;
 
+    m_currentPage = 1;
+    m_totalPages = 0;
+    m_totalItems = 0;
+    m_gateId = 0;
+
     emit summaryChanged();
+    emit paginationChanged();
 
     if (m_hasData) {
         m_hasData = false;
