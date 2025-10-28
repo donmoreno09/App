@@ -237,8 +237,10 @@ QJsonArray ViGateService::transformTransitData(const QJsonArray& transits)
 
         QString laneType = transit["lanetype_id"].toString();
 
-        // Transit Info (only for VEHICLE)
-        if (transit.contains("transit_info") && transit["transit_info"].isObject()) {
+        // Transit Info (ONLY for VEHICLE, not for WALK)
+        if (laneType == "VEHICLE" &&
+            transit.contains("transit_info") &&
+            transit["transit_info"].isObject()) {
             QJsonObject infoObj = transit["transit_info"].toObject();
             QJsonObject transformedInfo;
 
@@ -253,8 +255,8 @@ QJsonArray ViGateService::transformTransitData(const QJsonArray& transits)
             transformed["transitInfo"] = transformedInfo;
         }
 
-        // Permission (first element only) - ALL FIELDS - ONLY FOR VEHICLE
-        if (laneType == "VEHICLE" &&
+        // Permission (first element only) - ALL FIELDS - FOR BOTH VEHICLE AND WALK
+        if ((laneType == "VEHICLE" || laneType == "WALK") &&
             transit.contains("transit_permissions") &&
             transit["transit_permissions"].isArray()) {
             QJsonArray permissionsArray = transit["transit_permissions"].toArray();
