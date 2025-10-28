@@ -16,13 +16,16 @@ public:
 
     Q_INVOKABLE void getActiveGates();
 
-    Q_INVOKABLE void getGateData(int gateId,
-                                 const QDateTime& startDate,
-                                 const QDateTime& endDate,
-                                 bool includeVehicles,
-                                 bool includePedestrians,
-                                 int page = 1,
-                                 int pageSize = 50);
+    // Updated method name and signature
+    Q_INVOKABLE void getFilteredViGateData(int gateId,
+                                           const QDateTime& startDate,
+                                           const QDateTime& endDate,
+                                           bool pedestrian,
+                                           bool vehicle,
+                                           int pageNumber = 1,
+                                           int pageSize = 50,
+                                           const QString& sortBy = QString(),
+                                           bool sortDescending = false);
 
 signals:
     void activeGatesReady(const QJsonArray& gates);
@@ -37,8 +40,6 @@ private:
     int m_port = 7000;
 
     void performGet(const QUrl& url);
-
-    // Changed return type from QJsonObject to QJsonArray - no longer calculates summary
     QJsonArray transformTransitData(const QJsonArray& transits);
 
     static QUrl makeUrl(const QString& host, int port,

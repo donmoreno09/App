@@ -202,9 +202,11 @@ void ViGateController::fetchCurrentPage()
     }
 
     setLoading(true);
-    m_service->getGateData(m_gateId, m_startDate, m_endDate,
-                           m_includeVehicles, m_includePedestrians,
-                           m_currentPage, m_pageSize);
+
+    // Call the updated method with correct parameter names
+    m_service->getFilteredViGateData(m_gateId, m_startDate, m_endDate,
+                                     m_includePedestrians, m_includeVehicles,
+                                     m_currentPage, m_pageSize);
 }
 
 void ViGateController::nextPage()

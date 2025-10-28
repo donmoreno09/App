@@ -142,16 +142,18 @@ void ViGateService::performGet(const QUrl& url)
 
         QJsonObject rootObj = doc.object();
 
-        // Expected format: { "data": [...], "pagination": {...}, "summary": {...} }
-        if (!rootObj.contains("data") || !rootObj.contains("pagination") || !rootObj.contains("summary")) {
-            qWarning() << "ViGateService: Invalid response format - missing data, pagination, or summary";
+        qDebug() << "ViGateService: Response structure:" << rootObj.keys();
+
+        // Expected format: { "items": [...], "pageNumber": N, "pageSize": N, "summary": {...}, "totalCount": N, "totalPages": N }
+        if (!rootObj.contains("items") || !rootObj.contains("pageNumber") || !rootObj.contains("summary")) {
+            qWarning() << "ViGateService: Invalid response format - missing items, pageNumber, or summary";
             emit requestFailed(QStringLiteral("Invalid response format"));
             return;
         }
 
         qDebug() << "ViGateService: Detected backend response with summary";
 
-        QJsonArray dataArray = rootObj["data"].toArray();
+        QJsonArray dataArray = rootObj["items"].toArray();
         qDebug() << "ViGateService: Processing" << dataArray.size() << "transit items";
 
         // Transform transit data
@@ -181,11 +183,10 @@ void ViGateService::performGet(const QUrl& url)
         response["summary"] = convertedSummary;
         response["transits"] = transformedTransits;
 
-        // Extract pagination info
-        QJsonObject pagination = rootObj["pagination"].toObject();
-        int currentPage = pagination["page"].toInt();
-        int totalPages = pagination["totalPages"].toInt();
-        int totalItems = pagination["totalItems"].toInt();
+        // Extract pagination info (flat structure, not nested)
+        int currentPage = rootObj["pageNumber"].toInt();
+        int totalPages = rootObj["totalPages"].toInt();
+        int totalItems = rootObj["totalCount"].toInt();
 
         qDebug() << "ViGateService: Pagination - page" << currentPage
                  << "of" << totalPages << "(" << totalItems << "total items)";
@@ -292,31 +293,43 @@ QJsonArray ViGateService::transformTransitData(const QJsonArray& transits)
     return transformedTransits;
 }
 
-void ViGateService::getGateData(int gateId,
-                                const QDateTime& startDate,
-                                const QDateTime& endDate,
-                                bool includeVehicles,
-                                bool includePedestrians,
-                                int page,
-                                int pageSize)
+void ViGateService::getFilteredViGateData(int gateId,
+                                          const QDateTime& startDate,
+                                          const QDateTime& endDate,
+                                          bool pedestrian,
+                                          bool vehicle,
+                                          int pageNumber,
+                                          int pageSize,
+                                          const QString& sortBy,
+                                          bool sortDescending)
 {
-    qDebug() << "ViGateService::getGateData called";
+    qDebug() << "ViGateService::getFilteredViGateData called";
     qDebug() << "  - Gate ID:" << gateId;
     qDebug() << "  - Date range:" << startDate.toString(Qt::ISODate)
              << "to" << endDate.toString(Qt::ISODate);
-    qDebug() << "  - Include vehicles:" << includeVehicles;
-    qDebug() << "  - Include pedestrians:" << includePedestrians;
-    qDebug() << "  - Page:" << page << ", Page size:" << pageSize;
+    qDebug() << "  - Pedestrian:" << pedestrian;
+    qDebug() << "  - Vehicle:" << vehicle;
+    qDebug() << "  - Page:" << pageNumber << ", Page size:" << pageSize;
+    if (!sortBy.isEmpty()) {
+        qDebug() << "  - Sort by:" << sortBy << "(descending:" << sortDescending << ")";
+    }
 
-    auto url = makeUrl(m_host, m_port, QStringLiteral("/ViGate/GetGateData"),
+    auto url = makeUrl(m_host, m_port, QStringLiteral("/vigate/GetFilteredViGateData"),
                        [&](QUrlQuery& q) {
-                           q.addQueryItem(QStringLiteral("gateId"), QString::number(gateId));
-                           q.addQueryItem(QStringLiteral("startDate"), startDate.toString(Qt::ISODate));
-                           q.addQueryItem(QStringLiteral("endDate"), endDate.toString(Qt::ISODate));
-                           q.addQueryItem(QStringLiteral("includeVehicles"), includeVehicles ? "true" : "false");
-                           q.addQueryItem(QStringLiteral("includePedestrians"), includePedestrians ? "true" : "false");
-                           q.addQueryItem(QStringLiteral("page"), QString::number(page));
-                           q.addQueryItem(QStringLiteral("pageSize"), QString::number(pageSize));
+                           // Required parameters matching the API spec
+                           q.addQueryItem(QStringLiteral("GateId"), QString::number(gateId));
+                           q.addQueryItem(QStringLiteral("StartDate"), startDate.toString(Qt::ISODate));
+                           q.addQueryItem(QStringLiteral("EndDate"), endDate.toString(Qt::ISODate));
+                           q.addQueryItem(QStringLiteral("Pedestrian"), pedestrian ? "true" : "false");
+                           q.addQueryItem(QStringLiteral("Vehicle"), vehicle ? "true" : "false");
+                           q.addQueryItem(QStringLiteral("PageNumber"), QString::number(pageNumber));
+                           q.addQueryItem(QStringLiteral("PageSize"), QString::number(pageSize));
+
+                           // Optional sorting parameters
+                           if (!sortBy.isEmpty()) {
+                               q.addQueryItem(QStringLiteral("SortBy"), sortBy);
+                               q.addQueryItem(QStringLiteral("SortDescending"), sortDescending ? "true" : "false");
+                           }
                        });
 
     qDebug() << "ViGateService: Built URL:" << url.toString();
