@@ -128,12 +128,12 @@
     <message>
         <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="130"/>
         <source>Auth Code</source>
-        <translation>Codice Autenticazione</translation>
+        <translation>Codice Aut.</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="137"/>
         <source>Auth Message</source>
-        <translation>Messaggio Autenticazione</translation>
+        <translation>Messaggio Aut.</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="144"/>
