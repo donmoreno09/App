@@ -205,6 +205,7 @@ ColumnLayout {
         SummaryTable {
             Layout.fillWidth: true
             controller: root.controller
+            visible: !controller.isLoadingPage
         }
 
         // Transits Table
@@ -212,6 +213,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             model: root.controller.transitsModel
+            visible: !controller.isLoadingPage
 
             Component.onCompleted: {
                 // Set initial filter when table is created
@@ -225,7 +227,7 @@ ColumnLayout {
             Layout.minimumHeight: Theme.spacing.s10
             color: Theme.colors.surface
             radius: Theme.radius.sm
-            visible: controller.totalPages > 0
+            visible: controller.totalPages > 0 && !controller.isLoadingPage
 
             RowLayout {
                 anchors.fill: parent
@@ -318,7 +320,7 @@ ColumnLayout {
 
         // Pagination Controls
         RowLayout {
-            visible: controller.totalPages > 1
+            visible: controller.totalPages > 1 && !controller.isLoadingPage
             Layout.fillWidth: true
             spacing: Theme.spacing.s2
 
@@ -406,6 +408,21 @@ ColumnLayout {
                 text: (TranslationManager.revision, qsTr("Last »"))
                 enabled: controller.currentPage < controller.totalPages
                 onClicked: controller.goToPage(controller.totalPages)
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            visible: controller.isLoadingPage
+
+            BusyIndicator {
+                anchors.centerIn: parent
+                width: Theme.spacing.s12
+                height: Theme.spacing.s12
+                running: true
+                layer.enabled: true
+                layer.effect: ColorOverlay { color: Theme.colors.text }
             }
         }
     }

@@ -34,6 +34,7 @@ class ViGateController : public QObject
 
     // State
     Q_PROPERTY(bool isLoading READ isLoading NOTIFY loadingChanged)
+    Q_PROPERTY(bool isLoadingPage READ isLoadingPage NOTIFY loadingPageChanged)
     Q_PROPERTY(bool hasData READ hasData NOTIFY hasDataChanged)
     Q_PROPERTY(bool hasError READ hasError NOTIFY hasErrorChanged)
     Q_PROPERTY(bool isLoadingGates READ isLoadingGates NOTIFY loadingGatesChanged)
@@ -60,6 +61,7 @@ public:
     TransitModel* transitsModel() { return m_transitsModel; }
 
     bool isLoading() const { return m_loading; }
+    bool isLoadingPage() const { return m_loadingPage; }
     bool hasData() const { return m_hasData; }
     bool hasError() const { return m_hasError; }
     bool isLoadingGates() const { return m_loadingGates; }
@@ -82,6 +84,7 @@ signals:
     void pageSizeChanged();
     void activeGatesChanged();
     void loadingChanged(bool);
+    void loadingPageChanged(bool);
     void hasDataChanged(bool);
     void hasErrorChanged(bool);
     void loadingGatesChanged(bool);
@@ -89,6 +92,7 @@ signals:
 
 private:
     void setLoading(bool loading);
+    void setLoadingPage(bool loading);
     void setLoadingGates(bool loading);
     void hookUpService();
     void processSummary(const QJsonObject& summary);
@@ -123,6 +127,7 @@ private:
 
     // State
     bool m_loading = false;
+    bool m_loadingPage = false;
     bool m_hasData = false;
     bool m_hasError = false;
     bool m_loadingGates = false;

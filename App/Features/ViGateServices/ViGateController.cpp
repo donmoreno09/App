@@ -22,6 +22,13 @@ void ViGateController::setLoading(bool loading)
     emit loadingChanged(loading);
 }
 
+void ViGateController::setLoadingPage(bool loading)
+{
+    if (m_loadingPage == loading) return;
+    m_loadingPage = loading;
+    emit loadingPageChanged(loading);
+}
+
 void ViGateController::setLoadingGates(bool loading)
 {
     if (m_loadingGates == loading) return;
@@ -86,6 +93,7 @@ void ViGateController::hookUpService()
             emit hasErrorChanged(false);
         }
         setLoading(false);
+        setLoadingPage(false);
     });
 
     connect(m_service, &ViGateService::paginationInfo, this,
@@ -111,6 +119,7 @@ void ViGateController::hookUpService()
             emit hasErrorChanged(false);
         }
         setLoading(false);
+        setLoadingPage(false);
         setLoadingGates(false);
     });
 
@@ -127,6 +136,7 @@ void ViGateController::hookUpService()
             emit hasDataChanged(false);
         }
         setLoading(false);
+        setLoadingPage(false);
         setLoadingGates(false);
     });
 }
@@ -184,7 +194,7 @@ void ViGateController::fetchGateData(int gateId,
 
 void ViGateController::fetchCurrentPage()
 {
-    if (m_loading) {
+    if (m_loading || m_loadingPage) {
         qDebug() << "ViGateController::fetchCurrentPage - Already loading, ignoring request";
         return;
     }
@@ -192,16 +202,24 @@ void ViGateController::fetchCurrentPage()
     qDebug() << "ViGateController::fetchCurrentPage - Page" << m_currentPage
              << "with page size" << m_pageSize;
 
-    if (m_hasData) {
-        m_hasData = false;
-        emit hasDataChanged(false);
-    }
+    // Clear error state if present
     if (m_hasError) {
         m_hasError = false;
         emit hasErrorChanged(false);
     }
 
-    setLoading(true);
+    // Use different loading states based on whether we already have data
+    if (m_hasData) {
+        // We have data, this is a pagination request
+        setLoadingPage(true);
+    } else {
+        // No data yet, this is the initial fetch
+        if (m_hasData) {
+            m_hasData = false;
+            emit hasDataChanged(false);
+        }
+        setLoading(true);
+    }
 
     // Call the updated method with correct parameter names
     m_service->getFilteredViGateData(m_gateId, m_startDate, m_endDate,
