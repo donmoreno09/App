@@ -23,8 +23,9 @@ ColumnLayout {
     }
 
     enum AreaType {
-        Polygon,
-        Rectangle,
+        // Mirror backend's values
+        Polygon = 3,
+        Rectangle, // There's no RectangleType from the backend, see isRectangle below.
         Ellipse
     }
 
@@ -64,7 +65,7 @@ ColumnLayout {
                     text: qsTr("Rectangle")
                     source: "qrc:/App/assets/icons/rectangle.svg"
                     checked: areaType === AreaForm.Rectangle
-                    enabled: !isEditing
+                    enabled: !isEditing || areaType === AreaForm.Rectangle
                     onClicked: if (!isEditing) {
                         areaType = AreaForm.Rectangle
                         MapModeController.setActiveMode(MapModeRegistry.createRectangleMode)
@@ -75,7 +76,7 @@ ColumnLayout {
                     text: qsTr("Ellipse")
                     source: "qrc:/App/assets/icons/ellipse.svg"
                     checked: areaType === AreaForm.Ellipse
-                    enabled: !isEditing
+                    enabled: !isEditing || areaType === AreaForm.Ellipse
                     onClicked: if (!isEditing) {
                         areaType = AreaForm.Ellipse
                         MapModeController.setActiveMode(MapModeRegistry.createEllipseMode)
@@ -86,7 +87,7 @@ ColumnLayout {
                     text: qsTr("Polygon")
                     source: "qrc:/App/assets/icons/polygon.svg"
                     checked: areaType === AreaForm.Polygon
-                    enabled: !isEditing
+                    enabled: !isEditing || areaType === AreaForm.Polygon
                     onClicked: if (!isEditing) {
                         areaType = AreaForm.Polygon
                         MapModeController.setActiveMode(MapModeRegistry.createPolygonMode)

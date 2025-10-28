@@ -15,6 +15,8 @@ RadioButton {
 
     property alias source: image.source
 
+    opacity: enabled ? Theme.opacity.o100 : Theme.opacity.o50
+
     contentItem: ColumnLayout {
         spacing: Theme.spacing.s2
 
@@ -32,6 +34,7 @@ RadioButton {
             id: label
             text: root.text
             Layout.alignment: Qt.AlignHCenter
+            color: root.enabled ? Theme.colors.text : Theme.colors.textMuted
         }
 
         UI.VerticalSpacer { }
@@ -39,6 +42,7 @@ RadioButton {
 
     background: Rectangle {
         radius: Theme.radius.md
-        color: root.checked ? Theme.colors.accent350 : "transparent"
+        color: root.checked ? Theme.colors.accent350 : Theme.colors.transparent
+        opacity: root.enabled ? Theme.opacity.o100 : Theme.opacity.o50
     }
 }
