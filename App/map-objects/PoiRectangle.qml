@@ -9,6 +9,7 @@ import App.Features.MapModes 1.0
 
 MapItemGroup {
     id: root
+    z: Theme.elevation.z100 + (isEditing) ? 100 : 0
 
     readonly property bool isEditing: MapModeController.poi && id === MapModeController.poi.id
 
@@ -60,7 +61,7 @@ MapItemGroup {
         color: "#22448888"
         border.color: "green"
         border.width: 2
-        z: 1100
+        z: root.z
 
         // Scratch state for drag
         property point _startTLpx: Qt.point(0, 0)
@@ -142,6 +143,8 @@ MapItemGroup {
         )
         anchorPoint: Qt.point(8, 8)
         sourceItem: Rectangle { width:16; height:16; radius:8; color:"white"; border.color:"green" }
+        visible: isEditing
+        z: committedRect.z + 1
 
         TapHandler {
             acceptedButtons: Qt.LeftButton
@@ -200,10 +203,10 @@ MapItemGroup {
         }
     }
 
-    VertexHandle { id: topLeftVertex; kind: 0; visible: isEditing; z: committedRect.z + 1 }
-    VertexHandle { id: topRightVertex; kind: 1; visible: isEditing; z: committedRect.z + 1 }
-    VertexHandle { id: bottomRightVertex; kind: 2; visible: isEditing; z: committedRect.z + 1 }
-    VertexHandle { id: bottomLeftVertex; kind: 3; visible: isEditing; z: committedRect.z + 1 }
+    VertexHandle { id: topLeftVertex; kind: 0 }
+    VertexHandle { id: topRightVertex; kind: 1 }
+    VertexHandle { id: bottomRightVertex; kind: 2 }
+    VertexHandle { id: bottomLeftVertex; kind: 3 }
 
     Rectangle {
         anchors.centerIn: committedRect
@@ -213,6 +216,7 @@ MapItemGroup {
         color: Theme.colors.hexWithAlpha("#539E07", 0.6)
         border.color: Theme.colors.white
         border.width: isEditing ? Theme.borders.b1 : Theme.borders.b0
+        z: committedRect.z + 2
 
         Text {
             anchors.centerIn: parent

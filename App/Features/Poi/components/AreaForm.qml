@@ -5,15 +5,25 @@ import QtQuick.Layouts 6.8
 import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.MapModes 1.0
 
 ColumnLayout {
     spacing: Theme.spacing.s4
 
     property int areaType: AreaForm.Rectangle
 
+    readonly property bool isEditing: !!MapModeController.poi
+
+    Connections {
+        target: MapModeController
+
+        function onPoiChanged() {
+            areaButtons.updateButtons()
+        }
+    }
+
     enum AreaType {
-        Polygon = 3,
-        // This is actually CircleType in BE
+        Polygon,
         Rectangle,
         Ellipse
     }
@@ -38,28 +48,49 @@ ColumnLayout {
             Layout.fillWidth: true
 
             RowLayout {
+                id: areaButtons
                 width: parent.width
                 spacing: Theme.spacing.s4
+
+                function updateButtons() {
+                    if (!MapModeController.poi) return
+
+                    areaType = (MapModeController.poi.isRectangle) ? AreaForm.Rectangle :  MapModeController.poi.shapeTypeId
+                }
+
+                Component.onCompleted: updateButtons()
 
                 AreaButton {
                     text: qsTr("Rectangle")
                     source: "qrc:/App/assets/icons/rectangle.svg"
                     checked: areaType === AreaForm.Rectangle
-                    onClicked: areaType = AreaForm.Rectangle
+                    enabled: !isEditing
+                    onClicked: if (!isEditing) {
+                        areaType = AreaForm.Rectangle
+                        MapModeController.setActiveMode(MapModeRegistry.createRectangleMode)
+                    }
                 }
 
                 AreaButton {
                     text: qsTr("Ellipse")
                     source: "qrc:/App/assets/icons/ellipse.svg"
                     checked: areaType === AreaForm.Ellipse
-                    onClicked: areaType = AreaForm.Ellipse
+                    enabled: !isEditing
+                    onClicked: if (!isEditing) {
+                        areaType = AreaForm.Ellipse
+                        MapModeController.setActiveMode(MapModeRegistry.createEllipseMode)
+                    }
                 }
 
                 AreaButton {
                     text: qsTr("Polygon")
                     source: "qrc:/App/assets/icons/polygon.svg"
                     checked: areaType === AreaForm.Polygon
-                    onClicked: areaType = AreaForm.Polygon
+                    enabled: !isEditing
+                    onClicked: if (!isEditing) {
+                        areaType = AreaForm.Polygon
+                        MapModeController.setActiveMode(MapModeRegistry.createPolygonMode)
+                    }
                 }
             }
 

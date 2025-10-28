@@ -62,10 +62,14 @@ QVariant PoiModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(out);
     }
     case TopLeftRole: {
+        if (!isRectangle(poi.geometry)) return QVariant::fromValue(QGeoCoordinate());
+
         QGeoCoordinate topLeft(poi.geometry.coordinates[0].y(), poi.geometry.coordinates[0].x());
         return QVariant::fromValue(topLeft);
     }
     case BottomRightRole: {
+        if (!isRectangle(poi.geometry)) return QVariant::fromValue(QGeoCoordinate());
+
         QGeoCoordinate bottomRight(poi.geometry.coordinates[2].y(), poi.geometry.coordinates[2].x());
         return QVariant::fromValue(bottomRight);
     }
@@ -181,6 +185,8 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
         break;
     }
     case TopLeftRole: {
+        if (!isRectangle(poi.geometry)) return false;
+
         const QGeoCoordinate c = value.value<QGeoCoordinate>();
         const QVector2D topLeft(c.longitude(), c.latitude()); // x=lon, y=lat
 
@@ -204,6 +210,8 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
         break;
     }
     case BottomRightRole: {
+        if (!isRectangle(poi.geometry)) return false;
+
         const QGeoCoordinate c = value.value<QGeoCoordinate>();
         const QVector2D BR(c.longitude(), c.latitude()); // x=lon, y=lat
 
@@ -453,10 +461,10 @@ bool PoiModel::isRectangle(const Geometry &geom)
     if (!qFuzzyCompare(BL.x(), TL.x())) return false;
 
     // Optional: ensure non-degenerate (width/height > 0)
-    const double width  = std::abs(TR.x() - TL.x());
-    const double height = std::abs(TL.y() - BL.y());
-    if (qFuzzyIsNull(width) || qFuzzyIsNull(height))
-        return false;
+    // const double width  = std::abs(TR.x() - TL.x());
+    // const double height = std::abs(TL.y() - BL.y());
+    // if (qFuzzyIsNull(width) || qFuzzyIsNull(height))
+    //     return false;
 
     return true;
 }

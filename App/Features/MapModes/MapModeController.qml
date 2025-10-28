@@ -22,8 +22,8 @@ QtObject {
     enum ShapeType {
         PointType = 1,
         LineStringType,
-        PolygonType,
-        RectangleType, // This is actually CircleType in BE
+        PolygonType, // For RectangleType, check if PolygonType and use poi's isRectangle property
+        CircleType,  // This type is unused.
         EllipseType
     }
 
@@ -35,6 +35,10 @@ QtObject {
             PoiModel.discardChanges()
         }
 
+        if (activeMode && activeMode.resetPreview) {
+            activeMode.resetPreview()
+        }
+
         activeMode = mode
     }
 
@@ -44,6 +48,9 @@ QtObject {
         switch (poi.shapeTypeId) {
         case MapModeController.PointType:
             activeMode = MapModeRegistry.editPointMode
+            break;
+        case MapModeController.EllipseType:
+            activeMode = MapModeRegistry.editEllipseMode
             break;
         case MapModeController.PolygonType:
             if (poi.isRectangle) activeMode = MapModeRegistry.editRectangleMode

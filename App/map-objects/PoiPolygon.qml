@@ -9,20 +9,21 @@ import App.Features.MapModes 1.0
 
 MapItemGroup {
     id: root
+    z: Theme.elevation.z100 + (isEditing) ? 100 : 0
 
     property bool isDraggingHandle: false
 
     MapPolygon {
-        id: mapPolygon
-
+        id: polygon
         color: "#22448888"
         border.color: "green"
         border.width: 2
         path: coordinates
+        z: root.z
     }
 
     Text {
-        anchors.centerIn: mapPolygon
+        anchors.centerIn: polygon
         text: label
         font.pixelSize: 12
         color: "black"

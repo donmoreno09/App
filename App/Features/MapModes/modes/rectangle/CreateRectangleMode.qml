@@ -100,7 +100,7 @@ RectangleMode {
         color: "#3388cc88"
         border.color: "orange"
         border.width: 2
-        z: Theme.elevation.z100
+        z: Theme.elevation.z100 + 1
     }
 
     // Committed rectangle
@@ -112,7 +112,7 @@ RectangleMode {
         color: "#22448888"
         border.color: "green"
         border.width: 2
-        z: 1100
+        z: Theme.elevation.z100 + 1
 
         // Scratch state for drag
         property point _startTLpx: Qt.point(0, 0)
@@ -190,6 +190,8 @@ RectangleMode {
         )
         anchorPoint: Qt.point(8, 8)
         sourceItem: Rectangle { width:16; height:16; radius:8; color:"white"; border.color:"green" }
+        visible: !root.dragging
+        z: committedRect.z + 1
 
         TapHandler {
             acceptedButtons: Qt.LeftButton
@@ -238,8 +240,8 @@ RectangleMode {
         }
     }
 
-    VertexHandle { id: topLeftVertex; kind: 0; visible: !root.dragging; z: committedRect.z + 1 }
-    VertexHandle { id: topRightVertex; kind: 1; visible: !root.dragging; z: committedRect.z + 1 }
-    VertexHandle { id: bottomRightVertex; kind: 2; visible: !root.dragging; z: committedRect.z + 1 }
-    VertexHandle { id: bottomLeftVertex; kind: 3; visible: !root.dragging; z: committedRect.z + 1 }
+    VertexHandle { id: topLeftVertex; kind: 0 }
+    VertexHandle { id: topRightVertex; kind: 1 }
+    VertexHandle { id: bottomRightVertex; kind: 2 }
+    VertexHandle { id: bottomLeftVertex; kind: 3 }
 }

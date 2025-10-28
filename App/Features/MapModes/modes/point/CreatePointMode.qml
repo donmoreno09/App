@@ -19,6 +19,10 @@ PointMode {
         }
     }
 
+    function resetPreview() {
+        coord = QtPositioning.coordinate(0, 0)
+    }
+
     // Input handlers
     TapHandler {
         acceptedButtons: Qt.LeftButton
@@ -34,7 +38,7 @@ PointMode {
         id: mapPoint
 
         coordinate: coord
-        z: Theme.elevation.z100
+        z: Theme.elevation.z100 + 1
         anchorPoint.x: sourceItem.width / 2
         anchorPoint.y: sourceItem.height / 2
         sourceItem:  Image {

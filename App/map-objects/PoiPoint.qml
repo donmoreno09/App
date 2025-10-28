@@ -9,6 +9,7 @@ import App.Features.MapModes 1.0
 
 MapQuickItem {
     id: root
+    z: Theme.elevation.z100 + (isEditing) ? 100 : 0
 
     readonly property bool isEditing: MapModeController.poi && id === MapModeController.poi.id
 

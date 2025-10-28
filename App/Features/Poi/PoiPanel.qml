@@ -73,18 +73,25 @@ PanelTemplate {
                     id: categoryComboBox
                     Layout.fillWidth: true
                     labelText: qsTr("Category(*)")
-
+                    textRole: "name"
+                    valueRole: "key"
                     model: {
                         if (MapModeController.isEditing) {
-                            if (MapModeController.poi.categoryId >= PoiOptions.pointCategoriesStartIndex)return PoiOptions.pointCategories
+                            if (MapModeController.poi.categoryId >= PoiOptions.pointCategoriesStartIndex) return PoiOptions.pointCategories
                             else return PoiOptions.areaCategories
                         }
 
                         return PoiOptions.categories
                     }
 
-                    textRole: "name"
-                    valueRole: "key"
+                    onActivated: {
+                        if (!MapModeController.isEditing) {
+                            if (currentValue >= PoiOptions.pointCategoriesStartIndex)
+                                MapModeController.setActiveMode(MapModeRegistry.createPointMode)
+                            else
+                                MapModeController.setActiveMode(MapModeRegistry.createRectangleMode)
+                        }
+                    }
                 }
 
                 UI.ComboBox {
