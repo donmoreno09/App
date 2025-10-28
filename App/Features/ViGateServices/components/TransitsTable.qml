@@ -86,104 +86,388 @@ GroupBox {
         }
 
         // Use ListView instead of TableView
-        ListView {
-            id: listView
+
+        ScrollView {
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: 200
             clip: true
+            ListView {
+                id: listView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
 
-            model: root.model
+                model: root.model
 
-            flickableDirection: Flickable.HorizontalAndVerticalFlick
-            boundsBehavior: Flickable.StopAtBounds
+                flickableDirection: Flickable.HorizontalAndVerticalFlick
+                boundsBehavior: Flickable.StopAtBounds
 
-            // Performance optimizations
-            cacheBuffer: Theme.spacing.s10 * 10  // Cache 10 extra rows
-            reuseItems: true  // Recycle delegates (crucial!)
+                // Performance optimizations
+                cacheBuffer: Theme.spacing.s10 * 10
+                reuseItems: true
 
-            // Smooth scrolling
-            maximumFlickVelocity: 2500
-            flickDeceleration: 1500
+                // Smooth scrolling
+                maximumFlickVelocity: 2500
+                flickDeceleration: 1500
 
-            delegate: Rectangle {
-                id: rowDelegate
-                width: Math.max(contentRow.width, listView.width)
-                height: Theme.spacing.s10
-                color: index % 2 === 0 ? Theme.colors.transparent : Theme.colors.surface
+                delegate: Rectangle {
+                    // CRITICAL: Define required properties to receive model data
+                    required property int index
+                    required property string gateName
+                    required property string transitId
+                    required property string transitStartDate
+                    required property string transitEndDate
+                    required property string transitStatus
+                    required property string laneTypeId
+                    required property string laneStatusId
+                    required property string laneName
+                    required property string transitDirection
+                    required property string colors
+                    required property string macroClass
+                    required property string microClass
+                    required property string make
+                    required property string models
+                    required property string country
+                    required property string kemler
+                    required property bool hasTransitInfo
+                    required property string auth
+                    required property string authMessage
+                    required property string permissionType
+                    required property string vehiclePlate
+                    required property string peopleFullname
+                    required property string companyFullname
+                    required property bool hasPermission
 
-                Row {
-                    id: contentRow
-                    height: parent.height
-                    spacing: 0
+                    width: contentRow.width
+                    height: Theme.spacing.s10
+                    color: index % 2 === 0 ? Theme.colors.transparent : Theme.colors.surfaceVariant
 
-                    component CellText: Text {
-                        required property string cellText
-                        required property real cellWidth
-                        property color cellColor: Theme.colors.text
+                    Row {
+                        id: contentRow
+                        height: parent.height
+                        spacing: 0
 
-                        text: cellText
-                        color: cellColor
-                        font.family: Theme.typography.familySans
-                        font.weight: Theme.typography.weightRegular
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignLeft
-                        elide: Text.ElideRight
-                        width: cellWidth
-                        height: Theme.spacing.s10
-                        leftPadding: Theme.spacing.s2
-                        rightPadding: Theme.spacing.s2
+                        // Gate Name
+                        Text {
+                            text: gateName || "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 120
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Transit ID
+                        Text {
+                            text: transitId || "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 200
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Start Date
+                        Text {
+                            text: transitStartDate || "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 150
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // End Date
+                        Text {
+                            text: transitEndDate || "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 150
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Status
+                        Text {
+                            text: transitStatus || "-"
+                            color: transitStatus === "Autorizzato" ? Theme.colors.success : Theme.colors.error
+                            font.family: Theme.typography.familySans
+                            font.weight: Theme.typography.weightMedium
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 120
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Lane Type
+                        Text {
+                            text: laneTypeId || "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 100
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Lane Status
+                        Text {
+                            text: laneStatusId || "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 100
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Lane Name
+                        Text {
+                            text: laneName || "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 120
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Direction
+                        Text {
+                            text: transitDirection || "-"
+                            color: transitDirection === "IN" ? Theme.colors.success : Theme.colors.warning
+                            font.family: Theme.typography.familySans
+                            font.weight: Theme.typography.weightMedium
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 100
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Color
+                        Text {
+                            text: hasTransitInfo ? (colors || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 80
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Macro Class
+                        Text {
+                            text: hasTransitInfo ? (macroClass || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 100
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Micro Class
+                        Text {
+                            text: hasTransitInfo ? (microClass || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 100
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Make
+                        Text {
+                            text: hasTransitInfo ? (make || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 100
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Model
+                        Text {
+                            text: hasTransitInfo ? (models || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 100
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Country
+                        Text {
+                            text: hasTransitInfo ? (country || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 80
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Kemler
+                        Text {
+                            text: hasTransitInfo ? (kemler || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 80
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Auth
+                        Text {
+                            text: hasPermission ? (auth || "-") : "-"
+                            color: auth === "ACCEPT" ? Theme.colors.success : Theme.colors.error
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 80
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Auth Message
+                        Text {
+                            text: hasPermission ? (authMessage || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 150
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Permission Type
+                        Text {
+                            text: hasPermission ? (permissionType || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 120
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Vehicle Plate
+                        Text {
+                            text: hasPermission ? (vehiclePlate || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 120
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Person Name
+                        Text {
+                            text: hasPermission ? (peopleFullname || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 150
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
+
+                        // Company
+                        Text {
+                            text: hasPermission ? (companyFullname || "-") : "-"
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                            width: 200
+                            height: Theme.spacing.s10
+                            leftPadding: Theme.spacing.s2
+                            rightPadding: Theme.spacing.s2
+                        }
                     }
+                }
 
-                    CellText { cellText: model.gateName || "-"; cellWidth: 120 }
-                    CellText { cellText: model.transitId || "-"; cellWidth: 200 }
-                    CellText { cellText: model.transitStartDate || "-"; cellWidth: 150 }
-                    CellText { cellText: model.transitEndDate || "-"; cellWidth: 150 }
-                    CellText {
-                        cellText: model.transitStatus || "-"
-                        cellWidth: 120
-                        cellColor: model.transitStatus === "Autorizzato" ? Theme.colors.success : Theme.colors.error
-                        font.weight: Theme.typography.weightMedium
-                    }
-                    CellText { cellText: model.laneTypeId || "-"; cellWidth: 100 }
-                    CellText { cellText: model.laneStatusId || "-"; cellWidth: 100 }
-                    CellText { cellText: model.laneName || "-"; cellWidth: 120 }
-                    CellText {
-                        cellText: model.transitDirection || "-"
-                        cellWidth: 100
-                        cellColor: model.transitDirection === "IN" ? Theme.colors.success : Theme.colors.warning
-                        font.weight: Theme.typography.weightMedium
-                    }
+                ScrollBar.vertical: ScrollBar {
+                    width: 12
+                }
 
-                    // Transit Info columns (only for VEHICLE)
-                    CellText { cellText: model.hasTransitInfo ? (model.color || "-") : "-"; cellWidth: 80 }
-                    CellText { cellText: model.hasTransitInfo ? (model.macroClass || "-") : "-"; cellWidth: 100 }
-                    CellText { cellText: model.hasTransitInfo ? (model.microClass || "-") : "-"; cellWidth: 100 }
-                    CellText { cellText: model.hasTransitInfo ? (model.make || "-") : "-"; cellWidth: 100 }
-                    CellText { cellText: model.hasTransitInfo ? (model.model || "-") : "-"; cellWidth: 100 }
-                    CellText { cellText: model.hasTransitInfo ? (model.country || "-") : "-"; cellWidth: 80 }
-                    CellText { cellText: model.hasTransitInfo ? (model.kemler || "-") : "-"; cellWidth: 80 }
-
-                    // Permission columns
-                    CellText {
-                        cellText: model.hasPermission ? (model.auth || "-") : "-"
-                        cellWidth: 80
-                        cellColor: model.auth === "ACCEPT" ? Theme.colors.success : Theme.colors.error
-                    }
-                    CellText { cellText: model.hasPermission ? (model.authMessage || "-") : "-"; cellWidth: 150 }
-                    CellText { cellText: model.hasPermission ? (model.permissionType || "-") : "-"; cellWidth: 120 }
-                    CellText { cellText: model.hasPermission ? (model.vehiclePlate || "-") : "-"; cellWidth: 120 }
-                    CellText { cellText: model.hasPermission ? (model.peopleFullname || "-") : "-"; cellWidth: 150 }
-                    CellText { cellText: model.hasPermission ? (model.companyFullname || "-") : "-"; cellWidth: 200 }
+                ScrollBar.horizontal: ScrollBar {
+                    height: 12
                 }
             }
 
-            ScrollBar.vertical: ScrollBar {
-                width: 12
-            }
-
-            ScrollBar.horizontal: ScrollBar {
-                height: 12
-            }
         }
     }
 }

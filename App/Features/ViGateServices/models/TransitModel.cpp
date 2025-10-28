@@ -95,11 +95,11 @@ QHash<int, QByteArray> TransitModel::roleNames() const
         {TransitDirectionRole, "transitDirection"},
 
         // Transit Info
-        {ColorRole, "color"},
+        {ColorRole, "colors"},
         {MacroClassRole, "macroClass"},
         {MicroClassRole, "microClass"},
         {MakeRole, "make"},
-        {ModelRole, "model"},
+        {ModelRole, "models"},
         {CountryRole, "country"},
         {KemlerRole, "kemler"},
         {HasTransitInfoRole, "hasTransitInfo"},
