@@ -14,6 +14,8 @@ public:
 
     void setHostPort(const QString& host, int port);
 
+    Q_INVOKABLE void getActiveGates();
+
     Q_INVOKABLE void getGateData(int gateId,
                                  const QDateTime& startDate,
                                  const QDateTime& endDate,
@@ -23,6 +25,7 @@ public:
                                  int pageSize = 50);
 
 signals:
+    void activeGatesReady(const QJsonArray& gates);
     void dataReady(const QJsonObject& data);
     void paginationInfo(int currentPage, int totalPages, int totalItems);
     void requestFailed(const QString& error);
@@ -31,7 +34,7 @@ signals:
 private:
     QNetworkAccessManager m_manager;
     QString m_host = QStringLiteral("localhost");
-    int m_port = 5005;
+    int m_port = 7000;
 
     void performGet(const QUrl& url);
     QJsonObject transformTransitData(const QJsonArray& transits);

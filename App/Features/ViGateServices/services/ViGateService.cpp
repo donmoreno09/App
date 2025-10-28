@@ -32,6 +32,67 @@ QUrl ViGateService::makeUrl(const QString& host, int port,
     return url;
 }
 
+void ViGateService::getActiveGates()
+{
+    qDebug() << "ViGateService::getActiveGates called";
+
+    auto url = makeUrl(m_host, m_port, QStringLiteral("/vigate/GetActiveGates"));
+    qDebug() << "ViGateService: Built URL:" << url.toString();
+
+    QNetworkRequest req(url);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply* reply = m_manager.get(req);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        const auto finish = qScopeGuard([&]{ reply->deleteLater(); });
+
+        if (reply->error() != QNetworkReply::NoError) {
+            qWarning() << "ViGateService: Network error:" << reply->errorString();
+            emit requestFailed(reply->errorString());
+            return;
+        }
+
+        const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qDebug() << "ViGateService: HTTP status" << status;
+
+        if (status == 404) {
+            qDebug() << "ViGateService: Active gates not found (404)";
+            emit notFound();
+            return;
+        }
+        if (status < 200 || status >= 300) {
+            QString error = QStringLiteral("HTTP %1").arg(status);
+            qWarning() << "ViGateService: HTTP error:" << error;
+            emit requestFailed(error);
+            return;
+        }
+
+        QByteArray responseData = reply->readAll();
+        qDebug() << "ViGateService: Received" << responseData.size() << "bytes";
+
+        QJsonParseError parseError;
+        QJsonDocument doc = QJsonDocument::fromJson(responseData, &parseError);
+
+        if (parseError.error != QJsonParseError::NoError) {
+            QString error = QStringLiteral("JSON parse error: %1").arg(parseError.errorString());
+            qWarning() << "ViGateService:" << error;
+            emit requestFailed(error);
+            return;
+        }
+
+        if (!doc.isArray()) {
+            qWarning() << "ViGateService: Expected array response for active gates";
+            emit requestFailed(QStringLiteral("Invalid response format"));
+            return;
+        }
+
+        QJsonArray gates = doc.array();
+        qDebug() << "ViGateService: Successfully loaded" << gates.size() << "active gates";
+
+        emit activeGatesReady(gates);
+    });
+}
+
 void ViGateService::performGet(const QUrl& url)
 {
     qDebug() << "ViGateService::performGet - Fetching" << url.toString();

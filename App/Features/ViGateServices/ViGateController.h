@@ -2,6 +2,7 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QDateTime>
+#include <QVariantList>
 #include "models/TransitModel.h"
 
 class ViGateService;
@@ -25,6 +26,9 @@ class ViGateController : public QObject
     Q_PROPERTY(int totalItems READ totalItems NOTIFY paginationChanged)
     Q_PROPERTY(int pageSize READ pageSize WRITE setPageSize NOTIFY pageSizeChanged)
 
+    // Active Gates
+    Q_PROPERTY(QVariantList activeGates READ activeGates NOTIFY activeGatesChanged)
+
     // Model - Changed to single unified model
     Q_PROPERTY(TransitModel* transitsModel READ transitsModel CONSTANT)
 
@@ -32,6 +36,7 @@ class ViGateController : public QObject
     Q_PROPERTY(bool isLoading READ isLoading NOTIFY loadingChanged)
     Q_PROPERTY(bool hasData READ hasData NOTIFY hasDataChanged)
     Q_PROPERTY(bool hasError READ hasError NOTIFY hasErrorChanged)
+    Q_PROPERTY(bool isLoadingGates READ isLoadingGates NOTIFY loadingGatesChanged)
 
 public:
     explicit ViGateController(QObject* parent = nullptr);
@@ -50,13 +55,17 @@ public:
     int pageSize() const { return m_pageSize; }
     void setPageSize(int size);
 
+    QVariantList activeGates() const { return m_activeGates; }
+
     TransitModel* transitsModel() { return m_transitsModel; }
 
     bool isLoading() const { return m_loading; }
     bool hasData() const { return m_hasData; }
     bool hasError() const { return m_hasError; }
+    bool isLoadingGates() const { return m_loadingGates; }
 
 public slots:
+    void loadActiveGates();
     void fetchGateData(int gateId,
                        const QDateTime& startDate,
                        const QDateTime& endDate,
@@ -71,13 +80,16 @@ signals:
     void summaryChanged();
     void paginationChanged();
     void pageSizeChanged();
+    void activeGatesChanged();
     void loadingChanged(bool);
     void hasDataChanged(bool);
     void hasErrorChanged(bool);
+    void loadingGatesChanged(bool);
     void requestFailed(const QString& error);
 
 private:
     void setLoading(bool loading);
+    void setLoadingGates(bool loading);
     void hookUpService();
     void processSummary(const QJsonObject& summary);
     void fetchCurrentPage();
@@ -103,6 +115,9 @@ private:
     bool m_includeVehicles = true;
     bool m_includePedestrians = true;
 
+    // Active Gates
+    QVariantList m_activeGates;
+
     // Model - Changed to single unified model
     TransitModel* m_transitsModel = nullptr;
 
@@ -110,9 +125,10 @@ private:
     bool m_loading = false;
     bool m_hasData = false;
     bool m_hasError = false;
+    bool m_loadingGates = false;
 
     // Service
     ViGateService* m_service = nullptr;
     QString m_host = QStringLiteral("localhost");
-    int m_port = 5005;
+    int m_port = 7000;
 };

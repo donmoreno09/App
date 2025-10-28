@@ -98,7 +98,15 @@ Item {
                 Item { Layout.preferredWidth: Theme.spacing.s4 }
 
                 Text {
-                    text: comboBox.displayText
+                    text: {
+                        if (comboBox.currentIndex >= 0) {
+                            var item = comboBox.model[comboBox.currentIndex]
+                            if (item && typeof item === 'object' && 'id' in item && 'name' in item) {
+                                return item.id + " - " + item.name
+                            }
+                        }
+                        return comboBox.displayText
+                    }
                     color: comboBox.enabled ? Theme.colors.text : Theme.colors.textMuted
                     font: comboBox.font
                     elide: Text.ElideRight
@@ -148,7 +156,13 @@ Item {
                 height: Theme.spacing.s10
 
                 contentItem: Text {
-                    text: comboBox.textAt(index)
+                    text: {
+                        var item = comboBox.model[index]
+                        if (item && typeof item === 'object' && 'id' in item && 'name' in item) {
+                            return item.id + " - " + item.name
+                        }
+                        return comboBox.textAt(index)
+                    }
                     color: Theme.colors.text
                     font: comboBox.font
                     elide: Text.ElideRight

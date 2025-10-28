@@ -10,6 +10,9 @@ ViGateController::ViGateController(QObject* parent)
     m_service = new ViGateService(this);
     m_service->setHostPort(m_host, m_port);
     hookUpService();
+
+    // Load active gates on initialization
+    loadActiveGates();
 }
 
 void ViGateController::setLoading(bool loading)
@@ -17,6 +20,13 @@ void ViGateController::setLoading(bool loading)
     if (m_loading == loading) return;
     m_loading = loading;
     emit loadingChanged(loading);
+}
+
+void ViGateController::setLoadingGates(bool loading)
+{
+    if (m_loadingGates == loading) return;
+    m_loadingGates = loading;
+    emit loadingGatesChanged(loading);
 }
 
 void ViGateController::setPageSize(int size)
@@ -37,6 +47,27 @@ void ViGateController::setPageSize(int size)
 
 void ViGateController::hookUpService()
 {
+    // Handle active gates response
+    connect(m_service, &ViGateService::activeGatesReady, this, [this](const QJsonArray& gates) {
+        qDebug() << "ViGateController: Received" << gates.size() << "active gates";
+
+        m_activeGates.clear();
+        for (const auto& gateValue : gates) {
+            if (gateValue.isObject()) {
+                QJsonObject gateObj = gateValue.toObject();
+                QVariantMap gateMap;
+                gateMap["id"] = gateObj["id"].toInt();
+                gateMap["name"] = gateObj["name"].toString();
+                m_activeGates.append(gateMap);
+
+                qDebug() << "  - Gate" << gateMap["id"].toInt() << ":" << gateMap["name"].toString();
+            }
+        }
+
+        emit activeGatesChanged();
+        setLoadingGates(false);
+    });
+
     connect(m_service, &ViGateService::dataReady, this, [this](const QJsonObject& data) {
         if (data.contains("summary")) {
             processSummary(data["summary"].toObject());
@@ -80,6 +111,7 @@ void ViGateController::hookUpService()
             emit hasErrorChanged(false);
         }
         setLoading(false);
+        setLoadingGates(false);
     });
 
     connect(m_service, &ViGateService::requestFailed, this, [this](const QString& e) {
@@ -95,7 +127,15 @@ void ViGateController::hookUpService()
             emit hasDataChanged(false);
         }
         setLoading(false);
+        setLoadingGates(false);
     });
+}
+
+void ViGateController::loadActiveGates()
+{
+    qDebug() << "ViGateController::loadActiveGates - Fetching active gates";
+    setLoadingGates(true);
+    m_service->getActiveGates();
 }
 
 void ViGateController::processSummary(const QJsonObject& summary)
