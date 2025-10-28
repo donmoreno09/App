@@ -27,7 +27,7 @@ GroupBox {
         // Data ListView
         ScrollView {
             Layout.fillWidth: true
-            Layout.preferredHeight: 250
+            Layout.preferredHeight: 300
             clip: true
 
             ListView {
