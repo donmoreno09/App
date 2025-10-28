@@ -372,5 +372,7 @@
         <file>components/ui/EllipsePoiPopup.qml</file>
         <file>components/ui/PolygonPoiPopup.qml</file>
         <file>App/assets/icons/icona_centra_clean.svg</file>
+        <file>App/Components/floating-window/windowRoutes.js</file>
+        <file>App/Features/Poi/CavalliereGommatoVideoContainer.qml</file>
     </qresource>
 </RCC>

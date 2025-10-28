@@ -1,5 +1,7 @@
 set(qml_files
     PoiPanel.qml
+    MOCPoiPanel.qml
+    CavalliereGommatoVideoContainer.qml
 )
 
 set(cpp_files

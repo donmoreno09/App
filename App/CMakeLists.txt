@@ -16,6 +16,7 @@ set(qml_files
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
     map-objects/PoiPoint.qml
+    map-objects/MOCPoiPoint.qml
 
     # Layers
     layers/BaseMapLayer.qml
@@ -24,6 +25,7 @@ set(qml_files
     layers/TirTrackMapLayer.qml
     layers/LayersPanel.qml
     layers/PoiMapLayer.qml
+    layers/MOCPoIStaticLayer.qml
 )
 
 set(cpp_sources

@@ -7,6 +7,9 @@ import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.TrackPanel 1.0
 
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
+
+
 MapQuickItem {
     id: tir
 
@@ -60,7 +63,7 @@ MapQuickItem {
             id: tapHandler
             acceptedButtons: Qt.LeftButton
             onTapped: (event) => {
-                SidePanelController.openOrRefresh("tirpanel")
+                SidePanelController.openOrRefresh(Routes.TirPanel)
                 SelectedTrackState.select(tir.tirModel.getEditableTir(tir.index))
             }
         }
