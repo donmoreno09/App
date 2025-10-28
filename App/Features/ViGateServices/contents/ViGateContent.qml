@@ -261,22 +261,6 @@ ColumnLayout {
                     color: Theme.colors.textMuted
                 }
 
-                Text {
-                    Layout.fillWidth: true
-                    text: (TranslationManager.revision, qsTr("Showing %1-%2")
-                        .arg((controller.currentPage - 1) * controller.pageSize + 1)
-                        .arg(Math.min(controller.currentPage * controller.pageSize, controller.totalItems)))
-                    font.family: Theme.typography.familySans
-                    color: Theme.colors.textMuted
-                    horizontalAlignment: Text.AlignHCenter
-                    elide: Text.ElideRight
-                }
-
-                UI.VerticalDivider {
-                    Layout.fillHeight: true
-                    color: Theme.colors.textMuted
-                }
-
                 RowLayout {
                     Layout.fillWidth: true
 
