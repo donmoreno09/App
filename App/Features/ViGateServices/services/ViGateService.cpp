@@ -140,80 +140,66 @@ void ViGateService::performGet(const QUrl& url)
             return;
         }
 
-        QJsonObject response;
         QJsonObject rootObj = doc.object();
 
-        // Check if response has pagination wrapper
-        if (rootObj.contains("data") && rootObj.contains("pagination")) {
-            qDebug() << "ViGateService: Detected paginated response";
-
-            // Backend sent paginated response
-            QJsonArray dataArray = rootObj["data"].toArray();
-            qDebug() << "ViGateService: Processing" << dataArray.size() << "transit items";
-
-            response = transformTransitData(dataArray);
-
-            // Extract pagination info
-            QJsonObject pagination = rootObj["pagination"].toObject();
-            int currentPage = pagination["page"].toInt();
-            int totalPages = pagination["totalPages"].toInt();
-            int totalItems = pagination["totalItems"].toInt();
-
-            qDebug() << "ViGateService: Pagination - page" << currentPage
-                     << "of" << totalPages << "(" << totalItems << "total items)";
-
-            emit paginationInfo(currentPage, totalPages, totalItems);
-
-        } else if (doc.isArray()) {
-            qDebug() << "ViGateService: Detected array response (no pagination wrapper)";
-
-            // Backend sent array without pagination
-            QJsonArray dataArray = doc.array();
-            qDebug() << "ViGateService: Processing" << dataArray.size() << "transit items";
-
-            response = transformTransitData(dataArray);
-
-        } else if (doc.isObject()) {
-            qDebug() << "ViGateService: Detected pre-formatted object response";
-
-            // Backend sent pre-formatted response
-            response = doc.object();
-
-        } else {
-            qWarning() << "ViGateService: Invalid response format";
+        // Expected format: { "data": [...], "pagination": {...}, "summary": {...} }
+        if (!rootObj.contains("data") || !rootObj.contains("pagination") || !rootObj.contains("summary")) {
+            qWarning() << "ViGateService: Invalid response format - missing data, pagination, or summary";
             emit requestFailed(QStringLiteral("Invalid response format"));
             return;
         }
 
-        qDebug() << "ViGateService: Successfully processed response";
+        qDebug() << "ViGateService: Detected backend response with summary";
 
-        // Log what we're emitting
-        if (response.contains("summary")) {
-            QJsonObject summary = response["summary"].toObject();
-            qDebug() << "  - Summary: total_entries =" << summary["total_entries"].toInt();
-        }
-        if (response.contains("transits")) {
-            int transitCount = response["transits"].toArray().size();
-            qDebug() << "  - Transits:" << transitCount << "items";
-        }
+        QJsonArray dataArray = rootObj["data"].toArray();
+        qDebug() << "ViGateService: Processing" << dataArray.size() << "transit items";
 
+        // Transform transit data
+        QJsonArray transformedTransits = transformTransitData(dataArray);
+
+        // Use the provided summary from backend
+        QJsonObject providedSummary = rootObj["summary"].toObject();
+        QJsonObject convertedSummary;
+
+        convertedSummary["total_entries"] = providedSummary.value("totalEntries").toInt();
+        convertedSummary["total_exits"] = providedSummary.value("totalExits").toInt();
+        convertedSummary["total_vehicle_entries"] = providedSummary.value("totalVehiclesEntries").toInt();
+        convertedSummary["total_vehicle_exits"] = providedSummary.value("totalVehiclesExits").toInt();
+        convertedSummary["total_pedestrian_entries"] = providedSummary.value("totalPedestriansEntries").toInt();
+        convertedSummary["total_pedestrian_exits"] = providedSummary.value("totalPedestriansExits").toInt();
+
+        qDebug() << "ViGateService: Using backend summary:";
+        qDebug() << "  - Entries:" << convertedSummary["total_entries"].toInt()
+                 << "(Vehicles:" << convertedSummary["total_vehicle_entries"].toInt()
+                 << ", Pedestrians:" << convertedSummary["total_pedestrian_entries"].toInt() << ")";
+        qDebug() << "  - Exits:" << convertedSummary["total_exits"].toInt()
+                 << "(Vehicles:" << convertedSummary["total_vehicle_exits"].toInt()
+                 << ", Pedestrians:" << convertedSummary["total_pedestrian_exits"].toInt() << ")";
+
+        // Build response
+        QJsonObject response;
+        response["summary"] = convertedSummary;
+        response["transits"] = transformedTransits;
+
+        // Extract pagination info
+        QJsonObject pagination = rootObj["pagination"].toObject();
+        int currentPage = pagination["page"].toInt();
+        int totalPages = pagination["totalPages"].toInt();
+        int totalItems = pagination["totalItems"].toInt();
+
+        qDebug() << "ViGateService: Pagination - page" << currentPage
+                 << "of" << totalPages << "(" << totalItems << "total items)";
+
+        emit paginationInfo(currentPage, totalPages, totalItems);
         emit dataReady(response);
     });
 }
 
-QJsonObject ViGateService::transformTransitData(const QJsonArray& transits)
+QJsonArray ViGateService::transformTransitData(const QJsonArray& transits)
 {
     qDebug() << "ViGateService::transformTransitData - Processing" << transits.size() << "transits";
 
-    QJsonObject result;
     QJsonArray transformedTransits;
-
-    int totalEntries = 0;
-    int totalExits = 0;
-    int totalVehicleEntries = 0;
-    int totalVehicleExits = 0;
-    int totalPedestrianEntries = 0;
-    int totalPedestrianExits = 0;
 
     for (int i = 0; i < transits.size(); ++i) {
         const auto& value = transits[i];
@@ -248,15 +234,7 @@ QJsonObject ViGateService::transformTransitData(const QJsonArray& transits)
         transformed["laneName"] = transit["lane_name"].toString();
         transformed["transitDirection"] = transit["transitdirection_id"].toString();
 
-        QString direction = transit["transitdirection_id"].toString();
         QString laneType = transit["lanetype_id"].toString();
-
-        // Count totals
-        if (direction == "IN") {
-            totalEntries++;
-        } else if (direction == "OUT") {
-            totalExits++;
-        }
 
         // Transit Info (only for VEHICLE)
         if (transit.contains("transit_info") && transit["transit_info"].isObject()) {
@@ -274,37 +252,35 @@ QJsonObject ViGateService::transformTransitData(const QJsonArray& transits)
             transformed["transitInfo"] = transformedInfo;
         }
 
-        // Permission (first element only)
-        if (transit.contains("transit_permissions") && transit["transit_permissions"].isArray()) {
+        // Permission (first element only) - ALL FIELDS - ONLY FOR VEHICLE
+        if (laneType == "VEHICLE" &&
+            transit.contains("transit_permissions") &&
+            transit["transit_permissions"].isArray()) {
             QJsonArray permissionsArray = transit["transit_permissions"].toArray();
             if (!permissionsArray.isEmpty()) {
                 QJsonObject firstPerm = permissionsArray[0].toObject();
                 QJsonObject transformedPerm;
 
+                // Map all permission fields
                 transformedPerm["uidCode"] = firstPerm["uid_code"].toString();
                 transformedPerm["auth"] = firstPerm["auth"].toString();
+                transformedPerm["authCode"] = firstPerm["auth_code"].toString();
                 transformedPerm["authMessage"] = firstPerm["auth_message"].toString();
+                transformedPerm["permissionId"] = firstPerm["permission_id"].toInt();
                 transformedPerm["permissionType"] = firstPerm["permissiontype_name"].toString();
+                transformedPerm["ownerType"] = firstPerm["ownertype_id"].toString();
+                transformedPerm["vehicleId"] = firstPerm["vehicle_id"].toInt();
                 transformedPerm["vehiclePlate"] = firstPerm["vehicle_plate"].toString();
+                transformedPerm["peopleId"] = firstPerm["people_id"].toInt();
                 transformedPerm["peopleFullname"] = firstPerm["people_fullname"].toString();
+                transformedPerm["peopleBirthdayDate"] = firstPerm["people_birthday_date"].toString();
+                transformedPerm["peopleBirthdayPlace"] = firstPerm["people_birthday_place"].toString();
+                transformedPerm["companyId"] = firstPerm["company_id"].toInt();
                 transformedPerm["companyFullname"] = firstPerm["company_fullname"].toString();
+                transformedPerm["companyCity"] = firstPerm["company_city"].toString();
+                transformedPerm["companyType"] = firstPerm["companytype_name"].toString();
 
                 transformed["permission"] = transformedPerm;
-            }
-        }
-
-        // Count by type
-        if (laneType == "VEHICLE") {
-            if (direction == "IN") {
-                totalVehicleEntries++;
-            } else if (direction == "OUT") {
-                totalVehicleExits++;
-            }
-        } else if (laneType == "WALK") {
-            if (direction == "IN") {
-                totalPedestrianEntries++;
-            } else if (direction == "OUT") {
-                totalPedestrianExits++;
             }
         }
 
@@ -312,22 +288,8 @@ QJsonObject ViGateService::transformTransitData(const QJsonArray& transits)
     }
 
     qDebug() << "ViGateService::transformTransitData - Transformed" << transformedTransits.size() << "transits";
-    qDebug() << "  - Vehicle entries:" << totalVehicleEntries << ", exits:" << totalVehicleExits;
-    qDebug() << "  - Pedestrian entries:" << totalPedestrianEntries << ", exits:" << totalPedestrianExits;
 
-    // Build summary
-    QJsonObject summary;
-    summary["total_entries"] = totalEntries;
-    summary["total_exits"] = totalExits;
-    summary["total_vehicle_entries"] = totalVehicleEntries;
-    summary["total_vehicle_exits"] = totalVehicleExits;
-    summary["total_pedestrian_entries"] = totalPedestrianEntries;
-    summary["total_pedestrian_exits"] = totalPedestrianExits;
-
-    result["summary"] = summary;
-    result["transits"] = transformedTransits;
-
-    return result;
+    return transformedTransits;
 }
 
 void ViGateService::getGateData(int gateId,

@@ -1,7 +1,6 @@
 pragma Singleton
 import QtQuick 6.8
 
-
 QtObject {
     id: root
 
@@ -61,6 +60,7 @@ QtObject {
             width: 100,
             role: "transitDirection"
         },
+        // Transit Info columns
         {
             key: "color",
             header: qsTr("Color"),
@@ -110,6 +110,14 @@ QtObject {
             role: "kemler",
             conditional: "hasTransitInfo"
         },
+        // Permission columns - ALL FIELDS
+        {
+            key: "uidCode",
+            header: qsTr("UID Code"),
+            width: 150,
+            role: "uidCode",
+            conditional: "hasPermission"
+        },
         {
             key: "auth",
             header: qsTr("Auth"),
@@ -118,10 +126,24 @@ QtObject {
             conditional: "hasPermission"
         },
         {
+            key: "authCode",
+            header: qsTr("Auth Code"),
+            width: 100,
+            role: "authCode",
+            conditional: "hasPermission"
+        },
+        {
             key: "authMessage",
             header: qsTr("Auth Message"),
-            width: 150,
+            width: 180,
             role: "authMessage",
+            conditional: "hasPermission"
+        },
+        {
+            key: "permissionId",
+            header: qsTr("Permission ID"),
+            width: 100,
+            role: "permissionId",
             conditional: "hasPermission"
         },
         {
@@ -132,10 +154,31 @@ QtObject {
             conditional: "hasPermission"
         },
         {
+            key: "ownerType",
+            header: qsTr("Owner Type"),
+            width: 100,
+            role: "ownerType",
+            conditional: "hasPermission"
+        },
+        {
+            key: "vehicleId",
+            header: qsTr("Vehicle ID"),
+            width: 100,
+            role: "vehicleId",
+            conditional: "hasPermission"
+        },
+        {
             key: "vehiclePlate",
             header: qsTr("Vehicle Plate"),
             width: 120,
             role: "vehiclePlate",
+            conditional: "hasPermission"
+        },
+        {
+            key: "peopleId",
+            header: qsTr("People ID"),
+            width: 100,
+            role: "peopleId",
             conditional: "hasPermission"
         },
         {
@@ -146,10 +189,45 @@ QtObject {
             conditional: "hasPermission"
         },
         {
+            key: "peopleBirthdayDate",
+            header: qsTr("Birthday Date"),
+            width: 120,
+            role: "peopleBirthdayDate",
+            conditional: "hasPermission"
+        },
+        {
+            key: "peopleBirthdayPlace",
+            header: qsTr("Birthday Place"),
+            width: 150,
+            role: "peopleBirthdayPlace",
+            conditional: "hasPermission"
+        },
+        {
+            key: "companyId",
+            header: qsTr("Company ID"),
+            width: 100,
+            role: "companyId",
+            conditional: "hasPermission"
+        },
+        {
             key: "company",
             header: qsTr("Company"),
             width: 200,
             role: "companyFullname",
+            conditional: "hasPermission"
+        },
+        {
+            key: "companyCity",
+            header: qsTr("Company City"),
+            width: 150,
+            role: "companyCity",
+            conditional: "hasPermission"
+        },
+        {
+            key: "companyType",
+            header: qsTr("Company Type"),
+            width: 150,
+            role: "companyType",
             conditional: "hasPermission"
         }
     ]

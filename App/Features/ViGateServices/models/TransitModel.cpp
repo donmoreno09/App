@@ -58,21 +58,41 @@ QVariant TransitModel::data(const QModelIndex& index, int role) const
     case HasTransitInfoRole:
         return entry.hasTransitInfo;
 
-    // Permission
+    // Permission - Complete fields
     case UidCodeRole:
         return entry.permission.uidCode;
     case AuthRole:
         return entry.permission.auth;
+    case AuthCodeRole:
+        return entry.permission.authCode;
     case AuthMessageRole:
         return entry.permission.authMessage;
+    case PermissionIdRole:
+        return entry.permission.permissionId;
     case PermissionTypeRole:
         return entry.permission.permissionType;
+    case OwnerTypeRole:
+        return entry.permission.ownerType;
+    case VehicleIdRole:
+        return entry.permission.vehicleId;
     case VehiclePlateRole:
         return entry.permission.vehiclePlate;
+    case PeopleIdRole:
+        return entry.permission.peopleId;
     case PeopleFullnameRole:
         return entry.permission.peopleFullname;
+    case PeopleBirthdayDateRole:
+        return entry.permission.peopleBirthdayDate;
+    case PeopleBirthdayPlaceRole:
+        return entry.permission.peopleBirthdayPlace;
+    case CompanyIdRole:
+        return entry.permission.companyId;
     case CompanyFullnameRole:
         return entry.permission.companyFullname;
+    case CompanyCityRole:
+        return entry.permission.companyCity;
+    case CompanyTypeRole:
+        return entry.permission.companyType;
     case HasPermissionRole:
         return entry.hasPermission;
 
@@ -104,14 +124,24 @@ QHash<int, QByteArray> TransitModel::roleNames() const
         {KemlerRole, "kemler"},
         {HasTransitInfoRole, "hasTransitInfo"},
 
-        // Permission
+        // Permission - Complete roles
         {UidCodeRole, "uidCode"},
         {AuthRole, "auth"},
+        {AuthCodeRole, "authCode"},
         {AuthMessageRole, "authMessage"},
+        {PermissionIdRole, "permissionId"},
         {PermissionTypeRole, "permissionType"},
+        {OwnerTypeRole, "ownerType"},
+        {VehicleIdRole, "vehicleId"},
         {VehiclePlateRole, "vehiclePlate"},
+        {PeopleIdRole, "peopleId"},
         {PeopleFullnameRole, "peopleFullname"},
+        {PeopleBirthdayDateRole, "peopleBirthdayDate"},
+        {PeopleBirthdayPlaceRole, "peopleBirthdayPlace"},
+        {CompanyIdRole, "companyId"},
         {CompanyFullnameRole, "companyFullname"},
+        {CompanyCityRole, "companyCity"},
+        {CompanyTypeRole, "companyType"},
         {HasPermissionRole, "hasPermission"}
     };
 }
@@ -215,16 +245,28 @@ void TransitModel::setData(const QJsonArray& transitsArray)
             entry.hasTransitInfo = false;
         }
 
-        // Permission (first element only)
+        // Permission (first element only) - Complete fields
         if (obj.contains("permission") && obj.value("permission").isObject()) {
             QJsonObject permObj = obj.value("permission").toObject();
+
             entry.permission.uidCode = permObj.value("uidCode").toString();
             entry.permission.auth = permObj.value("auth").toString();
+            entry.permission.authCode = permObj.value("authCode").toString();
             entry.permission.authMessage = permObj.value("authMessage").toString();
+            entry.permission.permissionId = permObj.value("permissionId").toInt();
             entry.permission.permissionType = permObj.value("permissionType").toString();
+            entry.permission.ownerType = permObj.value("ownerType").toString();
+            entry.permission.vehicleId = permObj.value("vehicleId").toInt();
             entry.permission.vehiclePlate = permObj.value("vehiclePlate").toString();
+            entry.permission.peopleId = permObj.value("peopleId").toInt();
             entry.permission.peopleFullname = permObj.value("peopleFullname").toString();
+            entry.permission.peopleBirthdayDate = permObj.value("peopleBirthdayDate").toString();
+            entry.permission.peopleBirthdayPlace = permObj.value("peopleBirthdayPlace").toString();
+            entry.permission.companyId = permObj.value("companyId").toInt();
             entry.permission.companyFullname = permObj.value("companyFullname").toString();
+            entry.permission.companyCity = permObj.value("companyCity").toString();
+            entry.permission.companyType = permObj.value("companyType").toString();
+
             entry.hasPermission = true;
         } else {
             entry.hasPermission = false;

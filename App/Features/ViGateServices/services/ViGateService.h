@@ -37,7 +37,9 @@ private:
     int m_port = 7000;
 
     void performGet(const QUrl& url);
-    QJsonObject transformTransitData(const QJsonArray& transits);
+
+    // Changed return type from QJsonObject to QJsonArray - no longer calculates summary
+    QJsonArray transformTransitData(const QJsonArray& transits);
 
     static QUrl makeUrl(const QString& host, int port,
                         const QString& path,

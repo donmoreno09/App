@@ -17,11 +17,21 @@ struct TransitInfo {
 struct TransitPermission {
     QString uidCode;
     QString auth;
+    QString authCode;
     QString authMessage;
+    int permissionId;
     QString permissionType;
+    QString ownerType;
+    int vehicleId;
     QString vehiclePlate;
+    int peopleId;
     QString peopleFullname;
+    QString peopleBirthdayDate;
+    QString peopleBirthdayPlace;
+    int companyId;
     QString companyFullname;
+    QString companyCity;
+    QString companyType;
 };
 
 struct TransitEntry {
@@ -76,14 +86,24 @@ public:
         KemlerRole,
         HasTransitInfoRole,
 
-        // Permission (first element)
+        // Permission (first element) - Complete list
         UidCodeRole,
         AuthRole,
+        AuthCodeRole,
         AuthMessageRole,
+        PermissionIdRole,
         PermissionTypeRole,
+        OwnerTypeRole,
+        VehicleIdRole,
         VehiclePlateRole,
+        PeopleIdRole,
         PeopleFullnameRole,
+        PeopleBirthdayDateRole,
+        PeopleBirthdayPlaceRole,
+        CompanyIdRole,
         CompanyFullnameRole,
+        CompanyCityRole,
+        CompanyTypeRole,
         HasPermissionRole
     };
 

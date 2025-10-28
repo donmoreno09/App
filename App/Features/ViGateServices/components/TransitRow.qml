@@ -8,7 +8,7 @@ Item {
     required property var columns
     required property int index
 
-    // Required properties from model
+    // Required properties from model - Basic
     required property string gateName
     required property string transitId
     required property string transitStartDate
@@ -18,6 +18,8 @@ Item {
     required property string laneStatusId
     required property string laneName
     required property string transitDirection
+
+    // Transit Info properties
     required property string colors
     required property string macroClass
     required property string microClass
@@ -26,12 +28,25 @@ Item {
     required property string country
     required property string kemler
     required property bool hasTransitInfo
+
+    // Permission properties - ALL FIELDS
+    required property string uidCode
     required property string auth
+    required property string authCode
     required property string authMessage
+    required property int permissionId
     required property string permissionType
+    required property string ownerType
+    required property int vehicleId
     required property string vehiclePlate
+    required property int peopleId
     required property string peopleFullname
+    required property string peopleBirthdayDate
+    required property string peopleBirthdayPlace
+    required property int companyId
     required property string companyFullname
+    required property string companyCity
+    required property string companyType
     required property bool hasPermission
 
     width: contentRow.implicitWidth
@@ -80,6 +95,16 @@ Item {
 
         // Get the value from the property
         const value = root[column.role]
+
+        // Handle numeric fields (IDs) - show them even if 0
+        if (column.role === "permissionId" ||
+            column.role === "vehicleId" ||
+            column.role === "peopleId" ||
+            column.role === "companyId") {
+            return value !== undefined ? value.toString() : "-"
+        }
+
+        // Handle string fields
         return value || "-"
     }
 
@@ -93,7 +118,7 @@ Item {
             case "direction":
                 return value === "IN" ? Theme.colors.success : Theme.colors.warning
             case "auth":
-                return value === "ACCEPT" ? Theme.colors.success : Theme.colors.error
+                return value === "ALLOW" ? Theme.colors.success : Theme.colors.error
             default:
                 return Theme.colors.text
         }
@@ -104,6 +129,7 @@ Item {
         switch(column.key) {
             case "status":
             case "direction":
+            case "auth":
                 return Theme.typography.weightMedium
             default:
                 return Theme.typography.weightLight
