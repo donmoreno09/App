@@ -141,9 +141,7 @@ UI.GlobalBackgroundConsumer {
                 active: PanelRouter.currentPath === "accordion-test" && SidePanelController.isOpen
 
                 // Add badge with total notification count
-                badgeCount: NotificationsController.urgent.count +
-                            NotificationsController.warning.count +
-                            NotificationsController.info.count
+                badgeCount: 7
 
                 // Optional: customize badge color (defaults to error500/red)
                 // badgeColor: Theme.colors.accent500

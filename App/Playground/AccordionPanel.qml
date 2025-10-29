@@ -53,7 +53,7 @@ PanelTemplate {
                         }
 
                         content: ColumnLayout {
-                            anchors.fill: parent
+                            width: parent.width
                             spacing: Theme.spacing.s2
 
                             Text {
@@ -124,7 +124,7 @@ PanelTemplate {
                         }
 
                         content: ColumnLayout {
-                            anchors.fill: parent
+                            width: parent.width
                             spacing: Theme.spacing.s3
 
                             Text {
@@ -173,7 +173,7 @@ PanelTemplate {
                         }
 
                         content: ColumnLayout {
-                            anchors.fill: parent
+                            width: parent.width
                             spacing: Theme.spacing.s3
 
                             Text {
@@ -222,7 +222,7 @@ PanelTemplate {
                         }
 
                         content: ColumnLayout {
-                            anchors.fill: parent
+                            width: parent.width
                             spacing: Theme.spacing.s3
 
                             Text {
@@ -235,6 +235,8 @@ PanelTemplate {
                         }
                     }
                 }
+
+                // In AccordionPanel.qml, update the notification examples section:
 
                 // 3. Notification-like Examples (from screenshots)
                 ColumnLayout {
@@ -257,15 +259,34 @@ PanelTemplate {
                             anchors.fill: parent
                             spacing: Theme.spacing.s3
 
-                            Text {
-                                text: "Truck: EA624F714"
-                                color: Theme.colors.text
-                                font.family: Theme.typography.bodySans25Family
-                                font.pointSize: Theme.typography.bodySans25Size
-                                font.weight: Theme.typography.bodySans25Weight
+                            // Left side: Title + Preview stacked
+                            ColumnLayout {
                                 Layout.fillWidth: true
+                                spacing: Theme.spacing.s1
+
+                                // Bold title
+                                Text {
+                                    text: "Truck: EA624F714"
+                                    color: Theme.colors.text
+                                    font.family: Theme.typography.bodySans25StrongFamily
+                                    font.pointSize: Theme.typography.bodySans25StrongSize
+                                    font.weight: Theme.typography.bodySans25StrongWeight
+                                    Layout.fillWidth: true
+                                }
+
+                                // Preview text (lighter, smaller, elided)
+                                Text {
+                                    text: "Segnalazione Avvenuta alle 10:00 del 27/10/2025"
+                                    color: Theme.colors.textMuted
+                                    font.family: Theme.typography.bodySans15Family
+                                    font.pointSize: Theme.typography.bodySans15Size
+                                    font.weight: Theme.typography.bodySans15Weight
+                                    elide: Text.ElideRight
+                                    Layout.fillWidth: true
+                                }
                             }
 
+                            // Right side: Badge
                             Rectangle {
                                 Layout.preferredWidth: Theme.spacing.s16
                                 Layout.preferredHeight: Theme.spacing.s6
@@ -284,7 +305,7 @@ PanelTemplate {
                         }
 
                         content: ColumnLayout {
-                            anchors.fill: parent
+                            width: parent.width
                             spacing: Theme.spacing.s3
 
                             Text {
@@ -328,12 +349,9 @@ PanelTemplate {
                                 Layout.preferredHeight: Theme.spacing.s8
                             }
                         }
-
-                        onToggled: function(expanded) {
-                            console.log("Notification accordion toggled:", expanded)
-                        }
                     }
 
+                    // SUCCESS variant
                     UI.Accordion {
                         Layout.fillWidth: true
                         variant: UI.AccordionStyles.Success
@@ -342,13 +360,28 @@ PanelTemplate {
                             anchors.fill: parent
                             spacing: Theme.spacing.s3
 
-                            Text {
-                                text: "Truck: BA43F716"
-                                color: Theme.colors.text
-                                font.family: Theme.typography.bodySans25Family
-                                font.pointSize: Theme.typography.bodySans25Size
-                                font.weight: Theme.typography.bodySans25Weight
+                            ColumnLayout {
                                 Layout.fillWidth: true
+                                spacing: Theme.spacing.s1
+
+                                Text {
+                                    text: "Truck: BA43F716"
+                                    color: Theme.colors.text
+                                    font.family: Theme.typography.bodySans25StrongFamily
+                                    font.pointSize: Theme.typography.bodySans25StrongSize
+                                    font.weight: Theme.typography.bodySans25StrongWeight
+                                    Layout.fillWidth: true
+                                }
+
+                                Text {
+                                    text: "Segnalazione Avvenuta alle 10:00 del 27/10/2025"
+                                    color: Theme.colors.textMuted
+                                    font.family: Theme.typography.bodySans15Family
+                                    font.pointSize: Theme.typography.bodySans15Size
+                                    font.weight: Theme.typography.bodySans15Weight
+                                    elide: Text.ElideRight
+                                    Layout.fillWidth: true
+                                }
                             }
 
                             Rectangle {
@@ -369,7 +402,7 @@ PanelTemplate {
                         }
 
                         content: ColumnLayout {
-                            anchors.fill: parent
+                            width: parent.width
                             spacing: Theme.spacing.s3
 
                             Text {
@@ -389,6 +422,7 @@ PanelTemplate {
                         }
                     }
 
+                    // WARNING variant
                     UI.Accordion {
                         Layout.fillWidth: true
                         variant: UI.AccordionStyles.Warning
@@ -397,13 +431,28 @@ PanelTemplate {
                             anchors.fill: parent
                             spacing: Theme.spacing.s3
 
-                            Text {
-                                text: "Ship: VF755987"
-                                color: Theme.colors.text
-                                font.family: Theme.typography.bodySans25Family
-                                font.pointSize: Theme.typography.bodySans25Size
-                                font.weight: Theme.typography.bodySans25Weight
+                            ColumnLayout {
                                 Layout.fillWidth: true
+                                spacing: Theme.spacing.s1
+
+                                Text {
+                                    text: "Ship: VF755987"
+                                    color: Theme.colors.text
+                                    font.family: Theme.typography.bodySans25StrongFamily
+                                    font.pointSize: Theme.typography.bodySans25StrongSize
+                                    font.weight: Theme.typography.bodySans25StrongWeight
+                                    Layout.fillWidth: true
+                                }
+
+                                Text {
+                                    text: "Segnalazione Avvenuta alle 10:00 del 27/10/2025"
+                                    color: Theme.colors.textMuted
+                                    font.family: Theme.typography.bodySans15Family
+                                    font.pointSize: Theme.typography.bodySans15Size
+                                    font.weight: Theme.typography.bodySans15Weight
+                                    elide: Text.ElideRight
+                                    Layout.fillWidth: true
+                                }
                             }
 
                             Rectangle {
@@ -424,7 +473,7 @@ PanelTemplate {
                         }
 
                         content: ColumnLayout {
-                            anchors.fill: parent
+                            width: parent.width
                             spacing: Theme.spacing.s3
 
                             Text {

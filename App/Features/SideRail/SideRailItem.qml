@@ -35,24 +35,24 @@ UI.Button {
         visible: root.badgeCount > 0
         z: Theme.elevation.raised
 
-        width: root.badgeCount > 99 ? Theme.spacing.s7 :
-               root.badgeCount > 9 ? Theme.spacing.s6 : Theme.spacing.s5
-        height: Theme.spacing.s5
+        width: root.badgeCount > 99 ? Theme.spacing.s6 :
+               root.badgeCount > 9 ? Theme.spacing.s5 : Theme.spacing.s4
+        height: Theme.spacing.s4
 
         radius: Theme.radius.circle(width, height)
         color: root.badgeColor
 
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.rightMargin: Theme.spacing.s4
-        anchors.topMargin: Theme.spacing.s4
+        anchors.rightMargin: Theme.spacing.s5
+        anchors.topMargin: Theme.spacing.s3
 
         Text {
             anchors.centerIn: parent
             text: root.badgeCount > 99 ? "99+" : root.badgeCount
             color: root.badgeTextColor
             font.family: Theme.typography.bodySans15Family
-            font.pointSize: Theme.typography.bodySans15Size
+            font.pointSize: Theme.typography.fontSize100
             font.weight: Theme.typography.bodySans15StrongWeight
         }
     }
