@@ -24,6 +24,7 @@ public:
         NameRole,
         OperationCodeRole,
         SourceNameRole,
+        UidForHistoryRole,
     };
 
     Q_ENUM(Roles)

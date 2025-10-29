@@ -9,9 +9,27 @@
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
 #include <connections/mqtt/parser/TirParser.h>
+#include <QtWebEngineQuick/qtwebenginequickglobal.h>
 
 int main(int argc, char *argv[])
 {
+
+    // CRITICAL: Configure WebEngine BEFORE creating QGuiApplication
+    // This tells Chromium to handle GPU gracefully
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+
+    // Fix GPU issues by running GPU in main process instead of separate process
+    // This prevents the "Failed to create command buffer" error
+    qputenv("QTWEBENGINE_CHROMIUM_FLAGS",
+            "--disable-gpu-process-crash-limit "
+            "--in-process-gpu "
+            "--disable-dev-shm-usage "
+            "--no-sandbox");
+
+    // Initialize WebEngine BEFORE QGuiApplication
+    // This ensures proper setup of Chromium backend
+    QtWebEngineQuick::initialize();
+
     QGuiApplication app(argc, argv);
 
     QCoreApplication::setOrganizationName("IRIDESS");

@@ -28,6 +28,7 @@ QVariant TirModel::data(const QModelIndex &index, int role) const
     case StateRole: return tir.state;
     case SourceNameRole: return tir.sourceName;
     case NameRole: return tir.name;
+    case UidForHistoryRole: return tir.uidForHistory;
     default: return {};
     }
 }
@@ -42,7 +43,8 @@ QHash<int, QByteArray> TirModel::roleNames() const
         { TimeRole, "time" },
         { VelRole, "vel" },
         { StateRole, "state" },
-        { SourceNameRole, "sourceName"}
+        { SourceNameRole, "sourceName" },
+        { UidForHistoryRole, "uidForHistory" },
     };
 }
 
@@ -131,6 +133,7 @@ QVector<int> TirModel::diffRoles(const Tir &a, const Tir &b) const
     if (a.state != b.state) roles << StateRole;
     if (a.sourceName != b.sourceName) roles << SourceNameRole;
     if (a.name != b.name) roles << NameRole;
+    if (a.uidForHistory != b.uidForHistory) roles << UidForHistoryRole;
 
     return roles;
 }

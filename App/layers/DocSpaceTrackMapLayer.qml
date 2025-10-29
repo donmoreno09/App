@@ -5,8 +5,9 @@ import QtPositioning 6.8
 import App 1.0
 import App.Features.Map 1.0
 
-MapItemGroup {
+BaseMapLayer {
     id: root
+    _mapLayer: trackMapLayer
 
     property alias trackMapLayer: trackMapLayer
 
@@ -29,16 +30,6 @@ MapItemGroup {
             TrackManager.registerLayer(MqttClientService.getTopicFromLayer(Layers.docSpaceTrackMapLayer()), trackMapLayer)
             MqttClientService.registerLayer(Layers.docSpaceTrackMapLayer(), trackMapLayer)
             trackMapLayer.map = MapController.map
-            trackMapLayer.initialize()
-        }
-    }
-
-    Connections {
-        target: MapController
-
-        function onMapLoaded() {
-            trackMapLayer.map = MapController.map
-            MapController.map.addMapItemGroup(root)
         }
     }
 }

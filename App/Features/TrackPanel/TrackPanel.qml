@@ -182,14 +182,42 @@ PanelTemplate {
 
                 UI.HorizontalSpacer {}
 
-
                 // Track History Functionality
                 RowLayout {
                     Layout.preferredWidth: 1
-                    Layout.rightMargin: Theme.spacing.s4    //TODO: Investigate to solve this ugly fix.
+                    Layout.rightMargin: Theme.spacing.s4    // TODO: Investigate to solve this ugly fix.
 
                     UI.Toggle {
                         id: toggle
+                        property string topic: track? track.sourceName : ""
+                        property string uid: track? track.uidForHistory : ""
+
+                        // Local cached state, initialized from the manager (functions are not reactive by themselves)
+                        property int  _state:  TrackManager.historyState(topic, uid)      // 0=Inactive, 1=Loading, 2=Active
+                        property bool _active: TrackManager.isHistoryActive(topic, uid)   // convenience: true if Active
+
+                        // Bind UI to local cached state
+                        checked: _active
+                        enabled: _state !== TrackManager.Loading   // disable while waiting for first payload
+
+                        // Prevent spurious requests on programmatic updates or while in Loading
+                        onCheckedChanged: {
+                            if (_state === TrackManager.Loading) return;        // ignore while awaiting backend data
+                            if (checked === _active) return;                    // ignore no-op changes
+                            TrackManager.setHistoryActive(topic, uid, checked); // ON→Loading, OFF→Inactive (+clear)
+                        }
+
+                        // Keep local state in sync with manager changes (makes the binding reactive)
+                        Connections {
+                            target: TrackManager
+                            function onHistoryStateChanged(tp, u, state) {
+                                if (tp === toggle.topic && u === toggle.uid) {
+                                    toggle._state  = state;                              // update cached state
+                                    toggle._active = (state === TrackManager.Active);    // update cached boolean
+                                    // 'checked' follows _active via binding; no re-entrant calls
+                                }
+                            }
+                        }
                     }
 
                     Text {

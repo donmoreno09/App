@@ -11,9 +11,6 @@ class BaseTrackMapLayer : public BaseMapLayer
 public:
     explicit BaseTrackMapLayer(QObject* parent = nullptr);
 
-    void loadData() override;
-    void handleLoadedObjects(const QList<IPersistable*>& objects) override;
-
     bool active() const;
     void setActive(bool newActive);
 

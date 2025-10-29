@@ -17,6 +17,9 @@ import QtLocation 6.8
 import QtPositioning 6.8
 import Qt.labs.animation 6.8
 
+import App.Themes 1.0
+import App.Features.MapTools 1.0
+
 Map {
     id: map
 
@@ -150,5 +153,30 @@ Map {
         grabPermissions: PointerHandler.TakeOverForbidden
 
         onActiveChanged: if (active) flickAnimation.stop()
+    }
+
+    InputHandler {
+        id: inputHandler
+        anchors.fill: parent
+        map: map
+        Component.onCompleted: ToolController.inputHandler = inputHandler
+    }
+
+    MapQuickItem {
+        visible: ToolController.activeTool === ToolRegistry.pointTool && ToolRegistry.pointTool.editable == null
+        onVisibleChanged: console.log("Preview is now", visible ? "active" : "hidden")
+        z: Theme.elevation.z100
+
+        coordinate: ToolRegistry.pointTool.coord
+        anchorPoint.x: sourceItem.width / 2
+        anchorPoint.y: sourceItem.height / 2
+        sourceItem: Rectangle {
+            width: 12
+            height: 12
+            color: "white"
+            radius: width / 2
+            border.color: "blue"
+            border.width: 2
+        }
     }
 }

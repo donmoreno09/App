@@ -98,15 +98,7 @@ Item {
                 Item { Layout.preferredWidth: Theme.spacing.s4 }
 
                 Text {
-                    text: {
-                        if (comboBox.currentIndex >= 0) {
-                            var item = comboBox.model[comboBox.currentIndex]
-                            if (item && typeof item === 'object' && 'id' in item && 'name' in item) {
-                                return item.id + " - " + item.name
-                            }
-                        }
-                        return comboBox.displayText
-                    }
+                    text: comboBox.displayText
                     color: comboBox.enabled ? Theme.colors.text : Theme.colors.textMuted
                     font: comboBox.font
                     elide: Text.ElideRight
