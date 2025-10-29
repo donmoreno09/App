@@ -1,45 +1,93 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import QtPositioning 6.8
 
 import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.MapModes 1.0
 
 ColumnLayout {
     spacing: Theme.spacing.s4
 
     component CoordInputs : RowLayout {
-        required property string latLabel
-        required property string lonLabel
+        required property int index
         spacing: Theme.spacing.s4
 
-        UI.InputCoordinate {
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            labelText: latLabel
+        Connections {
+            target: MapModeController.activeMode
+            ignoreUnknownSignals: true
+
+            function onCoordinatesChanged() {
+                latInput.updateText()
+                lonInput.updateText()
+            }
         }
 
         UI.InputCoordinate {
+            id: latInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: lonLabel
+            labelText: qsTr("Point Lat. #") + (index + 1)
+
+            onValueChanged: {
+                const oldCoord = MapModeRegistry.createPolygonMode.getCoordinate(index)
+                const coord = QtPositioning.coordinate(value, oldCoord.longitude)
+                if (MapModeController.isEditing) {}
+                else MapModeRegistry.createPolygonMode.setCoordinate(index, coord)
+            }
+
+            function updateText() {
+                let value
+                if (MapModeController.isEditing) value = 0
+                else value = MapModeRegistry.createPolygonMode.getCoordinate(index).latitude
+                setText(value)
+            }
+            Component.onCompleted: updateText()
+        }
+
+        UI.InputCoordinate {
+            id: lonInput
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            labelText: qsTr("Point Lon. #") + (index + 1)
             type: UI.InputCoordinate.Longitude
+
+            onValueChanged: {
+                const oldCoord = MapModeRegistry.createPolygonMode.getCoordinate(index)
+                const coord = QtPositioning.coordinate(oldCoord.latitude, value)
+                if (MapModeController.isEditing) {}
+                else MapModeRegistry.createPolygonMode.setCoordinate(index, coord)
+            }
+
+            function updateText() {
+                let value
+                if (MapModeController.isEditing) value = 0
+                else value = MapModeRegistry.createPolygonMode.getCoordinate(index).longitude
+                setText(value)
+            }
+            Component.onCompleted: updateText()
         }
     }
 
-    CoordInputs {
-        latLabel: qsTr("Point 1 Lat.")
-        lonLabel: qsTr("Point 1 Lon.")
+    Label {
+        Layout.fillWidth: true
+        visible: MapModeRegistry.createPolygonMode.coordinatesCount() === 0
+        text: qsTr("No coordinates inserted. Start by clicking anywhere on the map to insert the first coordinate.")
+        wrapMode: Text.Wrap
+        leftPadding: Theme.spacing.s4
+        rightPadding: Theme.spacing.s4
+        bottomPadding: Theme.spacing.s4
+        font {
+            family: Theme.typography.bodySans25Family
+            pointSize: Theme.typography.bodySans25Size
+            weight: Theme.typography.bodySans25Weight
+        }
     }
 
-    CoordInputs {
-        latLabel: qsTr("Point 2 Lat.")
-        lonLabel: qsTr("Point 2 Lon.")
-    }
-
-    CoordInputs {
-        latLabel: qsTr("Point 3 Lat.")
-        lonLabel: qsTr("Point 3 Lon.")
+    Repeater {
+        model: MapModeRegistry.createPolygonMode.coordinatesCount()
+        delegate: CoordInputs { }
     }
 }

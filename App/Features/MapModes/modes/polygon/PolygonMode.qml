@@ -4,4 +4,6 @@ import QtPositioning 6.8
 
 import ".."
 
-BaseMode { }
+BaseMode {
+    signal coordinatesChanged()
+}
