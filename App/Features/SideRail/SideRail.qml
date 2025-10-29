@@ -132,7 +132,23 @@ UI.GlobalBackgroundConsumer {
                 active: PanelRouter.currentPath === "viGate-services" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle(Routes.ViGateServices)
+            }
 
+            SideRailItem {
+                source: "qrc:/App/assets/icons/notification.svg"
+                text: (TranslationManager.revision, qsTr("Notifications"))
+                active: PanelRouter.currentPath === "accordion-test" && SidePanelController.isOpen
+
+                // Add badge with total notification count
+                badgeCount: NotificationsController.urgent.count +
+                            NotificationsController.warning.count +
+                            NotificationsController.info.count
+
+                // Optional: customize badge color (defaults to error500/red)
+                // badgeColor: Theme.colors.accent500
+                // badgeTextColor: Theme.colors.white
+
+                onClicked: SidePanelController.toggle(Routes.AccordionTest)
             }
 
             SideRailItem {
