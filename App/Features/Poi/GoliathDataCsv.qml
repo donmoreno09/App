@@ -78,7 +78,8 @@ UI.FloatingWindow {
                 var lines = xhr.responseText.split("\n").filter(l => l.trim())
                 if (!lines.length) return
 
-                csvHeaders = lines[0].split(";").map(s => s.trim())
+                csvHeaders = lines[0].split(";").map(s => s.trim().replace(/_/g,' ')
+                            .replace(/([a-z])([A-Z])/g, '$1 $2'))
                 csvData = []
 
                 colWidths = csvHeaders.map(h => h.length*8 + 40)
