@@ -6,7 +6,6 @@ set(qml_files
 
 set(qml_singletons
     ShipStowageController.qml
-    WebEngineProfileManager.qml
 )
 
 set_source_files_properties(

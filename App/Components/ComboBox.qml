@@ -148,7 +148,13 @@ Item {
                 height: Theme.spacing.s10
 
                 contentItem: Text {
-                    text: comboBox.textAt(index)
+                    text: {
+                        var item = comboBox.model[index]
+                        if (item && typeof item === 'object' && 'id' in item && 'name' in item) {
+                            return item.id + " - " + item.name
+                        }
+                        return comboBox.textAt(index)
+                    }
                     color: Theme.colors.text
                     font: comboBox.font
                     elide: Text.ElideRight

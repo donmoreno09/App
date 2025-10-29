@@ -13,6 +13,7 @@ add_subdirectory(MapToolbar)
 add_subdirectory(TrackPanel)
 add_subdirectory(TruckArrivals)
 add_subdirectory(TrailerPredictions)
+add_subdirectory(ViGateServices)
 add_subdirectory(ShipStowage)
 add_subdirectory(Poi)
 
@@ -36,6 +37,7 @@ target_link_libraries(${PROJECT_NAME}
         app_features_trackpanel
         app_features_truckarrivals
         app_features_trailerpredictions
+        app_features_vigateservices
         app_features_shipstowage
         app_features_poi
 )

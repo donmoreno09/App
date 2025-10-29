@@ -4,7 +4,6 @@ import QtQuick.Layouts 6.8
 import QtWebEngine 1.10
 
 import App.Themes 1.0
-import App.Features.ShipStowage 1.0
 
 Item {
     id: webViewItem
@@ -44,28 +43,13 @@ Item {
         anchors.fill: parent
         url: urlPath
 
-        profile: WebEngineProfileManager.sharedProfile
-
-        // Critical performance settings
         settings.javascriptEnabled: true
         settings.pluginsEnabled: true
         settings.localStorageEnabled: true
         settings.localContentCanAccessRemoteUrls: true
 
-        // ADD THESE PERFORMANCE SETTINGS:
-        settings.accelerated2dCanvasEnabled: true
-        settings.webGLEnabled: true
-        settings.autoLoadImages: true
-        settings.javascriptCanOpenWindows: false
-        settings.showScrollBars: true
-
-        // Memory and performance optimization
-        lifecycleState: WebEngineView.LifecycleState.Active
-
-        // Background color to prevent white flash
-        backgroundColor: Theme.colors.primary900
-
         onJavaScriptConsoleMessage: function(level, message, lineNumber, sourceID) {
+            // Filtering out known website warnings/errors
             var ignoredMessages = [
                 "useDefaultLang",
                 "defaultLanguage",
@@ -74,22 +58,16 @@ Item {
                 "fallbackLang"
             ]
 
+            // Checking if message should be ignored
             for (var i = 0; i < ignoredMessages.length; i++) {
                 if (message.indexOf(ignoredMessages[i]) !== -1) {
-                    return
+                    return // Ignore this message
                 }
             }
         }
 
-        // Handle loading errors
-        onLoadingChanged: function(loadRequest) {
-            if (loadRequest.status === WebEngineView.LoadFailedStatus) {
-                console.error("WebView failed to load:", loadRequest.errorString)
-            }
-        }
-
+        // Cleanup when the component is being destroyed
         Component.onDestruction: {
-            lifecycleState = WebEngineView.LifecycleState.Discarded
             stop()
             url = "about:blank"
         }
