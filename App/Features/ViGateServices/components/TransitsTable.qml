@@ -30,6 +30,8 @@ GroupBox {
             Layout.preferredHeight: 300
             clip: true
 
+            Layout.maximumWidth: parent.width
+
             ListView {
                 id: listView
                 clip: true

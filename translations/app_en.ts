@@ -36,167 +36,167 @@
 <context>
     <name>ColumnConfig</name>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="11"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="12"/>
         <source>Gate Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="17"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="18"/>
         <source>Transit ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="23"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="24"/>
         <source>Start Date</source>
         <translation type="unfinished">Start Date</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="29"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="30"/>
         <source>End Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="35"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="36"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="41"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="42"/>
         <source>Lane Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="47"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="48"/>
         <source>Lane Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="53"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="54"/>
         <source>Lane Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="59"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="60"/>
         <source>Direction</source>
         <translation type="unfinished">Direction</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="66"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="67"/>
         <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="73"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="74"/>
         <source>Macro Class</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="80"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="81"/>
         <source>Micro Class</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="87"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="88"/>
         <source>Make</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="94"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="95"/>
         <source>Model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="101"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="102"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="108"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="109"/>
         <source>Kemler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="116"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="117"/>
         <source>UID Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="123"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="124"/>
         <source>Auth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="130"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="131"/>
         <source>Auth Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="137"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="138"/>
         <source>Auth Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="144"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="145"/>
         <source>Permission ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="151"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="152"/>
         <source>Permission Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="158"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="159"/>
         <source>Owner Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="165"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="166"/>
         <source>Vehicle ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="172"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="173"/>
         <source>Vehicle Plate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="179"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="180"/>
         <source>People ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="186"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="187"/>
         <source>Person Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="193"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="194"/>
         <source>Birthday Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="200"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="201"/>
         <source>Birthday Place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="207"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="208"/>
         <source>Company ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="214"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="215"/>
         <source>Company</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="221"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="222"/>
         <source>Company City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="228"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="229"/>
         <source>Company Type</source>
         <translation type="unfinished"></translation>
     </message>
@@ -958,8 +958,8 @@
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="131"/>
-        <source>Leonardo Vi Gate Services</source>
-        <translation>Leonardo Vi Gate Services</translation>
+        <source>Leonardo ViGate Services</source>
+        <translation>Leonardo ViGate Services</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="143"/>
@@ -1177,8 +1177,8 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
-        <source>Leonardo Vi Gate Services</source>
-        <translation>Leonardo Vi Gate Services</translation>
+        <source>Leonardo ViGate Services</source>
+        <translation>Leonardo ViGate Services</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="44"/>
@@ -1490,8 +1490,8 @@
     <name>ViGatePanel</name>
     <message>
         <location filename="../App/Features/ViGateServices/panels/ViGatePanel.qml" line="9"/>
-        <source>Leonardo Vi Gate Services</source>
-        <translation>Leonardo Vi Gate Services</translation>
+        <source>Leonardo ViGate Services</source>
+        <translation>Leonardo ViGate Services</translation>
     </message>
 </context>
 <context>
