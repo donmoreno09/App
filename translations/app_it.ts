@@ -34,6 +34,174 @@
     </message>
 </context>
 <context>
+    <name>ColumnConfig</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="12"/>
+        <source>Gate Name</source>
+        <translation>Nome del Varco</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="18"/>
+        <source>Transit ID</source>
+        <translation>ID Transito</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="24"/>
+        <source>Start Date</source>
+        <translation>Data di inizio</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="30"/>
+        <source>End Date</source>
+        <translation>Data di fine</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="36"/>
+        <source>Status</source>
+        <translation>Stato</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="42"/>
+        <source>Lane Type</source>
+        <translation>Tipo di corsia</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="48"/>
+        <source>Lane Status</source>
+        <translation>Stato della corsia</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="54"/>
+        <source>Lane Name</source>
+        <translation>Nome della corsia</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="60"/>
+        <source>Direction</source>
+        <translation>Direzione</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="67"/>
+        <source>Color</source>
+        <translation>Colore</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="74"/>
+        <source>Macro Class</source>
+        <translation>Macroclasse</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="81"/>
+        <source>Micro Class</source>
+        <translation>Microclasse</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="88"/>
+        <source>Make</source>
+        <translation>Marca</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="95"/>
+        <source>Model</source>
+        <translation>Modello</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="102"/>
+        <source>Country</source>
+        <translation>Paese</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="109"/>
+        <source>Kemler</source>
+        <translation>Kemler</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="117"/>
+        <source>UID Code</source>
+        <translation>Codice UID</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="124"/>
+        <source>Auth</source>
+        <translation>Autenticazione</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="131"/>
+        <source>Auth Code</source>
+        <translation>Codice Aut.</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="138"/>
+        <source>Auth Message</source>
+        <translation>Mesaggio Aut.</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="145"/>
+        <source>Permission ID</source>
+        <translation>ID Permesso</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="152"/>
+        <source>Permission Type</source>
+        <translation>Tipo di permesso</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="159"/>
+        <source>Owner Type</source>
+        <translation>Tipo di proprietario</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="166"/>
+        <source>Vehicle ID</source>
+        <translation>ID Veicolo</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="173"/>
+        <source>Vehicle Plate</source>
+        <translation>Targa</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="180"/>
+        <source>People ID</source>
+        <translation>ID Persone</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="187"/>
+        <source>Person Name</source>
+        <translation>Nome</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="194"/>
+        <source>Birthday Date</source>
+        <translation>Data di nascita</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="201"/>
+        <source>Birthday Place</source>
+        <translation>Luogo di nascita</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="208"/>
+        <source>Company ID</source>
+        <translation>ID Azienda</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="215"/>
+        <source>Company</source>
+        <translation>Azienda</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="222"/>
+        <source>Company City</source>
+        <translation>Città dell&apos;azienda</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="229"/>
+        <source>Company Type</source>
+        <translation>Tipo di azienda</translation>
+    </message>
+</context>
+<context>
     <name>ComboBoxPanel</name>
     <message>
         <location filename="../App/Playground/ComboBoxPanel.qml" line="11"/>
@@ -590,6 +758,74 @@
     </message>
 </context>
 <context>
+    <name>PoiPanel</name>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="15"/>
+        <source>Point of Interest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="62"/>
+        <source>Name(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="63"/>
+        <source>Name</source>
+        <translation type="unfinished">Nome</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="71"/>
+        <source>Category(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="81"/>
+        <source>Type(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="91"/>
+        <source>Health Status(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="101"/>
+        <source>Operational State(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="111"/>
+        <source>Latitude(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="125"/>
+        <source>Longitude(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="140"/>
+        <source>Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="171"/>
+        <source>Back</source>
+        <translation type="unfinished">Indietro</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="182"/>
+        <source>Remove</source>
+        <translation type="unfinished">Rimuovi</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="189"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SidePanelArrivalContent</name>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="33"/>
@@ -688,31 +924,41 @@
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="77"/>
+        <source>PoI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="86"/>
         <source>Truck Arrivals</source>
         <translation>Arrivi Truck</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="86"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="95"/>
         <source>Truck Arrivals Date</source>
         <translation>Data Arrivi Truck</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="95"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="104"/>
         <source>Truck Arrivals DT</source>
         <translation>Data e Ora Arrivi Truck</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="104"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="113"/>
         <source>Trailer Prediction</source>
         <translation>Previsione Trailer</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="113"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="122"/>
         <source>Ship Stowage</source>
         <translation>Stivaggio a Bordo</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="124"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="131"/>
+        <source>Leonardo ViGate Services</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="143"/>
         <source>Languages</source>
         <translation>Lingue</translation>
     </message>
@@ -721,7 +967,7 @@
         <translation type="vanished">Lingue</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="135"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="154"/>
         <source>Tilesets</source>
         <translation>Tilesets</translation>
     </message>
@@ -750,6 +996,39 @@
         <location filename="../App/Components/wizard-page/constants/StepDefinitions.qml" line="13"/>
         <source>Operational Area</source>
         <translation>Area Operativa</translation>
+    </message>
+</context>
+<context>
+    <name>SummaryTable</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="8"/>
+        <source>Summary</source>
+        <translation>Riepilogo</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="24"/>
+        <source>Entries</source>
+        <translation>Entrate</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="30"/>
+        <source>Exits</source>
+        <translation>Uscite</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="36"/>
+        <source>Vehicles</source>
+        <translation>Veicoli</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="50"/>
+        <source>Pedestrians</source>
+        <translation>Pedoni</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="67"/>
+        <source>Total</source>
+        <translation>Totale</translation>
     </message>
 </context>
 <context>
@@ -820,7 +1099,7 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="48"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="50"/>
         <source>Overview</source>
         <translation>Panoramica</translation>
     </message>
@@ -861,81 +1140,91 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="29"/>
+        <source>Point of Interest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="30"/>
         <source>DateTime Test</source>
         <translation>Test Data e Ora</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="30"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="31"/>
         <source>Toggle Test</source>
         <translation>Test Toggle</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="31"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="32"/>
         <source>TextArea Test</source>
         <translation>Test Area di testo</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="32"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="33"/>
         <source>Overlay Test</source>
         <translation>Test Overlay</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="33"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="34"/>
         <source>Switcher Test</source>
         <translation>Test Switcher</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="34"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="35"/>
         <source>Slider Test</source>
         <translation>Test Slider</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="35"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="36"/>
         <source>Modal Test</source>
         <translation>Test Modale</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="36"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="37"/>
         <source>Button Test</source>
         <translation>Test Pulsanti</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="37"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="38"/>
         <source>ComboBox Test</source>
         <translation>Test ComboBox</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="38"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="39"/>
         <source>Arrival Content</source>
         <translation>Contenuto Arrivi</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="39"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="40"/>
         <source>Arrival Date Content</source>
         <translation>Contenuto Arrivi per Data</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="40"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="41"/>
         <source>Arrival DateTime Content</source>
         <translation>Contenuto Arrivi Data e Ora</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="41"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="42"/>
         <source>Trailer Predictions</source>
         <translation>Previsioni Trailer</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="42"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
+        <source>Leonardo ViGate Services</source>
+        <translation>Servizi Leonardo ViGate</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="44"/>
         <source>Track Details</source>
         <translation>Dettaglio Traccia</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="45"/>
         <source>Tir Details</source>
         <translation>Dettaglio Tir</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="44"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="46"/>
         <source>Not Found</source>
         <translation>Non Trovato</translation>
     </message>
@@ -1020,7 +1309,7 @@
         <translation>Centra Vista</translation>
     </message>
     <message>
-        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="197"/>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="225"/>
         <source>Track History</source>
         <translation>Storico Traccia</translation>
     </message>
@@ -1099,6 +1388,130 @@
         <location filename="../App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml" line="10"/>
         <source>Waiting Time Prediction</source>
         <translation>Previsione del tempo di attesa</translation>
+    </message>
+</context>
+<context>
+    <name>TransitsTable</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/components/TransitsTable.qml" line="9"/>
+        <source>Transits</source>
+        <translation>Transiti</translation>
+    </message>
+</context>
+<context>
+    <name>ViGateContent</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="40"/>
+        <source>Select Gate</source>
+        <translation>Seleziona Varco</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="76"/>
+        <source>Loading gates...</source>
+        <translation>Caricamento varchi...</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="102"/>
+        <source>Date Range: %1 - %2</source>
+        <translation>Intervallo di date: %1 - %2</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="106"/>
+        <source>Select Date Range</source>
+        <translation>Seleziona Intervallo di date</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="118"/>
+        <source>Filters:</source>
+        <translation>Filtri:</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="126"/>
+        <source>Vehicles</source>
+        <translation>Veicoli</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="139"/>
+        <source>Pedestrians</source>
+        <translation>Pedoni</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="155"/>
+        <source>Fetch Data</source>
+        <translation>Recupera Dati</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="237"/>
+        <source>Page %1 of %2</source>
+        <translation>Pagina %1 di %2</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="253"/>
+        <source>Total Items: %1</source>
+        <translation>Totale elementi: %1</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="270"/>
+        <source>Items per page:</source>
+        <translation>Elementi per pagina:</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="329"/>
+        <source>« First</source>
+        <translation>« Prima</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="336"/>
+        <source>‹ Previous</source>
+        <translation>« Precedente</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="348"/>
+        <source>Go to page:</source>
+        <translation>Vai alla pagina:</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="391"/>
+        <source>of %1</source>
+        <translation>di %1</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="401"/>
+        <source>Next ›</source>
+        <translation>Successiva »</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="408"/>
+        <source>Last »</source>
+        <translation>Ultima »</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="433"/>
+        <source>No data available. Please select filters and fetch.</source>
+        <translation>Nessun dato disponibile. Seleziona i filtri e recupera.</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="447"/>
+        <source>Error loading data. Please try again.</source>
+        <translation>Errore nel caricamento dei dati. Riprova.</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="490"/>
+        <source>Cancel</source>
+        <translation>Annulla</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="497"/>
+        <source>Apply</source>
+        <translation>Applica</translation>
+    </message>
+</context>
+<context>
+    <name>ViGatePanel</name>
+    <message>
+        <location filename="../App/Features/ViGateServices/panels/ViGatePanel.qml" line="9"/>
+        <source>Leonardo ViGate Services</source>
+        <translation>Servizi Leonardo ViGate</translation>
     </message>
 </context>
 <context>
