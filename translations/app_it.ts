@@ -1003,32 +1003,32 @@
     <message>
         <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="8"/>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>Riepilogo</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="24"/>
         <source>Entries</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrate</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="30"/>
         <source>Exits</source>
-        <translation type="unfinished"></translation>
+        <translation>Uscite</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="36"/>
         <source>Vehicles</source>
-        <translation type="unfinished"></translation>
+        <translation>Veicoli</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="50"/>
         <source>Pedestrians</source>
-        <translation type="unfinished"></translation>
+        <translation>Pedoni</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="67"/>
         <source>Total</source>
-        <translation type="unfinished"></translation>
+        <translation>Totale</translation>
     </message>
 </context>
 <context>
