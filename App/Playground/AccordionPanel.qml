@@ -494,7 +494,31 @@ PanelTemplate {
                     }
                 }
 
-                Item { Layout.fillHeight: true }
+                UI.VerticalSpacer {}
+
+                UI.HorizontalDivider {}
+
+                RowLayout {
+                    Layout.margins: Theme.spacing.s3
+                    spacing: Theme.spacing.s2
+
+                    UI.Button {
+                        Layout.fillWidth: true
+                        variant: UI.ButtonStyles.Ghost
+                        text:  (TranslationManager.revision, qsTr("Back"))
+
+                        background: Rectangle {
+                            color: Theme.colors.transparent
+                            border.width: 0
+                        }
+                    }
+
+                    UI.Button {
+                        Layout.fillWidth: true
+                        variant: UI.ButtonStyles.Primary
+                        text:  (TranslationManager.revision, qsTr("Delete All"))
+                    }
+                }
             }
         }
     }
