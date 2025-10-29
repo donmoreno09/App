@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="it_IT">
+<TS version="2.1" language="it_IT" sourcelanguage="en_US">
 <context>
     <name>ArrivalsCountPanel</name>
     <message>
         <location filename="../App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml" line="10"/>
         <source>Truck Arrivals</source>
-        <translation>Arrivi Camion</translation>
+        <translation>Arrivi Truck</translation>
     </message>
 </context>
 <context>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../App/Features/TruckArrivals/panels/ArrivalsDatePanel.qml" line="10"/>
         <source>Date Range Selection</source>
-        <translation>Selezione Intervallo Date</translation>
+        <translation>Selezione intervallo di date</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml" line="10"/>
         <source>Date Time Range Selection</source>
-        <translation>Selezione Intervallo Data e Ora</translation>
+        <translation>Selezione intervallo data e ora</translation>
     </message>
 </context>
 <context>
@@ -36,169 +36,169 @@
 <context>
     <name>ColumnConfig</name>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="11"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="12"/>
         <source>Gate Name</source>
         <translation>Nome del Varco</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="17"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="18"/>
         <source>Transit ID</source>
         <translation>ID Transito</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="23"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="24"/>
         <source>Start Date</source>
-        <translation>Data di Inizio</translation>
+        <translation>Data di inizio</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="29"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="30"/>
         <source>End Date</source>
         <translation>Data di fine</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="35"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="36"/>
         <source>Status</source>
         <translation>Stato</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="41"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="42"/>
         <source>Lane Type</source>
-        <translation>Tipo di Corsia</translation>
+        <translation>Tipo di corsia</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="47"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="48"/>
         <source>Lane Status</source>
-        <translation>Stato della Corsia</translation>
+        <translation>Stato della corsia</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="53"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="54"/>
         <source>Lane Name</source>
-        <translation>Nome della Corsia</translation>
+        <translation>Nome della corsia</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="59"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="60"/>
         <source>Direction</source>
         <translation>Direzione</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="66"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="67"/>
         <source>Color</source>
         <translation>Colore</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="73"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="74"/>
         <source>Macro Class</source>
         <translation>Macroclasse</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="80"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="81"/>
         <source>Micro Class</source>
         <translation>Microclasse</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="87"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="88"/>
         <source>Make</source>
         <translation>Marca</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="94"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="95"/>
         <source>Model</source>
         <translation>Modello</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="101"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="102"/>
         <source>Country</source>
         <translation>Paese</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="108"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="109"/>
         <source>Kemler</source>
         <translation>Kemler</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="116"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="117"/>
         <source>UID Code</source>
         <translation>Codice UID</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="123"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="124"/>
         <source>Auth</source>
         <translation>Autenticazione</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="130"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="131"/>
         <source>Auth Code</source>
         <translation>Codice Aut.</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="137"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="138"/>
         <source>Auth Message</source>
-        <translation>Messaggio Aut.</translation>
+        <translation>Mesaggio Aut.</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="144"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="145"/>
         <source>Permission ID</source>
         <translation>ID Permesso</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="151"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="152"/>
         <source>Permission Type</source>
-        <translation>Tipo di Permesso</translation>
+        <translation>Tipo di permesso</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="158"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="159"/>
         <source>Owner Type</source>
-        <translation>Tipo di Proprietario</translation>
+        <translation>Tipo di proprietario</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="165"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="166"/>
         <source>Vehicle ID</source>
         <translation>ID Veicolo</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="172"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="173"/>
         <source>Vehicle Plate</source>
         <translation>Targa</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="179"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="180"/>
         <source>People ID</source>
         <translation>ID Persone</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="186"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="187"/>
         <source>Person Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="193"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="194"/>
         <source>Birthday Date</source>
-        <translation>Data di Nascita</translation>
+        <translation>Data di nascita</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="200"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="201"/>
         <source>Birthday Place</source>
-        <translation>Luogo di Nascita</translation>
+        <translation>Luogo di nascita</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="207"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="208"/>
         <source>Company ID</source>
         <translation>ID Azienda</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="214"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="215"/>
         <source>Company</source>
         <translation>Azienda</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="221"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="222"/>
         <source>Company City</source>
-        <translation>Città dell&apos;Azienda</translation>
+        <translation>Città dell&apos;azienda</translation>
     </message>
     <message>
-        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="228"/>
+        <location filename="../App/Features/ViGateServices/components/ColumnConfig.qml" line="229"/>
         <source>Company Type</source>
-        <translation>Tipo di Azienda</translation>
+        <translation>Tipo di azienda</translation>
     </message>
 </context>
 <context>
@@ -253,12 +253,12 @@
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="12"/>
         <source>Date &amp; Time Picker Test</source>
-        <translation>Test Selettore Data &amp; Ora</translation>
+        <translation>Test Selettore Data e Ora</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="168"/>
         <source>Date &amp; Time Picker Components</source>
-        <translation>Componenti Selettore Data &amp; Ora</translation>
+        <translation>Componenti Selettore Data e Ora</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="433"/>
@@ -268,7 +268,7 @@
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="437"/>
         <source>Select Date &amp; Time</source>
-        <translation>Seleziona Data &amp; Ora</translation>
+        <translation>Seleziona data e ora</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="466"/>
@@ -289,12 +289,12 @@
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="484"/>
         <source>Selection cleared</source>
-        <translation>Selezione azzerata</translation>
+        <translation>Selezione cancellata</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="494"/>
         <source>No datetime selected</source>
-        <translation>Nessuna data/ora selezionata</translation>
+        <translation>Nessuna data e ora selezionata</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="506"/>
@@ -304,7 +304,7 @@
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="510"/>
         <source>Select Date &amp; Time Range</source>
-        <translation>Seleziona Intervallo Data &amp; Ora</translation>
+        <translation>Seleziona intervallo di data e ora</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="566"/>
@@ -324,12 +324,12 @@
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="587"/>
         <source>Range selection cleared</source>
-        <translation>Intervallo azzerato</translation>
+        <translation>Selezione intervallo cancellata</translation>
     </message>
     <message>
         <location filename="../App/Playground/DateTimePickerPanel.qml" line="597"/>
         <source>No datetime range selected</source>
-        <translation>Nessun intervallo data/ora selezionato</translation>
+        <translation>Nessun intervallo data e ora selezionato</translation>
     </message>
 </context>
 <context>
@@ -342,12 +342,12 @@
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="32"/>
         <source>1. Core Icon Set (6 Icons)</source>
-        <translation>1. Set Icone Principali (6 icone)</translation>
+        <translation>1. Set di Icone Principali (6 Icone)</translation>
     </message>
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="39"/>
         <source>Primary set of icons using base Button component with proper theme sizing</source>
-        <translation>Set principale di icone che usa il componente Button base con dimensioni corrette del tema</translation>
+        <translation>Set principale di icone utilizzando il componente Button di base con dimensionamento del tema appropriato</translation>
     </message>
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="58"/>
@@ -368,7 +368,7 @@
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="101"/>
         <source>Home Base</source>
-        <translation>Base</translation>
+        <translation>Base Principale</translation>
     </message>
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="120"/>
@@ -393,7 +393,7 @@
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="179"/>
         <source>Using theme icon sizes: sm (16px), md (20px), lg (24px)</source>
-        <translation>Uso delle dimensioni icone del tema: sm (16px), md (20px), lg (24px)</translation>
+        <translation>Utilizzando le dimensioni delle icone del tema: sm (16px), md (20px), lg (24px)</translation>
     </message>
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="201"/>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="341"/>
         <source>Home</source>
-        <translation>Home</translation>
+        <translation>Casa</translation>
     </message>
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="363"/>
@@ -448,12 +448,12 @@
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="422"/>
         <source>4. Icon Button States</source>
-        <translation>4. Stati Pulsante Icona</translation>
+        <translation>4. Stati Pulsanti Icona</translation>
     </message>
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="429"/>
         <source>Testing enabled, disabled, and interactive states</source>
-        <translation>Test degli stati abilitato, disabilitato e interattivo</translation>
+        <translation>Test di stati abilitati, disabilitati e interattivi</translation>
     </message>
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="453"/>
@@ -468,12 +468,12 @@
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="495"/>
         <source>Remove Mode</source>
-        <translation>Modalità Rimozione</translation>
+        <translation>Modalità Rimuovi</translation>
     </message>
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="495"/>
         <source>Add Mode</source>
-        <translation>Modalità Aggiunta</translation>
+        <translation>Modalità Aggiungi</translation>
     </message>
 </context>
 <context>
@@ -504,17 +504,17 @@
     <message>
         <location filename="../App/layers/LayersPanel.qml" line="39"/>
         <source>AIS Map Layer</source>
-        <translation>Livello Mappa AIS</translation>
+        <translation>Livello AIS</translation>
     </message>
     <message>
         <location filename="../App/layers/LayersPanel.qml" line="48"/>
         <source>Doc-Space Map Layer</source>
-        <translation>Livello Mappa Doc-Space</translation>
+        <translation>Livello Doc-Space</translation>
     </message>
     <message>
         <location filename="../App/layers/LayersPanel.qml" line="57"/>
         <source>TIR Map Layer</source>
-        <translation>Livello Mappa TIR</translation>
+        <translation>Livello TIR</translation>
     </message>
 </context>
 <context>
@@ -524,23 +524,39 @@
         <source>IRIDESS FE</source>
         <translation>IRIDESS FE</translation>
     </message>
+    <message>
+        <source>English</source>
+        <translation type="vanished">Inglese</translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation type="vanished">Italiano</translation>
+    </message>
 </context>
 <context>
     <name>MapTilesetsPanel</name>
     <message>
         <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="11"/>
         <source>Map Tilesets</source>
-        <translation>Tileset Mappa</translation>
+        <translation>Tilesets Mappa</translation>
     </message>
     <message>
         <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="23"/>
         <source>Online OSM</source>
-        <translation>OSM Online</translation>
+        <translation>Online OSM</translation>
     </message>
     <message>
         <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="32"/>
         <source>Default OSM</source>
-        <translation>OSM Predefinito</translation>
+        <translation>Default OSM</translation>
+    </message>
+    <message>
+        <source>OSM (Online)</source>
+        <translation type="vanished">OSM (Online)</translation>
+    </message>
+    <message>
+        <source>OSM (Default)</source>
+        <translation type="vanished">OSM (Default)</translation>
     </message>
 </context>
 <context>
@@ -608,7 +624,7 @@
     <message>
         <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="29"/>
         <source>Search &amp; Rescue</source>
-        <translation>Ricerca &amp; Soccorso</translation>
+        <translation>Ricerca e Salvataggio</translation>
     </message>
     <message>
         <location filename="../App/Components/wizard-page/test-pages/MissionOverview.qml" line="29"/>
@@ -639,7 +655,7 @@
     <message>
         <location filename="../App/Playground/ModalPanel.qml" line="11"/>
         <source>Modal Dialog Stack Test</source>
-        <translation>Test Stack Dialoghi Modali</translation>
+        <translation>Test Stack di Dialoghi Modali</translation>
     </message>
 </context>
 <context>
@@ -742,86 +758,71 @@
     </message>
 </context>
 <context>
-    <name>PedestriansTable</name>
-    <message>
-        <source>Pedestrians</source>
-        <translation type="vanished">Pedoni</translation>
-    </message>
-    <message>
-        <source>Start Date</source>
-        <translation type="vanished">Data Inizio</translation>
-    </message>
-    <message>
-        <source>Direction</source>
-        <translation type="vanished">Direzione</translation>
-    </message>
-</context>
-<context>
     <name>PoiPanel</name>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="15"/>
         <source>Point of Interest</source>
-        <translation>Punto di Interesse</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="62"/>
         <source>Name(*)</source>
-        <translation>Nome(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="63"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation type="unfinished">Nome</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="71"/>
         <source>Category(*)</source>
-        <translation>Categoria(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="81"/>
         <source>Type(*)</source>
-        <translation>Tipo(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="91"/>
         <source>Health Status(*)</source>
-        <translation>Stato di Salute(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="101"/>
         <source>Operational State(*)</source>
-        <translation>Stato Operativo(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="111"/>
         <source>Latitude(*)</source>
-        <translation>Latitudine(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="125"/>
         <source>Longitude(*)</source>
-        <translation>Longitudine(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="140"/>
         <source>Note</source>
-        <translation>Nota</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="171"/>
         <source>Back</source>
-        <translation>Indietro</translation>
+        <translation type="unfinished">Indietro</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="182"/>
         <source>Remove</source>
-        <translation>Rimuovi</translation>
+        <translation type="unfinished">Rimuovi</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/PoiPanel.qml" line="189"/>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -829,7 +830,7 @@
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="33"/>
         <source>Next Hour</source>
-        <translation>Prossima Ora</translation>
+        <translation>Prossima ora</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="34"/>
@@ -886,12 +887,12 @@
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="50"/>
         <source>Select a date &amp; time range</source>
-        <translation>Seleziona un intervallo di data &amp; ora</translation>
+        <translation>Seleziona un intervallo di data e ora</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="56"/>
         <source>Arriving Trucks</source>
-        <translation>Camion in Arrivo</translation>
+        <translation>Camion in arrivo</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="57"/>
@@ -917,11 +918,6 @@
         <translation>Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="60"/>
-        <source>Notifications</source>
-        <translation>Notifiche</translation>
-    </message>
-    <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="68"/>
         <source>Layers</source>
         <translation>Livelli</translation>
@@ -929,22 +925,22 @@
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="77"/>
         <source>PoI</source>
-        <translation>PoI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="86"/>
         <source>Truck Arrivals</source>
-        <translation>Arrivi Camion</translation>
+        <translation>Arrivi Truck</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="95"/>
         <source>Truck Arrivals Date</source>
-        <translation>Arrivi Camion Data</translation>
+        <translation>Data Arrivi Truck</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="104"/>
         <source>Truck Arrivals DT</source>
-        <translation>Arrivi Camion DT</translation>
+        <translation>Data e Ora Arrivi Truck</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="113"/>
@@ -954,12 +950,12 @@
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="122"/>
         <source>Ship Stowage</source>
-        <translation>Stivaggio Nave</translation>
+        <translation>Stivaggio a Bordo</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="131"/>
-        <source>Leonardo Vi Gate Services</source>
-        <translation>Servizi Leonardo Vi Gate</translation>
+        <source>Leonardo ViGate Services</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="143"/>
@@ -967,9 +963,18 @@
         <translation>Lingue</translation>
     </message>
     <message>
+        <source>Language</source>
+        <translation type="vanished">Lingue</translation>
+    </message>
+    <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="154"/>
         <source>Tilesets</source>
-        <translation>Tileset</translation>
+        <translation>Tilesets</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="60"/>
+        <source>Notifications</source>
+        <translation>Notifiche</translation>
     </message>
 </context>
 <context>
@@ -1003,7 +1008,7 @@
     <message>
         <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="24"/>
         <source>Entries</source>
-        <translation>Ingressi</translation>
+        <translation>Entrate</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/components/SummaryTable.qml" line="30"/>
@@ -1039,7 +1044,7 @@
     <message>
         <location filename="../App/Playground/TextAreaPanel.qml" line="11"/>
         <source>TextArea Test</source>
-        <translation>Test Area di Testo</translation>
+        <translation>Test Area di testo</translation>
     </message>
 </context>
 <context>
@@ -1061,7 +1066,30 @@
     </message>
 </context>
 <context>
+    <name>Title</name>
+    <message>
+        <source>Overview</source>
+        <translation type="vanished">Panoramica</translation>
+    </message>
+    <message>
+        <source>Languages</source>
+        <translation type="obsolete">Lingue</translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="obsolete">Missione</translation>
+    </message>
+    <message>
+        <source>Pod</source>
+        <translation type="obsolete">Pod</translation>
+    </message>
+</context>
+<context>
     <name>TitleBar</name>
+    <message>
+        <source>Languages</source>
+        <translation type="obsolete">Lingue</translation>
+    </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBar.qml" line="54"/>
         <source>Search here...</source>
@@ -1071,14 +1099,19 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="18"/>
-        <source>Ship Stowage</source>
-        <translation>Stivaggio Nave</translation>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="50"/>
+        <source>Overview</source>
+        <translation>Panoramica</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="23"/>
         <source>Languages</source>
         <translation>Lingue</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="18"/>
+        <source>Ship Stowage</source>
+        <translation>Stivaggio a Bordo</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="24"/>
@@ -1098,7 +1131,7 @@
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="27"/>
         <source>Map Tilesets</source>
-        <translation>Tileset Mappa</translation>
+        <translation>Tilesets Mappa</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="28"/>
@@ -1108,7 +1141,7 @@
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="29"/>
         <source>Point of Interest</source>
-        <translation>Punto di Interesse</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="30"/>
@@ -1123,7 +1156,7 @@
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="32"/>
         <source>TextArea Test</source>
-        <translation>Test Area di Testo</translation>
+        <translation>Test Area di testo</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="33"/>
@@ -1168,7 +1201,7 @@
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="41"/>
         <source>Arrival DateTime Content</source>
-        <translation>Contenuto Arrivi Data/Ora</translation>
+        <translation>Contenuto Arrivi Data e Ora</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="42"/>
@@ -1177,28 +1210,42 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
-        <source>Leonardo Vi Gate Services</source>
-        <translation>Servizi Leonardo Vi Gate</translation>
+        <source>Leonardo ViGate Services</source>
+        <translation>Servizi Leonardo ViGate</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="44"/>
         <source>Track Details</source>
-        <translation>Dettagli Traccia</translation>
+        <translation>Dettaglio Traccia</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="45"/>
         <source>Tir Details</source>
-        <translation>Dettagli TIR</translation>
+        <translation>Dettaglio Tir</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="46"/>
         <source>Not Found</source>
         <translation>Non Trovato</translation>
     </message>
+</context>
+<context>
+    <name>TitleTranslations</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="50"/>
         <source>Overview</source>
-        <translation>Panoramica</translation>
+        <translation type="obsolete">Panoramica</translation>
+    </message>
+    <message>
+        <source>Languages</source>
+        <translation type="obsolete">Lingue</translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="obsolete">Missione</translation>
+    </message>
+    <message>
+        <source>Pod</source>
+        <translation type="obsolete">Pod</translation>
     </message>
 </context>
 <context>
@@ -1212,6 +1259,21 @@
 <context>
     <name>TrackPanel</name>
     <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="73"/>
+        <source>Track Details</source>
+        <translation>Dettaglio Traccia</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="91"/>
+        <source>General Info</source>
+        <translation>Informazioni Generali</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="115"/>
+        <source>Name</source>
+        <translation>Nome</translation>
+    </message>
+    <message>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="23"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="116"/>
         <source>Latitude</source>
@@ -1224,37 +1286,22 @@
         <translation>Longitudine</translation>
     </message>
     <message>
-        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="27"/>
-        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="120"/>
-        <source>Speed</source>
-        <translation>Velocità</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="36"/>
-        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="119"/>
-        <source>Heading</source>
-        <translation>Rotta</translation>
-    </message>
-    <message>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="38"/>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="118"/>
         <source>Timestamp</source>
         <translation>Timestamp</translation>
     </message>
     <message>
-        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="73"/>
-        <source>Track Details</source>
-        <translation>Dettagli Traccia</translation>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="36"/>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="119"/>
+        <source>Heading</source>
+        <translation>Orientamento</translation>
     </message>
     <message>
-        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="91"/>
-        <source>General Info</source>
-        <translation>Informazioni Generali</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="115"/>
-        <source>Name</source>
-        <translation>Nome</translation>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="27"/>
+        <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="120"/>
+        <source>Speed</source>
+        <translation>Velocità</translation>
     </message>
     <message>
         <location filename="../App/Features/TrackPanel/TrackPanel.qml" line="175"/>
@@ -1287,7 +1334,7 @@
     <message>
         <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="73"/>
         <source>Estimated Time</source>
-        <translation>Tempo Stimato</translation>
+        <translation>Tempo stimato</translation>
     </message>
     <message>
         <location filename="../App/Features/TrailerPredictions/contents/TrailersPredictionsContent.qml" line="97"/>
@@ -1340,7 +1387,7 @@
     <message>
         <location filename="../App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml" line="10"/>
         <source>Waiting Time Prediction</source>
-        <translation>Previsione Tempi di Attesa</translation>
+        <translation>Previsione del tempo di attesa</translation>
     </message>
 </context>
 <context>
@@ -1352,34 +1399,7 @@
     </message>
 </context>
 <context>
-    <name>VehiclesTable</name>
-    <message>
-        <source>Vehicles</source>
-        <translation type="vanished">Veicoli</translation>
-    </message>
-    <message>
-        <source>Start Date</source>
-        <translation type="vanished">Data Inizio</translation>
-    </message>
-    <message>
-        <source>Plate</source>
-        <translation type="vanished">Targa</translation>
-    </message>
-    <message>
-        <source>Direction</source>
-        <translation type="vanished">Direzione</translation>
-    </message>
-</context>
-<context>
     <name>ViGateContent</name>
-    <message>
-        <source>Gate ID</source>
-        <translation type="vanished">ID Varco</translation>
-    </message>
-    <message>
-        <source>Enter gate ID</source>
-        <translation type="vanished">Inserisci ID varco</translation>
-    </message>
     <message>
         <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="40"/>
         <source>Select Gate</source>
@@ -1393,12 +1413,12 @@
     <message>
         <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="102"/>
         <source>Date Range: %1 - %2</source>
-        <translation>Intervallo Date: %1 - %2</translation>
+        <translation>Intervallo di date: %1 - %2</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="106"/>
         <source>Select Date Range</source>
-        <translation>Seleziona Intervallo Date</translation>
+        <translation>Seleziona Intervallo di date</translation>
     </message>
     <message>
         <location filename="../App/Features/ViGateServices/contents/ViGateContent.qml" line="118"/>
@@ -1490,8 +1510,8 @@
     <name>ViGatePanel</name>
     <message>
         <location filename="../App/Features/ViGateServices/panels/ViGatePanel.qml" line="9"/>
-        <source>Leonardo Vi Gate Services</source>
-        <translation>Servizi Leonardo Vi Gate</translation>
+        <source>Leonardo ViGate Services</source>
+        <translation>Servizi Leonardo ViGate</translation>
     </message>
 </context>
 <context>
@@ -1499,7 +1519,7 @@
     <message>
         <location filename="../App/Features/ShipStowage/components/WebViewItem.qml" line="32"/>
         <source>Loading...</source>
-        <translation>Caricamento...</translation>
+        <translation>Attendere, caricamento in corso…</translation>
     </message>
 </context>
 <context>
