@@ -9,6 +9,7 @@ import App.Features.SidePanel
 import App.Features.TitleBar
 import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
+import App.Features.Notifications 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 

@@ -34,10 +34,10 @@ Item {
             id: header
             Layout.fillWidth: true
             Layout.preferredHeight: root.headerHeight
-            color: root.backgroundColor
+            color: headerMouse.containsMouse ? _style.backgroundHover : _style.backgroundColor
             radius: root.expanded ? 0 : Theme.radius.sm
             border.width: Theme.borders.b1
-            border.color: root.borderColor
+            border.color: Theme.colors.grey500
 
             // Top corners rounded, bottom square when expanded
             topLeftRadius: Theme.radius.sm
@@ -45,9 +45,18 @@ Item {
             bottomLeftRadius: root.expanded ? 0 : Theme.radius.sm
             bottomRightRadius: root.expanded ? 0 : Theme.radius.sm
 
+            Behavior on color {
+                ColorAnimation {
+                    duration: 150
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
             MouseArea {
+                id: headerMouse
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
                 onClicked: {
                     root.expanded = !root.expanded
                     root.toggled(root.expanded)
@@ -70,8 +79,8 @@ Item {
 
                     Behavior on rotation {
                         NumberAnimation {
-                            duration: Theme.motion.transitionMs
-                            easing.type: Easing.InOutQuad
+                            duration: Theme.motion.panelTransitionMs
+                            easing.type: Theme.motion.panelTransitionEasing
                         }
                     }
                 }
@@ -89,36 +98,41 @@ Item {
         Rectangle {
             id: contentContainer
             Layout.fillWidth: true
-            Layout.preferredHeight: root.expanded ? contentSlot.implicitHeight : 0
+            Layout.preferredHeight: root.expanded ? (contentSlot.childrenRect.height + Theme.spacing.s4 * 2) : 0
             visible: Layout.preferredHeight > 0
-            color: root.backgroundColor
+            color: Theme.colors.surface
             border.width: Theme.borders.b1
-            border.color: root.borderColor
+            border.color: Theme.colors.grey500
             bottomLeftRadius: Theme.radius.sm
             bottomRightRadius: Theme.radius.sm
+
+            clip: true
+
+            Behavior on Layout.preferredHeight {
+                NumberAnimation {
+                    duration: Theme.motion.panelTransitionMs
+                    easing.type: Theme.motion.panelTransitionEasing
+                }
+            }
 
             // Remove top border to connect with header
             Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
-                height: Theme.borders.b1
-                color: root.backgroundColor
+                anchors.topMargin: -1
+                height: Theme.borders.b1 + 1
+                color: _style.backgroundColor
+                z: 1
             }
 
-            clip: true
-
-            Behavior on Layout.preferredHeight {
-                NumberAnimation {
-                    duration: Theme.motion.transitionMs
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
+            // Content slot - NO anchors.fill, just position it
             Item {
                 id: contentSlot
-                anchors.fill: parent
-                anchors.margins: Theme.spacing.s4
+                x: Theme.spacing.s4
+                y: Theme.spacing.s4
+                width: parent.width - Theme.spacing.s4 * 2
+                height: childrenRect.height
             }
         }
     }
