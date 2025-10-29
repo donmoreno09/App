@@ -11,7 +11,7 @@ import App.Features.MapTools 1.0
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 MapQuickItem {
-    id: cavalliere_gommato
+    id: goliath
 
     coordinate: QtPositioning.coordinate(44.400285, 8.909861)
     anchorPoint.x: svgIcon.width / 2
@@ -49,14 +49,14 @@ MapQuickItem {
             width: text.width + Theme.spacing.s3
             height: text.height + Theme.spacing.s1
             radius: Theme.radius.sm
-            color: Theme.colors.hexWithAlpha("#800080", 0.6)
+            color: Theme.colors.hexWithAlpha(Theme.colors.primary500, 1)
             border.color: Theme.colors.white
             border.width: false ? Theme.borders.b1 : Theme.borders.b0
 
             Text {
                 anchors.centerIn: parent
                 id: text
-                text: "Cavalliere Gommato"
+                text: "Goliath"
                 font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.white
                 horizontalAlignment: Text.AlignHCenter

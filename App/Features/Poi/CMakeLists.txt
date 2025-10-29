@@ -1,7 +1,9 @@
 set(qml_files
     PoiPanel.qml
     MOCPoiPanel.qml
-    CavalliereGommatoVideoContainer.qml
+    GoliathVideoContainer.qml
+    GoliathDataCsv.qml
+    GoliathLiftedLoads.qml
 )
 
 set(cpp_files

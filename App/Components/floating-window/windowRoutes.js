@@ -5,7 +5,9 @@ const STOWAGE   = "stowage";
 const REPORTS   = "reports";
 const ANALYTICS = "analytics";
 const NOTFOUND  = "*";
-const CAVALLIEREGOMMATO = "cavalliere-gommato";
+const GOLIATH = "goliath";
+const GOLIATHCSV = "goliath-csv";
+const GOLIATHLIFTEDLOADS = "goliath-lifted-loads";
 
 var routes = Object.freeze({
     [STOWAGE]: {
@@ -16,10 +18,26 @@ var routes = Object.freeze({
         modal: false,
         resizable: true
     },
-    [CAVALLIEREGOMMATO]: {
-        url: "qrc:/App/Features/Poi/CavalliereGommatoVideoContainer.qml",
+    [GOLIATH]: {
+       url: "qrc:/App/Features/Poi/GoliathVideoContainer.qml",
+       singleton: false,
+       defaultProps: { title: "Goliath Video" },
+       initialGeometry: { x: 120, y: 96, width: 1000, height: 680 },
+       modal: false,
+       resizable: true
+    },
+   [GOLIATHCSV]: {
+        url: "qrc:/App/Features/Poi/GoliathDataCsv.qml",
         singleton: false,
-        defaultProps: { title: "Cavalliere Gommato Video" },
+        defaultProps: { title: "Goliath Data Csv" },
+        initialGeometry: { x: 120, y: 96, width: 1000, height: 680 },
+        modal: false,
+        resizable: true
+    },
+    [GOLIATHLIFTEDLOADS]: {
+        url: "qrc:/App/Features/Poi/GoliathLiftedLoads.qml",
+        singleton: false,
+        defaultProps: { title: "Goliath Lifted Loads" },
         initialGeometry: { x: 120, y: 96, width: 1000, height: 680 },
         modal: false,
         resizable: true

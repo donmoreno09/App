@@ -14,7 +14,7 @@ import "qrc:/App/Components/floating-window/windowRoutes.js" as WinRoutes
 
 PanelTemplate {
     id: root
-    title.text: (TranslationManager.revision, qsTr("CAVALLIERE GOMMATO"))
+    title.text: (TranslationManager.revision, qsTr("GOLIATH"))
 
     ScrollView {
         id: scrollView
@@ -118,15 +118,22 @@ PanelTemplate {
                 UI.HorizontalSpacer {}
 
                 UI.Button {
-                    id: openTelimetryButton
-                    variant: UI.ButtonStyles.Warning
+                    id: openTelemetryButton
+                    variant: UI.ButtonStyles.Primary
                     icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
                     icon.width: 16
                     icon.height: 16
-                    text: (TranslationManager.revision, qsTr("Open Telimetry"))
+                    text: (TranslationManager.revision, qsTr("Telemetry"))
 
                     onClicked: function () {
-                        console.log("cliccato ")
+                        const window = UI.WindowRouter.open(WinRoutes.GOLIATHCSV, Window.window, {
+                            x: 120, y: 90, width: 1200, height: 740,
+                            title: "Telemetry Viewer",
+                            csvSource: "qrc:/App/assets/resources/Export_MH3_Goliath.csv"
+                        })
+                        if (!window) {
+                            console.warn("[MOCPoiPanel] I can't open floating window");
+                        }
                     }
                 }
 
@@ -138,13 +145,13 @@ PanelTemplate {
                     icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
                     icon.width: 16
                     icon.height: 16
-                    text: (TranslationManager.revision, qsTr("Open Video"))
+                    text: (TranslationManager.revision, qsTr("Video"))
 
                     onClicked: function () {
-                        const window = UI.WindowRouter.open(WinRoutes.CAVALLIEREGOMMATO, {
-                            x: 120, y: 90, width: 1200, height: 740,
-                            windowWidth: 1200,
-                            windowHeight: 740
+                        const window = UI.WindowRouter.open(WinRoutes.GOLIATH, Window.window, {
+                            x: 120, y: 90,  width: 1200, height: 740,
+                            videoTitle: "Video View",
+                            source: "qrc:/App/assets/resources/Monitoraggio Goliath 2.mp4"
                         })
                         if (!window) {
                             console.warn("[MOCPoiPanel] I can't open floating window");
@@ -153,6 +160,38 @@ PanelTemplate {
                 }
 
                 UI.HorizontalSpacer {}
+
+                UI.Button {
+                    id: openLoadsButton
+                    variant: UI.ButtonStyles.Primary
+                    icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
+                    icon.width: 16
+                    icon.height: 16
+                    text: (TranslationManager.revision, qsTr("Lifted Loads"))
+
+                    onClicked: function () {
+                        const window = UI.WindowRouter.open(WinRoutes.GOLIATHLIFTEDLOADS, Window.window, {
+                            x: 120, y: 90,  width: 1200, height: 740,
+                            title: "Lifted Loads View",
+                            source: "qrc:/App/assets/resources/Goliath_Lifted_Loads.jpg"
+                        })
+                        if (!window) {
+                            console.warn("[MOCPoiPanel] I can't open floating window");
+                        }
+                    }
+                }
+
+                UI.HorizontalSpacer {}
+
+                Component.onCompleted: {
+                    const minW = Math.max(openTelemetryButton.implicitWidth,
+                                          openVideoButton.implicitWidth,
+                                          openLoadsButton.implicitWidth)
+                    openTelemetryButton.Layout.minimumWidth = minW
+                    openLoadsButton.Layout.minimumWidth = minW
+                    openVideoButton.Layout.minimumWidth = minW
+                }
+
             }
         }
     }

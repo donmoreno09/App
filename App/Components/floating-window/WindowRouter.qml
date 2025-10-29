@@ -86,7 +86,12 @@ QtObject {
             root.windowClosed(routeName, item)
             // console.log("[WindowRouter] closed:", routeName)
         })
-
+        // Se la finestra espone il segnale closeRequested, connettilo a destroy()
+        if (item && item.closeRequested) {
+            item.closeRequested.connect(function() {
+                _safeDestroy(item)
+            })
+        }
         // porta davanti (se ha .z)
         _bringToFront(item)
 
