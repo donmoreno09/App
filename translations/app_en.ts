@@ -2,6 +2,34 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>AreaForm</name>
+    <message>
+        <location filename="../App/Features/Poi/components/AreaForm.qml" line="40"/>
+        <source>Shape Type(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/AreaForm.qml" line="67"/>
+        <source>Point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/AreaForm.qml" line="78"/>
+        <source>Rectangle</source>
+        <translation type="unfinished">Rectangle</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/AreaForm.qml" line="89"/>
+        <source>Ellipse</source>
+        <translation type="unfinished">Ellipse</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/AreaForm.qml" line="100"/>
+        <source>Polygon</source>
+        <translation type="unfinished">Polygon</translation>
+    </message>
+</context>
+<context>
     <name>ArrivalsCountPanel</name>
     <message>
         <location filename="../App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml" line="10"/>
@@ -333,6 +361,35 @@
     </message>
 </context>
 <context>
+    <name>EllipseForm</name>
+    <message>
+        <location filename="../App/Features/Poi/components/EllipseForm.qml" line="47"/>
+        <source>Center Latitude(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/EllipseForm.qml" line="62"/>
+        <source>Center Longitude(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/EllipseForm.qml" line="82"/>
+        <source>Major Axis(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/EllipseForm.qml" line="83"/>
+        <location filename="../App/Features/Poi/components/EllipseForm.qml" line="110"/>
+        <source>Type length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/EllipseForm.qml" line="109"/>
+        <source>Minor Axis(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>IconButtonsTest</name>
     <message>
         <location filename="../App/Playground/IconButtonsTest.qml" line="19"/>
@@ -518,6 +575,119 @@
     </message>
 </context>
 <context>
+    <name>MOCPoiPanel</name>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="17"/>
+        <source>GOLIATH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="35"/>
+        <source>General Info</source>
+        <translation type="unfinished">General Info</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="59"/>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="60"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="60"/>
+        <source>In missione</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="61"/>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="61"/>
+        <source>Auto assistita</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="62"/>
+        <source>Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="63"/>
+        <source>Task</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="64"/>
+        <source>ETA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="65"/>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="66"/>
+        <source>Twistlock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="66"/>
+        <source>Bloccati</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="67"/>
+        <source>Speed</source>
+        <translation type="unfinished">Speed</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="68"/>
+        <source>Heading</source>
+        <translation type="unfinished">Heading</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="69"/>
+        <source>Fuel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
+        <source>Alarms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
+        <source>1 attivo (Manutenzione 48h)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="71"/>
+        <source>Timestamp</source>
+        <translation type="unfinished">Timestamp</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="126"/>
+        <source>Telemetry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="148"/>
+        <source>Video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="170"/>
+        <source>Lifted Loads</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Main</name>
     <message>
         <location filename="../App/Main.qml" line="28"/>
@@ -674,6 +844,17 @@
     </message>
 </context>
 <context>
+    <name>OldPoiPanel</name>
+    <message>
+        <source>Back</source>
+        <translation type="obsolete">Back</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="obsolete">Remove</translation>
+    </message>
+</context>
+<context>
     <name>OperationalArea</name>
     <message>
         <location filename="../App/Components/wizard-page/test-pages/OperationalArea.qml" line="29"/>
@@ -742,86 +923,428 @@
     </message>
 </context>
 <context>
-    <name>PedestriansTable</name>
+    <name>PoiOptions</name>
     <message>
-        <source>Pedestrians</source>
-        <translation type="vanished">Pedestrians</translation>
+        <location filename="../App/core/PoiOptions.cpp" line="70"/>
+        <source>Administrative and Control Buildings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Start Date</source>
-        <translation type="vanished">Start Date</translation>
+        <location filename="../App/core/PoiOptions.cpp" line="71"/>
+        <source>Personnel and Operational Support Buildings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Direction</source>
-        <translation type="vanished">Direction</translation>
+        <location filename="../App/core/PoiOptions.cpp" line="72"/>
+        <source>Cargo Handling and Storage Facilities</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="73"/>
+        <source>Production, Technical and Maintenance Buildings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="74"/>
+        <source>Transport and Logistics Infrastructure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="75"/>
+        <source>Passenger and Ferry Terminals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="76"/>
+        <source>Assets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="77"/>
+        <source>Terminals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="78"/>
+        <source>Security</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="82"/>
+        <source>Port Authority Headquarters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="83"/>
+        <source>Control Tower / Vessel Traffic Service (VTS) Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="84"/>
+        <source>Customs and Border Control Offices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="85"/>
+        <source>Security and Surveillance Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="87"/>
+        <source>Crew Accommodation / Seafarers’ Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="88"/>
+        <source>Administrative Offices for Port Operators</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="89"/>
+        <source>Security Posts / Gatehouses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="90"/>
+        <source>Firefighting Stations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="91"/>
+        <source>Medical / First Aid Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="92"/>
+        <source>Training Centers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="94"/>
+        <source>Warehouses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="95"/>
+        <source>Cold Storage / Refrigerated Warehouses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="96"/>
+        <source>Bulk Storage Silos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="97"/>
+        <source>Cargo Consolidation Centers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="99"/>
+        <source>Power Substations and Pumping Stations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="100"/>
+        <source>Panel Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="101"/>
+        <source>Steel Cutting and Forming</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="102"/>
+        <source>Welding and Assembly Halls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="103"/>
+        <source>Surface Treatment and Painting Halls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="104"/>
+        <source>Fitting-out and Integration Halls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="106"/>
+        <source>Freight Forwarding Offices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="107"/>
+        <source>Truck Parking Areas and Inspection Stations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="108"/>
+        <source>Weighbridges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="109"/>
+        <source>Container Freight Stations (CFS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="110"/>
+        <source>Rail Terminals / Intermodal Facilities</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="111"/>
+        <source>Parking Areas &amp; Maintenance Depots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="113"/>
+        <source>Cruise Terminals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="114"/>
+        <source>Ferry Terminals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="115"/>
+        <source>Ticketing &amp; Check-in Buildings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="116"/>
+        <source>Visitor &amp; Information Centers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="117"/>
+        <source>Security &amp; Customs Posts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="119"/>
+        <source>Goliath Cranes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="120"/>
+        <source>Portal Cranes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="121"/>
+        <source>Tower Cranes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="122"/>
+        <source>Mobile Cranes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="123"/>
+        <source>Self-Propelled Modular Transporters (SPMTs)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="124"/>
+        <source>Block Transporters / Heavy-load Trailers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="125"/>
+        <source>Monorail Systems, Hoists, and Winches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="127"/>
+        <source>Container Yards / Terminals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="128"/>
+        <source>Ro-Ro (Roll-on/Roll-off) Terminals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="129"/>
+        <source>Ship Repair Docks / Dry Docks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="131"/>
+        <source>CCTV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="132"/>
+        <source>Access Control Servers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="133"/>
+        <source>Network Video Recorders (NVRs) with Cybersecurity Hardening</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="134"/>
+        <source>Digital Twin / Situational Awareness Systems (GIS-based Threat Visualization)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="138"/>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="139"/>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="140"/>
+        <source>Degraded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="141"/>
+        <source>Maintenance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="145"/>
+        <source>Standby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="146"/>
+        <source>Operating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="147"/>
+        <source>In transit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/core/PoiOptions.cpp" line="148"/>
+        <source>Waiting</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PoiPanel</name>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="15"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="17"/>
         <source>Point of Interest</source>
-        <translation>Point of Interest</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="62"/>
-        <source>Name(*)</source>
-        <translation>Name(*)</translation>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="66"/>
+        <source>Label(*)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="63"/>
-        <source>Name</source>
-        <translation>Name</translation>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="67"/>
+        <source>Label</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="71"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="75"/>
         <source>Category(*)</source>
-        <translation>Category(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="81"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="84"/>
         <source>Type(*)</source>
-        <translation>Type(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="91"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="94"/>
         <source>Health Status(*)</source>
-        <translation>Health Status(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="101"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="106"/>
         <source>Operational State(*)</source>
-        <translation>Operational State(*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="111"/>
-        <source>Latitude(*)</source>
-        <translation>Latitude(*)</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="125"/>
-        <source>Longitude(*)</source>
-        <translation>Longitude(*)</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="140"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="124"/>
         <source>Note</source>
-        <translation>Note</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="171"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="187"/>
         <source>Back</source>
-        <translation>Back</translation>
+        <translation type="unfinished">Back</translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="182"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="198"/>
         <source>Remove</source>
-        <translation>Remove</translation>
+        <translation type="unfinished">Remove</translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="189"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="205"/>
         <source>Save</source>
-        <translation>Save</translation>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PointForm</name>
+    <message>
+        <location filename="../App/Features/Poi/components/PointForm.qml" line="33"/>
+        <source>Latitude(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/PointForm.qml" line="47"/>
+        <source>Longitude(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PolygonForm</name>
+    <message>
+        <location filename="../App/Features/Poi/components/PolygonForm.qml" line="38"/>
+        <source>Point Lat. #</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/PolygonForm.qml" line="61"/>
+        <source>Point Lon. #</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/PolygonForm.qml" line="88"/>
+        <source>No coordinates inserted. Start by clicking anywhere on the map to insert the first coordinate.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RectangleForm</name>
+    <message>
+        <location filename="../App/Features/Poi/components/RectangleForm.qml" line="42"/>
+        <source>Top Left Latitude(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/RectangleForm.qml" line="57"/>
+        <source>Top Left Longitude(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/RectangleForm.qml" line="77"/>
+        <source>Bottom Right Latitude(*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/components/RectangleForm.qml" line="92"/>
+        <source>Bottom Right Longitude(*)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -929,7 +1452,7 @@
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="77"/>
         <source>PoI</source>
-        <translation>PoI</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="86"/>
@@ -959,12 +1482,16 @@
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="131"/>
         <source>Leonardo ViGate Services</source>
-        <translation>Leonardo ViGate Services</translation>
+        <translation type="unfinished">Leonardo ViGate Services</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="143"/>
         <source>Languages</source>
         <translation>Languages</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation type="vanished">Language</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="154"/>
@@ -1071,14 +1598,19 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="18"/>
-        <source>Ship Stowage</source>
-        <translation>Ship Stowage</translation>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="50"/>
+        <source>Overview</source>
+        <translation>Overview</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="23"/>
         <source>Languages</source>
         <translation>Languages</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="18"/>
+        <source>Ship Stowage</source>
+        <translation type="unfinished">Ship Stowage</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="24"/>
@@ -1108,7 +1640,7 @@
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="29"/>
         <source>Point of Interest</source>
-        <translation>Point of Interest</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="30"/>
@@ -1178,27 +1710,22 @@
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
         <source>Leonardo ViGate Services</source>
-        <translation>Leonardo ViGate Services</translation>
+        <translation type="unfinished">Leonardo ViGate Services</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="44"/>
         <source>Track Details</source>
-        <translation>Track Details</translation>
+        <translation type="unfinished">Track Details</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="45"/>
         <source>Tir Details</source>
-        <translation>Tir Details</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="46"/>
         <source>Not Found</source>
         <translation>Not Found</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="50"/>
-        <source>Overview</source>
-        <translation>Overview</translation>
     </message>
 </context>
 <context>
