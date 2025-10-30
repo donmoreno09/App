@@ -8,6 +8,7 @@ import App.Features.MapModes 1.0
 
 PointMode {
     id: root
+    z: Theme.elevation.z100 + 100
 
     // Properties
     property geoCoordinate coord: QtPositioning.coordinate()
@@ -38,7 +39,7 @@ PointMode {
         id: mapPoint
 
         coordinate: coord
-        z: Theme.elevation.z100 + 1
+        z: root.z + 1
         anchorPoint.x: sourceItem.width / 2
         anchorPoint.y: sourceItem.height / 2
         sourceItem:  Image {

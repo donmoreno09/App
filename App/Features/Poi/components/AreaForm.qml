@@ -10,7 +10,7 @@ import App.Features.MapModes 1.0
 ColumnLayout {
     spacing: Theme.spacing.s4
 
-    property int areaType: AreaForm.Rectangle
+    property int areaType: AreaForm.Point
 
     readonly property bool isEditing: !!MapModeController.poi
 
@@ -24,6 +24,7 @@ ColumnLayout {
 
     enum AreaType {
         // Mirror backend's values
+        Point = 1,
         Polygon = 3,
         Rectangle, // There's no RectangleType from the backend, see isRectangle below.
         Ellipse
@@ -35,7 +36,7 @@ ColumnLayout {
 
         Label {
             Layout.fillWidth: true
-            text: qsTr("Area Type(*)")
+            text: qsTr("Shape Type(*)")
             leftPadding: Theme.spacing.s4
             rightPadding: Theme.spacing.s4
             font {
@@ -60,6 +61,17 @@ ColumnLayout {
                 }
 
                 Component.onCompleted: updateButtons()
+
+                AreaButton {
+                    text: qsTr("Point")
+                    source: "qrc:/App/assets/icons/point.svg"
+                    checked: areaType === AreaForm.Point
+                    enabled: !isEditing || areaType === AreaForm.Point
+                    onClicked: if (!isEditing) {
+                        areaType = AreaForm.Point
+                        MapModeController.setActiveMode(MapModeRegistry.createPointMode)
+                    }
+                }
 
                 AreaButton {
                     text: qsTr("Rectangle")
@@ -108,6 +120,8 @@ ColumnLayout {
         Layout.fillWidth: true
         source: {
             switch (areaType) {
+            case AreaForm.Point:
+                return "PointForm.qml"
             case AreaForm.Rectangle:
                 return "RectangleForm.qml"
             case AreaForm.Ellipse:

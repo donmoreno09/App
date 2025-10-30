@@ -369,6 +369,8 @@ QQmlPropertyMap *PoiModel::getEditablePoi(int index)
     if (index < 0 || index >= m_pois.size())
         return nullptr;
 
+    if (m_oldPoi != nullptr) discardChanges();
+
     m_oldPoi = std::make_unique<Poi>(m_pois[index]);
     m_persistenceManager->get(m_oldPoi->id);
 

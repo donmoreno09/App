@@ -8,6 +8,7 @@ import App.Features.MapModes 1.0
 
 RectangleMode {
     id: root
+    z: Theme.elevation.z100 + 100
 
     // Final (committed) rectangle
     property geoCoordinate topLeft: QtPositioning.coordinate()
@@ -100,7 +101,7 @@ RectangleMode {
         color: "#3388cc88"
         border.color: "orange"
         border.width: 2
-        z: Theme.elevation.z100 + 1
+        z: root.z + 1
     }
 
     // Committed rectangle
@@ -112,7 +113,7 @@ RectangleMode {
         color: "#22448888"
         border.color: "green"
         border.width: 2
-        z: Theme.elevation.z100 + 1
+        z: root.z + 1
 
         // Scratch state for drag
         property point _startTLpx: Qt.point(0, 0)

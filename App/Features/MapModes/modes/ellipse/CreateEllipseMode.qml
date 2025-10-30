@@ -8,6 +8,7 @@ import App.Features.MapModes 1.0
 
 EllipseMode {
     id: root
+    z: Theme.elevation.z100 + 100
 
     // Ellipse parameters (center + half-axes in degrees)
     property geoCoordinate coord: QtPositioning.coordinate()
@@ -121,7 +122,7 @@ EllipseMode {
         color: "#3388cc88"
         border.color: "orange"
         border.width: 2
-        z: Theme.elevation.z100 + 1
+        z: root.z + 1
     }
 
     // ----- Committed ellipse -----
@@ -132,7 +133,7 @@ EllipseMode {
         color: "#22448888"
         border.color: "green"
         border.width: 2
-        z: Theme.elevation.z100 + 1
+        z: root.z + 1
 
         // Move whole ellipse
         property point _centerPx: Qt.point(0,0)

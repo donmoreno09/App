@@ -114,7 +114,7 @@ MapItemGroup {
         radius: Theme.radius.sm
         color: Theme.colors.hexWithAlpha("#539E07", 0.6)
         border.color: Theme.colors.white
-        border.width: MapModeController.isEditing ? Theme.borders.b1 : Theme.borders.b0
+        border.width: isEditing ? Theme.borders.b1 : Theme.borders.b0
         z: polygon.z + 2
 
         Text {

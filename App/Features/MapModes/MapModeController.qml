@@ -43,7 +43,6 @@ QtObject {
     }
 
     function editPoi(editablePoi) {
-        PoiModel.discardChanges()
         poi = editablePoi
         switch (poi.shapeTypeId) {
         case MapModeController.PointType:

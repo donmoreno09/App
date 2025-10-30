@@ -8,6 +8,7 @@ import App.Features.MapModes 1.0
 
 PolygonMode {
     id: root
+    z: Theme.elevation.z100 + 100
 
     ListModel { id: coordinatesModel }
     property bool closed: false
@@ -108,7 +109,7 @@ PolygonMode {
         visible: !root.closed && coordinatesModel.count > 0
         line.width: 2
         line.color: "orange"
-        z: Theme.elevation.z100 + 1
+        z: root.z + 1
         path: root._polylinePath()
     }
 
@@ -119,7 +120,7 @@ PolygonMode {
         color: "#22448888"
         border.color: "green"
         border.width: 2
-        z: Theme.elevation.z100 + 1
+        z: root.z + 1
 
         property var _startPx: [] // [{x,y} per vertex]
 

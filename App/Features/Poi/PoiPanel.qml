@@ -30,7 +30,7 @@ PanelTemplate {
     Component.onCompleted: {
         syncData()
         if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
-            MapModeController.setActiveMode(MapModeRegistry.createRectangleMode)
+            MapModeController.setActiveMode(MapModeRegistry.createPointMode)
         }
     }
 
@@ -75,23 +75,7 @@ PanelTemplate {
                     labelText: qsTr("Category(*)")
                     textRole: "name"
                     valueRole: "key"
-                    model: {
-                        if (MapModeController.isEditing) {
-                            if (MapModeController.poi.categoryId >= PoiOptions.pointCategoriesStartIndex) return PoiOptions.pointCategories
-                            else return PoiOptions.areaCategories
-                        }
-
-                        return PoiOptions.categories
-                    }
-
-                    onActivated: {
-                        if (!MapModeController.isEditing) {
-                            if (currentValue >= PoiOptions.pointCategoriesStartIndex)
-                                MapModeController.setActiveMode(MapModeRegistry.createPointMode)
-                            else
-                                MapModeController.setActiveMode(MapModeRegistry.createRectangleMode)
-                        }
-                    }
+                    model: PoiOptions.categories
                 }
 
                 UI.ComboBox {
@@ -124,9 +108,8 @@ PanelTemplate {
                     valueRole: "key"
                 }
 
-                Loader {
+                AreaForm {
                     Layout.fillWidth: true
-                    source: (categoryComboBox.currentValue >= PoiOptions.pointCategoriesStartIndex) ? "components/PointForm.qml" : "components/AreaForm.qml"
                 }
 
                 UI.TextArea {
