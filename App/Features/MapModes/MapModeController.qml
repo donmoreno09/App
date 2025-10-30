@@ -16,6 +16,8 @@ QtObject {
     readonly property bool isCreating: activeMode && activeMode.type === "creating"
     readonly property bool isEditing: poi != null
 
+    property bool isSwitchingToOtherPoi: false
+
     property BaseMode activeMode: null
 
     enum ShapeType {
@@ -28,10 +30,12 @@ QtObject {
 
     // Methods
     function setActiveMode(mode: BaseMode) {
-        if (poi) {
+        if (poi && !isSwitchingToOtherPoi) {
             poi = null
             PoiModel.discardChanges()
         }
+
+        if (isSwitchingToOtherPoi) isSwitchingToOtherPoi = false
 
         if (activeMode && activeMode.resetPreview) {
             activeMode.resetPreview()
@@ -41,6 +45,8 @@ QtObject {
     }
 
     function editPoi(editablePoi) {
+        if (poi) isSwitchingToOtherPoi = true
+
         poi = editablePoi
         switch (poi.shapeTypeId) {
         case MapModeController.PointType:
