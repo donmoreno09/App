@@ -8,6 +8,7 @@
 #include <core/TrackManager.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
+#include <connections/mqtt/parser/TruckNotificationParser.h>
 #include <connections/mqtt/parser/TirParser.h>
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
 
@@ -76,6 +77,7 @@ int main(int argc, char *argv[])
     mqtt->initialize(":/App/config/mqtt_config.json");
     mqtt->registerParser("ais", new TrackParser());
     mqtt->registerParser("doc-space", new TrackParser());
+    mqtt->registerParser("trucknotifications", new TruckNotificationParser());
     mqtt->registerParser("tir", new TirParser());
 
     auto *trackManager = engine.singletonInstance<TrackManager*>("App", "TrackManager");

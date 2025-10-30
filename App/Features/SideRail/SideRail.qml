@@ -3,6 +3,7 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import QtQuick.Effects 6.8
 
+import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.SidePanel
@@ -137,19 +138,24 @@ UI.GlobalBackgroundConsumer {
             }
 
             SideRailItem {
-                source: "qrc:/App/assets/icons/notification.svg"
+                source: "qrc:/App/assets/icons/notification-bell.svg"
                 text: (TranslationManager.revision, qsTr("Notifications"))
-                active: PanelRouter.currentPath === "accordion-test" && SidePanelController.isOpen
+                active: PanelRouter.currentPath === "notification" && SidePanelController.isOpen
 
-                // Add badge with total notification count
-                badgeCount: 7
+                badgeCount: TruckNotificationModel.count
 
-                // Optional: customize badge color (defaults to error500/red)
-                // badgeColor: Theme.colors.accent500
-                // badgeTextColor: Theme.colors.white
-
-                onClicked: SidePanelController.toggle(Routes.AccordionTest)
+                onClicked: SidePanelController.toggle(Routes.Notification)
             }
+
+            // SideRailItem {
+            //     source: "qrc:/App/assets/icons/notification-bell.svg"
+            //     text: (TranslationManager.revision, qsTr("Notifications"))
+            //     active: PanelRouter.currentPath === "accordion-test" && SidePanelController.isOpen
+
+            //     badgeCount: 3
+
+            //     onClicked: SidePanelController.toggle(Routes.AccordionTest)
+            // }
 
             SideRailItem {
                 visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen

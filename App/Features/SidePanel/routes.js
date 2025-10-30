@@ -23,6 +23,7 @@ const ArrivalDateContent = "arrival-date-content";
 const ArrivalDateTimeContent = "arrival-date-time-content";
 const TrailerPrediction = "trailer-prediction"
 const ViGateServices = "viGate-services"
+const Notification = "notification"
 const TrackPanel = "trackpanel"
 const TirPanel = "tirpanel"
 const NotFound = "*";
@@ -56,6 +57,7 @@ const routes = {
   [ArrivalDateTimeContent]: "qrc:/App/Features/TruckArrivals/panels/ArrivalsDateTimePanel.qml",
   [TrailerPrediction] : "qrc:/App/Features/TrailerPredictions/panels/TrailersPredictionsPanel.qml",
   [ViGateServices] : "qrc:/App/Features/ViGateServices/panels/ViGatePanel.qml",
+  [Notification] : "qrc:/App/Features/Notifications/NotificationsPanel.qml",
   [NotFound]: "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
 };
 
