@@ -1,6 +1,5 @@
 #include "PoiModel.h"
 #include <QDebug>
-#include <QtPositioning/QGeoCoordinate>
 #include <QMetaType>
 
 Q_DECLARE_METATYPE(QList<QGeoCoordinate>) // declare the list type
@@ -56,7 +55,10 @@ QVariant PoiModel::data(const QModelIndex &index, int role) const
     case CoordinatesRole: {
         QList<QGeoCoordinate> out;
         out.reserve(poi.geometry.coordinates.size());
-        for (const auto &p : poi.geometry.coordinates) {
+        for (int i = 0 ; i < poi.geometry.coordinates.length(); i++) {
+            if (i == poi.geometry.coordinates.length() - 1) break; // skip last point which is used for closing polygon and since the logic in QML doesn't need it
+
+            const auto& p = poi.geometry.coordinates[i];
             out.append(QGeoCoordinate(p.y(), p.x())); // lat, lon
         }
         return QVariant::fromValue(out);
@@ -87,6 +89,11 @@ QVariant PoiModel::data(const QModelIndex &index, int role) const
         }
         return {};
     }
+
+    // Temp/Internals
+    case ModelIndexRole: {
+        return index.row();
+    }
     }
 
     return {};
@@ -110,6 +117,7 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
     case OperationalStateIdRole:
     case ShapeTypeIdRole:
     case IsRectangleRole:
+    case ModelIndexRole:
         break;
 
     // Poi
@@ -297,6 +305,7 @@ QHash<int, QByteArray> PoiModel::roleNames() const
         { IsRectangleRole, "isRectangle" },
 
         { NoteRole, "note" },
+        { ModelIndexRole, "modelIndex" },
     };
 }
 
@@ -310,6 +319,28 @@ Qt::ItemFlags PoiModel::flags(const QModelIndex &index) const
 QVector<Poi> &PoiModel::pois()
 {
     return m_pois;
+}
+
+void PoiModel::setCoordinate(int row, int coordIndex, const QGeoCoordinate &coord)
+{
+    const QModelIndex idx = index(row, 0);
+    if (!idx.isValid() || row < 0 || row >= m_pois.size())
+        return;
+
+    auto& coordinates = m_pois[row].geometry.coordinates;
+    if (coordIndex < 0 || coordIndex >= coordinates.length())
+        return;
+
+    const QVector2D oldPoint = coordinates.at(coordIndex);
+    const QVector2D point(coord.longitude(), coord.latitude());
+    if (!qFuzzyCompare(point.x(), oldPoint.x()) || !qFuzzyCompare(point.y(), oldPoint.y())) {
+        coordinates[coordIndex] = point;
+
+        // Since in the QML side, I don't show the last point, we update it here
+        if (coordIndex == 0) coordinates[coordinates.length() - 1] = point;
+
+        emit dataChanged(idx, idx, { CoordinatesRole });
+    }
 }
 
 void PoiModel::append(const QVariantMap &data)
@@ -526,7 +557,7 @@ void PoiModel::buildPoiSave(const QVariantMap &data)
 void PoiModel::handlePoiSaved(bool success, const QString &uuid)
 {
     if (!success) {
-        qWarning() << "Error: Could not save PoI with label '" << m_poiSave->label << "'. Check logs.";
+        qWarning() << "Error: Could not save PoI with label '" << (m_poiSave != nullptr ? m_poiSave->label : "unknown") << "'. Check logs.";
     } else {
         const int index = m_pois.size();
         beginInsertRows(QModelIndex(), index, index);

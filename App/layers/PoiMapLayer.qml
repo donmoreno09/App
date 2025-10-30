@@ -24,6 +24,7 @@ BaseMapLayer {
             z: MapModeController.poi && MapModeController.poi.id === id ? Theme.elevation.z100 + 100 : 0
 
             required property int index
+            required property int modelIndex // model's exclusive for index
             required property var model
             required property string id
             required property string label

@@ -32,15 +32,16 @@ ColumnLayout {
             labelText: qsTr("Point Lat. #") + (index + 1)
 
             onValueChanged: {
-                const oldCoord = MapModeRegistry.createPolygonMode.getCoordinate(index)
+                const poi = MapModeController.poi
+                const oldCoord = (MapModeController.isEditing) ? poi.coordinates[index] : MapModeRegistry.createPolygonMode.getCoordinate(index)
                 const coord = QtPositioning.coordinate(value, oldCoord.longitude)
-                if (MapModeController.isEditing) {}
+                if (MapModeController.isEditing) PoiModel.setCoordinate(poi.modelIndex, index, coord)
                 else MapModeRegistry.createPolygonMode.setCoordinate(index, coord)
             }
 
             function updateText() {
                 let value
-                if (MapModeController.isEditing) value = 0
+                if (MapModeController.isEditing) value = MapModeController.poi.coordinates[index].latitude
                 else value = MapModeRegistry.createPolygonMode.getCoordinate(index).latitude
                 setText(value)
             }
@@ -55,15 +56,16 @@ ColumnLayout {
             type: UI.InputCoordinate.Longitude
 
             onValueChanged: {
-                const oldCoord = MapModeRegistry.createPolygonMode.getCoordinate(index)
+                const poi = MapModeController.poi
+                const oldCoord = (MapModeController.isEditing) ? poi.coordinates[index] : MapModeRegistry.createPolygonMode.getCoordinate(index)
                 const coord = QtPositioning.coordinate(oldCoord.latitude, value)
-                if (MapModeController.isEditing) {}
+                if (MapModeController.isEditing) PoiModel.setCoordinate(poi.modelIndex, index, coord)
                 else MapModeRegistry.createPolygonMode.setCoordinate(index, coord)
             }
 
             function updateText() {
                 let value
-                if (MapModeController.isEditing) value = 0
+                if (MapModeController.isEditing) value = MapModeController.poi.coordinates[index].longitude
                 else value = MapModeRegistry.createPolygonMode.getCoordinate(index).longitude
                 setText(value)
             }
@@ -73,7 +75,10 @@ ColumnLayout {
 
     Label {
         Layout.fillWidth: true
-        visible: MapModeRegistry.createPolygonMode.coordinatesCount() === 0
+        visible: {
+            if (MapModeController.isEditing) return MapModeController.poi.coordinates.length === 0
+            else return MapModeRegistry.createPolygonMode.coordinatesCount() === 0
+        }
         text: qsTr("No coordinates inserted. Start by clicking anywhere on the map to insert the first coordinate.")
         wrapMode: Text.Wrap
         leftPadding: Theme.spacing.s4
@@ -87,7 +92,10 @@ ColumnLayout {
     }
 
     Repeater {
-        model: MapModeRegistry.createPolygonMode.coordinatesCount()
+        model: {
+            if (MapModeController.isEditing) return MapModeController.poi.coordinates.length
+            else return MapModeRegistry.createPolygonMode.coordinatesCount()
+        }
         delegate: CoordInputs { }
     }
 }

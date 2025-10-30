@@ -8,6 +8,7 @@
 #include <QQmlEngine>
 #include <entities/Poi.h>
 #include <persistence/poipersistencemanager.h>
+#include <QtPositioning/QGeoCoordinate>
 #include "ModelHelper.h"
 
 class PoiModel : public QAbstractListModel
@@ -51,6 +52,9 @@ public:
 
         // Details/Metadata
         NoteRole,
+
+        // Temp/Internals
+        ModelIndexRole,
     };
 
     Q_ENUM(Roles);
@@ -66,6 +70,8 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     QVector<Poi>& pois();
+
+    Q_INVOKABLE void setCoordinate(int row, int coordIndex, const QGeoCoordinate& coord);
 
     Q_INVOKABLE void append(const QVariantMap &data);
 
