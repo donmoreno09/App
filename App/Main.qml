@@ -70,6 +70,14 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: TranslationManager
+
+        function onRevisionChanged() {
+            PoiOptions.updateTranslations()
+        }
+    }
+
     RowLayout {
         anchors.fill: parent
         spacing: 0

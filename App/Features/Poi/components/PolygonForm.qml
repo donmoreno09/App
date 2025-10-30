@@ -11,6 +11,12 @@ import App.Features.MapModes 1.0
 ColumnLayout {
     spacing: Theme.spacing.s4
 
+    function validate() {
+        if (MapModeController.isEditing) return true
+
+        return MapModeRegistry.createPolygonMode.coordinatesCount() >= 3
+    }
+
     component CoordInputs : RowLayout {
         required property int index
         spacing: Theme.spacing.s4

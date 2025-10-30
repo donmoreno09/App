@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVariantList>
 #include <QQmlEngine>
+#include <QJsonArray>
 #include <connections/httpclient.h>
 
 class PoiOptions : public QObject
@@ -13,9 +14,6 @@ class PoiOptions : public QObject
     QML_SINGLETON
     QML_UNCREATABLE("PoiOptions is not intended to be instantiated. Use it as a singleton.")
 
-    Q_PROPERTY(int pointCategoriesStartIndex READ pointCategoriesStartIndex CONSTANT)
-    Q_PROPERTY(QVariantList pointCategories READ pointCategories NOTIFY pointCategoriesChanged)
-    Q_PROPERTY(QVariantList areaCategories READ areaCategories NOTIFY areaCategoriesChanged)
     Q_PROPERTY(QVariantList categories READ categories NOTIFY categoriesChanged)
     Q_PROPERTY(QVariantList healthStatuses READ healthStatuses NOTIFY healthStatusesChanged)
     Q_PROPERTY(QVariantList operationalStates READ operationalStates NOTIFY operationalStatesChanged)
@@ -25,35 +23,38 @@ public:
     void fetch(const QString& endpoint, std::function<void(QVariantList)> callback);
 
     Q_INVOKABLE void fetchAll();
+    Q_INVOKABLE void updateTranslations(); // Check Main.qml; on language changed, it calls this method from there.
     Q_INVOKABLE QVariantList typesForCategory(int categoryKey) const;
 
-    int pointCategoriesStartIndex() const;
     QVariantList categories() const;
     QVariantList healthStatuses() const;
     QVariantList operationalStates() const;
-
-    QVariantList pointCategories() const;
-
-    QVariantList areaCategories() const;
 
 signals:
     void categoriesChanged();
     void healthStatusesChanged();
     void operationalStatesChanged();
 
-    void pointCategoriesChanged();
-
-    void areaCategoriesChanged();
-
 private:
     HttpClient m_httpClient;
-
     QVariantList m_categories;
-    QVariantList m_pointCategories;
-    QVariantList m_areaCategories;
     QVariantList m_healthStatuses;
     QVariantList m_operationalStates;
     QHash<int, QVariantList> m_typesByCategory;
+
+    QJsonArray rawCategoriesTypes;
+    QJsonArray rawHealthStatuses;
+    QJsonArray rawOperationalStates;
+
+    QHash<QString, QString> trCategoryMap;
+    QHash<QString, QString> trTypeMap;
+    QHash<int, QString> trHealthStatusesMap;
+    QHash<int, QString> trOperationalStatesMap;
+
+    void buildTranslationMaps();
+    void buildCategoriesTypes();
+    void buildHealthStatuses();
+    void buildOperationalStates();
 };
 
 #endif // POIOPTIONS_H

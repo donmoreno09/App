@@ -8,6 +8,7 @@ import App.Features.MapModes 1.0
 
 PolygonMode {
     id: root
+    type: "creating"
     z: Theme.elevation.z100 + 100
 
     ListModel { id: coordinatesModel }
@@ -124,7 +125,8 @@ PolygonMode {
 
         property var _startPx: [] // [{x,y} per vertex]
 
-        TapHandler { id: moveTap; acceptedButtons: Qt.LeftButton }
+        // Prevent tap propagating below
+        TapHandler { id: moveTap; acceptedButtons: Qt.LeftButton; gesturePolicy: TapHandler.ReleaseWithinBounds }
 
         DragHandler {
             id: moveDrag

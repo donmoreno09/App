@@ -11,6 +11,14 @@ import App.Features.MapModes 1.0
 ColumnLayout {
     spacing: Theme.spacing.s4
 
+    function validate() {
+        if (MapModeController.isEditing) return true
+
+        return MapModeRegistry.createEllipseMode.coord.isValid
+                && MapModeRegistry.createEllipseMode.radiusA > 0
+                && MapModeRegistry.createEllipseMode.radiusB > 0
+    }
+
     Connections {
         target: MapModeController.activeMode
         ignoreUnknownSignals: true

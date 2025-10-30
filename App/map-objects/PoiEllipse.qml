@@ -70,7 +70,7 @@ MapItemGroup {
         property point _centerPx: Qt.point(0,0)
 
         TapHandler {
-            enabled: !isEditing
+            enabled: !isEditing && !MapModeController.isCreating
             gesturePolicy: TapHandler.ReleaseWithinBounds
             acceptedButtons: Qt.LeftButton
             onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))

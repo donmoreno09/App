@@ -8,6 +8,7 @@ import App.Features.MapModes 1.0
 
 PointMode {
     id: root
+    type: "creating"
     z: Theme.elevation.z100 + 100
 
     // Properties
@@ -21,7 +22,7 @@ PointMode {
     }
 
     function resetPreview() {
-        coord = QtPositioning.coordinate(0, 0)
+        coord   = QtPositioning.coordinate()
     }
 
     // Input handlers
@@ -62,6 +63,9 @@ PointMode {
                 shadowScale: 1.12          // thickness of the border
             }
         }
+
+        // Prevent tap propagating below
+        TapHandler { id: moveTap; acceptedButtons: Qt.LeftButton; gesturePolicy: TapHandler.ReleaseWithinBounds }
 
         DragHandler {
             onTranslationChanged: {

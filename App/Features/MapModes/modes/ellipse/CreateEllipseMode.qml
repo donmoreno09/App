@@ -8,6 +8,7 @@ import App.Features.MapModes 1.0
 
 EllipseMode {
     id: root
+    type: "creating"
     z: Theme.elevation.z100 + 100
 
     // Ellipse parameters (center + half-axes in degrees)
@@ -33,7 +34,7 @@ EllipseMode {
     }
 
     function resetPreview() {
-        coord   = QtPositioning.coordinate(0, 0)
+        coord   = QtPositioning.coordinate()
         radiusA = 0
         root.majorAxisChanged()
         radiusB = 0
@@ -138,7 +139,8 @@ EllipseMode {
         // Move whole ellipse
         property point _centerPx: Qt.point(0,0)
 
-        TapHandler { id: moveTap; acceptedButtons: Qt.LeftButton }
+        // Prevent tap propagating below
+        TapHandler { id: moveTap; acceptedButtons: Qt.LeftButton; gesturePolicy: TapHandler.ReleaseWithinBounds }
 
         DragHandler {
             id: moveDrag

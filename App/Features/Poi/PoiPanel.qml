@@ -19,7 +19,7 @@ PanelTemplate {
     function syncData() {
         if (!MapModeController.isEditing) return
 
-        nameInput.text = MapModeController.poi.label
+        labelInput.text = MapModeController.poi.label
         noteTextArea.text = MapModeController.poi.note ?? ""
         categoryComboBox.currentIndex = categoryComboBox.comboBox.indexOfValue(MapModeController.poi.categoryId)
         typeComboBox.currentIndex = typeComboBox.comboBox.indexOfValue(MapModeController.poi.typeId)
@@ -61,10 +61,10 @@ PanelTemplate {
                 spacing: Theme.spacing.s4
 
                 UI.Input {
-                    id: nameInput
+                    id: labelInput
                     Layout.fillWidth: true
-                    labelText: qsTr("Name(*)")
-                    placeholderText: qsTr("Name")
+                    labelText: qsTr("Label(*)")
+                    placeholderText: qsTr("Label")
 
                     onTextEdited: if (MapModeController.isEditing) MapModeController.poi.label = text
                 }
@@ -92,6 +92,8 @@ PanelTemplate {
                     id: healthStatusComboBox
                     Layout.fillWidth: true
                     labelText: qsTr("Health Status(*)")
+                    enabled: false
+                    visible: !MapModeController.isCreating
 
                     model: PoiOptions.healthStatuses
                     textRole: "value"
@@ -102,13 +104,17 @@ PanelTemplate {
                     id: operationalStateComboBox
                     Layout.fillWidth: true
                     labelText: qsTr("Operational State(*)")
+                    enabled: false
+                    visible: !MapModeController.isCreating
 
                     model: PoiOptions.operationalStates
                     textRole: "value"
                     valueRole: "key"
                 }
 
+                // For legacy reasons, it's still called AreaForm but should be called ShapeForm instead, feel free to change it
                 AreaForm {
+                    id: areaForm
                     Layout.fillWidth: true
                 }
 
@@ -123,9 +129,14 @@ PanelTemplate {
         }
     }
 
+    function validate() {
+        if (labelInput.text.trim() === "") return false;
+        return areaForm.isValid;
+    }
+
     function save() {
         const data = {
-            label: nameInput.text,
+            label: labelInput.text,
             geometry: MapModeController.activeMode.buildGeometry(),
             layerId: 1,
             layerName: Layers.poiMapLayer(),
@@ -192,7 +203,7 @@ PanelTemplate {
                     Layout.preferredWidth: 1
                     Layout.fillWidth: true
                     text: qsTr("Save")
-                    enabled: !PoiModel.loading
+                    enabled: !PoiModel.loading && validate()
                     onClicked: save()
                 }
             }

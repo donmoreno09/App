@@ -11,6 +11,12 @@ import App.Features.MapModes 1.0
 ColumnLayout {
     spacing: Theme.spacing.s4
 
+    function validate() {
+        if (MapModeController.isEditing) return true
+
+        return MapModeRegistry.createRectangleMode.topLeft.isValid && MapModeRegistry.createRectangleMode.bottomRight.isValid
+    }
+
     Connections {
         target: MapModeController.activeMode
         ignoreUnknownSignals: true

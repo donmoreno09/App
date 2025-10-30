@@ -8,6 +8,7 @@ import App.Features.MapModes 1.0
 
 RectangleMode {
     id: root
+    type: "creating"
     z: Theme.elevation.z100 + 100
 
     // Final (committed) rectangle
@@ -119,10 +120,8 @@ RectangleMode {
         property point _startTLpx: Qt.point(0, 0)
         property point _startBRpx: Qt.point(0, 0)
 
-        TapHandler {
-            id: moveRectTap
-            acceptedButtons: Qt.LeftButton
-        }
+        // Prevent tap propagating below
+        TapHandler { id: moveRectTap; acceptedButtons: Qt.LeftButton; gesturePolicy: TapHandler.ReleaseWithinBounds }
 
         DragHandler {
             id: moveRect

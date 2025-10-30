@@ -13,9 +13,8 @@ QtObject {
 
     // Properties
     property var poi: null
+    readonly property bool isCreating: activeMode && activeMode.type === "creating"
     readonly property bool isEditing: poi != null
-    // TODO: Handle discarding changes by containing the "old" poi
-    //       For now, I'm using PoiModel.discardChanges().
 
     property BaseMode activeMode: null
 
@@ -29,7 +28,6 @@ QtObject {
 
     // Methods
     function setActiveMode(mode: BaseMode) {
-        // TODO: Handle discarding changes
         if (poi) {
             poi = null
             PoiModel.discardChanges()

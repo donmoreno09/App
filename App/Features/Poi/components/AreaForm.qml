@@ -12,6 +12,7 @@ ColumnLayout {
 
     property int areaType: AreaForm.Point
 
+    readonly property bool isValid: formLoader.item && formLoader.item.validate()
     readonly property bool isEditing: !!MapModeController.poi
 
     Connections {
@@ -117,6 +118,7 @@ ColumnLayout {
     }
 
     Loader {
+        id: formLoader
         Layout.fillWidth: true
         source: {
             switch (areaType) {

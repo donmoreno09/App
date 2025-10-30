@@ -14,4 +14,5 @@ import Qt.labs.animation 6.8
 
 BaseMode {
     id: root
+    type: "interaction"
 }

@@ -67,7 +67,7 @@ MapQuickItem {
     }
 
     TapHandler {
-        enabled: !isEditing
+        enabled: !isEditing && !MapModeController.isCreating
         gesturePolicy: TapHandler.ReleaseWithinBounds
         acceptedButtons: Qt.LeftButton
         onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
