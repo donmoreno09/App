@@ -53,6 +53,8 @@ ApplicationWindow {
             map.copyrightsVisible = false // Hide the copyright label from the bottom left
         }
 
+        MOCPoIStaticLayer { }
+
         PoiMapLayer { }
 
         AISTrackMapLayer { }

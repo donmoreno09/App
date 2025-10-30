@@ -27,6 +27,9 @@ const TrackPanel = "trackpanel"
 const TirPanel = "tirpanel"
 const NotFound = "*";
 
+// MOC Pages
+const MOCPoiStaticPanel = "moc-poi-static-panel";
+
 // Build the map using the constants
 const routes = {
   [Languages]: "qrc:/App/Features/Language/LanguagePanel.qml",
@@ -37,6 +40,7 @@ const routes = {
   [Poi]: "qrc:/App/Features/Poi/PoiPanel.qml",
   [TrackPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
   [TirPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
+  [MOCPoiStaticPanel]: "qrc:/App/Features/Poi/MOCPoiPanel.qml",
   [DateTimeTest]: "qrc:/App/Playground/DateTimePickerPanel.qml",
   [ToggleTest]: "qrc:/App/Playground/TogglePanel.qml",
   [TextAreaTest]: "qrc:/App/Playground/TextAreaPanel.qml",
