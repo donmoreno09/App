@@ -16,7 +16,8 @@ MapItemGroup {
         }
 
         function onMapLoaded() {
-            _mapLayer.map = MapController.map
+            if(_mapLayer)
+                _mapLayer.map = MapController.map
             MapController.map.addMapItemGroup(root)
         }
     }

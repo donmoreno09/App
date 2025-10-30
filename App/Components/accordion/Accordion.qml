@@ -29,7 +29,7 @@ Item {
         anchors.fill: parent
         spacing: 0
 
-        // Header (always visible, clickable)
+        // Header
         Rectangle {
             id: header
             Layout.fillWidth: true
@@ -113,17 +113,6 @@ Item {
                     duration: Theme.motion.panelTransitionMs
                     easing.type: Theme.motion.panelTransitionEasing
                 }
-            }
-
-            // Remove top border to connect with header
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.topMargin: -1
-                height: Theme.borders.b1 + 1
-                color: _style.backgroundColor
-                z: 1
             }
 
             // Content slot - NO anchors.fill, just position it

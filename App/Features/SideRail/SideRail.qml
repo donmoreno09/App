@@ -129,25 +129,21 @@ UI.GlobalBackgroundConsumer {
             SideRailItem {
                 source: "qrc:/App/assets/icons/test.svg"
                 preserveIconColor: true
-                text: (TranslationManager.revision, qsTr("Leonardo Vi Gate Services"))
+                text: (TranslationManager.revision, qsTr("Leonardo ViGate Services"))
                 active: PanelRouter.currentPath === "viGate-services" && SidePanelController.isOpen
 
                 onClicked: SidePanelController.toggle(Routes.ViGateServices)
+
             }
 
             SideRailItem {
-                source: "qrc:/App/assets/icons/notification.svg"
+                source: "qrc:/App/assets/icons/notification-bell.svg"
                 text: (TranslationManager.revision, qsTr("Notifications"))
-                active: PanelRouter.currentPath === "accordion-test" && SidePanelController.isOpen
+                active: PanelRouter.currentPath === "notification" && SidePanelController.isOpen
 
-                // Add badge with total notification count
-                badgeCount: 7
+                badgeCount: NotificationsController.totalCount
 
-                // Optional: customize badge color (defaults to error500/red)
-                // badgeColor: Theme.colors.accent500
-                // badgeTextColor: Theme.colors.white
-
-                onClicked: SidePanelController.toggle(Routes.AccordionTest)
+                onClicked: SidePanelController.toggle(Routes.Notification)
             }
 
             SideRailItem {

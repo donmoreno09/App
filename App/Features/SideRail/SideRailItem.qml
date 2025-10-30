@@ -12,8 +12,6 @@ UI.Button {
     property bool preserveIconColor: false
 
     property int badgeCount: 0
-    property color badgeColor: Theme.colors.error500
-    property color badgeTextColor: Theme.colors.white
 
     variant: UI.ButtonStyles.Ghost
     Layout.fillWidth: true
@@ -29,7 +27,6 @@ UI.Button {
     radius: 0
     backgroundRect.border.width: Theme.borders.b0
 
-
     Rectangle {
         id: badge
         visible: root.badgeCount > 0
@@ -40,7 +37,7 @@ UI.Button {
         height: Theme.spacing.s4
 
         radius: Theme.radius.circle(width, height)
-        color: root.badgeColor
+        color: Theme.colors.error500
 
         anchors.right: parent.right
         anchors.top: parent.top
@@ -50,7 +47,7 @@ UI.Button {
         Text {
             anchors.centerIn: parent
             text: root.badgeCount > 99 ? "99+" : root.badgeCount
-            color: root.badgeTextColor
+            color: Theme.colors.text
             font.family: Theme.typography.bodySans15Family
             font.pointSize: Theme.typography.fontSize100
             font.weight: Theme.typography.bodySans15StrongWeight

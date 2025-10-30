@@ -14,7 +14,7 @@ import QtQuick 2.15
 QtObject {
     // ApplicationWindow
     readonly property int appWindowWidth: 1400
-    readonly property int appWindowHeight: 850
+    readonly property int appWindowHeight: 800
 
     // TitleBar
     readonly property int titleBarHeight: 68

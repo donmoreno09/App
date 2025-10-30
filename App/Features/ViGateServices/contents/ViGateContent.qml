@@ -14,7 +14,7 @@ ColumnLayout {
     Layout.fillHeight: true
     spacing: Theme.spacing.s4
 
-    required property ViGateController controller
+    required property var controller
 
     // Loading Indicator
     BusyIndicator {

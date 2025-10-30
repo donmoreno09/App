@@ -47,6 +47,9 @@ set(qml_files
     wizard-page/test-pages/OperationalArea.qml
     toggle/ToggleStyle.qml
     toggle/Toggle.qml
+
+    floating-window/FloatingWindow.qml
+    floating-window/windowRoutes.js
 )
 
 
@@ -55,6 +58,7 @@ set(qml_singletons
     button/ButtonStyles.qml
     input/InputStyles.qml
     toggle/ToggleStyles.qml
+    floating-window/WindowRouter.qml
 )
 
 set_source_files_properties(
