@@ -14,6 +14,7 @@
 int main(int argc, char *argv[])
 {
 
+    qputenv("QML_XHR_ALLOW_FILE_READ", "1");
     // CRITICAL: Configure WebEngine BEFORE creating QGuiApplication
     // This tells Chromium to handle GPU gracefully
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);

@@ -19,6 +19,7 @@ set(qml_files
     map-objects/PoiRectangle.qml
     map-objects/PoiEllipse.qml
     map-objects/PoiPolygon.qml
+    map-objects/MOCPoiPoint.qml
 
     # Layers
     layers/BaseMapLayer.qml
@@ -27,6 +28,7 @@ set(qml_files
     layers/TirTrackMapLayer.qml
     layers/LayersPanel.qml
     layers/PoiMapLayer.qml
+    layers/MOCPoIStaticLayer.qml
 )
 
 set(cpp_sources
@@ -143,6 +145,7 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Mqtt
         Qt6::Location
         Qt6::Positioning
+        Qt6::Network
         Qt6::WebEngineQuick
         Qt6::WebEngineCore
 )
