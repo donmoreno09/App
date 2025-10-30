@@ -1,5 +1,8 @@
 #include "PoiModel.h"
 #include <QDebug>
+#include <QMetaType>
+
+Q_DECLARE_METATYPE(QList<QGeoCoordinate>) // declare the list type
 
 PoiModel::PoiModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this)), m_persistenceManager(new PoiPersistenceManager(this))
@@ -45,15 +48,36 @@ QVariant PoiModel::data(const QModelIndex &index, int role) const
     case ShapeTypeIdRole:          return poi.geometry.shapeTypeId;
     case SurfaceRole:              return poi.geometry.surface;
     case HeightRole:               return poi.geometry.height;
-    case LatitudeRole:             return poi.geometry.coordinate.y(); // lat
-    case LongitudeRole:            return poi.geometry.coordinate.x(); // lon
-    case CoordinatesRole: {
-        auto* that = const_cast<PoiModel*>(this);
-        auto* cm = that->getCoordsModel(poi.id, poi.geometry.coordinates);
-        return QVariant::fromValue(static_cast<QObject*>(cm));
+    case CoordinateRole: {
+        QGeoCoordinate coord(poi.geometry.coordinate.y(), poi.geometry.coordinate.x());
+        return QVariant::fromValue(coord);
     }
-    case RadiusARole:              return poi.geometry.radiusA;
-    case RadiusBRole:              return poi.geometry.radiusB;
+    case CoordinatesRole: {
+        QList<QGeoCoordinate> out;
+        out.reserve(poi.geometry.coordinates.size());
+        for (int i = 0 ; i < poi.geometry.coordinates.length(); i++) {
+            if (i == poi.geometry.coordinates.length() - 1) break; // skip last point which is used for closing polygon and since the logic in QML doesn't need it
+
+            const auto& p = poi.geometry.coordinates[i];
+            out.append(QGeoCoordinate(p.y(), p.x())); // lat, lon
+        }
+        return QVariant::fromValue(out);
+    }
+    case TopLeftRole: {
+        if (!isRectangle(poi.geometry)) return QVariant::fromValue(QGeoCoordinate());
+
+        QGeoCoordinate topLeft(poi.geometry.coordinates[0].y(), poi.geometry.coordinates[0].x());
+        return QVariant::fromValue(topLeft);
+    }
+    case BottomRightRole: {
+        if (!isRectangle(poi.geometry)) return QVariant::fromValue(QGeoCoordinate());
+
+        QGeoCoordinate bottomRight(poi.geometry.coordinates[2].y(), poi.geometry.coordinates[2].x());
+        return QVariant::fromValue(bottomRight);
+    }
+    case RadiusARole:     return poi.geometry.radiusA;
+    case RadiusBRole:     return poi.geometry.radiusB;
+    case IsRectangleRole: return isRectangle(poi.geometry);
 
     // Details/Metadata
     case NoteRole: {
@@ -64,6 +88,11 @@ QVariant PoiModel::data(const QModelIndex &index, int role) const
             }
         }
         return {};
+    }
+
+    // Temp/Internals
+    case ModelIndexRole: {
+        return index.row();
     }
     }
 
@@ -79,7 +108,7 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
     bool changed = false;
 
     switch (role) {
-    // Immutable IDs
+    // Immutable IDs/data
     case IdRole:
     case LayerIdRole:
     case TypeIdRole:
@@ -87,6 +116,8 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
     case HealthStatusIdRole:
     case OperationalStateIdRole:
     case ShapeTypeIdRole:
+    case IsRectangleRole:
+    case ModelIndexRole:
         break;
 
     // Poi
@@ -132,33 +163,81 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
         if (!qFuzzyCompare(poi.geometry.height, v)) { poi.geometry.height = v; changed = true; }
         break;
     }
-    case LatitudeRole: {
-        const float lat = value.toFloat();
-        if (!qFuzzyCompare(poi.geometry.coordinate.y(), lat)) {
-            poi.geometry.coordinate.setY(lat);
-            changed = true;
-        }
-        break;
-    }
-    case LongitudeRole: {
-        const float lon = value.toFloat();
-        if (!qFuzzyCompare(poi.geometry.coordinate.x(), lon)) {
-            poi.geometry.coordinate.setX(lon);
+    case CoordinateRole: {
+        const QGeoCoordinate coord = value.value<QGeoCoordinate>();
+        const QVector2D point(coord.longitude(), coord.latitude());
+        if (!qFuzzyCompare(point.x(), poi.geometry.coordinate.x()) || !qFuzzyCompare(point.y(), poi.geometry.coordinate.y())) {
+            poi.geometry.coordinate = point;
             changed = true;
         }
         break;
     }
     case CoordinatesRole: {
-        const QList<QVector2D> newCoords = parseCoordinatesVariant(value);
+        QList<QVector2D> newCoords;
+
+        // Preferred: direct QList<QGeoCoordinate>
+        if (value.canConvert<QList<QGeoCoordinate>>()) {
+            const auto list = value.value<QList<QGeoCoordinate>>();
+            newCoords.reserve(list.size());
+            for (const auto &c : list)
+                newCoords.append(QVector2D(c.longitude(), c.latitude())); // x=lon, y=lat
+        } else {
+            // Fallbacks: [{x,y}], [[x,y]], QList<QVector2D>, etc.
+            newCoords = parseCoordinatesVariant(value);
+        }
 
         if (!compareCoords(poi.geometry.coordinates, newCoords)) {
             poi.geometry.coordinates = newCoords;
+            changed = true;
+        }
+        break;
+    }
+    case TopLeftRole: {
+        if (!isRectangle(poi.geometry)) return false;
 
-            // If a cached child model exists for this POI id, update it
-            if (auto* cm = m_coordsModels.value(poi.id, nullptr)) {
-                cm->setPoints(newCoords);
-            }
+        const QGeoCoordinate c = value.value<QGeoCoordinate>();
+        const QVector2D topLeft(c.longitude(), c.latitude()); // x=lon, y=lat
 
+        // Opposite corner from current geometry if present, otherwise degenerate
+        QVector2D bottomRight = topLeft;
+        if (poi.geometry.coordinates.size() >= 3) {
+            bottomRight = poi.geometry.coordinates[2]; // index 2 is bottom right
+        }
+
+        // Rebuild rectangle: TL, TR, BR, BL, TL
+        QList<QVector2D> rect;
+        rect.reserve(5);
+        const QVector2D topRight(bottomRight.x(), topLeft.y());
+        const QVector2D bottomLeft(topLeft.x(), bottomRight.y());
+        rect << topLeft << topRight << bottomRight << bottomLeft << topLeft;
+
+        if (!compareCoords(poi.geometry.coordinates, rect)) {
+            poi.geometry.coordinates = rect;
+            changed = true;
+        }
+        break;
+    }
+    case BottomRightRole: {
+        if (!isRectangle(poi.geometry)) return false;
+
+        const QGeoCoordinate c = value.value<QGeoCoordinate>();
+        const QVector2D BR(c.longitude(), c.latitude()); // x=lon, y=lat
+
+        // Opposite corner from current geometry if present, otherwise degenerate
+        QVector2D TL = BR;
+        if (poi.geometry.coordinates.size() >= 1) {
+            TL = poi.geometry.coordinates[0]; // index 0 is top left
+        }
+
+        // Rebuild rectangle: TL, TR, BR, BL, TL
+        QList<QVector2D> rect;
+        rect.reserve(5);
+        const QVector2D TR(BR.x(), TL.y());
+        const QVector2D BL(TL.x(), BR.y());
+        rect << TL << TR << BR << BL << TL;
+
+        if (!compareCoords(poi.geometry.coordinates, rect)) {
+            poi.geometry.coordinates = rect;
             changed = true;
         }
         break;
@@ -217,13 +296,16 @@ QHash<int, QByteArray> PoiModel::roleNames() const
         { ShapeTypeIdRole, "shapeTypeId" },
         { SurfaceRole, "surface" },
         { HeightRole, "height" },
-        { LatitudeRole, "latitude" },
-        { LongitudeRole, "longitude" },
+        { CoordinateRole, "coordinate" },
         { CoordinatesRole, "coordinates" },
+        { TopLeftRole, "topLeft" },
+        { BottomRightRole, "bottomRight" },
         { RadiusARole, "radiusA" },
         { RadiusBRole, "radiusB" },
+        { IsRectangleRole, "isRectangle" },
 
         { NoteRole, "note" },
+        { ModelIndexRole, "modelIndex" },
     };
 }
 
@@ -237,6 +319,28 @@ Qt::ItemFlags PoiModel::flags(const QModelIndex &index) const
 QVector<Poi> &PoiModel::pois()
 {
     return m_pois;
+}
+
+void PoiModel::setCoordinate(int row, int coordIndex, const QGeoCoordinate &coord)
+{
+    const QModelIndex idx = index(row, 0);
+    if (!idx.isValid() || row < 0 || row >= m_pois.size())
+        return;
+
+    auto& coordinates = m_pois[row].geometry.coordinates;
+    if (coordIndex < 0 || coordIndex >= coordinates.length())
+        return;
+
+    const QVector2D oldPoint = coordinates.at(coordIndex);
+    const QVector2D point(coord.longitude(), coord.latitude());
+    if (!qFuzzyCompare(point.x(), oldPoint.x()) || !qFuzzyCompare(point.y(), oldPoint.y())) {
+        coordinates[coordIndex] = point;
+
+        // Since in the QML side, I don't show the last point, we update it here
+        if (coordIndex == 0) coordinates[coordinates.length() - 1] = point;
+
+        emit dataChanged(idx, idx, { CoordinatesRole });
+    }
 }
 
 void PoiModel::append(const QVariantMap &data)
@@ -265,6 +369,8 @@ QQmlPropertyMap *PoiModel::getEditablePoi(int index)
     if (index < 0 || index >= m_pois.size())
         return nullptr;
 
+    discardChanges();
+
     m_oldPoi = std::make_unique<Poi>(m_pois[index]);
     m_persistenceManager->get(m_oldPoi->id);
 
@@ -286,6 +392,7 @@ void PoiModel::discardChanges()
 
     if (row >= 0) {
         m_pois[row] = *m_oldPoi;
+        m_oldPoi = nullptr;
         QModelIndex idx = index(row, 0);
         emit dataChanged(idx, idx);
     }
@@ -364,23 +471,36 @@ bool PoiModel::compareCoords(const QList<QVector2D> &a, const QList<QVector2D> &
     return true;
 }
 
-CoordinatesModel *PoiModel::getCoordsModel(const QString &id, const QList<QVector2D> &pts)
+bool PoiModel::isRectangle(const Geometry &geom)
 {
-    if (id.isEmpty()) return nullptr;
+    // Must be shapeTypeId == 3 (rectangle) and 5 coordinates (closed loop)
+    if (geom.shapeTypeId != 3 || geom.coordinates.size() != 5)
+        return false;
 
-    if (auto* m = m_coordsModels.value(id, nullptr))
-        return m;
+    const QVector2D& TL = geom.coordinates[0];
+    const QVector2D& TR = geom.coordinates[1];
+    const QVector2D& BR = geom.coordinates[2];
+    const QVector2D& BL = geom.coordinates[3];
+    const QVector2D& backToTL = geom.coordinates[4];
 
-    auto* m = new CoordinatesModel(this);
-    m->setPoints(pts);
-    m_coordsModels.insert(id, m);
-    return m;
-}
+    // Ensure closure (last == first)
+    if (!qFuzzyCompare(TL.x(), backToTL.x()) || !qFuzzyCompare(TL.y(), backToTL.y()))
+        return false;
 
-void PoiModel::removeCoordsModel(const QString &id)
-{
-    if (auto* m = m_coordsModels.take(id))
-        m->deleteLater();
+    // Check rectangle rules:
+    // TL.y == TR.y, TR.x == BR.x, BR.y == BL.y, BL.x == TL.x
+    if (!qFuzzyCompare(TL.y(), TR.y())) return false;
+    if (!qFuzzyCompare(TR.x(), BR.x())) return false;
+    if (!qFuzzyCompare(BR.y(), BL.y())) return false;
+    if (!qFuzzyCompare(BL.x(), TL.x())) return false;
+
+    // Optional: ensure non-degenerate (width/height > 0)
+    // const double width  = std::abs(TR.x() - TL.x());
+    // const double height = std::abs(TL.y() - BL.y());
+    // if (qFuzzyIsNull(width) || qFuzzyIsNull(height))
+    //     return false;
+
+    return true;
 }
 
 void PoiModel::buildPoiSave(const QVariantMap &data)
@@ -440,7 +560,7 @@ void PoiModel::buildPoiSave(const QVariantMap &data)
 void PoiModel::handlePoiSaved(bool success, const QString &uuid)
 {
     if (!success) {
-        qWarning() << "Error: Could not save PoI with label '" << m_poiSave->label << "'. Check logs.";
+        qWarning() << "Error: Could not save PoI with label '" << (m_poiSave != nullptr ? m_poiSave->label : "unknown") << "'. Check logs.";
     } else {
         const int index = m_pois.size();
         beginInsertRows(QModelIndex(), index, index);
@@ -470,12 +590,6 @@ void PoiModel::handlePoiUpdated(bool success)
 void PoiModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
 {
     beginResetModel();
-
-    // Drop cached per-POI coordinate models
-    for (auto it = m_coordsModels.begin(); it != m_coordsModels.end(); ++it) {
-        if (it.value()) it.value()->deleteLater();
-    }
-    m_coordsModels.clear();
 
     // Rebuild backing store
     m_pois.clear();
