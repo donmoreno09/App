@@ -66,7 +66,7 @@ PanelTemplate {
                                     color: Theme.colors.text
                                     font.family: Theme.typography.bodySans25StrongFamily
                                     font.pointSize: Theme.typography.bodySans25StrongSize
-                                    font.weight: Theme.typography.bodySans25StrongWeight
+                                    font.weight: Theme.typography.weightBold
                                     Layout.fillWidth: true
                                 }
 
@@ -88,7 +88,7 @@ PanelTemplate {
 
                             // Right side: Badge
                             Rectangle {
-                                Layout.preferredWidth: Theme.spacing.s16 + 2
+                                Layout.preferredWidth: Theme.spacing.s20
                                 Layout.preferredHeight: Theme.spacing.s6
                                 radius: Theme.radius.sm
                                 color: {
@@ -116,11 +116,11 @@ PanelTemplate {
                             spacing: Theme.spacing.s3
 
                             Text {
-                                text: model.operationCode
+                                text: (TranslationManager.revision, qsTr("Truck: ")) + model.operationCode
                                 color: Theme.colors.text
                                 font.family: Theme.typography.bodySans25StrongFamily
                                 font.pointSize: Theme.typography.bodySans25StrongSize
-                                font.weight: Theme.typography.bodySans25StrongWeight
+                                font.weight: Theme.typography.weightBold
                             }
 
                             // Show issue type or solution type based on state
