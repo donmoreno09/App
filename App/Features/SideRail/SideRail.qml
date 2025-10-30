@@ -9,6 +9,7 @@ import App.Features.SidePanel
 import App.Features.TitleBar
 import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
+import App.Features.Notifications 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
@@ -133,6 +134,21 @@ UI.GlobalBackgroundConsumer {
 
                 onClicked: SidePanelController.toggle(Routes.ViGateServices)
 
+            }
+
+            SideRailItem {
+                source: "qrc:/App/assets/icons/notification.svg"
+                text: (TranslationManager.revision, qsTr("Notifications"))
+                active: PanelRouter.currentPath === "accordion-test" && SidePanelController.isOpen
+
+                // Add badge with total notification count
+                badgeCount: 7
+
+                // Optional: customize badge color (defaults to error500/red)
+                // badgeColor: Theme.colors.accent500
+                // badgeTextColor: Theme.colors.white
+
+                onClicked: SidePanelController.toggle(Routes.AccordionTest)
             }
 
             SideRailItem {

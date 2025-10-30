@@ -13,6 +13,7 @@ set(qml_files
     SliderPanel.qml
     ModalPanel.qml
     ButtonPanel.qml
+    AccordionPanel.qml
 )
 
 qt_add_qml_module(app_playground
