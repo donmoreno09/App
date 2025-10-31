@@ -1601,7 +1601,7 @@
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="88"/>
-        <source>PoI</source>
+        <source>Point of Interest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

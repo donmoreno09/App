@@ -1614,9 +1614,13 @@
         <translation>Livelli</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="88"/>
         <source>PoI</source>
-        <translation>PoI</translation>
+        <translation type="vanished">PoI</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="88"/>
+        <source>Point of Interest</source>
+        <translation>Punto di Interesse</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="97"/>

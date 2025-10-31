@@ -75,7 +75,7 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/layers.svg"
+                    source: "qrc:/App/assets/icons/layers-colored.svg"
                     text: (TranslationManager.revision, qsTr("Layers"))
                     active: PanelRouter.currentPath === "maplayers" && SidePanelController.isOpen
 
@@ -85,7 +85,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/poi.svg"
                     preserveIconColor: true
-                    text: (TranslationManager.revision, qsTr("PoI"))
+                    text: (TranslationManager.revision, qsTr("Point of Interest"))
                     active: PanelRouter.currentPath === Routes.Poi && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.Poi)
@@ -137,7 +137,7 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/test.svg"
+                    source: "qrc:/App/assets/icons/barrier.svg"
                     preserveIconColor: true
                     text: (TranslationManager.revision, qsTr("Gate Transits"))
                     active: PanelRouter.currentPath === "viGate-services" && SidePanelController.isOpen
@@ -146,7 +146,7 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/notification-bell.svg"
+                    source: "qrc:/App/assets/icons/notification-bell-colored.svg"
                     text: (TranslationManager.revision, qsTr("Notifications"))
                     active: PanelRouter.currentPath === "notification" && SidePanelController.isOpen
 
