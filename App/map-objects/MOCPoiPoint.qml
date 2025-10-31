@@ -72,9 +72,6 @@ MapQuickItem {
     TapHandler {
         enabled: true
         gesturePolicy: TapHandler.ReleaseWithinBounds
-        onTapped: {
-            console.log("Ho cliccato")
-            SidePanelController.openOrRefresh(Routes.MOCPoiStaticPanel)
-        }
+        onTapped: SidePanelController.openOrRefresh(Routes.MOCPoiStaticPanel)
     }
 }

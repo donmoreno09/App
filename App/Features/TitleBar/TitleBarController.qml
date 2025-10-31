@@ -43,6 +43,7 @@ QtObject {
             case Routes.ViGateServices: return qsTr("Leonardo ViGate Services")
             case Routes.TrackPanel: return qsTr("Track Details")
             case Routes.TirPanel: return qsTr("Tir Details")
+            case Routes.MOCPoiStaticPanel: return qsTr("Crane")
             case Routes.NotFound: return qsTr("Not Found")
             }
         }
