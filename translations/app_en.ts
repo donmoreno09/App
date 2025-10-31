@@ -578,7 +578,7 @@
     <name>MOCPoiPanel</name>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="17"/>
-        <source>GOLIATH</source>
+        <source>Crane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -597,18 +597,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="60"/>
-        <source>In missione</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="61"/>
         <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="60"/>
+        <source>On mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="61"/>
-        <source>Auto assistita</source>
+        <source>Auto-assisted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -619,6 +619,11 @@
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="63"/>
         <source>Task</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="63"/>
+        <source>Relocation  B7-14 → C3-07</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -638,7 +643,12 @@
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="66"/>
-        <source>Bloccati</source>
+        <source>Locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
+        <source>1 active (Maintenance 48h)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -659,11 +669,6 @@
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
         <source>Alarms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
-        <source>1 attivo (Manutenzione 48h)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1598,7 +1603,7 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="50"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="51"/>
         <source>Overview</source>
         <translation>Overview</translation>
     </message>
@@ -1724,6 +1729,11 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="46"/>
+        <source>Crane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="47"/>
         <source>Not Found</source>
         <translation>Not Found</translation>
     </message>

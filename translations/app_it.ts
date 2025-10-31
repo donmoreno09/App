@@ -578,113 +578,118 @@
     <name>MOCPoiPanel</name>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="17"/>
-        <source>GOLIATH</source>
-        <translation type="unfinished"></translation>
+        <source>Crane</source>
+        <translation>Crane</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="35"/>
         <source>General Info</source>
-        <translation type="unfinished">Informazioni Generali</translation>
+        <translation>Informazioni Generali</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="59"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="60"/>
         <source>Status</source>
-        <translation type="unfinished">Stato</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="60"/>
-        <source>In missione</source>
-        <translation type="unfinished"></translation>
+        <translation>Stato</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="61"/>
         <source>Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="60"/>
+        <source>On mission</source>
+        <translation>In missione</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="61"/>
-        <source>Auto assistita</source>
-        <translation type="unfinished"></translation>
+        <source>Auto-assisted</source>
+        <translation>Auto assistita</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="62"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Posizione</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="63"/>
         <source>Task</source>
-        <translation type="unfinished"></translation>
+        <translation>Attività</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="63"/>
+        <source>Relocation  B7-14 → C3-07</source>
+        <translation>Rilocazione B7-14 → C3-07</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="64"/>
         <source>ETA</source>
-        <translation type="unfinished"></translation>
+        <translation>ETA</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="65"/>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Carico</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="66"/>
         <source>Twistlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Twistlock</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="66"/>
-        <source>Bloccati</source>
-        <translation type="unfinished"></translation>
+        <source>Locked</source>
+        <translation>Bloccati</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
+        <source>1 active (Maintenance 48h)</source>
+        <translation>1 attivo (Manutenzione 48h)</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="67"/>
         <source>Speed</source>
-        <translation type="unfinished">Velocità</translation>
+        <translation>Velocità</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="68"/>
         <source>Heading</source>
-        <translation type="unfinished">Orientamento</translation>
+        <translation>Orientamento</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="69"/>
         <source>Fuel</source>
-        <translation type="unfinished"></translation>
+        <translation>Carburante</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
         <source>Alarms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
-        <source>1 attivo (Manutenzione 48h)</source>
-        <translation type="unfinished"></translation>
+        <translation>Allarmi</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="71"/>
         <source>Timestamp</source>
-        <translation type="unfinished">Timestamp</translation>
+        <translation>Timestamp</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="126"/>
         <source>Telemetry</source>
-        <translation type="unfinished"></translation>
+        <translation>Telemetria</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="148"/>
         <source>Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Video</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="170"/>
         <source>Lifted Loads</source>
-        <translation type="unfinished"></translation>
+        <translation>Carichi Sollevati</translation>
     </message>
 </context>
 <context>
@@ -1497,7 +1502,7 @@
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="131"/>
         <source>Leonardo ViGate Services</source>
-        <translation type="unfinished">Servizi Leonardo ViGate</translation>
+        <translation>Servizi Leonardo ViGate</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="143"/>
@@ -1641,7 +1646,7 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="50"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="51"/>
         <source>Overview</source>
         <translation>Panoramica</translation>
     </message>
@@ -1753,7 +1758,7 @@
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
         <source>Leonardo ViGate Services</source>
-        <translation type="unfinished">Servizi Leonardo ViGate</translation>
+        <translation>Servizi Leonardo ViGate</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="44"/>
@@ -1767,6 +1772,11 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="46"/>
+        <source>Crane</source>
+        <translation>Crane</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="47"/>
         <source>Not Found</source>
         <translation>Non Trovato</translation>
     </message>
