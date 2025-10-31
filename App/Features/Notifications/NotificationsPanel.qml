@@ -74,8 +74,9 @@ PanelTemplate {
                                 Text {
                                     text: {
                                         const dt = new Date(model.reportedAt)
+                                        const locale = Qt.locale(LanguageController.currentLanguage)
                                         return (TranslationManager.revision,
-                                            qsTr("Reported at %1").arg(dt.toLocaleString(Qt.locale())))
+                                            qsTr("Reported at %1").arg(dt.toLocaleString(locale, Locale.ShortFormat)))
                                     }
                                     color: Theme.colors.textMuted
                                     font.family: Theme.typography.bodySans15Family
@@ -135,10 +136,10 @@ PanelTemplate {
                                 }
                                 text: {
                                     if (model.operationState === "BLOCKED" && model.operationIssueTypeId > 0) {
-                                        const issueType = NotificationTranslations.getIssueTypeName(model.operationIssueTypeId)
+                                        const issueType = NotificationsTranslations.getIssueTypeName(model.operationIssueTypeId)
                                         return (TranslationManager.revision, qsTr("Issue: %1").arg(issueType))
                                     } else if (model.operationState === "ACTIVE" && model.operationIssueSolutionTypeId > 0) {
-                                        const solutionType = NotificationTranslations.getSolutionTypeName(model.operationIssueSolutionTypeId)
+                                        const solutionType = NotificationsTranslations.getSolutionTypeName(model.operationIssueSolutionTypeId)
                                         return (TranslationManager.revision, qsTr("Resolution: %1").arg(solutionType))
                                     }
                                     return ""
@@ -157,8 +158,9 @@ PanelTemplate {
                                 text: {
                                     if (model.estimatedArrival) {
                                         const dt = new Date(model.estimatedArrival)
+                                        const locale = Qt.locale(LanguageController.currentLanguage)
                                         return (TranslationManager.revision,
-                                            qsTr("Estimated arrival: %1").arg(dt.toLocaleString(Qt.locale())))
+                                            qsTr("Estimated arrival: %1").arg(dt.toLocaleString(locale, Locale.ShortFormat)))
                                     }
                                     return ""
                                 }
@@ -215,38 +217,40 @@ PanelTemplate {
                 UI.HorizontalDivider {
                     visible: TruckNotificationModel.count > 0
                 }
-
-                RowLayout {
-                    visible: TruckNotificationModel.count > 0
-                    Layout.margins: Theme.spacing.s3
-                    spacing: Theme.spacing.s2
-
-                    UI.Button {
-                        Layout.fillWidth: true
-                        variant: UI.ButtonStyles.Ghost
-                        text: (TranslationManager.revision, qsTr("Back"))
-
-                        background: Rectangle {
-                            color: Theme.colors.transparent
-                            border.width: 0
-                        }
-
-                        onClicked: {
-                            SidePanelController.close()
-                        }
-                    }
-
-                    UI.Button {
-                        Layout.fillWidth: true
-                        variant: UI.ButtonStyles.Primary
-                        text: (TranslationManager.revision, qsTr("Delete All"))
-
-                        onClicked: {
-                            TruckNotificationModel.clearAll()
-                        }
-                    }
-                }
             }
         }
     }
+
+    footer: RowLayout {
+            visible: TruckNotificationModel.count > 0
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: Theme.spacing.s3
+            spacing: Theme.spacing.s2
+
+            UI.Button {
+                Layout.fillWidth: true
+                variant: UI.ButtonStyles.Ghost
+                text: (TranslationManager.revision, qsTr("Back"))
+
+                background: Rectangle {
+                    color: Theme.colors.transparent
+                    border.width: 0
+                }
+
+                onClicked: {
+                    SidePanelController.close()
+                }
+            }
+
+            UI.Button {
+                Layout.fillWidth: true
+                variant: UI.ButtonStyles.Primary
+                text: (TranslationManager.revision, qsTr("Delete All"))
+
+                onClicked: {
+                    TruckNotificationModel.clearAll()
+                }
+            }
+        }
 }
