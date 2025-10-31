@@ -1611,13 +1611,21 @@
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="106"/>
-        <source>Truck Arrivals Date</source>
-        <translation>Truck Arrivals Date</translation>
+        <source>Truck Date Arrivals</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="115"/>
+        <source>Truck DT Arrivals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Truck Arrivals Date</source>
+        <translation type="vanished">Truck Arrivals Date</translation>
+    </message>
+    <message>
         <source>Truck Arrivals DT</source>
-        <translation>Truck Arrivals DT</translation>
+        <translation type="vanished">Truck Arrivals DT</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="124"/>
@@ -1845,18 +1853,30 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="40"/>
-        <source>Arrival Content</source>
-        <translation>Arrival Content</translation>
+        <source>Truck Arrivals</source>
+        <translation type="unfinished">Truck Arrivals</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="41"/>
-        <source>Arrival Date Content</source>
-        <translation>Arrival Date Content</translation>
+        <source>Truck Date Arrivals</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="42"/>
+        <source>Truck Date &amp; Time Arrivals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arrival Content</source>
+        <translation type="vanished">Arrival Content</translation>
+    </message>
+    <message>
+        <source>Arrival Date Content</source>
+        <translation type="vanished">Arrival Date Content</translation>
+    </message>
+    <message>
         <source>Arrival DateTime Content</source>
-        <translation>Arrival DateTime Content</translation>
+        <translation type="vanished">Arrival DateTime Content</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
@@ -1869,6 +1889,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="47"/>
+        <source>Truck Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Leonardo ViGate Services</source>
         <translation type="obsolete">Leonardo ViGate Services</translation>
     </message>
@@ -1876,11 +1901,6 @@
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="46"/>
         <source>Track Details</source>
         <translation type="unfinished">Track Details</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="47"/>
-        <source>Tir Details</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="48"/>
