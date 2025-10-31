@@ -16,6 +16,8 @@ MapQuickItem {
     readonly property real craneLatitude: 45.47693790805344
     readonly property real craneLongitude: 12.242793773599008
 
+    readonly property bool isSelected: PanelRouter.currentPath === Routes.MOCPoiStaticPanel
+
     coordinate: QtPositioning.coordinate(craneLatitude, craneLongitude)
     anchorPoint.x: svgIcon.width / 2
     anchorPoint.y: svgIcon.height / 2
@@ -34,7 +36,7 @@ MapQuickItem {
             asynchronous: true
             cache: true
 
-            layer.enabled: false
+            layer.enabled: isSelected
             layer.effect: MultiEffect {
                 shadowEnabled: true
                 shadowColor: "white"
@@ -54,7 +56,7 @@ MapQuickItem {
             radius: Theme.radius.sm
             color: Theme.colors.hexWithAlpha(Theme.colors.primary500, 1)
             border.color: Theme.colors.white
-            border.width: false ? Theme.borders.b1 : Theme.borders.b0
+            border.width: isSelected ? Theme.borders.b1 : Theme.borders.b0
 
             Text {
                 anchors.centerIn: parent
