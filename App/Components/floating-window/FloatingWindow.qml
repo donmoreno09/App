@@ -3,9 +3,14 @@ import QtQuick.Layouts 6.8
 import QtQuick.Controls 6.8
 
 import App.Themes 1.0
+import App.Components 1.0 as UI
 
 Rectangle {
     id: container
+
+    // Prevent map interactions below this component
+    UI.InputShield { anchors.fill: parent }
+
     // Use the same numbers for both logical min and Layout min (avoid conflicts)
     property real minWidth: 800
     property real minHeight: 600
