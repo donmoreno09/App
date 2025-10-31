@@ -52,7 +52,7 @@
     <message>
         <location filename="../App/Features/TruckArrivals/panels/ArrivalsCountPanel.qml" line="10"/>
         <source>Truck Arrivals</source>
-        <translation>Arrivi Truck</translation>
+        <translation>Arrivi TIR</translation>
     </message>
 </context>
 <context>
@@ -589,7 +589,7 @@
     <message>
         <location filename="../App/layers/LayersPanel.qml" line="57"/>
         <source>Truck Map Layer</source>
-        <translation>Livello Tir</translation>
+        <translation>Livello TIR</translation>
     </message>
     <message>
         <source>TIR Map Layer</source>
@@ -879,7 +879,7 @@
         <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="65"/>
         <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="120"/>
         <source>Truck: </source>
-        <translation>Camion: </translation>
+        <translation>TIR: </translation>
     </message>
     <message>
         <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="79"/>
@@ -1246,7 +1246,7 @@
     <message>
         <location filename="../App/core/PoiOptions.cpp" line="107"/>
         <source>Truck Parking Areas and Inspection Stations</source>
-        <translation>Aree parcheggio camion e stazioni di ispezione</translation>
+        <translation>Aree parcheggio TIR e stazioni di ispezione</translation>
     </message>
     <message>
         <location filename="../App/core/PoiOptions.cpp" line="108"/>
@@ -1527,7 +1527,7 @@
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="34"/>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="42"/>
         <source> trucks</source>
-        <translation> camion</translation>
+        <translation> TIR</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelArrivalContent.qml" line="41"/>
@@ -1560,7 +1560,7 @@
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateContent.qml" line="54"/>
         <source> trucks</source>
-        <translation> camion</translation>
+        <translation> TIR</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateContent.qml" line="66"/>
@@ -1583,12 +1583,12 @@
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="56"/>
         <source>Arriving Trucks</source>
-        <translation>Camion in arrivo</translation>
+        <translation>TIR in arrivo</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="57"/>
         <source> trucks</source>
-        <translation> camion</translation>
+        <translation> TIR</translation>
     </message>
     <message>
         <location filename="../App/Features/TruckArrivals/contents/SidePanelDateTimeContent.qml" line="66"/>
@@ -1614,6 +1614,16 @@
         <translation>Livelli</translation>
     </message>
     <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="106"/>
+        <source>Truck Date Arrivals</source>
+        <translation>Data Arrivi TIR</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="115"/>
+        <source>Truck DT Arrivals</source>
+        <translation>Data e Ora Arrivi TIR</translation>
+    </message>
+    <message>
         <source>PoI</source>
         <translation type="vanished">PoI</translation>
     </message>
@@ -1625,17 +1635,15 @@
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="97"/>
         <source>Truck Arrivals</source>
-        <translation>Arrivi Truck</translation>
+        <translation>Arrivi TIR</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="106"/>
         <source>Truck Arrivals Date</source>
-        <translation>Data Arrivi Truck</translation>
+        <translation type="vanished">Data Arrivi TIR</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="115"/>
         <source>Truck Arrivals DT</source>
-        <translation>Data e Ora Arrivi Truck</translation>
+        <translation type="vanished">Data e Ora Arrivi TIR</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="124"/>
@@ -1892,18 +1900,30 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="40"/>
-        <source>Arrival Content</source>
-        <translation>Contenuto Arrivi</translation>
+        <source>Truck Arrivals</source>
+        <translation>Arrivi TIR</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="41"/>
-        <source>Arrival Date Content</source>
-        <translation>Contenuto Arrivi per Data</translation>
+        <source>Truck Date Arrivals</source>
+        <translation>Data Arrivi TIR</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="42"/>
+        <source>Truck Date &amp; Time Arrivals</source>
+        <translation>Data e Ora Arrivi TIR</translation>
+    </message>
+    <message>
+        <source>Arrival Content</source>
+        <translation type="vanished">Contenuto Arrivi</translation>
+    </message>
+    <message>
+        <source>Arrival Date Content</source>
+        <translation type="vanished">Contenuto Arrivi per Data</translation>
+    </message>
+    <message>
         <source>Arrival DateTime Content</source>
-        <translation>Contenuto Arrivi Data e Ora</translation>
+        <translation type="vanished">Contenuto Arrivi Data e Ora</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="43"/>
@@ -1916,6 +1936,11 @@
         <translation>Transiti ai varchi</translation>
     </message>
     <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="47"/>
+        <source>Truck Details</source>
+        <translation>Dettaglio TIR</translation>
+    </message>
+    <message>
         <source>Leonardo ViGate Services</source>
         <translation type="vanished">Servizi Leonardo ViGate</translation>
     </message>
@@ -1925,9 +1950,8 @@
         <translation>Dettaglio Traccia</translation>
     </message>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="47"/>
         <source>Tir Details</source>
-        <translation>Dettaglio Tir</translation>
+        <translation type="vanished">Dettaglio Tir</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="48"/>

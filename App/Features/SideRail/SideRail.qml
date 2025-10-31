@@ -103,7 +103,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/calendar-arrivals.svg"
                     preserveIconColor: true
-                    text: (TranslationManager.revision, qsTr("Truck Arrivals Date"))
+                    text: (TranslationManager.revision, qsTr("Truck Date Arrivals"))
                     active: PanelRouter.currentPath === "arrival-date-content" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ArrivalDateContent)
@@ -112,7 +112,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/settings.svg"
                     preserveIconColor: true
-                    text: (TranslationManager.revision, qsTr("Truck Arrivals DT"))
+                    text: (TranslationManager.revision, qsTr("Truck DT Arrivals"))
                     active: PanelRouter.currentPath === "arrival-date-time-content" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ArrivalDateTimeContent)
