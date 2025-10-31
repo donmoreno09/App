@@ -13,7 +13,12 @@ import "qrc:/App/Features/SidePanel/routes.js" as Routes
 MapQuickItem {
     id: goliath
 
-    coordinate: QtPositioning.coordinate(44.400285, 8.909861)
+    readonly property real craneLatitude: 45.47693790805344
+    readonly property real craneLongitude: 12.242793773599008
+
+    readonly property bool isSelected: PanelRouter.currentPath === Routes.MOCPoiStaticPanel
+
+    coordinate: QtPositioning.coordinate(craneLatitude, craneLongitude)
     anchorPoint.x: svgIcon.width / 2
     anchorPoint.y: svgIcon.height / 2
 
@@ -25,13 +30,13 @@ MapQuickItem {
             id: svgIcon
             width: 24
             height: 24
-            source: "qrc:/App/assets/icons/poi.svg"
+            source: "qrc:/App/assets/icons/poi-blue.svg"
             smooth: true
             fillMode: Image.PreserveAspectFit
             asynchronous: true
             cache: true
 
-            layer.enabled: false
+            layer.enabled: isSelected
             layer.effect: MultiEffect {
                 shadowEnabled: true
                 shadowColor: "white"
@@ -51,12 +56,12 @@ MapQuickItem {
             radius: Theme.radius.sm
             color: Theme.colors.hexWithAlpha(Theme.colors.primary500, 1)
             border.color: Theme.colors.white
-            border.width: false ? Theme.borders.b1 : Theme.borders.b0
+            border.width: isSelected ? Theme.borders.b1 : Theme.borders.b0
 
             Text {
                 anchors.centerIn: parent
                 id: text
-                text: "Goliath"
+                text: "Crane"
                 font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.white
                 horizontalAlignment: Text.AlignHCenter
@@ -69,9 +74,6 @@ MapQuickItem {
     TapHandler {
         enabled: true
         gesturePolicy: TapHandler.ReleaseWithinBounds
-        onTapped: {
-            console.log("Ho cliccato")
-            SidePanelController.openOrRefresh(Routes.MOCPoiStaticPanel)
-        }
+        onTapped: SidePanelController.openOrRefresh(Routes.MOCPoiStaticPanel)
     }
 }

@@ -80,12 +80,23 @@ UI.FloatingWindow {
 
                 csvHeaders = lines[0].split(";").map(s => s.trim().replace(/_/g,' ')
                             .replace(/([a-z])([A-Z])/g, '$1 $2'))
+
+                // Remove unwanted column
+                const removeColIndex = csvHeaders.indexOf("Entity Name")
+                if (removeColIndex !== -1) {
+                    csvHeaders.splice(removeColIndex, 1)
+                }
+
                 csvData = []
 
                 colWidths = csvHeaders.map(h => h.length*8 + 40)
 
                 for (var i=1; i<Math.min(lines.length,100); i++){
                     var row = lines[i].split(";").map(s => s.trim())
+
+                    // Remove to row the unwanted column
+                    if (removeColIndex !== -1) row.splice(removeColIndex, 1)
+
                     csvData.push(row)
                     for (var c=0; c<row.length; c++){
                         let w = row[c].length*8+40

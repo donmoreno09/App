@@ -600,7 +600,7 @@
     <name>MOCPoiPanel</name>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="17"/>
-        <source>GOLIATH</source>
+        <source>Crane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -619,18 +619,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="60"/>
-        <source>In missione</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="61"/>
         <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="60"/>
+        <source>On mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="61"/>
-        <source>Auto assistita</source>
+        <source>Auto-assisted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -641,6 +641,11 @@
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="63"/>
         <source>Task</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="63"/>
+        <source>Relocation  B7-14 → C3-07</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -660,7 +665,12 @@
     </message>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="66"/>
-        <source>Bloccati</source>
+        <source>Locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
+        <source>1 active (Maintenance 48h)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -681,11 +691,6 @@
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
         <source>Alarms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="70"/>
-        <source>1 attivo (Manutenzione 48h)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -856,62 +861,62 @@
     </message>
     <message>
         <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="65"/>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="119"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="120"/>
         <source>Truck: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="78"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="79"/>
         <source>Reported at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="103"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="104"/>
         <source>NEW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="104"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="105"/>
         <source>UPDATED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="139"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="140"/>
         <source>Issue: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="142"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="143"/>
         <source>Resolution: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="161"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="163"/>
         <source>Estimated arrival: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="176"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="178"/>
         <source>Location: Lat %1°, Lon %2°</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="189"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="191"/>
         <source>Note: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="200"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="202"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="227"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="234"/>
         <source>Back</source>
         <translation type="unfinished">Back</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="242"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="249"/>
         <source>Delete All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1743,7 +1748,7 @@
 <context>
     <name>TitleBarController</name>
     <message>
-        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="52"/>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="53"/>
         <source>Overview</source>
         <translation>Overview</translation>
     </message>
@@ -1871,6 +1876,11 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="48"/>
+        <source>Crane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/TitleBar/TitleBarController.qml" line="49"/>
         <source>Not Found</source>
         <translation>Not Found</translation>
     </message>
