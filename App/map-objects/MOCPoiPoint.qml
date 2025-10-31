@@ -59,7 +59,7 @@ MapQuickItem {
             Text {
                 anchors.centerIn: parent
                 id: text
-                text: "Goliath"
+                text: "Crane"
                 font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.white
                 horizontalAlignment: Text.AlignHCenter

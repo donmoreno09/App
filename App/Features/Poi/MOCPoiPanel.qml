@@ -14,7 +14,7 @@ import "qrc:/App/Components/floating-window/windowRoutes.js" as WinRoutes
 
 PanelTemplate {
     id: root
-    title.text: (TranslationManager.revision, qsTr("GOLIATH"))
+    title.text: (TranslationManager.revision, qsTr("Crane"))
 
     ScrollView {
         id: scrollView
