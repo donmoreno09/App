@@ -1645,8 +1645,12 @@
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="142"/>
+        <source>Gate Transits</source>
+        <translation>Transiti ai varchi</translation>
+    </message>
+    <message>
         <source>Leonardo ViGate Services</source>
-        <translation>Servizi Leonardo ViGate</translation>
+        <translation type="vanished">Servizi Leonardo ViGate</translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="163"/>
@@ -1904,8 +1908,12 @@
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="44"/>
+        <source>Gate Transits</source>
+        <translation>Transiti ai varchi</translation>
+    </message>
+    <message>
         <source>Leonardo ViGate Services</source>
-        <translation>Servizi Leonardo ViGate</translation>
+        <translation type="vanished">Servizi Leonardo ViGate</translation>
     </message>
     <message>
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="46"/>
@@ -2208,9 +2216,13 @@
 <context>
     <name>ViGatePanel</name>
     <message>
-        <location filename="../App/Features/ViGateServices/panels/ViGatePanel.qml" line="9"/>
         <source>Leonardo ViGate Services</source>
-        <translation>Servizi Leonardo ViGate</translation>
+        <translation type="vanished">Servizi Leonardo ViGate</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/ViGateServices/panels/ViGatePanel.qml" line="9"/>
+        <source>Gate Transits</source>
+        <translation>Transiti ai varchi</translation>
     </message>
 </context>
 <context>
