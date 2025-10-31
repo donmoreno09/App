@@ -21,7 +21,7 @@ PanelTemplate {
         MapTilesetsItem {
             Layout.fillWidth: true
             text: (TranslationManager.revision, qsTr("Online OSM"))
-            source: "qrc:/App/assets/images/street-map.png"
+            source: "qrc:/App/assets/images/osm-online.png"
             active: MapController._currentPlugin === MapPlugins.osm
 
             onClicked: MapController.setPlugin(MapPlugins.osm)
@@ -30,7 +30,7 @@ PanelTemplate {
         MapTilesetsItem {
             Layout.fillWidth: true
             text: (TranslationManager.revision, qsTr("Default OSM"))
-            source: "qrc:/App/assets/images/street-map.png"
+            source: "qrc:/App/assets/images/osm-default.png"
             active: MapController._currentPlugin === MapPlugins.osmDefault
 
             onClicked: MapController.setPlugin(MapPlugins.osmDefault)
