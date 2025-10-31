@@ -54,7 +54,7 @@ PanelTemplate {
         }
 
         LayerToggle {
-            label: (TranslationManager.revision, qsTr("TIR Map Layer"))
+            label: (TranslationManager.revision, qsTr("Truck Map Layer"))
             toggle.checked: TrackManager.getLayer("tir").active
             toggle.onCheckedChanged: {
                 if (toggle.checked) TrackManager.activate("tir")
