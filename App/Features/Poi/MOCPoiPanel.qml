@@ -133,6 +133,8 @@ PanelTemplate {
                         })
                         if (!window) {
                             console.warn("[MOCPoiPanel] I can't open floating window");
+                        } else {
+                            SidePanelController.close(true)
                         }
                     }
                 }
@@ -155,6 +157,8 @@ PanelTemplate {
                         })
                         if (!window) {
                             console.warn("[MOCPoiPanel] I can't open floating window");
+                        } else {
+                            SidePanelController.close(true)
                         }
                     }
                 }
@@ -177,6 +181,8 @@ PanelTemplate {
                         })
                         if (!window) {
                             console.warn("[MOCPoiPanel] I can't open floating window");
+                        } else {
+                            SidePanelController.close(true)
                         }
                     }
                 }
