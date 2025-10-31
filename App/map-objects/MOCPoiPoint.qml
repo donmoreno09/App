@@ -13,7 +13,10 @@ import "qrc:/App/Features/SidePanel/routes.js" as Routes
 MapQuickItem {
     id: goliath
 
-    coordinate: QtPositioning.coordinate(44.400285, 8.909861)
+    readonly property real craneLatitude: 45.47693790805344
+    readonly property real craneLongitude: 12.242793773599008
+
+    coordinate: QtPositioning.coordinate(craneLatitude, craneLongitude)
     anchorPoint.x: svgIcon.width / 2
     anchorPoint.y: svgIcon.height / 2
 
