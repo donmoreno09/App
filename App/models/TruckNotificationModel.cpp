@@ -88,19 +88,25 @@ void TruckNotificationModel::set(const QVector<TruckNotification> &notifications
         m_upsertMap.insert(m_notifications[i].id, i);
     }
     endResetModel();
+    emit countChanged();
 }
 
 void TruckNotificationModel::upsert(const QVector<TruckNotification> &notifications)
 {
     QSet<QString> seen;
+    bool countChanged = false;
 
     // Update existing notification or insert it
     for (const auto& notif : notifications) {
+        if (m_deletedIds.contains(notif.id)) {
+            continue;
+        }
+
         seen.insert(notif.id);
         auto it = m_upsertMap.find(notif.id);
 
         if (it != m_upsertMap.end()) {
-            // Update notification
+            // Update existing notification
             const int row = it.value();
 
             QVector<int> changed = diffRoles(m_notifications[row], notif);
@@ -110,13 +116,14 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
                 emit dataChanged(idx, idx, changed);
             }
         } else {
-            // Insert notification
+            // Insert new notification
             const int row = m_notifications.size();
 
             beginInsertRows({}, row, row);
             m_notifications.append(notif);
             m_upsertMap.insert(notif.id, row);
             endInsertRows();
+            countChanged = true;
         }
     }
 
@@ -130,6 +137,7 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
             m_notifications.removeAt(row);
             endRemoveRows();
             removed = true;
+            countChanged = true;
         }
     }
 
@@ -140,6 +148,10 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
         for (int row = 0; row < m_notifications.size(); row++) {
             m_upsertMap.insert(m_notifications[row].id, row);
         }
+    }
+
+    if (countChanged) {
+        emit this->countChanged();
     }
 }
 
@@ -183,6 +195,8 @@ int TruckNotificationModel::countByState(const QString &state) const
 
 void TruckNotificationModel::removeNotification(const QString &id)
 {
+    m_deletedIds.insert(id);
+
     auto it = m_upsertMap.find(id);
     if (it == m_upsertMap.end()) {
         qWarning() << "[TruckNotificationModel] Cannot remove notification with id:" << id << "- not found";
@@ -203,15 +217,24 @@ void TruckNotificationModel::removeNotification(const QString &id)
         m_upsertMap.insert(m_notifications[i].id, i);
     }
 
+    emit countChanged();
     qDebug() << "[TruckNotificationModel] Removed notification:" << id;
 }
 
 void TruckNotificationModel::clearAll()
 {
+    if (m_notifications.isEmpty()) return;
+
+    for (const auto& notif : m_notifications) {
+        m_deletedIds.insert(notif.id);
+    }
+
     beginResetModel();
     m_notifications.clear();
     m_upsertMap.clear();
     endResetModel();
+
+    emit countChanged();
     qDebug() << "[TruckNotificationModel] Cleared all notifications";
 }
 

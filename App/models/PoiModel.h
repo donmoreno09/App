@@ -8,8 +8,8 @@
 #include <QQmlEngine>
 #include <entities/Poi.h>
 #include <persistence/poipersistencemanager.h>
+#include <QtPositioning/QGeoCoordinate>
 #include "ModelHelper.h"
-#include "CoordinatesModel.h"
 
 class PoiModel : public QAbstractListModel
 {
@@ -42,14 +42,19 @@ public:
         ShapeTypeIdRole,
         SurfaceRole,
         HeightRole,
-        LatitudeRole,   // coordinate.x
-        LongitudeRole,  // coordinate.y
+        CoordinateRole,
         CoordinatesRole,
+        TopLeftRole,
+        BottomRightRole,
         RadiusARole,
         RadiusBRole,
+        IsRectangleRole,
 
         // Details/Metadata
         NoteRole,
+
+        // Temp/Internals
+        ModelIndexRole,
     };
 
     Q_ENUM(Roles);
@@ -65,6 +70,8 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     QVector<Poi>& pois();
+
+    Q_INVOKABLE void setCoordinate(int row, int coordIndex, const QGeoCoordinate& coord);
 
     Q_INVOKABLE void append(const QVariantMap &data);
 
@@ -98,15 +105,12 @@ private:
     QPointer<PoiPersistenceManager> m_persistenceManager;
     QVector<Poi> m_pois;
     QPointer<ModelHelper> m_helper;
-    QHash<QString, CoordinatesModel*> m_coordsModels;
 
     static QList<QVector2D> parseCoordinatesVariant(const QVariant& v);
 
     static bool compareCoords(const QList<QVector2D>& a, const QList<QVector2D>& b);
 
-    CoordinatesModel* getCoordsModel(const QString& id, const QList<QVector2D>& pts);
-
-    void removeCoordsModel(const QString& id);
+    static bool isRectangle(const Geometry& geom);
 
     void buildPoiSave(const QVariantMap &data);
 

@@ -3,7 +3,7 @@ set(qml_files
 )
 
 set(qml_singletons
-    NotificationsController.qml
+    NotificationsTranslations.qml
 )
 
 set_source_files_properties(

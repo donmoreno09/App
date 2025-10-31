@@ -68,11 +68,11 @@ PanelTemplate {
                                 Layout.preferredWidth: Theme.spacing.s16
                                 Layout.preferredHeight: Theme.spacing.s6
                                 radius: Theme.radius.sm
-                                color: Theme.colors.error500
+                                color: Theme.colors.warning500
 
                                 Text {
                                     anchors.centerIn: parent
-                                    text: "HIGH"
+                                    text: "NEW"
                                     color: Theme.colors.white
                                     font.family: Theme.typography.bodySans15Family
                                     font.pointSize: Theme.typography.bodySans15Size
@@ -165,11 +165,11 @@ PanelTemplate {
                                 Layout.preferredWidth: Theme.spacing.s16
                                 Layout.preferredHeight: Theme.spacing.s6
                                 radius: Theme.radius.sm
-                                color: Theme.colors.caution500
+                                color: Theme.colors.success500
 
                                 Text {
                                     anchors.centerIn: parent
-                                    text: "MEDIUM"
+                                    text: "UPDATED"
                                     color: Theme.colors.white
                                     font.family: Theme.typography.bodySans15Family
                                     font.pointSize: Theme.typography.bodySans15Size
@@ -236,11 +236,11 @@ PanelTemplate {
                                 Layout.preferredWidth: Theme.spacing.s16
                                 Layout.preferredHeight: Theme.spacing.s6
                                 radius: Theme.radius.sm
-                                color: Theme.colors.success500
+                                color: Theme.colors.warning500
 
                                 Text {
                                     anchors.centerIn: parent
-                                    text: "LOW"
+                                    text: "NEW"
                                     color: Theme.colors.black
                                     font.family: Theme.typography.bodySans15Family
                                     font.pointSize: Theme.typography.bodySans15Size

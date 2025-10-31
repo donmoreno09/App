@@ -1,30 +1,41 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import QtPositioning 6.8
 
 import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
-import App.Features.MapTools 1.0
+import App.Features.MapModes 1.0
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
+import "components"
+
 PanelTemplate {
     id: root
-
     title.text: (TranslationManager.revision, qsTr("Point of Interest"))
 
-    function updateTexts() {
-        latitudeInput.updateText()
-        longitudeInput.updateText()
-        if (ToolRegistry.pointTool.editable) {
-            nameInput.text = ToolRegistry.pointTool.editable.label
-            noteTextArea.text = ToolRegistry.pointTool.editable.note ?? ""
-            categoryComboBox.currentIndex = categoryComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.categoryId)
-            typeComboBox.currentIndex = typeComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.typeId)
-            healthStatusComboBox.currentIndex = healthStatusComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.healthStatusId)
-            operationalStateComboBox.currentIndex = operationalStateComboBox.comboBox.indexOfValue(ToolRegistry.pointTool.editable.operationalStateId)
+    function syncData() {
+        if (!MapModeController.isEditing) return
+
+        labelInput.text = MapModeController.poi.label
+        noteTextArea.text = MapModeController.poi.note ?? ""
+        categoryComboBox.currentIndex = categoryComboBox.comboBox.indexOfValue(MapModeController.poi.categoryId)
+        typeComboBox.currentIndex = typeComboBox.comboBox.indexOfValue(MapModeController.poi.typeId)
+        healthStatusComboBox.currentIndex = healthStatusComboBox.comboBox.indexOfValue(MapModeController.poi.healthStatusId)
+        operationalStateComboBox.currentIndex = operationalStateComboBox.comboBox.indexOfValue(MapModeController.poi.operationalStateId)
+    }
+
+    Component.onCompleted: {
+        syncData()
+        if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
+            MapModeController.setActiveMode(MapModeRegistry.createPointMode)
         }
+    }
+
+    Component.onDestruction: {
+        MapModeController.setActiveMode(MapModeRegistry.interactionMode)
     }
 
     Connections {
@@ -33,19 +44,12 @@ PanelTemplate {
         function onAppended() { SidePanelController.close(true) }
         function onUpdated() { SidePanelController.close(true) }
         function onRemoved() { SidePanelController.close(true) }
-        function onFetched() { root.updateTexts() }
-    }
-
-    Connections {
-        target: ToolRegistry.pointTool
-
-        function onMapInputted() { root.updateTexts() }
+        function onFetched() { root.syncData() }
     }
 
     ScrollView {
         anchors.fill: parent
         contentWidth: availableWidth
-        Component.onCompleted: updateTexts()
 
         Pane {
             anchors.fill: parent
@@ -57,22 +61,21 @@ PanelTemplate {
                 spacing: Theme.spacing.s4
 
                 UI.Input {
-                    id: nameInput
+                    id: labelInput
                     Layout.fillWidth: true
-                    labelText: qsTr("Name(*)")
-                    placeholderText: qsTr("Name")
+                    labelText: qsTr("Label(*)")
+                    placeholderText: qsTr("Label")
 
-                    onTextEdited: if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.label = text
+                    onTextEdited: if (MapModeController.isEditing) MapModeController.poi.label = text
                 }
 
                 UI.ComboBox {
                     id: categoryComboBox
                     Layout.fillWidth: true
                     labelText: qsTr("Category(*)")
-
-                    model: PoiOptions.categories
                     textRole: "name"
                     valueRole: "key"
+                    model: PoiOptions.categories
                 }
 
                 UI.ComboBox {
@@ -89,6 +92,8 @@ PanelTemplate {
                     id: healthStatusComboBox
                     Layout.fillWidth: true
                     labelText: qsTr("Health Status(*)")
+                    enabled: false
+                    visible: !MapModeController.isCreating
 
                     model: PoiOptions.healthStatuses
                     textRole: "value"
@@ -99,39 +104,18 @@ PanelTemplate {
                     id: operationalStateComboBox
                     Layout.fillWidth: true
                     labelText: qsTr("Operational State(*)")
+                    enabled: false
+                    visible: !MapModeController.isCreating
 
                     model: PoiOptions.operationalStates
                     textRole: "value"
                     valueRole: "key"
                 }
 
-                UI.InputCoordinate {
-                    id: latitudeInput
+                // For legacy reasons, it's still called AreaForm but should be called ShapeForm instead, feel free to change it
+                AreaForm {
+                    id: areaForm
                     Layout.fillWidth: true
-                    labelText: qsTr("Latitude(*)")
-
-                    onValueChanged: {
-                        ToolRegistry.pointTool.setLatitude(value)
-                        if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.latitude = value
-                    }
-
-                    function updateText() { latitudeInput.setText(ToolRegistry.pointTool.coord.latitude) }
-                    Component.onCompleted: updateText()
-                }
-
-                UI.InputCoordinate {
-                    id: longitudeInput
-                    Layout.fillWidth: true
-                    labelText: qsTr("Longitude(*)")
-                    type: UI.InputCoordinate.Longitude
-
-                    onValueChanged: {
-                        ToolRegistry.pointTool.setLongitude(value)
-                        if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.longitude = value
-                    }
-
-                    function updateText() { longitudeInput.setText(ToolRegistry.pointTool.coord.longitude) }
-                    Component.onCompleted: updateText()
                 }
 
                 UI.TextArea {
@@ -139,9 +123,41 @@ PanelTemplate {
                     Layout.fillWidth: true
                     labelText: qsTr("Note")
 
-                    onTextEdited: if (ToolRegistry.pointTool.editable) ToolRegistry.pointTool.editable.note = text
+                    onTextEdited: if (MapModeController.isEditing) MapModeController.poi.note = text
                 }
             }
+        }
+    }
+
+    function validate() {
+        if (labelInput.text.trim() === "") return false;
+        return areaForm.isValid;
+    }
+
+    function save() {
+        const data = {
+            label: labelInput.text,
+            geometry: MapModeController.activeMode.buildGeometry(),
+            layerId: 1,
+            layerName: Layers.poiMapLayer(),
+            categoryId: categoryComboBox.currentValue,
+            categoryName: categoryComboBox.currentText,
+            typeId: typeComboBox.currentValue,
+            typeName: typeComboBox.currentText,
+            healthStatusId: healthStatusComboBox.currentValue,
+            healthStatusName: healthStatusComboBox.currentText,
+            operationalStateId: operationalStateComboBox.currentValue,
+            operationalStateName: operationalStateComboBox.currentText,
+            details: {
+                metadata: { note: noteTextArea.text }
+            }
+        }
+
+        if (MapModeController.isEditing) {
+            data.id = MapModeController.poi.id
+            PoiModel.update(data)
+        } else {
+            PoiModel.append(data)
         }
     }
 
@@ -173,59 +189,24 @@ PanelTemplate {
                 }
 
                 UI.Button {
-                    visible: !!ToolRegistry.pointTool.editable
+                    visible: !!MapModeController.poi
                     enabled: !PoiModel.loading
                     Layout.preferredWidth: 1
                     Layout.fillWidth: true
                     variant: UI.ButtonStyles.Danger
                     backgroundRect.border.width: Theme.borders.b0
                     text: qsTr("Remove")
-                    onClicked: PoiModel.remove(ToolRegistry.pointTool.editable.id)
+                    onClicked: PoiModel.remove(MapModeController.poi.id)
                 }
 
                 UI.Button {
                     Layout.preferredWidth: 1
                     Layout.fillWidth: true
                     text: qsTr("Save")
-                    enabled: !PoiModel.loading
-                    onClicked: {
-                        const data = {
-                            label: nameInput.text,
-                            geometry: {
-                               shapeTypeId: 1,
-                               coordinate: { x: ToolRegistry.pointTool.coord.longitude, y: ToolRegistry.pointTool.coord.latitude },
-                            },
-                            layerId: 1,
-                            layerName: Layers.poiMapLayer(),
-                            categoryId: categoryComboBox.currentValue,
-                            categoryName: categoryComboBox.currentText,
-                            typeId: typeComboBox.currentValue,
-                            typeName: typeComboBox.currentText,
-                            healthStatusId: healthStatusComboBox.currentValue,
-                            healthStatusName: healthStatusComboBox.currentText,
-                            operationalStateId: operationalStateComboBox.currentValue,
-                            operationalStateName: operationalStateComboBox.currentText,
-                            details: {
-                                metadata: { note: noteTextArea.text }
-                            }
-                        }
-
-                        if (ToolRegistry.pointTool.editable) {
-                            data.id = ToolRegistry.pointTool.editable.id
-                            PoiModel.update(data)
-                        } else {
-                            PoiModel.append(data)
-                        }
-                    }
+                    enabled: !PoiModel.loading && validate()
+                    onClicked: save()
                 }
             }
         }
-    }
-
-    Component.onCompleted: ToolController.activeTool = ToolRegistry.pointTool
-    Component.onDestruction: {
-        ToolRegistry.pointTool.editable = null
-        ToolController.activeTool = null
-        PoiModel.discardChanges()
     }
 }

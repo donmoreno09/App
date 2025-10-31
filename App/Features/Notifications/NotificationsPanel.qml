@@ -7,6 +7,7 @@ import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
+import App.Features.Notifications 1.0
 
 PanelTemplate {
     title.text: (TranslationManager.revision, qsTr("Notifications"))
@@ -25,7 +26,7 @@ PanelTemplate {
 
                 // Show message if no notifications
                 Text {
-                    visible: NotificationsController.totalCount === 0
+                    visible: TruckNotificationModel.count === 0
                     text: (TranslationManager.revision, qsTr("No notifications"))
                     color: Theme.colors.textMuted
                     font.family: Theme.typography.bodySans25Family
@@ -36,14 +37,14 @@ PanelTemplate {
 
                 // Notifications list
                 Repeater {
-                    model: NotificationsController.model
+                    model: TruckNotificationModel
 
                     delegate: UI.Accordion {
                         Layout.fillWidth: true
 
                         // Map operationState to accordion variant
                         variant: {
-                            if (model.operationState === "BLOCKED") return UI.AccordionStyles.Urgent
+                            if (model.operationState === "BLOCKED") return UI.AccordionStyles.Warning
                             if (model.operationState === "ACTIVE") return UI.AccordionStyles.Success
                             return UI.AccordionStyles.Warning
                         }
@@ -61,11 +62,11 @@ PanelTemplate {
 
                                 // Bold title - Operation Code
                                 Text {
-                                    text: "Truck: " + model.operationCode
+                                    text: (TranslationManager.revision, qsTr("Truck: ")) + model.operationCode
                                     color: Theme.colors.text
                                     font.family: Theme.typography.bodySans25StrongFamily
                                     font.pointSize: Theme.typography.bodySans25StrongSize
-                                    font.weight: Theme.typography.bodySans25StrongWeight
+                                    font.weight: Theme.typography.weightBold
                                     Layout.fillWidth: true
                                 }
 
@@ -87,20 +88,22 @@ PanelTemplate {
 
                             // Right side: Badge
                             Rectangle {
-                                Layout.preferredWidth: Theme.spacing.s16
+                                Layout.preferredWidth: Theme.spacing.s20
                                 Layout.preferredHeight: Theme.spacing.s6
                                 radius: Theme.radius.sm
                                 color: {
-                                    if (model.operationState === "BLOCKED") return Theme.colors.error500
+                                    if (model.operationState === "BLOCKED") return Theme.colors.warning500
                                     if (model.operationState === "ACTIVE") return Theme.colors.success500
                                     return Theme.colors.caution500
                                 }
 
                                 Text {
                                     anchors.centerIn: parent
-                                    text: model.badgeType // "NEW" or "UPDATED"
-                                    color: model.operationState === "ACTIVE" ? Theme.colors.white :
-                                           model.operationState === "BLOCKED" ? Theme.colors.white : Theme.colors.black
+                                    text: {
+                                        if (model.operationState === "BLOCKED") return (TranslationManager.revision, qsTr("NEW"))
+                                        if (model.operationState === "ACTIVE") return (TranslationManager.revision, qsTr("UPDATED"))
+                                    }
+                                    color: Theme.colors.text
                                     font.family: Theme.typography.bodySans15Family
                                     font.pointSize: Theme.typography.bodySans15Size
                                     font.weight: Theme.typography.bodySans15StrongWeight
@@ -113,17 +116,33 @@ PanelTemplate {
                             spacing: Theme.spacing.s3
 
                             Text {
-                                text: model.operationCode
+                                text: (TranslationManager.revision, qsTr("Truck: ")) + model.operationCode
                                 color: Theme.colors.text
                                 font.family: Theme.typography.bodySans25StrongFamily
                                 font.pointSize: Theme.typography.bodySans25StrongSize
-                                font.weight: Theme.typography.bodySans25StrongWeight
+                                font.weight: Theme.typography.weightBold
                             }
 
-                            // Show issue type if available
+                            // Show issue type or solution type based on state
                             Text {
-                                visible: model.operationIssueTypeId > 0
-                                text: (TranslationManager.revision, qsTr("Issue Type ID: %1").arg(model.operationIssueTypeId))
+                                visible: {
+                                    if (model.operationState === "BLOCKED") {
+                                        return model.operationIssueTypeId > 0
+                                    } else if (model.operationState === "ACTIVE") {
+                                        return model.operationIssueSolutionTypeId > 0
+                                    }
+                                    return false
+                                }
+                                text: {
+                                    if (model.operationState === "BLOCKED" && model.operationIssueTypeId > 0) {
+                                        const issueType = NotificationsTranslations.getIssueTypeName(model.operationIssueTypeId)
+                                        return (TranslationManager.revision, qsTr("Issue: %1").arg(issueType))
+                                    } else if (model.operationState === "ACTIVE" && model.operationIssueSolutionTypeId > 0) {
+                                        const solutionType = NotificationsTranslations.getSolutionTypeName(model.operationIssueSolutionTypeId)
+                                        return (TranslationManager.revision, qsTr("Resolution: %1").arg(solutionType))
+                                    }
+                                    return ""
+                                }
                                 color: Theme.colors.text
                                 font.family: Theme.typography.bodySans25Family
                                 font.pointSize: Theme.typography.bodySans25Size
@@ -179,15 +198,11 @@ PanelTemplate {
                             UI.Button {
                                 Layout.alignment: Qt.AlignRight
                                 text: (TranslationManager.revision, qsTr("Delete"))
-                                variant: {
-                                    if (model.operationState === "BLOCKED") return UI.ButtonStyles.Danger
-                                    if (model.operationState === "ACTIVE") return UI.ButtonStyles.Primary
-                                    return UI.ButtonStyles.Warning
-                                }
+                                variant: UI.ButtonStyles.Ghost
                                 Layout.preferredHeight: Theme.spacing.s8
 
                                 onClicked: {
-                                    NotificationsController.removeNotification(model.id)
+                                    TruckNotificationModel.removeNotification(model.id)
                                 }
                             }
                         }
@@ -198,36 +213,42 @@ PanelTemplate {
 
                 // Bottom actions
                 UI.HorizontalDivider {
-                    visible: NotificationsController.totalCount > 0
-                }
-
-                RowLayout {
-                    visible: NotificationsController.totalCount > 0
-                    Layout.margins: Theme.spacing.s3
-                    spacing: Theme.spacing.s2
-
-                    UI.Button {
-                        Layout.fillWidth: true
-                        variant: UI.ButtonStyles.Ghost
-                        text: (TranslationManager.revision, qsTr("Back"))
-
-                        background: Rectangle {
-                            color: Theme.colors.transparent
-                            border.width: 0
-                        }
-                    }
-
-                    UI.Button {
-                        Layout.fillWidth: true
-                        variant: UI.ButtonStyles.Primary
-                        text: (TranslationManager.revision, qsTr("Delete All"))
-
-                        onClicked: {
-                            NotificationsController.clearAll()
-                        }
-                    }
+                    visible: TruckNotificationModel.count > 0
                 }
             }
         }
     }
+
+    footer: RowLayout {
+            visible: TruckNotificationModel.count > 0
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: Theme.spacing.s3
+            spacing: Theme.spacing.s2
+
+            UI.Button {
+                Layout.fillWidth: true
+                variant: UI.ButtonStyles.Ghost
+                text: (TranslationManager.revision, qsTr("Back"))
+
+                background: Rectangle {
+                    color: Theme.colors.transparent
+                    border.width: 0
+                }
+
+                onClicked: {
+                    SidePanelController.close()
+                }
+            }
+
+            UI.Button {
+                Layout.fillWidth: true
+                variant: UI.ButtonStyles.Primary
+                text: (TranslationManager.revision, qsTr("Delete All"))
+
+                onClicked: {
+                    TruckNotificationModel.clearAll()
+                }
+            }
+        }
 }
