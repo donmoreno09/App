@@ -30,7 +30,7 @@ MapQuickItem {
             id: svgIcon
             width: 24
             height: 24
-            source: "qrc:/App/assets/icons/poi.svg"
+            source: "qrc:/App/assets/icons/poi-blue.svg"
             smooth: true
             fillMode: Image.PreserveAspectFit
             asynchronous: true
