@@ -62,6 +62,7 @@ MapQuickItem {
         TapHandler {
             id: tapHandler
             acceptedButtons: Qt.LeftButton
+            gesturePolicy: TapHandler.ReleaseWithinBounds
             onTapped: (event) => {
                 SidePanelController.openOrRefresh(Routes.TirPanel)
                 SelectedTrackState.select(tir.tirModel.getEditableTir(tir.index))

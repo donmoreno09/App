@@ -65,6 +65,7 @@ MapItemGroup {
             TapHandler {
                 id: tapHandler
                 acceptedButtons: Qt.LeftButton
+                gesturePolicy: TapHandler.ReleaseWithinBounds
                 onTapped: (event) => {
                     SidePanelController.openOrRefresh(Routes.TrackPanel)
                     SelectedTrackState.select(root.trackModel.getEditableTrack(root.index))
