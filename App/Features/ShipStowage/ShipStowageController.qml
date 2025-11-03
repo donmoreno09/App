@@ -1,50 +1,79 @@
 pragma Singleton
-
 import QtQuick 6.8
+import QtWebEngine 1.10
 
 QtObject {
     id: root
 
     property bool hasActiveWindow: false
+    property var webViewContainer: null  // Keep reference to container
 
     signal windowOpened()
     signal windowClosed()
 
+    // Call this on app startup or first use
+    function initialize(parentWindow) {
+        if (webViewContainer) return
+
+        var component = Qt.createComponent("qrc:/App/Features/ShipStowage/components/WebViewContainer.qml")
+
+        if (component.status === Component.Ready) {
+            webViewContainer = component.createObject(parentWindow, {
+                parentWindow: parentWindow,
+                visible: false
+            })
+
+            if (webViewContainer) {
+                console.log("[ShipStowageController] WebView preloaded")
+            }
+        }
+    }
+
     function openStowageWindow(parentWindow) {
-        if(!parentWindow) {
+        if (!parentWindow) {
             console.error("[ShipStowageController] No parent window provided")
             return
         }
 
-        if(hasActiveWindow) {
+        // Initialize if not already done
+        if (!webViewContainer) {
+            initialize(parentWindow)
+        }
+
+        if (hasActiveWindow) {
             console.warn("[ShipStowageController] A stowage window is already open")
+            return
         }
 
-        var component = Qt.createComponent("qrc:/App/Features/ShipStowage/components/WebViewContainer.qml")
+        // Show and activate the existing container
+        webViewContainer.visible = true
+        webViewContainer.parentWindow = parentWindow
 
-        if(component.status === Component.Ready) {
-            var webView = component.createObject(parentWindow, {
-                parentWindow: parentWindow
-            })
-
-            if(webView === null) {
-                console.error("[ShipStowageController] Failed to create WebView instance")
-            }
-
-            hasActiveWindow = true
-            windowOpened()
-
-            webView.Component.destruction.connect(function() {
-                hasActiveWindow = false
-                windowClosed()
-                console.log("[ShipStowageController] Stowage window closed")
-            })
-
-            console.log("[ShipStowageController] Stowage window opened")
-        } else if(component.status === Component.Error) {
-            console.error("[ShipStowageController] component error: ", component.errorString())
-        } else {
-            console.warn("[ShipStowageController] Component not ready status: ", component.status)
+        // Reactivate WebView
+        if (webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
+            webViewContainer.webViewItem.webView.lifecycleState = WebEngineView.LifecycleState.Active
         }
+
+        hasActiveWindow = true
+        windowOpened()
+
+        console.log("[ShipStowageController] Stowage window opened")
+    }
+
+    function closeStowageWindow() {
+        if (!webViewContainer || !hasActiveWindow) return
+
+        // Hide instead of destroy
+        webViewContainer.visible = false
+
+        // Freeze to save resources
+        if (webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
+            webViewContainer.webViewItem.webView.lifecycleState = WebEngineView.LifecycleState.Frozen
+        }
+
+        hasActiveWindow = false
+        windowClosed()
+
+        console.log("[ShipStowageController] Stowage window hidden")
     }
 }
