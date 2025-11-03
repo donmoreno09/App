@@ -8,11 +8,11 @@ UI.FloatingWindow {
     width: 1200
     height: 740
     visible: true
+    windowTitle: "CSV Viewer"
 
     property var parentWindow: null
     windowWidth: parentWindow ? parentWindow.width : 1200
     windowHeight: parentWindow ? parentWindow.height : 740
-    property string title: "CSV Viewer"
     property string csvSource: "qrc:/App/assets/resources/data.csv"
     property var csvHeaders: []
     property var csvData: []
@@ -22,14 +22,6 @@ UI.FloatingWindow {
         anchors.fill: parent
         spacing: Theme.spacing.s2
         anchors.margins: Theme.spacing.s2
-
-        Label {
-            text: title
-            font.bold: true
-            font.pixelSize: Theme.typography.fontSize200
-            color: Theme.colors.white500
-            Layout.fillWidth: true
-        }
 
         Item { // Contenitore fisso per header + dati
             Layout.fillWidth: true
@@ -66,7 +58,7 @@ UI.FloatingWindow {
         }
     }
 
-    function loadCsv(url) {
+    function loadCsv(url, ignoreColumns = []) {
         csvHeaders = []
         csvData = []
         colWidths = []
@@ -78,29 +70,36 @@ UI.FloatingWindow {
                 var lines = xhr.responseText.split("\n").filter(l => l.trim())
                 if (!lines.length) return
 
-                csvHeaders = lines[0].split(";").map(s => s.trim().replace(/_/g,' ')
-                            .replace(/([a-z])([A-Z])/g, '$1 $2'))
+                // Normalize header names
+                csvHeaders = lines[0]
+                    .split(";")
+                    .map(s => s.trim().replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2'))
 
-                // Remove unwanted column
-                const removeColIndex = csvHeaders.indexOf("Entity Name")
-                if (removeColIndex !== -1) {
-                    csvHeaders.splice(removeColIndex, 1)
+                // Determine which columns to remove (case-insensitive)
+                const removeIndices = []
+                for (let col of ignoreColumns) {
+                    const idx = csvHeaders.findIndex(
+                        h => h.toLowerCase() === col.toLowerCase()
+                    )
+                    if (idx !== -1) removeIndices.push(idx)
                 }
 
+                // Remove unwanted columns from headers (right-to-left to keep indices valid)
+                removeIndices.sort((a, b) => b - a).forEach(i => csvHeaders.splice(i, 1))
+
                 csvData = []
+                colWidths = csvHeaders.map(h => h.length * 8 + 40)
 
-                colWidths = csvHeaders.map(h => h.length*8 + 40)
-
-                for (var i=1; i<Math.min(lines.length,100); i++){
+                for (var i = 1; i < Math.min(lines.length, 100); i++) {
                     var row = lines[i].split(";").map(s => s.trim())
 
-                    // Remove to row the unwanted column
-                    if (removeColIndex !== -1) row.splice(removeColIndex, 1)
+                    // Remove unwanted columns from row
+                    removeIndices.forEach(idx => row.splice(idx, 1))
 
                     csvData.push(row)
-                    for (var c=0; c<row.length; c++){
-                        let w = row[c].length*8+40
-                        if (w>colWidths[c]) colWidths[c] = w
+                    for (var c = 0; c < row.length; c++) {
+                        let w = row[c].length * 8 + 40
+                        if (w > colWidths[c]) colWidths[c] = w
                     }
                 }
 
@@ -115,13 +114,17 @@ UI.FloatingWindow {
         for (let i=headerRow.children.length-1;i>=0;i--) headerRow.children[i].destroy()
         for (let i=columnData.children.length-1;i>=0;i--) columnData.children[i].destroy()
 
+        let deviceAddressIndex = -1
+
         // header
         for (let i=0;i<csvHeaders.length;i++){
+            const headerText = csvHeaders[i]
+            if (headerText === "Device Address") deviceAddressIndex = i
             Qt.createQmlObject(`
                 import QtQuick 6.8
                 import QtQuick.Controls 6.8
                 Label {
-                    text: "${csvHeaders[i]}"
+                    text: "${headerText}"
                     font.bold: true
                     color: "white"
                     width: ${colWidths[i]}
@@ -137,6 +140,7 @@ UI.FloatingWindow {
             let row = Qt.createQmlObject(`import QtQuick 6.8; import QtQuick.Controls 6.8; Row { spacing: 8 }`, columnData)
             for (let c=0;c<csvHeaders.length;c++){
                 let value = csvData[r][c]||""
+                if (c === deviceAddressIndex) value = "XX.XX.XX.XX"
                 Qt.createQmlObject(`
                     import QtQuick 6.8
                     import QtQuick.Controls 6.8
@@ -154,5 +158,5 @@ UI.FloatingWindow {
         }
     }
 
-    Component.onCompleted: loadCsv(csvSource)
+    Component.onCompleted: loadCsv(csvSource, ["Entity Name"])
 }

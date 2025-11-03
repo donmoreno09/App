@@ -1498,22 +1498,22 @@
     <message>
         <location filename="../App/Features/Poi/components/RectangleForm.qml" line="42"/>
         <source>Top Left Latitude(*)</source>
-        <translation>Latitudine In Alto a Sinistra(*)</translation>
+        <translation>Lat. In Alto a Sinistra(*)</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/components/RectangleForm.qml" line="57"/>
         <source>Top Left Longitude(*)</source>
-        <translation>Longitudine In Alto a Sinistra(*)</translation>
+        <translation>Lon. In Alto a Sinistra(*)</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/components/RectangleForm.qml" line="77"/>
         <source>Bottom Right Latitude(*)</source>
-        <translation>Latitudine In Basso a Destra(*)</translation>
+        <translation>Lat. In Basso a Destra(*)</translation>
     </message>
     <message>
         <location filename="../App/Features/Poi/components/RectangleForm.qml" line="92"/>
         <source>Bottom Right Longitude(*)</source>
-        <translation>Longitudine In Basso a Destra(*)</translation>
+        <translation>Lon. In Basso a Destra(*)</translation>
     </message>
 </context>
 <context>
