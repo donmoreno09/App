@@ -52,4 +52,5 @@ QtObject {
     readonly property int s10:  base * 10                // 40 dpi
     readonly property int s12:  base * 12                // 48 dpi
     readonly property int s16:  base * 16                // 64 dpi
+    readonly property int s20:  base * 20                // 64 dpi
 }

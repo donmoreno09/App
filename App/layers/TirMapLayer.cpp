@@ -20,11 +20,6 @@ TirMapLayer::TirMapLayer(QObject* parent)
     });
 }
 
-void TirMapLayer::initialize() {
-    qDebug() << "[TirMapLayer:initialize] polling ...";
-    BaseMapLayer::initialize();
-}
-
 void TirMapLayer::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight)
 {
     // In order for selection to work, I'll mutate the tirs

@@ -6,7 +6,6 @@
 #include <QGeoCoordinate>
 #include <QQuickItem>
 #include <QPointer>
-#include "../persistence/ipersistable.h"
 
 class BaseMapLayer : public BaseLayer
 {
@@ -20,9 +19,6 @@ class BaseMapLayer : public BaseLayer
 public:
     explicit BaseMapLayer(QObject* parent = nullptr);
     virtual QVariantList selectedObjects() const = 0;
-
-    virtual void loadData() = 0;
-    virtual void handleLoadedObjects(const QList<IPersistable*>& objects) = 0;
 
     Q_INVOKABLE virtual void selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight) = 0;
     Q_INVOKABLE virtual void clearSelection() = 0;

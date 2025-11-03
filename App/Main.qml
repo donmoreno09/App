@@ -18,6 +18,7 @@ import App.Features.ContextPanel 1.0
 import App.Features.Notifications 1.0
 import App.Features.MapToolbar 1.0
 import App.Features.Language 1.0
+import App.Features.ShipStowage 1.0
 
 ApplicationWindow {
     id: app
@@ -33,6 +34,7 @@ ApplicationWindow {
     property bool appLoaded: false
 
     Component.onCompleted: {
+        PoiOptions.fetchAll()
         WindowsNcController.attachToWindow(app)
         appLoaded = true
     }
@@ -51,11 +53,15 @@ ApplicationWindow {
             map.copyrightsVisible = false // Hide the copyright label from the bottom left
         }
 
+        MOCPoIStaticLayer { }
+
+        PoiMapLayer { }
+
         AISTrackMapLayer { }
 
-        DocSpaceTrackMapLayer { }
-
         TirTrackMapLayer { }
+
+        DocSpaceTrackMapLayer { }
     }
 
     Connections {
@@ -63,6 +69,14 @@ ApplicationWindow {
 
         function onAllLayersReady() {
             console.log("OK!")
+        }
+    }
+
+    Connections {
+        target: TranslationManager
+
+        function onRevisionChanged() {
+            PoiOptions.updateTranslations()
         }
     }
 

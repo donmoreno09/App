@@ -15,18 +15,27 @@ set(qml_files
     map-objects/Track.qml
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
+    map-objects/PoiPoint.qml
+    map-objects/PoiRectangle.qml
+    map-objects/PoiEllipse.qml
+    map-objects/PoiPolygon.qml
+    map-objects/MOCPoiPoint.qml
 
     # Layers
+    layers/BaseMapLayer.qml
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
     layers/TirTrackMapLayer.qml
     layers/LayersPanel.qml
+    layers/PoiMapLayer.qml
+    layers/MOCPoIStaticLayer.qml
 )
 
 set(cpp_sources
     # Connections
     connections/mqtt/parser/IMessageParser.h
     connections/mqtt/parser/TrackParser.h
+    connections/mqtt/parser/TruckNotificationParser.h
     connections/mqtt/parser/TirParser.h
     connections/mqtt/MqttClientService.cpp
     connections/mqtt/MqttClientService.h
@@ -46,6 +55,8 @@ set(cpp_sources
     core/TrackManager.h
     core/variantlistmodel.cpp
     core/variantlistmodel.h
+    core/PoiOptions.h
+    core/PoiOptions.cpp
 
     # Events
     events/selectionboxbus.h
@@ -58,8 +69,8 @@ set(cpp_sources
     layers/BaseMapLayer.cpp
     layers/BaseMapLayer.h
     layers/Layers.h
-    layers/PoiMapLayer.cpp
-    layers/PoiMapLayer.h
+    layers/PoiMapLayerController.cpp
+    layers/PoiMapLayerController.h
     layers/BaseTrackMapLayer.cpp
     layers/BaseTrackMapLayer.h
     layers/TrackMapLayer.cpp
@@ -76,6 +87,7 @@ set(cpp_sources
     entities/shape.h
     entities/BaseTrack.h
     entities/Track.h
+    entities/TruckNotification.h
     entities/Tir.h
     entities/Velocity.h
 
@@ -83,11 +95,14 @@ set(cpp_sources
     # Qt Models
     models/ModelHelper.h
     models/ModelHelper.cpp
+    models/CoordinatesModel.h
     models/PoiModel.cpp
     models/PoiModel.h
     models/BaseTrackModel.h
     models/TrackModel.cpp
     models/TrackModel.h
+    models/TruckNotificationModel.h
+    models/TruckNotificationModel.cpp
     models/TirModel.cpp
     models/TirModel.h
 
@@ -134,6 +149,9 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Mqtt
         Qt6::Location
         Qt6::Positioning
+        Qt6::Network
+        Qt6::WebEngineQuick
+        Qt6::WebEngineCore
 )
 
 target_include_directories(${PROJECT_NAME}

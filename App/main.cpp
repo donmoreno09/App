@@ -8,26 +8,24 @@
 #include <core/TrackManager.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
+#include <connections/mqtt/parser/TruckNotificationParser.h>
 #include <connections/mqtt/parser/TirParser.h>
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
 
 int main(int argc, char *argv[])
 {
-
+    qputenv("QML_XHR_ALLOW_FILE_READ", "1");
     // CRITICAL: Configure WebEngine BEFORE creating QGuiApplication
     // This tells Chromium to handle GPU gracefully
+    // This flag tells Qt to share OpenGL contexts between different components of the application.
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
-    // Fix GPU issues by running GPU in main process instead of separate process
-    // This prevents the "Failed to create command buffer" error
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS",
-            "--disable-gpu-process-crash-limit "
-            "--in-process-gpu "
-            "--disable-dev-shm-usage "
-            "--no-sandbox");
+            "--enable-gpu-rasterization " // Chromium creates a dedicated process for GPU rendering
+            "--enable-zero-copy "         // Reduces data copying between CPU and GPU
+            "--enable-hardware-overlays " // Uses hardware layers for faster composition
+            "--num-raster-threads=4 ");   // Parallelizes rendering across multiple threads
 
-    // Initialize WebEngine BEFORE QGuiApplication
-    // This ensures proper setup of Chromium backend
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);
@@ -75,6 +73,7 @@ int main(int argc, char *argv[])
     mqtt->initialize(":/App/config/mqtt_config.json");
     mqtt->registerParser("ais", new TrackParser());
     mqtt->registerParser("doc-space", new TrackParser());
+    mqtt->registerParser("trucknotifications", new TruckNotificationParser());
     mqtt->registerParser("tir", new TirParser());
 
     auto *trackManager = engine.singletonInstance<TrackManager*>("App", "TrackManager");

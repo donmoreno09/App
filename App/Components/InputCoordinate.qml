@@ -1,3 +1,20 @@
+/**
+ * WARNING!!
+ *
+ * This component is currently buggy and needs rework.
+ *
+ * When changing the value inside the input, it often
+ * jumps to the end because onValueChanged is also being
+ * invoked. I tried putting up a flag but that does not
+ * solve it nor was it a nice solution.
+ *
+ * I think the best way here is to control everything
+ * instead of using TextField.inputMask.
+ *
+ * UPDATE: For now, the input should be controlled by
+ * this component. Use the setText method to set the text.
+ */
+
 import QtQuick 6.8
 
 import App.Components 1.0 as UI
@@ -48,4 +65,35 @@ UI.Input {
 
     textField.onEditingFinished: _fixHemisphere()
     textField.onFocusChanged: if (!textField.focus) _fixHemisphere();
+
+    /**
+     * Formats and sets the field given a numeric coordinate.
+     * - Clamps to valid ranges (lat: [-90, 90], lon: [-180, 180]).
+     * - Pads integer part (lat: 2, lon: 3).
+     * - Uses N/S for latitude, E/W for longitude; 0 uses the positive hemisphere.
+     */
+    function setText(num) {
+        if (num === null || num === undefined || !isFinite(num))
+            return
+
+        const isLat = (type === InputCoordinate.Latitude)
+        const maxAbs = isLat ? 90 : 180
+        const hemi = (num < 0)
+                     ? (isLat ? "S" : "W")
+                     : (isLat ? "N" : "E")
+
+        let absDeg = Math.min(Math.abs(num), maxAbs)
+        // Force 6 decimals as string
+        const fixed = absDeg.toFixed(6)
+        const dot = fixed.indexOf(".")
+        const intPart = dot === -1 ? fixed : fixed.slice(0, dot)
+        const fracPart = dot === -1 ? "000000" : fixed.slice(dot + 1)
+
+        const pad = isLat ? 2 : 3
+        const paddedInt = intPart.padStart(pad, "0")
+
+        const formatted = paddedInt + "." + fracPart + "° " + hemi
+        textField.text = formatted
+        _hemiRemembered = hemi
+    }
 }

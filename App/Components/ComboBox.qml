@@ -12,30 +12,46 @@ Item {
     implicitWidth: container.implicitWidth
     implicitHeight: container.implicitHeight
 
+    property int variant: UI.InputStyles.Default
+
     property alias enabled: comboBox.enabled
     property alias labelText: label.text
     property alias currentIndex: comboBox.currentIndex
+    property alias currentText: comboBox.currentText
     property alias currentValue: comboBox.currentValue
     property alias displayText: comboBox.displayText
     property alias comboBox: comboBox
+    property alias textRole: comboBox.textRole
+    property alias valueRole: comboBox.valueRole
 
     property alias model: comboBox.model
 
     signal activated(int index)
+
+    // Internals
+    property UI.InputStyle _style: UI.InputStyles.fromVariant(variant)
 
     ColumnLayout {
         id: container
         anchors.fill: parent
         spacing: Theme.spacing.s3
 
-        Label {
-            id: label
+        // Label Section
+        RowLayout {
+            Layout.fillWidth: true
             visible: label.text !== ""
-            color: root.enabled ? Theme.colors.text : Theme.colors.textMuted
-            font {
-                family: Theme.typography.bodySans25Family
-                pointSize: Theme.typography.bodySans25Size
-                weight: Theme.typography.bodySans25Weight
+
+            Item { Layout.preferredWidth: Theme.spacing.s2 } // TODO: Replace with HorizontalPadding
+
+            Label {
+                id: label
+                visible: label.text !== ""
+                color: root.enabled ? Theme.colors.text : Theme.colors.textMuted
+                font {
+                    family: Theme.typography.bodySans25Family
+                    pointSize: Theme.typography.bodySans25Size
+                    weight: Theme.typography.bodySans25Weight
+                }
             }
         }
 
@@ -58,12 +74,7 @@ Item {
 
             // Background
             background: Rectangle {
-                color: {
-                    if (!comboBox.enabled) return Theme.colors.textMuted
-                    if (comboBox.pressed) return Qt.darker(Theme.colors.surface, 1.5)
-                    if (comboBox.hovered) return Theme.colors.surface
-                    return Theme.colors.transparent
-                }
+                color: _style.background
                 radius: Theme.radius.sm
 
                 UI.OutlineRect { target: comboBox }
@@ -75,18 +86,16 @@ Item {
                     anchors.bottom: parent.bottom
                     height: Theme.spacing.s0_5
                     color: {
-                        if (!comboBox.enabled) return Theme.colors.grey300
-                        if (comboBox.activeFocus) return Theme.colors.primary500
-                        if (comboBox.hovered) return Theme.colors.grey400
-                        return Theme.colors.grey300
+                        if (!comboBox.enabled) return _style.borderColorDisabled
+                        if (comboBox.activeFocus) return _style.borderColor
+                        return _style.borderColor
                     }
                 }
             }
 
             // Content Item
             contentItem: RowLayout {
-
-                Item { Layout.preferredWidth: Theme.spacing.s2}
+                Item { Layout.preferredWidth: Theme.spacing.s4 }
 
                 Text {
                     text: comboBox.displayText
@@ -105,7 +114,7 @@ Item {
                     rotation: comboBox.popup.visible ? 180 : 0
                 }
 
-                Item { Layout.preferredWidth: Theme.spacing.s2}
+                Item { Layout.preferredWidth: Theme.spacing.s4 }
             }
 
             // Popup
@@ -139,7 +148,13 @@ Item {
                 height: Theme.spacing.s10
 
                 contentItem: Text {
-                    text: modelData
+                    text: {
+                        var item = comboBox.model[index]
+                        if (item && typeof item === 'object' && 'id' in item && 'name' in item) {
+                            return item.id + " - " + item.name
+                        }
+                        return comboBox.textAt(index)
+                    }
                     color: Theme.colors.text
                     font: comboBox.font
                     elide: Text.ElideRight

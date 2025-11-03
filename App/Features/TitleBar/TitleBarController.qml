@@ -14,7 +14,7 @@ QtObject {
     property string currentTitle: {
         TranslationManager.revision; // Update title on language changed.
 
-        if(ShipStowageController.hasActiveWindow) {
+        if(ShipStowageController.hasActiveWindow){
             return qsTr("Ship Stowage")
         }
 
@@ -26,6 +26,7 @@ QtObject {
             case Routes.Notifications: return qsTr("Notifications")
             case Routes.MapTilesets: return qsTr("Map Tilesets")
             case Routes.MapLayers: return qsTr("Map Layers")
+            case Routes.Poi: return qsTr("Point of Interest")
             case Routes.DateTimeTest: return qsTr("DateTime Test")
             case Routes.ToggleTest: return qsTr("Toggle Test")
             case Routes.TextAreaTest: return qsTr("TextArea Test")
@@ -35,12 +36,16 @@ QtObject {
             case Routes.ModalTest: return qsTr("Modal Test")
             case Routes.ButtonTest: return qsTr("Button Test")
             case Routes.ComboBoxTest: return qsTr("ComboBox Test")
-            case Routes.ArrivalContent: return qsTr("Arrival Content")
-            case Routes.ArrivalDateContent: return qsTr("Arrival Date Content")
-            case Routes.ArrivalDateTimeContent: return qsTr("Arrival DateTime Content")
+            case Routes.AccordionTest: return qsTr("Notifications")
+            case Routes.ArrivalContent: return qsTr("Truck Arrivals")
+            case Routes.ArrivalDateContent: return qsTr("Truck Date Arrivals")
+            case Routes.ArrivalDateTimeContent: return qsTr("Truck Date & Time Arrivals")
             case Routes.TrailerPrediction: return qsTr("Trailer Predictions")
+            case Routes.ViGateServices: return qsTr("Gate Transits")
+            case Routes.Notification: return qsTr("Notifications")
             case Routes.TrackPanel: return qsTr("Track Details")
-            case Routes.TirPanel: return qsTr("Tir Details")
+            case Routes.TirPanel: return qsTr("Truck Details")
+            case Routes.MOCPoiStaticPanel: return qsTr("Crane")
             case Routes.NotFound: return qsTr("Not Found")
             }
         }
