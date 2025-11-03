@@ -128,15 +128,16 @@ PanelTemplate {
                             Text {
                                 visible: {
                                     if (model.operationState === "BLOCKED") {
-                                        return model.operationIssueTypeId > 0
+                                        return true // model.operationIssueTypeId can be undefined, if so -> Unknown
                                     } else if (model.operationState === "ACTIVE") {
                                         return model.operationIssueSolutionTypeId > 0
                                     }
                                     return false
                                 }
                                 text: {
-                                    if (model.operationState === "BLOCKED" && model.operationIssueTypeId > 0) {
-                                        const issueType = NotificationsTranslations.getIssueTypeName(model.operationIssueTypeId)
+                                    if (model.operationState === "BLOCKED") {
+                                        const issueTypeId = (model.operationIssueTypeId == undefined || model.operationIssueTypeId === 0) ? 2 : model.operationIssueTypeId
+                                        const issueType = NotificationsTranslations.getIssueTypeName(issueTypeId)
                                         return (TranslationManager.revision, qsTr("Issue: %1").arg(issueType))
                                     } else if (model.operationState === "ACTIVE" && model.operationIssueSolutionTypeId > 0) {
                                         const solutionType = NotificationsTranslations.getSolutionTypeName(model.operationIssueSolutionTypeId)
