@@ -89,6 +89,11 @@ public:
     // Flush all registered sinks (useful on shutdown for batched sinks).
     Logger& flush(){ registry_->forEach([](ILogSink* s){ if(s) s->flush(); }); return *this; }
 
+    Logger& shutdown() {
+        registry_->forEach([](ILogSink* s){ if (s) s->shutdown(); });
+        return *this;
+    }
+
     // Access the registry if you want to emplace a ready sink instead of a factory.
     SinkRegistry& sinks() { return *registry_; }
 
