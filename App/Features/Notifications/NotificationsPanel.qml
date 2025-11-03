@@ -124,26 +124,39 @@ PanelTemplate {
                                 font.weight: Theme.typography.weightBold
                             }
 
-                            // Show issue type or solution type based on state
+                            // Issue type
                             Text {
                                 visible: {
-                                    if (model.operationState === "BLOCKED") {
-                                        return true // model.operationIssueTypeId can be undefined, if so -> Unknown
-                                    } else if (model.operationState === "ACTIVE") {
-                                        return model.operationIssueSolutionTypeId > 0
-                                    }
-                                    return false
+                                    if (model.operationState === "ACTIVE") {
+                                        return model.operationIssueTypeId > 0
+                                    } else return false
                                 }
                                 text: {
-                                    if (model.operationState === "BLOCKED") {
-                                        const issueTypeId = (model.operationIssueTypeId == undefined || model.operationIssueTypeId === 0) ? 2 : model.operationIssueTypeId
-                                        const issueType = NotificationsTranslations.getIssueTypeName(issueTypeId)
+                                    if (model.operationState === "ACTIVE" && model.operationIssueTypeId > 0) {
+                                        const issueType = NotificationsTranslations.getIssueTypeName(model.operationIssueTypeId)
                                         return (TranslationManager.revision, qsTr("Issue: %1").arg(issueType))
-                                    } else if (model.operationState === "ACTIVE" && model.operationIssueSolutionTypeId > 0) {
+                                    } else return ""
+                                }
+                                color: Theme.colors.text
+                                font.family: Theme.typography.bodySans25Family
+                                font.pointSize: Theme.typography.bodySans25Size
+                                font.weight: Theme.typography.bodySans25Weight
+                                wrapMode: Text.WordWrap
+                                Layout.fillWidth: true
+                            }
+
+                            // Solution Type
+                            Text {
+                                visible: {
+                                    if (model.operationState === "ACTIVE") {
+                                        return model.operationIssueSolutionTypeId > 0
+                                    } else return false
+                                }
+                                text: {
+                                    if (model.operationState === "ACTIVE" && model.operationIssueSolutionTypeId > 0) {
                                         const solutionType = NotificationsTranslations.getSolutionTypeName(model.operationIssueSolutionTypeId)
                                         return (TranslationManager.revision, qsTr("Resolution: %1").arg(solutionType))
-                                    }
-                                    return ""
+                                    } else return ""
                                 }
                                 color: Theme.colors.text
                                 font.family: Theme.typography.bodySans25Family
