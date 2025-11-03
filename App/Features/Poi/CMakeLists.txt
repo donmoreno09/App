@@ -1,5 +1,16 @@
 set(qml_files
     PoiPanel.qml
+
+    components/AreaForm.qml
+    components/AreaButton.qml
+    components/RectangleForm.qml
+    components/EllipseForm.qml
+    components/PolygonForm.qml
+    components/PointForm.qml
+    MOCPoiPanel.qml
+    GoliathVideoContainer.qml
+    GoliathDataCsv.qml
+    GoliathLiftedLoads.qml
 )
 
 set(cpp_files

@@ -18,12 +18,15 @@ import QtPositioning 6.8
 import Qt.labs.animation 6.8
 
 import App.Themes 1.0
-import App.Features.MapTools 1.0
+import App.Features.MapModes 1.0
 
 Map {
     id: map
 
-    Component.onCompleted: resetPinchMinMax()
+    Component.onCompleted: {
+        MapModeController.setActiveMode(interactionMode)
+        resetPinchMinMax()
+    }
 
     tilt: tiltHandler.persistentTranslation.y / -5
     property bool pinchAdjustingZoom: false
@@ -106,10 +109,9 @@ Map {
 
     DragHandler {
         id: drag
-
         target: null
-
         onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
         onActiveChanged: if (active) {
             flickAnimation.stop()
@@ -155,28 +157,58 @@ Map {
         onActiveChanged: if (active) flickAnimation.stop()
     }
 
-    InputHandler {
-        id: inputHandler
-        anchors.fill: parent
-        map: map
-        Component.onCompleted: ToolController.inputHandler = inputHandler
+    // Modes
+    InteractionMode {
+        id: interactionMode
+        visible: MapModeController.activeMode === interactionMode
+        Component.onCompleted: MapModeRegistry.interactionMode = interactionMode
     }
 
-    MapQuickItem {
-        visible: ToolController.activeTool === ToolRegistry.pointTool && ToolRegistry.pointTool.editable == null
-        onVisibleChanged: console.log("Preview is now", visible ? "active" : "hidden")
-        z: Theme.elevation.z100
+    CreatePointMode {
+        id: createPointMode
+        visible: MapModeController.activeMode === createPointMode
+        Component.onCompleted: MapModeRegistry.createPointMode = createPointMode
+    }
 
-        coordinate: ToolRegistry.pointTool.coord
-        anchorPoint.x: sourceItem.width / 2
-        anchorPoint.y: sourceItem.height / 2
-        sourceItem: Rectangle {
-            width: 12
-            height: 12
-            color: "white"
-            radius: width / 2
-            border.color: "blue"
-            border.width: 2
-        }
+    EditPointMode {
+        id: editPointMode
+        visible: MapModeController.activeMode === editPointMode
+        Component.onCompleted: MapModeRegistry.editPointMode = editPointMode
+    }
+
+    CreateRectangleMode {
+        id: createRectangleMode
+        visible: MapModeController.activeMode === createRectangleMode
+        Component.onCompleted: MapModeRegistry.createRectangleMode = createRectangleMode
+    }
+
+    EditRectangleMode {
+        id: editRectangleMode
+        visible: MapModeController.activeMode === editRectangleMode
+        Component.onCompleted: MapModeRegistry.editRectangleMode = editRectangleMode
+    }
+
+    CreateEllipseMode {
+        id: createEllipseMode
+        visible: MapModeController.activeMode === createEllipseMode
+        Component.onCompleted: MapModeRegistry.createEllipseMode = createEllipseMode
+    }
+
+    EditEllipseMode {
+        id: editEllipseMode
+        visible: MapModeController.activeMode === editEllipseMode
+        Component.onCompleted: MapModeRegistry.editEllipseMode = editEllipseMode
+    }
+
+    CreatePolygonMode {
+        id: createPolygonMode
+        visible: MapModeController.activeMode === createPolygonMode
+        Component.onCompleted: MapModeRegistry.createPolygonMode = createPolygonMode
+    }
+
+    EditPolygonMode {
+        id: editPolygonMode
+        visible: MapModeController.activeMode === editPolygonMode
+        Component.onCompleted: MapModeRegistry.editPolygonMode = editPolygonMode
     }
 }

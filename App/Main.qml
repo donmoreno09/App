@@ -53,6 +53,8 @@ ApplicationWindow {
             map.copyrightsVisible = false // Hide the copyright label from the bottom left
         }
 
+        MOCPoIStaticLayer { }
+
         PoiMapLayer { }
 
         AISTrackMapLayer { }
@@ -67,6 +69,14 @@ ApplicationWindow {
 
         function onAllLayersReady() {
             console.log("OK!")
+        }
+    }
+
+    Connections {
+        target: TranslationManager
+
+        function onRevisionChanged() {
+            PoiOptions.updateTranslations()
         }
     }
 
