@@ -8,6 +8,8 @@ import App.Components 1.0 as UI
 Rectangle {
     id: container
 
+    property alias windowTitle: windowTitle.text
+
     // Prevent map interactions below this component
     UI.InputShield { anchors.fill: parent }
 
@@ -20,7 +22,7 @@ Rectangle {
 
     radius: Theme.radius.sm
     color: Theme.colors.primary900
-    border.color: Theme.colors.secondary500
+    border.color: Theme.colors.black
     border.width: Theme.borders.b1
     z: Theme.elevation.modal
 
@@ -40,14 +42,14 @@ Rectangle {
     // Drag handle bar on top
     Rectangle {
         id: dragHandle
-        height: Theme.spacing.s8
+        height: Theme.spacing.s10
         width: parent.width
-        color: Theme.colors.primary700
+        color: Theme.colors.black
         radius: Theme.radius.sm
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        border.color: Theme.colors.secondary500
+        border.color: Theme.colors.black
         border.width: Theme.borders.b1
         z: 10
 
@@ -68,6 +70,20 @@ Rectangle {
             hoverEnabled: true
         }
 
+        // Window title
+        Label {
+            id: windowTitle
+            visible: text !== ""
+            font.bold: true
+            font.pixelSize: Theme.typography.fontSize200
+            color: Theme.colors.white500
+            anchors {
+                left: parent.left
+                leftMargin: Theme.spacing.s4
+                verticalCenter: parent.verticalCenter
+            }
+        }
+
         // Close button
         Rectangle {
             id: closeButton
@@ -76,11 +92,11 @@ Rectangle {
             radius: Theme.radius.sm
             anchors {
                 right: parent.right
-                rightMargin: Theme.spacing.s2
+                rightMargin: Theme.spacing.s4
                 verticalCenter: parent.verticalCenter
             }
-            color: closeMouseArea.containsMouse ? Theme.colors.error500 : Theme.colors.primary700
-            border.color: Theme.colors.secondary500
+            color: closeMouseArea.containsMouse ? Theme.colors.error500 : Theme.colors.whiteA20
+            border.color: Theme.colors.grey500
             border.width: Theme.borders.b1
 
             Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
@@ -122,7 +138,7 @@ Rectangle {
         width: Theme.spacing.s4
         height: Theme.spacing.s4
         radius: Theme.radius.sm
-        color: resizeMouseArea.pressed ? Theme.colors.secondary400 : Theme.colors.secondary500
+        color: resizeMouseArea.pressed ? Theme.colors.whiteA10 : Theme.colors.whiteA20
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: Theme.spacing.s1

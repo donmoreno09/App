@@ -8,11 +8,11 @@ UI.FloatingWindow {
     width: 1200
     height: 740
     visible: true
+    windowTitle: "CSV Viewer"
 
     property var parentWindow: null
     windowWidth: parentWindow ? parentWindow.width : 1200
     windowHeight: parentWindow ? parentWindow.height : 740
-    property string title: "CSV Viewer"
     property string csvSource: "qrc:/App/assets/resources/data.csv"
     property var csvHeaders: []
     property var csvData: []
@@ -22,14 +22,6 @@ UI.FloatingWindow {
         anchors.fill: parent
         spacing: Theme.spacing.s2
         anchors.margins: Theme.spacing.s2
-
-        Label {
-            text: title
-            font.bold: true
-            font.pixelSize: Theme.typography.fontSize200
-            color: Theme.colors.white500
-            Layout.fillWidth: true
-        }
 
         Item { // Contenitore fisso per header + dati
             Layout.fillWidth: true
