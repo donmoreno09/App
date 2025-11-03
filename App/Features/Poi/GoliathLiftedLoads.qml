@@ -9,13 +9,13 @@ UI.FloatingWindow {
     id: loadsWin
     width: 1200
     height: 740
+    windowTitle: "Goliath Lifted Loads"
 
     // Imposta un titolo opzionale
     property var parentWindow: null
 
     windowWidth: parentWindow ? parentWindow.width : 1200
     windowHeight: parentWindow ? parentWindow.height : 740
-    property string title: "Goliath Lifted Loads"
     property url source: "qrc:/App/assets/resources/Goliath_Lifted_Loads.jpg"
 
     Rectangle {
@@ -27,14 +27,6 @@ UI.FloatingWindow {
             spacing: Theme.spacing.s2
             anchors.margins: Theme.spacing.s2
 
-            Label {
-                text: title
-                color: Theme.colors.white500
-                font.bold: true
-                font.family: Theme.typography.familySans
-                font.pixelSize: Theme.typography.fontSize200
-                Layout.leftMargin: Theme.spacing.s2
-            }
             // L'immagine che riempie lo spazio rimanente
             Image {
                 id: loadsImage

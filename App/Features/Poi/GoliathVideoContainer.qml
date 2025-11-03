@@ -9,13 +9,13 @@ UI.FloatingWindow {
     id: videoWin
     width: 1200
     height: 740
+    windowTitle: "Video"
 
     // Imposta un titolo opzionale
     property var parentWindow: null
 
     windowWidth: parentWindow ? parentWindow.width : 1200
     windowHeight: parentWindow ? parentWindow.height : 740
-    property string title: "Video"
     property string videoTitle: "Video"
     property url source: "qrc:/App/assets/resources/Monitoraggio Goliath 2.mp4"
 
@@ -27,15 +27,6 @@ UI.FloatingWindow {
             anchors.fill: parent
             spacing: Theme.spacing.s2
             anchors.margins: Theme.spacing.s2
-
-            Label {
-                text: videoTitle
-                color: Theme.colors.white500
-                font.bold: true
-                font.family: Theme.typography.familySans
-                font.pixelSize: Theme.typography.fontSize200
-                Layout.leftMargin: Theme.spacing.s2
-            }
 
             // Player
             Video {
