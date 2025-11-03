@@ -2,7 +2,6 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import QtWebEngine 1.10
-
 import App.Themes 1.0
 import App.Features.ShipStowage 1.0
 
@@ -46,24 +45,31 @@ Item {
 
         profile: WebEngineProfileManager.sharedProfile
 
-        // Memory and performance optimization
-        lifecycleState: WebEngineView.LifecycleState.Active
+        // Start frozen, will be activated when shown
+        lifecycleState: WebEngineView.LifecycleState.Frozen
 
-        // Critical performance settings
         settings.javascriptEnabled: true
         settings.pluginsEnabled: true
         settings.localStorageEnabled: true
         settings.localContentCanAccessRemoteUrls: true
-
-        // Performance Settings
         settings.accelerated2dCanvasEnabled: true
         settings.webGLEnabled: true
         settings.autoLoadImages: true
         settings.javascriptCanOpenWindows: false
         settings.showScrollBars: true
 
-        // Background color to prevent white flash
         backgroundColor: Theme.colors.primary900
+
+        // Preconnect for faster subsequent loads
+        Component.onCompleted: {
+            runJavaScript(`
+                const link = document.createElement('link');
+                link.rel = 'preconnect';
+                link.href = 'https://mbpv.fourclicks.it';
+                link.crossOrigin = 'anonymous';
+                if (document.head) document.head.appendChild(link);
+            `)
+        }
 
         onJavaScriptConsoleMessage: function(level, message, lineNumber, sourceID) {
             var ignoredMessages = [
@@ -81,17 +87,12 @@ Item {
             }
         }
 
-        // Handle loading errors
         onLoadingChanged: function(loadRequest) {
             if (loadRequest.status === WebEngineView.LoadFailedStatus) {
                 console.error("WebView failed to load:", loadRequest.errorString)
+            } else if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
+                console.log("WebView loaded successfully")
             }
-        }
-
-        Component.onDestruction: {
-            lifecycleState = WebEngineView.LifecycleState.Discarded
-            stop()
-            url = "about:blank"
         }
     }
 }
