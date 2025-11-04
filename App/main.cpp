@@ -15,16 +15,18 @@
 int main(int argc, char *argv[])
 {
     qputenv("QML_XHR_ALLOW_FILE_READ", "1");
-    // CRITICAL: Configure WebEngine BEFORE creating QGuiApplication
+
     // This tells Chromium to handle GPU gracefully
     // This flag tells Qt to share OpenGL contexts between different components of the application.
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS",
+            "--disable-gpu-shader-disk-cache " // Might reduce mismatches
             "--enable-gpu-rasterization " // Chromium creates a dedicated process for GPU rendering
             "--enable-zero-copy "         // Reduces data copying between CPU and GPU
             "--enable-hardware-overlays " // Uses hardware layers for faster composition
-            "--num-raster-threads=4 ");   // Parallelizes rendering across multiple threads
+            "--num-raster-threads=4 "   // Parallelizes rendering across multiple threads
+            "--disable-logging");
 
     QtWebEngineQuick::initialize();
 

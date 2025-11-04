@@ -36,7 +36,6 @@ DraggableResizableContainer {
     // Handle visibility changes
     onVisibleChanged: {
         if (visible) {
-            // Recenter when shown
             x = (windowWidth - width) / 2
             y = (windowHeight - height) / 2
         }

@@ -58,6 +58,9 @@ Item {
         settings.javascriptCanOpenWindows: false
         settings.showScrollBars: true
 
+        settings.errorPageEnabled: true
+        settings.allowRunningInsecureContent: false
+
         backgroundColor: Theme.colors.primary900
 
         // Preconnect for faster subsequent loads
