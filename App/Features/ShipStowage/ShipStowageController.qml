@@ -6,12 +6,11 @@ QtObject {
     id: root
 
     property bool hasActiveWindow: false
-    property var webViewContainer: null  // Keep reference to container
+    property var webViewContainer: null
 
     signal windowOpened()
     signal windowClosed()
 
-    // Call this on app startup or first use
     function initialize(parentWindow) {
         if (webViewContainer) return
 
@@ -35,7 +34,6 @@ QtObject {
             return
         }
 
-        // Initialize if not already done
         if (!webViewContainer) {
             initialize(parentWindow)
         }
@@ -45,11 +43,9 @@ QtObject {
             return
         }
 
-        // Show and activate the existing container
         webViewContainer.visible = true
         webViewContainer.parentWindow = parentWindow
 
-        // Reactivate WebView
         if (webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
             webViewContainer.webViewItem.webView.lifecycleState = WebEngineView.LifecycleState.Active
         }
@@ -63,17 +59,65 @@ QtObject {
     function closeStowageWindow() {
         if (!webViewContainer || !hasActiveWindow) return
 
-        // Hide instead of destroy
-        webViewContainer.visible = false
+        console.log("[ShipStowageController] Closing window...")
 
-        // Freeze to save resources
-        if (webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
-            webViewContainer.webViewItem.webView.lifecycleState = WebEngineView.LifecycleState.Frozen
+        // Nascondi subito
+        webViewContainer.visible = false
+        hasActiveWindow = false
+
+        // Freeze dopo (con un solo callLater)
+        Qt.callLater(function() {
+            if (webViewContainer && webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
+                var webView = webViewContainer.webViewItem.webView
+
+                try {
+                    webView.lifecycleState = WebEngineView.LifecycleState.Frozen
+                    webView.runJavaScript("if (window.gc) window.gc();")
+                    console.log("[ShipStowageController] Stowage window hidden (frozen)")
+                } catch (e) {
+                    console.error("[ShipStowageController] Error freezing:", e)
+                }
+            }
+
+            windowClosed()
+        })
+    }
+
+    function cleanup() {
+        console.log("[ShipStowageController] Cleanup started")
+
+        if (!webViewContainer) {
+            console.log("[ShipStowageController] Nothing to clean up")
+            return
         }
 
-        hasActiveWindow = false
-        windowClosed()
+        // TUTTO IN MODO SINCRONO - nessun Qt.callLater!
 
-        console.log("[ShipStowageController] Stowage window hidden")
+        try {
+            // 1. Nascondi
+            if (webViewContainer.visible) {
+                webViewContainer.visible = false
+                console.log("[ShipStowageController] Container hidden")
+            }
+
+            hasActiveWindow = false
+
+            // 2. Stop e Discard direttamente
+            if (webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
+                var webView = webViewContainer.webViewItem.webView
+
+                webView.lifecycleState = WebEngineView.LifecycleState.Discarded
+                console.log("[ShipStowageController] WebView discarded")
+            }
+
+            // 3. Destroy immediatamente
+            webViewContainer.destroy()
+            webViewContainer = null
+
+            console.log("[ShipStowageController] Cleanup completed")
+
+        } catch (e) {
+            console.error("[ShipStowageController] Error during cleanup:", e)
+        }
     }
 }

@@ -36,7 +36,13 @@ ApplicationWindow {
     Component.onCompleted: {
         PoiOptions.fetchAll()
         WindowsNcController.attachToWindow(app)
+        ShipStowageController.initialize(app)
         appLoaded = true
+    }
+
+    Component.onDestruction: {
+        console.log("Main window destroying, cleaning up...")
+        ShipStowageController.cleanup()
     }
 
     UI.GlobalBackground {
