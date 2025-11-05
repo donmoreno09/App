@@ -76,7 +76,7 @@ UI.GlobalBackgroundConsumer {
 
                 SideRailItem {
                     source: "qrc:/App/assets/icons/layers-colored.svg"
-                    text: Translator.translate("Layers")
+                    text: `${TranslationManager.revision}` && qsTr("Layers")
                     active: PanelRouter.currentPath === "maplayers" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.MapLayers)
@@ -85,7 +85,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/poi.svg"
                     preserveIconColor: true
-                    text: Translator.translate("Point of Interest")
+                    text: `${TranslationManager.revision}` && qsTr("Point of Interest")
                     active: PanelRouter.currentPath === Routes.Poi && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.Poi)
