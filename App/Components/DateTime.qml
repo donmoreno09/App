@@ -59,7 +59,7 @@ RowLayout {
     }
 
     Text {
-        text: TranslationHelper.tr("UTC")
+        text: `${TranslationManager.revision}` && qsTr("UTC")
         font.family: Theme.typography.familySans
         font.pixelSize: Theme.typography.fontSize200
         font.weight: Theme.typography.weightMedium
@@ -77,7 +77,7 @@ RowLayout {
     }
 
     Text {
-        text: TranslationHelper.tr("LOCAL")
+        text: `${TranslationManager.revision}` && qsTr("LOCAL")
         font.family: Theme.typography.familySans
         font.pixelSize: Theme.typography.fontSize200
         font.weight: Theme.typography.weightMedium
