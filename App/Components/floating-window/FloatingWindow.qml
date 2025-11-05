@@ -9,6 +9,7 @@ Rectangle {
     id: container
 
     property alias windowTitle: windowTitle.text
+    property alias loading: spinner.running
 
     // Prevent map interactions below this component
     UI.InputShield { anchors.fill: parent }
@@ -130,6 +131,12 @@ Rectangle {
             margins: Theme.spacing.s1
         }
         clip: true
+    }
+
+    BusyIndicator {
+        id: spinner
+        anchors.centerIn: parent
+        visible: running
     }
 
     // Resize handle (doesn't move; only resizes container)

@@ -13,13 +13,13 @@ UI.FloatingWindow {
     height: 740
     visible: true
     windowTitle: "CSV Viewer"
+    loading: csv.loading
 
-    property var parentWindow: null
-    readonly property string title: windowTitle
-
-
+    property url csvSource: "qrc:/App/assets/resources/Export_MH3_Goliath.csv"
     property int deviceAddressColumn: -1
 
+    property var parentWindow: null // needed by WindowRouter
+    readonly property string title: windowTitle // needed by WindowRouter
     windowWidth: parentWindow ? parentWindow.width : 1200
     windowHeight: parentWindow ? parentWindow.height : 740
 
@@ -92,12 +92,5 @@ UI.FloatingWindow {
         }
     }
 
-    BusyIndicator {
-        anchors.centerIn: parent
-        running: csv.loading
-        visible: running
-    }
-
-    property url csvSource: "qrc:/App/assets/resources/Export_MH3_Goliath.csv"
     Component.onCompleted: csv.load(csvSource, ["EntityName"])
 }
