@@ -53,6 +53,16 @@ UI.FloatingWindow {
             reuseItems: true
             selectionMode: TableView.SelectionDisabled
 
+            // space columns evenly
+            columnWidthProvider: function (col) {
+                const count = columns > 0 ? columns : 1
+                const totalSpacing = columnSpacing * (count - 1)
+                return (width - totalSpacing) / count
+            }
+
+            // ensure layout recalculates when resized
+            onWidthChanged: forceLayout()
+
             delegate: Item {
                 required property int column
                 required property string display
