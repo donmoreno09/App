@@ -29,8 +29,8 @@ signals:
     void headerChanged();
 
 private slots:
-    void onHeaderReady(QStringList headers, QVector<int> keep);
-    void onRowsReady(QVector<QStringList> chunk);
+    void onHeaderReady(const QStringList &headers, const QVector<int> &keep);
+    void onRowsReady(const QVector<QStringList> &chunk);
     void onFinished();
 
 private:

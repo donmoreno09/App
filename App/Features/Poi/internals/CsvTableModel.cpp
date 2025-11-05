@@ -22,15 +22,13 @@ int CsvTableModel::columnCount(const QModelIndex &) const
 
 void CsvTableModel::load(const QUrl& url, const QStringList& ignore) {
     if (m_loading) return;
-    m_loading = true; emit loadingChanged();
+    m_loading = true;
+    emit loadingChanged();
 
     const QString path = resolvePathForQFile(url);
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-        QMetaObject::invokeMethod(this, [this] {
-            onFinished();
-        });
-
+        onFinished();
         return;
     }
 
@@ -40,7 +38,7 @@ void CsvTableModel::load(const QUrl& url, const QStringList& ignore) {
     keep.reserve(headers.size());
 
     for (int i = 0; i < headers.size(); i++) {
-        bool drop=false;
+        bool drop = false;
         for (auto& ig: ignore) {
             if (headers[i].compare(ig, Qt::CaseInsensitive) == 0) {
                 drop = true;
@@ -51,9 +49,7 @@ void CsvTableModel::load(const QUrl& url, const QStringList& ignore) {
     }
 
     // send headers
-    QMetaObject::invokeMethod(this, [this, headers, keep] {
-        onHeaderReady(headers, keep);
-    });
+    onHeaderReady(headers, keep);
 
     // stream rows in chunks
     QVector<QStringList> chunk;
@@ -68,29 +64,24 @@ void CsvTableModel::load(const QUrl& url, const QStringList& ignore) {
         QStringList filtered;
         filtered.reserve(keep.size());
 
-        for (int k: keep) {
+        for (int i = 0; i < keep.size(); i++) {
+            auto k = keep[i];
             filtered << (k < cells.size() ? cells[k].trimmed() : QString());
         }
 
         chunk.push_back(std::move(filtered));
 
-        if (chunk.size()==500) {
-            QMetaObject::invokeMethod(this, [this, c = std::move(chunk)]() mutable {
-                onRowsReady(std::move(c));
-            });
+        if (chunk.size() == 500) {
+            onRowsReady(chunk);
             chunk.clear();
         }
     }
 
     if (!chunk.isEmpty()) {
-        QMetaObject::invokeMethod(this, [this, c = std::move(chunk)]() mutable {
-            onRowsReady(std::move(c));
-        });
+        onRowsReady(chunk);
     }
 
-    QMetaObject::invokeMethod(this,[this]{
-        onFinished();
-    });
+    onFinished();
 }
 
 int CsvTableModel::findColumn(const QString& name) const {
@@ -103,11 +94,12 @@ int CsvTableModel::findColumn(const QString& name) const {
     return -1;
 }
 
-void CsvTableModel::onHeaderReady(QStringList headers, QVector<int> keep) {
+void CsvTableModel::onHeaderReady(const QStringList &headers, const QVector<int> &keep) {
     beginResetModel();
     m_headers.clear();
 
-    for (int k: keep) {
+    for (int i = 0; i < keep.size(); i++) {
+        auto k = keep[i];
         m_headers << headers[k].trimmed().replace('_',' ').replace(QRegularExpression("([a-z])([A-Z])"), "\\1 \\2");
     }
 
@@ -118,7 +110,7 @@ void CsvTableModel::onHeaderReady(QStringList headers, QVector<int> keep) {
     emit headerChanged();
 }
 
-void CsvTableModel::onRowsReady(QVector<QStringList> chunk) {
+void CsvTableModel::onRowsReady(const QVector<QStringList> &chunk) {
     const int start = m_rows;
     const int end = m_rows + chunk.size() - 1;
 
@@ -161,8 +153,9 @@ void CsvTableModel::onFinished() {
 
 QString CsvTableModel::resolvePathForQFile(const QUrl &url)
 {
-    if (url.isLocalFile())
+    if (url.isLocalFile()) {
         return url.toLocalFile();
+    }
 
     const auto scheme = url.scheme().toLower();
 
