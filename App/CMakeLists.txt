@@ -150,6 +150,7 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Location
         Qt6::Positioning
         Qt6::Network
+        Qt6::Concurrent
         Qt6::WebEngineQuick
         Qt6::WebEngineCore
 )
