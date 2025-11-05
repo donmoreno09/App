@@ -16,7 +16,7 @@ Item {
 
         // Header
         Text {
-            text: (TranslationManager.revision, qsTr("Icon Button Components"))
+            text: `${TranslationManager.revision}` && qsTr("Icon Button Components")
             font.pixelSize: Theme.typography.fontSize300
             font.weight: Theme.typography.weightBold
             color: Theme.colors.text
@@ -29,14 +29,14 @@ Item {
             Layout.fillWidth: true
 
             Text {
-                text: (TranslationManager.revision, qsTr("1. Core Icon Set (6 Icons)"))
+                text: `${TranslationManager.revision}` && qsTr("1. Core Icon Set (6 Icons)")
                 font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
-                text: (TranslationManager.revision, qsTr("Primary set of icons using base Button component with proper theme sizing"))
+                text: `${TranslationManager.revision}` && qsTr("Primary set of icons using base Button component with proper theme sizing")
                 font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
@@ -55,13 +55,13 @@ Item {
                     icon.width: Theme.icons.sizeLg    // 24px from theme
                     icon.height: Theme.icons.sizeLg   // 24px from theme
 
-                    text: (TranslationManager.revision, qsTr("Mission"))
+                    text: `${TranslationManager.revision}` && qsTr("Mission")
 
                     onClicked: console.log("Mission clipboard clicked")
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Mission Clipboard"))
+                        text: `${TranslationManager.revision}` && qsTr("Mission Clipboard")
                         delay: 800
                     }
                 }
@@ -79,7 +79,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Navigation Map"))
+                        text: `${TranslationManager.revision}` && qsTr("Navigation Map")
                         delay: 800
                     }
                 }
@@ -98,7 +98,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Home Base"))
+                        text: `${TranslationManager.revision}` && qsTr("Home Base")
                         delay: 800
                     }
                 }
@@ -117,7 +117,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Send Command"))
+                        text: `${TranslationManager.revision}` && qsTr("Send Command")
                         delay: 800
                     }
                 }
@@ -136,7 +136,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Add Item"))
+                        text: `${TranslationManager.revision}` && qsTr("Add Item")
                         delay: 800
                     }
                 }
@@ -155,7 +155,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Remove Item"))
+                        text: `${TranslationManager.revision}` && qsTr("Remove Item")
                         delay: 800
                     }
                 }
@@ -169,14 +169,14 @@ Item {
             Layout.topMargin: Theme.spacing.s4
 
             Text {
-                text: (TranslationManager.revision, qsTr("2. Icon Button Sizes"))
+                text: `${TranslationManager.revision}` && qsTr("2. Icon Button Sizes")
                 font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
-                text: (TranslationManager.revision, qsTr("Using theme icon sizes: sm (16px), md (20px), lg (24px)"))
+                text: `${TranslationManager.revision}` && qsTr("Using theme icon sizes: sm (16px), md (20px), lg (24px)")
                 font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
@@ -198,7 +198,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Small (32px)"))
+                        text: `${TranslationManager.revision}` && qsTr("Small (32px)")
                         delay: 800
                     }
                 }
@@ -218,7 +218,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Medium (36px)"))
+                        text: `${TranslationManager.revision}` && qsTr("Medium (36px)")
                         delay: 800
                     }
                 }
@@ -235,7 +235,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Large (40px)"))
+                        text: `${TranslationManager.revision}` && qsTr("Large (40px)")
                         delay: 800
                     }
                 }
@@ -249,14 +249,14 @@ Item {
             Layout.topMargin: Theme.spacing.s4
 
             Text {
-                text: (TranslationManager.revision, qsTr("3. Mission Interface Navigation"))
+                text: `${TranslationManager.revision}` && qsTr("3. Mission Interface Navigation")
                 font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
-                text: (TranslationManager.revision, qsTr("Vertical navigation rail (80x80px as per Figma specs)"))
+                text: `${TranslationManager.revision}` && qsTr("Vertical navigation rail (80x80px as per Figma specs)")
                 font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
@@ -294,7 +294,7 @@ Item {
 
                         ToolTip {
                             visible: parent.hovered
-                            text: (TranslationManager.revision, qsTr("Mission"))
+                            text: `${TranslationManager.revision}` && qsTr("Mission")
                             delay: 800
                         }
                     }
@@ -316,7 +316,7 @@ Item {
 
                         ToolTip {
                             visible: parent.hovered
-                            text: (TranslationManager.revision, qsTr("Map"))
+                            text: `${TranslationManager.revision}` && qsTr("Map")
                             delay: 800
                         }
                     }
@@ -338,7 +338,7 @@ Item {
 
                         ToolTip {
                             visible: parent.hovered
-                            text: (TranslationManager.revision, qsTr("Home"))
+                            text: `${TranslationManager.revision}` && qsTr("Home")
                             delay: 800
                         }
                     }
@@ -360,7 +360,7 @@ Item {
 
                         ToolTip {
                             visible: parent.hovered
-                            text: (TranslationManager.revision, qsTr("Send"))
+                            text: `${TranslationManager.revision}` && qsTr("Send")
                             delay: 800
                         }
                     }
@@ -382,7 +382,7 @@ Item {
 
                         ToolTip {
                             visible: parent.hovered
-                            text: (TranslationManager.revision, qsTr("Add"))
+                            text: `${TranslationManager.revision}` && qsTr("Add")
                             delay: 800
                         }
                     }
@@ -404,7 +404,7 @@ Item {
 
                         ToolTip {
                             visible: parent.hovered
-                            text: (TranslationManager.revision, qsTr("Remove"))
+                            text: `${TranslationManager.revision}` && qsTr("Remove")
                             delay: 800
                         }
                     }
@@ -419,14 +419,14 @@ Item {
             Layout.topMargin: Theme.spacing.s4
 
             Text {
-                text: (TranslationManager.revision, qsTr("4. Icon Button States"))
+                text: `${TranslationManager.revision}` && qsTr("4. Icon Button States")
                 font.pixelSize: Theme.typography.fontSize250
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
 
             Text {
-                text: (TranslationManager.revision, qsTr("Testing enabled, disabled, and interactive states"))
+                text: `${TranslationManager.revision}` && qsTr("Testing enabled, disabled, and interactive states")
                 font.pixelSize: Theme.typography.fontSize150
                 color: Theme.colors.textMuted
                 Layout.bottomMargin: Theme.spacing.s2
@@ -450,7 +450,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: (TranslationManager.revision, qsTr("Enabled"))
+                        text: `${TranslationManager.revision}` && qsTr("Enabled")
                         delay: 800
                     }
                 }
@@ -468,7 +468,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered && parent.enabled
-                        text: (TranslationManager.revision, qsTr("Disabled"))
+                        text: `${TranslationManager.revision}` && qsTr("Disabled")
                         delay: 800
                     }
                 }
@@ -492,7 +492,7 @@ Item {
 
                     ToolTip {
                         visible: parent.hovered
-                        text: parent.isActive ? (TranslationManager.revision, qsTr("Remove Mode")) : (TranslationManager.revision, qsTr("Add Mode"))
+                        text: parent.isActive ? `${TranslationManager.revision}` && qsTr("Remove Mode") : `${TranslationManager.revision}` && qsTr("Add Mode")
                         delay: 800
                     }
                 }

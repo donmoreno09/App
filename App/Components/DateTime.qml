@@ -35,10 +35,10 @@ RowLayout {
 
             if (root.showSeconds) {
                 utcTimeString = now.toISOString().substr(11, 8)
-                localTimeString = now.toLocaleTimeString(Qt.locale(), "hh:mm:ss")
+                localTimeString = now.toLocaleTimeString(Qt.locale(LanguageController.currentLanguage), "hh:mm:ss")
             } else {
                 utcTimeString = now.toISOString().substr(11, 5)
-                localTimeString = now.toLocaleTimeString(Qt.locale(), "hh:mm")
+                localTimeString = now.toLocaleTimeString(Qt.locale(LanguageController.currentLanguage), "hh:mm")
             }
         }
 
@@ -59,7 +59,7 @@ RowLayout {
     }
 
     Text {
-        text: (TranslationManager.revision, qsTr("UTC"))
+        text: `${TranslationManager.revision}` && qsTr("UTC")
         font.family: Theme.typography.familySans
         font.pixelSize: Theme.typography.fontSize200
         font.weight: Theme.typography.weightMedium
@@ -77,7 +77,7 @@ RowLayout {
     }
 
     Text {
-        text: (TranslationManager.revision, qsTr("LOCAL"))
+        text: `${TranslationManager.revision}` && qsTr("LOCAL")
         font.family: Theme.typography.familySans
         font.pixelSize: Theme.typography.fontSize200
         font.weight: Theme.typography.weightMedium

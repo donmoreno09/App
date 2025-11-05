@@ -6,7 +6,7 @@ import App.Features.ViGateServices 1.0
 import App.Features.Language 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("Gate Transits"))
+    title.text: `${TranslationManager.revision}` && qsTr("Gate Transits")
 
     ScrollView {
         anchors.fill: parent
