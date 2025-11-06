@@ -9,7 +9,8 @@ PanelTemplate {
     title.text: (TranslationManager.revision, qsTr("Gate Transits"))
 
     ScrollView {
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
         contentWidth: availableWidth
         clip: true
 
