@@ -12,7 +12,7 @@ UI.FloatingWindow {
     width: 1200
     height: 740
     visible: true
-    windowTitle: "CSV Viewer"
+    windowTitle: "Telemetry"
     loading: csv.loading
 
     property url csvSource: "qrc:/App/assets/resources/Export_MH3_Goliath.csv"

@@ -8,9 +8,9 @@ set(qml_files
     components/PolygonForm.qml
     components/PointForm.qml
     MOCPoiPanel.qml
-    GoliathVideoContainer.qml
-    GoliathDataCsv.qml
-    GoliathLiftedLoads.qml
+    CraneVideoContainer.qml
+    CraneTelemetry.qml
+    CraneLiftedLoads.qml
 )
 
 set(cpp_files

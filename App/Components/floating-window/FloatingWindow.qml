@@ -136,6 +136,7 @@ Rectangle {
     BusyIndicator {
         id: spinner
         anchors.centerIn: parent
+        running: false
         visible: running
     }
 
