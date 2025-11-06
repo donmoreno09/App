@@ -22,6 +22,9 @@ set(qml_files
     VerticalPadding.qml
     VerticalSpacer.qml
 
+    accordion/Accordion.qml
+    accordion/AccordionStyle.qml
+
     button/ButtonStyle.qml
     button/Button.qml
 
@@ -44,15 +47,18 @@ set(qml_files
     wizard-page/test-pages/OperationalArea.qml
     toggle/ToggleStyle.qml
     toggle/Toggle.qml
+
+    floating-window/FloatingWindow.qml
+    floating-window/windowRoutes.js
 )
 
 
 set(qml_singletons
+    accordion/AccordionStyles.qml
+    button/ButtonStyles.qml
     input/InputStyles.qml
     toggle/ToggleStyles.qml
-    button/ButtonStyles.qml
-
-
+    floating-window/WindowRouter.qml
 )
 
 set_source_files_properties(

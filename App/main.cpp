@@ -8,12 +8,14 @@
 #include <core/TrackManager.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
+#include <connections/mqtt/parser/TruckNotificationParser.h>
 #include <connections/mqtt/parser/TirParser.h>
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
 
 int main(int argc, char *argv[])
 {
 
+    qputenv("QML_XHR_ALLOW_FILE_READ", "1");
     // CRITICAL: Configure WebEngine BEFORE creating QGuiApplication
     // This tells Chromium to handle GPU gracefully
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
@@ -75,6 +77,7 @@ int main(int argc, char *argv[])
     mqtt->initialize(":/App/config/mqtt_config.json");
     mqtt->registerParser("ais", new TrackParser());
     mqtt->registerParser("doc-space", new TrackParser());
+    mqtt->registerParser("trucknotifications", new TruckNotificationParser());
     mqtt->registerParser("tir", new TirParser());
 
     auto *trackManager = engine.singletonInstance<TrackManager*>("App", "TrackManager");

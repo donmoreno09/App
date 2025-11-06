@@ -14,6 +14,8 @@ public:
 
     // Optional: flush buffered data (files, streams, etc.)
     virtual void flush() {}
+
+    virtual void shutdown() {}
 };
 
 #endif // ILOGSINK_H

@@ -7,6 +7,7 @@ import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.TrackPanel 1.0
 
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 MapItemGroup {
     id: root
@@ -64,8 +65,9 @@ MapItemGroup {
             TapHandler {
                 id: tapHandler
                 acceptedButtons: Qt.LeftButton
+                gesturePolicy: TapHandler.ReleaseWithinBounds
                 onTapped: (event) => {
-                    SidePanelController.openOrRefresh("trackpanel")
+                    SidePanelController.openOrRefresh(Routes.TrackPanel)
                     SelectedTrackState.select(root.trackModel.getEditableTrack(root.index))
                 }
             }

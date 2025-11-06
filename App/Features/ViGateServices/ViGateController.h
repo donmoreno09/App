@@ -11,6 +11,7 @@ class ViGateController : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_SINGLETON
 
     // Summary properties
     Q_PROPERTY(int totalEntries READ totalEntries NOTIFY summaryChanged)
@@ -41,6 +42,14 @@ class ViGateController : public QObject
 
 public:
     explicit ViGateController(QObject* parent = nullptr);
+
+    static ViGateController* create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
+    {
+        Q_UNUSED(jsEngine);
+        static ViGateController* instance = new ViGateController();
+        QQmlEngine::setObjectOwnership(instance, QQmlEngine::CppOwnership);
+        return instance;
+    }
 
     // Getters
     int totalEntries() const { return m_totalEntries; }

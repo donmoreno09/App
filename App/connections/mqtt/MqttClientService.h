@@ -7,6 +7,8 @@
 #include <QVariantList>
 #include <QQmlEngine>
 #include <entities/Track.h>
+#include <entities/TruckNotification.h>
+#include <models/TruckNotificationModel.h>
 #include <layers/BaseTrackMapLayer.h>
 #include "parser/IMessageParser.h"
 

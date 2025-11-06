@@ -10,11 +10,10 @@ import App.Features.ViGateServices 1.0
 
 ColumnLayout {
     id: root
-    Layout.fillWidth: true
-    Layout.fillHeight: true
+    width: parent.width
     spacing: Theme.spacing.s4
 
-    required property ViGateController controller
+    required property var controller
 
     // Loading Indicator
     BusyIndicator {

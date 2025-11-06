@@ -12,31 +12,24 @@ GroupBox {
 
     required property var model
 
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: Theme.spacing.s2
+    contentItem: ColumnLayout {
+            spacing: Theme.spacing.s2
 
-        // Header
-        TableHeader {
-            Layout.fillWidth: true
-            Layout.preferredHeight: Theme.spacing.s10
-            columns: ColumnConfig.columns
-            contentX: listView.contentX
-        }
-
-        // Data ListView
-        ScrollView {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 300
-            clip: true
+            // Header
+            TableHeader {
+                Layout.fillWidth: true
+                Layout.preferredHeight: Theme.spacing.s10
+                columns: ColumnConfig.columns
+                contentX: listView.contentX
+            }
 
             ListView {
                 id: listView
+                Layout.fillWidth: true
+                Layout.preferredHeight: 300
                 clip: true
-
                 model: root.model
                 contentWidth: ColumnConfig.totalWidth
-
                 flickableDirection: Flickable.HorizontalAndVerticalFlick
                 boundsBehavior: Flickable.StopAtBounds
 
@@ -61,5 +54,5 @@ GroupBox {
                 }
             }
         }
-    }
+
 }

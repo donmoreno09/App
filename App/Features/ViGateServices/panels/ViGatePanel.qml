@@ -6,18 +6,17 @@ import App.Features.ViGateServices 1.0
 import App.Features.Language 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("Leonardo Vi Gate Services"))
-
-    ViGateController { id: ctrl }
+    title.text: (TranslationManager.revision, qsTr("Gate Transits"))
 
     ScrollView {
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
         contentWidth: availableWidth
         clip: true
 
         ViGateContent {
             width: parent.width
-            controller: ctrl
+            controller: ViGateController
         }
     }
 }

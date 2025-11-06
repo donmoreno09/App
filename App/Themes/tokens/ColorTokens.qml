@@ -132,6 +132,7 @@ QtObject {
     readonly property color accent600: "#1027C3"
     readonly property color accent500: "#0D27F2"
     readonly property color accent400: "#1A37FF"
+    readonly property color accent350: "#3C66EF"
     readonly property color accent300: "#3C66FF"
     readonly property color accent200: "#608FFF"
     readonly property color accent100: "#8DBAFF"

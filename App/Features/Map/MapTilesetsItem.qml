@@ -31,8 +31,12 @@ UI.Button {
         Label {
             Layout.fillWidth: true
             text: root.text
-            font.family: Theme.typography.familySans
             elide: Text.ElideRight
+            font {
+                family: Theme.typography.bodySans25Family
+                pointSize: Theme.typography.bodySans25Size
+                weight: Theme.typography.bodySans25Weight
+            }
         }
     }
 

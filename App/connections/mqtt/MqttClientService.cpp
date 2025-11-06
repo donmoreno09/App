@@ -7,6 +7,7 @@
 #include <layers/TrackMapLayer.h>
 #include <layers/TirMapLayer.h>
 #include "parser/TrackParser.h"
+#include "parser/TruckNotificationParser.h"
 #include "parser/TirParser.h"
 
 MqttClientService::MqttClientService(QObject* parent)
@@ -93,6 +94,27 @@ void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopi
         qWarning() << "[MQTT] No parser available for topic:" << topic;
         return;
     }
+
+    // Special handling for notifications topic
+    if (topic == "trucknotifications") {
+        auto* baseParser = topicToParser.value(topic);
+        if (auto* notificationParser = dynamic_cast<TruckNotificationParser*>(baseParser)) {
+            QVector<TruckNotification> data = notificationParser->parse(message);
+
+            // Get the singleton model instance
+            auto* engine = qmlEngine(this);
+            if (engine) {
+                auto* model = engine->singletonInstance<TruckNotificationModel*>("App", "TruckNotificationModel");
+                if (model) {
+                    model->upsert(data);
+                } else {
+                    qWarning() << "[MQTT] TruckNotificationModel singleton not found";
+                }
+            }
+        }
+        return;
+    }
+
     if (!topicToLayer.contains(topic)) {
         qWarning() << "[MQTT] No layer associated with topic:" << topic;
         return;

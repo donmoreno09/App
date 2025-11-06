@@ -47,6 +47,14 @@ private:
         // Optional: pre-create SQLite sink now (avoids cold start on first log line).
         logger.warmUp({ Sink::SQLiteDB });
 
+        if (auto* app = QCoreApplication::instance()) {
+            QObject::connect(app, &QCoreApplication::aboutToQuit, app, []{
+                auto& L = AppLogger::get();
+                L.flush();
+                L.shutdown();
+            });
+        }
+
         return logger;
     }
 };
