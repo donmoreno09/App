@@ -53,6 +53,10 @@ UI.FloatingWindow {
             reuseItems: true
             selectionMode: TableView.SelectionDisabled
 
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AsNeeded
+            }
+
             // space columns evenly
             columnWidthProvider: function (col) {
                 const count = columns > 0 ? columns : 1
