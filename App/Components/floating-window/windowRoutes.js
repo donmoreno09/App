@@ -5,9 +5,9 @@ const STOWAGE   = "stowage";
 const REPORTS   = "reports";
 const ANALYTICS = "analytics";
 const NOTFOUND  = "*";
-const GOLIATH = "goliath";
-const GOLIATHCSV = "goliath-csv";
-const GOLIATHLIFTEDLOADS = "goliath-lifted-loads";
+const CRANE_VIDEO = "crane-video";
+const CRANE_TELEMETRY = "crane-telemetry";
+const CRANE_LIFTED_LOADS = "crane-lifted-loads";
 
 var routes = Object.freeze({
     [STOWAGE]: {
@@ -18,26 +18,23 @@ var routes = Object.freeze({
         modal: false,
         resizable: true
     },
-    [GOLIATH]: {
-       url: "qrc:/App/Features/Poi/GoliathVideoContainer.qml",
+    [CRANE_VIDEO]: {
+       url: "qrc:/App/Features/Poi/CraneVideoContainer.qml",
        singleton: false,
-       defaultProps: { title: "Goliath Video" },
        initialGeometry: { x: 120, y: 96, width: 1000, height: 680 },
        modal: false,
        resizable: true
     },
-   [GOLIATHCSV]: {
-        url: "qrc:/App/Features/Poi/GoliathDataCsv.qml",
+   [CRANE_TELEMETRY]: {
+        url: "qrc:/App/Features/Poi/CraneTelemetry.qml",
         singleton: false,
-        defaultProps: { title: "Goliath Data Csv" },
         initialGeometry: { x: 120, y: 96, width: 1000, height: 680 },
         modal: false,
         resizable: true
     },
-    [GOLIATHLIFTEDLOADS]: {
-        url: "qrc:/App/Features/Poi/GoliathLiftedLoads.qml",
+    [CRANE_LIFTED_LOADS]: {
+        url: "qrc:/App/Features/Poi/CraneLiftedLoads.qml",
         singleton: false,
-        defaultProps: { title: "Goliath Lifted Loads" },
         initialGeometry: { x: 120, y: 96, width: 1000, height: 680 },
         modal: false,
         resizable: true

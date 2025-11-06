@@ -63,8 +63,6 @@ QtObject {
 
         // Props finali: default della route + props chiamante
         const finalProps = Object.assign({}, route.defaultProps || {}, props || {})
-        // Passa sempre il parent esplicitamente (owner per distruzione gerarchica)
-        finalProps.parent = parentItem
         // Tipico per i tuoi container: passa anche parentWindow se serve
         if (finalProps.parentWindow === undefined)
             finalProps.parentWindow = parentItem
