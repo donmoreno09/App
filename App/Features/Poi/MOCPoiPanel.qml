@@ -126,7 +126,7 @@ PanelTemplate {
                     text: (TranslationManager.revision, qsTr("Telemetry"))
 
                     onClicked: function () {
-                        const window = UI.WindowRouter.open(WinRoutes.GOLIATHCSV, Window.window, {
+                        const window = UI.WindowRouter.open(WinRoutes.CRANE_TELEMETRY, Window.window, {
                             x: 120, y: 90, width: 1200, height: 740,
                             title: "Telemetry Viewer",
                             csvSource: "qrc:/App/assets/resources/Export_MH3_Goliath.csv"
@@ -150,7 +150,7 @@ PanelTemplate {
                     text: (TranslationManager.revision, qsTr("Video"))
 
                     onClicked: function () {
-                        const window = UI.WindowRouter.open(WinRoutes.GOLIATH, Window.window, {
+                        const window = UI.WindowRouter.open(WinRoutes.CRANE_VIDEO, Window.window, {
                             x: 120, y: 90,  width: 1200, height: 740,
                             videoTitle: "Video View",
                             source: "qrc:/App/assets/resources/Monitoraggio Goliath 2.mp4"
@@ -174,7 +174,7 @@ PanelTemplate {
                     text: (TranslationManager.revision, qsTr("Lifted Loads"))
 
                     onClicked: function () {
-                        const window = UI.WindowRouter.open(WinRoutes.GOLIATHLIFTEDLOADS, Window.window, {
+                        const window = UI.WindowRouter.open(WinRoutes.CRANE_LIFTED_LOADS, Window.window, {
                             x: 120, y: 90,  width: 1200, height: 740,
                             title: "Lifted Loads View",
                             source: "qrc:/App/assets/resources/Goliath_Lifted_Loads.jpg"
