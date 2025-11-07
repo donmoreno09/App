@@ -156,12 +156,12 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
-                    visible: PanelRouter.currentPath === "language" && SidePanelController.isOpen
+                    visible: PanelRouter.currentPath === "languages" && SidePanelController.isOpen
                     source: "qrc:/App/assets/icons/world.svg"
                     icon.width: Theme.icons.sizeMd
                     icon.height: Theme.icons.sizeMd
                     text: `${TranslationManager.revision}` && qsTr("Languages")
-                    active: PanelRouter.currentPath === "language" && SidePanelController.isOpen
+                    active: PanelRouter.currentPath === "languages" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.Languages)
                 }
