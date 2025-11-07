@@ -10,7 +10,7 @@ import App.Features.Language 1.0
 import "components"
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("Languages"))
+    title.text: `${TranslationManager.revision}` && qsTr("Languages")
 
     ColumnLayout {
         anchors.top: parent.top
@@ -21,7 +21,7 @@ PanelTemplate {
 
         LanguageItem {
             source: "qrc:/App/assets/icons/flag-it.svg"
-            text: (TranslationManager.revision, qsTr("Italian"))
+            text: `${TranslationManager.revision}` && qsTr("Italian")
             active: LanguageController.currentLanguage === "it"
 
             onClicked: LanguageController.currentLanguage = "it"
@@ -29,7 +29,7 @@ PanelTemplate {
 
         LanguageItem {
             source: "qrc:/App/assets/icons/flag-gb.svg"
-            text: (TranslationManager.revision, qsTr("English"))
+            text: `${TranslationManager.revision}` && qsTr("English")
             active: LanguageController.currentLanguage === "en"
 
             onClicked: LanguageController.currentLanguage = "en"

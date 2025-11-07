@@ -14,7 +14,7 @@ import "qrc:/App/Components/floating-window/windowRoutes.js" as WinRoutes
 
 PanelTemplate {
     id: root
-    title.text: (TranslationManager.revision, qsTr("Crane"))
+    title.text: `${TranslationManager.revision}` && qsTr("Crane")
 
     ScrollView {
         id: scrollView
@@ -32,7 +32,7 @@ PanelTemplate {
             spacing: Theme.spacing.s4
 
             Label {
-                text: (TranslationManager.revision, qsTr("General Info")).toUpperCase()
+                text: `${TranslationManager.revision}` && qsTr("General Info").toUpperCase()
                 font.family: Theme.typography.familySans
                 font.bold: true
                 font.pixelSize: Theme.typography.fontSize200
@@ -56,19 +56,19 @@ PanelTemplate {
 
                     Repeater {
                         model: [
-                            { label: (TranslationManager.revision, qsTr("Name")),      value: "SC-07" },
-                            { label: (TranslationManager.revision, qsTr("Status")),    value: (TranslationManager.revision, qsTr("On mission")) },
-                            { label: (TranslationManager.revision, qsTr("Mode")),      value: (TranslationManager.revision, qsTr("Auto-assisted")) },
-                            { label: (TranslationManager.revision, qsTr("Position")),  value: "44.41127, 8.93277  (B7/B7-14)" },
-                            { label: (TranslationManager.revision, qsTr("Task")),      value: (TranslationManager.revision, qsTr("Relocation  B7-14 → C3-07")) },
-                            { label: (TranslationManager.revision, qsTr("ETA")),       value: "10:22:45" },
-                            { label: (TranslationManager.revision, qsTr("Load")),      value: "MSCU 123456 7  (45G1) • 28.7 t" },
-                            { label: (TranslationManager.revision, qsTr("Twistlock")), value: (TranslationManager.revision, qsTr("Locked")) },
-                            { label: (TranslationManager.revision, qsTr("Speed")),     value: "15.1 km/h" },
-                            { label: (TranslationManager.revision, qsTr("Heading")),   value: "132°" },
-                            { label: (TranslationManager.revision, qsTr("Fuel")),      value: "64% • ~3h" },
-                            { label: (TranslationManager.revision, qsTr("Alarms")),    value: (TranslationManager.revision, qsTr("1 active (Maintenance 48h)")) },
-                            { label: (TranslationManager.revision, qsTr("Timestamp")), value: "2025-10-24 10:18:32" }
+                            { label: `${TranslationManager.revision}` && qsTr("Name"),      value: "SC-07" },
+                            { label: `${TranslationManager.revision}` && qsTr("Status"),    value: `${TranslationManager.revision}` && qsTr("On mission") },
+                            { label: `${TranslationManager.revision}` && qsTr("Mode"),      value: `${TranslationManager.revision}` && qsTr("Auto-assisted") },
+                            { label: `${TranslationManager.revision}` && qsTr("Position"),  value: "44.41127, 8.93277  (B7/B7-14)" },
+                            { label: `${TranslationManager.revision}` && qsTr("Task"),      value: `${TranslationManager.revision}` && qsTr("Relocation  B7-14 → C3-07") },
+                            { label: `${TranslationManager.revision}` && qsTr("ETA"),       value: "10:22:45" },
+                            { label: `${TranslationManager.revision}` && qsTr("Load"),      value: "MSCU 123456 7  (45G1) • 28.7 t" },
+                            { label: `${TranslationManager.revision}` && qsTr("Twistlock"), value: `${TranslationManager.revision}` && qsTr("Locked") },
+                            { label: `${TranslationManager.revision}` && qsTr("Speed"),     value: "15.1 km/h" },
+                            { label: `${TranslationManager.revision}` && qsTr("Heading"),   value: "132°" },
+                            { label: `${TranslationManager.revision}` && qsTr("Fuel"),      value: "64% • ~3h" },
+                            { label: `${TranslationManager.revision}` && qsTr("Alarms"),    value: `${TranslationManager.revision}` && qsTr("1 active (Maintenance 48h)") },
+                            { label: `${TranslationManager.revision}` && qsTr("Timestamp"), value: "2025-10-24 10:18:32" }
                         ]
 
                         delegate: ColumnLayout {
@@ -123,7 +123,7 @@ PanelTemplate {
                     icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
                     icon.width: 16
                     icon.height: 16
-                    text: (TranslationManager.revision, qsTr("Telemetry"))
+                    text: `${TranslationManager.revision}` && qsTr("Telemetry")
 
                     onClicked: function () {
                         const window = UI.WindowRouter.open(WinRoutes.CRANE_TELEMETRY, Window.window, {
@@ -147,7 +147,7 @@ PanelTemplate {
                     icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
                     icon.width: 16
                     icon.height: 16
-                    text: (TranslationManager.revision, qsTr("Video"))
+                    text: `${TranslationManager.revision}` && qsTr("Video")
 
                     onClicked: function () {
                         const window = UI.WindowRouter.open(WinRoutes.CRANE_VIDEO, Window.window, {
@@ -171,7 +171,7 @@ PanelTemplate {
                     icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
                     icon.width: 16
                     icon.height: 16
-                    text: (TranslationManager.revision, qsTr("Lifted Loads"))
+                    text: `${TranslationManager.revision}` && qsTr("Lifted Loads")
 
                     onClicked: function () {
                         const window = UI.WindowRouter.open(WinRoutes.CRANE_LIFTED_LOADS, Window.window, {

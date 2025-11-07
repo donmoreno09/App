@@ -31,8 +31,8 @@ ColumnLayout {
         variant: UI.InputStyles.Success
         Layout.fillWidth: true
         Layout.margins: 10
-        labelText: (TranslationManager.revision, qsTr("Trailer ID"))
-        placeholderText: (TranslationManager.revision, qsTr("Enter ID"))
+        labelText: `${TranslationManager.revision}` && qsTr("Trailer ID")
+        placeholderText: `${TranslationManager.revision}` && qsTr("Enter ID")
         textField.inputMethodHints: Qt.ImhDigitsOnly
         textField.horizontalAlignment: TextInput.AlignHCenter
         textField.validator: IntValidator { bottom: 1 }
@@ -48,7 +48,7 @@ ColumnLayout {
         Layout.leftMargin: 10
         Layout.rightMargin: 10
         variant: UI.ButtonStyles.Primary
-        text: (TranslationManager.revision, qsTr("Calculate Prediction"))
+        text: `${TranslationManager.revision}` && qsTr("Calculate Prediction")
         enabled: trailerIdInput.text && !controller.isLoading
 
         onClicked: {
@@ -70,7 +70,7 @@ ColumnLayout {
             Layout.leftMargin: 10
             Layout.rightMargin: 10
             icon: "qrc:/App/assets/icons/compass.svg"
-            title: (TranslationManager.revision, qsTr("Estimated Time"))
+            title: `${TranslationManager.revision}` && qsTr("Estimated Time")
             value: formatMinutes(controller.prediction)
         }
 
@@ -94,7 +94,7 @@ ColumnLayout {
     // Error Message
     Text {
         visible: !controller.isLoading && !controller.hasPrediction && trailerIdInput.text && controller.hasError
-        text: (TranslationManager.revision, qsTr("No data available"))
+        text: `${TranslationManager.revision}` && qsTr("No data available")
         color: Theme.colors.error
         Layout.alignment: Qt.AlignHCenter
         Layout.topMargin: Theme.spacing.s4
@@ -108,24 +108,24 @@ ColumnLayout {
     UI.VerticalSpacer {}
 
     function formatMinutes(minutes) {
-        if (minutes === 0) return (TranslationManager.revision, qsTr("Ready"))
-        if (minutes < 60) return minutes + (TranslationManager.revision, qsTr(" min"))
+        if (minutes === 0) return `${TranslationManager.revision}` && qsTr("Ready")
+        if (minutes < 60) return minutes + `${TranslationManager.revision}` && qsTr(" min")
 
         const hours = Math.floor(minutes / 60)
         const mins = minutes % 60
 
         if (mins === 0) {
             return hours + (hours > 1 ?
-                (TranslationManager.revision, qsTr(" hours")) :
-                (TranslationManager.revision, qsTr(" hour")))
+                `${TranslationManager.revision}` && qsTr(" hours") :
+                `${TranslationManager.revision}` && qsTr(" hour"))
         }
         return hours + "h " + mins + "min"
     }
 
     function getStatusText(minutes) {
-        if (minutes === 0) return (TranslationManager.revision, qsTr("Immediate access to the bay"))
-        if (minutes < 30) return (TranslationManager.revision, qsTr("Short wait - entry soon"))
-        if (minutes < 120) return (TranslationManager.revision, qsTr("In queue - moderate wait"))
-        return (TranslationManager.revision, qsTr("Extended wait - consider alternatives"))
+        if (minutes === 0) return `${TranslationManager.revision}` && qsTr("Immediate access to the bay")
+        if (minutes < 30) return `${TranslationManager.revision}` && qsTr("Short wait - entry soon")
+        if (minutes < 120) return `${TranslationManager.revision}` && qsTr("In queue - moderate wait")
+        return `${TranslationManager.revision}` && qsTr("Extended wait - consider alternatives")
     }
 }
