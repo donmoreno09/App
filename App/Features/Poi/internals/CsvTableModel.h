@@ -3,6 +3,7 @@
 
 #include <QAbstractTableModel>
 #include <QQmlEngine>
+#include <QFuture>
 
 class CsvTableModel : public QAbstractTableModel {
     Q_OBJECT
@@ -11,6 +12,8 @@ class CsvTableModel : public QAbstractTableModel {
 
 public:
     explicit CsvTableModel(QObject* parent=nullptr);
+
+    virtual ~CsvTableModel();
 
     int rowCount(const QModelIndex&) const override;
     int columnCount(const QModelIndex&) const override;
@@ -39,6 +42,8 @@ private:
     QStringList m_headers;
     QVector<QVector<QString>> m_data;
     bool m_loading=false;
+    QFuture<void> m_future;
+    std::atomic_bool m_cancel { false };
 
     static QString resolvePathForQFile(const QUrl& url);
 };
