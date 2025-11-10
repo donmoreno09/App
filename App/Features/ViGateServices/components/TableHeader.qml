@@ -9,6 +9,10 @@ Rectangle {
     radius: Theme.radius.sm
     z: 2
 
+    onWidthChanged: {
+            console.log("TableHeader width:", width)
+        }
+
     required property var columns
     required property real contentX
 

@@ -9,27 +9,41 @@ GroupBox {
     title: qsTr("Transits")
     Layout.fillWidth: true
     Layout.fillHeight: true
+    Layout.maximumWidth: parent.width
 
     required property var model
 
+    onWidthChanged: {
+            console.log("TransitsTable GroupBox width:", width)
+        }
+
     contentItem: ColumnLayout {
+            width: parent.width
             spacing: Theme.spacing.s2
 
-            // Header
-            TableHeader {
+            // Header wrapper with clipping
+            Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: Theme.spacing.s10
-                columns: ColumnConfig.columns
-                contentX: listView.contentX
+                clip: true
+
+                TableHeader {
+                    width: parent.width
+                    height: parent.height
+                    columns: ColumnConfig.columns
+                    contentX: listView.contentX
+                }
             }
 
             ListView {
                 id: listView
                 Layout.fillWidth: true
                 Layout.preferredHeight: 300
+                Layout.maximumWidth: parent.width
                 clip: true
                 model: root.model
                 contentWidth: ColumnConfig.totalWidth
+
                 flickableDirection: Flickable.HorizontalAndVerticalFlick
                 boundsBehavior: Flickable.StopAtBounds
 
