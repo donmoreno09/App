@@ -211,11 +211,21 @@ ColumnLayout {
         }
 
         Rectangle {
-            Layout.fillWidth: true
+            width: parent.width
+            Layout.maximumWidth: parent.width - 14
             Layout.minimumHeight: Theme.spacing.s10
             color: Theme.colors.surface
             radius: Theme.radius.sm
             visible: controller.totalPages > 0 && !controller.isLoadingPage
+
+            Component.onCompleted: {
+                console.log("=== Pagination Controls ===")
+                console.log("width: ", width)
+            }
+
+            onWidthChanged: {
+                    console.log("Pagination Controls width changed to:", width)
+                }
 
             RowLayout {
                 anchors.fill: parent
@@ -308,8 +318,11 @@ ColumnLayout {
 
         RowLayout {
             visible: controller.totalPages > 1 && !controller.isLoadingPage
-            Layout.fillWidth: true
-            spacing: Theme.spacing.s2
+            width: parent.width
+            Layout.maximumWidth: parent.width - 14
+            spacing: Theme.spacing.s1
+
+            Item { Layout.fillWidth: true }
 
             UI.Button {
                 variant: UI.ButtonStyles.Ghost
@@ -325,10 +338,8 @@ ColumnLayout {
                 onClicked: controller.previousPage()
             }
 
-            Item { Layout.fillWidth: true }
-
             RowLayout {
-                spacing: Theme.spacing.s2
+                spacing: Theme.spacing.s0
 
                 Text {
                     text: `${TranslationManager.revision}` && qsTr("Go to page:")
@@ -338,7 +349,7 @@ ColumnLayout {
 
                 TextField {
                     id: pageJumpInput
-                    Layout.preferredWidth: 60
+                    Layout.preferredWidth: 35
                     horizontalAlignment: Text.AlignHCenter
                     text: controller.currentPage.toString()
                     validator: IntValidator {
@@ -379,8 +390,6 @@ ColumnLayout {
                 }
             }
 
-            Item { Layout.fillWidth: true }
-
             UI.Button {
                 variant: UI.ButtonStyles.Ghost
                 text: `${TranslationManager.revision}` && qsTr("Next ›")
@@ -394,6 +403,8 @@ ColumnLayout {
                 enabled: controller.currentPage < controller.totalPages
                 onClicked: controller.goToPage(controller.totalPages)
             }
+
+            Item { Layout.fillWidth: true }
         }
 
         Item {
