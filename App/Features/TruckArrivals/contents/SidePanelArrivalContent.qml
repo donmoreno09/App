@@ -30,16 +30,16 @@ ColumnLayout {
 
     StatCard {
         icon: "qrc:/App/assets/icons/stopwatch.svg"
-        title: (TranslationManager.revision, qsTr("Next Hour"))
-        value: controller.currentHourArrivalCount.toString() + (TranslationManager.revision, qsTr(" trucks"))
+        title: `${TranslationManager.revision}` && qsTr("Next Hour")
+        value: controller.currentHourArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
         Layout.fillWidth: true
         visible: !controller.isLoading
     }
 
     StatCard {
         icon: "qrc:/App/assets/icons/calendar-arrivals.svg"
-        title: (TranslationManager.revision, qsTr("Today"))
-        value: controller.todayArrivalCount.toString() + (TranslationManager.revision, qsTr(" trucks"))
+        title: `${TranslationManager.revision}` && qsTr("Today")
+        value: controller.todayArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
         Layout.fillWidth: true
         visible: !controller.isLoading
     }
@@ -53,7 +53,7 @@ ColumnLayout {
         Layout.preferredHeight: 40
         Layout.margins: 10
         variant: UI.ButtonStyles.Primary
-        text: (TranslationManager.revision, qsTr("Fetch Arrivals"))
+        text: `${TranslationManager.revision}` && qsTr("Fetch Arrivals")
         onClicked: controller.fetchAllArrivalData()
     }
 }

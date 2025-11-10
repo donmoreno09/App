@@ -8,7 +8,7 @@ import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("Notifications"))
+    title.text: `${TranslationManager.revision}` && qsTr("Notifications")
 
     ScrollView {
         id: sv
@@ -282,7 +282,7 @@ PanelTemplate {
                     UI.Button {
                         Layout.fillWidth: true
                         variant: UI.ButtonStyles.Ghost
-                        text: (TranslationManager.revision, qsTr("Back"))
+                        text: `${TranslationManager.revision}` && qsTr("Back")
 
                         background: Rectangle {
                             color: Theme.colors.transparent
@@ -293,7 +293,7 @@ PanelTemplate {
                     UI.Button {
                         Layout.fillWidth: true
                         variant: UI.ButtonStyles.Primary
-                        text: (TranslationManager.revision, qsTr("Delete All"))
+                        text: `${TranslationManager.revision}` && qsTr("Delete All")
                     }
                 }
             }

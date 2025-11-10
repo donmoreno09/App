@@ -178,7 +178,7 @@ Item {
 
                     Text {
                         anchors.centerIn: parent
-                        text: (TranslationManager.revision, qsTr("Back"))
+                        text: `${TranslationManager.revision}` && qsTr("Back")
                         color: wizardPage.canGoBack ? Theme.colors.text : Theme.colors.textMuted
                         font.family: Theme.typography.familySans
                         font.pixelSize: Theme.typography.fontSize150
@@ -197,7 +197,7 @@ Item {
 
                     Text {
                         anchors.centerIn: parent
-                        text: (TranslationManager.revision, qsTr("Next"))
+                        text: `${TranslationManager.revision}` && qsTr("Next")
                         color: Theme.colors.text
                         font.family: Theme.typography.familySans
                         font.pixelSize: Theme.typography.fontSize150

@@ -7,7 +7,7 @@ import App.Features.Language 1.0
 import App.Components 1.0 as UI
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("Waiting Time Prediction"))
+    title.text: `${TranslationManager.revision}` && qsTr("Waiting Time Prediction")
 
     TrailerPredictionController { id: ctrl }
 
