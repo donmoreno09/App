@@ -52,9 +52,9 @@ Item {
     width: contentRow.implicitWidth
     height: Theme.spacing.s10
 
-    onWidthChanged: {
-            console.log("TransitRow width:", width)
-        }
+    // onWidthChanged: {
+    //         console.log("TransitRow width:", width)
+    //     }
 
     Rectangle {
         anchors.fill: parent
