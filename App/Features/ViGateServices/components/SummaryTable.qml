@@ -7,6 +7,11 @@ import App.Components 1.0 as UI
 GroupBox {
     title: qsTr("Summary")
     Layout.fillWidth: true
+    Layout.maximumWidth: parent.width
+
+    onWidthChanged: {
+            console.log("SummaryTable GroupBox width:", width)
+        }
 
     required property var controller
 

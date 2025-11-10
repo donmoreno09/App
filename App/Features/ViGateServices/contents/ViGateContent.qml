@@ -15,6 +15,16 @@ ColumnLayout {
 
     required property var controller
 
+    Component.onCompleted: {
+            console.log("=== Root ColumnLayout Initial ===")
+            console.log("  width:", width)
+            console.log("  parent.width:", parent ? parent.width : "no parent")
+        }
+
+    onWidthChanged: {
+        console.log("Root ColumnLayout width:", width)
+    }
+
     // Loading Indicator
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
@@ -31,6 +41,16 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.margins: Theme.spacing.s4
         spacing: Theme.spacing.s3
+
+        Component.onCompleted: {
+                console.log("=== Filters and Controls Section ColumnLayout Initial ===")
+                console.log("  width:", width)
+                console.log("  parent.width:", parent ? parent.width : "no parent")
+            }
+
+        onWidthChanged: {
+            console.log("Filters and Controls Section ColumnLayout width:", width)
+        }
 
         // Gate Selection ComboBox
         UI.ComboBox {
@@ -194,11 +214,28 @@ ColumnLayout {
 
     // Data Display Section
     ColumnLayout {
+        id: dataDisplayLayout
         visible: !controller.isLoading && controller.hasData
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.margins: Theme.spacing.s4
+        Layout.maximumWidth: parent.width
+        // Layout.margins: Theme.spacing.s4
         spacing: Theme.spacing.s4
+
+
+        Component.onCompleted: {
+            width = Qt.binding(function() {
+                        return parent.width - (Layout.margins * 2)
+                    })
+                console.log("=== Data Display ColumnLayout Initial ===")
+                console.log("  width:", width)
+                console.log("  parent.width:", parent ? parent.width : "no parent")
+            }
+
+            onWidthChanged: {
+                console.log("Data Display ColumnLayout width:", width)
+            }
+
 
         // Summary Table
         SummaryTable {
