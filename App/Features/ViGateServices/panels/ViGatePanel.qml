@@ -7,9 +7,11 @@ import App.Features.Language 1.0
 
 PanelTemplate {
     title.text: `${TranslationManager.revision}` && qsTr("Gate Transits")
+    clip: true
 
     ScrollView {
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
         contentWidth: availableWidth
         clip: true
 
