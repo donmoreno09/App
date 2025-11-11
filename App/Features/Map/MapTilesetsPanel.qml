@@ -8,7 +8,7 @@ import App.Features.Language 1.0
 import App.Features.Map 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("Map Tilesets"))
+    title.text: `${TranslationManager.revision}` && qsTr("Map Tilesets")
 
     ColumnLayout {
         anchors.top: parent.top
@@ -20,7 +20,7 @@ PanelTemplate {
 
         MapTilesetsItem {
             Layout.fillWidth: true
-            text: (TranslationManager.revision, qsTr("Online OSM"))
+            text: `${TranslationManager.revision}` && qsTr("Online OSM")
             source: "qrc:/App/assets/images/osm-online.png"
             active: MapController._currentPlugin === MapPlugins.osm
 
@@ -29,7 +29,7 @@ PanelTemplate {
 
         MapTilesetsItem {
             Layout.fillWidth: true
-            text: (TranslationManager.revision, qsTr("Default OSM"))
+            text: `${TranslationManager.revision}` && qsTr("Default OSM")
             source: "qrc:/App/assets/images/osm-default.png"
             active: MapController._currentPlugin === MapPlugins.osmDefault
 

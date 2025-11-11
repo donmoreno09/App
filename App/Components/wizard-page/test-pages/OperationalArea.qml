@@ -26,7 +26,7 @@ Item {
             spacing: 12
 
             Text {
-                text: (TranslationManager.revision, qsTr("Area Type"))
+                text: `${TranslationManager.revision}` && qsTr("Area Type")
                 color: "#ffffff"
                 font.family: Theme.typography.familySans
                 font.pixelSize: Theme.typography.fontSize175
@@ -38,11 +38,11 @@ Item {
 
                 Repeater {
                     model: [
-                        {name: (TranslationManager.revision, qsTr("Ellipse")), icon: "○"},
-                        {name: (TranslationManager.revision, qsTr("Rectangle")), icon: "□"},
-                        {name: (TranslationManager.revision, qsTr("Sector")), icon: "◗"},
-                        {name: (TranslationManager.revision, qsTr("Polygon")), icon: "⬟"},
-                        {name: (TranslationManager.revision, qsTr("Arc")), icon: "⌒"}
+                        {name: `${TranslationManager.revision}` && qsTr("Ellipse"), icon: "○"},
+                        {name: `${TranslationManager.revision}` && qsTr("Rectangle"), icon: "□"},
+                        {name: `${TranslationManager.revision}` && qsTr("Sector"), icon: "◗"},
+                        {name: `${TranslationManager.revision}` && qsTr("Polygon"), icon: "⬟"},
+                        {name: `${TranslationManager.revision}` && qsTr("Arc"), icon: "⌒"}
                     ]
 
                     Button {
@@ -93,7 +93,7 @@ Item {
             spacing: 12
 
             Text {
-                text: (TranslationManager.revision, qsTr("Area Details"))
+                text: `${TranslationManager.revision}` && qsTr("Area Details")
                 color: "#ffffff"
                 font.family: Theme.typography.familySans
                 font.pixelSize: Theme.typography.fontSize175
@@ -110,8 +110,8 @@ Item {
                 UI.InputCoordinate {
                     Layout.fillWidth: true
                     type: UI.InputCoordinate.Latitude
-                    labelText: (TranslationManager.revision, qsTr("Latitude"))
-                    placeholderText: (TranslationManager.revision, qsTr("Latitude"))
+                    labelText: `${TranslationManager.revision}` && qsTr("Latitude")
+                    placeholderText: `${TranslationManager.revision}` && qsTr("Latitude")
                     onTextEdited: wizardData.latitude = text
                 }
 
@@ -119,8 +119,8 @@ Item {
                 UI.InputCoordinate {
                     Layout.fillWidth: true
                     type: UI.InputCoordinate.Longitude
-                    labelText: (TranslationManager.revision, qsTr("Longitude"))
-                    placeholderText: (TranslationManager.revision, qsTr("Longitude"))
+                    labelText: `${TranslationManager.revision}` && qsTr("Longitude")
+                    placeholderText: `${TranslationManager.revision}` && qsTr("Longitude")
                     onTextEdited: wizardData.longitude = text
                 }
 
@@ -128,7 +128,7 @@ Item {
                 TextField {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
-                    placeholderText: (TranslationManager.revision, qsTr("Radius (m)"))
+                    placeholderText: `${TranslationManager.revision}` && qsTr("Radius (m)")
                     placeholderTextColor: "white"
                     text: wizardData.radius || ""
 
@@ -150,7 +150,7 @@ Item {
                 TextField {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
-                    placeholderText: (TranslationManager.revision, qsTr("Rotation (°)"))
+                    placeholderText: `${TranslationManager.revision}` && qsTr("Rotation (°)")
                     placeholderTextColor: "white"
                     text: wizardData.rotation || ""
 

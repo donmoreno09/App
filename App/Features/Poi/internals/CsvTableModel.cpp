@@ -10,6 +10,14 @@ static QStringList splitRow(const QString& line) {
 
 CsvTableModel::CsvTableModel(QObject* p): QAbstractTableModel(p) {}
 
+CsvTableModel::~CsvTableModel()
+{
+    m_cancel.store(true, std::memory_order_relaxed);
+    if (m_future.isRunning()) {
+        m_future.waitForFinished();
+    }
+}
+
 int CsvTableModel::rowCount(const QModelIndex &) const
 {
     return m_rows;
@@ -21,67 +29,101 @@ int CsvTableModel::columnCount(const QModelIndex &) const
 }
 
 void CsvTableModel::load(const QUrl& url, const QStringList& ignore) {
-    if (m_loading) return;
+    if (m_loading) {
+        return;
+    }
+
     m_loading = true;
     emit loadingChanged();
 
+    m_cancel.store(false, std::memory_order_relaxed);
+
     const QString path = resolvePathForQFile(url);
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly)) {
+    if (path.isEmpty()) {
         onFinished();
         return;
     }
 
-    QStringList headers = QString::fromUtf8(file.readLine()).trimmed().split(';', Qt::KeepEmptyParts);
-    // build keep-index map (case-insensitive)
-    QVector<int> keep;
-    keep.reserve(headers.size());
+    m_future = QtConcurrent::run([this, path, ignore]() {
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly)) {
+            QMetaObject::invokeMethod(this, [this]() { onFinished(); }, Qt::QueuedConnection);
+            return;
+        }
 
-    for (int i = 0; i < headers.size(); i++) {
-        bool drop = false;
-        for (auto& ig: ignore) {
-            if (headers[i].compare(ig, Qt::CaseInsensitive) == 0) {
-                drop = true;
-                break;
+        QStringList headers = QString::fromUtf8(file.readLine()).trimmed().split(';', Qt::KeepEmptyParts);
+
+        QVector<int> keep;
+        keep.reserve(headers.size());
+
+        for (int i = 0; i < headers.size(); ++i) {
+            bool drop = false;
+
+            for (const auto& ig : ignore) {
+                if (headers[i].compare(ig, Qt::CaseInsensitive) == 0) {
+                    drop = true;
+                    break;
+                }
+            }
+
+            if (!drop) {
+                keep.push_back(i);
             }
         }
-        if (!drop) keep.push_back(i);
-    }
 
-    // send headers
-    onHeaderReady(headers, keep);
-
-    // stream rows in chunks
-    QVector<QStringList> chunk;
-    chunk.reserve(500);
-    while (!file.atEnd()) {
-        const QString line = QString::fromUtf8(file.readLine());
-        if (line.trimmed().isEmpty()) {
-            continue;
+        if (m_cancel.load(std::memory_order_relaxed)) {
+            // cancelled before we even start pushing rows
+            QMetaObject::invokeMethod(this, [this]() { onFinished(); }, Qt::QueuedConnection);
+            return;
         }
 
-        auto cells = splitRow(line);
-        QStringList filtered;
-        filtered.reserve(keep.size());
+        // Post header handling back to GUI thread
+        QMetaObject::invokeMethod(this, [this, headers, keep]() {
+            onHeaderReady(headers, keep);
+        }, Qt::QueuedConnection);
 
-        for (int i = 0; i < keep.size(); i++) {
-            auto k = keep[i];
-            filtered << (k < cells.size() ? cells[k].trimmed() : QString());
+        // Parse rows in chunks
+        QVector<QStringList> chunk;
+        chunk.reserve(500);
+
+        while (!file.atEnd()) {
+            if (m_cancel.load(std::memory_order_relaxed))
+                break;
+
+            const QString line = QString::fromUtf8(file.readLine());
+            if (line.trimmed().isEmpty())
+                continue;
+
+            const auto cells = splitRow(line);
+
+            QStringList filtered;
+            filtered.reserve(keep.size());
+            for (int i = 0; i < keep.size(); ++i) {
+                const int k = keep[i];
+                filtered << (k < cells.size() ? cells[k].trimmed() : QString());
+            }
+
+            chunk.push_back(std::move(filtered));
+
+            if (chunk.size() == 500) {
+                // copy chunk to send to GUI thread
+                auto toSend = chunk;
+                QMetaObject::invokeMethod(this, [this, toSend]() {
+                    onRowsReady(toSend);
+                }, Qt::QueuedConnection);
+                chunk.clear();
+            }
         }
 
-        chunk.push_back(std::move(filtered));
-
-        if (chunk.size() == 500) {
-            onRowsReady(chunk);
-            chunk.clear();
+        if (!chunk.isEmpty() && !m_cancel.load(std::memory_order_relaxed)) {
+            auto toSend = chunk;
+            QMetaObject::invokeMethod(this, [this, toSend]() {
+                onRowsReady(toSend);
+            }, Qt::QueuedConnection);
         }
-    }
 
-    if (!chunk.isEmpty()) {
-        onRowsReady(chunk);
-    }
-
-    onFinished();
+        QMetaObject::invokeMethod(this, [this]() { onFinished(); }, Qt::QueuedConnection);
+    });
 }
 
 int CsvTableModel::findColumn(const QString& name) const {
@@ -130,6 +172,12 @@ void CsvTableModel::onRowsReady(const QVector<QStringList> &chunk) {
 
     m_rows = m_data.size();
     endInsertRows();
+
+    // First chunk loaded, so tell GUI that it can show it now
+    if (m_loading) {
+        m_loading = false;
+        emit loadingChanged();
+    }
 }
 
 QVariant CsvTableModel::data(const QModelIndex& i, int role) const {

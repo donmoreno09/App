@@ -5,12 +5,12 @@ QtObject {
     readonly property var steps: ({
         MISSION_OVERVIEW: {
             index: 0,
-            title: (TranslationManager.revision, qsTr("Mission Overview")),
+            title: `${TranslationManager.revision}` && qsTr("Mission Overview"),
             component: "MissionOverview"
         },
         OPERATIONAL_AREA: {
             index: 1,
-            title: (TranslationManager.revision, qsTr("Operational Area")),
+            title: `${TranslationManager.revision}` && qsTr("Operational Area"),
             component: "OperationalArea"
         }
     })

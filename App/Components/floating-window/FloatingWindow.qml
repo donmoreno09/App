@@ -33,6 +33,14 @@ Rectangle {
     property real windowWidth: 800
     property real windowHeight: 600
 
+    function clampToBounds() {
+        container.x = Math.max(0, Math.min(container.x, container.windowWidth  - container.width))
+        container.y = Math.max(0, Math.min(container.y, container.windowHeight - container.height))
+    }
+
+    onWindowWidthChanged: clampToBounds()
+    onWindowHeightChanged: clampToBounds()
+
     // Max position based on current size
     property real maxPosX: windowWidth - width
     property real maxPosY: windowHeight - height
@@ -54,21 +62,17 @@ Rectangle {
         border.width: Theme.borders.b1
         z: 10
 
-        MouseArea {
-            id: dragMouseArea
-            anchors.fill: parent
-            drag.target: container
-            drag.axis: Drag.XAndYAxis
-            // Limit dragging within window bounds
-            drag.minimumX: 0
-            drag.minimumY: 0
-            drag.maximumX: container.maxPosX
-            drag.maximumY: container.maxPosY
-
-            cursorShape: Qt.OpenHandCursor
-            onPressed: cursorShape = Qt.ClosedHandCursor
-            onReleased: cursorShape = Qt.OpenHandCursor
-            hoverEnabled: true
+        HoverHandler { cursorShape: Qt.OpenHandCursor }
+        DragHandler {
+            id: moveDrag
+            target: container
+            dragThreshold: 0
+            xAxis.minimum: 0
+            xAxis.maximum: container.windowWidth  - container.width
+            yAxis.minimum: 0
+            yAxis.maximum: container.windowHeight - container.height
+            cursorShape: active ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+            grabPermissions: PointerHandler.CanTakeOverFromAnything
         }
 
         // Window title
@@ -146,7 +150,7 @@ Rectangle {
         width: Theme.spacing.s4
         height: Theme.spacing.s4
         radius: Theme.radius.sm
-        color: resizeMouseArea.pressed ? Theme.colors.whiteA10 : Theme.colors.whiteA20
+        color: resizeDrag.active ? Theme.colors.whiteA10 : Theme.colors.whiteA20
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: Theme.spacing.s1
@@ -154,38 +158,33 @@ Rectangle {
 
         Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
 
-        MouseArea {
-            id: resizeMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            preventStealing: true
-            acceptedButtons: Qt.LeftButton
+        HoverHandler { cursorShape: Qt.SizeFDiagCursor }
+        DragHandler {
+            id: resizeDrag
+            target: null
             cursorShape: Qt.SizeFDiagCursor
+            dragThreshold: 0
+            grabPermissions: PointerHandler.CanTakeOverFromAnything
 
-            // Remember starting state
-            property real startW: 0
-            property real startH: 0
-            property real startX: 0
-            property real startY: 0
-
-            onPressed: function(mouse) {
+            property real startW
+            property real startH
+            onActiveChanged: if (active) {
                 startW = container.width
                 startH = container.height
-                startX = mouse.x
-                startY = mouse.y
             }
 
-            onPositionChanged: function(mouse) {
-                if (!(mouse.buttons & Qt.LeftButton)) return
+            onActiveTranslationChanged: {
+                const dx = resizeDrag.activeTranslation.x
+                const dy = resizeDrag.activeTranslation.y
 
-                var dx = mouse.x - startX
-                var dy = mouse.y - startY
-
-                var newW = Math.max(container.minWidth,  Math.min(startW + dx, container.windowWidth  - container.x))
-                var newH = Math.max(container.minHeight, Math.min(startH + dy, container.windowHeight - container.y))
-
-                container.width  = newW
-                container.height = newH
+                container.width  = Math.min(
+                    container.windowWidth  - container.x,
+                    Math.max(container.minWidth,  startW + dx)
+                )
+                container.height = Math.min(
+                    container.windowHeight - container.y,
+                    Math.max(container.minHeight, startH + dy)
+                )
             }
         }
     }

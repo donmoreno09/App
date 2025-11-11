@@ -20,11 +20,11 @@ PanelTemplate {
         }
 
         switch (label) {
-        case (TranslationManager.revision, qsTr("Latitude")):
+        case `${TranslationManager.revision}` && qsTr("Latitude"):
             return value ? value.latitude.toFixed(6) : "-"
-        case (TranslationManager.revision, qsTr("Longitude")):
+        case `${TranslationManager.revision}` && qsTr("Longitude"):
             return value ? value.longitude.toFixed(6) : "-"
-        case (TranslationManager.revision, qsTr("Speed")):
+        case `${TranslationManager.revision}` && qsTr("Speed"):
             if (!value || !track)
                 return "-"
 
@@ -33,9 +33,9 @@ PanelTemplate {
             const unit = isTir ? "km/h" : "kn"
 
             return `${speed.toFixed(1)} ${unit}`
-        case (TranslationManager.revision, qsTr("Heading")):
+        case `${TranslationManager.revision}` && qsTr("Heading"):
             return value ? value + "°" : "0°"
-        case (TranslationManager.revision, qsTr("Timestamp")):
+        case `${TranslationManager.revision}` && qsTr("Timestamp"):
             return formatTimestamp(value)
         default:
             return value || "-"
@@ -70,7 +70,7 @@ PanelTemplate {
     }
 
 
-    title.text: (TranslationManager.revision, qsTr("Track Details"))
+    title.text: `${TranslationManager.revision}` && qsTr("Track Details")
 
     ScrollView {
         id: scrollView
@@ -88,7 +88,7 @@ PanelTemplate {
             spacing: Theme.spacing.s4
 
             Label {
-                text: (TranslationManager.revision, qsTr("General Info")).toUpperCase()
+                text: `${TranslationManager.revision}` && qsTr("General Info").toUpperCase()
                 font.family: Theme.typography.familySans
                 font.bold: true
                 font.pixelSize: Theme.typography.fontSize200
@@ -112,12 +112,12 @@ PanelTemplate {
 
                     Repeater {
                         model: [
-                            { label: (TranslationManager.revision, qsTr("Name")), value: track ? track.name : '-' },
-                            { label: (TranslationManager.revision, qsTr("Latitude")), value: track ? track.pos : '-' },
-                            { label: (TranslationManager.revision, qsTr("Longitude")), value: track ? track.pos : '-' },
-                            { label: (TranslationManager.revision, qsTr("Timestamp")), value: track ? track.time : '-' },
-                            { label: (TranslationManager.revision, qsTr("Heading")), value: track ? track.cog : '-' },
-                            { label: (TranslationManager.revision, qsTr("Speed")), value: track ? track.vel : '-' },
+                            { label: `${TranslationManager.revision}` && qsTr("Name"), value: track ? track.name : '-' },
+                            { label: `${TranslationManager.revision}` && qsTr("Latitude"), value: track ? track.pos : '-' },
+                            { label: `${TranslationManager.revision}` && qsTr("Longitude"), value: track ? track.pos : '-' },
+                            { label: `${TranslationManager.revision}` && qsTr("Timestamp"), value: track ? track.time : '-' },
+                            { label: `${TranslationManager.revision}` && qsTr("Heading"), value: track ? track.cog : '-' },
+                            { label: `${TranslationManager.revision}` && qsTr("Speed"), value: track ? track.vel : '-' },
                         ]
 
                         delegate: ColumnLayout {
@@ -172,7 +172,7 @@ PanelTemplate {
                     icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
                     icon.width: 16
                     icon.height: 16
-                    text: (TranslationManager.revision, qsTr("Center View"))
+                    text: `${TranslationManager.revision}` && qsTr("Center View")
 
                     onClicked: function () {
                         let trackPosition = QtPositioning.coordinate(track.pos.latitude, track.pos.longitude)
@@ -222,7 +222,7 @@ PanelTemplate {
 
                     Text {
                         Layout.leftMargin: Theme.spacing.s2
-                        text: (TranslationManager.revision, qsTr("Track History"))
+                        text: `${TranslationManager.revision}` && qsTr("Track History")
                         color: Theme.colors.text
                         font.family: Theme.typography.familySans
                         font.pixelSize: Theme.typography.fontSize150

@@ -44,17 +44,17 @@ ColumnLayout {
         function fmt(dt) { return Qt.formatDateTime(dt, "dd/MMM/yyyy HH:mm") }
 
         text: (dtRange.startDate && dtRange.endDate)
-              ? (TranslationManager.revision, qsTr("Selected: %1 — %2"))
+              ? `${TranslationManager.revision}` && qsTr("Selected: %1 — %2")
                   .arg(fmt(dtRange._combineDateTime(dtRange.startDate,  dtRange.selectedHour, dtRange.selectedMinute, dtRange.selectedAMPM)))
                   .arg(fmt(dtRange._combineDateTime(dtRange.endDate, dtRange.endHour, dtRange.endMinute, dtRange.endAMPM)))
-              : (TranslationManager.revision, qsTr("Select a date & time range"))
+              : `${TranslationManager.revision}` && qsTr("Select a date & time range")
     }
 
     StatCard {
         visible: !controller.isLoading
         icon: "qrc:/App/assets/icons/truck.svg"
-        title: (TranslationManager.revision, qsTr("Arriving Trucks"))
-        value: controller.dateTimeRangeArrivalCount.toString() + (TranslationManager.revision, qsTr(" trucks"))
+        title: `${TranslationManager.revision}` && qsTr("Arriving Trucks")
+        value: controller.dateTimeRangeArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
         Layout.fillWidth: true
     }
 
@@ -63,7 +63,7 @@ ColumnLayout {
     UI.Button {
         visible: !controller.isLoading
         variant: UI.ButtonStyles.Primary
-        text: (TranslationManager.revision, qsTr("Fetch Arrivals"))
+        text: `${TranslationManager.revision}` && qsTr("Fetch Arrivals")
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         Layout.margins: 10

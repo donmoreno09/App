@@ -8,7 +8,7 @@ import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("TextArea Test"))
+    title.text: `${TranslationManager.revision}` && qsTr("TextArea Test")
 
     ScrollView {
         id: sv

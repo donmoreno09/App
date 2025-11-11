@@ -7,7 +7,7 @@ import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("New Mission"))
+    title.text: `${TranslationManager.revision}` && qsTr("New Mission")
 
     WizardPageTest { }
 }

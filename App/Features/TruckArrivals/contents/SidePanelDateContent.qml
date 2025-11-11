@@ -40,18 +40,18 @@ ColumnLayout {
         visible: !controller.isLoading
         horizontalAlignment: Text.AlignHCenter
         text: (rangePicker.startDate && rangePicker.endDate)
-              ? (TranslationManager.revision, qsTr("Selected: %1 — %2"))
+              ? `${TranslationManager.revision}` && qsTr("Selected: %1 — %2")
                     .arg(Qt.formatDate(rangePicker.startDate, "dd/MMM/yyyy"))
                     .arg(Qt.formatDate(rangePicker.endDate,   "dd/MMM/yyyy"))
-              : (TranslationManager.revision, qsTr("Select a date range"))
+              : `${TranslationManager.revision}` && qsTr("Select a date range")
         color: Theme.colors.textMuted
     }
 
     StatCard {
         visible: !controller.isLoading
         icon: "qrc:/App/assets/icons/truck.svg"
-        title: (TranslationManager.revision, qsTr("Arrivals in range"))
-        value: controller.dateRangeArrivalCount.toString() + (TranslationManager.revision, qsTr(" trucks"))
+        title: `${TranslationManager.revision}` && qsTr("Arrivals in range")
+        value: controller.dateRangeArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
         Layout.fillWidth: true
     }
 
@@ -63,7 +63,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         Layout.margins: 10
-        text: (TranslationManager.revision, qsTr("Fetch Arrivals"))
+        text: `${TranslationManager.revision}` && qsTr("Fetch Arrivals")
         enabled: !controller.isLoading && (rangePicker.startDate && rangePicker.endDate)
 
         onClicked: controller.fetchDateRangeShipArrivals(rangePicker.startDate, rangePicker.endDate)
