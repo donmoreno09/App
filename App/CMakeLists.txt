@@ -81,6 +81,7 @@ set(cpp_sources
     # Entities
     entities/metadata/MetadataEntry.h
     entities/metadata/NoteMetadataEntry.h
+    entities/AlertZone.h
     entities/Details.h
     entities/Geometry.h
     entities/Poi.h
@@ -126,6 +127,8 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         ${APP_ASSETS}
         config/mqtt_config.json
+        SOURCES models/AlertZoneModel.h models/AlertZoneModel.cpp
+        SOURCES layers/AlertZoneMapLayerController.h layers/AlertZoneMapLayerController.cpp
 )
 
 add_subdirectory(Components)
