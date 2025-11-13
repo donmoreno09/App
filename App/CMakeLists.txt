@@ -49,8 +49,6 @@ set(cpp_sources
     core/interactionmodemanager.h
     core/LayerManager.cpp
     core/LayerManager.h
-    core/popupmanager.cpp
-    core/popupmanager.h
     core/TrackManager.cpp
     core/TrackManager.h
     core/PoiOptions.h
