@@ -8,7 +8,6 @@ AnnotationMapLayer::AnnotationMapLayer(QObject* parent)
     : BaseMapLayer(parent)
 {
     setObjectName("AnnotationMapLayer");
-    m_annotationModel = new VariantListModel(this);
 }
 
 void AnnotationMapLayer::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight)
@@ -23,9 +22,4 @@ void AnnotationMapLayer::clearSelection()
 {
     m_selectedAnnotations.clear();
     emit clearedSelection();
-}
-
-VariantListModel *AnnotationMapLayer::annotationModel() const
-{
-    return m_annotationModel;
 }

@@ -53,8 +53,6 @@ set(cpp_sources
     core/popupmanager.h
     core/TrackManager.cpp
     core/TrackManager.h
-    core/variantlistmodel.cpp
-    core/variantlistmodel.h
     core/PoiOptions.h
     core/PoiOptions.cpp
 
