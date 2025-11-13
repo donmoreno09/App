@@ -15,8 +15,6 @@ class AnnotationMapLayer : public BaseMapLayer
 public:
     explicit AnnotationMapLayer(QObject* parent = nullptr);
 
-    QVariantList selectedObjects() const override { return m_selectedAnnotations; }
-
     Q_INVOKABLE void selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight) override;
     Q_INVOKABLE void clearSelection() override;
 
