@@ -58,9 +58,6 @@ set(cpp_sources
     core/PoiOptions.h
     core/PoiOptions.cpp
 
-    # Events
-    events/selectionboxbus.h
-
     # Layers
     layers/AnnotationMapLayer.cpp
     layers/AnnotationMapLayer.h
