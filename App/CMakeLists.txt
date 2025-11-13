@@ -49,17 +49,10 @@ set(cpp_sources
     core/interactionmodemanager.h
     core/LayerManager.cpp
     core/LayerManager.h
-    core/popupmanager.cpp
-    core/popupmanager.h
     core/TrackManager.cpp
     core/TrackManager.h
-    core/variantlistmodel.cpp
-    core/variantlistmodel.h
     core/PoiOptions.h
     core/PoiOptions.cpp
-
-    # Events
-    events/selectionboxbus.h
 
     # Layers
     layers/AnnotationMapLayer.cpp
