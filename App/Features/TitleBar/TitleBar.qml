@@ -7,7 +7,6 @@ import App.Themes 1.0
 import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
-import App.StubComponents 1.0 as UI
 import App.Components 1.0 as UI
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
