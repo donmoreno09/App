@@ -16,6 +16,7 @@ public:
     QString label;
     int layerId = 2;  // Hardcoded for alert zones
     QString layerName = "AlertZoneMapLayer";
+    QString note;
 
     Geometry geometry;  // Polygon only
 
@@ -25,6 +26,7 @@ public:
         obj["label"] = label;
         obj["layerId"] = layerId;
         obj["layerName"] = layerName;
+        obj["note"] = note;
         obj["geometry"] = geometry.toJson();
         return obj;
     }
@@ -34,6 +36,7 @@ public:
         label = obj["label"].toString();
         layerId = obj["layerId"].toInt();
         layerName = obj["layerName"].toString();
+        note = obj["note"].toString();
         geometry = Geometry::fromJson(obj["geometry"].toObject());
     }
 };

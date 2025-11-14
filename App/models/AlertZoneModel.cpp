@@ -6,7 +6,7 @@
 Q_DECLARE_METATYPE(QList<QGeoCoordinate>)
 
 AlertZoneModel::AlertZoneModel(QObject *parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), m_helper(new ModelHelper(this))
 {
     // No persistence manager - local storage only
 }
@@ -44,6 +44,8 @@ QVariant AlertZoneModel::data(const QModelIndex &index, int role) const
         }
         return QVariant::fromValue(out);
     }
+    case NoteRole:
+        return alertZone.note;
     case ModelIndexRole:
         return index.row();
     }
@@ -85,6 +87,15 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
         break;
     }
 
+    case NoteRole: {
+        const auto v = value.toString();
+        if (alertZone.note != v) {
+            alertZone.note = v;
+            changed = true;
+        }
+        break;
+    }
+
     case CoordinatesRole: {
         QList<QVector2D> newCoords;
 
@@ -118,6 +129,7 @@ QHash<int, QByteArray> AlertZoneModel::roleNames() const
             { LayerNameRole, "layerName" },
             { ShapeTypeIdRole, "shapeTypeId" },
             { CoordinatesRole, "coordinates" },
+            { NoteRole, "note" },
             { ModelIndexRole, "modelIndex" },
             };
 }
@@ -157,21 +169,30 @@ void AlertZoneModel::setCoordinate(int row, int coordIndex, const QGeoCoordinate
 
 void AlertZoneModel::append(const QVariantMap &data)
 {
+    qDebug() << "[STEP 5e] AlertZoneModel::append called";
+    qDebug() << "[STEP 5e-1] Data received - label:" << data.value("label").toString();
+
     setLoading(true);
     buildAlertZoneSave(data);
 
     // Generate UUID locally (no backend)
     m_alertZoneSave->id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    qDebug() << "[STEP 5e-2] Generated UUID:" << m_alertZoneSave->id;
 
     const int index = m_alertZones.size();
+    qDebug() << "[STEP 5e-3] Inserting at index:" << index;
+
     beginInsertRows(QModelIndex(), index, index);
     m_alertZones.push_back(*m_alertZoneSave);
     endInsertRows();
 
+    qDebug() << "[STEP 5e-4] Alert zone added to model. Total count:" << m_alertZones.size();
+    qDebug() << "[STEP 5e-5] Emitting appended signal";
+
     emit appended();
     setLoading(false);
 
-    qDebug() << "[AlertZoneModel] Appended alert zone:" << m_alertZoneSave->label << "with ID:" << m_alertZoneSave->id;
+    qDebug() << "[STEP 5e-6] AlertZoneModel::append complete - label:" << m_alertZoneSave->label << "| ID:" << m_alertZoneSave->id;
 }
 
 void AlertZoneModel::update(const QVariantMap &data)
@@ -233,9 +254,7 @@ QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
     discardChanges();
     m_oldAlertZone = std::make_unique<AlertZone>(m_alertZones[index]);
 
-    // For now, just return nullptr - we'll handle this in QML directly
-    // This would need ModelHelper like PoiModel if we want QQmlPropertyMap support
-    return nullptr;
+    return m_helper->map(index, 0);
 }
 
 void AlertZoneModel::discardChanges()
@@ -328,18 +347,27 @@ bool AlertZoneModel::compareCoords(const QList<QVector2D> &a, const QList<QVecto
 
 void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
 {
+    qDebug() << "[STEP 5e-1a] AlertZoneModel::buildAlertZoneSave - building alert zone from data";
+
     m_alertZoneSave = std::make_unique<AlertZone>();
 
     m_alertZoneSave->label = data.value("label").toString();
     m_alertZoneSave->layerId = 2; // Hardcoded for alert zones
+    m_alertZoneSave->note = data.value("note").toString();
+
+    qDebug() << "[STEP 5e-1b] Label:" << m_alertZoneSave->label << "| LayerId:" << m_alertZoneSave->layerId << "| Note:" << m_alertZoneSave->note;
 
     // Geometry
     QVariantMap geomMap = data.value("geometry").toMap();
     Geometry geom;
     geom.shapeTypeId = geomMap.value("shapeTypeId").toInt(); // Should be 3 (Polygon)
 
+    qDebug() << "[STEP 5e-1c] ShapeTypeId:" << geom.shapeTypeId;
+
     QVariantList coordList = geomMap.value("coordinates").toList();
     QList<QVector2D> coords;
+    qDebug() << "[STEP 5e-1d] Processing" << coordList.size() << "coordinates";
+
     for (const QVariant &coordVar : std::as_const(coordList)) {
         QVariantMap coordMap = coordVar.toMap();
         float x = static_cast<float>(coordMap.value("x").toDouble());
@@ -347,8 +375,13 @@ void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
         coords.append(QVector2D(x, y));
     }
 
-    if (!coords.isEmpty())
+    if (!coords.isEmpty()) {
         geom.coordinates = coords;
+        qDebug() << "[STEP 5e-1e] Geometry coordinates set. Count:" << coords.size();
+    } else {
+        qDebug() << "[STEP 5e-1e] WARNING: No coordinates in geometry!";
+    }
 
     m_alertZoneSave->geometry = geom;
+    qDebug() << "[STEP 5e-1f] AlertZone build complete";
 }

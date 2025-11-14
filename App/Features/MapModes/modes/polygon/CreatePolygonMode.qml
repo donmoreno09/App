@@ -32,7 +32,12 @@ PolygonMode {
     }
 
     function buildGeometry() {
-        if (coordinatesModel.count < 3) return {}
+        console.log("[STEP 5a-1] CreatePolygonMode.buildGeometry called with", coordinatesModel.count, "coordinates")
+
+        if (coordinatesModel.count < 3) {
+            console.warn("[STEP 5a-1] WARNING: Not enough coordinates to build geometry")
+            return {}
+        }
 
         const out = []
         for (let i = 0; i < coordinatesModel.count; i++) {
@@ -41,10 +46,13 @@ PolygonMode {
         }
         out.push({ x: out[0].x, y: out[0].y })
 
-        return {
+        const geometry = {
             shapeTypeId: MapModeController.PolygonType,
             coordinates: out
         }
+
+        console.log("[STEP 5a-2] CreatePolygonMode.buildGeometry: Built geometry with", out.length, "coordinates (including closing point)")
+        return geometry
     }
 
     function resetPreview() {
@@ -56,6 +64,7 @@ PolygonMode {
     }
 
     function _addCoordinate(coord: geoCoordinate) {
+        console.log("[STEP 3] CreatePolygonMode: Adding coordinate", coord, "| Total coordinates:", coordinatesModel.count + 1)
         // Path needs to be manually updated here because Qt doesn't update on set since ListModel uses JS objects
         coordinatesModel.append(coord)
         polyPreview.path = _polylinePath()
@@ -78,13 +87,18 @@ PolygonMode {
     }
 
     function _tryClose() {
-        if (closed || coordinatesModel.count < 3) return
+        if (closed || coordinatesModel.count < 3) {
+            console.log("[STEP 4] CreatePolygonMode: Cannot close - closed:", closed, "| count:", coordinatesModel.count)
+            return
+        }
 
+        console.log("[STEP 4] CreatePolygonMode: Closing polygon with", coordinatesModel.count, "vertices")
         // Path needs to be manually updated here because Qt doesn't update on set since ListModel uses JS objects
         polyPreview.path = []
         polygon.path = _polygonPath()
         closed = true
         root.coordinatesChanged()
+        console.log("[STEP 4a] CreatePolygonMode: Polygon closed successfully")
     }
 
     TapHandler {

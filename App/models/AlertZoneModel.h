@@ -8,6 +8,7 @@
 #include <QQmlEngine>
 #include <entities/AlertZone.h>
 #include <QtPositioning/QGeoCoordinate>
+#include "ModelHelper.h"
 
 class AlertZoneModel : public QAbstractListModel
 {
@@ -28,6 +29,7 @@ public:
         LayerNameRole,
         ShapeTypeIdRole,
         CoordinatesRole,
+        NoteRole,
         ModelIndexRole,
     };
 
@@ -75,6 +77,7 @@ private:
     std::unique_ptr<AlertZone> m_alertZoneSave = nullptr;
     std::unique_ptr<AlertZone> m_oldAlertZone = nullptr;
     QVector<AlertZone> m_alertZones;
+    QPointer<ModelHelper> m_helper;
 
     static QList<QVector2D> parseCoordinatesVariant(const QVariant& v);
     static bool compareCoords(const QList<QVector2D>& a, const QList<QVector2D>& b);

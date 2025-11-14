@@ -19,6 +19,7 @@ set(qml_files
     map-objects/PoiRectangle.qml
     map-objects/PoiEllipse.qml
     map-objects/PoiPolygon.qml
+    map-objects/AlertZonePolygon.qml
     map-objects/MOCPoiPoint.qml
 
     # Layers
@@ -28,6 +29,7 @@ set(qml_files
     layers/TirTrackMapLayer.qml
     layers/LayersPanel.qml
     layers/PoiMapLayer.qml
+    layers/AlertZoneMapLayer.qml
     layers/MOCPoIStaticLayer.qml
 )
 
@@ -62,6 +64,8 @@ set(cpp_sources
     events/selectionboxbus.h
 
     # Layers
+    layers/AlertZoneMapLayerController.cpp
+    layers/AlertZoneMapLayerController.h
     layers/AnnotationMapLayer.cpp
     layers/AnnotationMapLayer.h
     layers/BaseLayer.cpp
@@ -99,6 +103,8 @@ set(cpp_sources
     models/CoordinatesModel.h
     models/PoiModel.cpp
     models/PoiModel.h
+    models/AlertZoneModel.cpp
+    models/AlertZoneModel.h
     models/BaseTrackModel.h
     models/TrackModel.cpp
     models/TrackModel.h
@@ -127,8 +133,6 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         ${APP_ASSETS}
         config/mqtt_config.json
-        SOURCES models/AlertZoneModel.h models/AlertZoneModel.cpp
-        SOURCES layers/AlertZoneMapLayerController.h layers/AlertZoneMapLayerController.cpp
 )
 
 add_subdirectory(Components)
