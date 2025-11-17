@@ -3,7 +3,6 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QTimer>
-#include <qcoreapplication.h>
 
 class TranslationManager : public QObject
 {

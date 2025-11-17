@@ -61,11 +61,9 @@ QtObject {
 
         console.log("[ShipStowageController] Closing window...")
 
-        // Nascondi subito
         webViewContainer.visible = false
         hasActiveWindow = false
 
-        // Freeze dopo (con un solo callLater)
         Qt.callLater(function() {
             if (webViewContainer && webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
                 var webView = webViewContainer.webViewItem.webView
@@ -91,10 +89,7 @@ QtObject {
             return
         }
 
-        // TUTTO IN MODO SINCRONO - nessun Qt.callLater!
-
         try {
-            // 1. Nascondi
             if (webViewContainer.visible) {
                 webViewContainer.visible = false
                 console.log("[ShipStowageController] Container hidden")
@@ -102,7 +97,6 @@ QtObject {
 
             hasActiveWindow = false
 
-            // 2. Stop e Discard direttamente
             if (webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
                 var webView = webViewContainer.webViewItem.webView
 
@@ -110,7 +104,6 @@ QtObject {
                 console.log("[ShipStowageController] WebView discarded")
             }
 
-            // 3. Destroy immediatamente
             webViewContainer.destroy()
             webViewContainer = null
 

@@ -12,7 +12,7 @@
 class TruckNotificationParser : public IMessageParser<TruckNotification> {
 public:
     QVector<TruckNotification> parse(const QByteArray& message) override {
-        qDebug() << "[TruckNotificationParser] RAW MESSAGE:" << message;
+        // qDebug() << "[TruckNotificationParser] RAW MESSAGE:" << message;
 
         QJsonParseError err;
         QJsonDocument doc = QJsonDocument::fromJson(message, &err);

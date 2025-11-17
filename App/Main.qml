@@ -43,6 +43,14 @@ ApplicationWindow {
     Component.onDestruction: {
         console.log("Main window destroying, cleaning up...")
         ShipStowageController.cleanup()
+
+        // Forza il processing
+        // for (var i = 0; i < 10; i++) {
+        //     console.log("Processing events iteration", i)
+        //     // Questo non esiste in QML ma aiuta a capire
+        // }
+
+        // console.log("Main window destruction COMPLETE")
     }
 
     UI.GlobalBackground {

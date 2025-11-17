@@ -76,7 +76,7 @@ UI.GlobalBackgroundConsumer {
 
                 SideRailItem {
                     source: "qrc:/App/assets/icons/layers-colored.svg"
-                    text: `${TranslationManager.revision}` && qsTr("Layers")
+                    text: (TranslationManager.revision, qsTr("Layers"))
                     active: PanelRouter.currentPath === "maplayers" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.MapLayers)
@@ -85,7 +85,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/poi.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Point of Interest")
+                    text: (TranslationManager.revision, qsTr("Point of Interest"))
                     active: PanelRouter.currentPath === Routes.Poi && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.Poi)
@@ -133,7 +133,10 @@ UI.GlobalBackgroundConsumer {
                     text: (TranslationManager.revision, qsTr("Ship Stowage"))
                     active: PanelRouter.currentPath === "shipstowage" && SidePanelController.isOpen
 
-                    onClicked: ShipStowageController.openStowageWindow(Window.window)
+                    onClicked: {
+                        SidePanelController.close(true)
+                        ShipStowageController.openStowageWindow(Window.window)
+                    }
                 }
 
                 SideRailItem {

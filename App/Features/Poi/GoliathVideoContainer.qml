@@ -11,8 +11,8 @@ UI.FloatingWindow {
     height: 740
     windowTitle: "Video"
 
-    property var parentWindow: null // needed by WindowRouter
-    readonly property string title: windowTitle // needed by WindowRouter
+    // Imposta un titolo opzionale
+    property var parentWindow: null
 
     windowWidth: parentWindow ? parentWindow.width : 1200
     windowHeight: parentWindow ? parentWindow.height : 740
