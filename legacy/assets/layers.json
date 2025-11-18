@@ -1,0 +1,17 @@
+[
+    {
+        "type": "TrackMapLayerComponent",
+        "layerName": "NavalTracks",
+        "isVisible": true
+    },
+    {
+        "type": "TrackMapLayerComponent",
+        "layerName": "SubmarineTracks",
+        "isVisible": true
+    },
+    {
+        "type": "AnnotationMapLayerComponent",
+        "layerName": "MissionMarkers",
+        "isVisible": true
+    }
+]

@@ -114,6 +114,8 @@ set(cpp_sources
     models/TirModel.h
 
     # Persistence
+    persistence/alertzonepersistencemanager.cpp
+    persistence/alertzonepersistencemanager.h
     persistence/ipersistable.h
     persistence/ipersistencemanager.h
     persistence/persistencemanagerbase.cpp

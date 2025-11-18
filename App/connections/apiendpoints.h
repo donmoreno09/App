@@ -17,6 +17,10 @@ namespace ApiEndpoints {
 
     static const QString BaseUrlShapes = BaseUrl + "/shape";
 
+    // ALERT ZONE ENDPOINTS
+    // TODO: Update endpoint when backend is implemented
+    static const QString BaseUrlAlertZone = BaseUrl + "/alertzone";
+
     static const QString BaseUrlMenuManager = BaseUrl + "/menumanager";
     static const QString GetMenuManager = BaseUrlMenuManager + "/getMenu";
 

@@ -6,9 +6,30 @@
 Q_DECLARE_METATYPE(QList<QGeoCoordinate>)
 
 AlertZoneModel::AlertZoneModel(QObject *parent)
-    : QAbstractListModel(parent), m_helper(new ModelHelper(this))
+    : QAbstractListModel(parent),
+      m_helper(new ModelHelper(this)),
+      m_persistenceManager(new AlertZonePersistenceManager(this))
 {
-    // No persistence manager - local storage only
+    qDebug() << "[AlertZoneModel] Initializing with persistence support";
+
+    connect(m_persistenceManager, &AlertZonePersistenceManager::objectsLoaded,
+            this, &AlertZoneModel::handleObjectsLoaded, Qt::UniqueConnection);
+
+    connect(m_persistenceManager, &AlertZonePersistenceManager::objectSaved,
+            this, &AlertZoneModel::handleAlertZoneSaved, Qt::UniqueConnection);
+
+    connect(m_persistenceManager, &AlertZonePersistenceManager::objectGot,
+            this, &AlertZoneModel::handleAlertZoneGot, Qt::UniqueConnection);
+
+    connect(m_persistenceManager, &AlertZonePersistenceManager::objectUpdated,
+            this, &AlertZoneModel::handleAlertZoneUpdated, Qt::UniqueConnection);
+
+    connect(m_persistenceManager, &AlertZonePersistenceManager::objectRemoved,
+            this, &AlertZoneModel::handleAlertZoneRemoved, Qt::UniqueConnection);
+
+    m_persistenceManager->load();
+
+    qDebug() << "[AlertZoneModel] Initialization complete";
 }
 
 int AlertZoneModel::rowCount(const QModelIndex &parent) const
@@ -169,61 +190,38 @@ void AlertZoneModel::setCoordinate(int row, int coordIndex, const QGeoCoordinate
 
 void AlertZoneModel::append(const QVariantMap &data)
 {
-    qDebug() << "[STEP 5e] AlertZoneModel::append called";
-    qDebug() << "[STEP 5e-1] Data received - label:" << data.value("label").toString();
+    qDebug() << "[AlertZoneModel] append() - Label:" << data.value("label").toString();
 
     setLoading(true);
     buildAlertZoneSave(data);
+    m_persistenceManager->save(*m_alertZoneSave);
 
-    // Generate UUID locally (no backend)
-    m_alertZoneSave->id = QUuid::createUuid().toString(QUuid::WithoutBraces);
-    qDebug() << "[STEP 5e-2] Generated UUID:" << m_alertZoneSave->id;
-
-    const int index = m_alertZones.size();
-    qDebug() << "[STEP 5e-3] Inserting at index:" << index;
-
-    beginInsertRows(QModelIndex(), index, index);
-    m_alertZones.push_back(*m_alertZoneSave);
-    endInsertRows();
-
-    qDebug() << "[STEP 5e-4] Alert zone added to model. Total count:" << m_alertZones.size();
-    qDebug() << "[STEP 5e-5] Emitting appended signal";
-
-    emit appended();
-    setLoading(false);
-
-    qDebug() << "[STEP 5e-6] AlertZoneModel::append complete - label:" << m_alertZoneSave->label << "| ID:" << m_alertZoneSave->id;
+    qDebug() << "[AlertZoneModel] Save request sent (async)";
 }
 
 void AlertZoneModel::update(const QVariantMap &data)
 {
+    qDebug() << "[AlertZoneModel] update() - ID:" << data.value("id").toString();
+
     setLoading(true);
     buildAlertZoneSave(data);
     m_alertZoneSave->id = data.value("id").toString();
 
-    // Find and update in local storage
-    int row = -1;
-    for (int i = 0; i < m_alertZones.size(); ++i) {
-        if (m_alertZones[i].id == m_alertZoneSave->id) {
-            row = i;
-            break;
-        }
+    if (m_alertZoneSave->id.isEmpty()) {
+        qCritical() << "[AlertZoneModel] Cannot update: ID is empty";
+        setLoading(false);
+        return;
     }
 
-    if (row >= 0) {
-        m_alertZones[row] = *m_alertZoneSave;
-        QModelIndex idx = index(row, 0);
-        emit dataChanged(idx, idx);
-        m_oldAlertZone = nullptr;
-        emit updated();
-        qDebug() << "[AlertZoneModel] Updated alert zone:" << m_alertZoneSave->label;
-    }
+    m_persistenceManager->update(*m_alertZoneSave);
 
-    setLoading(false);
+    qDebug() << "[AlertZoneModel] Update request sent (async)";
 }
 
 void AlertZoneModel::remove(const QString &id)
 {
+    qDebug() << "[AlertZoneModel] remove() - ID:" << id;
+
     setLoading(true);
 
     int row = -1;
@@ -234,16 +232,23 @@ void AlertZoneModel::remove(const QString &id)
         }
     }
 
-    if (row >= 0) {
-        beginRemoveRows(QModelIndex(), row, row);
-        m_alertZones.remove(row);
-        endRemoveRows();
-        m_oldAlertZone = nullptr;
-        emit removed();
-        qDebug() << "[AlertZoneModel] Removed alert zone with ID:" << id;
+    if (row < 0) {
+        qWarning() << "[AlertZoneModel] Alert zone not found with ID:" << id;
+        setLoading(false);
+        return;
     }
 
+    beginRemoveRows(QModelIndex(), row, row);
+    m_alertZones.remove(row);
+    endRemoveRows();
+
+    m_oldAlertZone = nullptr;
+    emit removed();
+
+    m_persistenceManager->remove(id);
     setLoading(false);
+
+    qDebug() << "[AlertZoneModel] Delete request sent (async)";
 }
 
 QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
@@ -384,4 +389,117 @@ void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
 
     m_alertZoneSave->geometry = geom;
     qDebug() << "[STEP 5e-1f] AlertZone build complete";
+}
+
+void AlertZoneModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
+{
+    qDebug() << "[AlertZoneModel] handleObjectsLoaded() - Received" << objects.size() << "alert zones";
+
+    beginResetModel();
+    m_alertZones.clear();
+
+    for (IPersistable* obj : objects) {
+        if (AlertZone* alertZone = dynamic_cast<AlertZone*>(obj)) {
+            m_alertZones.append(*alertZone);
+            qDebug() << "  Loaded:" << alertZone->label << "| ID:" << alertZone->id;
+            delete alertZone;
+        }
+    }
+
+    endResetModel();
+
+    qDebug() << "[AlertZoneModel] Load complete - Total:" << m_alertZones.size();
+}
+
+void AlertZoneModel::handleAlertZoneSaved(bool success, const QString &uuid)
+{
+    qDebug() << "[AlertZoneModel] handleAlertZoneSaved() - Success:" << success << "| UUID:" << uuid;
+
+    if (!success || uuid.isEmpty()) {
+        qCritical() << "[AlertZoneModel] Backend failed to save alert zone";
+        setLoading(false);
+        return;
+    }
+
+    m_alertZoneSave->id = uuid;
+
+    const int row = m_alertZones.size();
+    beginInsertRows(QModelIndex(), row, row);
+    m_alertZones.append(*m_alertZoneSave);
+    endInsertRows();
+
+    setLoading(false);
+    emit appended();
+
+    qDebug() << "[AlertZoneModel] Alert zone saved - Label:" << m_alertZoneSave->label << "| ID:" << uuid;
+}
+
+void AlertZoneModel::handleAlertZoneUpdated(bool success)
+{
+    qDebug() << "[AlertZoneModel] handleAlertZoneUpdated() - Success:" << success;
+
+    if (!success) {
+        qCritical() << "[AlertZoneModel] Backend failed to update alert zone";
+        setLoading(false);
+        return;
+    }
+
+    int row = -1;
+    for (int i = 0; i < m_alertZones.size(); ++i) {
+        if (m_alertZones[i].id == m_alertZoneSave->id) {
+            row = i;
+            break;
+        }
+    }
+
+    if (row < 0) {
+        qWarning() << "[AlertZoneModel] Alert zone not found with ID:" << m_alertZoneSave->id;
+        setLoading(false);
+        return;
+    }
+
+    m_alertZones[row] = *m_alertZoneSave;
+    QModelIndex idx = index(row, 0);
+    emit dataChanged(idx, idx);
+
+    m_oldAlertZone = nullptr;
+    setLoading(false);
+    emit updated();
+
+    qDebug() << "[AlertZoneModel] Alert zone updated - Label:" << m_alertZoneSave->label;
+}
+
+void AlertZoneModel::handleAlertZoneGot(const IPersistable *object)
+{
+    qDebug() << "[AlertZoneModel] handleAlertZoneGot()";
+
+    if (const AlertZone* alertZone = dynamic_cast<const AlertZone*>(object)) {
+        for (int i = 0; i < m_alertZones.size(); ++i) {
+            if (m_alertZones[i].id == alertZone->id) {
+                m_alertZones[i] = *alertZone;
+
+                QModelIndex idx = index(i, 0);
+                emit dataChanged(idx, idx);
+                emit fetched(alertZone->id);
+
+                qDebug() << "[AlertZoneModel] Updated alert zone:" << alertZone->label;
+                break;
+            }
+        }
+
+        delete alertZone;
+    }
+}
+
+void AlertZoneModel::handleAlertZoneRemoved(bool success)
+{
+    qDebug() << "[AlertZoneModel] handleAlertZoneRemoved() - Success:" << success;
+
+    if (!success) {
+        qCritical() << "[AlertZoneModel] Backend failed to delete alert zone";
+        qCritical() << "[AlertZoneModel] Warning: Already removed from UI (optimistic update)";
+        return;
+    }
+
+    qDebug() << "[AlertZoneModel] Backend confirmed deletion";
 }
