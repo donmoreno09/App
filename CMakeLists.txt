@@ -21,6 +21,7 @@ find_package(Qt6 6.8 REQUIRED
         QuickTest
         Sql
 )
+find_package(QMapLibre COMPONENTS Location REQUIRED)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
