@@ -23,4 +23,13 @@ QtObject {
             value: "osm_cache"
         }
     }
+
+    readonly property Plugin maplibreSatellite: Plugin {
+        name: "maplibre"
+
+        PluginParameter {
+           name: "maplibre.map.styles"
+           value: "https://api.maptiler.com/maps/hybrid/style.json?key=0m5Y65SvoEZ1VL15Y7ty"
+        }
+    }
 }
