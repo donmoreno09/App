@@ -14,8 +14,8 @@ class AlertZone : public IPersistable
 public:
     QString id;
     QString label;
-    int layerId = 2;  // Hardcoded for alert zones
-    QString layerName = "AlertZoneMapLayer";
+    int layerId = 0;
+    QString layerName;
     QString note;
 
     Geometry geometry;  // Polygon only

@@ -220,35 +220,17 @@ void AlertZoneModel::update(const QVariantMap &data)
 
 void AlertZoneModel::remove(const QString &id)
 {
-    qDebug() << "[AlertZoneModel] remove() - ID:" << id;
-
     setLoading(true);
 
-    int row = -1;
-    for (int i = 0; i < m_alertZones.size(); ++i) {
-        if (m_alertZones[i].id == id) {
-            row = i;
+    // Store the alert zone to be removed (needed by handleAlertZoneRemoved)
+    for (const auto& alertZone : m_alertZones) {
+        if (alertZone.id == id) {
+            m_oldAlertZone = std::make_unique<AlertZone>(alertZone);
             break;
         }
     }
 
-    if (row < 0) {
-        qWarning() << "[AlertZoneModel] Alert zone not found with ID:" << id;
-        setLoading(false);
-        return;
-    }
-
-    beginRemoveRows(QModelIndex(), row, row);
-    m_alertZones.remove(row);
-    endRemoveRows();
-
-    m_oldAlertZone = nullptr;
-    emit removed();
-
     m_persistenceManager->remove(id);
-    setLoading(false);
-
-    qDebug() << "[AlertZoneModel] Delete request sent (async)";
 }
 
 QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
@@ -257,7 +239,9 @@ QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
         return nullptr;
 
     discardChanges();
+
     m_oldAlertZone = std::make_unique<AlertZone>(m_alertZones[index]);
+    m_persistenceManager->get(m_oldAlertZone->id);
 
     return m_helper->map(index, 0);
 }
@@ -357,7 +341,7 @@ void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
     m_alertZoneSave = std::make_unique<AlertZone>();
 
     m_alertZoneSave->label = data.value("label").toString();
-    m_alertZoneSave->layerId = 2; // Hardcoded for alert zones
+    m_alertZoneSave->layerId = data.value("layerId").toInt();
     m_alertZoneSave->note = data.value("note").toString();
 
     qDebug() << "[STEP 5e-1b] Label:" << m_alertZoneSave->label << "| LayerId:" << m_alertZoneSave->layerId << "| Note:" << m_alertZoneSave->note;
@@ -493,13 +477,24 @@ void AlertZoneModel::handleAlertZoneGot(const IPersistable *object)
 
 void AlertZoneModel::handleAlertZoneRemoved(bool success)
 {
-    qDebug() << "[AlertZoneModel] handleAlertZoneRemoved() - Success:" << success;
-
     if (!success) {
-        qCritical() << "[AlertZoneModel] Backend failed to delete alert zone";
-        qCritical() << "[AlertZoneModel] Warning: Already removed from UI (optimistic update)";
-        return;
+        qWarning() << "[AlertZoneModel] Error: Could not remove alert zone. Check logs.";
+    } else {
+        int row = -1;
+        for (int i = 0; i < m_alertZones.size(); ++i) {
+            if (m_alertZones[i].id == m_oldAlertZone->id) {
+                row = i;
+                break;
+            }
+        }
+
+        beginRemoveRows(QModelIndex(), row, row);
+        m_alertZones.remove(row);
+        endRemoveRows();
+
+        m_oldAlertZone = nullptr;
+        emit removed();
     }
 
-    qDebug() << "[AlertZoneModel] Backend confirmed deletion";
+    setLoading(false);
 }
