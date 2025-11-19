@@ -1,5 +1,6 @@
 # --- Compilazione CMake / qmake ---
 build/
+install/
 cmake-build-*/
 Makefile
 CMakeFiles/

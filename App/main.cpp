@@ -14,6 +14,8 @@
 
 int main(int argc, char *argv[])
 {
+    // Set QSG_RHI_BACKEND (rendering backend) to OpenGL in order for MapLibre to work.
+    qputenv("QSG_RHI_BACKEND", "opengl");
 
     qputenv("QML_XHR_ALLOW_FILE_READ", "1");
     // CRITICAL: Configure WebEngine BEFORE creating QGuiApplication
