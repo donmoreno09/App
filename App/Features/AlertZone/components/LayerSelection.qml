@@ -18,6 +18,8 @@ ColumnLayout {
         return layers
     }
 
+    readonly property bool isValid: selectedLayers.length > 0
+
     function setLayers(layers) {
         aisToggle.checked = layers.includes("ais")
         docSpaceToggle.checked = layers.includes("docSpace")
