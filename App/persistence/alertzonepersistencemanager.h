@@ -8,7 +8,7 @@ class AlertZonePersistenceManager : public PersistenceManagerBase
     Q_OBJECT
 public:
     explicit AlertZonePersistenceManager(QObject *parent = nullptr);
-    void load() override;
+    virtual void load() override;
 
 protected:
     QString getApiEndpoint() const override;

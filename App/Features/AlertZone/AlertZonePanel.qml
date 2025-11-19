@@ -21,6 +21,8 @@ PanelTemplate {
 
         labelInput.text = MapModeController.alertZone.label
         noteTextArea.text = MapModeController.alertZone.note ?? ""
+        severityComboBox.currentIndex = severityComboBox.comboBox.indexOfValue(MapModeController.alertZone.severity ?? "low")
+        layerSelection.setLayers(MapModeController.alertZone.targetLayers ?? [])
     }
 
     Component.onCompleted: {
@@ -84,6 +86,11 @@ PanelTemplate {
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.label = text
                 }
 
+                Severity {
+                    id: severityComboBox
+                    Layout.fillWidth: true
+                }
+
                 AlertZonePolygonForm {
                     id: polygonForm
                     Layout.fillWidth: true
@@ -95,6 +102,11 @@ PanelTemplate {
                     labelText: qsTr("Note")
 
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
+                }
+
+                LayerSelection {
+                    id: layerSelection
+                    Layout.fillWidth: true
                 }
             }
         }
@@ -120,7 +132,9 @@ PanelTemplate {
             geometry: geometry,
             layerId: 2,
             layerName: Layers.alertZoneMapLayer(),
-            note: noteTextArea.text
+            severity: severityComboBox.currentValue,
+            note: noteTextArea.text,
+            targetLayers: layerSelection.selectedLayers
         }
 
         console.log("[STEP 5c] Data object created:", JSON.stringify(data))

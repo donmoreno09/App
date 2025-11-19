@@ -16,11 +16,20 @@ MapItemGroup {
 
     property bool isDraggingHandle: false
 
+    readonly property color zoneColor: {
+        switch(severity) {
+            case "high": return "#FF0000"
+            case "medium": return "#FF6600"
+            case "low":
+            default: return "#FFCC00"
+        }
+    }
+
     MapPolygon {
         id: polygon
         path: coordinates
-        color: "#22FF6600" // Semi-transparent orange for alert zones
-        border.color: "#FF6600" // Orange border
+        color: Qt.rgba(root.zoneColor.r, root.zoneColor.g, root.zoneColor.b, 0.13)
+        border.color: root.zoneColors
         border.width: 3
         z: root.z
         property var _startPx: [] // [{x,y} per vertex]
@@ -88,7 +97,7 @@ MapItemGroup {
                 height: 16
                 radius: 8
                 color: "white"
-                border.color: "#FF6600" // Orange to match alert zone theme
+                border.color: root.zoneColor
                 border.width: 2
             }
 
@@ -122,7 +131,7 @@ MapItemGroup {
         width: text.width + Theme.spacing.s3
         height: text.height + Theme.spacing.s1
         radius: Theme.radius.sm
-        color: Theme.colors.hexWithAlpha("#FF6600", 0.8) // Orange with transparency
+        color: Theme.colors.hexWithAlpha(root.zoneColor, 0.8)
         border.color: Theme.colors.white
         border.width: isEditing ? Theme.borders.b1 : Theme.borders.b0
         z: polygon.z + 2

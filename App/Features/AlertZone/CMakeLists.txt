@@ -1,6 +1,9 @@
 set(qml_files
     AlertZonePanel.qml
+
     components/AlertZonePolygonForm.qml
+    components/LayerSelection.qml
+    components/Severity.qml
 )
 
 qt_add_qml_module(app_features_alertzone
