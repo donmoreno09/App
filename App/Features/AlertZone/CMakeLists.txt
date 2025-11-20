@@ -7,6 +7,7 @@ set(qml_files
     components/AreaButton.qml
     components/AreaForm.qml
     components/LayerSelection.qml
+    components/SectionTitle.qml
     components/Severity.qml
 )
 

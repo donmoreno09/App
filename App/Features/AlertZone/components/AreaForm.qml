@@ -33,18 +33,6 @@ ColumnLayout {
         Layout.fillWidth: true
         spacing: Theme.spacing.s2
 
-        Label {
-            Layout.fillWidth: true
-            text: qsTr("Draw Tools (*)")
-            leftPadding: Theme.spacing.s4
-            rightPadding: Theme.spacing.s4
-            font {
-                family: Theme.typography.bodySans25Family
-                pointSize: Theme.typography.bodySans25Size
-                weight: Theme.typography.bodySans25Weight
-            }
-        }
-
         Pane {
             Layout.fillWidth: true
 

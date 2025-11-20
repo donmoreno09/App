@@ -27,19 +27,6 @@ ColumnLayout {
         poiToggle.checked = layers.includes("poi")
     }
 
-    Label {
-        text: qsTr("Layer Selection(*)")
-        color: Theme.colors.text
-        Layout.leftMargin: Theme.spacing.s3
-        font {
-            family: Theme.typography.bodySans25Family
-            pointSize: Theme.typography.bodySans25Size
-            weight: Theme.typography.bodySans25Weight
-        }
-    }
-
-    UI.HorizontalDivider {}
-
     RowLayout {
         Layout.fillWidth: true
         Label {

@@ -77,6 +77,10 @@ PanelTemplate {
                 width: parent.width
                 spacing: Theme.spacing.s4
 
+                SectionTitle { text: qsTr("General Info") }
+
+                UI.HorizontalDivider {}
+
                 UI.Input {
                     id: labelInput
                     Layout.fillWidth: true
@@ -91,11 +95,6 @@ PanelTemplate {
                     Layout.fillWidth: true
                 }
 
-                AlertZonePolygonForm {
-                    id: polygonForm
-                    Layout.fillWidth: true
-                }
-
                 UI.TextArea {
                     id: noteTextArea
                     Layout.fillWidth: true
@@ -106,12 +105,26 @@ PanelTemplate {
 
                 UI.VerticalSpacer {}
 
+                SectionTitle {
+                    Layout.topMargin: Theme.spacing.s3
+                    text: qsTr("Layer Selection")
+                }
+
+                UI.HorizontalDivider {}
+
                 LayerSelection {
                     id: layerSelection
                     Layout.fillWidth: true
                 }
 
                 UI.VerticalSpacer {}
+
+                SectionTitle {
+                    Layout.topMargin: Theme.spacing.s3
+                    text: qsTr("Drawing Tools")
+                }
+
+                UI.HorizontalDivider {}
 
                 AreaForm {
                     id: areaForm
