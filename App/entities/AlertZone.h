@@ -17,6 +17,7 @@ public:
     int layerId;
     QString layerName;
     QString note;
+    QString severity = "low";
 
     Geometry geometry;
 
@@ -27,6 +28,7 @@ public:
         obj["layerId"] = layerId;
         obj["layerName"] = layerName;
         obj["note"] = note;
+        obj["severity"] = severity;
         obj["geometry"] = geometry.toJson();
         return obj;
     }
@@ -37,6 +39,7 @@ public:
         layerId = obj["layerId"].toInt();
         layerName = obj["layerName"].toString();
         note = obj["note"].toString();
+        severity = obj["severity"].toString("low");
         geometry = Geometry::fromJson(obj["geometry"].toObject());
     }
 };

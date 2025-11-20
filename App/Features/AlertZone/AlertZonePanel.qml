@@ -21,20 +21,14 @@ PanelTemplate {
 
         labelInput.text = MapModeController.alertZone.label
         noteTextArea.text = MapModeController.alertZone.note ?? ""
+        severityComboBox.currentIndex = severityComboBox.comboBox.indexOfValue(MapModeController.alertZone.severity ?? "low")
     }
 
     Component.onCompleted: {
-        console.log("[STEP 1] AlertZonePanel opened")
-        console.log("[STEP 1a] Syncing data from MapModeController")
         syncData()
-        console.log("[STEP 1b] Checking active mode:", MapModeController.activeMode)
         if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
-            console.log("[STEP 1c] Setting active mode to createPolygonMode")
             MapModeController.setActiveMode(MapModeRegistry.createPolygonMode)
-        } else {
-            console.log("[STEP 1c] Active mode already set:", MapModeController.activeMode)
         }
-        console.log("[STEP 1d] Panel initialization complete")
     }
 
     Component.onDestruction: {
@@ -45,19 +39,15 @@ PanelTemplate {
         target: AlertZoneModel
 
         function onAppended() {
-            console.log("[STEP 6] AlertZoneModel.appended signal received - closing panel")
             SidePanelController.close(true)
         }
         function onUpdated() {
-            console.log("[STEP 6] AlertZoneModel.updated signal received - closing panel")
             SidePanelController.close(true)
         }
         function onRemoved() {
-            console.log("[STEP 6] AlertZoneModel.removed signal received - closing panel")
             SidePanelController.close(true)
         }
         function onFetched() {
-            console.log("[STEP 6] AlertZoneModel.fetched signal received - syncing data")
             root.syncData()
         }
     }
@@ -75,6 +65,10 @@ PanelTemplate {
                 width: parent.width
                 spacing: Theme.spacing.s4
 
+                SectionTitle { text: qsTr("General Info") }
+
+                UI.HorizontalDivider {}
+
                 UI.Input {
                     id: labelInput
                     Layout.fillWidth: true
@@ -84,8 +78,8 @@ PanelTemplate {
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.label = text
                 }
 
-                AlertZonePolygonForm {
-                    id: polygonForm
+                Severity {
+                    id: severityComboBox
                     Layout.fillWidth: true
                 }
 
@@ -96,6 +90,43 @@ PanelTemplate {
 
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
                 }
+
+                UI.Toggle {
+                    id: activeSwitch
+                    Layout.fillWidth: true
+                    visible: MapModeController.isEditingAlertZone
+                    leftLabel: checked ? qsTr("Deactivate") : qsTr("Activate")
+                    checked: true
+                    onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
+                }
+
+                UI.VerticalSpacer {}
+
+                SectionTitle {
+                    Layout.topMargin: Theme.spacing.s3
+                    text: qsTr("Layer Selection")
+                }
+
+                UI.HorizontalDivider {}
+
+                LayerSelection {
+                    id: layerSelection
+                    Layout.fillWidth: true
+                }
+
+                UI.VerticalSpacer {}
+
+                SectionTitle {
+                    Layout.topMargin: Theme.spacing.s3
+                    text: qsTr("Drawing Tools")
+                }
+
+                UI.HorizontalDivider {}
+
+                AlertZonePolygonForm {
+                    id: polygonForm
+                    Layout.fillWidth: true
+                }
             }
         }
     }
@@ -103,34 +134,29 @@ PanelTemplate {
     function validate() {
         const labelValid = labelInput.text.trim() !== ""
         const polygonValid = polygonForm.isValid
-        console.log("[VALIDATION] Label valid:", labelValid, "| Polygon valid:", polygonValid)
+        const layersValid = layerSelection.isValid
+
         if (!labelValid) return false;
+        if (!layersValid) return false
+
         return polygonValid;
     }
 
     function save() {
-        console.log("[STEP 5] Save button clicked")
-        console.log("[STEP 5a] Building geometry from activeMode:", MapModeController.activeMode)
-
         const geometry = MapModeController.activeMode.buildGeometry()
-        console.log("[STEP 5b] Geometry built:", JSON.stringify(geometry))
-
         const data = {
             label: labelInput.text,
             geometry: geometry,
             layerId: 2,
             layerName: Layers.alertZoneMapLayer(),
+            severity: severityComboBox.currentValue,
             note: noteTextArea.text
         }
 
-        console.log("[STEP 5c] Data object created:", JSON.stringify(data))
-
         if (MapModeController.isEditingAlertZone) {
-            console.log("[STEP 5d] Editing mode - updating existing alert zone:", MapModeController.alertZone.id)
             data.id = MapModeController.alertZone.id
             AlertZoneModel.update(data)
         } else {
-            console.log("[STEP 5d] Creating mode - appending new alert zone")
             AlertZoneModel.append(data)
         }
     }

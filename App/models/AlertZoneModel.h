@@ -28,6 +28,7 @@ public:
         LayerIdRole,
         LayerNameRole,
         NoteRole,
+        SeverityRole,
         ShapeTypeIdRole,
         CoordinatesRole,
         ModelIndexRole,

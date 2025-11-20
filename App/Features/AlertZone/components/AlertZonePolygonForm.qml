@@ -15,15 +15,12 @@ ColumnLayout {
 
     function validate() {
         if (MapModeController.isEditingAlertZone) {
-            console.log("[STEP 2] AlertZonePolygonForm validate: Editing mode - valid")
             return true
         }
 
         const coordCount = MapModeRegistry.createPolygonMode.coordinatesCount()
         const isClosed = MapModeRegistry.createPolygonMode.closed
         const isValid = coordCount >= 3 && isClosed
-
-        console.log("[STEP 2] AlertZonePolygonForm validate: coordCount:", coordCount, "| closed:", isClosed, "| valid:", isValid)
 
         return isValid
     }

@@ -34,6 +34,8 @@ QVariant AlertZoneModel::data(const QModelIndex &index, int role) const
         return alertZone.layerName;
     case NoteRole:
         return alertZone.note;
+    case SeverityRole:
+        return alertZone.severity;
     case ShapeTypeIdRole:
         return alertZone.geometry.shapeTypeId;
     case CoordinatesRole: {
@@ -96,6 +98,15 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
         break;
     }
 
+    case SeverityRole: {
+        const auto v = value.toString();
+        if (alertZone.severity != v) {
+            alertZone.severity = v;
+            changed = true;
+        }
+        break;
+    }
+
     case CoordinatesRole: {
         QList<QVector2D> newCoords;
 
@@ -130,6 +141,7 @@ QHash<int, QByteArray> AlertZoneModel::roleNames() const
             { ShapeTypeIdRole, "shapeTypeId" },
             { CoordinatesRole, "coordinates" },
             { NoteRole, "note" },
+            {SeverityRole, "severity"},
             { ModelIndexRole, "modelIndex" },
             };
 }
@@ -344,6 +356,8 @@ void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
 
     m_alertZoneSave->label = data.value("label").toString();
     m_alertZoneSave->layerId = 2; // Hardcoded for alert zones
+    m_alertZoneSave->note = data.value("note").toString();
+    m_alertZoneSave->severity = data.value("severity").toString();
 
     // Geometry
     QVariantMap geomMap = data.value("geometry").toMap();
