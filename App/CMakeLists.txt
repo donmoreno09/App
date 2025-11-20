@@ -20,6 +20,8 @@ set(qml_files
     map-objects/PoiEllipse.qml
     map-objects/PoiPolygon.qml
     map-objects/AlertZonePolygon.qml
+    map-objects/AlertZoneEllipse.qml
+    map-objects/AlertZoneRectangle.qml
     map-objects/MOCPoiPoint.qml
 
     # Layers

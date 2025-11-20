@@ -17,8 +17,9 @@ public:
     int layerId = 0;
     QString layerName;
     QString note;
+    bool active = true;
 
-    Geometry geometry;  // Polygon only
+    Geometry geometry;
 
     QJsonObject toJson() const override {
         QJsonObject obj;
@@ -27,6 +28,7 @@ public:
         obj["layerId"] = layerId;
         obj["layerName"] = layerName;
         obj["note"] = note;
+        obj["active"] = active;
         obj["geometry"] = geometry.toJson();
         return obj;
     }
@@ -37,6 +39,7 @@ public:
         layerId = obj["layerId"].toInt();
         layerName = obj["layerName"].toString();
         note = obj["note"].toString();
+        active = obj["active"].toBool(true);
         geometry = Geometry::fromJson(obj["geometry"].toObject());
     }
 };

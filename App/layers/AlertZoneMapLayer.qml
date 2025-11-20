@@ -38,11 +38,29 @@ BaseMapLayer {
             required property string id
             required property string label
             required property int shapeTypeId
+            required property bool isRectangle
+            required property geoCoordinate coordinate
+            required property geoCoordinate topLeft
+            required property geoCoordinate bottomRight
+            required property real radiusA
+            required property real radiusB
             required property var coordinates
+            required property bool active
 
             Component.onCompleted: {
-                console.log("[STEP 7b] Creating AlertZonePolygon - ID:", id, "| Label:", label, "| Coordinates count:", coordinates.length)
-                const component = Qt.createComponent("qrc:/App/map-objects/AlertZonePolygon.qml", Qt.Asynchronous)
+                let source = ""
+                switch (shapeTypeId) {
+                case MapModeController.EllipseType:
+                    source = "qrc:/App/map-objects/AlertZoneEllipse.qml"
+                    break;
+                case MapModeController.PolygonType:
+                    if (isRectangle) source = "qrc:/App/map-objects/AlertZoneRectangle.qml"
+                    else source = "qrc:/App/map-objects/AlertZonePolygon.qml"
+                    break;
+                }
+
+                console.log("[STEP 7b] Creating AlertZone shape - ID:", id, "| Label:", label, "| ShapeType:", shapeTypeId, "| isRectangle:", isRectangle)
+                const component = Qt.createComponent(source, Qt.Asynchronous)
                 component.createObject(loader)
             }
         }

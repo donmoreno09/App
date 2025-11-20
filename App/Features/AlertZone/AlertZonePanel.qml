@@ -23,6 +23,7 @@ PanelTemplate {
         noteTextArea.text = MapModeController.alertZone.note ?? ""
         severityComboBox.currentIndex = severityComboBox.comboBox.indexOfValue(MapModeController.alertZone.severity ?? "low")
         layerSelection.setLayers(MapModeController.alertZone.targetLayers ?? [])
+        activeSwitch.checked = MapModeController.alertZone.active ?? true
     }
 
     Component.onCompleted: {
@@ -103,6 +104,25 @@ PanelTemplate {
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
                 }
 
+                RowLayout {
+                    Layout.fillWidth: true
+                    visible: MapModeController.isEditingAlertZone
+
+                    Text {
+                        text: qsTr("Active")
+                        color: Theme.colors.white
+                        font.pixelSize: Theme.typography.fontSize150
+                    }
+
+                    Item { Layout.fillWidth: true }
+
+                    Switch {
+                        id: activeSwitch
+                        checked: true
+                        onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
+                    }
+                }
+
                 UI.VerticalSpacer {}
 
                 SectionTitle {
@@ -158,6 +178,7 @@ PanelTemplate {
             layerName: Layers.alertZoneMapLayer(),
             severity: severityComboBox.currentValue,
             note: noteTextArea.text,
+            active: activeSwitch.checked,
             targetLayers: layerSelection.selectedLayers
         }
 

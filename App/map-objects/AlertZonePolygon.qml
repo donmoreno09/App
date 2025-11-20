@@ -17,6 +17,7 @@ MapItemGroup {
     property bool isDraggingHandle: false
 
     readonly property color zoneColor: {
+        if (!active) return "#888888"
         switch(severity) {
             case "high": return "#FF0000"
             case "medium": return "#FF6600"
