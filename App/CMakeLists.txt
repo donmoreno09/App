@@ -1,5 +1,7 @@
 qt_add_executable(${PROJECT_NAME}
+    WIN32 # Only for Windows; ignored by other platforms.
     main.cpp
+    app.rc
 )
 
 file(GLOB_RECURSE APP_ASSETS

@@ -64,11 +64,16 @@ install(DIRECTORY
 # Enable CPack for creating an installer
 include(InstallRequiredSystemLibraries)
 
+# ---- CPack / NSIS settings ----
+set(CPACK_GENERATOR "NSIS")
+
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VENDOR "Fincantieri NexTech")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY ${PROJECT_NAME})
 
-set(CPACK_GENERATOR "NSIS")
+# What the user sees in the installer window
+set(CPACK_NSIS_PACKAGE_NAME "${PROJECT_NAME} - ${CPACK_PACKAGE_VENDOR}")
+set(CPACK_NSIS_DISPLAY_NAME "${PROJECT_NAME} by ${CPACK_PACKAGE_VENDOR}")
 
 include(CPack)

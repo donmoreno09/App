@@ -5,6 +5,7 @@
 #include <App/Features/Map/PluginProbe.h>
 #include <QFontDatabase>
 #include <QDebug>
+#include <QIcon>
 #include <core/TrackManager.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
@@ -35,6 +36,7 @@ int main(int argc, char *argv[])
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/App/assets/logo-app.ico"));
 
     QCoreApplication::setOrganizationName("IRIDESS");
     QCoreApplication::setApplicationName("IRIDESS_FE");
