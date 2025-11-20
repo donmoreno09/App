@@ -54,7 +54,7 @@ ColumnLayout {
         }
         UI.Toggle {
             id: aisToggle
-            checked: true
+            checked: false
         }
     }
 
@@ -72,7 +72,7 @@ ColumnLayout {
         }
         UI.Toggle {
             id: docSpaceToggle
-            checked: true
+            checked: false
         }
     }
 
@@ -90,7 +90,7 @@ ColumnLayout {
         }
         UI.Toggle {
             id: tirToggle
-            checked: true
+            checked: false
         }
     }
 
@@ -108,7 +108,7 @@ ColumnLayout {
         }
         UI.Toggle {
             id: poiToggle
-            checked: true
+            checked: false
         }
     }
 }

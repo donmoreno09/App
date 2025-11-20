@@ -104,8 +104,17 @@ PanelTemplate {
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
                 }
 
+                UI.VerticalSpacer {}
+
                 LayerSelection {
                     id: layerSelection
+                    Layout.fillWidth: true
+                }
+
+                UI.VerticalSpacer {}
+
+                AreaForm {
+                    id: areaForm
                     Layout.fillWidth: true
                 }
             }
