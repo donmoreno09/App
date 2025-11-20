@@ -55,6 +55,8 @@ set(cpp_sources
     core/PoiOptions.cpp
 
     # Layers
+    layers/AlertZoneMapLayerController.h
+    layers/AlertZoneMapLayerController.cpp
     layers/AnnotationMapLayer.cpp
     layers/AnnotationMapLayer.h
     layers/BaseLayer.cpp
@@ -74,6 +76,7 @@ set(cpp_sources
     # Entities
     entities/metadata/MetadataEntry.h
     entities/metadata/NoteMetadataEntry.h
+    entities/AlertZone.h
     entities/Details.h
     entities/Geometry.h
     entities/Poi.h
@@ -86,6 +89,8 @@ set(cpp_sources
 
 
     # Qt Models
+    models/AlertZoneModel.h
+    models/AlertZoneModel.cpp
     models/ModelHelper.h
     models/ModelHelper.cpp
     models/CoordinatesModel.h
@@ -119,6 +124,8 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         ${APP_ASSETS}
         config/mqtt_config.json
+        QML_FILES layers/AlertZoneMapLayer.qml
+        QML_FILES map-objects/AlertZonePolygon.qml
 )
 
 add_subdirectory(Components)
