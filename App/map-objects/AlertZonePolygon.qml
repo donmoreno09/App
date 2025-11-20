@@ -30,7 +30,7 @@ MapItemGroup {
         id: polygon
         path: coordinates
         color: Qt.rgba(root.zoneColor.r, root.zoneColor.g, root.zoneColor.b, 0.13)
-        border.color: root.zoneColors
+        border.color: root.zoneColor
         border.width: 3
         z: root.z
         property var _startPx: [] // [{x,y} per vertex]

@@ -104,23 +104,13 @@ PanelTemplate {
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
                 }
 
-                RowLayout {
+                UI.Toggle {
+                    id: activeSwitch
                     Layout.fillWidth: true
                     visible: MapModeController.isEditingAlertZone
-
-                    Text {
-                        text: qsTr("Active")
-                        color: Theme.colors.white
-                        font.pixelSize: Theme.typography.fontSize150
-                    }
-
-                    Item { Layout.fillWidth: true }
-
-                    Switch {
-                        id: activeSwitch
-                        checked: true
-                        onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
-                    }
+                    leftLabel: checked ? qsTr("Deactivate") : qsTr("Activate")
+                    checked: true
+                    onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
                 }
 
                 UI.VerticalSpacer {}

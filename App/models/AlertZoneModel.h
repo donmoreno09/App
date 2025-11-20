@@ -42,6 +42,7 @@ public:
         IsRectangleRole,
 
         NoteRole,
+        SeverityRole,
         ActiveRole,
         ModelIndexRole,
     };

@@ -94,6 +94,8 @@ QVariant AlertZoneModel::data(const QModelIndex &index, int role) const
 
     case NoteRole:
         return alertZone.note;
+    case SeverityRole:
+        return alertZone.severity;
     case ActiveRole:
         return alertZone.active;
     case ModelIndexRole:
@@ -142,6 +144,15 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
         const auto v = value.toString();
         if (alertZone.note != v) {
             alertZone.note = v;
+            changed = true;
+        }
+        break;
+    }
+
+    case SeverityRole: {
+        const auto v = value.toString();
+        if (alertZone.severity != v) {
+            alertZone.severity = v;
             changed = true;
         }
         break;
@@ -289,6 +300,7 @@ QHash<int, QByteArray> AlertZoneModel::roleNames() const
             { IsRectangleRole, "isRectangle" },
 
             { NoteRole, "note" },
+            { SeverityRole, "severity" },
             { ActiveRole, "active" },
             { ModelIndexRole, "modelIndex" },
             };
@@ -509,8 +521,9 @@ void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
     m_alertZoneSave->layerId = data.value("layerId").toInt();
     m_alertZoneSave->note = data.value("note").toString();
     m_alertZoneSave->active = data.value("active", true).toBool();
+    m_alertZoneSave->severity = data.value("severity", "low").toString();
 
-    qDebug() << "[STEP 5e-1b] Label:" << m_alertZoneSave->label << "| LayerId:" << m_alertZoneSave->layerId << "| Note:" << m_alertZoneSave->note << "| Active:" << m_alertZoneSave->active;
+    qDebug() << "[STEP 5e-1b] Label:" << m_alertZoneSave->label << "| LayerId:" << m_alertZoneSave->layerId << "| Note:" << m_alertZoneSave->note << "| Severity:" << m_alertZoneSave->severity << "| Active:" << m_alertZoneSave->active;
 
     // Geometry
     QVariantMap geomMap = data.value("geometry").toMap();
