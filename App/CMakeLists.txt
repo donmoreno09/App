@@ -146,7 +146,10 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Concurrent
         Qt6::WebEngineQuick
         Qt6::WebEngineCore
+        QMapLibre::Location
 )
+
+qmaplibre_location_setup_plugins(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
