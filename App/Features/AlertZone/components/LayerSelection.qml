@@ -14,7 +14,6 @@ ColumnLayout {
         if (aisToggle.checked) layers.push("ais")
         if (docSpaceToggle.checked) layers.push("docSpace")
         if (tirToggle.checked) layers.push("tir")
-        if (poiToggle.checked) layers.push("poi")
         return layers
     }
 
@@ -24,7 +23,6 @@ ColumnLayout {
         aisToggle.checked = layers.includes("ais")
         docSpaceToggle.checked = layers.includes("docSpace")
         tirToggle.checked = layers.includes("tir")
-        poiToggle.checked = layers.includes("poi")
     }
 
     RowLayout {
@@ -77,24 +75,6 @@ ColumnLayout {
         }
         UI.Toggle {
             id: tirToggle
-            checked: false
-        }
-    }
-
-    RowLayout {
-        Layout.fillWidth: true
-        Label {
-            Layout.fillWidth: true
-            text: qsTr("PoI")
-            color: Theme.colors.text
-            font {
-                family: Theme.typography.bodySans25Family
-                pointSize: Theme.typography.bodySans25Size
-                weight: Theme.typography.bodySans25Weight
-            }
-        }
-        UI.Toggle {
-            id: poiToggle
             checked: false
         }
     }
