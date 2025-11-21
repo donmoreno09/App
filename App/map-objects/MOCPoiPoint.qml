@@ -6,12 +6,11 @@ import QtPositioning 6.8
 import App 1.0
 import App.Themes 1.0
 import App.Features.SidePanel 1.0
-import App.Features.MapTools 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 MapQuickItem {
-    id: goliath
+    id: root
 
     readonly property real craneLatitude: 45.47693790805344
     readonly property real craneLongitude: 12.242793773599008

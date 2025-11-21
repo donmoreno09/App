@@ -14,7 +14,7 @@ import "components"
 
 PanelTemplate {
     id: root
-    title.text: (TranslationManager.revision, qsTr("Point of Interest"))
+    title.text: `${TranslationManager.revision}` && qsTr("Point of Interest")
 
     function syncData() {
         if (!MapModeController.isEditing) return

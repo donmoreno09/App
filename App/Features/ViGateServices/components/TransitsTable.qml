@@ -9,33 +9,38 @@ GroupBox {
     title: qsTr("Transits")
     Layout.fillWidth: true
     Layout.fillHeight: true
+    Layout.maximumWidth: parent.width
 
     required property var model
 
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: Theme.spacing.s2
-
-        // Header
-        TableHeader {
-            Layout.fillWidth: true
-            Layout.preferredHeight: Theme.spacing.s10
-            columns: ColumnConfig.columns
-            contentX: listView.contentX
+    onWidthChanged: {
+            console.log("TransitsTable GroupBox width:", width)
         }
 
-        // Data ListView
-        ScrollView {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 300
-            clip: true
+    contentItem: ColumnLayout {
+            width: parent.width
+            spacing: Theme.spacing.s2
 
-            Layout.maximumWidth: parent.width
+            // Header wrapper with clipping
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredHeight: Theme.spacing.s10
+                clip: true
+
+                TableHeader {
+                    width: parent.width
+                    height: parent.height
+                    columns: ColumnConfig.columns
+                    contentX: listView.contentX
+                }
+            }
 
             ListView {
                 id: listView
+                Layout.fillWidth: true
+                Layout.preferredHeight: 300
+                Layout.maximumWidth: parent.width
                 clip: true
-
                 model: root.model
                 contentWidth: ColumnConfig.totalWidth
 
@@ -63,5 +68,5 @@ GroupBox {
                 }
             }
         }
-    }
+
 }

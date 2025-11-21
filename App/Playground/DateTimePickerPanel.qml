@@ -9,7 +9,7 @@ import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("Date & Time Picker Test"))
+    title.text: `${TranslationManager.revision}` && qsTr("Date & Time Picker Test")
 
     // Micro-component: Reusable Input Field
     component PickerInputField: Rectangle {
@@ -165,262 +165,12 @@ PanelTemplate {
 
             // Header
             Text {
-                text: (TranslationManager.revision, qsTr("Date & Time Picker Components"))
+                text: `${TranslationManager.revision}` && qsTr("Date & Time Picker Components")
                 font.family: Theme.typography.familySans
                 font.pixelSize: Theme.typography.fontSize200
                 font.weight: Theme.typography.weightSemibold
                 color: Theme.colors.text
             }
-
-            UI.HorizontalDivider { Layout.fillWidth: true }
-
-            // // 1. Single Date Selection
-            // ColumnLayout {
-            //     Layout.fillWidth: true
-            //     spacing: Theme.spacing.s4
-
-            //     SectionHeader {
-            //         title: (TranslationManager.revision, qsTr("Single Date Selection"))
-            //     }
-
-            //     FieldLabel {
-            //         title: (TranslationManager.revision, qsTr("Select Date"))
-            //         required: true
-            //     }
-
-            //     PickerInputField {
-            //         id: singleDateInput
-            //         placeholder: "DD/MM/YYYY"
-            //         focused: singleDatePopup.opened
-
-            //         property date selectedDate: new Date(NaN)
-            //         displayText: !isNaN(selectedDate.getTime()) ?
-            //                    Qt.formatDate(selectedDate, "dd/MM/yyyy") : ""
-
-            //         onClicked: singleDatePopup.toggle()
-
-            //         PickerPopup {
-            //             id: singleDatePopup
-            //             pickerContent: Component {
-            //                 UI.DatePicker {
-            //                     id: picker
-            //                     mode: "single"
-            //                     selectedDate: singleDateInput.selectedDate
-
-            //                     onDateSelected: function(date) {
-            //                         singleDateInput.selectedDate = date
-            //                         singleDateResult.result = (TranslationManager.revision, qsTr("Single Date: ")) +
-            //                                                 Qt.formatDate(date, "dd/MM/yyyy")
-            //                         singleDatePopup.close()
-            //                     }
-
-            //                     onCurrentViewChanged: {
-            //                         singleDatePopup.currentView = currentView
-            //                     }
-            //                 }
-            //             }
-            //             onClosed: singleDateInput.focused = false
-            //         }
-            //     }
-
-            //     ResultText {
-            //         id: singleDateResult
-            //         result: (TranslationManager.revision, qsTr("No single date selected"))
-            //     }
-            // }
-
-            // UI.HorizontalDivider { Layout.fillWidth: true }
-
-            // // 2. Date Range Selection
-            // ColumnLayout {
-            //     Layout.fillWidth: true
-            //     spacing: Theme.spacing.s4
-
-            //     SectionHeader {
-            //         title: (TranslationManager.revision, qsTr("Date Range Selection"))
-            //     }
-
-            //     FieldLabel {
-            //         title: (TranslationManager.revision, qsTr("Select Date Range"))
-            //         required: true
-            //     }
-
-            //     PickerInputField {
-            //         id: dateRangeInput
-            //         placeholder: "DD/MM/YYYY - DD/MM/YYYY"
-            //         focused: dateRangePopup.opened
-
-            //         property date startDate: new Date(NaN)
-            //         property date endDate: new Date(NaN)
-            //         displayText: {
-            //             const hasStart = !isNaN(startDate.getTime())
-            //             const hasEnd = !isNaN(endDate.getTime())
-
-            //             if (!hasStart && !hasEnd) return ""
-            //             if (hasStart && hasEnd) {
-            //                 return Qt.formatDate(startDate, "dd/MM/yyyy") + " - " +
-            //                        Qt.formatDate(endDate, "dd/MM/yyyy")
-            //             }
-            //             if (hasStart) return Qt.formatDate(startDate, "dd/MM/yyyy") + " - ..."
-            //             return ""
-            //         }
-
-            //         onClicked: dateRangePopup.toggle()
-
-            //         PickerPopup {
-            //             id: dateRangePopup
-            //             pickerContent: Component {
-            //                 UI.DatePicker {
-            //                     mode: "range"
-            //                     startDate: dateRangeInput.startDate
-            //                     endDate: dateRangeInput.endDate
-
-            //                     onRangeSelected: function(startDate, endDate) {
-            //                         dateRangeInput.startDate = startDate
-            //                         dateRangeInput.endDate = endDate
-            //                         dateRangeResult.result = (TranslationManager.revision, qsTr("Date Range: ")) +
-            //                                                Qt.formatDate(startDate, "dd/MM/yyyy") + " - " +
-            //                                                Qt.formatDate(endDate, "dd/MM/yyyy")
-            //                         dateRangePopup.close()
-            //                     }
-
-            //                     onCurrentViewChanged: {
-            //                         dateRangePopup.currentView = currentView
-            //                     }
-            //                 }
-            //             }
-            //             onClosed: dateRangeInput.focused = false
-            //         }
-            //     }
-
-            //     ResultText {
-            //         id: dateRangeResult
-            //         result: (TranslationManager.revision, qsTr("No date range selected"))
-            //     }
-            // }
-
-            // UI.HorizontalDivider { Layout.fillWidth: true }
-
-            // // 3. Time Selection (24H)
-            // ColumnLayout {
-            //     Layout.fillWidth: true
-            //     spacing: Theme.spacing.s4
-
-            //     SectionHeader {
-            //         title: (TranslationManager.revision, qsTr("Time Selection (24H)"))
-            //     }
-
-            //     FieldLabel {
-            //         title: (TranslationManager.revision, qsTr("Select Time"))
-            //         required: true
-            //     }
-
-            //     PickerInputField {
-            //         id: time24Input
-            //         placeholder: "HH:MM"
-            //         iconSource: "qrc:/App/assets/icons/clock.svg"
-            //         focused: time24Popup.opened
-
-            //         property int selectedHour: -1
-            //         property int selectedMinute: -1
-            //         displayText: (selectedHour !== -1 && selectedMinute !== -1) ?
-            //                    selectedHour.toString().padStart(2, '0') + ":" +
-            //                    selectedMinute.toString().padStart(2, '0') : ""
-
-            //         onClicked: time24Popup.toggle()
-
-            //         PickerPopup {
-            //             id: time24Popup
-            //             height: 200 // TimePicker height
-            //             pickerContent: Component {
-            //                 UI.TimePicker {
-            //                     is24Hour: true
-            //                     selectedHour: time24Input.selectedHour === -1 ? 0 : time24Input.selectedHour
-            //                     selectedMinute: time24Input.selectedMinute === -1 ? 0 : time24Input.selectedMinute
-
-            //                     onTimeSelected: function(hour, minute, isAM) {
-            //                         time24Input.selectedHour = hour
-            //                         time24Input.selectedMinute = minute
-            //                         time24Result.result = (TranslationManager.revision, qsTr("24H Time: ")) +
-            //                                             hour.toString().padStart(2, '0') + ":" +
-            //                                             minute.toString().padStart(2, '0')
-            //                         time24Popup.close()
-            //                     }
-            //                 }
-            //             }
-            //             onClosed: time24Input.focused = false
-            //         }
-            //     }
-
-            //     ResultText {
-            //         id: time24Result
-            //         result: (TranslationManager.revision, qsTr("No time selected"))
-            //     }
-            // }
-
-            // UI.HorizontalDivider { Layout.fillWidth: true }
-
-            // // 4. Time Selection (12H)
-            // ColumnLayout {
-            //     Layout.fillWidth: true
-            //     spacing: Theme.spacing.s4
-
-            //     SectionHeader {
-            //         title: (TranslationManager.revision, qsTr("Time Selection (12H AM/PM)"))
-            //     }
-
-            //     FieldLabel {
-            //         title: (TranslationManager.revision, qsTr("Select Time"))
-            //         required: true
-            //     }
-
-            //     PickerInputField {
-            //         id: time12Input
-            //         placeholder: "HH:MM AM/PM"
-            //         iconSource: "qrc:/App/assets/icons/clock.svg"
-            //         focused: time12Popup.opened
-
-            //         property int selectedHour: -1
-            //         property int selectedMinute: -1
-            //         property bool selectedAMPM: true
-            //         displayText: (selectedHour !== -1 && selectedMinute !== -1) ?
-            //                    selectedHour.toString().padStart(2, '0') + ":" +
-            //                    selectedMinute.toString().padStart(2, '0') + " " +
-            //                    (selectedAMPM ? "AM" : "PM") : ""
-
-            //         onClicked: time12Popup.toggle()
-
-            //         PickerPopup {
-            //             id: time12Popup
-            //             height: 200 // TimePicker height
-            //             pickerContent: Component {
-            //                 UI.TimePicker {
-            //                     is24Hour: false
-            //                     selectedHour: time12Input.selectedHour === -1 ? 12 : time12Input.selectedHour
-            //                     selectedMinute: time12Input.selectedMinute === -1 ? 0 : time12Input.selectedMinute
-            //                     selectedAMPM: time12Input.selectedAMPM
-
-            //                     onTimeSelected: function(hour, minute, isAM) {
-            //                         time12Input.selectedHour = hour
-            //                         time12Input.selectedMinute = minute
-            //                         time12Input.selectedAMPM = isAM
-            //                         time12Result.result = (TranslationManager.revision, qsTr("12H Time: ")) +
-            //                                             hour.toString().padStart(2, '0') + ":" +
-            //                                             minute.toString().padStart(2, '0') + " " +
-            //                                             (isAM ? "AM" : "PM")
-            //                         time12Popup.close()
-            //                     }
-            //                 }
-            //             }
-            //             onClosed: time12Input.focused = false
-            //         }
-            //     }
-
-            //     ResultText {
-            //         id: time12Result
-            //         result: (TranslationManager.revision, qsTr("No time selected"))
-            //     }
-            // }
 
             UI.HorizontalDivider { Layout.fillWidth: true }
 
@@ -430,11 +180,11 @@ PanelTemplate {
                 spacing: Theme.spacing.s4
 
                 SectionHeader {
-                    title: (TranslationManager.revision, qsTr("DateTime Selection (Combined)"))
+                    title: `${TranslationManager.revision}` && qsTr("DateTime Selection (Combined)")
                 }
 
                 FieldLabel {
-                    title: (TranslationManager.revision, qsTr("Select Date & Time"))
+                    title: `${TranslationManager.revision}` && qsTr("Select Date & Time")
                     required: true
                 }
 
@@ -463,17 +213,17 @@ PanelTemplate {
                                     // Live update as user selects date/time
                                     if (hasValidSelection) {
                                         dateTimeInput.selectedDateTime = currentDateTime
-                                        dateTimeResult.result = (TranslationManager.revision, qsTr("Live Preview: ")) +
+                                        dateTimeResult.result = `${TranslationManager.revision}` && qsTr("Live Preview: ") +
                                                               Qt.formatDateTime(currentDateTime, "dd/MM/yyyy hh:mm")
                                     } else {
-                                        dateTimeResult.result = (TranslationManager.revision, qsTr("Select date and time..."))
+                                        dateTimeResult.result = `${TranslationManager.revision}` && qsTr("Select date and time...")
                                     }
                                 }
 
                                 // Final confirmation when Apply is clicked
                                 onDateTimeApplied: function(dateTime) {
                                     dateTimeInput.selectedDateTime = dateTime
-                                    dateTimeResult.result = (TranslationManager.revision, qsTr("Applied: ")) +
+                                    dateTimeResult.result = `${TranslationManager.revision}` && qsTr("Applied: ") +
                                                           Qt.formatDateTime(dateTime, "dd/MM/yyyy hh:mm")
                                     dateTimePopup.close()
                                 }
@@ -481,7 +231,7 @@ PanelTemplate {
                                 // When user clears selection
                                 onSelectionCleared: {
                                     dateTimeInput.selectedDateTime = new Date(NaN)
-                                    dateTimeResult.result = (TranslationManager.revision, qsTr("Selection cleared"))
+                                    dateTimeResult.result = `${TranslationManager.revision}` && qsTr("Selection cleared")
                                 }
                             }
                         }
@@ -491,7 +241,7 @@ PanelTemplate {
 
                 ResultText {
                     id: dateTimeResult
-                    result: (TranslationManager.revision, qsTr("No datetime selected"))
+                    result: `${TranslationManager.revision}` && qsTr("No datetime selected")
                 }
             }
 
@@ -503,11 +253,11 @@ PanelTemplate {
                     spacing: Theme.spacing.s4
 
                     SectionHeader {
-                        title: (TranslationManager.revision, qsTr("DateTime Range Selection (Combined)"))
+                        title: `${TranslationManager.revision}` && qsTr("DateTime Range Selection (Combined)")
                     }
 
                     FieldLabel {
-                        title: (TranslationManager.revision, qsTr("Select Date & Time Range"))
+                        title: `${TranslationManager.revision}` && qsTr("Select Date & Time Range")
                         required: true
                     }
 
@@ -556,16 +306,16 @@ PanelTemplate {
                                                 dateTimeRangeInput.startDateTime = startDT
                                                 dateTimeRangeInput.endDateTime = endDT
 
-                                                dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Live Preview: ")) +
+                                                dateTimeRangeResult.result = `${TranslationManager.revision}` && qsTr("Live Preview: ") +
                                                                            Qt.formatDateTime(startDT, "dd/MM/yyyy hh:mm") + " - " +
                                                                            Qt.formatDateTime(endDT, "dd/MM/yyyy hh:mm")
                                             }
                                         } else {
                                             // Show partial selection feedback
                                             if (!isNaN(startDate.getTime()) && isNaN(endDate.getTime())) {
-                                                dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Start date selected, choose end date..."))
+                                                dateTimeRangeResult.result = `${TranslationManager.revision}` && qsTr("Start date selected, choose end date...")
                                             } else {
-                                                dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Select date range and time..."))
+                                                dateTimeRangeResult.result = `${TranslationManager.revision}` && qsTr("Select date range and time...")
                                             }
                                         }
                                     }
@@ -574,7 +324,7 @@ PanelTemplate {
                                     onRangeApplied: function(startDateTime, endDateTime) {
                                         dateTimeRangeInput.startDateTime = startDateTime
                                         dateTimeRangeInput.endDateTime = endDateTime
-                                        dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Applied Range: ")) +
+                                        dateTimeRangeResult.result = `${TranslationManager.revision}` && qsTr("Applied Range: ") +
                                                                    Qt.formatDateTime(startDateTime, "dd/MM/yyyy hh:mm") + " - " +
                                                                    Qt.formatDateTime(endDateTime, "dd/MM/yyyy hh:mm")
                                         dateTimeRangePopup.close()
@@ -584,7 +334,7 @@ PanelTemplate {
                                     onSelectionCleared: {
                                         dateTimeRangeInput.startDateTime = new Date(NaN)
                                         dateTimeRangeInput.endDateTime = new Date(NaN)
-                                        dateTimeRangeResult.result = (TranslationManager.revision, qsTr("Range selection cleared"))
+                                        dateTimeRangeResult.result = `${TranslationManager.revision}` && qsTr("Range selection cleared")
                                     }
                                 }
                             }
@@ -594,108 +344,9 @@ PanelTemplate {
 
                     ResultText {
                         id: dateTimeRangeResult
-                        result: (TranslationManager.revision, qsTr("No datetime range selected"))
+                        result: `${TranslationManager.revision}` && qsTr("No datetime range selected")
                     }
                 }
-
-            // // Test Controls
-            // ColumnLayout {
-            //     Layout.fillWidth: true
-            //     spacing: Theme.spacing.s4
-
-            //     Text {
-            //         text: (TranslationManager.revision, qsTr("Test Controls"))
-            //         font.family: Theme.typography.familySans
-            //         font.pixelSize: Theme.typography.fontSize175
-            //         font.weight: Theme.typography.weightMedium
-            //         color: Theme.colors.accent500
-            //     }
-
-            //     RowLayout {
-            //         Layout.fillWidth: true
-            //         spacing: Theme.spacing.s3
-
-            //         UI.Button {
-            //             text: (TranslationManager.revision, qsTr("Set Today/Now"))
-            //             size: "md"
-            //             variant: "secondary"
-            //             onClicked: {
-            //                 const now = new Date()
-
-            //                 // Single date
-            //                 singleDateInput.selectedDate = now
-            //                 singleDateResult.result = (TranslationManager.revision, qsTr("Single Date: ")) +
-            //                                         Qt.formatDate(now, "dd/MM/yyyy")
-
-            //                 // Time inputs
-            //                 time24Input.selectedHour = now.getHours()
-            //                 time24Input.selectedMinute = now.getMinutes()
-            //                 time24Result.result = (TranslationManager.revision, qsTr("24H Time: ")) +
-            //                                     now.getHours().toString().padStart(2, '0') + ":" +
-            //                                     now.getMinutes().toString().padStart(2, '0')
-
-            //                 const hour24 = now.getHours()
-            //                 const isAM = hour24 < 12
-            //                 const hour12 = hour24 === 0 ? 12 : (hour24 > 12 ? hour24 - 12 : hour24)
-            //                 time12Input.selectedHour = hour12
-            //                 time12Input.selectedMinute = now.getMinutes()
-            //                 time12Input.selectedAMPM = isAM
-            //                 time12Result.result = (TranslationManager.revision, qsTr("12H Time: ")) +
-            //                                     hour12.toString().padStart(2, '0') + ":" +
-            //                                     now.getMinutes().toString().padStart(2, '0') + " " +
-            //                                     (isAM ? "AM" : "PM")
-
-            //                 // DateTime
-            //                 dateTimeInput.selectedDateTime = now
-            //                 dateTimeResult.result = (TranslationManager.revision, qsTr("DateTime: ")) +
-            //                                       Qt.formatDateTime(now, "dd/MM/yyyy hh:mm")
-            //             }
-            //         }
-
-            //         UI.Button {
-            //             text: (TranslationManager.revision, qsTr("Set This Week"))
-            //             size: "md"
-            //             variant: "secondary"
-            //             onClicked: {
-            //                 const today = new Date()
-            //                 const startOfWeek = new Date(today)
-            //                 startOfWeek.setDate(today.getDate() - today.getDay())
-            //                 const endOfWeek = new Date(startOfWeek)
-            //                 endOfWeek.setDate(startOfWeek.getDate() + 6)
-
-            //                 dateRangeInput.startDate = startOfWeek
-            //                 dateRangeInput.endDate = endOfWeek
-            //                 dateRangeResult.result = (TranslationManager.revision, qsTr("Date Range: ")) +
-            //                                        Qt.formatDate(startOfWeek, "dd/MM/yyyy") + " - " +
-            //                                        Qt.formatDate(endOfWeek, "dd/MM/yyyy")
-            //             }
-            //         }
-
-            //         UI.Button {
-            //             text: (TranslationManager.revision, qsTr("Clear All"))
-            //             size: "md"
-            //             variant: "ghost"
-            //             onClicked: {
-            //                 // Clear all inputs
-            //                 singleDateInput.selectedDate = new Date(NaN)
-            //                 dateRangeInput.startDate = new Date(NaN)
-            //                 dateRangeInput.endDate = new Date(NaN)
-            //                 time24Input.selectedHour = -1
-            //                 time24Input.selectedMinute = -1
-            //                 time12Input.selectedHour = -1
-            //                 time12Input.selectedMinute = -1
-            //                 dateTimeInput.selectedDateTime = new Date(NaN)
-
-            //                 // Clear all results
-            //                 singleDateResult.result = (TranslationManager.revision, qsTr("All selections cleared"))
-            //                 dateRangeResult.result = (TranslationManager.revision, qsTr("All selections cleared"))
-            //                 time24Result.result = (TranslationManager.revision, qsTr("All selections cleared"))
-            //                 time12Result.result = (TranslationManager.revision, qsTr("All selections cleared"))
-            //                 dateTimeResult.result = (TranslationManager.revision, qsTr("All selections cleared"))
-            //             }
-            //         }
-            //     }
-            // }
 
             // Spacer
             Item { Layout.preferredHeight: Theme.spacing.s6 }

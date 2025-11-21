@@ -10,7 +10,7 @@ import App.Features.Language 1.0
 import App.Features.Map 1.0
 
 PanelTemplate {
-    title.text: (TranslationManager.revision, qsTr("Map Layers"))
+    title.text: `${TranslationManager.revision}` && qsTr("Map Layers")
 
     ColumnLayout {
         anchors.top: parent.top
@@ -27,7 +27,7 @@ PanelTemplate {
             Layout.fillWidth: true
 
             Label {
-                text: (TranslationManager.revision, qsTr(label))
+                text: `${TranslationManager.revision}` && qsTr(label)
             }
 
             UI.HorizontalSpacer { }
@@ -36,7 +36,7 @@ PanelTemplate {
         }
 
         LayerToggle {
-            label: (TranslationManager.revision, qsTr("AIS Map Layer"))
+            label: `${TranslationManager.revision}` && qsTr("AIS Map Layer")
             toggle.checked: TrackManager.getLayer("ais").active
             toggle.onCheckedChanged: {
                 if (toggle.checked) TrackManager.activate("ais")
@@ -45,7 +45,7 @@ PanelTemplate {
         }
 
         LayerToggle {
-            label: (TranslationManager.revision, qsTr("Doc-Space Map Layer"))
+            label: `${TranslationManager.revision}` && qsTr("Doc-Space Map Layer")
             toggle.checked: TrackManager.getLayer("doc-space").active
             toggle.onCheckedChanged: {
                 if (toggle.checked) TrackManager.activate("doc-space")
@@ -54,7 +54,7 @@ PanelTemplate {
         }
 
         LayerToggle {
-            label: (TranslationManager.revision, qsTr("Truck Map Layer"))
+            label: `${TranslationManager.revision}` && qsTr("Truck Map Layer")
             toggle.checked: TrackManager.getLayer("tir").active
             toggle.onCheckedChanged: {
                 if (toggle.checked) TrackManager.activate("tir")

@@ -49,17 +49,10 @@ set(cpp_sources
     core/interactionmodemanager.h
     core/LayerManager.cpp
     core/LayerManager.h
-    core/popupmanager.cpp
-    core/popupmanager.h
     core/TrackManager.cpp
     core/TrackManager.h
-    core/variantlistmodel.cpp
-    core/variantlistmodel.h
     core/PoiOptions.h
     core/PoiOptions.cpp
-
-    # Events
-    events/selectionboxbus.h
 
     # Layers
     layers/AnnotationMapLayer.cpp
@@ -150,9 +143,13 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Location
         Qt6::Positioning
         Qt6::Network
+        Qt6::Concurrent
         Qt6::WebEngineQuick
         Qt6::WebEngineCore
+        QMapLibre::Location
 )
+
+qmaplibre_location_setup_plugins(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE

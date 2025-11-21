@@ -10,13 +10,11 @@ import App.Features.ViGateServices 1.0
 
 ColumnLayout {
     id: root
-    Layout.fillWidth: true
-    Layout.fillHeight: true
+    width: parent.width
     spacing: Theme.spacing.s4
 
     required property var controller
 
-    // Loading Indicator
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
         Layout.topMargin: 300
@@ -26,18 +24,16 @@ ColumnLayout {
         layer.effect: ColorOverlay { color: Theme.colors.text }
     }
 
-    // Filters and Controls Section
     ColumnLayout {
         visible: !controller.isLoading
         Layout.fillWidth: true
         Layout.margins: Theme.spacing.s4
         spacing: Theme.spacing.s3
 
-        // Gate Selection ComboBox
         UI.ComboBox {
             id: gateComboBox
             Layout.fillWidth: true
-            labelText: (TranslationManager.revision, qsTr("Select Gate"))
+            labelText: `${TranslationManager.revision}` && qsTr("Select Gate")
 
             model: controller.activeGates
             textRole: "name"
@@ -60,7 +56,6 @@ ColumnLayout {
             }
         }
 
-        // Gate Loading Indicator
         RowLayout {
             visible: controller.isLoadingGates
             Layout.fillWidth: true
@@ -73,13 +68,12 @@ ColumnLayout {
             }
 
             Text {
-                text: (TranslationManager.revision, qsTr("Loading gates..."))
+                text: `${TranslationManager.revision}` && qsTr("Loading gates...")
                 color: Theme.colors.textMuted
                 font.family: Theme.typography.familySans
             }
         }
 
-        // Date Range Button
         UI.Button {
             id: dateRangeButton
             Layout.fillWidth: true
@@ -109,13 +103,12 @@ ColumnLayout {
             onClicked: datePickerOverlay.open()
         }
 
-        // Filters Row
         RowLayout {
             Layout.fillWidth: true
             spacing: Theme.spacing.s3
 
             Text {
-                text: (TranslationManager.revision, qsTr("Filters:"))
+                text: `${TranslationManager.revision}` && qsTr("Filters:")
                 font.family: Theme.typography.familySans
                 color: Theme.colors.text
             }
@@ -123,7 +116,7 @@ ColumnLayout {
             UI.Toggle {
                 id: vehiclesToggle
                 Layout.fillWidth: true
-                rightLabel: (TranslationManager.revision, qsTr("Vehicles"))
+                rightLabel: `${TranslationManager.revision}` && qsTr("Vehicles")
                 checked: true
 
                 onCheckedChanged: {
@@ -136,7 +129,7 @@ ColumnLayout {
             UI.Toggle {
                 id: pedestriansToggle
                 Layout.fillWidth: true
-                rightLabel: (TranslationManager.revision, qsTr("Pedestrians"))
+                rightLabel: `${TranslationManager.revision}` && qsTr("Pedestrians")
                 checked: true
 
                 onCheckedChanged: {
@@ -147,12 +140,11 @@ ColumnLayout {
             }
         }
 
-        // Fetch Data Button
         UI.Button {
             Layout.fillWidth: true
             Layout.preferredHeight: Theme.spacing.s10
             variant: UI.ButtonStyles.Primary
-            text: (TranslationManager.revision, qsTr("Fetch Data"))
+            text: `${TranslationManager.revision}` && qsTr("Fetch Data")
             enabled: canFetch && !controller.isLoading
 
             readonly property bool canFetch: {
@@ -193,22 +185,20 @@ ColumnLayout {
         UI.HorizontalDivider { Layout.fillWidth: true }
     }
 
-    // Data Display Section
     ColumnLayout {
+        id: dataDisplayLayout
         visible: !controller.isLoading && controller.hasData
-        Layout.fillWidth: true
+        width: parent.width
         Layout.fillHeight: true
-        Layout.margins: Theme.spacing.s4
+        Layout.maximumWidth: parent.width
         spacing: Theme.spacing.s4
 
-        // Summary Table
         SummaryTable {
             Layout.fillWidth: true
             controller: root.controller
             visible: !controller.isLoadingPage
         }
 
-        // Transits Table
         TransitsTable {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -216,27 +206,35 @@ ColumnLayout {
             visible: !controller.isLoadingPage
 
             Component.onCompleted: {
-                // Set initial filter when table is created
                 updateTransitFilter()
             }
         }
 
-        // Pagination Info Bar
         Rectangle {
-            Layout.fillWidth: true
+            width: parent.width
+            Layout.maximumWidth: parent.width - 14
             Layout.minimumHeight: Theme.spacing.s10
             color: Theme.colors.surface
             radius: Theme.radius.sm
             visible: controller.totalPages > 0 && !controller.isLoadingPage
+
+            Component.onCompleted: {
+                console.log("=== Pagination Controls ===")
+                console.log("width: ", width)
+            }
+
+            onWidthChanged: {
+                    console.log("Pagination Controls width changed to:", width)
+                }
 
             RowLayout {
                 anchors.fill: parent
 
                 Text {
                     Layout.fillWidth: true
-                    text: (TranslationManager.revision, qsTr("Page %1 of %2")
+                    text: `${TranslationManager.revision}` && qsTr("Page %1 of %2")
                         .arg(controller.currentPage)
-                        .arg(controller.totalPages))
+                        .arg(controller.totalPages)
                     font.family: Theme.typography.familySans
                     font.weight: Theme.typography.weightMedium
                     color: Theme.colors.text
@@ -250,8 +248,8 @@ ColumnLayout {
 
                 Text {
                     Layout.fillWidth: true
-                    text: (TranslationManager.revision, qsTr("Total Items: %1")
-                        .arg(controller.totalItems))
+                    text: `${TranslationManager.revision}` && qsTr("Total Items: %1")
+                        .arg(controller.totalItems)
                     font.family: Theme.typography.familySans
                     color: Theme.colors.textMuted
                     horizontalAlignment: Text.AlignHCenter
@@ -267,7 +265,7 @@ ColumnLayout {
                     Layout.fillWidth: true
 
                     Text {
-                        text: (TranslationManager.revision, qsTr("Items per page:"))
+                        text: `${TranslationManager.revision}` && qsTr("Items per page:")
                         font.family: Theme.typography.familySans
                         color: Theme.colors.text
                     }
@@ -277,7 +275,7 @@ ColumnLayout {
                         Layout.fillWidth: true
                         Layout.maximumWidth: 80
                         model: [25, 50, 100, 200]
-                        currentIndex: 1 // Default to 50
+                        currentIndex: 1
 
                         onCurrentValueChanged: {
                             if (currentValue) {
@@ -318,41 +316,40 @@ ColumnLayout {
             }
         }
 
-        // Pagination Controls
         RowLayout {
             visible: controller.totalPages > 1 && !controller.isLoadingPage
-            Layout.fillWidth: true
-            spacing: Theme.spacing.s2
+            width: parent.width
+            Layout.maximumWidth: parent.width - 14
+            spacing: Theme.spacing.s1
+
+            Item { Layout.fillWidth: true }
 
             UI.Button {
                 variant: UI.ButtonStyles.Ghost
-                text: (TranslationManager.revision, qsTr("« First"))
+                text: `${TranslationManager.revision}` && qsTr("« First")
                 enabled: controller.currentPage > 1
                 onClicked: controller.goToPage(1)
             }
 
             UI.Button {
                 variant: UI.ButtonStyles.Ghost
-                text: (TranslationManager.revision, qsTr("‹ Previous"))
+                text: `${TranslationManager.revision}` && qsTr("‹ Previous")
                 enabled: controller.currentPage > 1
                 onClicked: controller.previousPage()
             }
 
-            Item { Layout.fillWidth: true }
-
-            // Page Number Display with Quick Jump
             RowLayout {
-                spacing: Theme.spacing.s2
+                spacing: Theme.spacing.s0
 
                 Text {
-                    text: (TranslationManager.revision, qsTr("Go to page:"))
+                    text: `${TranslationManager.revision}` && qsTr("Go to page:")
                     font.family: Theme.typography.familySans
                     color: Theme.colors.text
                 }
 
                 TextField {
                     id: pageJumpInput
-                    Layout.preferredWidth: 60
+                    Layout.preferredWidth: 35
                     horizontalAlignment: Text.AlignHCenter
                     text: controller.currentPage.toString()
                     validator: IntValidator {
@@ -379,7 +376,6 @@ ColumnLayout {
                         }
                     }
 
-                    // Reset to current page when focus is lost
                     onActiveFocusChanged: {
                         if (!activeFocus) {
                             text = controller.currentPage.toString()
@@ -388,27 +384,27 @@ ColumnLayout {
                 }
 
                 Text {
-                    text: (TranslationManager.revision, qsTr("of %1").arg(controller.totalPages))
+                    text: `${TranslationManager.revision}` && qsTr("of %1").arg(controller.totalPages)
                     font.family: Theme.typography.familySans
                     color: Theme.colors.textMuted
                 }
             }
 
-            Item { Layout.fillWidth: true }
-
             UI.Button {
                 variant: UI.ButtonStyles.Ghost
-                text: (TranslationManager.revision, qsTr("Next ›"))
+                text: `${TranslationManager.revision}` && qsTr("Next ›")
                 enabled: controller.currentPage < controller.totalPages
                 onClicked: controller.nextPage()
             }
 
             UI.Button {
                 variant: UI.ButtonStyles.Ghost
-                text: (TranslationManager.revision, qsTr("Last »"))
+                text: `${TranslationManager.revision}` && qsTr("Last »")
                 enabled: controller.currentPage < controller.totalPages
                 onClicked: controller.goToPage(controller.totalPages)
             }
+
+            Item { Layout.fillWidth: true }
         }
 
         Item {
@@ -427,10 +423,9 @@ ColumnLayout {
         }
     }
 
-    // No Data Message
     Text {
         visible: !controller.isLoading && !controller.hasData && !controller.hasError
-        text: (TranslationManager.revision, qsTr("No data available. Please select filters and fetch."))
+        text: `${TranslationManager.revision}` && qsTr("No data available. Please select filters and fetch.")
         color: Theme.colors.textMuted
         Layout.alignment: Qt.AlignHCenter
         Layout.topMargin: Theme.spacing.s8
@@ -441,10 +436,9 @@ ColumnLayout {
         }
     }
 
-    // Error Message
     Text {
         visible: !controller.isLoading && controller.hasError
-        text: (TranslationManager.revision, qsTr("Error loading data. Please try again."))
+        text: `${TranslationManager.revision}` && qsTr("Error loading data. Please try again.")
         color: Theme.colors.error
         Layout.alignment: Qt.AlignHCenter
         Layout.topMargin: Theme.spacing.s8
@@ -457,7 +451,6 @@ ColumnLayout {
 
     UI.VerticalSpacer {}
 
-    // Date Picker Overlay
     UI.Overlay {
         id: datePickerOverlay
         width: 400
@@ -487,14 +480,14 @@ ColumnLayout {
                 UI.Button {
                     Layout.fillWidth: true
                     variant: UI.ButtonStyles.Ghost
-                    text: (TranslationManager.revision, qsTr("Cancel"))
+                    text: `${TranslationManager.revision}` && qsTr("Cancel")
                     onClicked: datePickerOverlay.close()
                 }
 
                 UI.Button {
                     Layout.fillWidth: true
                     variant: UI.ButtonStyles.Primary
-                    text: (TranslationManager.revision, qsTr("Apply"))
+                    text: `${TranslationManager.revision}` && qsTr("Apply")
                     enabled: dateTimePicker.hasValidSelection
                     onClicked: datePickerOverlay.close()
                 }
@@ -502,7 +495,6 @@ ColumnLayout {
         }
     }
 
-    // Connection to update filter when data is loaded
     Connections {
         target: root.controller
         function onHasDataChanged() {
@@ -513,7 +505,6 @@ ColumnLayout {
         }
     }
 
-    // Function to update model filter based on toggle states
     function updateTransitFilter() {
         let types = []
         if (vehiclesToggle.checked) types.push("VEHICLE")

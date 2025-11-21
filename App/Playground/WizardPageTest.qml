@@ -5,7 +5,7 @@ import App.Features.Language 1.0
 
 WizardPage {
     id: testWizard
-    title: (TranslationManager.revision, qsTr("Mission Menu"))
+    title: `${TranslationManager.revision}` && qsTr("Mission Menu")
 
     StepDefinitions { id: stepDefs }
 
