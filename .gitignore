@@ -52,7 +52,7 @@ Thumbs.db
 .vscode/
 .idea/
 *.iml
-*.ini
+App/assets/**/*.ini
 
 # --- QML cache / build ---
 .qmlcache/

@@ -42,6 +42,11 @@ install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+# Install the default configuration template next to the executable
+install(FILES ${CMAKE_SOURCE_DIR}/App/config.default.ini
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
 install(SCRIPT ${deploy_script})
 
 install(TARGETS app_logger RUNTIME DESTINATION bin LIBRARY DESTINATION bin)

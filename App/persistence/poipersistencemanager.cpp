@@ -9,7 +9,7 @@ PoiPersistenceManager::PoiPersistenceManager(QObject *parent)
 
 QString PoiPersistenceManager::getApiEndpoint() const
 {
-    return ApiEndpoints::BaseUrlPoi;
+    return ApiEndpoints::BaseUrlPoi();
 }
 
 IPersistable* PoiPersistenceManager::createPersistable() const
