@@ -37,7 +37,7 @@ Rectangle {
         id: dragHandle
         height: Theme.spacing.s8
         width: parent.width
-        color: Theme.colors.primary700
+        color: Theme.colors.black
         radius: Theme.radius.sm
         anchors.top: parent.top
         anchors.left: parent.left
@@ -74,7 +74,7 @@ Rectangle {
                 rightMargin: Theme.spacing.s2
                 verticalCenter: parent.verticalCenter
             }
-            color: closeMouseArea.containsMouse ? Theme.colors.error500 : Theme.colors.primary700
+            color: closeMouseArea.containsMouse ? Theme.colors.error500 : Theme.colors.whiteA20
             border.color: Theme.colors.secondary500
             border.width: Theme.borders.b1
 
@@ -117,7 +117,7 @@ Rectangle {
         width: Theme.spacing.s4
         height: Theme.spacing.s4
         radius: Theme.radius.sm
-        color: resizeMouseArea.pressed ? Theme.colors.secondary400 : Theme.colors.secondary500
+        color: resizeMouseArea.pressed ? Theme.colors.whiteA10 : Theme.colors.whiteA20
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: Theme.spacing.s1
