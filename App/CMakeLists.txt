@@ -1,5 +1,7 @@
 qt_add_executable(${PROJECT_NAME}
+    WIN32 # Only for Windows; ignored by other platforms.
     main.cpp
+    app.rc
 )
 
 file(GLOB_RECURSE APP_ASSETS
@@ -32,6 +34,8 @@ set(qml_files
 )
 
 set(cpp_sources
+    config.h
+
     # Connections
     connections/mqtt/parser/IMessageParser.h
     connections/mqtt/parser/TrackParser.h
@@ -39,7 +43,8 @@ set(cpp_sources
     connections/mqtt/parser/TirParser.h
     connections/mqtt/MqttClientService.cpp
     connections/mqtt/MqttClientService.h
-    connections/apiendpoints.h
+    connections/ApiEndpoints.h
+    connections/ApiEndpoints.cpp
     connections/httpclient.cpp
     connections/httpclient.h
 

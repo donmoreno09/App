@@ -17,12 +17,12 @@ MqttClientService::MqttClientService(QObject* parent)
     connect(client, &QMqttClient::disconnected, this, &MqttClientService::onDisconnected);
 }
 
-void MqttClientService::initialize(const QString& configPath) {
-    loadConfiguration(configPath);
+void MqttClientService::initialize(const QString& configPath, const AppConfig& appConfig) {
+    loadConfiguration(configPath, appConfig);
     connectToBroker();
 }
 
-void MqttClientService::loadConfiguration(const QString& path) {
+void MqttClientService::loadConfiguration(const QString& path, const AppConfig& appConfig) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "[MQTT] Failed to open configuration file:" << path;
@@ -36,11 +36,10 @@ void MqttClientService::loadConfiguration(const QString& path) {
         return;
     }
 
-    QJsonObject root = doc.object();
-    QJsonObject mqttConfig = root["mqtt"].toObject();
-    client->setHostname(mqttConfig["host"].toString());
-    client->setPort(mqttConfig["port"].toInt());
+    client->setHostname(appConfig.mqttHost);
+    client->setPort(appConfig.mqttPort);
 
+    QJsonObject root = doc.object();
     QJsonObject topics = root["topics"].toObject();
     for (auto it = topics.begin(); it != topics.end(); it++) {
         const QString &topic = it.key();
