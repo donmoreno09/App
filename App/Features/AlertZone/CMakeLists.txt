@@ -1,6 +1,11 @@
 set(qml_files
     AlertZonePanel.qml
+
+    components/AlertZoneEllipseForm.qml
     components/AlertZonePolygonForm.qml
+    components/AlertZoneRectangleForm.qml
+    components/AreaButton.qml
+    components/AreaForm.qml
     components/LayerSelection.qml
     components/SectionTitle.qml
     components/Severity.qml

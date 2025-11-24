@@ -12,6 +12,9 @@ set(qml_files
     Main.qml
 
     # Map Objects
+    map-objects/AlertZoneEllipse.qml
+    map-objects/AlertZonePolygon.qml
+    map-objects/AlertZoneRectangle.qml
     map-objects/Track.qml
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
@@ -22,6 +25,7 @@ set(qml_files
     map-objects/MOCPoiPoint.qml
 
     # Layers
+    layers/AlertZoneMapLayer.qml
     layers/BaseMapLayer.qml
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
@@ -74,6 +78,7 @@ set(cpp_sources
     layers/TirMapLayer.h
 
     # Entities
+    entities/AlertZone.h
     entities/metadata/MetadataEntry.h
     entities/metadata/NoteMetadataEntry.h
     entities/AlertZone.h
@@ -124,8 +129,6 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         ${APP_ASSETS}
         config/mqtt_config.json
-        QML_FILES layers/AlertZoneMapLayer.qml
-        QML_FILES map-objects/AlertZonePolygon.qml
 )
 
 add_subdirectory(Components)

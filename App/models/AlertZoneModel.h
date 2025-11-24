@@ -27,10 +27,23 @@ public:
         LabelRole,
         LayerIdRole,
         LayerNameRole,
+
+        // Geometry
+        ShapeTypeIdRole,
+        SurfaceRole,
+        HeightRole,
+        CoordinateRole,
+        CoordinatesRole,
+        TopLeftRole,
+        BottomRightRole,
+        RadiusARole,
+        RadiusBRole,
+        IsRectangleRole,
+
         NoteRole,
         SeverityRole,
-        ShapeTypeIdRole,
-        CoordinatesRole,
+        ActiveRole,
+        TargetLayersRole,
         ModelIndexRole,
     };
 
@@ -82,6 +95,7 @@ private:
 
     static QList<QVector2D> parseCoordinatesVariant(const QVariant& v);
     static bool compareCoords(const QList<QVector2D>& a, const QList<QVector2D>& b);
+    static bool isRectangle(const Geometry& geom);
 
     void buildAlertZoneSave(const QVariantMap &data);
 };

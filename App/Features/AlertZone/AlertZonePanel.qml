@@ -22,6 +22,8 @@ PanelTemplate {
         labelInput.text = MapModeController.alertZone.label
         noteTextArea.text = MapModeController.alertZone.note ?? ""
         severityComboBox.currentIndex = severityComboBox.comboBox.indexOfValue(MapModeController.alertZone.severity ?? "low")
+        layerSelection.setLayers(MapModeController.alertZone.targetLayers ?? [])
+        activeSwitch.checked = MapModeController.alertZone.active ?? true
     }
 
     Component.onCompleted: {
@@ -65,6 +67,32 @@ PanelTemplate {
                 width: parent.width
                 spacing: Theme.spacing.s4
 
+                RowLayout {
+                    Layout.leftMargin: Theme.spacing.s2
+                    Layout.fillWidth: true
+
+                    Label {
+                        Layout.fillWidth: true
+                        visible: MapModeController.isEditingAlertZone
+                        text: activeSwitch.checked ? qsTr("Deactivate") : qsTr("Activate")
+                        color: Theme.colors.text
+                        font {
+                            family: Theme.typography.bodySans25Family
+                            pointSize: Theme.typography.bodySans25Size
+                            weight: Theme.typography.bodySans25Weight
+                        }
+                    }
+
+                    UI.Toggle {
+                        id: activeSwitch
+                        visible: MapModeController.isEditingAlertZone
+                        checked: true
+                        onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
+                    }
+                }
+
+                UI.HorizontalDivider { visible: MapModeController.isEditingAlertZone }
+
                 SectionTitle { text: qsTr("General Info") }
 
                 UI.HorizontalDivider {}
@@ -91,15 +119,6 @@ PanelTemplate {
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
                 }
 
-                UI.Toggle {
-                    id: activeSwitch
-                    Layout.fillWidth: true
-                    visible: MapModeController.isEditingAlertZone
-                    leftLabel: checked ? qsTr("Deactivate") : qsTr("Activate")
-                    checked: true
-                    onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
-                }
-
                 UI.VerticalSpacer {}
 
                 SectionTitle {
@@ -123,8 +142,8 @@ PanelTemplate {
 
                 UI.HorizontalDivider {}
 
-                AlertZonePolygonForm {
-                    id: polygonForm
+                AreaForm {
+                    id: areaForm
                     Layout.fillWidth: true
                 }
             }
@@ -133,24 +152,25 @@ PanelTemplate {
 
     function validate() {
         const labelValid = labelInput.text.trim() !== ""
-        const polygonValid = polygonForm.isValid
         const layersValid = layerSelection.isValid
-
         if (!labelValid) return false;
         if (!layersValid) return false
-
-        return polygonValid;
+        return areaForm.isValid;
     }
 
     function save() {
+
         const geometry = MapModeController.activeMode.buildGeometry()
+
         const data = {
             label: labelInput.text,
             geometry: geometry,
             layerId: 2,
             layerName: Layers.alertZoneMapLayer(),
             severity: severityComboBox.currentValue,
-            note: noteTextArea.text
+            note: noteTextArea.text,
+            active: activeSwitch.checked,
+            targetLayers: layerSelection.selectedLayers
         }
 
         if (MapModeController.isEditingAlertZone) {

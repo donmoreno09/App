@@ -43,6 +43,8 @@ ColumnLayout {
         }
     }
 
+    UI.HorizontalDivider {}
+
     RowLayout {
         Layout.fillWidth: true
         Label {
@@ -61,6 +63,8 @@ ColumnLayout {
         }
     }
 
+    UI.HorizontalDivider {}
+
     RowLayout {
         Layout.fillWidth: true
         Label {
@@ -78,4 +82,6 @@ ColumnLayout {
             checked: false
         }
     }
+
+    UI.HorizontalDivider {}
 }

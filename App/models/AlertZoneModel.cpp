@@ -36,8 +36,22 @@ QVariant AlertZoneModel::data(const QModelIndex &index, int role) const
         return alertZone.note;
     case SeverityRole:
         return alertZone.severity;
+    case ActiveRole:
+        return alertZone.active;
+    case TargetLayersRole:
+        return QVariant::fromValue(alertZone.targetLayers);
+
+    // Geometry
     case ShapeTypeIdRole:
         return alertZone.geometry.shapeTypeId;
+    case SurfaceRole:
+        return alertZone.geometry.surface;
+    case HeightRole:
+        return alertZone.geometry.height;
+    case CoordinateRole: {
+        QGeoCoordinate coord(alertZone.geometry.coordinate.y(), alertZone.geometry.coordinate.x());
+        return QVariant::fromValue(coord);
+    }
     case CoordinatesRole: {
         QList<QGeoCoordinate> out;
         out.reserve(alertZone.geometry.coordinates.size());
@@ -48,6 +62,23 @@ QVariant AlertZoneModel::data(const QModelIndex &index, int role) const
         }
         return QVariant::fromValue(out);
     }
+    case TopLeftRole: {
+        if (!isRectangle(alertZone.geometry)) return QVariant::fromValue(QGeoCoordinate());
+        QGeoCoordinate topLeft(alertZone.geometry.coordinates[0].y(), alertZone.geometry.coordinates[0].x());
+        return QVariant::fromValue(topLeft);
+    }
+    case BottomRightRole: {
+        if (!isRectangle(alertZone.geometry)) return QVariant::fromValue(QGeoCoordinate());
+        QGeoCoordinate bottomRight(alertZone.geometry.coordinates[2].y(), alertZone.geometry.coordinates[2].x());
+        return QVariant::fromValue(bottomRight);
+    }
+    case RadiusARole:
+        return alertZone.geometry.radiusA;
+    case RadiusBRole:
+        return alertZone.geometry.radiusB;
+    case IsRectangleRole:
+        return isRectangle(alertZone.geometry);
+
     case ModelIndexRole:
         return index.row();
     }
@@ -64,11 +95,12 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
     bool changed = false;
 
     switch (role) {
+    // Immutable
     case IdRole:
     case LayerIdRole:
     case ShapeTypeIdRole:
+    case IsRectangleRole:
     case ModelIndexRole:
-        // Immutable
         break;
 
     case LabelRole: {
@@ -107,6 +139,51 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
         break;
     }
 
+    case ActiveRole: {
+        const bool v = value.toBool();
+        if (alertZone.active != v) {
+            alertZone.active = v;
+            changed = true;
+        }
+        break;
+    }
+
+    case TargetLayersRole: {
+        const QStringList v = value.toStringList();
+        if (alertZone.targetLayers != v) {
+            alertZone.targetLayers = v;
+            changed = true;
+        }
+        break;
+    }
+
+    // Geometry
+    case SurfaceRole: {
+        const double v = value.toDouble();
+        if (!qFuzzyCompare(alertZone.geometry.surface, v)) {
+            alertZone.geometry.surface = v;
+            changed = true;
+        }
+        break;
+    }
+    case HeightRole: {
+        const double v = value.toDouble();
+        if (!qFuzzyCompare(alertZone.geometry.height, v)) {
+            alertZone.geometry.height = v;
+            changed = true;
+        }
+        break;
+    }
+    case CoordinateRole: {
+        const QGeoCoordinate coord = value.value<QGeoCoordinate>();
+        const QVector2D point(coord.longitude(), coord.latitude());
+        if (!qFuzzyCompare(point.x(), alertZone.geometry.coordinate.x()) ||
+            !qFuzzyCompare(point.y(), alertZone.geometry.coordinate.y())) {
+            alertZone.geometry.coordinate = point;
+            changed = true;
+        }
+        break;
+    }
     case CoordinatesRole: {
         QList<QVector2D> newCoords;
 
@@ -125,6 +202,68 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
         }
         break;
     }
+    case TopLeftRole: {
+        if (!isRectangle(alertZone.geometry)) return false;
+
+        const QGeoCoordinate c = value.value<QGeoCoordinate>();
+        const QVector2D topLeft(c.longitude(), c.latitude());
+
+        QVector2D bottomRight = topLeft;
+        if (alertZone.geometry.coordinates.size() >= 3) {
+            bottomRight = alertZone.geometry.coordinates[2];
+        }
+
+        QList<QVector2D> rect;
+        rect.reserve(5);
+        const QVector2D topRight(bottomRight.x(), topLeft.y());
+        const QVector2D bottomLeft(topLeft.x(), bottomRight.y());
+        rect << topLeft << topRight << bottomRight << bottomLeft << topLeft;
+
+        if (!compareCoords(alertZone.geometry.coordinates, rect)) {
+            alertZone.geometry.coordinates = rect;
+            changed = true;
+        }
+        break;
+    }
+    case BottomRightRole: {
+        if (!isRectangle(alertZone.geometry)) return false;
+
+        const QGeoCoordinate c = value.value<QGeoCoordinate>();
+        const QVector2D BR(c.longitude(), c.latitude());
+
+        QVector2D TL = BR;
+        if (alertZone.geometry.coordinates.size() >= 1) {
+            TL = alertZone.geometry.coordinates[0];
+        }
+
+        QList<QVector2D> rect;
+        rect.reserve(5);
+        const QVector2D TR(BR.x(), TL.y());
+        const QVector2D BL(TL.x(), BR.y());
+        rect << TL << TR << BR << BL << TL;
+
+        if (!compareCoords(alertZone.geometry.coordinates, rect)) {
+            alertZone.geometry.coordinates = rect;
+            changed = true;
+        }
+        break;
+    }
+    case RadiusARole: {
+        const double v = value.toDouble();
+        if (!qFuzzyCompare(alertZone.geometry.radiusA, v)) {
+            alertZone.geometry.radiusA = v;
+            changed = true;
+        }
+        break;
+    }
+    case RadiusBRole: {
+        const double v = value.toDouble();
+        if (!qFuzzyCompare(alertZone.geometry.radiusB, v)) {
+            alertZone.geometry.radiusB = v;
+            changed = true;
+        }
+        break;
+    }
     }
 
     if (changed) emit dataChanged(index, index, { role });
@@ -138,10 +277,22 @@ QHash<int, QByteArray> AlertZoneModel::roleNames() const
             { LabelRole, "label" },
             { LayerIdRole, "layerId" },
             { LayerNameRole, "layerName" },
+
             { ShapeTypeIdRole, "shapeTypeId" },
+            { SurfaceRole, "surface" },
+            { HeightRole, "height" },
+            { CoordinateRole, "coordinate" },
             { CoordinatesRole, "coordinates" },
+            { TopLeftRole, "topLeft" },
+            { BottomRightRole, "bottomRight" },
+            { RadiusARole, "radiusA" },
+            { RadiusBRole, "radiusB" },
+            { IsRectangleRole, "isRectangle" },
+
             { NoteRole, "note" },
-            {SeverityRole, "severity"},
+            { SeverityRole, "severity" },
+            { ActiveRole, "active" },
+            { TargetLayersRole, "targetLayers" },
             { ModelIndexRole, "modelIndex" },
             };
 }
@@ -257,8 +408,6 @@ QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
     discardChanges();
     m_oldAlertZone = std::make_unique<AlertZone>(m_alertZones[index]);
 
-    // For now, just return nullptr - we'll handle this in QML directly
-    // This would need ModelHelper like PoiModel if we want QQmlPropertyMap support
     return m_helper->map(index, 0);
 }
 
@@ -350,20 +499,60 @@ bool AlertZoneModel::compareCoords(const QList<QVector2D> &a, const QList<QVecto
     return true;
 }
 
+bool AlertZoneModel::isRectangle(const Geometry &geom)
+{
+    // Must be shapeTypeId == 3 (polygon) and 5 coordinates (closed loop)
+    if (geom.shapeTypeId != 3 || geom.coordinates.size() != 5)
+        return false;
+
+    const QVector2D& TL = geom.coordinates[0];
+    const QVector2D& TR = geom.coordinates[1];
+    const QVector2D& BR = geom.coordinates[2];
+    const QVector2D& BL = geom.coordinates[3];
+    const QVector2D& backToTL = geom.coordinates[4];
+
+    // Ensure closure (last == first)
+    if (!qFuzzyCompare(TL.x(), backToTL.x()) || !qFuzzyCompare(TL.y(), backToTL.y()))
+        return false;
+
+    // Check rectangle rules
+    if (!qFuzzyCompare(TL.y(), TR.y())) return false;
+    if (!qFuzzyCompare(TR.x(), BR.x())) return false;
+    if (!qFuzzyCompare(BR.y(), BL.y())) return false;
+    if (!qFuzzyCompare(BL.x(), TL.x())) return false;
+
+    return true;
+}
+
 void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
 {
     m_alertZoneSave = std::make_unique<AlertZone>();
 
     m_alertZoneSave->label = data.value("label").toString();
-    m_alertZoneSave->layerId = 2; // Hardcoded for alert zones
+    m_alertZoneSave->layerId = data.value("layerId").toInt();
+    m_alertZoneSave->layerName = data.value("layerName").toString();
     m_alertZoneSave->note = data.value("note").toString();
-    m_alertZoneSave->severity = data.value("severity").toString();
+    m_alertZoneSave->active = data.value("active", true).toBool();
+    m_alertZoneSave->severity = data.value("severity", "low").toString();
+    m_alertZoneSave->targetLayers = data.value("targetLayers").toStringList();
 
     // Geometry
     QVariantMap geomMap = data.value("geometry").toMap();
     Geometry geom;
-    geom.shapeTypeId = geomMap.value("shapeTypeId").toInt(); // Should be 3 (Polygon)
+    geom.shapeTypeId = geomMap.value("shapeTypeId").toInt();
+    geom.surface = geomMap.value("surface").toDouble();
+    geom.height = geomMap.value("height").toDouble();
 
+    // Center coordinate (for ellipse)
+    QVariantMap centerCoordMap = geomMap.value("coordinate").toMap();
+    geom.coordinate.setX(centerCoordMap.value("x").toDouble());
+    geom.coordinate.setY(centerCoordMap.value("y").toDouble());
+
+    // Radii (for ellipse)
+    geom.radiusA = geomMap.value("radiusA").toDouble();
+    geom.radiusB = geomMap.value("radiusB").toDouble();
+
+    // Coordinates (for polygon/rectangle)
     QVariantList coordList = geomMap.value("coordinates").toList();
     QList<QVector2D> coords;
     for (const QVariant &coordVar : std::as_const(coordList)) {
