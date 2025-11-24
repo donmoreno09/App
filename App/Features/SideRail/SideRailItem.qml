@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import QtQuick.Effects 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
@@ -59,6 +60,13 @@ UI.Button {
                 // Use layout hints so ColumnLayout respects them
                 Layout.preferredWidth: content.iconSize
                 Layout.preferredHeight: content.iconSize
+
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    colorizationColor: root.icon.color
+                    colorization: 1.0
+                    brightness: 1.0
+                }
 
                 // Crisp scaling for PNGs/JPGs (optional)
                 // sourceSize.width:  content.iconSize * Screen.devicePixelRatio
