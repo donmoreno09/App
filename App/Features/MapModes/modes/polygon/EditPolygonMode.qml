@@ -8,11 +8,11 @@ PolygonMode {
     id: root
 
     function buildGeometry() {
-        const poi = MapModeController.poi
-        if (!poi) return {}
+        const entity = MapModeController.poi || MapModeController.alertZone
+        if (!entity) { return {} }
 
-        const coordinates = poi.coordinates
-        if (coordinates.length < 3) return {}
+        const coordinates = entity.coordinates
+        if (coordinates.length < 3) { return {} }
 
         const out = []
         for (let i = 0; i < coordinates.length; i++) {

@@ -12,6 +12,9 @@ set(qml_files
     Main.qml
 
     # Map Objects
+    map-objects/AlertZoneEllipse.qml
+    map-objects/AlertZonePolygon.qml
+    map-objects/AlertZoneRectangle.qml
     map-objects/Track.qml
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
@@ -22,6 +25,7 @@ set(qml_files
     map-objects/MOCPoiPoint.qml
 
     # Layers
+    layers/AlertZoneMapLayer.qml
     layers/BaseMapLayer.qml
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
@@ -49,19 +53,14 @@ set(cpp_sources
     core/interactionmodemanager.h
     core/LayerManager.cpp
     core/LayerManager.h
-    core/popupmanager.cpp
-    core/popupmanager.h
     core/TrackManager.cpp
     core/TrackManager.h
-    core/variantlistmodel.cpp
-    core/variantlistmodel.h
     core/PoiOptions.h
     core/PoiOptions.cpp
 
-    # Events
-    events/selectionboxbus.h
-
     # Layers
+    layers/AlertZoneMapLayerController.h
+    layers/AlertZoneMapLayerController.cpp
     layers/AnnotationMapLayer.cpp
     layers/AnnotationMapLayer.h
     layers/BaseLayer.cpp
@@ -79,8 +78,10 @@ set(cpp_sources
     layers/TirMapLayer.h
 
     # Entities
+    entities/AlertZone.h
     entities/metadata/MetadataEntry.h
     entities/metadata/NoteMetadataEntry.h
+    entities/AlertZone.h
     entities/Details.h
     entities/Geometry.h
     entities/Poi.h
@@ -93,6 +94,8 @@ set(cpp_sources
 
 
     # Qt Models
+    models/AlertZoneModel.h
+    models/AlertZoneModel.cpp
     models/ModelHelper.h
     models/ModelHelper.cpp
     models/CoordinatesModel.h
@@ -153,7 +156,10 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Concurrent
         Qt6::WebEngineQuick
         Qt6::WebEngineCore
+        QMapLibre::Location
 )
+
+qmaplibre_location_setup_plugins(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE

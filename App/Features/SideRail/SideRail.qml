@@ -92,6 +92,15 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
+                    source: "qrc:/App/assets/icons/test.svg"
+                    preserveIconColor: true
+                    text: `${TranslationManager.revision}` && qsTr("Alert Zone")
+                    active: PanelRouter.currentPath === Routes.AlertZone && SidePanelController.isOpen
+
+                    onClicked: SidePanelController.toggle(Routes.AlertZone)
+                }
+
+                SideRailItem {
                     source: "qrc:/App/assets/icons/truck.svg"
                     preserveIconColor: true
                     text: `${TranslationManager.revision}` && qsTr("Truck Arrivals")
@@ -133,7 +142,10 @@ UI.GlobalBackgroundConsumer {
                     text: `${TranslationManager.revision}` && qsTr("Ship Stowage")
                     active: PanelRouter.currentPath === "shipstowage" && SidePanelController.isOpen
 
-                    onClicked: ShipStowageController.openStowageWindow(Window.window)
+                    onClicked: {
+                        SidePanelController.close(true)
+                        ShipStowageController.openStowageWindow(Window.window)
+                    }
                 }
 
                 SideRailItem {

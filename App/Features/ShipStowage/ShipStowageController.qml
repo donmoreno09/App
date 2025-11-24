@@ -1,50 +1,116 @@
 pragma Singleton
-
 import QtQuick 6.8
+import QtWebEngine 1.10
 
 QtObject {
     id: root
 
     property bool hasActiveWindow: false
+    property var webViewContainer: null
 
     signal windowOpened()
     signal windowClosed()
 
+    function initialize(parentWindow) {
+        if (webViewContainer) return
+
+        var component = Qt.createComponent("qrc:/App/Features/ShipStowage/components/WebViewContainer.qml")
+
+        if (component.status === Component.Ready) {
+            webViewContainer = component.createObject(parentWindow, {
+                parentWindow: parentWindow,
+                visible: false
+            })
+
+            if (webViewContainer) {
+                console.log("[ShipStowageController] WebView preloaded")
+            }
+        }
+    }
+
     function openStowageWindow(parentWindow) {
-        if(!parentWindow) {
+        if (!parentWindow) {
             console.error("[ShipStowageController] No parent window provided")
             return
         }
 
-        if(hasActiveWindow) {
-            console.warn("[ShipStowageController] A stowage window is already open")
+        if (!webViewContainer) {
+            initialize(parentWindow)
         }
 
-        var component = Qt.createComponent("qrc:/App/Features/ShipStowage/components/WebViewContainer.qml")
+        if (hasActiveWindow) {
+            console.warn("[ShipStowageController] A stowage window is already open")
+            return
+        }
 
-        if(component.status === Component.Ready) {
-            var webView = component.createObject(parentWindow, {
-                parentWindow: parentWindow
-            })
+        webViewContainer.visible = true
+        webViewContainer.parentWindow = parentWindow
 
-            if(webView === null) {
-                console.error("[ShipStowageController] Failed to create WebView instance")
+        if (webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
+            webViewContainer.webViewItem.webView.lifecycleState = WebEngineView.LifecycleState.Active
+        }
+
+        hasActiveWindow = true
+        windowOpened()
+
+        console.log("[ShipStowageController] Stowage window opened")
+    }
+
+    function closeStowageWindow() {
+        if (!webViewContainer || !hasActiveWindow) return
+
+        console.log("[ShipStowageController] Closing window...")
+
+        webViewContainer.visible = false
+        hasActiveWindow = false
+
+        Qt.callLater(function() {
+            if (webViewContainer && webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
+                var webView = webViewContainer.webViewItem.webView
+
+                try {
+                    webView.lifecycleState = WebEngineView.LifecycleState.Frozen
+                    webView.runJavaScript("if (window.gc) window.gc();")
+                    console.log("[ShipStowageController] Stowage window hidden (frozen)")
+                } catch (e) {
+                    console.error("[ShipStowageController] Error freezing:", e)
+                }
             }
 
-            hasActiveWindow = true
-            windowOpened()
+            windowClosed()
+        })
+    }
 
-            webView.Component.destruction.connect(function() {
-                hasActiveWindow = false
-                windowClosed()
-                console.log("[ShipStowageController] Stowage window closed")
-            })
+    function cleanup() {
+        console.log("[ShipStowageController] Cleanup started")
 
-            console.log("[ShipStowageController] Stowage window opened")
-        } else if(component.status === Component.Error) {
-            console.error("[ShipStowageController] component error: ", component.errorString())
-        } else {
-            console.warn("[ShipStowageController] Component not ready status: ", component.status)
+        if (!webViewContainer) {
+            console.log("[ShipStowageController] Nothing to clean up")
+            return
+        }
+
+        try {
+            if (webViewContainer.visible) {
+                webViewContainer.visible = false
+                console.log("[ShipStowageController] Container hidden")
+            }
+
+            hasActiveWindow = false
+
+            if (webViewContainer.webViewItem && webViewContainer.webViewItem.webView) {
+                var webView = webViewContainer.webViewItem.webView
+
+                webView.lifecycleState = WebEngineView.LifecycleState.Discarded
+                console.log("[ShipStowageController] WebView discarded")
+            }
+
+            webViewContainer.destroy()
+            webViewContainer = null
+
+            console.log("[ShipStowageController] Cleanup completed")
+
+        } catch (e) {
+            console.error("[ShipStowageController] Error during cleanup:", e)
         }
     }
 }

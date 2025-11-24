@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick 6.8
 import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
+import App.Features.ShipStowage 1.0
 
 QtObject {
     id: root
@@ -36,6 +37,10 @@ QtObject {
     }
 
     function toggle(path, props) {
+        if (ShipStowageController.hasActiveWindow) {
+            ShipStowageController.closeStowageWindow()
+        }
+
         if (!isOpen) {
             open(path, props)
             return
