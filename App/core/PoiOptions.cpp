@@ -16,17 +16,17 @@ PoiOptions::PoiOptions(QObject* parent)
 
 void PoiOptions::fetchAll() {
     // Parse categories + build typesByCategory from the same payload
-    m_httpClient.get(QUrl(ApiEndpoints::GetTypes), [this](QByteArray data){
+    m_httpClient.get(QUrl(ApiEndpoints::GetTypes()), [this](QByteArray data){
         rawCategoriesTypes = QJsonDocument::fromJson(data).array();
         buildCategoriesTypes();
     });
 
-    m_httpClient.get(QUrl(ApiEndpoints::GetHealthStatuses), [this](QByteArray data){
+    m_httpClient.get(QUrl(ApiEndpoints::GetHealthStatuses()), [this](QByteArray data){
         rawHealthStatuses = QJsonDocument::fromJson(data).array();
         buildHealthStatuses();
     });
 
-    m_httpClient.get(QUrl(ApiEndpoints::GetOperationalStates), [this](QByteArray data){
+    m_httpClient.get(QUrl(ApiEndpoints::GetOperationalStates()), [this](QByteArray data){
         rawOperationalStates = QJsonDocument::fromJson(data).array();
         buildOperationalStates();
     });

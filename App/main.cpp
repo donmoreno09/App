@@ -1,11 +1,14 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QDir>
+#include <App/config.h>
 #include <App/Logger/app_logger.h>
 #include <App/Features/Map/PluginProbe.h>
 #include <QFontDatabase>
 #include <QDebug>
+#include <QIcon>
 #include <core/TrackManager.h>
+#include <connections/ApiEndpoints.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
 #include <connections/mqtt/parser/TruckNotificationParser.h>
@@ -14,6 +17,9 @@
 
 int main(int argc, char *argv[])
 {
+    // Set QSG_RHI_BACKEND (rendering backend) to OpenGL in order for MapLibre to work.
+    qputenv("QSG_RHI_BACKEND", "opengl");
+
     qputenv("QML_XHR_ALLOW_FILE_READ", "1");
 
     // This tells Chromium to handle GPU gracefully
@@ -31,6 +37,12 @@ int main(int argc, char *argv[])
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/App/assets/logo-app.ico"));
+
+    ensureUserConfigExists();
+    AppConfig appConfig = loadConfig();
+
+    ApiEndpoints::BaseUrl = appConfig.restBaseUrl;
 
     QCoreApplication::setOrganizationName("IRIDESS");
     QCoreApplication::setApplicationName("IRIDESS_FE");
@@ -72,7 +84,7 @@ int main(int argc, char *argv[])
     engine.addImportPath("qrc:/"); // For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
 
     auto *mqtt = engine.singletonInstance<MqttClientService*>("App", "MqttClientService");
-    mqtt->initialize(":/App/config/mqtt_config.json");
+    mqtt->initialize(":/App/config/mqtt_config.json", appConfig);
     mqtt->registerParser("ais", new TrackParser());
     mqtt->registerParser("doc-space", new TrackParser());
     mqtt->registerParser("trucknotifications", new TruckNotificationParser());
