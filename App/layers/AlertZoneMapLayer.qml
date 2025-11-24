@@ -45,6 +45,7 @@ BaseMapLayer {
             required property real radiusA
             required property real radiusB
             required property var coordinates
+            required property string severity
             required property bool active
 
             Component.onCompleted: {

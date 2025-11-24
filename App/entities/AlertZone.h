@@ -2,6 +2,7 @@
 #define ALERTZONE_H
 
 #include <QString>
+#include <QStringList>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QMap>
@@ -19,6 +20,7 @@ public:
     QString note;
     QString severity = "low";
     bool active = true;
+    QStringList targetLayers;
 
     Geometry geometry;
 
@@ -31,6 +33,7 @@ public:
         obj["note"] = note;
         obj["severity"] = severity;
         obj["active"] = active;
+        obj["targetLayers"] = QJsonArray::fromStringList(targetLayers);
         obj["geometry"] = geometry.toJson();
         return obj;
     }
@@ -43,6 +46,13 @@ public:
         note = obj["note"].toString();
         severity = obj["severity"].toString("low");
         active = obj["active"].toBool(true);
+
+        targetLayers.clear();
+        const QJsonArray arr = obj["targetLayers"].toArray();
+        for (const auto& v : arr) {
+            targetLayers.append(v.toString());
+        }
+
         geometry = Geometry::fromJson(obj["geometry"].toObject());
     }
 };

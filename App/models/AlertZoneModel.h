@@ -44,6 +44,7 @@ public:
         NoteRole,
         SeverityRole,
         ActiveRole,
+        TargetLayersRole,
         ModelIndexRole,
     };
 

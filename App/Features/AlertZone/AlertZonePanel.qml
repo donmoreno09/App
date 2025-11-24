@@ -146,12 +146,10 @@ PanelTemplate {
 
     function validate() {
         const labelValid = labelInput.text.trim() !== ""
-        const polygonValid = polygonForm.isValid
         const layersValid = layerSelection.isValid
-        console.log("[VALIDATION] Label valid:", labelValid, "| Polygon valid:", polygonValid)
         if (!labelValid) return false;
         if (!layersValid) return false
-        return polygonValid;
+        return areaForm.isValid
     }
 
     function save() {
