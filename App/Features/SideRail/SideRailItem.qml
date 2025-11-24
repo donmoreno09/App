@@ -46,7 +46,7 @@ UI.Button {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: root.padding
-            spacing: Theme.spacing.s1
+            spacing: Theme.spacing.s2
 
             // tiny spacer so text doesn't kiss the bottom edge
             Item { Layout.fillHeight: true; height: Theme.spacing.s0 }
@@ -87,6 +87,7 @@ UI.Button {
                 color: Theme.colors.text
                 font.family: Theme.typography.bodySans15Family
                 font.pointSize: Theme.typography.fontSize100
+                font.capitalization: Font.AllUppercase
             }
 
             // tiny spacer so text doesn't kiss the bottom edge
