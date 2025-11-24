@@ -115,7 +115,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/gate.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Gate Transitsì")
+                    text: `${TranslationManager.revision}` && qsTr("Gate Transit")
                     active: PanelRouter.currentPath === "viGate-services" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ViGateServices)

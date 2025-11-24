@@ -904,7 +904,7 @@
     <message>
         <location filename="../App/Features/Map/MapTilesetsPanel.qml" line="41"/>
         <source>Satellite</source>
-        <translation type="unfinished"></translation>
+        <translation>Satellite</translation>
     </message>
     <message>
         <source>OSM (Online)</source>
@@ -1781,48 +1781,38 @@
 <context>
     <name>SideRail</name>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="53"/>
         <source>Mission</source>
-        <translation>Missione</translation>
+        <translation type="vanished">Missione</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="62"/>
         <source>Pod</source>
-        <translation>Pod</translation>
+        <translation type="vanished">Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="79"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="52"/>
         <source>Layers</source>
         <translation>Livelli</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="97"/>
-        <source>Alert Zone</source>
-        <translation>Zona di Allerta</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="115"/>
         <source>Truck Date Arrivals</source>
-        <translation>Data Arrivi TIR</translation>
+        <translation type="vanished">Data Arrivi TIR</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="124"/>
         <source>Truck DT Arrivals</source>
-        <translation>Data e Ora Arrivi TIR</translation>
+        <translation type="vanished">Data e Ora Arrivi TIR</translation>
     </message>
     <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="61"/>
         <source>PoI</source>
-        <translation type="vanished">PoI</translation>
+        <translation>PoI</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="88"/>
         <source>Point of Interest</source>
-        <translation>Punto di Interesse</translation>
+        <translation type="vanished">Punto di Interesse</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="106"/>
         <source>Truck Arrivals</source>
-        <translation>Arrivi TIR</translation>
+        <translation type="vanished">Arrivi TIR</translation>
     </message>
     <message>
         <source>Truck Arrivals Date</source>
@@ -1833,26 +1823,45 @@
         <translation type="vanished">Data e Ora Arrivi TIR</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="133"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="70"/>
+        <source>Arrivals</source>
+        <translation>Arrivi</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="79"/>
+        <source>Date Arrivals</source>
+        <translation>Data Arrivi</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="88"/>
+        <source>DT Arrivals</source>
+        <translation>DO Arrivi</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="97"/>
         <source>Trailer Prediction</source>
         <translation>Previsione Trailer</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="142"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="106"/>
         <source>Ship Stowage</source>
         <translation>Stivaggio a Bordo</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="154"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="118"/>
+        <source>Gate Transit</source>
+        <translation>Transito al varco</translation>
+    </message>
+    <message>
         <source>Gate Transits</source>
-        <translation>Transiti ai varchi</translation>
+        <translation type="vanished">Transiti ai varchi</translation>
     </message>
     <message>
         <source>Leonardo ViGate Services</source>
         <translation type="vanished">Servizi Leonardo ViGate</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="175"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="139"/>
         <source>Languages</source>
         <translation>Lingue</translation>
     </message>
@@ -1861,13 +1870,12 @@
         <translation type="vanished">Lingue</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="186"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="150"/>
         <source>Tilesets</source>
         <translation>Tilesets</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="71"/>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="162"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="126"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
