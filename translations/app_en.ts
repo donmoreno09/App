@@ -1761,50 +1761,26 @@
 <context>
     <name>SideRail</name>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="53"/>
         <source>Mission</source>
-        <translation>Mission</translation>
+        <translation type="vanished">Mission</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="62"/>
         <source>Pod</source>
-        <translation>Pod</translation>
+        <translation type="vanished">Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="71"/>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="162"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="126"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="79"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="52"/>
         <source>Layers</source>
         <translation>Layers</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="88"/>
-        <source>Point of Interest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="97"/>
-        <source>Alert Zone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="106"/>
         <source>Truck Arrivals</source>
-        <translation>Truck Arrivals</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="115"/>
-        <source>Truck Date Arrivals</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="124"/>
-        <source>Truck DT Arrivals</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Truck Arrivals</translation>
     </message>
     <message>
         <source>Truck Arrivals Date</source>
@@ -1815,18 +1791,38 @@
         <translation type="vanished">Truck Arrivals DT</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="133"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="61"/>
+        <source>PoI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="70"/>
+        <source>Arrivals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="79"/>
+        <source>Date Arrivals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="88"/>
+        <source>DT Arrivals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="97"/>
         <source>Trailer Prediction</source>
         <translation>Trailer Prediction</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="142"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="106"/>
         <source>Ship Stowage</source>
         <translation>Ship Stowage</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="154"/>
-        <source>Gate Transits</source>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="118"/>
+        <source>Gate Transit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1834,7 +1830,7 @@
         <translation type="obsolete">Leonardo ViGate Services</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="175"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="139"/>
         <source>Languages</source>
         <translation>Languages</translation>
     </message>
@@ -1843,7 +1839,7 @@
         <translation type="vanished">Language</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="186"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="150"/>
         <source>Tilesets</source>
         <translation>Tilesets</translation>
     </message>
