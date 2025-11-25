@@ -6,6 +6,7 @@ import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
+import App.Features.Language 1.0
 
 ColumnLayout {
     spacing: Theme.spacing.s4
@@ -13,12 +14,12 @@ ColumnLayout {
     property int areaType: AreaForm.Polygon
 
     readonly property bool isValid: formLoader.item && formLoader.item.validate()
-    readonly property bool isEditing: !!MapModeController.poi
+    readonly property bool isEditing: !!MapModeController.alertZone
 
     Connections {
         target: MapModeController
 
-        function onPoiChanged() {
+        function onAlertZoneChanged() {
             areaButtons.updateButtons()
         }
     }
@@ -42,15 +43,15 @@ ColumnLayout {
                 spacing: Theme.spacing.s4
 
                 function updateButtons() {
-                    if (!MapModeController.poi) return
+                    if (!MapModeController.alertZone) return
 
-                    areaType = (MapModeController.poi.isRectangle) ? AreaForm.Rectangle :  MapModeController.poi.shapeTypeId
+                    areaType = (MapModeController.alertZone.isRectangle) ? AreaForm.Rectangle :  MapModeController.alertZone.shapeTypeId
                 }
 
                 Component.onCompleted: updateButtons()
 
                 AreaButton {
-                    text: qsTr("Polygon")
+                    text: `${TranslationManager.revision}` && qsTr("Polygon")
                     source: "qrc:/App/assets/icons/polygon.svg"
                     checked: areaType === AreaForm.Polygon
                     enabled: !isEditing || areaType === AreaForm.Polygon
@@ -61,7 +62,7 @@ ColumnLayout {
                 }
 
                 AreaButton {
-                    text: qsTr("Rectangle")
+                    text: `${TranslationManager.revision}` && qsTr("Rectangle")
                     source: "qrc:/App/assets/icons/rectangle.svg"
                     checked: areaType === AreaForm.Rectangle
                     enabled: !isEditing || areaType === AreaForm.Rectangle
@@ -72,7 +73,7 @@ ColumnLayout {
                 }
 
                 AreaButton {
-                    text: qsTr("Ellipse")
+                    text: `${TranslationManager.revision}` && qsTr("Ellipse")
                     source: "qrc:/App/assets/icons/ellipse.svg"
                     checked: areaType === AreaForm.Ellipse
                     enabled: !isEditing || areaType === AreaForm.Ellipse
