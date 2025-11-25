@@ -11,7 +11,7 @@ import App.Features.SidePanel 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
-RowLayout {
+ColumnLayout {
     spacing: Theme.spacing.s3
 
     MapToolbarContainer {
