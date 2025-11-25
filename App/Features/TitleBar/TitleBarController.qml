@@ -19,7 +19,7 @@ QtObject {
         }
 
         if (SidePanelController.isOpen) {
-            switch(PanelRouter.currentPath) {
+            switch(SidePanelController.router.currentPath) {
             case Routes.Languages: return qsTr("Languages")
             case Routes.Mission: return qsTr("Mission")
             case Routes.Pod: return qsTr("Pod")

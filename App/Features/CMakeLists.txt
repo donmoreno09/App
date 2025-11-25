@@ -5,6 +5,7 @@ add_subdirectory(Mission)
 add_subdirectory(Map)
 add_subdirectory(MapModes)
 add_subdirectory(TitleBar)
+add_subdirectory(Panels)
 add_subdirectory(SideRail)
 add_subdirectory(SidePanel)
 add_subdirectory(ContextPanel)
@@ -30,6 +31,7 @@ target_link_libraries(${PROJECT_NAME}
         app_features_map
         app_features_mapmodes
         app_features_titlebar
+        app_features_panels
         app_features_siderail
         app_features_sidepanel
         app_features_contextpanel
