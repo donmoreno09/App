@@ -32,7 +32,6 @@ set(qml_files
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
     layers/TirTrackMapLayer.qml
-    layers/LayersPanel.qml
     layers/PoiMapLayer.qml
     layers/MOCPoIStaticLayer.qml
 )

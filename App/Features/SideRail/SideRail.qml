@@ -50,14 +50,6 @@ UI.GlobalBackgroundConsumer {
                 spacing: Theme.spacing.s0
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/layers.svg"
-                    text: `${TranslationManager.revision}` && qsTr("Layers")
-                    active: currentPanelPath === "maplayers" && SidePanelController.isOpen
-
-                    onClicked: SidePanelController.toggle(Routes.MapLayers)
-                }
-
-                SideRailItem {
                     source: "qrc:/App/assets/icons/location-dot.svg"
                     preserveIconColor: true
                     text: `${TranslationManager.revision}` && qsTr("PoI")
