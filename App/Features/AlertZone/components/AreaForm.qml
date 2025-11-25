@@ -13,12 +13,12 @@ ColumnLayout {
     property int areaType: AreaForm.Polygon
 
     readonly property bool isValid: formLoader.item && formLoader.item.validate()
-    readonly property bool isEditing: !!MapModeController.poi
+    readonly property bool isEditing: !!MapModeController.alertZone
 
     Connections {
         target: MapModeController
 
-        function onPoiChanged() {
+        function onAlertZoneChanged() {
             areaButtons.updateButtons()
         }
     }
@@ -42,9 +42,9 @@ ColumnLayout {
                 spacing: Theme.spacing.s4
 
                 function updateButtons() {
-                    if (!MapModeController.poi) return
+                    if (!MapModeController.alertZone) return
 
-                    areaType = (MapModeController.poi.isRectangle) ? AreaForm.Rectangle :  MapModeController.poi.shapeTypeId
+                    areaType = (MapModeController.alertZone.isRectangle) ? AreaForm.Rectangle :  MapModeController.alertZone.shapeTypeId
                 }
 
                 Component.onCompleted: updateButtons()

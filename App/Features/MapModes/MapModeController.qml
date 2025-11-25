@@ -78,8 +78,17 @@ QtObject {
         if (alertZone) isSwitchingToOtherAlertZone = true
 
         alertZone = editableAlertZone
-        // Alert zones are always polygons
-        activeMode = MapModeRegistry.editPolygonMode
+        switch (alertZone.shapeTypeId) {
+        case MapModeController.EllipseType:
+            activeMode = MapModeRegistry.editEllipseMode
+            break;
+        case MapModeController.PolygonType:
+            if (alertZone.isRectangle) activeMode = MapModeRegistry.editRectangleMode
+            else activeMode = MapModeRegistry.editPolygonMode
+            break;
+        default:
+            console.error("Editing AlertZone with unknown shape type")
+        }
         SidePanelController.openOrRefresh(Routes.AlertZone)
     }
 }
