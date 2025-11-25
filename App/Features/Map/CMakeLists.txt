@@ -1,5 +1,6 @@
 set(qml_files
     MapHost.qml
+    MapToolsPanel.qml
     internals/Map.qml
     internals/MapState.qml
 )
