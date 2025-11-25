@@ -22,28 +22,28 @@
 <context>
     <name>AlertZoneEllipseForm</name>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="47"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="48"/>
         <source>Center Latitude(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="62"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="63"/>
         <source>Center Longitude(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="82"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="83"/>
         <source>Major Axis(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="83"/>
-        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="110"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="84"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="111"/>
         <source>Type length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="109"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneEllipseForm.qml" line="110"/>
         <source>Minor Axis(*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -114,17 +114,17 @@
 <context>
     <name>AlertZonePolygonForm</name>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZonePolygonForm.qml" line="46"/>
+        <location filename="../App/Features/AlertZone/components/AlertZonePolygonForm.qml" line="47"/>
         <source>Point Lat. #</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZonePolygonForm.qml" line="69"/>
+        <location filename="../App/Features/AlertZone/components/AlertZonePolygonForm.qml" line="70"/>
         <source>Point Lon. #</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZonePolygonForm.qml" line="96"/>
+        <location filename="../App/Features/AlertZone/components/AlertZonePolygonForm.qml" line="97"/>
         <source>No coordinates inserted. Click on the map to add points.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -132,22 +132,22 @@
 <context>
     <name>AlertZoneRectangleForm</name>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZoneRectangleForm.qml" line="42"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneRectangleForm.qml" line="43"/>
         <source>Top Left Latitude(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZoneRectangleForm.qml" line="57"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneRectangleForm.qml" line="58"/>
         <source>Top Left Longitude(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZoneRectangleForm.qml" line="77"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneRectangleForm.qml" line="78"/>
         <source>Bottom Right Latitude(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZoneRectangleForm.qml" line="92"/>
+        <location filename="../App/Features/AlertZone/components/AlertZoneRectangleForm.qml" line="93"/>
         <source>Bottom Right Longitude(*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -165,19 +165,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AreaForm.qml" line="64"/>
+        <location filename="../App/Features/AlertZone/components/AreaForm.qml" line="65"/>
         <location filename="../App/Features/Poi/components/AreaForm.qml" line="78"/>
         <source>Rectangle</source>
         <translation type="unfinished">Rectangle</translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AreaForm.qml" line="75"/>
+        <location filename="../App/Features/AlertZone/components/AreaForm.qml" line="76"/>
         <location filename="../App/Features/Poi/components/AreaForm.qml" line="89"/>
         <source>Ellipse</source>
         <translation type="unfinished">Ellipse</translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/AreaForm.qml" line="53"/>
+        <location filename="../App/Features/AlertZone/components/AreaForm.qml" line="54"/>
         <location filename="../App/Features/Poi/components/AreaForm.qml" line="100"/>
         <source>Polygon</source>
         <translation type="unfinished">Polygon</translation>
@@ -708,17 +708,17 @@
 <context>
     <name>LayerSelection</name>
     <message>
-        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="32"/>
+        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="33"/>
         <source>AIS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="52"/>
+        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="53"/>
         <source>DOC - SPACE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="72"/>
+        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="73"/>
         <source>TRUCK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1658,22 +1658,22 @@
 <context>
     <name>Severity</name>
     <message>
-        <location filename="../App/Features/AlertZone/components/Severity.qml" line="11"/>
+        <location filename="../App/Features/AlertZone/components/Severity.qml" line="12"/>
         <source>Severity(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/Severity.qml" line="16"/>
+        <location filename="../App/Features/AlertZone/components/Severity.qml" line="17"/>
         <source>Low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/Severity.qml" line="17"/>
+        <location filename="../App/Features/AlertZone/components/Severity.qml" line="18"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/Severity.qml" line="18"/>
+        <location filename="../App/Features/AlertZone/components/Severity.qml" line="19"/>
         <source>High</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1769,7 +1769,7 @@
         <translation type="vanished">Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="126"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="135"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
@@ -1797,31 +1797,36 @@
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="70"/>
-        <source>Arrivals</source>
+        <source>Alert Zone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="79"/>
-        <source>Date Arrivals</source>
+        <source>Arrivals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="88"/>
-        <source>DT Arrivals</source>
+        <source>Date Arrivals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="97"/>
+        <source>DT Arrivals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="106"/>
         <source>Trailer Prediction</source>
         <translation>Trailer Prediction</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="106"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="115"/>
         <source>Ship Stowage</source>
         <translation>Ship Stowage</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="118"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="127"/>
         <source>Gate Transit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1830,7 +1835,7 @@
         <translation type="obsolete">Leonardo ViGate Services</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="139"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="148"/>
         <source>Languages</source>
         <translation>Languages</translation>
     </message>
@@ -1839,7 +1844,7 @@
         <translation type="vanished">Language</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="150"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="159"/>
         <source>Tilesets</source>
         <translation>Tilesets</translation>
     </message>
