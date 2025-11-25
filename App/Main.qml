@@ -71,6 +71,8 @@ ApplicationWindow {
 
         PoiMapLayer { }
 
+        AlertZoneMapLayer { }
+
         AISTrackMapLayer { }
 
         TirTrackMapLayer { }

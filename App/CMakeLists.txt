@@ -14,6 +14,9 @@ set(qml_files
     Main.qml
 
     # Map Objects
+    map-objects/AlertZoneEllipse.qml
+    map-objects/AlertZonePolygon.qml
+    map-objects/AlertZoneRectangle.qml
     map-objects/Track.qml
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
@@ -24,6 +27,7 @@ set(qml_files
     map-objects/MOCPoiPoint.qml
 
     # Layers
+    layers/AlertZoneMapLayer.qml
     layers/BaseMapLayer.qml
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
@@ -60,6 +64,8 @@ set(cpp_sources
     core/PoiOptions.cpp
 
     # Layers
+    layers/AlertZoneMapLayerController.h
+    layers/AlertZoneMapLayerController.cpp
     layers/AnnotationMapLayer.cpp
     layers/AnnotationMapLayer.h
     layers/BaseLayer.cpp
@@ -77,8 +83,10 @@ set(cpp_sources
     layers/TirMapLayer.h
 
     # Entities
+    entities/AlertZone.h
     entities/metadata/MetadataEntry.h
     entities/metadata/NoteMetadataEntry.h
+    entities/AlertZone.h
     entities/Details.h
     entities/Geometry.h
     entities/Poi.h
@@ -91,6 +99,8 @@ set(cpp_sources
 
 
     # Qt Models
+    models/AlertZoneModel.h
+    models/AlertZoneModel.cpp
     models/ModelHelper.h
     models/ModelHelper.cpp
     models/CoordinatesModel.h

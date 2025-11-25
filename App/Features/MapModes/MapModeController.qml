@@ -13,10 +13,13 @@ QtObject {
 
     // Properties
     property var poi: null
+    property var alertZone: null
     readonly property bool isCreating: activeMode && activeMode.type === "creating"
     readonly property bool isEditing: poi != null
+    readonly property bool isEditingAlertZone: alertZone != null
 
     property bool isSwitchingToOtherPoi: false
+    property bool isSwitchingToOtherAlertZone: false
 
     property BaseMode activeMode: null
 
@@ -35,7 +38,13 @@ QtObject {
             PoiModel.discardChanges()
         }
 
+        if (alertZone && !isSwitchingToOtherAlertZone) {
+            alertZone = null
+            AlertZoneModel.discardChanges()
+        }
+
         if (isSwitchingToOtherPoi) isSwitchingToOtherPoi = false
+        if (isSwitchingToOtherAlertZone) isSwitchingToOtherAlertZone = false
 
         if (activeMode && activeMode.resetPreview) {
             activeMode.resetPreview()
@@ -63,5 +72,14 @@ QtObject {
             console.error("Editing PoI with unknown shape type")
         }
         SidePanelController.openOrRefresh(Routes.Poi)
+    }
+
+    function editAlertZone(editableAlertZone) {
+        if (alertZone) isSwitchingToOtherAlertZone = true
+
+        alertZone = editableAlertZone
+        // Alert zones are always polygons
+        activeMode = MapModeRegistry.editPolygonMode
+        SidePanelController.openOrRefresh(Routes.AlertZone)
     }
 }
