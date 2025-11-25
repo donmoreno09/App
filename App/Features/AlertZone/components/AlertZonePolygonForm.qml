@@ -7,6 +7,7 @@ import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
+import App.Features.Language 1.0
 
 ColumnLayout {
     spacing: Theme.spacing.s4
@@ -43,7 +44,7 @@ ColumnLayout {
             id: latInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Point Lat. #") + (index + 1)
+            labelText:  `${TranslationManager.revision}` && qsTr("Point Lat. #") + (index + 1)
 
             onValueChanged: {
                 const alertZone = MapModeController.alertZone
@@ -66,7 +67,7 @@ ColumnLayout {
             id: lonInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Point Lon. #") + (index + 1)
+            labelText: `${TranslationManager.revision}` && qsTr("Point Lon. #") + (index + 1)
             type: UI.InputCoordinate.Longitude
 
             onValueChanged: {
@@ -93,7 +94,7 @@ ColumnLayout {
             if (MapModeController.isEditingAlertZone) return MapModeController.alertZone.coordinates.length === 0
             else return MapModeRegistry.createPolygonMode.coordinatesCount() === 0
         }
-        text: qsTr("No coordinates inserted. Click on the map to add points.")
+        text: `${TranslationManager.revision}` && qsTr("No coordinates inserted. Click on the map to add points.")
         wrapMode: Text.Wrap
         leftPadding: Theme.spacing.s4
         rightPadding: Theme.spacing.s4
@@ -104,21 +105,6 @@ ColumnLayout {
             weight: Theme.typography.bodySans25Weight
         }
     }
-
-    // Label {
-    //     Layout.fillWidth: true
-    //     visible: MapModeRegistry.createPolygonMode.coordinatesCount() > 0 && !MapModeRegistry.createPolygonMode.closed
-    //     text: qsTr("Polygon not closed. Double-click or click the first point to close.")
-    //     wrapMode: Text.Wrap
-    //     leftPadding: Theme.spacing.s4
-    //     rightPadding: Theme.spacing.s4
-    //     color: Theme.colors.warning || "orange"
-    //     font {
-    //         family: Theme.typography.bodySans25Family
-    //         pointSize: Theme.typography.bodySans25Size
-    //         weight: Theme.typography.bodySans25Weight
-    //     }
-    // }
 
     Repeater {
         model: {

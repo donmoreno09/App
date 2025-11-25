@@ -4,18 +4,19 @@ import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.Language 1.0
 
 UI.ComboBox {
     id: root
 
-    labelText: qsTr("Severity(*)")
+    labelText: `${TranslationManager.revision}` && qsTr("Severity(*)")
     valueRole: "key"
     textRole: "name"
 
     model: ListModel {
-        ListElement { key: "low"; name: "Low"; color: "#FFCC00" }
-        ListElement { key: "medium"; name: "Medium"; color: "#FF6600" }
-        ListElement { key: "high"; name: "High"; color: "#FF0000" }
+        ListElement { key: "low"; name: qsTr("Low"); color: "#FFCC00" }
+        ListElement { key: "medium"; name: qsTr("Medium"); color: "#FF6600" }
+        ListElement { key: "high"; name: qsTr("High"); color: "#FF0000" }
     }
 
     comboBox.delegate: ItemDelegate {

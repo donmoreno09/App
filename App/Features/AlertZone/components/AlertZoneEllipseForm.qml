@@ -7,6 +7,7 @@ import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
+import App.Features.Language 1.0
 
 ColumnLayout {
     spacing: Theme.spacing.s4
@@ -44,7 +45,7 @@ ColumnLayout {
             id: centerLatInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Center Latitude(*)")
+            labelText: `${TranslationManager.revision}` && qsTr("Center Latitude(*)")
 
             onValueChanged: {
                 if (MapModeController.isEditing) MapModeController.poi.coordinate = QtPositioning.coordinate(value, MapModeController.poi.coordinate.longitude)
@@ -59,7 +60,7 @@ ColumnLayout {
             id: centerLonInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Center Longitude(*)")
+            labelText: `${TranslationManager.revision}` && qsTr("Center Longitude(*)")
             type: UI.InputCoordinate.Longitude
 
             onValueChanged: {
@@ -79,8 +80,8 @@ ColumnLayout {
             id: majorAxisInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Major Axis(*)")
-            placeholderText: qsTr("Type length")
+            labelText: `${TranslationManager.revision}` && qsTr("Major Axis(*)")
+            placeholderText: `${TranslationManager.revision}` && qsTr("Type length")
             validator: DoubleValidator {
                 bottom: 0
                 top: 9999
@@ -106,8 +107,8 @@ ColumnLayout {
             id: minorAxisInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Minor Axis(*)")
-            placeholderText: qsTr("Type length")
+            labelText: `${TranslationManager.revision}` && qsTr("Minor Axis(*)")
+            placeholderText: `${TranslationManager.revision}` && qsTr("Type length")
             validator: DoubleValidator {
                 bottom: 0
                 top: 9999

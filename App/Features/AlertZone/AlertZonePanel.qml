@@ -74,7 +74,7 @@ PanelTemplate {
                     Label {
                         Layout.fillWidth: true
                         visible: MapModeController.isEditingAlertZone
-                        text: activeSwitch.checked ? qsTr("Deactivate") : qsTr("Activate")
+                        text: activeSwitch.checked ?  `${TranslationManager.revision}` && qsTr("Deactivate") :  `${TranslationManager.revision}` && qsTr("Activate")
                         color: Theme.colors.text
                         font {
                             family: Theme.typography.bodySans25Family
@@ -93,15 +93,15 @@ PanelTemplate {
 
                 UI.HorizontalDivider { visible: MapModeController.isEditingAlertZone }
 
-                SectionTitle { text: qsTr("General Info") }
+                SectionTitle { text: `${TranslationManager.revision}` && qsTr("General Info") }
 
                 UI.HorizontalDivider {}
 
                 UI.Input {
                     id: labelInput
                     Layout.fillWidth: true
-                    labelText: qsTr("Label(*)")
-                    placeholderText: qsTr("Label")
+                    labelText: `${TranslationManager.revision}` && qsTr("Label(*)")
+                    placeholderText: `${TranslationManager.revision}` && qsTr("Label")
 
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.label = text
                 }
@@ -114,7 +114,7 @@ PanelTemplate {
                 UI.TextArea {
                     id: noteTextArea
                     Layout.fillWidth: true
-                    labelText: qsTr("Note")
+                    labelText: `${TranslationManager.revision}` && qsTr("Note")
 
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
                 }
@@ -123,7 +123,7 @@ PanelTemplate {
 
                 SectionTitle {
                     Layout.topMargin: Theme.spacing.s3
-                    text: qsTr("Layer Selection")
+                    text: `${TranslationManager.revision}` && qsTr("Layer Selection")
                 }
 
                 UI.HorizontalDivider {}
@@ -137,7 +137,7 @@ PanelTemplate {
 
                 SectionTitle {
                     Layout.topMargin: Theme.spacing.s3
-                    text: qsTr("Drawing Tools")
+                    text: `${TranslationManager.revision}` && qsTr("Drawing Tools")
                 }
 
                 UI.HorizontalDivider {}
@@ -204,7 +204,7 @@ PanelTemplate {
                     Layout.fillWidth: true
                     variant: UI.ButtonStyles.Ghost
                     backgroundRect.border.width: Theme.borders.b0
-                    text: qsTr("Back")
+                    text: `${TranslationManager.revision}` && qsTr("Back")
                     onClicked: SidePanelController.close(true)
                 }
 
@@ -215,14 +215,14 @@ PanelTemplate {
                     Layout.fillWidth: true
                     variant: UI.ButtonStyles.Danger
                     backgroundRect.border.width: Theme.borders.b0
-                    text: qsTr("Remove")
+                    text: `${TranslationManager.revision}` && qsTr("Remove")
                     onClicked: AlertZoneModel.remove(MapModeController.alertZone.id)
                 }
 
                 UI.Button {
                     Layout.preferredWidth: 1
                     Layout.fillWidth: true
-                    text: qsTr("Save")
+                    text: `${TranslationManager.revision}` && qsTr("Save")
                     enabled: !AlertZoneModel.loading && validate()
                     onClicked: save()
                 }
