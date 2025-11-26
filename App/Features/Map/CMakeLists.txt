@@ -1,6 +1,11 @@
 set(qml_files
     MapHost.qml
     MapToolsPanel.qml
+
+    components/SectionHeader.qml
+    components/TilesetGrid.qml
+    components/TilesetGridItem.qml
+
     internals/Map.qml
     internals/MapState.qml
 )
