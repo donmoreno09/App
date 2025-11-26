@@ -50,6 +50,11 @@ Rectangle {
                 color: "white"
                 font.pixelSize: 12
                 horizontalAlignment: Text.AlignHCenter
+                font {
+                    family: Theme.typography.bodySans15Family
+                    pointSize: Theme.typography.bodySans15Size
+                    weight: Theme.typography.bodySans15Weight
+                }
             }
         }
     }

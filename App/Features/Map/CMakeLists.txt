@@ -2,6 +2,7 @@ set(qml_files
     MapHost.qml
     MapToolsPanel.qml
 
+    components/LayerToggle.qml
     components/SectionHeader.qml
     components/TilesetGrid.qml
     components/TilesetGridItem.qml
