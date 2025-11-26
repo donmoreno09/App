@@ -45,6 +45,8 @@ ColumnLayout {
         }
     }
 
+    UI.HorizontalDivider {}
+
     RowLayout {
         Layout.fillWidth: true
         Label {
@@ -63,11 +65,13 @@ ColumnLayout {
         }
     }
 
+    UI.HorizontalDivider {}
+
     RowLayout {
         Layout.fillWidth: true
         Label {
             Layout.fillWidth: true
-            text: qsTr("TIR")
+            text: qsTr("TRUCK")
             color: Theme.colors.text
             font {
                 family: Theme.typography.bodySans25Family
@@ -80,6 +84,8 @@ ColumnLayout {
             checked: false
         }
     }
+
+    UI.HorizontalDivider {}
 
     RowLayout {
         Layout.fillWidth: true
@@ -98,4 +104,6 @@ ColumnLayout {
             checked: false
         }
     }
+
+    UI.HorizontalDivider {}
 }

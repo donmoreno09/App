@@ -3,7 +3,12 @@
     "allow": [
       "Bash(cat:*)",
       "Bash(git log:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(findstr:*)",
+      "Bash(dir \"C:\\Users\\esis\\Documents\\IRIDESS_FE\\App\\assets\\icons\" /b)",
+      "Bash(cmake --build:*)",
+      "Bash(ninja -C build:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []

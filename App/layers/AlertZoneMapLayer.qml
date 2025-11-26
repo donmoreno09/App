@@ -13,17 +13,6 @@ BaseMapLayer {
 
     // property alias alertZoneMapLayer: alertZoneMapLayer
 
-    Component.onCompleted: {
-        console.log("[STEP 7] AlertZoneMapLayer initialized")
-    }
-
-    Connections {
-        target: AlertZoneModel
-        function onRowsInserted() {
-            console.log("[STEP 7a] AlertZoneMapLayer: New alert zone(s) inserted. Total count:", AlertZoneModel.rowCount())
-        }
-    }
-
     MapItemView {
         model: AlertZoneModel
 
@@ -60,7 +49,6 @@ BaseMapLayer {
                     break;
                 }
 
-                console.log("[STEP 7b] Creating AlertZone shape - ID:", id, "| Label:", label, "| ShapeType:", shapeTypeId, "| isRectangle:", isRectangle)
                 const component = Qt.createComponent(source, Qt.Asynchronous)
                 component.createObject(loader)
             }

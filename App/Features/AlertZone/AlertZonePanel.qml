@@ -27,17 +27,10 @@ PanelTemplate {
     }
 
     Component.onCompleted: {
-        console.log("[STEP 1] AlertZonePanel opened")
-        console.log("[STEP 1a] Syncing data from MapModeController")
         syncData()
-        console.log("[STEP 1b] Checking active mode:", MapModeController.activeMode)
         if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
-            console.log("[STEP 1c] Setting active mode to createPolygonMode")
             MapModeController.setActiveMode(MapModeRegistry.createPolygonMode)
-        } else {
-            console.log("[STEP 1c] Active mode already set:", MapModeController.activeMode)
         }
-        console.log("[STEP 1d] Panel initialization complete")
     }
 
     Component.onDestruction: {
@@ -48,19 +41,15 @@ PanelTemplate {
         target: AlertZoneModel
 
         function onAppended() {
-            console.log("[STEP 6] AlertZoneModel.appended signal received - closing panel")
             SidePanelController.close(true)
         }
         function onUpdated() {
-            console.log("[STEP 6] AlertZoneModel.updated signal received - closing panel")
             SidePanelController.close(true)
         }
         function onRemoved() {
-            console.log("[STEP 6] AlertZoneModel.removed signal received - closing panel")
             SidePanelController.close(true)
         }
         function onFetched() {
-            console.log("[STEP 6] AlertZoneModel.fetched signal received - syncing data")
             root.syncData()
         }
     }
@@ -78,15 +67,41 @@ PanelTemplate {
                 width: parent.width
                 spacing: Theme.spacing.s4
 
-                SectionTitle { text: qsTr("General Info") }
+                RowLayout {
+                    Layout.leftMargin: Theme.spacing.s2
+                    Layout.fillWidth: true
+
+                    Label {
+                        Layout.fillWidth: true
+                        visible: MapModeController.isEditingAlertZone
+                        text: activeSwitch.checked ?  `${TranslationManager.revision}` && qsTr("Deactivate") :  `${TranslationManager.revision}` && qsTr("Activate")
+                        color: Theme.colors.text
+                        font {
+                            family: Theme.typography.bodySans25Family
+                            pointSize: Theme.typography.bodySans25Size
+                            weight: Theme.typography.bodySans25Weight
+                        }
+                    }
+
+                    UI.Toggle {
+                        id: activeSwitch
+                        visible: MapModeController.isEditingAlertZone
+                        checked: true
+                        onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
+                    }
+                }
+
+                UI.HorizontalDivider { visible: MapModeController.isEditingAlertZone }
+
+                SectionTitle { text: `${TranslationManager.revision}` && qsTr("General Info") }
 
                 UI.HorizontalDivider {}
 
                 UI.Input {
                     id: labelInput
                     Layout.fillWidth: true
-                    labelText: qsTr("Label(*)")
-                    placeholderText: qsTr("Label")
+                    labelText: `${TranslationManager.revision}` && qsTr("Label(*)")
+                    placeholderText: `${TranslationManager.revision}` && qsTr("Label")
 
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.label = text
                 }
@@ -99,25 +114,16 @@ PanelTemplate {
                 UI.TextArea {
                     id: noteTextArea
                     Layout.fillWidth: true
-                    labelText: qsTr("Note")
+                    labelText: `${TranslationManager.revision}` && qsTr("Note")
 
                     onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
-                }
-
-                UI.Toggle {
-                    id: activeSwitch
-                    Layout.fillWidth: true
-                    visible: MapModeController.isEditingAlertZone
-                    leftLabel: checked ? qsTr("Deactivate") : qsTr("Activate")
-                    checked: true
-                    onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
                 }
 
                 UI.VerticalSpacer {}
 
                 SectionTitle {
                     Layout.topMargin: Theme.spacing.s3
-                    text: qsTr("Layer Selection")
+                    text: `${TranslationManager.revision}` && qsTr("Layer Selection")
                 }
 
                 UI.HorizontalDivider {}
@@ -131,7 +137,7 @@ PanelTemplate {
 
                 SectionTitle {
                     Layout.topMargin: Theme.spacing.s3
-                    text: qsTr("Drawing Tools")
+                    text: `${TranslationManager.revision}` && qsTr("Drawing Tools")
                 }
 
                 UI.HorizontalDivider {}
@@ -149,15 +155,12 @@ PanelTemplate {
         const layersValid = layerSelection.isValid
         if (!labelValid) return false;
         if (!layersValid) return false
-        return areaForm.isValid
+        return areaForm.isValid;
     }
 
     function save() {
-        console.log("[STEP 5] Save button clicked")
-        console.log("[STEP 5a] Building geometry from activeMode:", MapModeController.activeMode)
 
         const geometry = MapModeController.activeMode.buildGeometry()
-        console.log("[STEP 5b] Geometry built:", JSON.stringify(geometry))
 
         const data = {
             label: labelInput.text,
@@ -165,19 +168,19 @@ PanelTemplate {
             layerId: 2,
             layerName: Layers.alertZoneMapLayer(),
             severity: severityComboBox.currentValue,
-            note: noteTextArea.text,
             active: activeSwitch.checked,
-            targetLayers: layerSelection.selectedLayers
+            targetLayers: layerSelection.selectedLayers,
+            details: {
+                metadata : {
+                    note: noteTextArea.text
+                }
+            }
         }
 
-        console.log("[STEP 5c] Data object created:", JSON.stringify(data))
-
         if (MapModeController.isEditingAlertZone) {
-            console.log("[STEP 5d] Editing mode - updating existing alert zone:", MapModeController.alertZone.id)
             data.id = MapModeController.alertZone.id
             AlertZoneModel.update(data)
         } else {
-            console.log("[STEP 5d] Creating mode - appending new alert zone")
             AlertZoneModel.append(data)
         }
     }
@@ -205,7 +208,7 @@ PanelTemplate {
                     Layout.fillWidth: true
                     variant: UI.ButtonStyles.Ghost
                     backgroundRect.border.width: Theme.borders.b0
-                    text: qsTr("Back")
+                    text: `${TranslationManager.revision}` && qsTr("Back")
                     onClicked: SidePanelController.close(true)
                 }
 
@@ -216,14 +219,14 @@ PanelTemplate {
                     Layout.fillWidth: true
                     variant: UI.ButtonStyles.Danger
                     backgroundRect.border.width: Theme.borders.b0
-                    text: qsTr("Remove")
+                    text: `${TranslationManager.revision}` && qsTr("Remove")
                     onClicked: AlertZoneModel.remove(MapModeController.alertZone.id)
                 }
 
                 UI.Button {
                     Layout.preferredWidth: 1
                     Layout.fillWidth: true
-                    text: qsTr("Save")
+                    text: `${TranslationManager.revision}` && qsTr("Save")
                     enabled: !AlertZoneModel.loading && validate()
                     onClicked: save()
                 }

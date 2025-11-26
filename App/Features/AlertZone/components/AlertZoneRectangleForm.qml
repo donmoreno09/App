@@ -7,12 +7,13 @@ import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
+import App.Features.Language 1.0
 
 ColumnLayout {
     spacing: Theme.spacing.s4
 
     function validate() {
-        if (MapModeController.isEditing) return true
+        if (MapModeController.isEditingAlertZone) return true
 
         return MapModeRegistry.createRectangleMode.topLeft.isValid && MapModeRegistry.createRectangleMode.bottomRight.isValid
     }
@@ -39,14 +40,14 @@ ColumnLayout {
             id: topLeftLatInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Top Left Latitude(*)")
+            labelText: `${TranslationManager.revision}` && qsTr("Top Left Latitude(*)")
 
             onValueChanged: {
-                if (MapModeController.isEditing) MapModeController.poi.topLeft = QtPositioning.coordinate(value, MapModeController.poi.topLeft.longitude)
+                if (MapModeController.isEditingAlertZone) MapModeController.alertZone.topLeft = QtPositioning.coordinate(value, MapModeController.alertZone.topLeft.longitude)
                 else MapModeRegistry.createRectangleMode.setTopLeftLatitude(value)
             }
 
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.poi.topLeft.latitude: MapModeRegistry.createRectangleMode.topLeft.latitude) }
+            function updateText() { setText((MapModeController.isEditingAlertZone) ? MapModeController.alertZone.topLeft.latitude: MapModeRegistry.createRectangleMode.topLeft.latitude) }
             Component.onCompleted: updateText()
         }
 
@@ -54,15 +55,15 @@ ColumnLayout {
             id: topLeftLonInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Top Left Longitude(*)")
+            labelText: `${TranslationManager.revision}` && qsTr("Top Left Longitude(*)")
             type: UI.InputCoordinate.Longitude
 
             onValueChanged: {
-                if (MapModeController.isEditing) MapModeController.poi.topLeft = QtPositioning.coordinate(MapModeController.poi.topLeft.latitude, value)
+                if (MapModeController.isEditingAlertZone) MapModeController.alertZone.topLeft = QtPositioning.coordinate(MapModeController.alertZone.topLeft.latitude, value)
                 else MapModeRegistry.createRectangleMode.setTopLeftLongitude(value)
             }
 
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.poi.topLeft.longitude : MapModeRegistry.createRectangleMode.topLeft.longitude) }
+            function updateText() { setText((MapModeController.isEditingAlertZone) ? MapModeController.alertZone.topLeft.longitude : MapModeRegistry.createRectangleMode.topLeft.longitude) }
             Component.onCompleted: updateText()
         }
     }
@@ -74,14 +75,14 @@ ColumnLayout {
             id: bottomRightLatInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Bottom Right Latitude(*)")
+            labelText: `${TranslationManager.revision}` && qsTr("Bottom Right Latitude(*)")
 
             onValueChanged: {
-                if (MapModeController.isEditing) MapModeController.poi.bottomRight = QtPositioning.coordinate(value, MapModeController.poi.bottomRight.longitude)
+                if (MapModeController.isEditingAlertZone) MapModeController.alertZone.bottomRight = QtPositioning.coordinate(value, MapModeController.alertZone.bottomRight.longitude)
                 else MapModeRegistry.createRectangleMode.setBottomRightLatitude(value)
             }
 
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.poi.bottomRight.latitude : MapModeRegistry.createRectangleMode.bottomRight.latitude) }
+            function updateText() { setText((MapModeController.isEditingAlertZone) ? MapModeController.alertZone.bottomRight.latitude : MapModeRegistry.createRectangleMode.bottomRight.latitude) }
             Component.onCompleted: updateText()
         }
 
@@ -89,15 +90,15 @@ ColumnLayout {
             id: bottomRightLonInput
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            labelText: qsTr("Bottom Right Longitude(*)")
+            labelText: `${TranslationManager.revision}` && qsTr("Bottom Right Longitude(*)")
             type: UI.InputCoordinate.Longitude
 
             onValueChanged: {
-                if (MapModeController.isEditing) MapModeController.poi.bottomRight = QtPositioning.coordinate(MapModeController.poi.bottomRight.latitude, value)
+                if (MapModeController.isEditingAlertZone) MapModeController.alertZone.bottomRight = QtPositioning.coordinate(MapModeController.alertZone.bottomRight.latitude, value)
                 else MapModeRegistry.createRectangleMode.setBottomRightLongitude(value)
             }
 
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.poi.bottomRight.longitude : MapModeRegistry.createRectangleMode.bottomRight.longitude) }
+            function updateText() { setText((MapModeController.isEditingAlertZone) ? MapModeController.alertZone.bottomRight.longitude : MapModeRegistry.createRectangleMode.bottomRight.longitude) }
             Component.onCompleted: updateText()
         }
     }

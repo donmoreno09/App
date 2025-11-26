@@ -1,5 +1,8 @@
 set(qml_files
     NotificationsPanel.qml
+    components/NotificationBadge.qml
+    components/NotificationActions.qml
+    components/NotificationCard.qml
 )
 
 set(qml_singletons

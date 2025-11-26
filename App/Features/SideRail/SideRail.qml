@@ -92,7 +92,7 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/test.svg"
+                    source: "qrc:/App/assets/icons/alert-zone.svg"
                     preserveIconColor: true
                     text: `${TranslationManager.revision}` && qsTr("Alert Zone")
                     active: PanelRouter.currentPath === Routes.AlertZone && SidePanelController.isOpen
