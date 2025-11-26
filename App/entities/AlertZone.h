@@ -9,6 +9,7 @@
 #include <QSharedPointer>
 #include "../persistence/ipersistable.h"
 #include "Geometry.h"
+#include "Details.h"
 
 class AlertZone : public IPersistable
 {
@@ -17,12 +18,13 @@ public:
     QString label;
     int layerId = 0;
     QString layerName;
-    QString note;
     QString severity = "low";
     bool active = true;
     QStringList targetLayers;
 
     Geometry geometry;
+
+    Details details;
 
     QJsonObject toJson() const override {
         QJsonObject obj;
@@ -30,11 +32,11 @@ public:
         obj["label"] = label;
         obj["layerId"] = layerId;
         obj["layerName"] = layerName;
-        obj["note"] = note;
         obj["severity"] = severity;
         obj["active"] = active;
         obj["targetLayers"] = QJsonArray::fromStringList(targetLayers);
         obj["geometry"] = geometry.toJson();
+        obj["details"] = details.toJson();
         return obj;
     }
 
@@ -43,7 +45,6 @@ public:
         label = obj["label"].toString();
         layerId = obj["layerId"].toInt();
         layerName = obj["layerName"].toString();
-        note = obj["note"].toString();
         severity = obj["severity"].toString("low");
         active = obj["active"].toBool(true);
 
@@ -54,6 +55,7 @@ public:
         }
 
         geometry = Geometry::fromJson(obj["geometry"].toObject());
+        details.fromJson(obj["details"].toObject());
     }
 };
 

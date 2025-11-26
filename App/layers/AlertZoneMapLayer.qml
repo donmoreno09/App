@@ -9,9 +9,9 @@ import App.Features.MapModes 1.0
 
 BaseMapLayer {
     id: root
-    // _mapLayer: alertZoneMapLayer
+    _mapLayer: alertZoneMapLayer
 
-    // property alias alertZoneMapLayer: alertZoneMapLayer
+    property alias alertZoneMapLayer: alertZoneMapLayer
 
     MapItemView {
         model: AlertZoneModel
@@ -56,15 +56,15 @@ BaseMapLayer {
 
     // This is for the selection of the alert zones on the map, to deepen
 
-    // AlertZoneMapLayerController {
-    //     id: alertZoneMapLayer
-    //     layerName: Layers.alertZoneMapLayer()
+        AlertZoneMapLayerController {
+            id: alertZoneMapLayer
+            layerName: Layers.alertZoneMapLayer()
 
-    //     Component.onCompleted: {
-    //         LayerManager.registerLayer(alertZoneMapLayer)
-    //         alertZoneMapLayer.map = MapController.map
-    //         alertZoneMapLayer.initialize()
-    //     }
-    // }
+            Component.onCompleted: {
+                LayerManager.registerLayer(alertZoneMapLayer)
+                alertZoneMapLayer.map = MapController.map
+                alertZoneMapLayer.initialize()
+            }
+        }
     }
 }

@@ -6,6 +6,8 @@
 namespace ApiEndpoints {
     extern QString BaseUrl;
 
+    QString BaseUrlAlertZone();
+
     QString BaseUrlPoi();
     QString GetAllPoiSByLayerId();
     QString GetCategories();
