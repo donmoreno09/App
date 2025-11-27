@@ -4,6 +4,7 @@ import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.Language 1.0
 import App.Features.Poi 1.0
 
 UI.FloatingWindow {
@@ -12,7 +13,7 @@ UI.FloatingWindow {
     width: 1200
     height: 740
     visible: true
-    windowTitle: "Telemetry"
+    windowTitle: `${TranslationManager.revision}` && qsTr("Telemetry")
     loading: csv.loading
 
     property url csvSource: "qrc:/App/assets/resources/Export_MH3_Goliath.csv"
