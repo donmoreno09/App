@@ -26,8 +26,6 @@ public:
     enum Roles {
         IdRole = Qt::UserRole + 1,
         LabelRole,
-        LayerIdRole,
-        LayerNameRole,
 
         // Geometry
         ShapeTypeIdRole,
@@ -44,7 +42,7 @@ public:
         NoteRole,
         SeverityRole,
         ActiveRole,
-        TargetLayersRole,
+        LayersRole,
         ModelIndexRole,
     };
 

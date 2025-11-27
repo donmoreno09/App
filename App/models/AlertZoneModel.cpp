@@ -34,10 +34,6 @@ QVariant AlertZoneModel::data(const QModelIndex &index, int role) const
         return alertZone.id;
     case LabelRole:
         return alertZone.label;
-    case LayerIdRole:
-        return alertZone.layerId;
-    case LayerNameRole:
-        return alertZone.layerName;
 
     // Geometry
     case ShapeTypeIdRole:
@@ -90,8 +86,13 @@ QVariant AlertZoneModel::data(const QModelIndex &index, int role) const
         return alertZone.severity;
     case ActiveRole:
         return alertZone.active;
-    case TargetLayersRole:
-        return QVariant::fromValue(alertZone.targetLayers);
+    case LayersRole: {
+        QVariantMap map;
+        for (auto it = alertZone.layers.begin(); it != alertZone.layers.end(); ++it) {
+            map.insert(it.key(), it.value());
+        }
+        return map;
+    }
     case ModelIndexRole:
         return index.row();
     }
@@ -110,7 +111,6 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
     switch (role) {
     // Immutable
     case IdRole:
-    case LayerIdRole:
     case ShapeTypeIdRole:
     case IsRectangleRole:
     case ModelIndexRole:
@@ -120,15 +120,6 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
         const auto v = value.toString();
         if (alertZone.label != v) {
             alertZone.label = v;
-            changed = true;
-        }
-        break;
-    }
-
-    case LayerNameRole: {
-        const auto v = value.toString();
-        if (alertZone.layerName != v) {
-            alertZone.layerName = v;
             changed = true;
         }
         break;
@@ -153,7 +144,7 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
     }
 
     case SeverityRole: {
-        const auto v = value.toString();
+        const int v = value.toInt();
         if (alertZone.severity != v) {
             alertZone.severity = v;
             changed = true;
@@ -170,10 +161,14 @@ bool AlertZoneModel::setData(const QModelIndex &index, const QVariant &value, in
         break;
     }
 
-    case TargetLayersRole: {
-        const QStringList v = value.toStringList();
-        if (alertZone.targetLayers != v) {
-            alertZone.targetLayers = v;
+    case LayersRole: {
+        const QVariantMap vMap = value.toMap();
+        QMap<QString, bool> newLayers;
+        for (auto it = vMap.begin(); it != vMap.end(); ++it) {
+            newLayers.insert(it.key(), it.value().toBool());
+        }
+        if (alertZone.layers != newLayers) {
+            alertZone.layers = newLayers;
             changed = true;
         }
         break;
@@ -297,8 +292,6 @@ QHash<int, QByteArray> AlertZoneModel::roleNames() const
     return {
             { IdRole, "id" },
             { LabelRole, "label" },
-            { LayerIdRole, "layerId" },
-            { LayerNameRole, "layerName" },
 
             { ShapeTypeIdRole, "shapeTypeId" },
             { SurfaceRole, "surface" },
@@ -314,7 +307,7 @@ QHash<int, QByteArray> AlertZoneModel::roleNames() const
             { NoteRole, "note" },
             { SeverityRole, "severity" },
             { ActiveRole, "active" },
-            { TargetLayersRole, "targetLayers" },
+            { LayersRole, "layers" },
             { ModelIndexRole, "modelIndex" },
             };
 }
@@ -512,11 +505,20 @@ void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
     m_alertZoneSave = std::make_unique<AlertZone>();
 
     m_alertZoneSave->label = data.value("label").toString();
-    m_alertZoneSave->layerId = data.value("layerId").toInt();
-    m_alertZoneSave->layerName = data.value("layerName").toString();
     m_alertZoneSave->active = data.value("active", true).toBool();
-    m_alertZoneSave->severity = data.value("severity", "low").toString();
-    m_alertZoneSave->targetLayers = data.value("targetLayers").toStringList();
+    m_alertZoneSave->severity = data.value("severity", "low").toInt();
+
+    qDebug() << "[buildAlertZoneSave] Raw layers data:" << data.value("layers");
+    qDebug() << "[buildAlertZoneSave] Layers type:" << data.value("layers").typeName();
+
+    QVariantMap layersMap = data.value("layers").toMap();
+    qDebug() << "[buildAlertZoneSave] Layers map size:" << layersMap.size();
+    for (auto it = layersMap.begin(); it != layersMap.end(); ++it) {
+        qDebug() << "[buildAlertZoneSave] Layer:" << it.key() << "=" << it.value().toBool();
+        m_alertZoneSave->layers.insert(it.key(), it.value().toBool());
+    }
+
+    qDebug() << "[buildAlertZoneSave] Final layers count:" << m_alertZoneSave->layers.size();
 
     // Geometry
     QVariantMap geomMap = data.value("geometry").toMap();

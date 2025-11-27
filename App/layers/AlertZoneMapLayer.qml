@@ -35,7 +35,7 @@ BaseMapLayer {
             required property real radiusB
             required property var coordinates
             required property bool active
-            required property string severity
+            required property int severity
 
             Component.onCompleted: {
                 let source = ""

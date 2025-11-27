@@ -19,12 +19,11 @@ IPersistable* AlertZonePersistenceManager::createPersistable() const
 void AlertZonePersistenceManager::load()
 {
     qDebug() << "[AlertZonePersistenceManager] Loading alert zones from backend...";
-    qDebug() << "[AlertZonePersistenceManager] GET" << getApiEndpoint();
 
-    m_httpClient.get(QUrl(getApiEndpoint()));
+    QString endpoint = getApiEndpoint() + "/all";
+    qDebug() << "[AlertZonePersistenceManager] GET" << endpoint;
 
-    // It should be like this: m_httpClient.get(QUrl(getApiEndpoint() + "/layer/{?}"));
-    // TODO: update the layer id here once be is done
+    m_httpClient.get(QUrl(endpoint));
 
     qDebug() << "[AlertZonePersistenceManager] Load request sent (async)";
 }

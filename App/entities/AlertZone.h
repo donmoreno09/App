@@ -16,11 +16,9 @@ class AlertZone : public IPersistable
 public:
     QString id;
     QString label;
-    int layerId = 0;
-    QString layerName;
-    QString severity = "low";
+    int severity = 0;
     bool active = true;
-    QStringList targetLayers;
+    QMap<QString, bool> layers;
 
     Geometry geometry;
 
@@ -30,11 +28,15 @@ public:
         QJsonObject obj;
         obj["id"] = id;
         obj["label"] = label;
-        obj["layerId"] = layerId;
-        obj["layerName"] = layerName;
         obj["severity"] = severity;
         obj["active"] = active;
-        obj["targetLayers"] = QJsonArray::fromStringList(targetLayers);
+
+        QJsonObject layersObj;
+        for (auto it = layers.begin(); it != layers.end(); ++it) {
+            layersObj[it.key()] = it.value();
+        }
+        obj["layers"] = layersObj;
+
         obj["geometry"] = geometry.toJson();
         obj["details"] = details.toJson();
         return obj;
@@ -43,15 +45,13 @@ public:
     void fromJson(const QJsonObject &obj) override {
         id = obj["id"].toString();
         label = obj["label"].toString();
-        layerId = obj["layerId"].toInt();
-        layerName = obj["layerName"].toString();
-        severity = obj["severity"].toString("low");
+        severity = obj["severity"].toInt(0);
         active = obj["active"].toBool(true);
 
-        targetLayers.clear();
-        const QJsonArray arr = obj["targetLayers"].toArray();
-        for (const auto& v : arr) {
-            targetLayers.append(v.toString());
+        layers.clear();
+        const QJsonObject layersObj = obj["layers"].toObject();
+        for (auto it = layersObj.begin(); it != layersObj.end(); ++it) {
+            layers.insert(it.key(), it.value().toBool());
         }
 
         geometry = Geometry::fromJson(obj["geometry"].toObject());

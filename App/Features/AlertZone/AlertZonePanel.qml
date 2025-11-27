@@ -21,8 +21,8 @@ PanelTemplate {
 
         labelInput.text = MapModeController.alertZone.label
         noteTextArea.text = MapModeController.alertZone.note ?? ""
-        severityComboBox.currentIndex = severityComboBox.comboBox.indexOfValue(MapModeController.alertZone.severity ?? "low")
-        layerSelection.setLayers(MapModeController.alertZone.targetLayers ?? [])
+        severityComboBox.currentIndex = MapModeController.alertZone.severity ?? 0
+        layerSelection.setLayers(MapModeController.alertZone.layers ?? {})
         activeSwitch.checked = MapModeController.alertZone.active ?? true
     }
 
@@ -162,16 +162,24 @@ PanelTemplate {
 
         const geometry = MapModeController.activeMode.buildGeometry()
 
+        const layersJs = layerSelection.selectedLayers
+        const layersMap = {}
+        for (let key in layersJs) {
+            layersMap[key] = layersJs[key]
+        }
+
         const data = {
             label: labelInput.text,
             geometry: geometry,
-            layerId: 2,
-            layerName: Layers.alertZoneMapLayer(),
             severity: severityComboBox.currentValue,
-            note: noteTextArea.text,
             active: activeSwitch.checked,
-            targetLayers: layerSelection.selectedLayers
+            layers: layersMap,
+            details: {
+                metadata: { note: noteTextArea.text }
+            }
         }
+
+        console.log("Sending layers:", JSON.stringify(layersMap))
 
         if (MapModeController.isEditingAlertZone) {
             data.id = MapModeController.alertZone.id

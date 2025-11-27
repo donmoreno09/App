@@ -10,21 +10,28 @@ ColumnLayout {
     spacing: Theme.spacing.s4
 
     readonly property var selectedLayers: {
-        var layers = []
-        if (aisToggle.checked) layers.push("ais")
-        if (docSpaceToggle.checked) layers.push("docSpace")
-        if (tirToggle.checked) layers.push("tir")
-        if (poiToggle.checked) layers.push("poi")
+       var layers = {}
+       layers["ais"] = aisToggle.checked
+       layers["docSpace"] = docSpaceToggle.checked
+       layers["tir"] = tirToggle.checked
+       layers["poi"] = poiToggle.checked
+
+        console.log("LayerSelection.selectedLayers:", JSON.stringify(layers))
         return layers
-    }
+   }
 
-    readonly property bool isValid: selectedLayers.length > 0
+    readonly property bool isValid: {
+            const valid = aisToggle.checked || docSpaceToggle.checked ||
+                         tirToggle.checked || poiToggle.checked
+            console.log("LayerSelection.isValid:", valid)
+            return valid
+        }
 
-    function setLayers(layers) {
-        aisToggle.checked = layers.includes("ais")
-        docSpaceToggle.checked = layers.includes("docSpace")
-        tirToggle.checked = layers.includes("tir")
-        poiToggle.checked = layers.includes("poi")
+    function setLayers(layersMap) {
+        aisToggle.checked = layersMap["ais"] === true
+        docSpaceToggle.checked = layersMap["docSpace"] === true
+        tirToggle.checked = layersMap["tir"] === true
+        poiToggle.checked = layersMap["poi"] === true
     }
 
     RowLayout {
