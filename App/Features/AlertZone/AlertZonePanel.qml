@@ -168,13 +168,9 @@ PanelTemplate {
             layerId: 2,
             layerName: Layers.alertZoneMapLayer(),
             severity: severityComboBox.currentValue,
+            note: noteTextArea.text,
             active: activeSwitch.checked,
-            targetLayers: layerSelection.selectedLayers,
-            details: {
-                metadata : {
-                    note: noteTextArea.text
-                }
-            }
+            targetLayers: layerSelection.selectedLayers
         }
 
         if (MapModeController.isEditingAlertZone) {

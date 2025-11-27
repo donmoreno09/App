@@ -9,14 +9,10 @@ PolygonMode {
 
     function buildGeometry() {
         const entity = MapModeController.poi || MapModeController.alertZone
-        if (!entity) {
-            return {}
-        }
+        if (!entity) { return {} }
 
         const coordinates = entity.coordinates
-        if (coordinates.length < 3) {
-            return {}
-        }
+        if (coordinates.length < 3) { return {} }
 
         const out = []
         for (let i = 0; i < coordinates.length; i++) {

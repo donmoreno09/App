@@ -8,6 +8,7 @@ const Notifications = "notifications";
 const MapTilesets = "maptilesets";
 const MapLayers = "maplayers";
 const Poi = "poi";
+const AlertZone = "alertzone"
 const DateTimeTest = "datetime-test";
 const ToggleTest = "toggle-test";
 const TextAreaTest = "textarea-test";
@@ -26,7 +27,6 @@ const ViGateServices = "viGate-services"
 const Notification = "notification"
 const TrackPanel = "trackpanel"
 const TirPanel = "tirpanel"
-const AlertZone = "alertzone"
 const NotFound = "*";
 
 // MOC Pages
@@ -40,9 +40,9 @@ const routes = {
   [MapTilesets]: "qrc:/App/Features/Map/MapTilesetsPanel.qml",
   [MapLayers]: "qrc:/App/layers/LayersPanel.qml",
   [Poi]: "qrc:/App/Features/Poi/PoiPanel.qml",
+  [AlertZone]: "qrc:/App/Features/AlertZone/AlertZonePanel.qml",
   [TrackPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
   [TirPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
-  [AlertZone]: "qrc:/App/Features/AlertZone/AlertZonePanel.qml",
   [MOCPoiStaticPanel]: "qrc:/App/Features/Poi/MOCPoiPanel.qml",
   [DateTimeTest]: "qrc:/App/Playground/DateTimePickerPanel.qml",
   [ToggleTest]: "qrc:/App/Playground/TogglePanel.qml",

@@ -9,7 +9,7 @@ ShapePersistenceManager::ShapePersistenceManager(QObject *parent)
 
 QString ShapePersistenceManager::getApiEndpoint() const
 {
-    return ApiEndpoints::BaseUrlShapes;
+    return ApiEndpoints::BaseUrlShapes();
 }
 
 IPersistable* ShapePersistenceManager::createPersistable() const

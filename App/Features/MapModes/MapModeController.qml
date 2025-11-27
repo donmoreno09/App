@@ -87,7 +87,7 @@ QtObject {
             else activeMode = MapModeRegistry.editPolygonMode
             break;
         default:
-            console.error("Editing AlertZone with unknown shape type")
+            console.error("Editing Alert Zone with unknown shape type")
         }
         SidePanelController.openOrRefresh(Routes.AlertZone)
     }

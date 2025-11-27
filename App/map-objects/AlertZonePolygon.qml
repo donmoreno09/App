@@ -17,11 +17,12 @@ MapItemGroup {
     property bool isDraggingHandle: false
 
     readonly property color zoneColor: {
+        console.log("AlertZone", label, "active:", active, "severity:", severity)
         if (!active) return "#888888"
         switch(severity) {
             case "high": return "#FF0000"
             case "medium": return "#FF6600"
-            case "low":
+            case "low": return "#FFCC00"
             default: return "#FFCC00"
         }
     }

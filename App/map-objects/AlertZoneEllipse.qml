@@ -17,6 +17,7 @@ MapItemGroup {
     property bool isDraggingHandler: false
 
     readonly property color zoneColor: {
+        console.log("AlertZone", label, "active:", active, "severity:", severity)
         if (!active) return "#888888"
         switch(severity) {
             case "high": return "#FF0000"

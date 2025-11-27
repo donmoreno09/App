@@ -3,7 +3,6 @@ add_subdirectory(Mission)
 
 # Core UIs
 add_subdirectory(Map)
-add_subdirectory(MapTools)
 add_subdirectory(MapModes)
 add_subdirectory(TitleBar)
 add_subdirectory(SideRail)
@@ -30,7 +29,6 @@ target_link_libraries(${PROJECT_NAME}
         # Core UIs
         app_features_map
         app_features_mapmodes
-        app_features_maptools
         app_features_titlebar
         app_features_siderail
         app_features_sidepanel

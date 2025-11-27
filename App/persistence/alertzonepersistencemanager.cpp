@@ -1,17 +1,14 @@
 #include "alertzonepersistencemanager.h"
 #include "../connections/apiendpoints.h"
 #include "../entities/AlertZone.h"
-#include <QDebug>
 
 AlertZonePersistenceManager::AlertZonePersistenceManager(QObject *parent)
     : PersistenceManagerBase(parent)
-{
-    qDebug() << "[AlertZonePersistenceManager] Persistence manager initialized";
-}
+{}
 
 QString AlertZonePersistenceManager::getApiEndpoint() const
 {
-    return ApiEndpoints::BaseUrlAlertZone;
+    return ApiEndpoints::BaseUrlAlertZone();
 }
 
 IPersistable* AlertZonePersistenceManager::createPersistable() const

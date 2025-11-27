@@ -35,5 +35,14 @@ PanelTemplate {
 
             onClicked: MapController.setPlugin(MapPlugins.osmDefault)
         }
+
+        MapTilesetsItem {
+            Layout.fillWidth: true
+            text: `${TranslationManager.revision}` && qsTr("Satellite")
+            source: "qrc:/App/assets/images/maplibre-satellite.png"
+            active: MapController._currentPlugin === MapPlugins.maplibreSatellite
+
+            onClicked: MapController.setPlugin(MapPlugins.maplibreSatellite)
+        }
     }
 }

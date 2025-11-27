@@ -8,6 +8,7 @@ class AlertZonePersistenceManager : public PersistenceManagerBase
     Q_OBJECT
 public:
     explicit AlertZonePersistenceManager(QObject *parent = nullptr);
+
     virtual void load() override;
 
 protected:
