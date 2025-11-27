@@ -1,5 +1,4 @@
 set(qml_files
-    components/DraggableResizableContainer.qml
     components/WebViewItem.qml
     components/WebViewContainer.qml
 )
