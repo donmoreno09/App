@@ -508,17 +508,12 @@ void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
     m_alertZoneSave->active = data.value("active", true).toBool();
     m_alertZoneSave->severity = data.value("severity", "low").toInt();
 
-    qDebug() << "[buildAlertZoneSave] Raw layers data:" << data.value("layers");
-    qDebug() << "[buildAlertZoneSave] Layers type:" << data.value("layers").typeName();
+    qDebug() << "[buildAlertZoneSave] Active: " << m_alertZoneSave->active;
 
     QVariantMap layersMap = data.value("layers").toMap();
-    qDebug() << "[buildAlertZoneSave] Layers map size:" << layersMap.size();
     for (auto it = layersMap.begin(); it != layersMap.end(); ++it) {
-        qDebug() << "[buildAlertZoneSave] Layer:" << it.key() << "=" << it.value().toBool();
         m_alertZoneSave->layers.insert(it.key(), it.value().toBool());
     }
-
-    qDebug() << "[buildAlertZoneSave] Final layers count:" << m_alertZoneSave->layers.size();
 
     // Geometry
     QVariantMap geomMap = data.value("geometry").toMap();
@@ -590,14 +585,32 @@ void AlertZoneModel::handleAlertZoneSaved(bool success, const QString &uuid)
 
 void AlertZoneModel::handleAlertZoneUpdated(bool success)
 {
-    if (!success) {
-        qWarning() << "Error: Could not update Alert Zone with id '" << m_alertZoneSave->id << "'. Check logs.";
-    } else {
-        m_oldAlertZone = nullptr;
-        emit updated();
+    if(!success) {
+        qWarning() << "Error: Could not updare Alert Zone with id '" << m_alertZoneSave->id << "' Check logs.";
+        setLoading(false);
+        return;
     }
 
+    int row = -1;
+    for(int i = 0; i < m_alertZones.size(); ++i) {
+        if(m_alertZones[i].id == m_alertZoneSave->id){
+            row = i;
+            break;
+        }
+    }
+
+    if (row >= 0) {
+        m_alertZones[row] = *m_alertZoneSave;
+
+        QModelIndex idx = index(row, 0);
+        emit dataChanged(idx, idx);
+
+        qDebug() << "[AlertZoneModel] Updated AlertZone at row " << row << " with severity " << m_alertZoneSave->severity;
+    }
+
+    m_oldAlertZone = nullptr;
     setLoading(false);
+    emit updated();
 }
 
 void AlertZoneModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
@@ -620,6 +633,10 @@ void AlertZoneModel::handleAlertZoneGot(const IPersistable *object)
 {
     const AlertZone* alertZone = dynamic_cast<const AlertZone*>(object);
     if (!alertZone) return;
+
+    qDebug() << "[handleAlertZoneGot] ID: " << alertZone->id;
+    qDebug() << "[handleAlertZoneGot] active: " << alertZone->active;
+
 
     // Find the corresponding row in the model
     int row = -1;
