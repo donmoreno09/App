@@ -15,7 +15,7 @@ MapQuickItem {
     readonly property real craneLatitude: 45.47693790805344
     readonly property real craneLongitude: 12.242793773599008
 
-    readonly property bool isSelected: PanelRouter.currentPath === Routes.MOCPoiStaticPanel
+    readonly property bool isSelected: SidePanelController.router.currentPath === Routes.MOCPoiStaticPanel
 
     coordinate: QtPositioning.coordinate(craneLatitude, craneLongitude)
     anchorPoint.x: svgIcon.width / 2
