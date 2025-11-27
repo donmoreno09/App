@@ -67,6 +67,7 @@ PanelTemplate {
 
             ColumnLayout {
                 Layout.fillWidth: true
+                Layout.bottomMargin: Theme.spacing.s8
                 Layout.leftMargin: Theme.spacing.s8
                 Layout.rightMargin: Theme.spacing.s8
                 spacing: Theme.spacing.s3
