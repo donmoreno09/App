@@ -21,7 +21,7 @@ Rectangle {
         height: parent.height
     }
 
-    RowLayout {
+    ColumnLayout {
         id: contentSlot
         anchors.centerIn: parent
         spacing: Theme.spacing.s1_5

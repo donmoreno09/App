@@ -3,10 +3,12 @@ import QtQuick.Layouts 6.8
 
 import App.Themes 1.0
 import App.Components 1.0 as UI
-import App.Features.SidePanel 1.0
+import App.Features.Panels 1.0
 
 BasePanel {
     property alias title: title
+
+    signal requestClose(destroy: bool)
 
     header: ColumnLayout {
         width: parent.width
@@ -45,7 +47,7 @@ BasePanel {
                     font.pixelSize: Theme.typography.fontSize200
                 }
 
-                onClicked: SidePanelController.close(true)
+                onClicked: requestClose(true)
             }
 
             UI.HorizontalPadding { }

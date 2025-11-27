@@ -1,12 +1,10 @@
-pragma Singleton
-
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 
-import "qrc:/App/Features/SidePanel/routes.js" as Routes
-
 QtObject {
     id: root
+
+    required property var routes
 
     property StackView stackView: null
     property string currentPath: ""
@@ -40,7 +38,7 @@ QtObject {
             return
         }
 
-        const url = Routes.resolve(path)
+        const url = routes.resolve(path)
         if (!url) {
             routeMissing(path)
             return
@@ -71,7 +69,7 @@ QtObject {
             return
         }
 
-        const url = Routes.resolve(path)
+        const url = routes.resolve(path)
         if (!url) {
             routeMissing(path)
             return
@@ -90,7 +88,7 @@ QtObject {
             return
         }
 
-        const url = Routes.resolve(path)
+        const url = routes.resolve(path)
         if (!url) {
             routeMissing(path)
             return

@@ -1,12 +1,15 @@
 import QtQuick 6.8
 import QtQuick.Window 6.8
 import App.Themes 1.0
+import App.Components 1.0 as UI
+import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
 
-DraggableResizableContainer {
+UI.FloatingWindow {
     id: container
     width: 800
     height: 600
+    windowTitle: `${TranslationManager.revision}` && qsTr("Ship Stowage")
     visible: false  // Start hidden
 
     property var parentWindow: null
