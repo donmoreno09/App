@@ -392,6 +392,30 @@
     </message>
 </context>
 <context>
+    <name>CraneLiftedLoads</name>
+    <message>
+        <location filename="../App/Features/Poi/CraneLiftedLoads.qml" line="13"/>
+        <source>Lifted Loads</source>
+        <translation>Carichi Sollevati</translation>
+    </message>
+</context>
+<context>
+    <name>CraneTelemetry</name>
+    <message>
+        <location filename="../App/Features/Poi/CraneTelemetry.qml" line="16"/>
+        <source>Telemetry</source>
+        <translation>Telemetria</translation>
+    </message>
+</context>
+<context>
+    <name>CraneVideoContainer</name>
+    <message>
+        <location filename="../App/Features/Poi/CraneVideoContainer.qml" line="13"/>
+        <source>Video</source>
+        <translation>Video</translation>
+    </message>
+</context>
+<context>
     <name>DatePickerActions</name>
     <message>
         <location filename="../App/Components/date-time-picker/DatePickerActions.qml" line="40"/>
@@ -935,17 +959,17 @@
         <translation>Gestione livelli</translation>
     </message>
     <message>
-        <location filename="../App/Features/Map/MapToolsPanel.qml" line="76"/>
+        <location filename="../App/Features/Map/MapToolsPanel.qml" line="77"/>
         <source>AIS</source>
         <translation>AIS</translation>
     </message>
     <message>
-        <location filename="../App/Features/Map/MapToolsPanel.qml" line="86"/>
+        <location filename="../App/Features/Map/MapToolsPanel.qml" line="87"/>
         <source>DOC - SPACE</source>
         <translation>DOC - SPACE</translation>
     </message>
     <message>
-        <location filename="../App/Features/Map/MapToolsPanel.qml" line="96"/>
+        <location filename="../App/Features/Map/MapToolsPanel.qml" line="97"/>
         <source>TRUCK</source>
         <translation>TIR</translation>
     </message>
@@ -2488,6 +2512,14 @@
         <location filename="../App/Features/ViGateServices/panels/ViGatePanel.qml" line="9"/>
         <source>Gate Transits</source>
         <translation>Transiti ai varchi</translation>
+    </message>
+</context>
+<context>
+    <name>WebViewContainer</name>
+    <message>
+        <location filename="../App/Features/ShipStowage/components/WebViewContainer.qml" line="12"/>
+        <source>Ship Stowage</source>
+        <translation>Stivaggio a Bordo</translation>
     </message>
 </context>
 <context>
