@@ -29,7 +29,7 @@ public:
         obj["id"] = id;
         obj["label"] = label;
         obj["severity"] = severity;
-        obj["active"] = active;
+        obj["enabled"] = active;
 
         QJsonObject layersObj;
         for (auto it = layers.begin(); it != layers.end(); ++it) {
@@ -46,7 +46,7 @@ public:
         id = obj["id"].toString();
         label = obj["label"].toString();
         severity = obj["severity"].toInt(0);
-        active = obj["active"].toBool(true);
+        active = obj["enabled"].toBool(true);
 
         layers.clear();
         const QJsonObject layersObj = obj["layers"].toObject();

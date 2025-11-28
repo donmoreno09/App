@@ -9,6 +9,7 @@ import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
 import App.Features.Panels 1.0
 import App.Features.Language 1.0
+import App.Features.SidePanel 1.0
 
 import "components"
 
