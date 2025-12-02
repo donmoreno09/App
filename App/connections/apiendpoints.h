@@ -4,27 +4,24 @@
 #include <QString>
 
 namespace ApiEndpoints {
-    //static const QString BaseUrl = "https://dear-ghost-free.ngrok-free.app";
-    static const QString BaseUrl = "http://localhost:7000";
+    extern QString BaseUrl;
 
-    static const QString BaseUrlPoi = BaseUrl + "/pointofinterest";
+    QString BaseUrlPoi();
+    QString GetAllPoiSByLayerId();
+    QString GetCategories();
+    QString GetHealthStatuses();
+    QString GetOperationalStates();
+    QString GetTypes();
 
-    static const QString GetAllPoiSByLayerId = BaseUrlPoi + "/layer";
-    static const QString GetCategories = BaseUrlPoi + "/getCategories";
-    static const QString GetHealthStatuses = BaseUrlPoi + "/getHealthStatuses";
-    static const QString GetOperationalStates = BaseUrlPoi + "/getOperationalStates";
-    static const QString GetTypes = BaseUrlPoi + "/getTypes";
+    QString BaseUrlShapes();
 
-    static const QString BaseUrlShapes = BaseUrl + "/shape";
-
-    static const QString BaseUrlMenuManager = BaseUrl + "/menumanager";
-    static const QString GetMenuManager = BaseUrlMenuManager + "/getMenu";
-
-    static const QString BaseTrackSenderUrl = BaseUrl + "/tracksender";
-    static const QString TrackSenderStart(const QString& topic) { return BaseTrackSenderUrl + "/" + topic + "/start"; }
-    static const QString TrackSenderStop(const QString& topic) { return BaseTrackSenderUrl + "/" + topic + "/stop"; }
-    static const QString TrackHistorySenderStart(const QString& topic, const QString &track_iridess_uid) { return BaseTrackSenderUrl + "/" + topic + "/history/" + track_iridess_uid + "/start"; }
-    static const QString TrackHistorySenderStop(const QString& topic, const QString &track_iridess_uid) { return BaseTrackSenderUrl + "/" + topic + "/history/" + track_iridess_uid + "/stop"; }
+    QString BaseTrackSenderUrl();
+    QString TrackSenderStart(const QString& topic);
+    QString TrackSenderStop(const QString& topic);
+    QString TrackHistorySenderStart(const QString& topic,
+                                    const QString &track_iridess_uid);
+    QString TrackHistorySenderStop(const QString& topic,
+                                   const QString &track_iridess_uid);
 }
 
 #endif // APIENDPOINTS_H

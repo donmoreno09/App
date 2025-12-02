@@ -8,14 +8,14 @@ RectangleMode {
     id: root
 
     function buildGeometry() {
-        const poi = MapModeController.poi
-        if (!poi) return {}
+        const entity = MapModeController.poi || MapModeController.alertZone
+        if (!entity) return {}
 
         return {
             shapeTypeId: MapModeController.PolygonType,
             coordinates: root.rectToPoints({
-                topLeft: poi.topLeft,
-                bottomRight: poi.bottomRight
+                topLeft: entity.topLeft,
+                bottomRight: entity.bottomRight
             }),
         }
     }

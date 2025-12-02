@@ -48,34 +48,7 @@ UI.GlobalBackgroundConsumer {
                 spacing: Theme.spacing.s0
 
                 SideRailItem {
-                    visible: devPanelsShown
-                    source: "qrc:/App/assets/icons/clipboard.svg"
-                    text: `${TranslationManager.revision}` && qsTr("Mission")
-                    active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
-
-                    onClicked: SidePanelController.toggle(Routes.Mission)
-                }
-
-                SideRailItem {
-                    visible: devPanelsShown
-                    source: "qrc:/App/assets/icons/submarine.svg"
-                    text: `${TranslationManager.revision}` && qsTr("Pod")
-                    active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
-
-                    onClicked: SidePanelController.toggle(Routes.Pod)
-                }
-
-                SideRailItem {
-                    visible: devPanelsShown
-                    source: "qrc:/App/assets/icons/notification.svg"
-                    text: `${TranslationManager.revision}` && qsTr("Notifications")
-                    active: PanelRouter.currentPath === "notifications" && SidePanelController.isOpen
-
-                    onClicked: SidePanelController.toggle(Routes.Notifications)
-                }
-
-                SideRailItem {
-                    source: "qrc:/App/assets/icons/layers-colored.svg"
+                    source: "qrc:/App/assets/icons/layers.svg"
                     text: `${TranslationManager.revision}` && qsTr("Layers")
                     active: PanelRouter.currentPath === "maplayers" && SidePanelController.isOpen
 
@@ -83,43 +56,52 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/poi.svg"
+                    source: "qrc:/App/assets/icons/location-dot.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Point of Interest")
+                    text: `${TranslationManager.revision}` && qsTr("PoI")
                     active: PanelRouter.currentPath === Routes.Poi && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.Poi)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/truck.svg"
+                    source: "qrc:/App/assets/icons/test.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Truck Arrivals")
+                    text: `${TranslationManager.revision}` && qsTr("Alert Zone")
+                    active: PanelRouter.currentPath === Routes.AlertZone && SidePanelController.isOpen
+
+                    onClicked: SidePanelController.toggle(Routes.AlertZone)
+                }
+
+                SideRailItem {
+                    source: "qrc:/App/assets/icons/truck-fast.svg"
+                    preserveIconColor: true
+                    text: `${TranslationManager.revision}` && qsTr("Arrivals")
                     active: PanelRouter.currentPath === "arrival-content" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ArrivalContent)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/calendar-arrivals.svg"
+                    source: "qrc:/App/assets/icons/calendar-days.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Truck Date Arrivals")
+                    text: `${TranslationManager.revision}` && qsTr("Date Arrivals")
                     active: PanelRouter.currentPath === "arrival-date-content" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ArrivalDateContent)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/settings.svg"
+                    source: "qrc:/App/assets/icons/calendar-range.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Truck DT Arrivals")
+                    text: `${TranslationManager.revision}` && qsTr("DT Arrivals")
                     active: PanelRouter.currentPath === "arrival-date-time-content" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ArrivalDateTimeContent)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/compass.svg"
+                    source: "qrc:/App/assets/icons/timeline-arrow.svg"
                     preserveIconColor: true
                     text: `${TranslationManager.revision}` && qsTr("Trailer Prediction")
                     active: PanelRouter.currentPath === "trailer-prediction" && SidePanelController.isOpen
@@ -128,25 +110,28 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/monitor.svg"
+                    source: "qrc:/App/assets/icons/ship.svg"
                     preserveIconColor: true
                     text: `${TranslationManager.revision}` && qsTr("Ship Stowage")
                     active: PanelRouter.currentPath === "shipstowage" && SidePanelController.isOpen
 
-                    onClicked: ShipStowageController.openStowageWindow(Window.window)
+                    onClicked: {
+                        SidePanelController.close(true)
+                        ShipStowageController.openStowageWindow(Window.window)
+                    }
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/barrier.svg"
+                    source: "qrc:/App/assets/icons/gate.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Gate Transits")
+                    text: `${TranslationManager.revision}` && qsTr("Gate Transit")
                     active: PanelRouter.currentPath === "viGate-services" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ViGateServices)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/notification-bell-colored.svg"
+                    source: "qrc:/App/assets/icons/bell.svg"
                     text: `${TranslationManager.revision}` && qsTr("Notifications")
                     active: PanelRouter.currentPath === "notification" && SidePanelController.isOpen
 

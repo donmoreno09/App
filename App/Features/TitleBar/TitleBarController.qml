@@ -27,6 +27,7 @@ QtObject {
             case Routes.MapTilesets: return qsTr("Map Tilesets")
             case Routes.MapLayers: return qsTr("Map Layers")
             case Routes.Poi: return qsTr("Point of Interest")
+            case Routes.AlertZone: return qsTr("Alert Zone")
             case Routes.DateTimeTest: return qsTr("DateTime Test")
             case Routes.ToggleTest: return qsTr("Toggle Test")
             case Routes.TextAreaTest: return qsTr("TextArea Test")

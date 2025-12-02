@@ -8,6 +8,7 @@ import App.Components 1.0 as UI
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 import App.Features.Notifications 1.0
+import App.Features.Map 1.0
 
 PanelTemplate {
     title.text: `${TranslationManager.revision}` && qsTr("Notifications")
@@ -197,14 +198,31 @@ PanelTemplate {
                                 Layout.fillWidth: true
                             }
 
-                            UI.Button {
+                            RowLayout {
                                 Layout.alignment: Qt.AlignRight
-                                text: `${TranslationManager.revision}` && qsTr("Delete")
-                                variant: UI.ButtonStyles.Ghost
-                                Layout.preferredHeight: Theme.spacing.s8
 
-                                onClicked: {
-                                    TruckNotificationModel.removeNotification(model.id)
+                                UI.Button {
+                                    text: `${TranslationManager.revision}` && qsTr("View on Map")
+                                    variant: UI.ButtonStyles.Primary
+                                    icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
+                                    icon.width: 16
+                                    icon.height: 16
+                                    Layout.preferredHeight: Theme.spacing.s8
+                                    enabled: model.location && model.location.isValid
+
+                                    onClicked: {
+                                        MapController.setMapCenter(model.location)
+                                    }
+                                }
+
+                                UI.Button {
+                                    text: `${TranslationManager.revision}` && qsTr("Delete")
+                                    variant: UI.ButtonStyles.Ghost
+                                    Layout.preferredHeight: Theme.spacing.s8
+
+                                    onClicked: {
+                                        TruckNotificationModel.removeNotification(model.id)
+                                    }
                                 }
                             }
                         }

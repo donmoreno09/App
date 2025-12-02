@@ -105,9 +105,77 @@ And here's what each flag does:
 - `--config <name>`: Select which configuration to build (only works because of the multi-config generator).
 - `--target install`: Run the install target, copying headers, libraries, and tools into `C:\Qt\6.8.3\msvc2022_64` for each configuration.
 
-## 4 | Setting, Building, and Running the Project
+
+## 4 | Installing and Setting Up MapLibre
+
+1. Go to `C:\Qt\6.8.3\msvc2022_64`.
+
+2. Clone the MapLibre repository:
+
+```bash
+git clone https://github.com/maplibre/maplibre-native-qt.git
+cd maplibre-native-qt
+git submodule update --init --recursive
+```
+
+**`Filename too long` errors can be safely ignored.**
+
+Reference: [https://maplibre.org/maplibre-native-qt/docs/index.html](https://maplibre.org/maplibre-native-qt/docs/index.html)
+
+3. Comment out assert in `maplibre-native-qt\vendor\maplibre-native\src\mbgl\gl\renderer_backend.cpp`:
+
+```cpp
+void RendererBackend::assumeViewport(int32_t x, int32_t y, const Size& size) {
+    MLN_TRACE_FUNC();
+
+    getContext<gl::Context>().viewport.setCurrentValue({x, y, size});
+    // Comment this line out (it should be around line 53):
+    // assert(gl::value::Viewport::Get() == getContext<gl::Context>().viewport.getCurrentValue());
+}
+```
+
+4. Open **x64 Native Tools for VS 2022** and load the Qt environment variables:
+
+```bash
+C:\Qt\6.8.3\msvc2022_64\bin\qtenv2.bat
+```
+
+> Ignore the warning `Remember to call vcvarsall.bat to complete environment setup!` if it logged.
+
+This is a **very important step**, otherwise, we cannot run the application in Debug mode.
+
+5. Go to `maplibre-native-qt` inside the terminal then build and install MapLibre:
+
+```bash
+mkdir build && cd build
+cmake ../../maplibre-native-qt -G "Ninja Multi-Config" ^
+  -DCMAKE_TOOLCHAIN_FILE="C:\Qt\6.8.3\msvc2022_64\lib\cmake\Qt6\qt.toolchain.cmake" ^
+  -DCMAKE_CONFIGURATION_TYPES="Release;Debug" ^
+  -DMLN_WITH_OPENGL=ON ^
+  -DCMAKE_INSTALL_PREFIX="..\install"
+cmake --build . --config Debug
+cmake --build . --config Release
+cmake --install . --config Debug
+cmake --install . --config Release
+```
+
+## 5 | Setting, Building, and Running the Project
 
 1. Open Qt Creator.
 2. Open the project by going to its directory and clicking on the `CMakeLists.txt` file.
 3. You'll be asked to configure the project, you should automatically have MSVC selected. Proceed with that.
-4. Then the project will open and will start setting itself up. Afterwards, you can then build the project by clicking on the hammer icon on the left then run it by clicking on the play button.
+4. Configure the project to use MapLibre: Go to **Projects -> Build Settings** and under _Initial CMake configuration_, add:
+
+```bash
+QMapLibre_DIR:PATH=C:/Qt/6.8.3/msvc2022_64/maplibre-native-qt/install/lib/cmake/QMapLibre
+```
+
+Reconfigure the project by clicking the `Re-configure with Initial Parameters` button. And then set up the runtime environment variables by going to **Projects -> Run Settings**, under _Environment_, add these lines (You might have to click _Details_ in order to place these):
+
+```bash
+QT_PLUGIN_PATH=%{Qt:QT_INSTALL_PLUGINS};C:/Qt/6.8.3/msvc2022_64/maplibre-native-qt/install/plugins
+QML_IMPORT_PATH=%{Qt:QT_INSTALL_QML};C:/Qt/6.8.3/msvc2022_64/maplibre-native-qt/install/qml
+QSG_RHI_BACKEND=opengl
+```
+
+5. Then the project will open and will start setting itself up. Afterwards, you can then build the project by clicking on the hammer icon on the left then run it by clicking on the play button.

@@ -41,10 +41,12 @@ PolygonMode {
         }
         out.push({ x: out[0].x, y: out[0].y })
 
-        return {
+        const geometry = {
             shapeTypeId: MapModeController.PolygonType,
             coordinates: out
         }
+
+        return geometry
     }
 
     function resetPreview() {

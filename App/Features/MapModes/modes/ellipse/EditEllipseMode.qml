@@ -8,14 +8,14 @@ EllipseMode {
     id: root
 
     function buildGeometry() {
-        const poi = MapModeController.poi
-        if (!poi) return {}
+        const entity = MapModeController.poi || MapModeController.alertZone
+        if (!entity) return {}
 
         return {
             shapeTypeId: MapModeController.EllipseType,
-            coordinate: { x: poi.coordinate.longitude, y: poi.coordinate.latitude },
-            radiusA: poi.radiusA,
-            radiusB: poi.radiusB,
+            coordinate: { x: entity.coordinate.longitude, y: entity.coordinate.latitude },
+            radiusA: entity.radiusA,
+            radiusB: entity.radiusB,
         }
     }
 }
