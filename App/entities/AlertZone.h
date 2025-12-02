@@ -33,7 +33,7 @@ public:
         obj["layerId"] = layerId;
         obj["layerName"] = layerName;
         obj["severity"] = severity;
-        obj["active"] = active;
+        obj["enabled"] = active;  // Send as "enabled" to match backend
         obj["targetLayers"] = QJsonArray::fromStringList(targetLayers);
         obj["geometry"] = geometry.toJson();
         obj["details"] = details.toJson();
@@ -46,7 +46,7 @@ public:
         layerId = obj["layerId"].toInt();
         layerName = obj["layerName"].toString();
         severity = obj["severity"].toString("low");
-        active = obj["active"].toBool(true);
+        active = obj["enabled"].toBool(true);
 
         targetLayers.clear();
         const QJsonArray arr = obj["targetLayers"].toArray();
