@@ -56,17 +56,32 @@ RectangleMode {
     function setBottomRightLatitude(lat)     { setBottomRight(lat,  undefined) }
     function setBottomRightLongitude(lon)    { setBottomRight(undefined, lon) }
 
+    function maxCheckNaN(a: real, b: real): real {
+        if (isNaN(a)) return b
+        if (isNaN(b)) return a
+        return Math.max(a, b)
+    }
+
+    function minCheckNaN(a: real, b: real): real {
+        if (isNaN(a)) return b
+        if (isNaN(b)) return a
+        return Math.min(a, b)
+    }
+
     function normalizeCorners() {
         // Keep NW -> SE ordering
-        const n = Math.max(topLeft.latitude, bottomRight.latitude)
-        const s = Math.min(topLeft.latitude, bottomRight.latitude)
-        const w = Math.min(topLeft.longitude, bottomRight.longitude)
-        const e = Math.max(topLeft.longitude, bottomRight.longitude)
+        const n = maxCheckNaN(topLeft.latitude, bottomRight.latitude)
+        const s = minCheckNaN(topLeft.latitude, bottomRight.latitude)
+        const w = minCheckNaN(topLeft.longitude, bottomRight.longitude)
+        const e = maxCheckNaN(topLeft.longitude, bottomRight.longitude)
         const tl = QtPositioning.coordinate(n, w)
         const br = QtPositioning.coordinate(s, e)
-        if (tl.latitude !== topLeft.latitude || tl.longitude !== topLeft.longitude
-                || br.latitude !== bottomRight.latitude || br.longitude !== bottomRight.longitude) {
+
+        if (tl.latitude !== topLeft.latitude || tl.longitude !== topLeft.longitude) {
             topLeft = tl
+        }
+
+        if (br.latitude !== bottomRight.latitude || br.longitude !== bottomRight.longitude) {
             bottomRight = br
         }
     }
