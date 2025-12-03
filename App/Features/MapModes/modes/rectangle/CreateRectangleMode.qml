@@ -38,6 +38,10 @@ RectangleMode {
         let x = v; while (x < -180) x += 360; while (x > 180) x -= 360; return x
     }
 
+    function areValidCoords() {
+        return topLeft.isValid && bottomRight.isValid
+    }
+
     function setTopLeft(lat, lon) {
         const lat1 = (lat === undefined || lat === null) ? topLeft.latitude  : clampLat(Number(lat))
         const lon1 = (lon === undefined || lon === null) ? topLeft.longitude : normLon(Number(lon))
@@ -131,7 +135,7 @@ RectangleMode {
     // Committed rectangle
     MapRectangle {
         id: committedRect
-        visible: !root.dragging
+        visible: !root.dragging && root.areValidCoords()
         topLeft: root.topLeft
         bottomRight: root.bottomRight
         color: "#22448888"
