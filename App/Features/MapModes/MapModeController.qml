@@ -43,8 +43,11 @@ QtObject {
             AlertZoneModel.discardChanges()
         }
 
-        if (isSwitchingToOtherPoi) isSwitchingToOtherPoi = false
-        if (isSwitchingToOtherAlertZone) isSwitchingToOtherAlertZone = false
+        // The "switching" flags are an ad hoc solution to prevent PoiPanel's
+        // Component.onDestruction from messing the activeMode to interactionMode.
+        // Granted, it's hacky and should be refactored in the future.
+        if (isSwitchingToOtherPoi) { isSwitchingToOtherPoi = false; return }
+        if (isSwitchingToOtherAlertZone) { isSwitchingToOtherAlertZone = false; return }
 
         if (activeMode && activeMode.resetPreview) {
             activeMode.resetPreview()
