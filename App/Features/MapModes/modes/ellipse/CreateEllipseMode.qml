@@ -97,11 +97,20 @@ EllipseMode {
         enabled: !moveTap.pressed && !isDraggingHandler
 
         onTranslationChanged: {
-            const tl = MapController.map.toCoordinate(Qt.point(Math.min(dragStart.x, dragEnd.x),
-                                                               Math.min(dragStart.y, dragEnd.y)))
-            const br = MapController.map.toCoordinate(Qt.point(Math.max(dragStart.x, dragEnd.x),
-                                                               Math.max(dragStart.y, dragEnd.y)))
-            if (!tl.isValid || !br.isValid) return
+            // Map drag endpoints into geo space first (screen min/max is wrong when map is rotated/tilted).
+            const p1 = MapController.map.mapFromItem(root, dragStart.x, dragStart.y)
+            const p2 = MapController.map.mapFromItem(root, dragEnd.x, dragEnd.y)
+            const c1 = MapController.map.toCoordinate(p1, false)
+            const c2 = MapController.map.toCoordinate(p2, false)
+            if (!c1.isValid || !c2.isValid) return
+
+            // Build bbox in geo space
+            const n = Math.max(c1.latitude,  c2.latitude)
+            const s = Math.min(c1.latitude,  c2.latitude)
+            const w = Math.min(c1.longitude, c2.longitude)
+            const e = Math.max(c1.longitude, c2.longitude)
+            const tl = QtPositioning.coordinate(n, w)
+            const br = QtPositioning.coordinate(s, e)
 
             // center = bbox center
             const cLat = (tl.latitude  + br.latitude ) / 2

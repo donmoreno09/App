@@ -86,11 +86,19 @@ RectangleMode {
         enabled: !moveRectTap.pressed && !isDraggingHandler
 
         onTranslationChanged: {
-            topLeft = MapController.map.toCoordinate(Qt.point(Math.min(dragStart.x, dragEnd.x),
-                                                              Math.min(dragStart.y, dragEnd.y)))
-            bottomRight = MapController.map.toCoordinate(Qt.point(Math.max(dragStart.x, dragEnd.x),
-                                                                  Math.max(dragStart.y, dragEnd.y)))
-            root.normalizeCorners()
+            const p1 = MapController.map.mapFromItem(root, dragStart.x, dragStart.y)
+            const p2 = MapController.map.mapFromItem(root, dragEnd.x, dragEnd.y)
+            const c1 = MapController.map.toCoordinate(p1, false)
+            const c2 = MapController.map.toCoordinate(p2, false)
+            if (!c1.isValid || !c2.isValid) return
+
+            const n = Math.max(c1.latitude, c2.latitude)
+            const s = Math.min(c1.latitude, c2.latitude)
+            const w = Math.min(c1.longitude, c2.longitude)
+            const e = Math.max(c1.longitude, c2.longitude)
+
+            topLeft = QtPositioning.coordinate(n, w)
+            bottomRight = QtPositioning.coordinate(s, e)
         }
     }
 
