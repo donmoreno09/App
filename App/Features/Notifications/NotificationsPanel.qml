@@ -221,6 +221,16 @@ PanelTemplate {
                                     Layout.preferredHeight: Theme.spacing.s8
 
                                     onClicked: {
+                                        // ═══════════════════════════════════════════════════════════
+                                        // UPDATED: Use SignalR to confirm read (instead of just local delete)
+                                        // ═══════════════════════════════════════════════════════════
+
+                                        console.log("[NotificationsPanel] Confirming read for:", model.id)
+
+                                        // Call backend to mark as read
+                                        SignalRClientService.invoke("ConfirmRead", [model.id])
+
+                                        // Remove from local model immediately for better UX
                                         TruckNotificationModel.removeNotification(model.id)
                                     }
                                 }
@@ -266,6 +276,8 @@ PanelTemplate {
             text: `${TranslationManager.revision}` && qsTr("Delete All")
 
             onClicked: {
+                // Note: You might want to confirm all reads via SignalR here too
+                // For now, just clearing locally
                 TruckNotificationModel.clearAll()
             }
         }

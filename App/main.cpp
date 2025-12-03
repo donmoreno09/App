@@ -13,6 +13,10 @@
 #include <connections/mqtt/parser/TrackParser.h>
 #include <connections/mqtt/parser/TruckNotificationParser.h>
 #include <connections/mqtt/parser/TirParser.h>
+#include <connections/signalr/SignalRClientService.h>
+#include <connections/signalr/parser/TruckNotificationSignalRParser.h>
+#include <connections/signalr/parser/AlertZoneNotificationParser.h>
+
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
 
 int main(int argc, char *argv[])
@@ -94,6 +98,25 @@ int main(int argc, char *argv[])
     trackManager->deactivate("ais");
     trackManager->deactivate("doc-space");
     trackManager->deactivate("tir");
+
+    // SIGNALR SETUP
+
+    auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
+
+    // Register parsers for each EventType (just like MQTT!)
+    signalR->registerParser(0, new TruckNotificationSignalRParser());  // TirAppIssueCreated
+    signalR->registerParser(1, new TruckNotificationSignalRParser());  // TirAppIssueResolved
+    signalR->registerParser(2, new AlertZoneNotificationParser());     // ControlRoomAlertZoneIntrusion
+
+    // Register handler (minimal - delegates to parsers!)
+    signalR->registerHandler("ReceiveNotification", [signalR](const QVariantList& args) {
+        signalR->handleNotification(args);  // ← Clean! Just like MQTT!
+    });
+
+    // Initialize connection
+    signalR->initialize(appConfig);
+
+    qDebug() << "[Main] ✅ SignalR service initialized";
 
     engine.loadFromModule("App", "Main");
 
