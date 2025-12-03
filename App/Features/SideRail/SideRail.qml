@@ -135,7 +135,7 @@ UI.GlobalBackgroundConsumer {
                     text: `${TranslationManager.revision}` && qsTr("Notifications")
                     active: PanelRouter.currentPath === "notification" && SidePanelController.isOpen
 
-                    badgeCount: TruckNotificationModel.count
+                    badgeCount: TruckNotificationModel.count + AlertZoneNotificationModel.count
 
                     onClicked: SidePanelController.toggle(Routes.Notification)
                 }

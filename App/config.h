@@ -10,6 +10,12 @@ struct AppConfig {
     QString mqttHost;
     int     mqttPort;
     QString restBaseUrl;
+
+    // SignalR settings
+    QString signalRHost;
+    int     signalRPort;
+    QString signalRApiKey;
+    QString signalRUserId;
 };
 
 static void ensureUserConfigExists()
@@ -36,6 +42,13 @@ static AppConfig loadConfig()
     cfg.mqttHost      = s.value("mqtt/host", "localhost").toString();
     cfg.mqttPort      = s.value("mqtt/port", 1883).toInt();
     cfg.restBaseUrl   = s.value("rest/baseUrl", "http://localhost:7000").toString();
+
+    // Load SignalR settings
+    cfg.signalRHost   = s.value("signalr/host", "localhost").toString();
+    cfg.signalRPort   = s.value("signalr/port", 7007).toInt();
+    cfg.signalRApiKey = s.value("signalr/apiKey", "IRIDESS_CONTROL_ROOM").toString();
+    cfg.signalRUserId = s.value("signalr/userId", "control-room-user").toString();
+
     return cfg;
 }
 
