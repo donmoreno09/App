@@ -186,7 +186,7 @@ UI.GlobalBackgroundConsumer {
 
                 onClicked: {
                     if (SidePanelController.isOpen) SidePanelController.close()
-                    else SidePanelController.open()
+                    else SidePanelController.show()
                 }
 
                 rotation: SidePanelController.isOpen ? 0 : 180
