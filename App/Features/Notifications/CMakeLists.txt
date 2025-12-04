@@ -1,5 +1,6 @@
 set(qml_files
     NotificationsPanel.qml
+    NotificationToast.qml
 )
 
 set(qml_singletons
