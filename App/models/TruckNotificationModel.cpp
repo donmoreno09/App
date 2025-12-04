@@ -3,8 +3,7 @@
 
 TruckNotificationModel::TruckNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
-{
-}
+{}
 
 int TruckNotificationModel::rowCount(const QModelIndex &parent) const
 {
@@ -37,8 +36,6 @@ QVariant TruckNotificationModel::data(const QModelIndex &index, int role) const
     case IsDeletedRole: return notif.isDeleted;
     case CreatedAtRole: return notif.createdAt;
     case UpdatedAtRole: return notif.updatedAt;
-    case BadgeTypeRole: return notif.getBadgeType();
-    case VariantTypeRole: return notif.getVariantType();
     default: return {};
     }
 }
@@ -93,7 +90,6 @@ void TruckNotificationModel::set(const QVector<TruckNotification> &notifications
 
 void TruckNotificationModel::upsert(const QVector<TruckNotification> &notifications)
 {
-    // Early return if no notifications to process
     if (notifications.isEmpty()) {
         return;
     }
@@ -102,20 +98,17 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
 
     bool countChanged = false;
 
-    // Update existing notification or insert it
     for (const auto& notif : notifications) {
         qDebug() << "[TruckNotificationModel] Processing notification:" << notif.id;
 
-        // Skip if already deleted
         if (m_deletedIds.contains(notif.id)) {
-            qWarning() << "[TruckNotificationModel] ⚠️ Skipping deleted notification:" << notif.id;
+            qWarning() << "[TruckNotificationModel] Skipping deleted notification:" << notif.id;
             continue;
         }
 
         auto it = m_upsertMap.find(notif.id);
 
         if (it != m_upsertMap.end()) {
-            // Update existing notification
             const int row = it.value();
 
             QVector<int> changed = diffRoles(m_notifications[row], notif);
@@ -123,12 +116,11 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
-                qDebug() << "[TruckNotificationModel] ✏️ Updated notification at row" << row;
+                qDebug() << "[TruckNotificationModel] Updated notification at row" << row;
             } else {
-                qDebug() << "[TruckNotificationModel] ℹ️ No changes for notification at row" << row;
+                qDebug() << "[TruckNotificationModel] No changes for notification at row" << row;
             }
         } else {
-            // Insert new notification
             const int row = m_notifications.size();
 
             beginInsertRows({}, row, row);
@@ -137,15 +129,9 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
             endInsertRows();
             countChanged = true;
 
-            qDebug() << "[TruckNotificationModel] ✅ Inserted new notification at row" << row;
+            qDebug() << "[TruckNotificationModel] Inserted new notification at row" << row;
         }
     }
-
-    // ═══════════════════════════════════════════════════════════════
-    // IMPORTANT: DO NOT auto-remove notifications not in current batch!
-    // SignalR sends notifications one-at-a-time, not in batches like MQTT.
-    // Notifications should only be removed via removeNotification() or clearAll().
-    // ═══════════════════════════════════════════════════════════════
 
     if (countChanged) {
         qDebug() << "[TruckNotificationModel] Count changed to:" << m_notifications.size();
@@ -173,22 +159,7 @@ QVector<int> TruckNotificationModel::diffRoles(const TruckNotification &a, const
     if (a.createdAt != b.createdAt) roles << CreatedAtRole;
     if (a.updatedAt != b.updatedAt) roles << UpdatedAtRole;
 
-    // Check helper roles
-    if (a.getBadgeType() != b.getBadgeType()) roles << BadgeTypeRole;
-    if (a.getVariantType() != b.getVariantType()) roles << VariantTypeRole;
-
     return roles;
-}
-
-int TruckNotificationModel::countByState(const QString &state) const
-{
-    int count = 0;
-    for (const auto& notif : m_notifications) {
-        if (notif.operationState == state) {
-            count++;
-        }
-    }
-    return count;
 }
 
 void TruckNotificationModel::removeNotification(const QString &id)

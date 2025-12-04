@@ -51,9 +51,6 @@ public:
 
     // Property getters
     int count() const { return m_notifications.size(); }
-    int blockedCount() const { return countByState("BLOCKED"); }
-    int activeCount() const { return countByState("ACTIVE"); }
-    int warningCount() const { return countByState("WARNING"); }
     bool initialLoadComplete() const { return m_initialLoadComplete; }
     void setInitialLoadComplete(bool complete);
 
@@ -65,7 +62,6 @@ public:
     void upsert(const QVector<TruckNotification> &notifications);
 
     // Invokable methods for QML
-    Q_INVOKABLE int countByState(const QString& state) const;
     Q_INVOKABLE void removeNotification(const QString& id);
     Q_INVOKABLE void clearAll();
     Q_INVOKABLE QQmlPropertyMap* getEditableNotification(int index);
@@ -79,7 +75,7 @@ private:
     QVector<int> diffRoles(const TruckNotification &a, const TruckNotification &b) const;
 
     QVector<TruckNotification> m_notifications;
-    QHash<QString, int> m_upsertMap; // id -> row index
+    QHash<QString, int> m_upsertMap;
     QSet<QString> m_deletedIds;
     QPointer<ModelHelper> m_helper;
     bool m_initialLoadComplete = false;

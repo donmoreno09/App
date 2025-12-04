@@ -23,20 +23,6 @@ public:
     bool isDeleted;                       // IsDeleted
     QString createdAt;                    // CreatedAt (ISO8601 string)
     QString updatedAt;                    // UpdatedAt (ISO8601 string)
-
-    // Helper to determine badge type
-    QString getBadgeType() const {
-        if (operationState == "BLOCKED") return "NEW";
-        if (operationState == "ACTIVE") return "UPDATED";
-        return "NEW"; // fallback
-    }
-
-    // Helper to determine accordion variant
-    QString getVariantType() const {
-        if (operationState == "BLOCKED") return "Urgent";
-        if (operationState == "ACTIVE") return "Success";
-        return "Warning"; // fallback
-    }
 };
 
 #endif // TRUCKNOTIFICATION_H
