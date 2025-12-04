@@ -15,8 +15,8 @@ class TruckNotificationModel : public QAbstractListModel
     QML_ELEMENT
     QML_SINGLETON
 
-    // Expose count property for QML bindings
     Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(bool initialLoadComplete READ initialLoadComplete NOTIFY initialLoadCompleteChanged)
 
 public:
     explicit TruckNotificationModel(QObject *parent = nullptr);
@@ -54,6 +54,8 @@ public:
     int blockedCount() const { return countByState("BLOCKED"); }
     int activeCount() const { return countByState("ACTIVE"); }
     int warningCount() const { return countByState("WARNING"); }
+    bool initialLoadComplete() const { return m_initialLoadComplete; }
+    void setInitialLoadComplete(bool complete);
 
     // Data access
     QVector<TruckNotification> &notifications();
@@ -71,6 +73,7 @@ public:
 signals:
     void countChanged();
     void stateCountsChanged();
+    void initialLoadCompleteChanged();
 
 private:
     QVector<int> diffRoles(const TruckNotification &a, const TruckNotification &b) const;
@@ -79,6 +82,7 @@ private:
     QHash<QString, int> m_upsertMap; // id -> row index
     QSet<QString> m_deletedIds;
     QPointer<ModelHelper> m_helper;
+    bool m_initialLoadComplete = false;
 };
 
 #endif // TRUCKNOTIFICATIONMODEL_H

@@ -451,6 +451,16 @@ void SignalRClientService::parseMessage(const QString& message)
             }
 
             qDebug() << "[SignalR] ✅ Finished loading unread notifications into models";
+
+            auto* truckModel = engine->singletonInstance<TruckNotificationModel*>("App", "TruckNotificationModel");
+            if (truckModel) {
+                truckModel->setInitialLoadComplete(true);
+            }
+
+            auto* alertModel = engine->singletonInstance<AlertZoneNotificationModel*>("App", "AlertZoneNotificationModel");
+            if (alertModel) {
+                alertModel->setInitialLoadComplete(true);
+            }
         }
         break;
     }

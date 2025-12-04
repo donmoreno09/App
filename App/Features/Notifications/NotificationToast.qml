@@ -62,6 +62,9 @@ Item {
         target: TruckNotificationModel
 
         function onRowsInserted(parent, first, last) {
+
+            if (!TruckNotificationModel.initialLoadComplete) { return }
+
             for (let i = first; i <= last; i++) {
                 const notification = TruckNotificationModel.getEditableNotification(i)
                 if (!notification) continue
@@ -80,6 +83,9 @@ Item {
         target: AlertZoneNotificationModel
 
         function onRowsInserted(parent, first, last) {
+
+            if (!AlertZoneNotificationModel.initialLoadComplete) { return }
+
             for (let i = first; i <= last; i++) {
                 const notification = AlertZoneNotificationModel.getEditableNotification(i)
                 if (!notification) continue
