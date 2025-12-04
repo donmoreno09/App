@@ -11,7 +11,6 @@
 #include <connections/ApiEndpoints.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
-#include <connections/mqtt/parser/TruckNotificationParser.h>
 #include <connections/mqtt/parser/TirParser.h>
 #include <connections/signalr/SignalRClientService.h>
 #include <connections/signalr/parser/TruckNotificationSignalRParser.h>
@@ -91,7 +90,6 @@ int main(int argc, char *argv[])
     mqtt->initialize(":/App/config/mqtt_config.json", appConfig);
     mqtt->registerParser("ais", new TrackParser());
     mqtt->registerParser("doc-space", new TrackParser());
-    mqtt->registerParser("trucknotifications", new TruckNotificationParser());
     mqtt->registerParser("tir", new TirParser());
 
     auto *trackManager = engine.singletonInstance<TrackManager*>("App", "TrackManager");
@@ -103,14 +101,14 @@ int main(int argc, char *argv[])
 
     auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
 
-    // Register parsers for each EventType (just like MQTT!)
+    // Register parsers for each EventType
     signalR->registerParser(0, new TruckNotificationSignalRParser());  // TirAppIssueCreated
     signalR->registerParser(1, new TruckNotificationSignalRParser());  // TirAppIssueResolved
     signalR->registerParser(2, new AlertZoneNotificationParser());     // ControlRoomAlertZoneIntrusion
 
-    // Register handler (minimal - delegates to parsers!)
+    // Register handler
     signalR->registerHandler("ReceiveNotification", [signalR](const QVariantList& args) {
-        signalR->handleNotification(args);  // ← Clean! Just like MQTT!
+        signalR->handleNotification(args);
     });
 
     // Initialize connection

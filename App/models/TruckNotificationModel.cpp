@@ -93,16 +93,25 @@ void TruckNotificationModel::set(const QVector<TruckNotification> &notifications
 
 void TruckNotificationModel::upsert(const QVector<TruckNotification> &notifications)
 {
-    QSet<QString> seen;
+    // Early return if no notifications to process
+    if (notifications.isEmpty()) {
+        return;
+    }
+
+    qDebug() << "[TruckNotificationModel] upsert() called with" << notifications.size() << "notifications";
+
     bool countChanged = false;
 
     // Update existing notification or insert it
     for (const auto& notif : notifications) {
+        qDebug() << "[TruckNotificationModel] Processing notification:" << notif.id;
+
+        // Skip if already deleted
         if (m_deletedIds.contains(notif.id)) {
+            qWarning() << "[TruckNotificationModel] ⚠️ Skipping deleted notification:" << notif.id;
             continue;
         }
 
-        seen.insert(notif.id);
         auto it = m_upsertMap.find(notif.id);
 
         if (it != m_upsertMap.end()) {
@@ -114,6 +123,9 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
+                qDebug() << "[TruckNotificationModel] ✏️ Updated notification at row" << row;
+            } else {
+                qDebug() << "[TruckNotificationModel] ℹ️ No changes for notification at row" << row;
             }
         } else {
             // Insert new notification
@@ -124,33 +136,19 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
             m_upsertMap.insert(notif.id, row);
             endInsertRows();
             countChanged = true;
+
+            qDebug() << "[TruckNotificationModel] ✅ Inserted new notification at row" << row;
         }
     }
 
-    // Remove stale notifications (not in current batch)
-    bool removed = false;
-    for (int row = m_notifications.size() - 1; row >= 0; row--) {
-        const auto& notif = m_notifications[row];
-        if (!seen.contains(notif.id)) {
-            beginRemoveRows({}, row, row);
-            m_upsertMap.remove(notif.id);
-            m_notifications.removeAt(row);
-            endRemoveRows();
-            removed = true;
-            countChanged = true;
-        }
-    }
-
-    // Rebuild map if removed notifications (indices shifted)
-    if (removed) {
-        m_upsertMap.clear();
-        m_upsertMap.reserve(m_notifications.size());
-        for (int row = 0; row < m_notifications.size(); row++) {
-            m_upsertMap.insert(m_notifications[row].id, row);
-        }
-    }
+    // ═══════════════════════════════════════════════════════════════
+    // IMPORTANT: DO NOT auto-remove notifications not in current batch!
+    // SignalR sends notifications one-at-a-time, not in batches like MQTT.
+    // Notifications should only be removed via removeNotification() or clearAll().
+    // ═══════════════════════════════════════════════════════════════
 
     if (countChanged) {
+        qDebug() << "[TruckNotificationModel] Count changed to:" << m_notifications.size();
         emit this->countChanged();
     }
 }
