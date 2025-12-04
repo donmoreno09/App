@@ -18,6 +18,7 @@ set(qml_files
     Switcher.qml
     TextArea.qml
     Title.qml
+    ToastNotification.qml
     VerticalDivider.qml
     VerticalPadding.qml
     VerticalSpacer.qml
@@ -40,9 +41,6 @@ set(qml_files
 
     input/Input.qml
     input/InputStyle.qml
-
-    toast/ToastContainer.qml
-    toast/ToastNotification.qml
 
     wizard-page/WizardPage.qml
     wizard-page/constants/StepDefinitions.qml

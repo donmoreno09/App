@@ -10,11 +10,12 @@ import App.Components 1.0 as UI
 Item {
     id: root
 
-    // Public API
-    property string title: qsTr("Nuova notifica")
+    property string title: qsTr("New Notification")
     property string message: ""
     property string notificationType: "truck"
-    property int notificationId: -1
+    property string notificationId: "-1"
+
+    property Item mapSource: null
 
     signal closeRequested()
     signal clicked()
@@ -22,74 +23,68 @@ Item {
     implicitWidth: 320
     implicitHeight: contentContainer.implicitHeight
 
-    // 10-second auto-dismiss timer
     property real _progress: 0
 
     Timer {
-        id: autoCloseTimer
-        interval: 10000
+        id: tick
+        interval: 16
         running: true
-        onTriggered: root.closeRequested()
-    }
-
-    // Progress update timer (separate)
-    Timer {
-        id: progressTimer
-        interval: 50
-        running: autoCloseTimer.running
         repeat: true
 
-        property int elapsed: 0
-
-        onRunningChanged: {
-            if (running) {
-                elapsed = 0
-                root._progress = 0
-            }
-        }
+        property real startTime: Date.now()   // record actual time at start
+        property real totalMs: 10000
 
         onTriggered: {
-            elapsed += interval
-            root._progress = Math.min(1.0, elapsed / autoCloseTimer.interval)
+            const now = Date.now()
+            const elapsed = now - startTime
+            root._progress = Math.min(1.0, elapsed / totalMs)
+
+            if (elapsed >= totalMs) {
+                root.closeRequested()
+                tick.stop()
+            }
         }
     }
 
-    // Modern input handling
     HoverHandler {
-        id: hoverHandler
         cursorShape: Qt.PointingHandCursor
     }
 
     TapHandler {
-        id: tapHandler
         acceptedButtons: Qt.LeftButton
         onTapped: root.clicked()
         grabPermissions: PointerHandler.TakeOverForbidden
     }
 
-    // Capture the background for blur effect
+
     ShaderEffectSource {
         id: backgroundSource
-        sourceItem: root.parent  // Captures the map behind
-        sourceRect: Qt.rect(root.x, root.y, root.width, root.height)
-        anchors.fill: parent
-        visible: false
+        sourceItem: root.mapSource
         live: true
+        recursive: true
+        hideSource: false
+        anchors.fill: parent
     }
 
-    // Apply blur effect
     MultiEffect {
-        id: blurEffect
+        id: blurredBackground
         anchors.fill: parent
         source: backgroundSource
         blurEnabled: true
         blur: 1.0
-        blurMax: 32
-        blurMultiplier: 0.5
-        visible: false
     }
 
-    // Mask for rounded corners
+    MultiEffect {
+        id: maskedBlur
+        anchors.fill: parent
+        source: blurredBackground
+        maskEnabled: true
+        maskSource: Rectangle {
+            anchors.fill: parent
+            radius: Theme.radius.sm
+        }
+    }
+
     Rectangle {
         id: mask
         anchors.fill: parent
@@ -97,23 +92,11 @@ Item {
         visible: false
     }
 
-    // Apply mask to blur
-    MultiEffect {
-        id: maskedBlur
-        anchors.fill: parent
-        source: blurEffect
-        maskEnabled: true
-        maskSource: mask
-    }
-
-    // Glass overlay with color tint
     Rectangle {
-        id: glassOverlay
+        id: glassTint
         anchors.fill: parent
-        color: Qt.rgba(0.1, 0.15, 0.2, 0.7)  // Dark semi-transparent tint
         radius: Theme.radius.sm
-        border.width: Theme.borders.b1
-        border.color: Qt.rgba(1, 1, 1, 0.2)  // Subtle light border
+        color: Qt.rgba(0.08, 0.12, 0.18, 0.60)
     }
 
     // Content container
@@ -122,7 +105,7 @@ Item {
         anchors.fill: parent
         spacing: 0
 
-        // Content area with padding
+        // Content area
         ColumnLayout {
             Layout.fillWidth: true
             Layout.margins: Theme.spacing.s4
@@ -156,7 +139,7 @@ Item {
 
                     Text {
                         text: root.message
-                        color: Qt.rgba(1, 1, 1, 0.7)  // Lighter text for subtitle
+                        color: Qt.rgba(1, 1, 1, 0.75)
                         font.family: Theme.typography.bodySans15Family
                         font.pointSize: Theme.typography.bodySans15Size
                         elide: Text.ElideRight
@@ -193,18 +176,19 @@ Item {
                     }
 
                     onClicked: {
+                        console.log("[Toast] Close button clicked - ID:", root.notificationId)
                         root.closeRequested()
                     }
                 }
             }
         }
 
-        // Progress bar at bottom edge (no margins)
+        // Progress bar
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: Theme.spacing.s0_5
+            Layout.preferredHeight: Theme.spacing.s1
             color: Qt.rgba(1, 1, 1, 0.2)
-            radius: 0
+            radius: Theme.radius.sm
 
             Rectangle {
                 anchors.left: parent.left
@@ -212,16 +196,11 @@ Item {
                 anchors.bottom: parent.bottom
                 width: parent.width * (1 - root._progress)
                 color: Theme.colors.accent500
-                radius: 0
-
-                Behavior on width {
-                    NumberAnimation { duration: 50; easing.type: Easing.Linear }
-                }
+                radius: Theme.radius.sm
             }
         }
     }
 
-    // Entrance animation
     opacity: 0
     scale: 0.9
     Component.onCompleted: {

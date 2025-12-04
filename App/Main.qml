@@ -59,6 +59,7 @@ ApplicationWindow {
     }
 
     MapHost {
+        id: mapHost
         anchors.fill: parent
         initialPlugin: MapPlugins.osmDefault
 
@@ -197,8 +198,10 @@ ApplicationWindow {
         }
     }
 
-    UI.ToastContainer {
+    NotificationToast {
         anchors.fill: parent
         z: Theme.elevation.modal + 1
+
+        mapReference: mapHost
     }
 }

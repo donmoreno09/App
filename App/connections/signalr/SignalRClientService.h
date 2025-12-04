@@ -114,6 +114,7 @@ private:
     void sendHandshake();
     void sendMessage(const QJsonObject& message);
     void parseMessage(const QString& message);
+    void fetchUnreadNotifications();
     QString generateInvocationId();
 
     QWebSocket* m_webSocket;
@@ -122,12 +123,15 @@ private:
     bool m_connected;
     int m_invocationCounter;
     QString m_connectionState;
+    QString m_userId;
 
     // Message handlers (like parsers in MQTT)
     QMap<QString, MessageHandler> m_methodHandlers;
 
     // EventType parsers (MQTT-style)
     QMap<int, class IBaseSignalRMessageParser*> m_eventTypeParsers;
+
+    QMap<QString, QString> m_pendingInvocations;
 
     static constexpr int PING_INTERVAL_MS = 15000;  // 15 seconds
     static constexpr char RECORD_SEPARATOR = '\x1e';

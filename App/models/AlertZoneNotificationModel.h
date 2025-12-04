@@ -22,6 +22,7 @@ class AlertZoneNotificationModel : public QAbstractListModel
     QML_SINGLETON
 
     Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(bool initialLoadComplete READ initialLoadComplete NOTIFY initialLoadCompleteChanged)
 
 public:
     explicit AlertZoneNotificationModel(QObject *parent = nullptr);
@@ -54,6 +55,8 @@ public:
 
     // Property getters
     int count() const { return m_notifications.size(); }
+    bool initialLoadComplete() const { return m_initialLoadComplete; }
+    void setInitialLoadComplete(bool complete);
 
     // Data access
     QVector<AlertZoneNotification> &notifications();
@@ -69,6 +72,7 @@ public:
 
 signals:
     void countChanged();
+    void initialLoadCompleteChanged();
 
 private:
     QVector<int> diffRoles(const AlertZoneNotification &a, const AlertZoneNotification &b) const;
@@ -77,6 +81,7 @@ private:
     QHash<QString, int> m_upsertMap; // id -> row index
     QSet<QString> m_deletedIds;
     QPointer<ModelHelper> m_helper;
+    bool m_initialLoadComplete = false;
 };
 
 #endif // ALERTZONENOTIFICATIONMODEL_H

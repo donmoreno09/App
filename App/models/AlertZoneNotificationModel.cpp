@@ -224,3 +224,12 @@ QQmlPropertyMap *AlertZoneNotificationModel::getEditableNotification(int index)
 {
     return m_helper->map(index);
 }
+
+void AlertZoneNotificationModel::setInitialLoadComplete(bool complete)
+{
+    if (m_initialLoadComplete != complete) {
+        m_initialLoadComplete = complete;
+        emit initialLoadCompleteChanged();
+        qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
+    }
+}

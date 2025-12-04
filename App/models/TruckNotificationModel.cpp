@@ -37,8 +37,6 @@ QVariant TruckNotificationModel::data(const QModelIndex &index, int role) const
     case IsDeletedRole: return notif.isDeleted;
     case CreatedAtRole: return notif.createdAt;
     case UpdatedAtRole: return notif.updatedAt;
-    case BadgeTypeRole: return notif.getBadgeType();
-    case VariantTypeRole: return notif.getVariantType();
     default: return {};
     }
 }
@@ -173,22 +171,7 @@ QVector<int> TruckNotificationModel::diffRoles(const TruckNotification &a, const
     if (a.createdAt != b.createdAt) roles << CreatedAtRole;
     if (a.updatedAt != b.updatedAt) roles << UpdatedAtRole;
 
-    // Check helper roles
-    if (a.getBadgeType() != b.getBadgeType()) roles << BadgeTypeRole;
-    if (a.getVariantType() != b.getVariantType()) roles << VariantTypeRole;
-
     return roles;
-}
-
-int TruckNotificationModel::countByState(const QString &state) const
-{
-    int count = 0;
-    for (const auto& notif : m_notifications) {
-        if (notif.operationState == state) {
-            count++;
-        }
-    }
-    return count;
 }
 
 void TruckNotificationModel::removeNotification(const QString &id)
@@ -239,4 +222,13 @@ void TruckNotificationModel::clearAll()
 QQmlPropertyMap *TruckNotificationModel::getEditableNotification(int index)
 {
     return m_helper->map(index);
+}
+
+void TruckNotificationModel::setInitialLoadComplete(bool complete)
+{
+    if (m_initialLoadComplete != complete) {
+        m_initialLoadComplete = complete;
+        emit initialLoadCompleteChanged();
+        qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
+    }
 }

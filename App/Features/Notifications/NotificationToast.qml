@@ -13,6 +13,8 @@ Item {
     id: container
     anchors.fill: parent
 
+    property Item mapReference: null
+
     readonly property int maxVisibleToasts: 3
     property var toastQueue: []
 
@@ -38,22 +40,17 @@ Item {
                 notificationType: model.toastType
                 notificationId: model.toastId
 
+                mapSource: container.mapReference
+
                 onCloseRequested: {
                     _removeToast(index)
                 }
 
                 onClicked: {
-                    // Open notifications panel
                     SidePanelController.open(Routes.Notification)
-
-                    // Auto-expand the accordion for this notification
-                    // We'll need to expose a method in NotificationsPanel for this
-                    // For now, just open the panel
-
                     _removeToast(index)
                 }
 
-                // Exit animation
                 Component.onDestruction: {
                     _processQueue()
                 }
@@ -61,18 +58,17 @@ Item {
         }
     }
 
-    // Listen to TruckNotificationModel
     Connections {
         target: TruckNotificationModel
 
         function onRowsInserted(parent, first, last) {
+
+            if (!TruckNotificationModel.initialLoadComplete) { return }
+
             for (let i = first; i <= last; i++) {
                 const notification = TruckNotificationModel.getEditableNotification(i)
                 if (!notification) continue
 
-                const title = notification.title
-
-                // Access properties directly, not via value()
                 _addToast({
                     toastTitle: qsTr("New Notification"),
                     toastMessage: qsTr("From ") + notification.operationCode,
@@ -83,17 +79,16 @@ Item {
         }
     }
 
-    // Listen to AlertZoneNotificationModel
     Connections {
         target: AlertZoneNotificationModel
 
         function onRowsInserted(parent, first, last) {
+
+            if (!AlertZoneNotificationModel.initialLoadComplete) { return }
+
             for (let i = first; i <= last; i++) {
                 const notification = AlertZoneNotificationModel.getEditableNotification(i)
                 if (!notification) continue
-
-                // Access properties directly, not via value()
-                const title = notification.title
 
                 _addToast({
                     toastTitle: qsTr("New Notification"),
@@ -105,7 +100,6 @@ Item {
         }
     }
 
-    // Internal functions
     function _addToast(toastData) {
         if (toastsModel.count < maxVisibleToasts) {
             // Add directly to visible toasts (insert at top = index 0)

@@ -60,12 +60,19 @@ PanelTemplate {
                             anchors.fill: parent
                             spacing: Theme.spacing.s3
 
+                            Rectangle {
+                                width: 16
+                                height: 16
+                                radius: 8
+                                color: "#FFCC00"
+                            }
+
                             ColumnLayout {
                                 Layout.fillWidth: true
                                 spacing: Theme.spacing.s1
 
                                 Text {
-                                    text: `${TranslationManager.revision}` && model.title
+                                    text: `${TranslationManager.revision}` && qsTr("Alert Zone: ") + qsTr("Name of the alert zone.")
                                     color: Theme.colors.text
                                     font.family: Theme.typography.bodySans25StrongFamily
                                     font.pointSize: Theme.typography.bodySans25StrongSize
@@ -77,7 +84,9 @@ PanelTemplate {
                                     text: {
                                         const dt = new Date(model.timestamp)
                                         const locale = Qt.locale(LanguageController.currentLanguage)
-                                        return dt.toLocaleString(locale, Locale.ShortFormat)
+                                        const time = dt.toLocaleTimeString(locale, Locale.ShortFormat)
+                                        const date = dt.toLocaleDateString(locale, Locale.ShortFormat)
+                                        return `${TranslationManager.revision}` && qsTr("Reported at %1 of %2").arg(time).arg(date)
                                     }
                                     color: Theme.colors.textMuted
                                     font.family: Theme.typography.bodySans15Family
@@ -91,11 +100,11 @@ PanelTemplate {
                                 Layout.preferredWidth: Theme.spacing.s20
                                 Layout.preferredHeight: Theme.spacing.s6
                                 radius: Theme.radius.sm
-                                color: Theme.colors.error500
+                                color: Theme.colors.warning500
 
                                 Text {
                                     anchors.centerIn: parent
-                                    text: `${TranslationManager.revision}` && qsTr("ALERT")
+                                    text: `${TranslationManager.revision}` && qsTr("NEW")
                                     color: Theme.colors.text
                                     font.family: Theme.typography.bodySans15Family
                                     font.pointSize: Theme.typography.bodySans15Size
@@ -109,11 +118,27 @@ PanelTemplate {
                             spacing: Theme.spacing.s3
 
                             Text {
-                                text: model.message
+                                text: model.id
                                 color: Theme.colors.text
                                 font.family: Theme.typography.bodySans25Family
                                 font.pointSize: Theme.typography.bodySans25Size
+                                font.weight: Theme.typography.weightBold
                                 wrapMode: Text.WordWrap
+                                Layout.fillWidth: true
+                            }
+
+                            Text {
+                                text: {
+                                    const dt = new Date(model.timestamp)
+                                    const locale = Qt.locale(LanguageController.currentLanguage)
+                                    const time = dt.toLocaleTimeString(locale, Locale.ShortFormat)
+                                    const date = dt.toLocaleDateString(locale, Locale.ShortFormat)
+                                    return `${TranslationManager.revision}` && qsTr("Reported at %1 of %2").arg(time).arg(date)
+                                }
+                                color: Theme.colors.textMuted
+                                font.family: Theme.typography.bodySans15Family
+                                font.pointSize: Theme.typography.bodySans15Size
+                                elide: Text.ElideRight
                                 Layout.fillWidth: true
                             }
 
@@ -232,7 +257,9 @@ PanelTemplate {
                                     text: {
                                         const dt = new Date(model.reportedAt)
                                         const locale = Qt.locale(LanguageController.currentLanguage)
-                                        return `${TranslationManager.revision}` && qsTr("Reported at %1").arg(dt.toLocaleString(locale, Locale.ShortFormat))
+                                        const time = dt.toLocaleTimeString(locale, Locale.ShortFormat)
+                                        const date = dt.toLocaleDateString(locale, Locale.ShortFormat)
+                                        return `${TranslationManager.revision}` && qsTr("Reported at %1 of %2").arg(time).arg(date)
                                     }
                                     color: Theme.colors.textMuted
                                     font.family: Theme.typography.bodySans15Family
@@ -272,11 +299,26 @@ PanelTemplate {
                             spacing: Theme.spacing.s3
 
                             Text {
-                                text: (`${TranslationManager.revision}` && qsTr("Truck: ")) + model.operationCode
+                                text:  model.operationCode
                                 color: Theme.colors.text
                                 font.family: Theme.typography.bodySans25StrongFamily
                                 font.pointSize: Theme.typography.bodySans25StrongSize
                                 font.weight: Theme.typography.weightBold
+                            }
+
+                            Text {
+                                text: {
+                                    const dt = new Date(model.reportedAt)
+                                    const locale = Qt.locale(LanguageController.currentLanguage)
+                                    const time = dt.toLocaleTimeString(locale, Locale.ShortFormat)
+                                    const date = dt.toLocaleDateString(locale, Locale.ShortFormat)
+                                    return `${TranslationManager.revision}` && qsTr("Reported at %1 of %2").arg(time).arg(date)
+                                }
+                                color: Theme.colors.textMuted
+                                font.family: Theme.typography.bodySans15Family
+                                font.pointSize: Theme.typography.bodySans15Size
+                                elide: Text.ElideRight
+                                Layout.fillWidth: true
                             }
 
                             Text {
@@ -288,9 +330,9 @@ PanelTemplate {
                                     }
                                     return ""
                                 }
-                                color: Theme.colors.text
-                                font.family: Theme.typography.bodySans25Family
-                                font.pointSize: Theme.typography.bodySans25Size
+                                color: Theme.colors.textMuted
+                                font.family: Theme.typography.bodySans15Family
+                                font.pointSize: Theme.typography.bodySans15Size
                                 wrapMode: Text.WordWrap
                                 Layout.fillWidth: true
                             }
@@ -304,9 +346,9 @@ PanelTemplate {
                                     }
                                     return ""
                                 }
-                                color: Theme.colors.text
-                                font.family: Theme.typography.bodySans25Family
-                                font.pointSize: Theme.typography.bodySans25Size
+                                color: Theme.colors.textMuted
+                                font.family: Theme.typography.bodySans15Family
+                                font.pointSize: Theme.typography.bodySans15Size
                                 wrapMode: Text.WordWrap
                                 Layout.fillWidth: true
                             }
