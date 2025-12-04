@@ -30,13 +30,9 @@ PanelTemplate {
 
     Component.onCompleted: {
         syncData()
-        if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
+        if (!MapModeController.isEditing) {
             MapModeController.setActiveMode(MapModeRegistry.createPointMode)
         }
-    }
-
-    Component.onDestruction: {
-        MapModeController.setActiveMode(MapModeRegistry.interactionMode)
     }
 
     Connections {

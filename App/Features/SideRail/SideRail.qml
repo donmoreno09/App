@@ -8,6 +8,7 @@ import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.SidePanel
 import App.Features.TitleBar
+import App.Features.MapModes
 import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
 import App.Features.Notifications 1.0

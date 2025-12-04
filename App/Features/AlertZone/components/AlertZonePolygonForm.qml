@@ -15,7 +15,7 @@ ColumnLayout {
     readonly property bool isValid: validate()
 
     function validate() {
-        if (MapModeController.isEditingAlertZone) {
+        if (MapModeController.isEditing) {
             return true
         }
 
@@ -48,15 +48,15 @@ ColumnLayout {
 
             onValueChanged: {
                 const alertZone = MapModeController.alertZone
-                const oldCoord = (MapModeController.isEditingAlertZone) ? alertZone.coordinates[index] : MapModeRegistry.createPolygonMode.getCoordinate(index)
+                const oldCoord = (MapModeController.isEditing) ? alertZone.coordinates[index] : MapModeRegistry.createPolygonMode.getCoordinate(index)
                 const coord = QtPositioning.coordinate(value, oldCoord.longitude)
-                if (MapModeController.isEditingAlertZone) AlertZoneModel.setCoordinate(alertZone.modelIndex, index, coord)
+                if (MapModeController.isEditing) AlertZoneModel.setCoordinate(alertZone.modelIndex, index, coord)
                 else MapModeRegistry.createPolygonMode.setCoordinate(index, coord)
             }
 
             function updateText() {
                 let value
-                if (MapModeController.isEditingAlertZone) value = MapModeController.alertZone.coordinates[index].latitude
+                if (MapModeController.isEditing) value = MapModeController.alertZone.coordinates[index].latitude
                 else value = MapModeRegistry.createPolygonMode.getCoordinate(index).latitude
                 setText(value)
             }
@@ -72,15 +72,15 @@ ColumnLayout {
 
             onValueChanged: {
                 const alertZone = MapModeController.alertZone
-                const oldCoord = (MapModeController.isEditingAlertZone) ? alertZone.coordinates[index] : MapModeRegistry.createPolygonMode.getCoordinate(index)
+                const oldCoord = (MapModeController.isEditing) ? alertZone.coordinates[index] : MapModeRegistry.createPolygonMode.getCoordinate(index)
                 const coord = QtPositioning.coordinate(oldCoord.latitude, value)
-                if (MapModeController.isEditingAlertZone) AlertZoneModel.setCoordinate(alertZone.modelIndex, index, coord)
+                if (MapModeController.isEditing) AlertZoneModel.setCoordinate(alertZone.modelIndex, index, coord)
                 else MapModeRegistry.createPolygonMode.setCoordinate(index, coord)
             }
 
             function updateText() {
                 let value
-                if (MapModeController.isEditingAlertZone) value = MapModeController.alertZone.coordinates[index].longitude
+                if (MapModeController.isEditing) value = MapModeController.alertZone.coordinates[index].longitude
                 else value = MapModeRegistry.createPolygonMode.getCoordinate(index).longitude
                 setText(value)
             }
@@ -91,7 +91,7 @@ ColumnLayout {
     Label {
         Layout.fillWidth: true
         visible: {
-            if (MapModeController.isEditingAlertZone) return MapModeController.alertZone.coordinates.length === 0
+            if (MapModeController.isEditing) return MapModeController.alertZone.coordinates.length === 0
             else return MapModeRegistry.createPolygonMode.coordinatesCount() === 0
         }
         text: `${TranslationManager.revision}` && qsTr("No coordinates inserted. Click on the map to add points.")
@@ -108,7 +108,7 @@ ColumnLayout {
 
     Repeater {
         model: {
-            if (MapModeController.isEditingAlertZone) return MapModeController.alertZone.coordinates.length
+            if (MapModeController.isEditing) return MapModeController.alertZone.coordinates.length
             else return MapModeRegistry.createPolygonMode.coordinatesCount()
         }
         delegate: CoordInputs { }
