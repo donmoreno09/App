@@ -18,6 +18,24 @@ QtObject {
     signal routeChanged(string path)
 
     // Methods
+    // Reopen the panel without recreating the current route if possible.
+    function show(path, props) {
+        if (isOpen) return
+
+        const targetPath = (path === undefined || path === null) ? (router.currentPath ?? "") : path
+        const hasStack = router.stackView && router.stackView.depth > 0
+        const canReuse = hasStack && router.currentPath === targetPath && targetPath !== ""
+
+        if (!canReuse) {
+            open(targetPath, props)
+            return
+        }
+
+        opening()
+        isOpen = true
+        opened()
+    }
+
     function open(path, props) {
         if (isOpen) return
 
@@ -30,7 +48,12 @@ QtObject {
 
     function toggle(path, props) {
         if (!isOpen) {
-            open(path, props)
+            const targetPath = (path === undefined || path === null) ? (router.currentPath ?? "") : path
+            const hasStack = router.stackView && router.stackView.depth > 0
+            const canReuse = hasStack && router.currentPath === targetPath && targetPath !== ""
+
+            if (canReuse) show(targetPath, props)
+            else open(path, props)
             return
         }
 

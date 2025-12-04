@@ -18,7 +18,7 @@ PanelTemplate {
     title.text: `${TranslationManager.revision}` && qsTr("Alert Zone")
 
     function syncData() {
-        if (!MapModeController.isEditingAlertZone) return
+        if (!MapModeController.isEditing) return
 
         labelInput.text = MapModeController.alertZone.label
         noteTextArea.text = MapModeController.alertZone.note ?? ""
@@ -29,13 +29,9 @@ PanelTemplate {
 
     Component.onCompleted: {
         syncData()
-        if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
+        if (!MapModeController.isEditing) {
             MapModeController.setActiveMode(MapModeRegistry.createPolygonMode)
         }
-    }
-
-    Component.onDestruction: {
-        MapModeController.setActiveMode(MapModeRegistry.interactionMode)
     }
 
     Connections {
@@ -74,7 +70,7 @@ PanelTemplate {
 
                     Label {
                         Layout.fillWidth: true
-                        visible: MapModeController.isEditingAlertZone
+                        visible: MapModeController.isEditing
                         text: activeSwitch.checked ?  `${TranslationManager.revision}` && qsTr("Deactivate") :  `${TranslationManager.revision}` && qsTr("Activate")
                         color: Theme.colors.text
                         font {
@@ -86,13 +82,13 @@ PanelTemplate {
 
                     UI.Toggle {
                         id: activeSwitch
-                        visible: MapModeController.isEditingAlertZone
+                        visible: MapModeController.isEditing
                         checked: true
-                        onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
+                        onToggled: if (MapModeController.isEditing) MapModeController.alertZone.active = checked
                     }
                 }
 
-                UI.HorizontalDivider { visible: MapModeController.isEditingAlertZone }
+                UI.HorizontalDivider { visible: MapModeController.isEditing }
 
                 SectionTitle { text: `${TranslationManager.revision}` && qsTr("General Info") }
 
@@ -104,7 +100,7 @@ PanelTemplate {
                     labelText: `${TranslationManager.revision}` && qsTr("Label(*)")
                     placeholderText: `${TranslationManager.revision}` && qsTr("Label")
 
-                    onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.label = text
+                    onTextEdited: if (MapModeController.isEditing) MapModeController.alertZone.label = text
                 }
 
                 Severity {
@@ -117,7 +113,7 @@ PanelTemplate {
                     Layout.fillWidth: true
                     labelText: `${TranslationManager.revision}` && qsTr("Note")
 
-                    onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
+                    onTextEdited: if (MapModeController.isEditing) MapModeController.alertZone.note = text
                 }
 
                 UI.VerticalSpacer {}
@@ -182,7 +178,7 @@ PanelTemplate {
 
         console.log("Sending layers:", JSON.stringify(layersMap))
 
-        if (MapModeController.isEditingAlertZone) {
+        if (MapModeController.isEditing) {
             data.id = MapModeController.alertZone.id
             AlertZoneModel.update(data)
         } else {

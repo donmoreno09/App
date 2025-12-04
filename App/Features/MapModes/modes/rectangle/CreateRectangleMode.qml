@@ -15,10 +15,26 @@ RectangleMode {
     property geoCoordinate topLeft: QtPositioning.coordinate()
     property geoCoordinate bottomRight: QtPositioning.coordinate()
 
+    // Listen to map events while drawing
+    Connections {
+        target: MapController.map
+
+        function onBearingChanged() {
+            // Keep the preview rectangle anchored when the map rotates mid-drag
+            updatePreviewRectangle()
+        }
+
+        function onTiltChanged() {
+            // Keep the preview rectangle anchored when the map tilts mid-drag
+            updatePreviewRectangle()
+        }
+    }
+
     // Input state
     property bool  dragging: drag.active
     property point dragStart: drag.centroid.pressPosition
     property point dragEnd: drag.centroid.position
+    property geoCoordinate dragStartCoord: QtPositioning.coordinate()
     property bool isDraggingHandler: false
 
     function buildGeometry() {
@@ -31,11 +47,16 @@ RectangleMode {
     function resetPreview() {
         topLeft = QtPositioning.coordinate()
         bottomRight = QtPositioning.coordinate()
+        dragStartCoord = QtPositioning.coordinate()
     }
 
     function clampLat(v)   { return Math.max(-90, Math.min(90, v)) } // spec range
     function normLon(v) { // wrap to [-180,180]
         let x = v; while (x < -180) x += 360; while (x > 180) x -= 360; return x
+    }
+
+    function areValidCoords() {
+        return topLeft.isValid && bottomRight.isValid
     }
 
     function setTopLeft(lat, lon) {
@@ -56,19 +77,57 @@ RectangleMode {
     function setBottomRightLatitude(lat)     { setBottomRight(lat,  undefined) }
     function setBottomRightLongitude(lon)    { setBottomRight(undefined, lon) }
 
+    function maxCheckNaN(a: real, b: real): real {
+        if (isNaN(a)) return b
+        if (isNaN(b)) return a
+        return Math.max(a, b)
+    }
+
+    function minCheckNaN(a: real, b: real): real {
+        if (isNaN(a)) return b
+        if (isNaN(b)) return a
+        return Math.min(a, b)
+    }
+
     function normalizeCorners() {
         // Keep NW -> SE ordering
-        const n = Math.max(topLeft.latitude, bottomRight.latitude)
-        const s = Math.min(topLeft.latitude, bottomRight.latitude)
-        const w = Math.min(topLeft.longitude, bottomRight.longitude)
-        const e = Math.max(topLeft.longitude, bottomRight.longitude)
+        const n = maxCheckNaN(topLeft.latitude, bottomRight.latitude)
+        const s = minCheckNaN(topLeft.latitude, bottomRight.latitude)
+        const w = minCheckNaN(topLeft.longitude, bottomRight.longitude)
+        const e = maxCheckNaN(topLeft.longitude, bottomRight.longitude)
         const tl = QtPositioning.coordinate(n, w)
         const br = QtPositioning.coordinate(s, e)
-        if (tl.latitude !== topLeft.latitude || tl.longitude !== topLeft.longitude
-                || br.latitude !== bottomRight.latitude || br.longitude !== bottomRight.longitude) {
+
+        if (tl.latitude !== topLeft.latitude || tl.longitude !== topLeft.longitude) {
             topLeft = tl
+        }
+
+        if (br.latitude !== bottomRight.latitude || br.longitude !== bottomRight.longitude) {
             bottomRight = br
         }
+    }
+
+    function updatePreviewRectangle() {
+        if (!drag.active) return
+
+        // Use the stored start coordinate so re-orienting the map won't move the anchor point.
+        let c1 = dragStartCoord
+        if (!c1.isValid) {
+            const p1 = MapController.map.mapFromItem(root, dragStart.x, dragStart.y)
+            c1 = MapController.map.toCoordinate(p1, false)
+        }
+
+        const p2 = MapController.map.mapFromItem(root, dragEnd.x, dragEnd.y)
+        const c2 = MapController.map.toCoordinate(p2, false)
+        if (!c1.isValid || !c2.isValid) return
+
+        const n = Math.max(c1.latitude, c2.latitude)
+        const s = Math.min(c1.latitude, c2.latitude)
+        const w = Math.min(c1.longitude, c2.longitude)
+        const e = Math.max(c1.longitude, c2.longitude)
+
+        topLeft = QtPositioning.coordinate(n, w)
+        bottomRight = QtPositioning.coordinate(s, e)
     }
 
     // Input handlers
@@ -85,12 +144,15 @@ RectangleMode {
         cursorShape: Qt.CrossCursor
         enabled: !moveRectTap.pressed && !isDraggingHandler
 
+        onActiveChanged: if (active) {
+            const p = MapController.map.mapFromItem(root, dragStart.x, dragStart.y)
+            dragStartCoord = MapController.map.toCoordinate(p, false)
+        } else {
+            dragStartCoord = QtPositioning.coordinate()
+        }
+
         onTranslationChanged: {
-            topLeft = MapController.map.toCoordinate(Qt.point(Math.min(dragStart.x, dragEnd.x),
-                                                              Math.min(dragStart.y, dragEnd.y)))
-            bottomRight = MapController.map.toCoordinate(Qt.point(Math.max(dragStart.x, dragEnd.x),
-                                                                  Math.max(dragStart.y, dragEnd.y)))
-            root.normalizeCorners()
+            updatePreviewRectangle()
         }
     }
 
@@ -108,7 +170,7 @@ RectangleMode {
     // Committed rectangle
     MapRectangle {
         id: committedRect
-        visible: !root.dragging
+        visible: !root.dragging && root.areValidCoords()
         topLeft: root.topLeft
         bottomRight: root.bottomRight
         color: "#22448888"
