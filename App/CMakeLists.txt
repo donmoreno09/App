@@ -43,7 +43,6 @@ set(cpp_sources
     # Connections
     connections/mqtt/parser/IMessageParser.h
     connections/mqtt/parser/TrackParser.h
-    connections/mqtt/parser/TruckNotificationParser.h
     connections/mqtt/parser/TirParser.h
     connections/mqtt/MqttClientService.cpp
     connections/mqtt/MqttClientService.h

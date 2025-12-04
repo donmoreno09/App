@@ -244,9 +244,10 @@ void SignalRClientService::onTextMessageReceived(const QString& message)
     // Can receive multiple messages concatenated
     QStringList messages = message.split(QChar(RECORD_SEPARATOR), Qt::SkipEmptyParts);
 
-    for (const QString& msg : messages) {
-        parseMessage(msg);
+    for (int i = 0; i < messages.size(); ++i) {
+        parseMessage(messages[i]);
     }
+
 }
 
 void SignalRClientService::onWebSocketError(QAbstractSocket::SocketError error)
@@ -343,12 +344,12 @@ void SignalRClientService::parseMessage(const QString& message)
         QString target = obj["target"].toString();
         QJsonArray argsArray = obj["arguments"].toArray();
 
-        // Convert QJsonArray to QVariantList
         QVariantList args;
-        for (const QJsonValue& val : argsArray) {
-            args.append(val.toVariant());
-        }
+        args.reserve(argsArray.size()); // migliora prestazioni
 
+        for (int i = 0; i < argsArray.size(); ++i) {
+            args.append(argsArray[i].toVariant());
+        }
         qDebug() << "[SignalR] 📞 Server invoked:" << target;
 
         // Route to registered handler (like MQTT parser routing)

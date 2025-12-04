@@ -196,4 +196,9 @@ ApplicationWindow {
             }
         }
     }
+
+    UI.ToastContainer {
+        anchors.fill: parent
+        z: Theme.elevation.modal + 1
+    }
 }

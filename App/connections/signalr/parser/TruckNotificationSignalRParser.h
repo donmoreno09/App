@@ -12,45 +12,30 @@
  * EventType 1: TirAppIssueResolved
  *
  * Parses SignalR envelope and Payload JSON into TruckNotification entities.
- *
- * IMPORTANT: Backend sends Payload as a JSON ARRAY STRING: "[{...}]"
  */
 class TruckNotificationSignalRParser : public ISignalRMessageParser<TruckNotification> {
 public:
     QVector<TruckNotification> parse(const QVariantMap& envelope) override {
-        // Extract envelope fields
-        QString id = envelope["Id"].toString();
+        // Extract payload string
         QString payloadStr = envelope["Payload"].toString();
 
-        // Parse Payload JSON ARRAY (backend sends "[{...}]")
-        QJsonDocument doc = QJsonDocument::fromJson(payloadStr.toUtf8());
-        if (doc.isNull() || !doc.isArray()) {
-            qWarning() << "[TruckNotificationSignalRParser] Payload is not a JSON array:" << payloadStr;
-            return {};
-        }
-
-        QJsonArray payloadArray = doc.array();
-        if (payloadArray.isEmpty()) {
-            qWarning() << "[TruckNotificationSignalRParser] Payload array is empty";
-            return {};
-        }
-
-        // Get first object from array
-        QJsonObject payload = payloadArray[0].toObject();
+        // Parse Payload JSON (backend sends single object: "{...}")
+        QJsonObject payload = parsePayload(payloadStr);
         if (payload.isEmpty()) {
-            qWarning() << "[TruckNotificationSignalRParser] Failed to parse Payload JSON object";
+            qWarning() << "[TruckNotificationSignalRParser] Failed to parse Payload JSON";
             return {};
         }
 
         // Create notification
         TruckNotification notif;
 
-        // Use notification ID from payload (not envelope ID)
-        // This is important for proper upsert behavior
+        // IMPORTANT: Use ID from payload, NOT envelope!
+        // Backend sends the notification envelope ID in args[0],
+        // but the actual TruckNotification.Id is in the payload
         notif.id = payload["Id"].toString();
-        notif.userId = extractUserId(envelope);
+        notif.userId = payload["UserId"].toString();  // Also in payload!
 
-        // Parse payload fields
+        // Parse remaining payload fields
         notif.operationCode = payload["OperationCode"].toString();
         notif.operationId = payload["OperationId"].toString();
 
@@ -90,7 +75,7 @@ public:
         notif.createdAt = payload["CreatedAt"].toString();
         notif.updatedAt = payload["UpdatedAt"].toString();
 
-        qDebug() << "[TruckNotificationSignalRParser] Parsed notification ID:" << notif.id
+        qDebug() << "[TruckNotificationSignalRParser] ✅ Parsed notification ID:" << notif.id
                  << "State:" << notif.operationState;
 
         return {notif};

@@ -41,6 +41,9 @@ set(qml_files
     input/Input.qml
     input/InputStyle.qml
 
+    toast/ToastContainer.qml
+    toast/ToastNotification.qml
+
     wizard-page/WizardPage.qml
     wizard-page/constants/StepDefinitions.qml
     wizard-page/test-pages/MissionOverview.qml

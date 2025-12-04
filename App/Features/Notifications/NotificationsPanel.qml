@@ -36,9 +36,7 @@ PanelTemplate {
                     Layout.topMargin: Theme.spacing.s8
                 }
 
-                // ════════════════════════════════════════════════════════════
                 // ALERT ZONE NOTIFICATIONS (EventType 2)
-                // ════════════════════════════════════════════════════════════
 
                 Text {
                     visible: AlertZoneNotificationModel.count > 0
@@ -187,9 +185,7 @@ PanelTemplate {
                     Layout.bottomMargin: Theme.spacing.s4
                 }
 
-                // ════════════════════════════════════════════════════════════
                 // TRUCK NOTIFICATIONS (EventType 0, 1)
-                // ════════════════════════════════════════════════════════════
 
                 Text {
                     visible: TruckNotificationModel.count > 0
@@ -394,27 +390,14 @@ PanelTemplate {
         visible: TruckNotificationModel.count > 0 || AlertZoneNotificationModel.count > 0
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Theme.spacing.s3
+        anchors.margins: Theme.spacing.s4
         spacing: Theme.spacing.s2
 
-        UI.Button {
-            Layout.fillWidth: true
-            variant: UI.ButtonStyles.Ghost
-            text: `${TranslationManager.revision}` && qsTr("Back")
-
-            background: Rectangle {
-                color: Theme.colors.transparent
-                border.width: 0
-            }
-
-            onClicked: {
-                SidePanelController.close()
-            }
-        }
+        UI.HorizontalSpacer {}
 
         UI.Button {
-            Layout.fillWidth: true
-            variant: UI.ButtonStyles.Primary
+            Layout.preferredWidth: parent.width / 2
+            variant: UI.ButtonStyles.Danger
             text: `${TranslationManager.revision}` && qsTr("Delete All")
 
             onClicked: {
@@ -426,21 +409,18 @@ PanelTemplate {
                 // Add truck notification IDs
                 for (let i = 0; i < TruckNotificationModel.count; i++) {
                     const notif = TruckNotificationModel.getEditableNotification(i)
-                    if (notif) allIds.push(notif.value("id"))
+                    if (notif) allIds.push(notif.id)
                 }
 
                 // Add alert zone notification IDs
-                for (let i = 0; i < AlertZoneNotificationModel.count; i++) {
-                    const notif = AlertZoneNotificationModel.getEditableNotification(i)
-                    if (notif) allIds.push(notif.value("id"))
+                for (let j = 0; j < AlertZoneNotificationModel.count; j++) {
+                    const notif = AlertZoneNotificationModel.getEditableNotification(j)
+                    if (notif) allIds.push(notif.id)
                 }
 
-                // Confirm all reads via SignalR (if backend supports bulk operation)
+                // Confirm all reads via SignalR
                 if (allIds.length > 0) {
-                    // Option 1: If backend has "ConfirmReadBulk" method
-                    // SignalRClientService.invoke("ConfirmReadBulk", [allIds])
-
-                    // Option 2: Individual calls (less efficient but works)
+                    // Individual calls (backend doesn't support bulk)
                     for (let id of allIds) {
                         SignalRClientService.invoke("ConfirmRead", [id])
                     }
