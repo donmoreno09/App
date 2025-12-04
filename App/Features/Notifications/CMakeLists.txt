@@ -1,6 +1,14 @@
 set(qml_files
     NotificationsPanel.qml
     NotificationToast.qml
+
+    components/AlertZoneNotificationCard.qml
+    components/NotificationSectionHeader.qml
+    components/NotificationEmptyState.qml
+    components/NotificationFooter.qml
+    components/TruckNotificationCard.qml
+
+    NotificationUtils.js
 )
 
 set(qml_singletons
