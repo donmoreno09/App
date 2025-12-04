@@ -54,7 +54,7 @@ ColumnLayout {
         visible: !controller.isLoading
         icon: "qrc:/App/assets/icons/truck.svg"
         title: `${TranslationManager.revision}` && qsTr("Arriving Trucks")
-        value: controller.dateTimeRangeArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
+        value: controller.dateTimeRangeArrivalCount.toString() + " " + qsTr(" trucks")
         Layout.fillWidth: true
     }
 
