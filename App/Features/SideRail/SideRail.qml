@@ -56,7 +56,10 @@ UI.GlobalBackgroundConsumer {
                     text: `${TranslationManager.revision}` && qsTr("PoI")
                     active: currentPanelPath === Routes.Poi && SidePanelController.isOpen
 
-                    onClicked: SidePanelController.toggle(Routes.Poi)
+                    onClicked: {
+                        MapModeController.clearState()
+                        SidePanelController.toggle(Routes.Poi)
+                    }
                 }
 
                 SideRailItem {
@@ -65,7 +68,10 @@ UI.GlobalBackgroundConsumer {
                     text: `${TranslationManager.revision}` && qsTr("Alert Zone")
                     active: currentPanelPath === Routes.AlertZone && SidePanelController.isOpen
 
-                    onClicked: SidePanelController.toggle(Routes.AlertZone)
+                    onClicked: {
+                        MapModeController.clearState()
+                        SidePanelController.toggle(Routes.AlertZone)
+                    }
                 }
 
                 SideRailItem {
