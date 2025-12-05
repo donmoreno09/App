@@ -34,7 +34,36 @@ MapItemGroup {
         border.color: root.zoneColor
         border.width: 3
         z: root.z
-        property var _startPx: [] // [{x,y} per vertex]
+        property var _startCoords: [] // coordinates at drag start
+        property geoCoordinate _anchorCoord: QtPositioning.coordinate()
+        property point _lastScenePos: Qt.point(0, 0)
+
+        function applyMoveDelta() {
+            if (!moveDrag.active || !_startCoords || _startCoords.length === 0 || !_anchorCoord.isValid) return
+
+            const scenePos = moveDrag.centroid.scenePosition
+            const pointerPx = MapController.map.mapFromItem(null, scenePos.x, scenePos.y)
+            const anchorPx  = MapController.map.fromCoordinate(_anchorCoord, false)
+            const dx = pointerPx.x - anchorPx.x
+            const dy = pointerPx.y - anchorPx.y
+            if (dx === 0 && dy === 0) return
+
+            let changed = false
+            for (let i = 0; i < _startCoords.length; i++) {
+                const startCoord = _startCoords[i]
+                if (!startCoord || !startCoord.isValid) continue
+
+                const startPx = MapController.map.fromCoordinate(startCoord, false)
+                const point = Qt.point(startPx.x + dx, startPx.y + dy)
+                const coord = MapController.map.toCoordinate(point, false)
+                if (coord.isValid) {
+                    AlertZoneModel.setCoordinate(modelIndex, i, coord)
+                    changed = true
+                }
+            }
+
+            if (changed) MapModeRegistry.editPolygonMode.coordinatesChanged()
+        }
 
         TapHandler {
             enabled: !isEditing && !MapModeController.isCreating
@@ -53,19 +82,27 @@ MapItemGroup {
             cursorShape: Qt.SizeAllCursor
 
             onActiveChanged: if (active) {
-                polygon._startPx = []
-                for (let i = 0; i < coordinates.length; i++)
-                    polygon._startPx.push(MapController.map.fromCoordinate(coordinates[i], false))
+                polygon._startCoords = []
+                for (let i = 0; i < coordinates.length; i++) {
+                    const c = coordinates[i]
+                    polygon._startCoords.push(QtPositioning.coordinate(c.latitude, c.longitude))
+                }
+                const pressScene = moveDrag.centroid.scenePressPosition
+                polygon._lastScenePos = pressScene
+                const pressPx = MapController.map.mapFromItem(null, pressScene.x, pressScene.y)
+                polygon._anchorCoord = MapController.map.toCoordinate(pressPx, false)
+            } else {
+                polygon._startCoords = []
+                polygon._anchorCoord = QtPositioning.coordinate()
+                polygon._lastScenePos = Qt.point(0, 0)
             }
 
             onActiveTranslationChanged: {
-                const dx = activeTranslation.x, dy = activeTranslation.y
-                for (let i = 0; i < polygon._startPx.length; i++) {
-                    const point = Qt.point(polygon._startPx[i].x + dx, polygon._startPx[i].y + dy)
-                    const coord = MapController.map.toCoordinate(point, false)
-                    if (coord.isValid) AlertZoneModel.setCoordinate(modelIndex, i, coord)
-                }
-                MapModeRegistry.editPolygonMode.coordinatesChanged()
+                const scenePos = centroid.scenePosition
+                if (scenePos.x === polygon._lastScenePos.x && scenePos.y === polygon._lastScenePos.y)
+                    return
+                polygon._lastScenePos = scenePos
+                polygon.applyMoveDelta()
             }
         }
     }

@@ -179,11 +179,49 @@ RectangleMode {
         z: root.z + 1
 
         // Scratch state for drag
-        property point _startTLpx: Qt.point(0, 0)
-        property point _startBRpx: Qt.point(0, 0)
+        property geoCoordinate _startTLCoord: QtPositioning.coordinate()
+        property geoCoordinate _startBRCoord: QtPositioning.coordinate()
+        property geoCoordinate _anchorCoord: QtPositioning.coordinate()
+        property point _lastScenePos: Qt.point(0, 0)
+
+        function applyMoveDelta() {
+            if (!moveRect.active || !_startTLCoord.isValid || !_startBRCoord.isValid || !_anchorCoord.isValid)
+                return
+
+            // 1. Mouse position in scene coords (real screen pointer)
+            const scenePos = moveRect.centroid.scenePosition
+
+            // 2. Convert from scene -> map-local
+            const pointerPx = MapController.map.mapFromItem(null, scenePos.x, scenePos.y)
+
+            // 3. Anchor geo -> map-local
+            const anchorPx = MapController.map.fromCoordinate(_anchorCoord, false)
+
+            const dx = pointerPx.x - anchorPx.x
+            const dy = pointerPx.y - anchorPx.y
+
+            const startTLpx = MapController.map.fromCoordinate(_startTLCoord, false)
+            const startBRpx = MapController.map.fromCoordinate(_startBRCoord, false)
+
+            const tlPx = Qt.point(startTLpx.x + dx, startTLpx.y + dy)
+            const brPx = Qt.point(startBRpx.x + dx, startBRpx.y + dy)
+
+            const tlCoord = MapController.map.toCoordinate(tlPx, false)
+            const brCoord = MapController.map.toCoordinate(brPx, false)
+            if (!tlCoord.isValid || !brCoord.isValid)
+                return
+
+            root.topLeft     = tlCoord
+            root.bottomRight = brCoord
+            root.normalizeCorners()
+        }
 
         // Prevent tap propagating below
-        TapHandler { id: moveRectTap; acceptedButtons: Qt.LeftButton; gesturePolicy: TapHandler.ReleaseWithinBounds }
+        TapHandler {
+            id: moveRectTap
+            acceptedButtons: Qt.LeftButton
+            gesturePolicy: TapHandler.ReleaseWithinBounds
+        }
 
         DragHandler {
             id: moveRect
@@ -195,17 +233,30 @@ RectangleMode {
             cursorShape: Qt.SizeAllCursor
 
             onActiveChanged: if (active) {
-                committedRect._startTLpx = MapController.map.fromCoordinate(root.topLeft, false)
-                committedRect._startBRpx = MapController.map.fromCoordinate(root.bottomRight, false)
+                committedRect._startTLCoord = root.topLeft
+                committedRect._startBRCoord = root.bottomRight
+
+                const pressScene = moveRect.centroid.scenePressPosition
+                committedRect._lastScenePos = pressScene
+
+                // scene -> map
+                const pressPx = MapController.map.mapFromItem(null, pressScene.x, pressScene.y)
+                committedRect._anchorCoord = MapController.map.toCoordinate(pressPx, false)
+            } else {
+                committedRect._startTLCoord = QtPositioning.coordinate()
+                committedRect._startBRCoord = QtPositioning.coordinate()
+                committedRect._anchorCoord = QtPositioning.coordinate()
             }
 
             onActiveTranslationChanged: {
-                const dx = activeTranslation.x, dy = activeTranslation.y
-                const tlPx = Qt.point(committedRect._startTLpx.x + dx, committedRect._startTLpx.y + dy)
-                const brPx = Qt.point(committedRect._startBRpx.x + dx, committedRect._startBRpx.y + dy)
-                root.topLeft     = MapController.map.toCoordinate(tlPx, false)
-                root.bottomRight = MapController.map.toCoordinate(brPx, false)
-                root.normalizeCorners()
+                const scenePos = centroid.scenePosition
+                if (scenePos.x === committedRect._lastScenePos.x &&
+                    scenePos.y === committedRect._lastScenePos.y) {
+                    return // map rotated/tilted but mouse didn't move
+                }
+
+                committedRect._lastScenePos = scenePos
+                committedRect.applyMoveDelta()
             }
         }
     }
@@ -251,7 +302,13 @@ RectangleMode {
                          QtPositioning.coordinate(bottomRight.latitude, topLeft.longitude)
         )
         anchorPoint: Qt.point(8, 8)
-        sourceItem: Rectangle { width:16; height:16; radius:8; color:"white"; border.color:"green" }
+        sourceItem: Rectangle {
+            width: 16
+            height: 16
+            radius: 8
+            color: "white"
+            border.color: "green"
+        }
         visible: !root.dragging
         z: committedRect.z + 1
 
@@ -263,41 +320,47 @@ RectangleMode {
 
         DragHandler {
             target: null
-                acceptedButtons: Qt.LeftButton
-                grabPermissions: PointerHandler.CanTakeOverFromAnything
+            acceptedButtons: Qt.LeftButton
+            grabPermissions: PointerHandler.CanTakeOverFromAnything
 
-                onTranslationChanged: {
-                    const p = h.mapToItem(MapController.map, centroid.position.x, centroid.position.y)
-                    const c = MapController.map.toCoordinate(p, false)
+            onTranslationChanged: {
+                const p = h.mapToItem(MapController.map, centroid.position.x, centroid.position.y)
+                const c = MapController.map.toCoordinate(p, false)
 
-                    if (h.kind === 0) topLeft = c
-                    else if (h.kind === 1) {
-                        topLeft = QtPositioning.coordinate(c.latitude, topLeft.longitude)
-                        bottomRight = QtPositioning.coordinate(bottomRight.latitude, c.longitude)
+                if (h.kind === 0) {
+                    topLeft = c
+                } else if (h.kind === 1) {
+                    topLeft = QtPositioning.coordinate(c.latitude, topLeft.longitude)
+                    bottomRight = QtPositioning.coordinate(bottomRight.latitude, c.longitude)
+                } else if (h.kind === 2) {
+                    bottomRight = c
+                } else {
+                    bottomRight = QtPositioning.coordinate(c.latitude, bottomRight.longitude)
+                    topLeft = QtPositioning.coordinate(topLeft.latitude, c.longitude)
+                }
+
+                root.normalizeCorners() // keep TL=NW, BR=SE
+
+                // re-label by SWAPPING owners so kinds stay unique
+                const corners = [
+                    { kind: 0, c: topLeft },
+                    { kind: 1, c: QtPositioning.coordinate(topLeft.latitude, bottomRight.longitude) },
+                    { kind: 2, c: bottomRight },
+                    { kind: 3, c: QtPositioning.coordinate(bottomRight.latitude, topLeft.longitude) },
+                ]
+                let nearest = h.kind
+                let best = Infinity
+                for (let i = 0; i < corners.length; ++i) {
+                    const px = MapController.map.fromCoordinate(corners[i].c, false)
+                    const dx = px.x - p.x
+                    const dy = px.y - p.y
+                    const d2 = dx * dx + dy * dy
+                    if (d2 < best) {
+                        best = d2
+                        nearest = corners[i].kind
                     }
-                    else if (h.kind === 2) bottomRight = c
-                    else {
-                        bottomRight = QtPositioning.coordinate(c.latitude, bottomRight.longitude)
-                        topLeft = QtPositioning.coordinate(topLeft.latitude, c.longitude)
-                    }
-
-                    root.normalizeCorners() // keep TL=NW, BR=SE
-
-                    // re-label by SWAPPING owners so kinds stay unique
-                    const corners = [
-                        { kind: 0, c: topLeft },
-                        { kind: 1, c: QtPositioning.coordinate(topLeft.latitude, bottomRight.longitude) },
-                        { kind: 2, c: bottomRight },
-                        { kind: 3, c: QtPositioning.coordinate(bottomRight.latitude, topLeft.longitude) },
-                    ]
-                    let nearest = h.kind, best = Infinity
-                    for (let i = 0; i < corners.length; ++i) {
-                        const px = MapController.map.fromCoordinate(corners[i].c, false)
-                        const dx = px.x - p.x, dy = px.y - p.y
-                        const d2 = dx*dx + dy*dy
-                        if (d2 < best) { best = d2; nearest = corners[i].kind }
-                    }
-                    root._swapKinds(h, nearest)
+                }
+                root._swapKinds(h, nearest)
             }
         }
     }

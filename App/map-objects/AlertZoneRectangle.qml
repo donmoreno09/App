@@ -72,8 +72,35 @@ MapItemGroup {
         border.width: 3
         z: root.z
 
-        property point _startTLpx: Qt.point(0, 0)
-        property point _startBRpx: Qt.point(0, 0)
+        property geoCoordinate _startTLCoord: QtPositioning.coordinate()
+        property geoCoordinate _startBRCoord: QtPositioning.coordinate()
+        property geoCoordinate _anchorCoord: QtPositioning.coordinate()
+        property point _lastScenePos: Qt.point(0, 0)
+
+        function applyMoveDelta() {
+            if (!moveRect.active || !_startTLCoord.isValid || !_startBRCoord.isValid || !_anchorCoord.isValid) return
+
+            const scenePos = moveRect.centroid.scenePosition
+            const pointerPx = MapController.map.mapFromItem(null, scenePos.x, scenePos.y)
+            const anchorPx  = MapController.map.fromCoordinate(_anchorCoord, false)
+            const dx = pointerPx.x - anchorPx.x
+            const dy = pointerPx.y - anchorPx.y
+            if (dx === 0 && dy === 0) return
+
+            const startTLpx = MapController.map.fromCoordinate(_startTLCoord, false)
+            const startBRpx = MapController.map.fromCoordinate(_startBRCoord, false)
+            const tlPx = Qt.point(startTLpx.x + dx, startTLpx.y + dy)
+            const brPx = Qt.point(startBRpx.x + dx, startBRpx.y + dy)
+            const tlCoord = MapController.map.toCoordinate(tlPx, false)
+            const brCoord = MapController.map.toCoordinate(brPx, false)
+            if (!tlCoord.isValid || !brCoord.isValid) return
+
+            model.topLeft = tlCoord
+            MapModeRegistry.editRectangleMode.topLeftChanged()
+            model.bottomRight = brCoord
+            MapModeRegistry.editRectangleMode.bottomRightChanged()
+            normalizeCorners()
+        }
 
         TapHandler {
             enabled: !isEditing && !MapModeController.isCreating
@@ -92,19 +119,25 @@ MapItemGroup {
             cursorShape: Qt.SizeAllCursor
 
             onActiveChanged: if (active) {
-                committedRect._startTLpx = MapController.map.fromCoordinate(topLeft, false)
-                committedRect._startBRpx = MapController.map.fromCoordinate(bottomRight, false)
+                committedRect._startTLCoord = topLeft
+                committedRect._startBRCoord = bottomRight
+                const pressScene = moveRect.centroid.scenePressPosition
+                committedRect._lastScenePos = pressScene
+                const pressPx = MapController.map.mapFromItem(null, pressScene.x, pressScene.y)
+                committedRect._anchorCoord = MapController.map.toCoordinate(pressPx, false)
+            } else {
+                committedRect._startTLCoord = QtPositioning.coordinate()
+                committedRect._startBRCoord = QtPositioning.coordinate()
+                committedRect._anchorCoord = QtPositioning.coordinate()
+                committedRect._lastScenePos = Qt.point(0, 0)
             }
 
             onActiveTranslationChanged: {
-                const dx = activeTranslation.x, dy = activeTranslation.y
-                const tlPx = Qt.point(committedRect._startTLpx.x + dx, committedRect._startTLpx.y + dy)
-                const brPx = Qt.point(committedRect._startBRpx.x + dx, committedRect._startBRpx.y + dy)
-                model.topLeft     = MapController.map.toCoordinate(tlPx, false)
-                MapModeRegistry.editRectangleMode.topLeftChanged()
-                model.bottomRight = MapController.map.toCoordinate(brPx, false)
-                MapModeRegistry.editRectangleMode.bottomRightChanged()
-                normalizeCorners()
+                const scenePos = centroid.scenePosition
+                if (scenePos.x === committedRect._lastScenePos.x && scenePos.y === committedRect._lastScenePos.y)
+                    return
+                committedRect._lastScenePos = scenePos
+                committedRect.applyMoveDelta()
             }
         }
     }
