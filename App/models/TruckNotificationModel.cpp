@@ -22,6 +22,7 @@ QVariant TruckNotificationModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case IdRole: return notif.id;
+    case EnvelopeIdRole: return notif.envelopeId;
     case UserIdRole: return notif.userId;
     case OperationIdRole: return notif.operationId;
     case OperationCodeRole: return notif.operationCode;
@@ -44,6 +45,7 @@ QHash<int, QByteArray> TruckNotificationModel::roleNames() const
 {
     return {
         { IdRole, "id" },
+        { EnvelopeIdRole, "envelopeId"},
         { UserIdRole, "userId" },
         { OperationIdRole, "operationId" },
         { OperationCodeRole, "operationCode" },

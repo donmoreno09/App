@@ -193,7 +193,6 @@ QString SignalRClientService::connectionState() const
     return m_connectionState;
 }
 
-
 void SignalRClientService::onWebSocketConnected()
 {
     qDebug() << "[SignalR] WebSocket connected";
@@ -343,7 +342,7 @@ void SignalRClientService::parseMessage(const QString& message)
         QString invocationId = obj["invocationId"].toString();
         QString methodName = m_pendingInvocations.take(invocationId);
 
-        qDebug() << "[SignalR] ✅ Invocation completed:" << methodName;
+        qDebug() << "[SignalR] Invocation completed:" << methodName;
 
         if (methodName == "GetUnreadNotifications" && obj.contains("result")) {
             QJsonArray resultArray = obj["result"].toArray();
@@ -380,6 +379,7 @@ void SignalRClientService::parseMessage(const QString& message)
         }
         break;
     }
+
     case 6: {  // Ping
         // qDebug() << "[SignalR] Ping received";
         break;

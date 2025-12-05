@@ -414,7 +414,7 @@ PanelTemplate {
 
                                     onClicked: {
                                         console.log("[NotificationsPanel] Confirming read for Truck:", model.id)
-                                        SignalRClientService.invoke("ConfirmRead", [model.id])
+                                        SignalRClientService.invoke("ConfirmRead", [model.envelopeId])
                                         TruckNotificationModel.removeNotification(model.id)
                                     }
                                 }
@@ -451,7 +451,7 @@ PanelTemplate {
                 // Add truck notification IDs
                 for (let i = 0; i < TruckNotificationModel.count; i++) {
                     const notif = TruckNotificationModel.getEditableNotification(i)
-                    if (notif) allIds.push(notif.id)
+                    if (notif) allIds.push(notif.envelopeId)
                 }
 
                 // Add alert zone notification IDs

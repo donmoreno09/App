@@ -9,6 +9,7 @@ class TruckNotification
 {
 public:
     QString id;                           // Id
+    QString envelopeId;                   // Envelope Id (backend deletion ID)
     QString userId;                       // UserId
     QString operationId;                  // OperationId
     QString operationCode;                // OperationCode

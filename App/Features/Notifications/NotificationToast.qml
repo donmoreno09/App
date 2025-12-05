@@ -71,7 +71,7 @@ Item {
 
                 _addToast({
                     toastTitle: qsTr("New Notification"),
-                    toastMessage: qsTr("From ") + notification.operationCode,
+                    toastMessage: qsTr("From ") + notification.envelopeId,
                     toastType: "truck",
                     toastId: notification.id
                 })
