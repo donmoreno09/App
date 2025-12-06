@@ -115,9 +115,6 @@ PanelTemplate {
     }
 
     footer: NotificationFooter {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: Theme.spacing.s4
 
         onDeleteAllRequested: {
             console.log("[NotificationsPanel] Confirming read for all notifications")
