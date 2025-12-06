@@ -3,6 +3,9 @@
 namespace ApiEndpoints {
     QString BaseUrl = "http://localhost:7000";
 
+    // TODO: Alert Zone: route to be updated when be is done
+    QString BaseUrlAlertZone () { return BaseUrl + "/alertzone"; }
+
     QString BaseUrlPoi() { return BaseUrl + "/pointofinterest"; }
     QString GetAllPoiSByLayerId() { return BaseUrlPoi() + "/layer"; }
     QString GetCategories() { return BaseUrlPoi() + "/getCategories"; }

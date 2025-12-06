@@ -71,7 +71,7 @@ ColumnLayout {
             Layout.rightMargin: 10
             icon: "qrc:/App/assets/icons/compass.svg"
             title: `${TranslationManager.revision}` && qsTr("Estimated Time")
-            value: formatMinutes(controller.prediction)
+            value: controller.prediction + " " + formatMinutes(controller.prediction)
         }
 
         Text {

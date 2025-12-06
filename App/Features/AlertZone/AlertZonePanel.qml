@@ -7,8 +7,9 @@ import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
-import App.Features.SidePanel 1.0
+import App.Features.Panels 1.0
 import App.Features.Language 1.0
+import App.Features.SidePanel 1.0
 
 import "components"
 
@@ -17,24 +18,20 @@ PanelTemplate {
     title.text: `${TranslationManager.revision}` && qsTr("Alert Zone")
 
     function syncData() {
-        if (!MapModeController.isEditingAlertZone) return
+        if (!MapModeController.isEditing) return
 
         labelInput.text = MapModeController.alertZone.label
         noteTextArea.text = MapModeController.alertZone.note ?? ""
-        severityComboBox.currentIndex = severityComboBox.comboBox.indexOfValue(MapModeController.alertZone.severity ?? "low")
-        layerSelection.setLayers(MapModeController.alertZone.targetLayers ?? [])
+        severityComboBox.currentIndex = MapModeController.alertZone.severity ?? 0
+        layerSelection.setLayers(MapModeController.alertZone.layers ?? {})
         activeSwitch.checked = MapModeController.alertZone.active ?? true
     }
 
     Component.onCompleted: {
         syncData()
-        if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
+        if (!MapModeController.isEditing) {
             MapModeController.setActiveMode(MapModeRegistry.createPolygonMode)
         }
-    }
-
-    Component.onDestruction: {
-        MapModeController.setActiveMode(MapModeRegistry.interactionMode)
     }
 
     Connections {
@@ -73,7 +70,7 @@ PanelTemplate {
 
                     Label {
                         Layout.fillWidth: true
-                        visible: MapModeController.isEditingAlertZone
+                        visible: MapModeController.isEditing
                         text: activeSwitch.checked ?  `${TranslationManager.revision}` && qsTr("Deactivate") :  `${TranslationManager.revision}` && qsTr("Activate")
                         color: Theme.colors.text
                         font {
@@ -85,13 +82,13 @@ PanelTemplate {
 
                     UI.Toggle {
                         id: activeSwitch
-                        visible: MapModeController.isEditingAlertZone
+                        visible: MapModeController.isEditing
                         checked: true
-                        onToggled: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.active = checked
+                        onToggled: if (MapModeController.isEditing) MapModeController.alertZone.active = checked
                     }
                 }
 
-                UI.HorizontalDivider { visible: MapModeController.isEditingAlertZone }
+                UI.HorizontalDivider { visible: MapModeController.isEditing }
 
                 SectionTitle { text: `${TranslationManager.revision}` && qsTr("General Info") }
 
@@ -103,7 +100,7 @@ PanelTemplate {
                     labelText: `${TranslationManager.revision}` && qsTr("Label(*)")
                     placeholderText: `${TranslationManager.revision}` && qsTr("Label")
 
-                    onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.label = text
+                    onTextEdited: if (MapModeController.isEditing) MapModeController.alertZone.label = text
                 }
 
                 Severity {
@@ -116,7 +113,7 @@ PanelTemplate {
                     Layout.fillWidth: true
                     labelText: `${TranslationManager.revision}` && qsTr("Note")
 
-                    onTextEdited: if (MapModeController.isEditingAlertZone) MapModeController.alertZone.note = text
+                    onTextEdited: if (MapModeController.isEditing) MapModeController.alertZone.note = text
                 }
 
                 UI.VerticalSpacer {}
@@ -162,18 +159,26 @@ PanelTemplate {
 
         const geometry = MapModeController.activeMode.buildGeometry()
 
+        const layersJs = layerSelection.selectedLayers
+        const layersMap = {}
+        for (let key in layersJs) {
+            layersMap[key] = layersJs[key]
+        }
+
         const data = {
             label: labelInput.text,
             geometry: geometry,
-            layerId: 2,
-            layerName: Layers.alertZoneMapLayer(),
             severity: severityComboBox.currentValue,
-            note: noteTextArea.text,
             active: activeSwitch.checked,
-            targetLayers: layerSelection.selectedLayers
+            layers: layersMap,
+            details: {
+                metadata: { note: noteTextArea.text }
+            }
         }
 
-        if (MapModeController.isEditingAlertZone) {
+        console.log("Sending layers:", JSON.stringify(layersMap))
+
+        if (MapModeController.isEditing) {
             data.id = MapModeController.alertZone.id
             AlertZoneModel.update(data)
         } else {

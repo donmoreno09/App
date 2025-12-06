@@ -7,6 +7,7 @@ import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 import App.Features.Mission 1.0
+import App.Features.Notifications 1.0
 import App.Features.TrackPanel 1.0
 import App.Features.TruckArrivals 1.0
 import App.Features.TrailerPredictions 1.0
@@ -24,25 +25,21 @@ UI.GlobalBackgroundConsumer {
         anchors.fill: parent
 
         Component.onCompleted: {
-            PanelRouter.stackView = stackView
+            SidePanelController.router.stackView = stackView
         }
-    }
-
-    Component.onCompleted: {
-        SidePanelController.attach(sidePanel)
     }
 
     Connections {
         target: LanguageController
         function onLanguageChanged() {
-            if (stackView.currentItem && PanelRouter.currentPath) {
+            if (stackView.currentItem && SidePanelController.router.currentPath) {
                 // Temporarily disable transitions
                 var oldTransition = stackView.replaceEnter
                 var oldExitTransition = stackView.replaceExit
                 stackView.replaceEnter = null
                 stackView.replaceExit = null
 
-                PanelRouter.replaceCurrent(PanelRouter.currentPath)
+                SidePanelController.router.replaceCurrent(SidePanelController.router.currentPath)
 
                 // Restore transitions
                 stackView.replaceEnter = oldTransition

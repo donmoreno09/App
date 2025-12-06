@@ -31,7 +31,7 @@ ColumnLayout {
     StatCard {
         icon: "qrc:/App/assets/icons/stopwatch.svg"
         title: `${TranslationManager.revision}` && qsTr("Next Hour")
-        value: controller.currentHourArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
+        value: controller.currentHourArrivalCount.toString() + " " + qsTr(" trucks")
         Layout.fillWidth: true
         visible: !controller.isLoading
     }
@@ -39,7 +39,7 @@ ColumnLayout {
     StatCard {
         icon: "qrc:/App/assets/icons/calendar-arrivals.svg"
         title: `${TranslationManager.revision}` && qsTr("Today")
-        value: controller.todayArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
+        value: controller.todayArrivalCount.toString() + " " + qsTr(" trucks")
         Layout.fillWidth: true
         visible: !controller.isLoading
     }

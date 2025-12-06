@@ -69,9 +69,11 @@ MapItemGroup {
         // Scratch state for drag
         property point _centerPx: Qt.point(0,0)
 
+        // Block input going through
+        TapHandler { gesturePolicy: TapHandler.ReleaseWithinBounds }
+
         TapHandler {
             enabled: !isEditing && !MapModeController.isCreating
-            gesturePolicy: TapHandler.ReleaseWithinBounds
             acceptedButtons: Qt.LeftButton
             onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
         }

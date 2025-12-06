@@ -7,31 +7,31 @@ import App.Components 1.0 as UI
 import App.Features.Language 1.0
 import App.Features.Map 1.0
 
-import "qrc:/App/Features/Notifications/NotificationUtils.js" as Utils
+import "../NotificationUtils.js" as Utils
 
 UI.Accordion {
     id: root
 
     // Data properties
-    required property string notificationId
-    required property string operationCode
-    required property string operationState
-    required property string reportedAt
-    required property int operationIssueTypeId
-    required property int operationIssueSolutionTypeId
-    required property string estimatedArrival
-    required property var location
-    required property string note
+    property string cardNotificationId: ""
+    property string cardOperationCode: ""
+    property string cardOperationState: ""
+    property string cardReportedAt: ""
+    property int cardOperationIssueTypeId: -1
+    property int cardOperationIssueSolutionTypeId: -1
+    property string cardEstimatedArrival: ""
+    property var cardLocation: null
+    property string cardNote: ""
 
     // Signals
     signal deleteRequested(string id)
-    signal viewOnMapRequested(var location)
+    signal viewOnMapRequested(var cardLocation)
 
     Layout.fillWidth: true
 
     variant: {
-        if (root.operationState === "BLOCKED") return UI.AccordionStyles.Warning
-        if (root.operationState === "ACTIVE") return UI.AccordionStyles.Success
+        if (root.cardOperationState === "BLOCKED") return UI.AccordionStyles.Warning
+        if (root.cardOperationState === "ACTIVE") return UI.AccordionStyles.Success
         return UI.AccordionStyles.Warning
     }
 
@@ -46,7 +46,7 @@ UI.Accordion {
             spacing: Theme.spacing.s1
 
             Text {
-                text: `${TranslationManager.revision}` && qsTr("Truck: ") + root.operationCode
+                text: `${TranslationManager.revision}` && qsTr("Truck: ") + root.cardOperationCode
                 color: Theme.colors.text
                 font.family: Theme.typography.bodySans25StrongFamily
                 font.pointSize: Theme.typography.bodySans25StrongSize
@@ -56,7 +56,7 @@ UI.Accordion {
 
             Text {
                 text: {
-                    const formatted = Utils.formatNotificationDate(root.reportedAt, LanguageController.currentLanguage)
+                    const formatted = Utils.formatNotificationDate(root.cardReportedAt, LanguageController.currentLanguage)
                     return `${TranslationManager.revision}` && qsTr("Reported at %1 of %2").arg(formatted.time).arg(formatted.date)
                 }
                 color: Theme.colors.textMuted
@@ -72,16 +72,16 @@ UI.Accordion {
             Layout.preferredHeight: Theme.spacing.s6
             radius: Theme.radius.sm
             color: {
-                if (root.operationState === "BLOCKED") return Theme.colors.warning500
-                if (root.operationState === "ACTIVE") return Theme.colors.success500
+                if (root.cardOperationState === "BLOCKED") return Theme.colors.warning500
+                if (root.cardOperationState === "ACTIVE") return Theme.colors.success500
                 return Theme.colors.caution500
             }
 
             Text {
                 anchors.centerIn: parent
                 text: {
-                    if (root.operationState === "BLOCKED") return `${TranslationManager.revision}` && qsTr("NEW")
-                    if (root.operationState === "ACTIVE") return `${TranslationManager.revision}` && qsTr("UPDATED")
+                    if (root.cardOperationState === "BLOCKED") return `${TranslationManager.revision}` && qsTr("NEW")
+                    if (root.cardOperationState === "ACTIVE") return `${TranslationManager.revision}` && qsTr("UPDATED")
                     return ""
                 }
                 color: Theme.colors.text
@@ -97,7 +97,7 @@ UI.Accordion {
         spacing: Theme.spacing.s3
 
         Text {
-            text: root.operationCode
+            text: root.cardOperationCode
             color: Theme.colors.text
             font.family: Theme.typography.bodySans25StrongFamily
             font.pointSize: Theme.typography.bodySans25StrongSize
@@ -106,7 +106,7 @@ UI.Accordion {
 
         Text {
             text: {
-                const formatted = Utils.formatNotificationDate(root.reportedAt, LanguageController.currentLanguage)
+                const formatted = Utils.formatNotificationDate(root.cardReportedAt, LanguageController.currentLanguage)
                 return `${TranslationManager.revision}` && qsTr("Reported at %1 of %2").arg(formatted.time).arg(formatted.date)
             }
             color: Theme.colors.textMuted
@@ -117,10 +117,10 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.operationState === "ACTIVE" && root.operationIssueTypeId > 0
+            visible: root.cardOperationState === "ACTIVE" && root.cardOperationIssueTypeId > 0
             text: {
-                if (root.operationState === "ACTIVE" && root.operationIssueTypeId > 0) {
-                    const issueType = NotificationsTranslations.getIssueTypeName(root.operationIssueTypeId)
+                if (root.cardOperationState === "ACTIVE" && root.cardOperationIssueTypeId > 0) {
+                    const issueType = NotificationsTranslations.getIssueTypeName(root.cardOperationIssueTypeId)
                     return `${TranslationManager.revision}` && qsTr("Issue: %1").arg(issueType)
                 }
                 return ""
@@ -133,10 +133,10 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.operationState === "ACTIVE" && root.operationIssueSolutionTypeId > 0
+            visible: root.cardOperationState === "ACTIVE" && root.cardOperationIssueSolutionTypeId > 0
             text: {
-                if (root.operationState === "ACTIVE" && root.operationIssueSolutionTypeId > 0) {
-                    const solutionType = NotificationsTranslations.getSolutionTypeName(root.operationIssueSolutionTypeId)
+                if (root.cardOperationState === "ACTIVE" && root.cardOperationIssueSolutionTypeId > 0) {
+                    const solutionType = NotificationsTranslations.getSolutionTypeName(root.cardOperationIssueSolutionTypeId)
                     return `${TranslationManager.revision}` && qsTr("Resolution: %1").arg(solutionType)
                 }
                 return ""
@@ -149,10 +149,10 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.estimatedArrival !== "" && root.estimatedArrival !== null
+            visible: root.cardEstimatedArrival !== "" && root.cardEstimatedArrival !== null
             text: {
-                if (root.estimatedArrival) {
-                    const dt = new Date(root.estimatedArrival)
+                if (root.cardEstimatedArrival) {
+                    const dt = new Date(root.cardEstimatedArrival)
                     const locale = Qt.locale(LanguageController.currentLanguage)
                     return `${TranslationManager.revision}` && qsTr("Estimated arrival: %1").arg(dt.toLocaleString(locale, Locale.ShortFormat))
                 }
@@ -164,11 +164,16 @@ UI.Accordion {
         }
 
         Text {
+            visible: {
+                if (!root.cardLocation) return false
+                if (typeof root.cardLocation !== 'object') return false
+                return root.cardLocation.isValid === true
+            }
             text: {
-                const loc = root.location
+                if (!root.cardLocation || !root.cardLocation.isValid) return ""
                 return `${TranslationManager.revision}` && qsTr("Location: Lat %1°, Lon %2°")
-                    .arg(loc.latitude.toFixed(4))
-                    .arg(loc.longitude.toFixed(4))
+                    .arg(root.cardLocation.latitude.toFixed(4))
+                    .arg(root.cardLocation.longitude.toFixed(4))
             }
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
@@ -176,8 +181,8 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.note !== "" && root.note !== null
-            text: `${TranslationManager.revision}` && qsTr("Note: %1").arg(root.note)
+            visible: root.cardNote !== "" && root.cardNote !== null
+            text: `${TranslationManager.revision}` && qsTr("Note: %1").arg(root.cardNote)
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
             font.pointSize: Theme.typography.bodySans15Size
@@ -195,10 +200,12 @@ UI.Accordion {
                 icon.width: 16
                 icon.height: 16
                 Layout.preferredHeight: Theme.spacing.s8
-                enabled: root.location && root.location.isValid
+                enabled: root.cardLocation && typeof root.cardLocation === 'object' && root.cardLocation.isValid === true
 
                 onClicked: {
-                    root.viewOnMapRequested(root.location)
+                    if (root.cardLocation && root.cardLocation.isValid) {
+                        root.viewOnMapRequested(root.cardLocation)
+                    }
                 }
             }
 
@@ -208,7 +215,7 @@ UI.Accordion {
                 Layout.preferredHeight: Theme.spacing.s8
 
                 onClicked: {
-                    root.deleteRequested(root.notificationId)
+                    root.deleteRequested(root.cardNotificationId)
                 }
             }
         }

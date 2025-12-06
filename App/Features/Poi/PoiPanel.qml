@@ -7,6 +7,7 @@ import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
+import App.Features.Panels 1.0
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
@@ -29,13 +30,9 @@ PanelTemplate {
 
     Component.onCompleted: {
         syncData()
-        if (MapModeController.activeMode === MapModeRegistry.interactionMode) {
+        if (!MapModeController.isEditing) {
             MapModeController.setActiveMode(MapModeRegistry.createPointMode)
         }
-    }
-
-    Component.onDestruction: {
-        MapModeController.setActiveMode(MapModeRegistry.interactionMode)
     }
 
     Connections {

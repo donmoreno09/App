@@ -98,7 +98,6 @@ int main(int argc, char *argv[])
     trackManager->deactivate("tir");
 
     // SIGNALR SETUP
-
     auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
 
     // Register parsers for each EventType
@@ -114,7 +113,7 @@ int main(int argc, char *argv[])
     // Initialize connection
     signalR->initialize(appConfig);
 
-    qDebug() << "[Main] ✅ SignalR service initialized";
+    qDebug() << "[Main] SignalR service initialized";
 
     engine.loadFromModule("App", "Main");
 

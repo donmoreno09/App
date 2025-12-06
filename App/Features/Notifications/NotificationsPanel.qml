@@ -5,12 +5,10 @@ import QtQuick.Layouts 6.8
 import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
-import App.Features.SidePanel 1.0
+import App.Features.Panels 1.0
 import App.Features.Language 1.0
 import App.Features.Notifications 1.0
 import App.Features.Map 1.0
-
-import "components" as NotificationComponents
 
 PanelTemplate {
     title.text: `${TranslationManager.revision}` && qsTr("Notifications")
@@ -27,11 +25,11 @@ PanelTemplate {
                 anchors.fill: parent
                 spacing: Theme.spacing.s4
 
-                NotificationComponents.NotificationEmptyState {
+                NotificationEmptyState {
                     visible: TruckNotificationModel.count === 0 && AlertZoneNotificationModel.count === 0
                 }
 
-                NotificationComponents.NotificationSectionHeader {
+                NotificationSectionHeader {
                     sectionTitle: qsTr("Alert Zone Intrusions")
                     visible: AlertZoneNotificationModel.count > 0
                 }
@@ -39,12 +37,18 @@ PanelTemplate {
                 Repeater {
                     model: AlertZoneNotificationModel
 
-                    delegate: NotificationComponents.AlertZoneNotificationCard {
-                        notificationId: model.id
-                        timestamp: model.timestamp
-                        trackName: model.trackName || ""
-                        alertZoneName: model.alertZoneName || ""
-                        location: model.location
+                    delegate: AlertZoneNotificationCard {
+                        required property string id
+                        required property string timestamp
+                        required property string trackName
+                        required property string alertZoneName
+                        required property var location
+
+                        cardNotificationId: id
+                        cardTimestamp: timestamp
+                        cardTrackName: trackName || ""
+                        cardAlertZoneName: alertZoneName || ""
+                        cardLocation: location
 
                         onDeleteRequested: (id) => {
                             console.log("[NotificationsPanel] Confirming read for AlertZone:", id)
@@ -64,7 +68,7 @@ PanelTemplate {
                     Layout.bottomMargin: Theme.spacing.s4
                 }
 
-                NotificationComponents.NotificationSectionHeader {
+                NotificationSectionHeader {
                     sectionTitle: qsTr("Truck Operations")
                     visible: TruckNotificationModel.count > 0
                 }
@@ -72,16 +76,26 @@ PanelTemplate {
                 Repeater {
                     model: TruckNotificationModel
 
-                    delegate: NotificationComponents.TruckNotificationCard {
-                        notificationId: model.id
-                        operationCode: model.operationCode
-                        operationState: model.operationState
-                        reportedAt: model.reportedAt
-                        operationIssueTypeId: model.operationIssueTypeId
-                        operationIssueSolutionTypeId: model.operationIssueSolutionTypeId
-                        estimatedArrival: model.estimatedArrival || ""
-                        location: model.location
-                        note: model.note || ""
+                    delegate: TruckNotificationCard {
+                        required property string id
+                        required property string operationCode
+                        required property string operationState
+                        required property string reportedAt
+                        required property int operationIssueTypeId
+                        required property int operationIssueSolutionTypeId
+                        required property string estimatedArrival
+                        required property var location
+                        required property string note
+
+                        cardNotificationId: id
+                        cardOperationCode: operationCode
+                        cardOperationState: operationState
+                        cardReportedAt: reportedAt
+                        cardOperationIssueTypeId: operationIssueTypeId
+                        cardOperationIssueSolutionTypeId: operationIssueSolutionTypeId
+                        cardEstimatedArrival: estimatedArrival || ""
+                        cardLocation: location
+                        cardNote: note || ""
 
                         onDeleteRequested: (id) => {
                             console.log("[NotificationsPanel] Confirming read for Truck:", id)
@@ -100,7 +114,7 @@ PanelTemplate {
         }
     }
 
-    footer: NotificationComponents.NotificationFooter {
+    footer: NotificationFooter {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: Theme.spacing.s4

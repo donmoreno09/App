@@ -25,9 +25,11 @@ MapItemGroup {
         z: root.z
         property var _startPx: [] // [{x,y} per vertex]
 
+        // Block input going through
+        TapHandler { gesturePolicy: TapHandler.ReleaseWithinBounds }
+
         TapHandler {
             enabled: !isEditing && !MapModeController.isCreating
-            gesturePolicy: TapHandler.ReleaseWithinBounds
             acceptedButtons: Qt.LeftButton
             onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
         }

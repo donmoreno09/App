@@ -67,9 +67,11 @@ MapItemGroup {
         property point _startTLpx: Qt.point(0, 0)
         property point _startBRpx: Qt.point(0, 0)
 
+        // Block input going through
+        TapHandler { gesturePolicy: TapHandler.ReleaseWithinBounds }
+
         TapHandler {
             enabled: !isEditing && !MapModeController.isCreating
-            gesturePolicy: TapHandler.ReleaseWithinBounds
             acceptedButtons: Qt.LeftButton
             onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
         }

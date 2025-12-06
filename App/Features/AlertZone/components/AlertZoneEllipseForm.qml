@@ -13,7 +13,7 @@ ColumnLayout {
     spacing: Theme.spacing.s4
 
     function validate() {
-        if (MapModeController.isEditingAlertZone) return true
+        if (MapModeController.isEditing) return true
 
         return MapModeRegistry.createEllipseMode.coord.isValid
                 && MapModeRegistry.createEllipseMode.radiusA > 0
@@ -48,11 +48,11 @@ ColumnLayout {
             labelText: `${TranslationManager.revision}` && qsTr("Center Latitude(*)")
 
             onValueChanged: {
-                if (MapModeController.isEditingAlertZone) MapModeController.alertZone.coordinate = QtPositioning.coordinate(value, MapModeController.alertZone.coordinate.longitude)
+                if (MapModeController.isEditing) MapModeController.alertZone.coordinate = QtPositioning.coordinate(value, MapModeController.alertZone.coordinate.longitude)
                 else MapModeRegistry.createEllipseMode.coord.latitude = value
             }
 
-            function updateText() { setText((MapModeController.isEditingAlertZone) ? MapModeController.alertZone.coordinate.latitude : MapModeRegistry.createEllipseMode.coord.latitude) }
+            function updateText() { setText((MapModeController.isEditing) ? MapModeController.alertZone.coordinate.latitude : MapModeRegistry.createEllipseMode.coord.latitude) }
             Component.onCompleted: updateText()
         }
 
@@ -64,11 +64,11 @@ ColumnLayout {
             type: UI.InputCoordinate.Longitude
 
             onValueChanged: {
-                if (MapModeController.isEditingAlertZone) MapModeController.alertZone.coordinate = QtPositioning.coordinate(MapModeController.alertZone.coordinate.latitude, value)
+                if (MapModeController.isEditing) MapModeController.alertZone.coordinate = QtPositioning.coordinate(MapModeController.alertZone.coordinate.latitude, value)
                 else MapModeRegistry.createEllipseMode.coord.longitude = value
             }
 
-            function updateText() { setText((MapModeController.isEditingAlertZone) ? MapModeController.alertZone.coordinate.longitude : MapModeRegistry.createEllipseMode.coord.longitude) }
+            function updateText() { setText((MapModeController.isEditing) ? MapModeController.alertZone.coordinate.longitude : MapModeRegistry.createEllipseMode.coord.longitude) }
             Component.onCompleted: updateText()
         }
     }
@@ -91,12 +91,12 @@ ColumnLayout {
 
             onTextEdited: {
                 const value = Number(text) || 0
-                if (MapModeController.isEditingAlertZone) MapModeController.alertZone.radiusA = value
+                if (MapModeController.isEditing) MapModeController.alertZone.radiusA = value
                 else MapModeRegistry.createEllipseMode.radiusA = value
             }
 
             function updateText() {
-                const value = (MapModeController.isEditingAlertZone) ? MapModeController.alertZone.radiusA : MapModeRegistry.createEllipseMode.radiusA
+                const value = (MapModeController.isEditing) ? MapModeController.alertZone.radiusA : MapModeRegistry.createEllipseMode.radiusA
                 text = value.toFixed(6)
             }
 
@@ -119,12 +119,12 @@ ColumnLayout {
             onTextEdited: {
                 const value = Number(text) || 0
                 console.log("text:", text, "value:", value)
-                if (MapModeController.isEditingAlertZone) MapModeController.alertZone.radiusB = value
+                if (MapModeController.isEditing) MapModeController.alertZone.radiusB = value
                 else MapModeRegistry.createEllipseMode.radiusB = value
             }
 
             function updateText() {
-                const value = (MapModeController.isEditingAlertZone) ? MapModeController.alertZone.radiusB : MapModeRegistry.createEllipseMode.radiusB
+                const value = (MapModeController.isEditing) ? MapModeController.alertZone.radiusB : MapModeRegistry.createEllipseMode.radiusB
                 text = value.toFixed(6)
             }
 

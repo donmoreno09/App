@@ -3,13 +3,11 @@
 
 AlertZoneNotificationModel::AlertZoneNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
-{
-}
+{}
 
 int AlertZoneNotificationModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
-        return 0;
+    if (parent.isValid()) return 0;
 
     return m_notifications.size();
 }
@@ -35,8 +33,6 @@ QVariant AlertZoneNotificationModel::data(const QModelIndex &index, int role) co
     case CreatedAtRole: return notif.createdAt;
     case IsReadRole: return notif.isRead;
     case IsDeletedRole: return notif.isDeleted;
-    case BadgeTypeRole: return notif.getBadgeType();
-    case VariantTypeRole: return notif.getVariantType();
     default: return {};
     }
 }
@@ -57,15 +53,12 @@ QHash<int, QByteArray> AlertZoneNotificationModel::roleNames() const
         { CreatedAtRole, "createdAt" },
         { IsReadRole, "isRead" },
         { IsDeletedRole, "isDeleted" },
-        { BadgeTypeRole, "badgeType" },
-        { VariantTypeRole, "variantType" }
     };
 }
 
 Qt::ItemFlags AlertZoneNotificationModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return Qt::NoItemFlags;
+    if (!index.isValid()) return Qt::NoItemFlags;
 
     return Qt::ItemIsSelectable;
 }
@@ -89,29 +82,24 @@ void AlertZoneNotificationModel::set(const QVector<AlertZoneNotification> &notif
 
 void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &notifications)
 {
-    // Early return if no notifications to process
-    if (notifications.isEmpty()) {
-        return;
-    }
+    if (notifications.isEmpty()) { return; }
 
     qDebug() << "[AlertZoneNotificationModel] upsert() called with" << notifications.size() << "notifications";
 
     bool countChanged = false;
 
-    // Update existing notification or insert it
     for (const auto& notif : notifications) {
-        qDebug() << "[AlertZoneNotificationModel] Processing notification:" << notif.id;
+        qDebug() << "[AlertZoneNotificationModel] Processing notification: " << notif.id;
 
         // Skip if already deleted
         if (m_deletedIds.contains(notif.id)) {
-            qWarning() << "[AlertZoneNotificationModel] ⚠️ Skipping deleted notification:" << notif.id;
+            qWarning() << "[AlertZoneNotificationModel] Skipping deleted notification: " << notif.id;
             continue;
         }
 
         auto it = m_upsertMap.find(notif.id);
 
         if (it != m_upsertMap.end()) {
-            // Update existing notification
             const int row = it.value();
 
             QVector<int> changed = diffRoles(m_notifications[row], notif);
@@ -119,9 +107,9 @@ void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &no
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
-                qDebug() << "[AlertZoneNotificationModel] ✏️ Updated notification at row" << row;
+                qDebug() << "[AlertZoneNotificationModel] Updated notification at row" << row;
             } else {
-                qDebug() << "[AlertZoneNotificationModel] ℹ️ No changes for notification at row" << row;
+                qDebug() << "[AlertZoneNotificationModel] No changes for notification at row" << row;
             }
         } else {
             // Insert new notification
@@ -133,15 +121,9 @@ void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &no
             endInsertRows();
             countChanged = true;
 
-            qDebug() << "[AlertZoneNotificationModel] ✅ Inserted new notification at row" << row;
+            qDebug() << "[AlertZoneNotificationModel] Inserted new notification at row" << row;
         }
     }
-
-    // ═══════════════════════════════════════════════════════════════
-    // IMPORTANT: DO NOT auto-remove notifications not in current batch!
-    // SignalR sends notifications one-at-a-time, not in batches like MQTT.
-    // Notifications should only be removed via removeNotification() or clearAll().
-    // ═══════════════════════════════════════════════════════════════
 
     if (countChanged) {
         qDebug() << "[AlertZoneNotificationModel] Count changed to:" << m_notifications.size();
@@ -149,8 +131,7 @@ void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &no
     }
 }
 
-QVector<int> AlertZoneNotificationModel::diffRoles(const AlertZoneNotification &a,
-                                                   const AlertZoneNotification &b) const
+QVector<int> AlertZoneNotificationModel::diffRoles(const AlertZoneNotification &a, const AlertZoneNotification &b) const
 {
     QVector<int> roles;
 
@@ -167,10 +148,6 @@ QVector<int> AlertZoneNotificationModel::diffRoles(const AlertZoneNotification &
     if (a.createdAt != b.createdAt) roles << CreatedAtRole;
     if (a.isRead != b.isRead) roles << IsReadRole;
     if (a.isDeleted != b.isDeleted) roles << IsDeletedRole;
-
-    // Check helper roles
-    if (a.getBadgeType() != b.getBadgeType()) roles << BadgeTypeRole;
-    if (a.getVariantType() != b.getVariantType()) roles << VariantTypeRole;
 
     return roles;
 }
@@ -192,7 +169,6 @@ void AlertZoneNotificationModel::removeNotification(const QString &id)
     m_notifications.removeAt(row);
     endRemoveRows();
 
-    // Rebuild map (indices shifted)
     m_upsertMap.clear();
     m_upsertMap.reserve(m_notifications.size());
     for (int i = 0; i < m_notifications.size(); i++) {

@@ -15,11 +15,8 @@ QtObject {
     property var poi: null
     property var alertZone: null
     readonly property bool isCreating: activeMode && activeMode.type === "creating"
-    readonly property bool isEditing: poi != null
-    readonly property bool isEditingAlertZone: alertZone != null
-
-    property bool isSwitchingToOtherPoi: false
-    property bool isSwitchingToOtherAlertZone: false
+    readonly property bool isEditing: poi != null || alertZone != null
+    property bool _willEdit: false
 
     property BaseMode activeMode: null
 
@@ -32,19 +29,17 @@ QtObject {
     }
 
     // Methods
+    function clearState() {
+        if (poi) PoiModel.discardChanges()
+        poi = null
+        if (alertZone) AlertZoneModel.discardChanges()
+        alertZone = null
+        console.log("Clearing map mode controller state")
+    }
+
     function setActiveMode(mode: BaseMode) {
-        if (poi && !isSwitchingToOtherPoi) {
-            poi = null
-            PoiModel.discardChanges()
-        }
-
-        if (alertZone && !isSwitchingToOtherAlertZone) {
-            alertZone = null
-            AlertZoneModel.discardChanges()
-        }
-
-        if (isSwitchingToOtherPoi) isSwitchingToOtherPoi = false
-        if (isSwitchingToOtherAlertZone) isSwitchingToOtherAlertZone = false
+        if (!_willEdit) clearState()
+        _willEdit = false
 
         if (activeMode && activeMode.resetPreview) {
             activeMode.resetPreview()
@@ -54,19 +49,20 @@ QtObject {
     }
 
     function editPoi(editablePoi) {
-        if (poi) isSwitchingToOtherPoi = true
+        clearState()
+        _willEdit = true
 
         poi = editablePoi
         switch (poi.shapeTypeId) {
         case MapModeController.PointType:
-            activeMode = MapModeRegistry.editPointMode
+            setActiveMode(MapModeRegistry.editPointMode)
             break;
         case MapModeController.EllipseType:
-            activeMode = MapModeRegistry.editEllipseMode
+            setActiveMode(MapModeRegistry.editEllipseMode)
             break;
         case MapModeController.PolygonType:
-            if (poi.isRectangle) activeMode = MapModeRegistry.editRectangleMode
-            else activeMode = MapModeRegistry.editPolygonMode
+            if (poi.isRectangle) setActiveMode(MapModeRegistry.editRectangleMode)
+            else setActiveMode(MapModeRegistry.editPolygonMode)
             break;
         default:
             console.error("Editing PoI with unknown shape type")
@@ -75,16 +71,17 @@ QtObject {
     }
 
     function editAlertZone(editableAlertZone) {
-        if (alertZone) isSwitchingToOtherAlertZone = true
+        clearState()
+        _willEdit = true
 
         alertZone = editableAlertZone
         switch (alertZone.shapeTypeId) {
         case MapModeController.EllipseType:
-            activeMode = MapModeRegistry.editEllipseMode
+            setActiveMode(MapModeRegistry.editEllipseMode)
             break;
         case MapModeController.PolygonType:
-            if (alertZone.isRectangle) activeMode = MapModeRegistry.editRectangleMode
-            else activeMode = MapModeRegistry.editPolygonMode
+            if (alertZone.isRectangle) setActiveMode(MapModeRegistry.editRectangleMode)
+            else setActiveMode(MapModeRegistry.editPolygonMode)
             break;
         default:
             console.error("Editing Alert Zone with unknown shape type")

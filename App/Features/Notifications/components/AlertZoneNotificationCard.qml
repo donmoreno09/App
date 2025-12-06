@@ -7,21 +7,21 @@ import App.Components 1.0 as UI
 import App.Features.Language 1.0
 import App.Features.Map 1.0
 
-import "qrc:/App/Features/Notifications/NotificationUtils.js" as Utils
+import "../NotificationUtils.js" as Utils
 
 UI.Accordion {
     id: root
 
     // Data properties
-    required property string notificationId
-    required property string timestamp
-    required property string trackName
-    required property string alertZoneName
-    required property var location
+    property string cardNotificationId: ""
+    property string cardTimestamp: ""
+    property string cardTrackName: ""
+    property string cardAlertZoneName: ""
+    property var cardLocation: null
 
     // Signals
     signal deleteRequested(string id)
-    signal viewOnMapRequested(var location)
+    signal viewOnMapRequested(var cardLocation)
 
     Layout.fillWidth: true
     variant: UI.AccordionStyles.Urgent
@@ -53,7 +53,7 @@ UI.Accordion {
 
             Text {
                 text: {
-                    const formatted = Utils.formatNotificationDate(root.timestamp, LanguageController.currentLanguage)
+                    const formatted = Utils.formatNotificationDate(root.cardTimestamp, LanguageController.currentLanguage)
                     return `${TranslationManager.revision}` && qsTr("Reported at %1 of %2").arg(formatted.time).arg(formatted.date)
                 }
                 color: Theme.colors.textMuted
@@ -86,7 +86,7 @@ UI.Accordion {
         spacing: Theme.spacing.s3
 
         Text {
-            text: root.notificationId
+            text: root.cardNotificationId
             color: Theme.colors.text
             font.family: Theme.typography.bodySans25Family
             font.pointSize: Theme.typography.bodySans25Size
@@ -97,7 +97,7 @@ UI.Accordion {
 
         Text {
             text: {
-                const formatted = Utils.formatNotificationDate(root.timestamp, LanguageController.currentLanguage)
+                const formatted = Utils.formatNotificationDate(root.cardTimestamp, LanguageController.currentLanguage)
                 return `${TranslationManager.revision}` && qsTr("Reported at %1 of %2").arg(formatted.time).arg(formatted.date)
             }
             color: Theme.colors.textMuted
@@ -108,28 +108,32 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.trackName !== "" && root.trackName !== null
-            text: `${TranslationManager.revision}` && qsTr("Track: %1").arg(root.trackName)
+            visible: root.cardTrackName !== "" && root.cardTrackName !== null
+            text: `${TranslationManager.revision}` && qsTr("Track: %1").arg(root.cardTrackName)
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
             font.pointSize: Theme.typography.bodySans15Size
         }
 
         Text {
-            visible: root.alertZoneName !== "" && root.alertZoneName !== null
-            text: `${TranslationManager.revision}` && qsTr("Alert Zone: %1").arg(root.alertZoneName)
+            visible: root.cardAlertZoneName !== "" && root.cardAlertZoneName !== null
+            text: `${TranslationManager.revision}` && qsTr("Alert Zone: %1").arg(root.cardAlertZoneName)
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
             font.pointSize: Theme.typography.bodySans15Size
         }
 
         Text {
-            visible: root.location && root.location.isValid
+            visible: {
+                if (!root.cardLocation) return false
+                if (typeof root.cardLocation !== 'object') return false
+                return root.cardLocation.isValid === true
+            }
             text: {
-                const loc = root.location
+                if (!root.cardLocation || !root.cardLocation.isValid) return ""
                 return `${TranslationManager.revision}` && qsTr("Location: Lat %1°, Lon %2°")
-                    .arg(loc.latitude.toFixed(4))
-                    .arg(loc.longitude.toFixed(4))
+                    .arg(root.cardLocation.latitude.toFixed(4))
+                    .arg(root.cardLocation.longitude.toFixed(4))
             }
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
@@ -140,7 +144,11 @@ UI.Accordion {
             Layout.alignment: Qt.AlignRight
 
             UI.Button {
-                visible: root.location && root.location.isValid
+                visible: {
+                    if (!root.cardLocation) return false
+                    if (typeof root.cardLocation !== 'object') return false
+                    return root.cardLocation.isValid === true
+                }
                 text: `${TranslationManager.revision}` && qsTr("View on Map")
                 variant: UI.ButtonStyles.Primary
                 icon.source: "qrc:/App/assets/icons/icona_centra_clean.svg"
@@ -149,7 +157,9 @@ UI.Accordion {
                 Layout.preferredHeight: Theme.spacing.s8
 
                 onClicked: {
-                    root.viewOnMapRequested(root.location)
+                    if (root.cardLocation && root.cardLocation.isValid) {
+                        root.viewOnMapRequested(root.cardLocation)
+                    }
                 }
             }
 
@@ -159,7 +169,7 @@ UI.Accordion {
                 Layout.preferredHeight: Theme.spacing.s8
 
                 onClicked: {
-                    root.deleteRequested(root.notificationId)
+                    root.deleteRequested(root.cardNotificationId)
                 }
             }
         }

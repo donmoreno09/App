@@ -1,13 +1,9 @@
 set(qml_files
-    BasePanel.qml
-    NotFoundPanel.qml
-    PanelTemplate.qml
     SidePanel.qml
     routes.js
 )
 
 set(qml_singletons
-    PanelRouter.qml
     SidePanelController.qml
 )
 

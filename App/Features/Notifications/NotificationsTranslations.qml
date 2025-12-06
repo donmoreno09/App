@@ -26,14 +26,4 @@ QtObject {
             default: return `${TranslationManager.revision}` && qsTr("Unknown")
         }
     }
-
-    // Operation State Translation
-    function getOperationStateName(state) {
-        switch(state) {
-            case "BLOCKED": return `${TranslationManager.revision}` && qsTr("Blocked")
-            case "ACTIVE": return `${TranslationManager.revision}` && qsTr("Active")
-            case "WARNING": return `${TranslationManager.revision}` && qsTr("Warning")
-            default: return state
-        }
-    }
 }

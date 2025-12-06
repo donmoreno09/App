@@ -9,51 +9,53 @@
 #include <QSharedPointer>
 #include "../persistence/ipersistable.h"
 #include "Geometry.h"
+#include "Details.h"
 
 class AlertZone : public IPersistable
 {
 public:
     QString id;
     QString label;
-    int layerId = 0;
-    QString layerName;
-    QString note;
-    QString severity = "low";
+    int severity = 0;
     bool active = true;
-    QStringList targetLayers;
+    QMap<QString, bool> layers;
 
     Geometry geometry;
+
+    Details details;
 
     QJsonObject toJson() const override {
         QJsonObject obj;
         obj["id"] = id;
         obj["label"] = label;
-        obj["layerId"] = layerId;
-        obj["layerName"] = layerName;
-        obj["note"] = note;
         obj["severity"] = severity;
-        obj["active"] = active;
-        obj["targetLayers"] = QJsonArray::fromStringList(targetLayers);
+        obj["enabled"] = active;
+
+        QJsonObject layersObj;
+        for (auto it = layers.begin(); it != layers.end(); ++it) {
+            layersObj[it.key()] = it.value();
+        }
+        obj["layers"] = layersObj;
+
         obj["geometry"] = geometry.toJson();
+        obj["details"] = details.toJson();
         return obj;
     }
 
     void fromJson(const QJsonObject &obj) override {
         id = obj["id"].toString();
         label = obj["label"].toString();
-        layerId = obj["layerId"].toInt();
-        layerName = obj["layerName"].toString();
-        note = obj["note"].toString();
-        severity = obj["severity"].toString("low");
-        active = obj["active"].toBool(true);
+        severity = obj["severity"].toInt(0);
+        active = obj["enabled"].toBool(true);
 
-        targetLayers.clear();
-        const QJsonArray arr = obj["targetLayers"].toArray();
-        for (const auto& v : arr) {
-            targetLayers.append(v.toString());
+        layers.clear();
+        const QJsonObject layersObj = obj["layers"].toObject();
+        for (auto it = layersObj.begin(); it != layersObj.end(); ++it) {
+            layers.insert(it.key(), it.value().toBool());
         }
 
         geometry = Geometry::fromJson(obj["geometry"].toObject());
+        details.fromJson(obj["details"].toObject());
     }
 };
 

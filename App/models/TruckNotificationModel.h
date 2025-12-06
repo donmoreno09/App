@@ -23,6 +23,7 @@ public:
 
     enum Roles {
         IdRole = Qt::UserRole + 1,
+        EnvelopeIdRole,
         UserIdRole,
         OperationIdRole,
         OperationCodeRole,
@@ -75,7 +76,7 @@ private:
     QVector<int> diffRoles(const TruckNotification &a, const TruckNotification &b) const;
 
     QVector<TruckNotification> m_notifications;
-    QHash<QString, int> m_upsertMap; // id -> row index
+    QHash<QString, int> m_upsertMap;
     QSet<QString> m_deletedIds;
     QPointer<ModelHelper> m_helper;
     bool m_initialLoadComplete = false;

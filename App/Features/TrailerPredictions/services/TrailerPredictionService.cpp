@@ -4,6 +4,8 @@
 #include <QUrl>
 #include <QUrlQuery>
 #include <QScopeGuard>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 TrailerPredictionService::TrailerPredictionService(QObject* parent)
     : QObject(parent)
@@ -49,10 +51,20 @@ void TrailerPredictionService::performGet(const QUrl& url)
             return;
         }
 
+        // Read the raw response
+        QByteArray rawData = reply->readAll();
+
+        // Remove quotes if present (API returns "26" instead of 26)
+        QString cleanData = QString::fromUtf8(rawData).trimmed();
+        if (cleanData.startsWith('"') && cleanData.endsWith('"')) {
+            cleanData = cleanData.mid(1, cleanData.length() - 2);
+        }
+
         bool ok = false;
-        const int value = reply->readAll().toInt(&ok);
+        const int value = cleanData.toInt(&ok);
+
         if (!ok) {
-            emit requestFailed(QStringLiteral("Invalid response format"));
+            emit requestFailed(QStringLiteral("Invalid response format: %1").arg(QString::fromUtf8(rawData)));
             return;
         }
 

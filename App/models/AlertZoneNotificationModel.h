@@ -9,12 +9,6 @@
 #include <entities/AlertZoneNotification.h>
 #include "ModelHelper.h"
 
-/**
- * @brief AlertZoneNotificationModel
- *
- * Model for Alert Zone Intrusion notifications (EventType 2).
- * Follows the same pattern as TruckNotificationModel for consistency.
- */
 class AlertZoneNotificationModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -41,8 +35,6 @@ public:
         CreatedAtRole,
         IsReadRole,
         IsDeletedRole,
-        BadgeTypeRole,
-        VariantTypeRole
     };
 
     Q_ENUM(Roles)
@@ -78,7 +70,7 @@ private:
     QVector<int> diffRoles(const AlertZoneNotification &a, const AlertZoneNotification &b) const;
 
     QVector<AlertZoneNotification> m_notifications;
-    QHash<QString, int> m_upsertMap; // id -> row index
+    QHash<QString, int> m_upsertMap;
     QSet<QString> m_deletedIds;
     QPointer<ModelHelper> m_helper;
     bool m_initialLoadComplete = false;

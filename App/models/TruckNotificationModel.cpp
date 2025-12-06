@@ -3,8 +3,7 @@
 
 TruckNotificationModel::TruckNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
-{
-}
+{}
 
 int TruckNotificationModel::rowCount(const QModelIndex &parent) const
 {
@@ -23,6 +22,7 @@ QVariant TruckNotificationModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case IdRole: return notif.id;
+    case EnvelopeIdRole: return notif.envelopeId;
     case UserIdRole: return notif.userId;
     case OperationIdRole: return notif.operationId;
     case OperationCodeRole: return notif.operationCode;
@@ -45,6 +45,7 @@ QHash<int, QByteArray> TruckNotificationModel::roleNames() const
 {
     return {
         { IdRole, "id" },
+        { EnvelopeIdRole, "envelopeId"},
         { UserIdRole, "userId" },
         { OperationIdRole, "operationId" },
         { OperationCodeRole, "operationCode" },
@@ -91,7 +92,6 @@ void TruckNotificationModel::set(const QVector<TruckNotification> &notifications
 
 void TruckNotificationModel::upsert(const QVector<TruckNotification> &notifications)
 {
-    // Early return if no notifications to process
     if (notifications.isEmpty()) {
         return;
     }
@@ -100,20 +100,17 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
 
     bool countChanged = false;
 
-    // Update existing notification or insert it
     for (const auto& notif : notifications) {
         qDebug() << "[TruckNotificationModel] Processing notification:" << notif.id;
 
-        // Skip if already deleted
         if (m_deletedIds.contains(notif.id)) {
-            qWarning() << "[TruckNotificationModel] ⚠️ Skipping deleted notification:" << notif.id;
+            qWarning() << "[TruckNotificationModel] Skipping deleted notification:" << notif.id;
             continue;
         }
 
         auto it = m_upsertMap.find(notif.id);
 
         if (it != m_upsertMap.end()) {
-            // Update existing notification
             const int row = it.value();
 
             QVector<int> changed = diffRoles(m_notifications[row], notif);
@@ -121,12 +118,11 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
-                qDebug() << "[TruckNotificationModel] ✏️ Updated notification at row" << row;
+                qDebug() << "[TruckNotificationModel] Updated notification at row" << row;
             } else {
-                qDebug() << "[TruckNotificationModel] ℹ️ No changes for notification at row" << row;
+                qDebug() << "[TruckNotificationModel] No changes for notification at row" << row;
             }
         } else {
-            // Insert new notification
             const int row = m_notifications.size();
 
             beginInsertRows({}, row, row);
@@ -135,15 +131,9 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
             endInsertRows();
             countChanged = true;
 
-            qDebug() << "[TruckNotificationModel] ✅ Inserted new notification at row" << row;
+            qDebug() << "[TruckNotificationModel] Inserted new notification at row" << row;
         }
     }
-
-    // ═══════════════════════════════════════════════════════════════
-    // IMPORTANT: DO NOT auto-remove notifications not in current batch!
-    // SignalR sends notifications one-at-a-time, not in batches like MQTT.
-    // Notifications should only be removed via removeNotification() or clearAll().
-    // ═══════════════════════════════════════════════════════════════
 
     if (countChanged) {
         qDebug() << "[TruckNotificationModel] Count changed to:" << m_notifications.size();
@@ -191,7 +181,6 @@ void TruckNotificationModel::removeNotification(const QString &id)
     m_notifications.removeAt(row);
     endRemoveRows();
 
-    // Rebuild map (indices shifted)
     m_upsertMap.clear();
     m_upsertMap.reserve(m_notifications.size());
     for (int i = 0; i < m_notifications.size(); i++) {
