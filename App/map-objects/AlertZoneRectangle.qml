@@ -20,9 +20,9 @@ MapItemGroup {
         console.log("AlertZone", label, "active:", active, "severity:", severity)
         if (!active) return "#888888"
         switch(severity) {
-            case "high": return "#FF0000"
-            case "medium": return "#FF6600"
-            case "low":
+            case 2: return "#FF0000"
+            case 1: return "#FF6600"
+            case 0:
             default: return "#FFCC00"
         }
     }

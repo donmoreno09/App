@@ -43,14 +43,6 @@ ApplicationWindow {
     Component.onDestruction: {
         console.log("Main window destroying, cleaning up...")
         ShipStowageController.cleanup()
-
-        // Forza il processing
-        // for (var i = 0; i < 10; i++) {
-        //     console.log("Processing events iteration", i)
-        //     // Questo non esiste in QML ma aiuta a capire
-        // }
-
-        // console.log("Main window destruction COMPLETE")
     }
 
     UI.GlobalBackground {
@@ -141,7 +133,7 @@ ApplicationWindow {
                     anchors.bottom: parent.bottom
 
                     RowLayout {
-                        id: slider
+                        id: leftSliderContainer
                         height: parent.height
                         spacing: 0
 
@@ -154,8 +146,8 @@ ApplicationWindow {
                         Connections {
                             target: app
 
-                            function onWidthChanged() { slider.recalculateMaskedBgs() }
-                            function onHeightChanged() { slider.recalculateMaskedBgs() }
+                            function onWidthChanged() { leftSliderContainer.recalculateMaskedBgs() }
+                            function onHeightChanged() { leftSliderContainer.recalculateMaskedBgs() }
                         }
 
                         x: SidePanelController.isOpen ? 0 : -(Theme.layout.sidePanelWidth + Theme.borders.b1 * 2)
@@ -193,6 +185,48 @@ ApplicationWindow {
                     anchors.bottom: parent.bottom
                     anchors.rightMargin: Theme.spacing.s7
                     anchors.bottomMargin: Theme.spacing.s5
+                }
+
+                Item {
+                    implicitWidth: childrenRect.width
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+
+                    RowLayout {
+                        id: rightSliderContainer
+                        height: parent.height
+                        spacing: 0
+
+                        function recalculateMaskedBgs() {
+                            if (!appLoaded) return
+                            contextPanel.recalculateMaskedBg()
+                        }
+
+                        Connections {
+                            target: app
+
+                            function onWidthChanged() { rightSliderContainer.recalculateMaskedBgs() }
+                            function onHeightChanged() { rightSliderContainer.recalculateMaskedBgs() }
+                        }
+
+                        x: ContextPanelController.isOpen ? 0 : (Theme.layout.sidePanelWidth + Theme.borders.b1 * 2)
+                        onXChanged: recalculateMaskedBgs()
+                        Behavior on x {
+                            NumberAnimation {
+                                duration: Theme.motion.panelTransitionMs
+                                easing.type: Theme.motion.panelTransitionEasing
+                            }
+                        }
+
+                        UI.VerticalDivider { }
+
+                        ContextPanel {
+                            id: contextPanel
+                            Layout.preferredWidth: Theme.layout.sidePanelWidth
+                            Layout.fillHeight: true
+                        }
+                    }
                 }
             }
         }

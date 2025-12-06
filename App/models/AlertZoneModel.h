@@ -7,6 +7,7 @@
 #include <QPointer>
 #include <QQmlEngine>
 #include <entities/AlertZone.h>
+#include <persistence/alertzonepersistencemanager.h>
 #include <QtPositioning/QGeoCoordinate>
 #include "ModelHelper.h"
 
@@ -25,8 +26,6 @@ public:
     enum Roles {
         IdRole = Qt::UserRole + 1,
         LabelRole,
-        LayerIdRole,
-        LayerNameRole,
 
         // Geometry
         ShapeTypeIdRole,
@@ -43,7 +42,7 @@ public:
         NoteRole,
         SeverityRole,
         ActiveRole,
-        TargetLayersRole,
+        LayersRole,
         ModelIndexRole,
     };
 
@@ -90,6 +89,7 @@ private:
     bool m_loading = false;
     std::unique_ptr<AlertZone> m_alertZoneSave = nullptr;
     std::unique_ptr<AlertZone> m_oldAlertZone = nullptr;
+    QPointer<AlertZonePersistenceManager> m_persistenceManager;
     QVector<AlertZone> m_alertZones;
     QPointer<ModelHelper> m_helper;
 
@@ -98,6 +98,13 @@ private:
     static bool isRectangle(const Geometry& geom);
 
     void buildAlertZoneSave(const QVariantMap &data);
+
+private slots:
+    void handleObjectsLoaded(const QList<IPersistable*> &objects);
+    void handleAlertZoneSaved(bool success, const QString &uuid);
+    void handleAlertZoneUpdated(bool success);
+    void handleAlertZoneGot(const IPersistable *object);
+    void handleAlertZoneRemoved(bool success);
 };
 
 #endif // ALERTZONEMODEL_H

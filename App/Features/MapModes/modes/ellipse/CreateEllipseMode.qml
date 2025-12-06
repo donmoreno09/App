@@ -17,10 +17,26 @@ EllipseMode {
     property real radiusB: 0      // latitude half-axis (N/S)
     readonly property bool hasEllipse: coord.isValid && radiusA > 0 && radiusB > 0
 
+    // Listen to map events while drawing
+    Connections {
+        target: MapController.map
+
+        function onBearingChanged() {
+            // Keep the preview rectangle anchored when the map rotates mid-drag
+            updatePreviewEllipse()
+        }
+
+        function onTiltChanged() {
+            // Keep the preview rectangle anchored when the map tilts mid-drag
+            updatePreviewEllipse()
+        }
+    }
+
     // Input state
     property bool  dragging: drag.active
     property point dragStart: drag.centroid.pressPosition
     property point dragEnd: drag.centroid.position
+    property geoCoordinate dragStartCoord: QtPositioning.coordinate()
     property bool  isDraggingHandler: false
 
     // ----- API -----
@@ -39,6 +55,7 @@ EllipseMode {
         root.majorAxisChanged()
         radiusB = 0
         root.minorAxisChanged()
+        dragStartCoord = QtPositioning.coordinate()
     }
 
     // ----- Helpers -----
@@ -49,6 +66,37 @@ EllipseMode {
         while (d > 180) d -= 360
         while (d < -180) d += 360
         return Math.abs(d)
+    }
+
+    function updatePreviewEllipse() {
+        if (!drag.active) return
+
+        // Keep anchor stable when map rotates/tilts mid-drag.
+        let c1 = dragStartCoord
+        if (!c1.isValid) {
+            const p1 = MapController.map.mapFromItem(root, dragStart.x, dragStart.y)
+            c1 = MapController.map.toCoordinate(p1, false)
+        }
+
+        const p2 = MapController.map.mapFromItem(root, dragEnd.x, dragEnd.y)
+        const c2 = MapController.map.toCoordinate(p2, false)
+        if (!c1.isValid || !c2.isValid) return
+
+        const n = Math.max(c1.latitude,  c2.latitude)
+        const s = Math.min(c1.latitude,  c2.latitude)
+        const w = Math.min(c1.longitude, c2.longitude)
+        const e = Math.max(c1.longitude, c2.longitude)
+        const tl = QtPositioning.coordinate(n, w)
+        const br = QtPositioning.coordinate(s, e)
+
+        const cLat = (tl.latitude  + br.latitude ) / 2
+        const cLon = (tl.longitude + br.longitude) / 2
+        coord = QtPositioning.coordinate(clampLat(cLat), normLon(cLon))
+
+        radiusA = lonDelta(tl.longitude, br.longitude) / 2
+        root.majorAxisChanged()
+        radiusB = Math.abs(br.latitude  - tl.latitude ) / 2
+        root.minorAxisChanged()
     }
 
     function setCenter(lat, lon) {
@@ -96,23 +144,15 @@ EllipseMode {
         cursorShape: Qt.CrossCursor
         enabled: !moveTap.pressed && !isDraggingHandler
 
+        onActiveChanged: if (active) {
+            const p = MapController.map.mapFromItem(root, dragStart.x, dragStart.y)
+            dragStartCoord = MapController.map.toCoordinate(p, false)
+        } else {
+            dragStartCoord = QtPositioning.coordinate()
+        }
+
         onTranslationChanged: {
-            const tl = MapController.map.toCoordinate(Qt.point(Math.min(dragStart.x, dragEnd.x),
-                                                               Math.min(dragStart.y, dragEnd.y)))
-            const br = MapController.map.toCoordinate(Qt.point(Math.max(dragStart.x, dragEnd.x),
-                                                               Math.max(dragStart.y, dragEnd.y)))
-            if (!tl.isValid || !br.isValid) return
-
-            // center = bbox center
-            const cLat = (tl.latitude  + br.latitude ) / 2
-            const cLon = (tl.longitude + br.longitude) / 2
-            coord = QtPositioning.coordinate(clampLat(cLat), normLon(cLon))
-
-            // radii = half of bbox size
-            radiusA = lonDelta(tl.longitude, br.longitude) / 2  // A = longitude
-            root.majorAxisChanged()
-            radiusB = Math.abs(br.latitude  - tl.latitude ) / 2  // B = latitude
-            root.minorAxisChanged()
+            updatePreviewEllipse()
         }
     }
 

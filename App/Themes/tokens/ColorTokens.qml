@@ -56,7 +56,7 @@ QtObject {
     readonly property color textMuted: grey200
 
     // Borders
-    readonly property color border: secondary500
+    readonly property color border: secondary450
     readonly property color glassBorder: whiteA20
 
     // -------------------------- // PRIMITIVES // -------------------------- //
@@ -80,6 +80,8 @@ QtObject {
     readonly property color whiteA20: hexWithAlpha(white500, 0.2)
     readonly property color whiteA10: hexWithAlpha(white500, 0.1)
     readonly property color whiteA5:  hexWithAlpha(white500, 0.05)
+    readonly property color whiteA2:  hexWithAlpha(white500, 0.02)
+    readonly property color whiteA1:  hexWithAlpha(white500, 0.01)
     readonly property color whiteA0:  hexWithAlpha(white500, 0.0)
 
     // Grey
@@ -117,6 +119,7 @@ QtObject {
     readonly property color secondary700: "#000000"
     readonly property color secondary600: "#000D1A"
     readonly property color secondary500: "#001C35"
+    readonly property color secondary450: "#1b2e3f"
     readonly property color secondary400: "#294054"
     readonly property color secondary300: "#526375"
     readonly property color secondary200: "#7A8A94"

@@ -5,11 +5,11 @@ import QtQuick.Layouts 6.8
 import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.Panels 1.0
 import App.Features.SidePanel 1.0
 import App.Features.Language 1.0
 
 import "qrc:/App/Components/floating-window/windowRoutes.js" as WinRoutes
-
 
 PanelTemplate {
     id: root

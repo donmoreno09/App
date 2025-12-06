@@ -24,25 +24,21 @@ UI.GlobalBackgroundConsumer {
         anchors.fill: parent
 
         Component.onCompleted: {
-            PanelRouter.stackView = stackView
+            SidePanelController.router.stackView = stackView
         }
-    }
-
-    Component.onCompleted: {
-        SidePanelController.attach(sidePanel)
     }
 
     Connections {
         target: LanguageController
         function onLanguageChanged() {
-            if (stackView.currentItem && PanelRouter.currentPath) {
+            if (stackView.currentItem && SidePanelController.router.currentPath) {
                 // Temporarily disable transitions
                 var oldTransition = stackView.replaceEnter
                 var oldExitTransition = stackView.replaceExit
                 stackView.replaceEnter = null
                 stackView.replaceExit = null
 
-                PanelRouter.replaceCurrent(PanelRouter.currentPath)
+                SidePanelController.router.replaceCurrent(SidePanelController.router.currentPath)
 
                 // Restore transitions
                 stackView.replaceEnter = oldTransition

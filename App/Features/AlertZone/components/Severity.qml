@@ -10,13 +10,13 @@ UI.ComboBox {
     id: root
 
     labelText: `${TranslationManager.revision}` && qsTr("Severity(*)")
-    valueRole: "key"
+    valueRole: "value"
     textRole: "name"
 
     model: ListModel {
-        ListElement { key: "low"; name: qsTr("Low"); color: "#FFCC00" }
-        ListElement { key: "medium"; name: qsTr("Medium"); color: "#FF6600" }
-        ListElement { key: "high"; name: qsTr("High"); color: "#FF0000" }
+        ListElement { value: 0; name: qsTr("Low"); color: "#FFCC00" }
+        ListElement { value: 1; name: qsTr("Medium"); color: "#FF6600" }
+        ListElement { value: 2; name: qsTr("High"); color: "#FF0000" }
     }
 
     comboBox.delegate: ItemDelegate {
