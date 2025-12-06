@@ -115,7 +115,7 @@ Item {
                 }
             }
 
-            // Content slot - NO anchors.fill, just position it
+            // Content slot
             Item {
                 id: contentSlot
                 x: Theme.spacing.s4

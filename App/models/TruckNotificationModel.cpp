@@ -181,7 +181,6 @@ void TruckNotificationModel::removeNotification(const QString &id)
     m_notifications.removeAt(row);
     endRemoveRows();
 
-    // Rebuild map (indices shifted)
     m_upsertMap.clear();
     m_upsertMap.reserve(m_notifications.size());
     for (int i = 0; i < m_notifications.size(); i++) {
