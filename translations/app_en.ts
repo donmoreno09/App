@@ -51,62 +51,62 @@
 <context>
     <name>AlertZonePanel</name>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="17"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="18"/>
         <source>Alert Zone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="77"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="74"/>
         <source>Deactivate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="77"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="74"/>
         <source>Activate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="96"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="93"/>
         <source>General Info</source>
         <translation type="unfinished">General Info</translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="103"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="100"/>
         <source>Label(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="104"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="101"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="117"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="114"/>
         <source>Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="126"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="123"/>
         <source>Layer Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="140"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="137"/>
         <source>Drawing Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="207"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="212"/>
         <source>Back</source>
         <translation type="unfinished">Back</translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="218"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="223"/>
         <source>Remove</source>
         <translation type="unfinished">Remove</translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="225"/>
+        <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="230"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
@@ -732,18 +732,23 @@
 <context>
     <name>LayerSelection</name>
     <message>
-        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="33"/>
+        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="41"/>
         <source>AIS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="53"/>
+        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="61"/>
         <source>DOC - SPACE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="73"/>
+        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="81"/>
         <source>TRUCK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/AlertZone/components/LayerSelection.qml" line="101"/>
+        <source>PoI</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1058,75 +1063,130 @@
     </message>
 </context>
 <context>
+    <name>NotificationToast</name>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="73"/>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="94"/>
+        <source>New Notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="74"/>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="95"/>
+        <source>From </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NotificationsPanel</name>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="13"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="14"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="29"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="31"/>
         <source>No notifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="60"/>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="113"/>
-        <source>Truck: </source>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="43"/>
+        <source>Alert Zone Intrusions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="72"/>
-        <source>Reported at %1</source>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="75"/>
+        <source>Alert Zone: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="96"/>
-        <source>NEW</source>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="75"/>
+        <source>Name of the alert zone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="97"/>
-        <source>UPDATED</source>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="89"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="136"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="262"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="315"/>
+        <source>Reported at %1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="129"/>
-        <source>Issue: %1</source>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="147"/>
+        <source>Track: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="149"/>
-        <source>Resolution: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="166"/>
-        <source>Estimated arrival: %1</source>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="155"/>
+        <source>Alert Zone: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="179"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="397"/>
+        <source>View on Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="217"/>
+        <source>Truck Operations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="248"/>
+        <source>Truck: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="107"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="285"/>
+        <source>NEW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="286"/>
+        <source>UPDATED</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="329"/>
+        <source>Issue: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="345"/>
+        <source>Resolution: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="362"/>
+        <source>Estimated arrival: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="165"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="374"/>
         <source>Location: Lat %1°, Lon %2°</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="191"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="385"/>
         <source>Note: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="202"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="192"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="411"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="233"/>
         <source>Back</source>
-        <translation type="unfinished">Back</translation>
+        <translation type="obsolete">Back</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="248"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="443"/>
         <source>Delete All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1184,21 +1244,6 @@
     <message>
         <location filename="../App/Features/Notifications/NotificationsTranslations.qml" line="25"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Notifications/NotificationsTranslations.qml" line="33"/>
-        <source>Blocked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Notifications/NotificationsTranslations.qml" line="34"/>
-        <source>Active</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Notifications/NotificationsTranslations.qml" line="35"/>
-        <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1597,57 +1642,57 @@
 <context>
     <name>PoiPanel</name>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="17"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="18"/>
         <source>Point of Interest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="66"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="63"/>
         <source>Label(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="67"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="64"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="75"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="72"/>
         <source>Category(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="84"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="81"/>
         <source>Type(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="94"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="91"/>
         <source>Health Status(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="106"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="103"/>
         <source>Operational State(*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="124"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="121"/>
         <source>Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="187"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="184"/>
         <source>Back</source>
         <translation type="unfinished">Back</translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="198"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="195"/>
         <source>Remove</source>
         <translation type="unfinished">Remove</translation>
     </message>
     <message>
-        <location filename="../App/Features/Poi/PoiPanel.qml" line="205"/>
+        <location filename="../App/Features/Poi/PoiPanel.qml" line="202"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1820,7 +1865,7 @@
         <translation type="vanished">Pod</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="129"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="130"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
@@ -1841,42 +1886,42 @@
         <translation type="vanished">Truck Arrivals DT</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="55"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="56"/>
         <source>PoI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="64"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="65"/>
         <source>Alert Zone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="73"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="74"/>
         <source>Arrivals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="82"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="83"/>
         <source>Date Arrivals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="91"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="92"/>
         <source>DT Arrivals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="100"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="101"/>
         <source>Trailer Prediction</source>
         <translation>Trailer Prediction</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="109"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="110"/>
         <source>Ship Stowage</source>
         <translation>Ship Stowage</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="121"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="122"/>
         <source>Gate Transit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1885,7 +1930,7 @@
         <translation type="obsolete">Leonardo ViGate Services</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="142"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="143"/>
         <source>Languages</source>
         <translation>Languages</translation>
     </message>
@@ -1894,7 +1939,7 @@
         <translation type="vanished">Language</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="153"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="154"/>
         <source>Tilesets</source>
         <translation>Tilesets</translation>
     </message>
@@ -2152,6 +2197,14 @@
         <location filename="../App/Features/TitleBar/TitleBarController.qml" line="48"/>
         <source>Not Found</source>
         <translation>Not Found</translation>
+    </message>
+</context>
+<context>
+    <name>ToastNotification</name>
+    <message>
+        <location filename="../App/Components/ToastNotification.qml" line="13"/>
+        <source>New Notification</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

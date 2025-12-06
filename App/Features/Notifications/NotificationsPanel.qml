@@ -14,15 +14,16 @@ PanelTemplate {
     title.text: `${TranslationManager.revision}` && qsTr("Notifications")
 
     ScrollView {
-        id: sv
         anchors.fill: parent
+        contentWidth: availableWidth
 
-        Frame {
+        Pane {
+            anchors.fill: parent
             padding: Theme.spacing.s4
-            width: sv.availableWidth
+            background: Rectangle { color: Theme.colors.transparent }
 
             ColumnLayout {
-                anchors.fill: parent
+                width: parent.width
                 spacing: Theme.spacing.s4
 
                 // Empty state (shown when both models are empty)
@@ -77,6 +78,7 @@ PanelTemplate {
                                     font.family: Theme.typography.bodySans25StrongFamily
                                     font.pointSize: Theme.typography.bodySans25StrongSize
                                     font.weight: Theme.typography.weightBold
+                                    elide: Text.ElideRight
                                     Layout.fillWidth: true
                                 }
 
@@ -428,49 +430,61 @@ PanelTemplate {
         }
     }
 
-    footer: RowLayout {
+    footer: ColumnLayout {
         visible: TruckNotificationModel.count > 0 || AlertZoneNotificationModel.count > 0
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Theme.spacing.s4
-        spacing: Theme.spacing.s2
+        spacing: Theme.spacing.s0
 
-        UI.HorizontalSpacer {}
+        UI.HorizontalDivider { color: Theme.colors.whiteA10 }
 
-        UI.Button {
-            Layout.preferredWidth: parent.width / 2
-            variant: UI.ButtonStyles.Danger
-            text: `${TranslationManager.revision}` && qsTr("Delete All")
+        Pane {
+            Layout.fillWidth: true
+            padding: Theme.spacing.s3
+            background: Rectangle { color: Theme.colors.transparent }
 
-            onClicked: {
-                console.log("[NotificationsPanel] Confirming read for all notifications")
+            RowLayout {
+                anchors.fill:  parent
+                spacing: Theme.spacing.s2
 
-                // Collect all notification IDs
-                let allIds = []
+                UI.HorizontalSpacer {}
 
-                // Add truck notification IDs
-                for (let i = 0; i < TruckNotificationModel.count; i++) {
-                    const notif = TruckNotificationModel.getEditableNotification(i)
-                    if (notif) allIds.push(notif.envelopeId)
-                }
+                UI.Button {
+                    Layout.preferredWidth: parent.width / 2
+                    variant: UI.ButtonStyles.Danger
+                    text: `${TranslationManager.revision}` && qsTr("Delete All")
 
-                // Add alert zone notification IDs
-                for (let j = 0; j < AlertZoneNotificationModel.count; j++) {
-                    const notif = AlertZoneNotificationModel.getEditableNotification(j)
-                    if (notif) allIds.push(notif.id)
-                }
+                    onClicked: {
+                        console.log("[NotificationsPanel] Confirming read for all notifications")
 
-                // Confirm all reads via SignalR
-                if (allIds.length > 0) {
-                    // Individual calls (backend doesn't support bulk)
-                    for (let id of allIds) {
-                        SignalRClientService.invoke("ConfirmRead", [id])
+                        // Collect all notification IDs
+                        let allIds = []
+
+                        // Add truck notification IDs
+                        for (let i = 0; i < TruckNotificationModel.count; i++) {
+                            const notif = TruckNotificationModel.getEditableNotification(i)
+                            if (notif) allIds.push(notif.envelopeId)
+                        }
+
+                        // Add alert zone notification IDs
+                        for (let j = 0; j < AlertZoneNotificationModel.count; j++) {
+                            const notif = AlertZoneNotificationModel.getEditableNotification(j)
+                            if (notif) allIds.push(notif.id)
+                        }
+
+                        // Confirm all reads via SignalR
+                        if (allIds.length > 0) {
+                            // Individual calls (backend doesn't support bulk)
+                            for (let id of allIds) {
+                                SignalRClientService.invoke("ConfirmRead", [id])
+                            }
+                        }
+
+                        // Clear local models
+                        TruckNotificationModel.clearAll()
+                        AlertZoneNotificationModel.clearAll()
                     }
                 }
-
-                // Clear local models
-                TruckNotificationModel.clearAll()
-                AlertZoneNotificationModel.clearAll()
             }
         }
     }
