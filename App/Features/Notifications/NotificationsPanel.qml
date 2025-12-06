@@ -79,6 +79,7 @@ PanelTemplate {
 
                     delegate: TruckNotificationCard {
                         required property string id
+                        required property string envelopeId
                         required property string operationCode
                         required property string operationState
                         required property string reportedAt
@@ -89,6 +90,7 @@ PanelTemplate {
                         required property string note
 
                         cardNotificationId: id
+                        cardEnvelopeId: envelopeId
                         cardOperationCode: operationCode
                         cardOperationState: operationState
                         cardReportedAt: reportedAt
@@ -98,9 +100,9 @@ PanelTemplate {
                         cardLocation: location
                         cardNote: note || ""
 
-                        onDeleteRequested: (id) => {
-                            console.log("[NotificationsPanel] Confirming read for Truck:", id)
-                            SignalRClientService.invoke("ConfirmRead", [id])
+                        onDeleteRequested: (envelopeId, id) => {
+                            console.log("[NotificationsPanel] Confirming read for Truck:", envelopeId)
+                            SignalRClientService.invoke("ConfirmRead", [envelopeId])
                             TruckNotificationModel.removeNotification(id)
                         }
 
@@ -124,7 +126,7 @@ PanelTemplate {
 
             for (let i = 0; i < TruckNotificationModel.count; i++) {
                 const notif = TruckNotificationModel.getEditableNotification(i)
-                if (notif) allIds.push(notif.id)
+                if (notif) allIds.push(notif.envelopeId)
             }
 
             for (let j = 0; j < AlertZoneNotificationModel.count; j++) {

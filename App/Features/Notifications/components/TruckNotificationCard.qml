@@ -12,8 +12,8 @@ import "../NotificationUtils.js" as Utils
 UI.Accordion {
     id: root
 
-    // Data properties
     property string cardNotificationId: ""
+    property string cardEnvelopeId: ""
     property string cardOperationCode: ""
     property string cardOperationState: ""
     property string cardReportedAt: ""
@@ -24,7 +24,7 @@ UI.Accordion {
     property string cardNote: ""
 
     // Signals
-    signal deleteRequested(string id)
+    signal deleteRequested(string envelopeId, string id)
     signal viewOnMapRequested(var cardLocation)
 
     Layout.fillWidth: true
@@ -215,7 +215,7 @@ UI.Accordion {
                 Layout.preferredHeight: Theme.spacing.s8
 
                 onClicked: {
-                    root.deleteRequested(root.cardNotificationId)
+                    root.deleteRequested(root.cardEnvelopeId, root.cardNotificationId)
                 }
             }
         }
