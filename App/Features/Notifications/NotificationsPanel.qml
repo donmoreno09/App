@@ -14,15 +14,16 @@ PanelTemplate {
     title.text: `${TranslationManager.revision}` && qsTr("Notifications")
 
     ScrollView {
-        id: sv
         anchors.fill: parent
+        contentWidth: availableWidth
 
-        Frame {
+        Pane {
+            anchors.fill: parent
             padding: Theme.spacing.s4
-            width: sv.availableWidth
+            background: Rectangle { color: Theme.colors.transparent }
 
             ColumnLayout {
-                anchors.fill: parent
+                width: parent.width
                 spacing: Theme.spacing.s4
 
                 NotificationEmptyState {
