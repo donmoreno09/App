@@ -71,7 +71,7 @@ ColumnLayout {
             Layout.rightMargin: 10
             icon: "qrc:/App/assets/icons/compass.svg"
             title: `${TranslationManager.revision}` && qsTr("Estimated Time")
-            value: controller.prediction + " " + formatMinutes(controller.prediction)
+            value: formatMinutes(controller.prediction)
         }
 
         Text {
@@ -109,15 +109,15 @@ ColumnLayout {
 
     function formatMinutes(minutes) {
         if (minutes === 0) return `${TranslationManager.revision}` && qsTr("Ready")
-        if (minutes < 60) return minutes + `${TranslationManager.revision}` && qsTr(" min")
+        if (minutes < 60) return minutes + " " + (`${TranslationManager.revision}` && qsTr("min"))
 
         const hours = Math.floor(minutes / 60)
         const mins = minutes % 60
 
         if (mins === 0) {
-            return hours + (hours > 1 ?
-                `${TranslationManager.revision}` && qsTr(" hours") :
-                `${TranslationManager.revision}` && qsTr(" hour"))
+            return hours + " " + (hours > 1 ?
+                (`${TranslationManager.revision}` && qsTr("hours")) :
+                (`${TranslationManager.revision}` && qsTr("hour")))
         }
         return hours + "h " + mins + "min"
     }

@@ -39,15 +39,8 @@ ColumnLayout {
         visible: !controller.isLoading
         Layout.fillWidth: true
         horizontalAlignment: Text.AlignHCenter
-        color: Theme.colors.text
-
-        function fmt(dt) { return Qt.formatDateTime(dt, "dd/MMM/yyyy HH:mm") }
-
-        text: (dtRange.startDate && dtRange.endDate)
-              ? `${TranslationManager.revision}` && qsTr("Selected: %1 — %2")
-                  .arg(fmt(dtRange._combineDateTime(dtRange.startDate,  dtRange.selectedHour, dtRange.selectedMinute, dtRange.selectedAMPM)))
-                  .arg(fmt(dtRange._combineDateTime(dtRange.endDate, dtRange.endHour, dtRange.endMinute, dtRange.endAMPM)))
-              : `${TranslationManager.revision}` && qsTr("Select a date & time range")
+        color: Theme.colors.textMuted
+        text: dtRange.rangeText
     }
 
     StatCard {
@@ -71,6 +64,25 @@ ColumnLayout {
         onClicked: {
             const startDT = dtRange._combineDateTime(dtRange.startDate, dtRange.selectedHour, dtRange.selectedMinute, dtRange.selectedAMPM)
             const endDT   = dtRange._combineDateTime(dtRange.endDate,   dtRange.endHour,     dtRange.endMinute,     dtRange.endAMPM)
+
+            console.log("========== QML DATETIME DEBUG ==========")
+            console.log("Start Date:", dtRange.startDate)
+            console.log("Start Hour:", dtRange.selectedHour)
+            console.log("Start Minute:", dtRange.selectedMinute)
+            console.log("Start AM/PM:", dtRange.selectedAMPM)
+            console.log("Start DateTime Combined:", startDT)
+            console.log("Start DateTime ISO:", startDT.toISOString())
+            console.log("Start DateTime LocaleString:", startDT.toLocaleString())
+            console.log("")
+            console.log("End Date:", dtRange.endDate)
+            console.log("End Hour:", dtRange.endHour)
+            console.log("End Minute:", dtRange.endMinute)
+            console.log("End AM/PM:", dtRange.endAMPM)
+            console.log("End DateTime Combined:", endDT)
+            console.log("End DateTime ISO:", endDT.toISOString())
+            console.log("End DateTime LocaleString:", endDT.toLocaleString())
+            console.log("==========================================")
+
             controller.fetchDateTimeRangeShipArrivals(startDT, endDT)
         }
     }

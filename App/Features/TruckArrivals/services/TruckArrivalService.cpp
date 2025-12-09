@@ -51,6 +51,20 @@ void TruckArrivalService::performGet(RequestKind kind, const QUrl& url)
     QNetworkRequest req(url);
     req.setRawHeader("Accept", "application/json");
 
+    // ADD THESE DEBUG LOGS HERE:
+    qDebug() << "========== REQUEST DEBUG ==========";
+    qDebug() << "URL:" << url.toString();
+    qDebug() << "URL Query:" << url.query();
+    qDebug() << "URL Path:" << url.path();
+
+    // Show query parameters broken down
+    QUrlQuery query(url);
+    qDebug() << "Query Parameters:";
+    for (const auto& item : query.queryItems()) {
+        qDebug() << "  " << item.first << "=" << item.second;
+    }
+    qDebug() << "===================================";
+
     QNetworkReply* reply = m_manager.get(req);
 
     connect(reply, &QNetworkReply::finished, this, [this, reply, kind, kindStr]() {
@@ -69,6 +83,14 @@ void TruckArrivalService::performGet(RequestKind kind, const QUrl& url)
         QByteArray rawData = reply->readAll();
         qDebug() << "[TruckArrivalService]" << kindStr << "- Raw response:" << rawData;
         qDebug() << "[TruckArrivalService]" << kindStr << "- Response size:" << rawData.size() << "bytes";
+
+        qDebug() << "========== RESPONSE DEBUG ==========";
+        qDebug() << "HTTP Status Code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qDebug() << "Content-Type:" << reply->header(QNetworkRequest::ContentTypeHeader).toString();
+        qDebug() << "Raw Response (text):" << rawData;
+        qDebug() << "Raw Response (hex):" << rawData.toHex();
+        qDebug() << "Response size (bytes):" << rawData.size();
+        qDebug() << "====================================";
 
         // Prova a parsare come JSON
         QJsonParseError jsonError;
