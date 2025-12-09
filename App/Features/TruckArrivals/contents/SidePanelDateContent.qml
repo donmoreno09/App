@@ -39,12 +39,8 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: !controller.isLoading
         horizontalAlignment: Text.AlignHCenter
-        text: (rangePicker.startDate && rangePicker.endDate)
-              ? `${TranslationManager.revision}` && qsTr("Selected: %1 — %2")
-                    .arg(Qt.formatDate(rangePicker.startDate, "dd/MMM/yyyy"))
-                    .arg(Qt.formatDate(rangePicker.endDate,   "dd/MMM/yyyy"))
-              : `${TranslationManager.revision}` && qsTr("Select a date range")
         color: Theme.colors.textMuted
+        text: rangePicker.rangeText
     }
 
     StatCard {
@@ -64,9 +60,18 @@ ColumnLayout {
         Layout.preferredHeight: 40
         Layout.margins: 10
         text: `${TranslationManager.revision}` && qsTr("Fetch Arrivals")
-        enabled: !controller.isLoading && (rangePicker.startDate && rangePicker.endDate)
+        enabled: rangePicker.hasValidSelection && !controller.isLoading
 
-        onClicked: controller.fetchDateRangeShipArrivals(rangePicker.startDate, rangePicker.endDate)
+        onClicked: {
+            console.log("========== QML DATE DEBUG ==========")
+            console.log("Start Date:", rangePicker.startDate)
+            console.log("Start Date ISO:", rangePicker.startDate.toISOString())
+            console.log("End Date:", rangePicker.endDate)
+            console.log("End Date ISO:", rangePicker.endDate.toISOString())
+            console.log("====================================")
+
+            controller.fetchDateRangeShipArrivals(rangePicker.startDate, rangePicker.endDate)
+        }
     }
 
     Component.onCompleted: {
