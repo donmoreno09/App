@@ -326,14 +326,6 @@ Rectangle {
         }
 
         result.setHours(finalHour, minute, 0, 0)
-
-        console.log("[DateTimePicker] _combineDateTime:",
-                        "hour=" + hour,
-                        "minute=" + minute,
-                        "isAM=" + isAM,
-                        "finalHour=" + finalHour,
-                        "result=" + result.toString(),
-                        "ISO=" + result.toISOString())
         return result
     }
 

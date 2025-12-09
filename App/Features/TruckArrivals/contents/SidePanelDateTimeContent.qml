@@ -16,9 +16,23 @@ ColumnLayout {
 
     required property TruckArrivalController controller
 
+    readonly property var startDT: dtRangePicker._combineDateTime(
+        dtRangePicker.startDate,
+        dtRangePicker.selectedHour,
+        dtRangePicker.selectedMinute,
+        dtRangePicker.selectedAMPM
+    )
+    readonly property var endDT: dtRangePicker._combineDateTime(
+        dtRangePicker.endDate,
+        dtRangePicker.endHour,
+        dtRangePicker.endMinute,
+        dtRangePicker.endAMPM
+    )
+    property alias hasValidSelection: dtRangePicker.hasValidSelection
+
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
-        Layout.topMargin: 300
+        Layout.topMargin: 250
         running: controller.isLoading
         visible: controller.isLoading
         layer.enabled: true
@@ -26,13 +40,12 @@ ColumnLayout {
     }
 
     UI.DateTimePicker {
-        id: dtRange
-        mode: "range"
-        is24Hour: true
+        id: dtRangePicker
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
-        Layout.margins: 10
         visible: !controller.isLoading
+        mode: "range"
+        is24Hour: true
     }
 
     Text {
@@ -40,7 +53,7 @@ ColumnLayout {
         Layout.fillWidth: true
         horizontalAlignment: Text.AlignHCenter
         color: Theme.colors.textMuted
-        text: dtRange.rangeText
+        text: dtRangePicker.rangeText
     }
 
     StatCard {
@@ -51,45 +64,9 @@ ColumnLayout {
         Layout.fillWidth: true
     }
 
-    UI.VerticalSpacer {}
-
-    UI.Button {
-        visible: !controller.isLoading
-        variant: UI.ButtonStyles.Primary
-        text: `${TranslationManager.revision}` && qsTr("Fetch Arrivals")
-        Layout.fillWidth: true
-        Layout.preferredHeight: 40
-        Layout.margins: 10
-        enabled: dtRange.hasValidSelection && !controller.isLoading
-        onClicked: {
-            const startDT = dtRange._combineDateTime(dtRange.startDate, dtRange.selectedHour, dtRange.selectedMinute, dtRange.selectedAMPM)
-            const endDT   = dtRange._combineDateTime(dtRange.endDate,   dtRange.endHour,     dtRange.endMinute,     dtRange.endAMPM)
-
-            console.log("========== QML DATETIME DEBUG ==========")
-            console.log("Start Date:", dtRange.startDate)
-            console.log("Start Hour:", dtRange.selectedHour)
-            console.log("Start Minute:", dtRange.selectedMinute)
-            console.log("Start AM/PM:", dtRange.selectedAMPM)
-            console.log("Start DateTime Combined:", startDT)
-            console.log("Start DateTime ISO:", startDT.toISOString())
-            console.log("Start DateTime LocaleString:", startDT.toLocaleString())
-            console.log("")
-            console.log("End Date:", dtRange.endDate)
-            console.log("End Hour:", dtRange.endHour)
-            console.log("End Minute:", dtRange.endMinute)
-            console.log("End AM/PM:", dtRange.endAMPM)
-            console.log("End DateTime Combined:", endDT)
-            console.log("End DateTime ISO:", endDT.toISOString())
-            console.log("End DateTime LocaleString:", endDT.toLocaleString())
-            console.log("==========================================")
-
-            controller.fetchDateTimeRangeShipArrivals(startDT, endDT)
-        }
-    }
-
     Component.onCompleted: {
         const today = new Date()
         const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1)
-        dtRange.setDateRange(today, tomorrow)
+        dtRangePicker.setDateRange(today, tomorrow)
     }
 }
