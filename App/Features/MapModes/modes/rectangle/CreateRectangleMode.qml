@@ -185,35 +185,42 @@ RectangleMode {
         property point _lastScenePos: Qt.point(0, 0)
 
         function applyMoveDelta() {
-            if (!moveRect.active || !_startTLCoord.isValid || !_startBRCoord.isValid || !_anchorCoord.isValid)
+            if (!moveRect.active
+                    || !_startTLCoord.isValid
+                    || !_startBRCoord.isValid
+                    || !_anchorCoord.isValid)
                 return
 
-            // 1. Mouse position in scene coords (real screen pointer)
+            // 1. Current pointer position in scene coords
             const scenePos = moveRect.centroid.scenePosition
 
-            // 2. Convert from scene -> map-local
-            const pointerPx = MapController.map.mapFromItem(null, scenePos.x, scenePos.y)
-
-            // 3. Anchor geo -> map-local
-            const anchorPx = MapController.map.fromCoordinate(_anchorCoord, false)
-
-            const dx = pointerPx.x - anchorPx.x
-            const dy = pointerPx.y - anchorPx.y
-
-            const startTLpx = MapController.map.fromCoordinate(_startTLCoord, false)
-            const startBRpx = MapController.map.fromCoordinate(_startBRCoord, false)
-
-            const tlPx = Qt.point(startTLpx.x + dx, startTLpx.y + dy)
-            const brPx = Qt.point(startBRpx.x + dx, startBRpx.y + dy)
-
-            const tlCoord = MapController.map.toCoordinate(tlPx, false)
-            const brCoord = MapController.map.toCoordinate(brPx, false)
-            if (!tlCoord.isValid || !brCoord.isValid)
+            // 2. Map coords under the pointer (geo)
+            const pointerPx    = MapController.map.mapFromItem(null, scenePos.x, scenePos.y)
+            const pointerCoord = MapController.map.toCoordinate(pointerPx, false)
+            if (!pointerCoord.isValid)
                 return
 
-            root.topLeft     = tlCoord
-            root.bottomRight = brCoord
-            root.normalizeCorners()
+            // 3. Compute geo delta between where we pressed and where the pointer is now
+            let dLat = pointerCoord.latitude  - _anchorCoord.latitude
+            let dLon = pointerCoord.longitude - _anchorCoord.longitude
+
+            // Shortest path across the dateline
+            if (dLon > 180)
+                dLon -= 360
+            else if (dLon < -180)
+                dLon += 360
+
+            // 4. Apply the same geo delta to both corners
+            const newTL = QtPositioning.coordinate(
+                            root.clampLat(_startTLCoord.latitude  + dLat),
+                            root.normLon (_startTLCoord.longitude + dLon))
+            const newBR = QtPositioning.coordinate(
+                            root.clampLat(_startBRCoord.latitude  + dLat),
+                            root.normLon (_startBRCoord.longitude + dLon))
+
+            root.topLeft     = newTL
+            root.bottomRight = newBR
+            root.normalizeCorners() // keep TL = NW, BR = SE
         }
 
         // Prevent tap propagating below
@@ -314,14 +321,17 @@ RectangleMode {
 
         TapHandler {
             acceptedButtons: Qt.LeftButton
-            onPressedChanged: isDraggingHandler = pressed
             gesturePolicy: TapHandler.ReleaseWithinBounds
         }
 
         DragHandler {
             target: null
             acceptedButtons: Qt.LeftButton
-            grabPermissions: PointerHandler.CanTakeOverFromAnything
+            // Do NOT let this steal the drag from the body
+            // and disable it while the body drag is active
+            enabled: !moveRect.active
+
+            onActiveChanged: isDraggingHandler = active
 
             onTranslationChanged: {
                 const p = h.mapToItem(MapController.map, centroid.position.x, centroid.position.y)
