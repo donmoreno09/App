@@ -7,7 +7,7 @@ import App.Features.Map 1.0
 
 import "../.."
 import "./RectangleGeometry.js" as RectGeom
-import "qrc:/App/map-objects/common"
+import App.Components 1.0 as UI
 
 RectangleMode {
     id: root
@@ -146,12 +146,13 @@ RectangleMode {
     }
 
     // Committed rectangle with shared editing behavior
-    EditableRectangle {
+    UI.EditableRectangle {
         id: committedRect
         visible: !root.dragging && root.areValidCoords()
         z: root.z + 1
 
         isEditing: true
+        map: MapController.map
         topLeft: root.topLeft
         bottomRight: root.bottomRight
 

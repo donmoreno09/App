@@ -2,9 +2,7 @@ import QtQuick 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
 
-import App 1.0
 import App.Themes 1.0
-import App.Features.Map 1.0
 import "qrc:/App/Features/MapModes/modes/rectangle/RectangleGeometry.js" as RectGeom
 
 MapItemGroup {
@@ -24,6 +22,9 @@ MapItemGroup {
     property color labelTextColor: Theme.colors.white
     property real labelBorderWidth: Theme.borders.b1
     property string labelText: ""
+
+    // The map instance used for coordinate conversions. Must be provided by callers.
+    property var map: null
 
     // Input geometry (do not mutate directly; use _tl/_br)
     property geoCoordinate topLeft: QtPositioning.coordinate()
@@ -74,9 +75,13 @@ MapItemGroup {
                     || !_anchorCoord.isValid)
                 return
 
+            const mapItem = root.map
+            if (!mapItem)
+                return
+
             const scenePos = moveRect.centroid.scenePosition
-            const pointerPx = MapController.map.mapFromItem(null, scenePos.x, scenePos.y)
-            const pointerCoord = MapController.map.toCoordinate(pointerPx, false)
+            const pointerPx = mapItem.mapFromItem(null, scenePos.x, scenePos.y)
+            const pointerCoord = mapItem.toCoordinate(pointerPx, false)
             if (!pointerCoord.isValid)
                 return
 
@@ -124,14 +129,18 @@ MapItemGroup {
             cursorShape: Qt.SizeAllCursor
 
             onActiveChanged: if (active) {
+                const mapItem = root.map
+                if (!mapItem)
+                    return
+
                 committedRect._startTLCoord = root._tl
                 committedRect._startBRCoord = root._br
 
                 const pressScene = moveRect.centroid.scenePressPosition
                 committedRect._lastScenePos = pressScene
 
-                const pressPx = MapController.map.mapFromItem(null, pressScene.x, pressScene.y)
-                committedRect._anchorCoord = MapController.map.toCoordinate(pressPx, false)
+                const pressPx = mapItem.mapFromItem(null, pressScene.x, pressScene.y)
+                committedRect._anchorCoord = mapItem.toCoordinate(pressPx, false)
             } else {
                 committedRect._startTLCoord = QtPositioning.coordinate()
                 committedRect._startBRCoord = QtPositioning.coordinate()
@@ -215,8 +224,12 @@ MapItemGroup {
             onActiveChanged: root.isDraggingHandler = active
 
             onTranslationChanged: {
-                const p = h.mapToItem(MapController.map, centroid.position.x, centroid.position.y)
-                const c = MapController.map.toCoordinate(p, false)
+                const mapItem = root.map
+                if (!mapItem)
+                    return
+
+                const p = h.mapToItem(mapItem, centroid.position.x, centroid.position.y)
+                const c = mapItem.toCoordinate(p, false)
                 if (!c.isValid)
                     return
 
@@ -234,7 +247,7 @@ MapItemGroup {
                 let nearest = h.kind
                 let best = Infinity
                 for (let i = 0; i < corners.length; ++i) {
-                    const px = MapController.map.fromCoordinate(corners[i].c, false)
+                    const px = mapItem.fromCoordinate(corners[i].c, false)
                     const dx = px.x - p.x, dy = px.y - p.y
                     const d2 = dx * dx + dy * dy
                     if (d2 < best) { best = d2; nearest = corners[i].kind }

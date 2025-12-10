@@ -6,12 +6,14 @@ import App 1.0
 import App.Themes 1.0
 import App.Features.Map 1.0
 import App.Features.MapModes 1.0
+import App.Components 1.0 as UI
 
-EditableRectangle {
+UI.EditableRectangle {
     id: root
     z: Theme.elevation.z100 + (isEditing ? 100 : 0)
 
     isEditing: MapModeController.alertZone && id === MapModeController.alertZone.id
+    map: MapController.map
 
     readonly property color zoneColor: {
         console.log("AlertZone", label, "active:", active, "severity:", severity)

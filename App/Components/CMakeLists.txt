@@ -3,6 +3,7 @@ set(qml_files
     ButtonOld.qml
     ComboBox.qml
     DateTime.qml
+    EditableRectangle.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml
