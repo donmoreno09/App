@@ -50,6 +50,8 @@ set(qml_files
 
     floating-window/FloatingWindow.qml
     floating-window/windowRoutes.js
+
+    forms/RectangleFormBase.qml
 )
 
 

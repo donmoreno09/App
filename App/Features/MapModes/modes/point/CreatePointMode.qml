@@ -4,7 +4,8 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 import App.Themes 1.0
-import App.Features.MapModes 1.0
+
+import "../.."
 
 PointMode {
     id: root

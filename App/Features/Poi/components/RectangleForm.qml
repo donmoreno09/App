@@ -8,133 +8,55 @@ import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
 
-ColumnLayout {
+UI.RectangleFormBase {
     id: rectForm
-    spacing: Theme.spacing.s4
 
-    // Guard to avoid writing back while syncing UI from the mode
-    property bool syncingFromModel: false
+    modeTarget: MapModeController.activeMode
+    isEditing: MapModeController.isEditing
 
-    function validate() {
+    topLeftLatLabel: qsTr("Top Left Latitude(*)")
+    topLeftLonLabel: qsTr("Top Left Longitude(*)")
+    bottomRightLatLabel: qsTr("Bottom Right Latitude(*)")
+    bottomRightLonLabel: qsTr("Bottom Right Longitude(*)")
+
+    validateFn: function() {
         if (MapModeController.isEditing) return true
-
-        return MapModeRegistry.createRectangleMode.topLeft.isValid && MapModeRegistry.createRectangleMode.bottomRight.isValid
+        return MapModeRegistry.createRectangleMode.topLeft.isValid &&
+               MapModeRegistry.createRectangleMode.bottomRight.isValid
     }
 
-    Connections {
-        target: MapModeController.activeMode
-        ignoreUnknownSignals: true
-
-        function onTopLeftChanged() {
-            rectForm.syncingFromModel = true
-            topLeftLatInput.updateText()
-            topLeftLonInput.updateText()
-            rectForm.syncingFromModel = false
-        }
-
-        function onBottomRightChanged() {
-            rectForm.syncingFromModel = true
-            bottomRightLatInput.updateText()
-            bottomRightLonInput.updateText()
-            rectForm.syncingFromModel = false
-        }
+    readTopLeft: function() {
+        return MapModeController.isEditing ? MapModeController.poi.topLeft
+                                           : MapModeRegistry.createRectangleMode.topLeft
+    }
+    readBottomRight: function() {
+        return MapModeController.isEditing ? MapModeController.poi.bottomRight
+                                           : MapModeRegistry.createRectangleMode.bottomRight
     }
 
-    RowLayout {
-        spacing: Theme.spacing.s4
-
-        UI.InputCoordinate {
-            id: topLeftLatInput
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            labelText: qsTr("Top Left Latitude(*)")
-
-            onValueChanged: {
-                if (rectForm.syncingFromModel)
-                    return
-
-                if (MapModeController.isEditing) MapModeController.poi.topLeft = QtPositioning.coordinate(value, MapModeController.poi.topLeft.longitude)
-                else MapModeRegistry.createRectangleMode.setTopLeftLatitude(value)
-            }
-
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.poi.topLeft.latitude: MapModeRegistry.createRectangleMode.topLeft.latitude) }
-            Component.onCompleted: {
-                rectForm.syncingFromModel = true
-                updateText()
-                rectForm.syncingFromModel = false
-            }
-        }
-
-        UI.InputCoordinate {
-            id: topLeftLonInput
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            labelText: qsTr("Top Left Longitude(*)")
-            type: UI.InputCoordinate.Longitude
-
-            onValueChanged: {
-                if (rectForm.syncingFromModel)
-                    return
-
-                if (MapModeController.isEditing) MapModeController.poi.topLeft = QtPositioning.coordinate(MapModeController.poi.topLeft.latitude, value)
-                else MapModeRegistry.createRectangleMode.setTopLeftLongitude(value)
-            }
-
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.poi.topLeft.longitude : MapModeRegistry.createRectangleMode.topLeft.longitude) }
-            Component.onCompleted: {
-                rectForm.syncingFromModel = true
-                updateText()
-                rectForm.syncingFromModel = false
-            }
-        }
+    writeTopLeftLat: function(value) {
+        if (MapModeController.isEditing)
+            MapModeController.poi.topLeft = QtPositioning.coordinate(value, MapModeController.poi.topLeft.longitude)
+        else
+            MapModeRegistry.createRectangleMode.setTopLeftLatitude(value)
+    }
+    writeTopLeftLon: function(value) {
+        if (MapModeController.isEditing)
+            MapModeController.poi.topLeft = QtPositioning.coordinate(MapModeController.poi.topLeft.latitude, value)
+        else
+            MapModeRegistry.createRectangleMode.setTopLeftLongitude(value)
     }
 
-    RowLayout {
-        spacing: Theme.spacing.s4
-
-        UI.InputCoordinate {
-            id: bottomRightLatInput
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            labelText: qsTr("Bottom Right Latitude(*)")
-
-            onValueChanged: {
-                if (rectForm.syncingFromModel)
-                    return
-
-                if (MapModeController.isEditing) MapModeController.poi.bottomRight = QtPositioning.coordinate(value, MapModeController.poi.bottomRight.longitude)
-                else MapModeRegistry.createRectangleMode.setBottomRightLatitude(value)
-            }
-
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.poi.bottomRight.latitude : MapModeRegistry.createRectangleMode.bottomRight.latitude) }
-            Component.onCompleted: {
-                rectForm.syncingFromModel = true
-                updateText()
-                rectForm.syncingFromModel = false
-            }
-        }
-
-        UI.InputCoordinate {
-            id: bottomRightLonInput
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            labelText: qsTr("Bottom Right Longitude(*)")
-            type: UI.InputCoordinate.Longitude
-
-            onValueChanged: {
-                if (rectForm.syncingFromModel)
-                    return
-
-                if (MapModeController.isEditing) MapModeController.poi.bottomRight = QtPositioning.coordinate(MapModeController.poi.bottomRight.latitude, value)
-                else MapModeRegistry.createRectangleMode.setBottomRightLongitude(value)
-            }
-
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.poi.bottomRight.longitude : MapModeRegistry.createRectangleMode.bottomRight.longitude) }
-            Component.onCompleted: {
-                rectForm.syncingFromModel = true
-                updateText()
-                rectForm.syncingFromModel = false
-            }
-        }
+    writeBottomRightLat: function(value) {
+        if (MapModeController.isEditing)
+            MapModeController.poi.bottomRight = QtPositioning.coordinate(value, MapModeController.poi.bottomRight.longitude)
+        else
+            MapModeRegistry.createRectangleMode.setBottomRightLatitude(value)
+    }
+    writeBottomRightLon: function(value) {
+        if (MapModeController.isEditing)
+            MapModeController.poi.bottomRight = QtPositioning.coordinate(MapModeController.poi.bottomRight.latitude, value)
+        else
+            MapModeRegistry.createRectangleMode.setBottomRightLongitude(value)
     }
 }
