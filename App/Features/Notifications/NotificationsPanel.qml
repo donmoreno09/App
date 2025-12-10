@@ -19,7 +19,7 @@ PanelTemplate {
 
         Pane {
             anchors.fill: parent
-            padding: Theme.spacing.s4
+            padding: Theme.spacing.s8
             background: Rectangle { color: Theme.colors.transparent }
 
             ColumnLayout {
