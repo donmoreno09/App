@@ -66,17 +66,14 @@ void TrailerPredictionService::performGet(const QUrl& url)
         // Read the raw response
         QByteArray rawData = reply->readAll();
         qDebug() << "[TrailerPredictionService] Raw response data:" << rawData;
-        qDebug() << "[TrailerPredictionService] Raw response (hex):" << rawData.toHex();
         qDebug() << "[TrailerPredictionService] Response size:" << rawData.size();
 
-        // Check if response is empty
         if (rawData.isEmpty()) {
             qDebug() << "[TrailerPredictionService] Empty response, emitting notFound()";
             emit notFound();
             return;
         }
 
-        // Remove quotes if present (API returns "26" instead of 26)
         QString cleanData = QString::fromUtf8(rawData).trimmed();
         qDebug() << "[TrailerPredictionService] Cleaned data:" << cleanData;
 

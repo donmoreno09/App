@@ -49,8 +49,6 @@ ColumnLayout {
 
         StatCard {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
             icon: "qrc:/App/assets/icons/compass.svg"
             title: `${TranslationManager.revision}` && qsTr("Estimated Time")
             value: formatMinutes(controller.prediction)
@@ -61,8 +59,6 @@ ColumnLayout {
             color: Theme.colors.text
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
-            Layout.leftMargin: Theme.spacing.s4
-            Layout.rightMargin: Theme.spacing.s4
             horizontalAlignment: Text.AlignHCenter
             font {
                 family: Theme.typography.bodySans25Family
