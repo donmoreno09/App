@@ -23,6 +23,15 @@ Item {
     property alias comboBox: comboBox
     property alias textRole: comboBox.textRole
     property alias valueRole: comboBox.valueRole
+    property alias fontFamily: comboBox.font.family
+
+    property real fontSize: Theme.typography.bodySans25Size
+    property int fontWeight: Theme.typography.bodySans25Weight
+    property int contentPadding: Theme.spacing.s4
+    property int popupPadding: Theme.spacing.s2
+
+    property int comboBoxHeight: Theme.spacing.s12
+    property int itemDelegateHeight: Theme.spacing.s10
 
     property alias model: comboBox.model
 
@@ -59,13 +68,13 @@ Item {
         ComboBox {
             id: comboBox
             Layout.fillWidth: true
-            Layout.preferredHeight: Theme.spacing.s12
+            Layout.preferredHeight: root.comboBoxHeight
             indicator: null
 
             font {
                 family: Theme.typography.bodySans25Family
-                pointSize: Theme.typography.bodySans25Size
-                weight: Theme.typography.bodySans25Weight
+                pointSize: root.fontSize
+                weight: root.fontWeight
             }
 
             onActivated: function(index) {
@@ -95,7 +104,7 @@ Item {
 
             // Content Item
             contentItem: RowLayout {
-                Item { Layout.preferredWidth: Theme.spacing.s4 }
+                Item { Layout.preferredWidth: root.contentPadding }
 
                 Text {
                     text: comboBox.displayText
@@ -114,7 +123,7 @@ Item {
                     rotation: comboBox.popup.visible ? 180 : 0
                 }
 
-                Item { Layout.preferredWidth: Theme.spacing.s4 }
+                Item { Layout.preferredWidth: root.contentPadding }
             }
 
             // Popup
@@ -122,7 +131,7 @@ Item {
                 y: comboBox.height + Theme.spacing.s1
                 width: comboBox.width
                 implicitHeight: Math.min(contentItem.implicitHeight, Theme.spacing.s10 * 5) + topPadding + bottomPadding
-                padding: Theme.spacing.s2
+                padding: root.popupPadding
                 transformOrigin: Popup.Top
 
                 background: Rectangle {
@@ -145,7 +154,7 @@ Item {
             // Delegate (item nel popup)
             delegate: ItemDelegate {
                 width: comboBox.popup.width
-                height: Theme.spacing.s10
+                height: itemDelegateHeight
 
                 contentItem: Text {
                     text: {

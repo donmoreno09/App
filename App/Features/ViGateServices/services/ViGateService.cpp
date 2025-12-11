@@ -131,6 +131,20 @@ void ViGateService::performGet(const QUrl& url)
 
         QJsonParseError parseError;
         QJsonDocument doc = QJsonDocument::fromJson(responseData, &parseError);
+        QJsonObject rootObj = doc.object();
+
+        // *** PROOF: Log what backend actually returned ***
+        qDebug() << "=== BACKEND RESPONSE ANALYSIS ===";
+        qDebug() << "ViGateService: Response structure:" << rootObj.keys();
+        qDebug() << "Backend says pageNumber:" << rootObj["pageNumber"].toInt();
+        qDebug() << "Backend says pageSize:" << rootObj["pageSize"].toInt();
+        qDebug() << "Backend says totalCount:" << rootObj["totalCount"].toInt();
+        qDebug() << "Backend says totalPages:" << rootObj["totalPages"].toInt();
+        qDebug() << "Backend ACTUALLY returned items.length:" << rootObj["items"].toArray().size();
+        qDebug() << "=== EXPECTED vs ACTUAL ===";
+        qDebug() << "EXPECTED items on this page:" << rootObj["pageSize"].toInt();
+        qDebug() << "ACTUAL items received:" << rootObj["items"].toArray().size();
+        qDebug() << "=================================";
 
         if (parseError.error != QJsonParseError::NoError) {
             QString error = QStringLiteral("JSON parse error: %1").arg(parseError.errorString());
@@ -140,11 +154,6 @@ void ViGateService::performGet(const QUrl& url)
             return;
         }
 
-        QJsonObject rootObj = doc.object();
-
-        qDebug() << "ViGateService: Response structure:" << rootObj.keys();
-
-        // Expected format: { "items": [...], "pageNumber": N, "pageSize": N, "summary": {...}, "totalCount": N, "totalPages": N }
         if (!rootObj.contains("items") || !rootObj.contains("pageNumber") || !rootObj.contains("summary")) {
             qWarning() << "ViGateService: Invalid response format - missing items, pageNumber, or summary";
             emit requestFailed(QStringLiteral("Invalid response format"));

@@ -227,10 +227,15 @@ ColumnLayout {
 
                 UI.ComboBox {
                     id: itemsPerPageComboBox
-                    comboBoxHeight: Theme.spacing.s8
-                    itemDelegateHeight: Theme.spacing.s6
-                    model: [25, 50, 100, 200]
+                    comboBoxHeight: Theme.spacing.s6
+                    itemDelegateHeight: Theme.spacing.s4
+                    contentPadding: Theme.spacing.s1
+                    popupPadding: Theme.spacing.s1
+                    model: [5, 10, 25, 50]
                     currentIndex: 0
+                    fontFamily: Theme.typography.familySans
+                    fontSize: Theme.spacing.s2 + 1
+                    fontWeight: Theme.spacing.s2 + 1
 
                     readonly property int itemsPerPage: model[currentIndex]
 
@@ -338,6 +343,7 @@ ColumnLayout {
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.topMargin: 150
             visible: controller.isLoadingPage
 
             BusyIndicator {
