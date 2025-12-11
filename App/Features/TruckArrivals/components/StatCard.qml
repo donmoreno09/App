@@ -15,7 +15,6 @@ RowLayout {
         Layout.preferredWidth: 50
         Layout.preferredHeight: 50
         Layout.alignment: Qt.AlignVCenter
-        Layout.margins: Theme.spacing.s2
         radius: 8
         color: Theme.colors.glassWhite
         border.color: Theme.colors.border

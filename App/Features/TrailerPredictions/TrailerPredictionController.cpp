@@ -16,6 +16,7 @@ void TrailerPredictionController::setLoading(bool loading) {
 
 void TrailerPredictionController::hookUpService() {
     connect(m_service, &TrailerPredictionService::predictionReady, this, [this](int v){
+        qDebug() << "[Controller] predictionReady received:" << v;
         if (m_prediction != v) { m_prediction = v; emit predictionChanged(v); }
         if (!m_hasPrediction) { m_hasPrediction = true; emit hasPredictionChanged(true); }
         if (m_hasError)       { m_hasError = false;     emit hasErrorChanged(false); }
@@ -23,13 +24,31 @@ void TrailerPredictionController::hookUpService() {
     });
 
     connect(m_service, &TrailerPredictionService::notFound, this, [this]{
-        if (m_hasPrediction)  { m_hasPrediction = false; emit hasPredictionChanged(false); }
-        if (m_hasError)       { m_hasError = false;      emit hasErrorChanged(false); }
-        if (m_prediction != -1) { m_prediction = -1; emit predictionChanged(-1); }
+        qDebug() << "[Controller] notFound received";
+        qDebug() << "[Controller] Current state - prediction:" << m_prediction << "hasPrediction:" << m_hasPrediction << "hasError:" << m_hasError;
+
+        if (m_hasPrediction)  {
+            m_hasPrediction = false;
+            qDebug() << "[Controller] Setting hasPrediction = false";
+            emit hasPredictionChanged(false);
+        }
+        if (!m_hasError) {
+            m_hasError = true;
+            qDebug() << "[Controller] Setting hasError = true";
+            emit hasErrorChanged(true);
+        }
+        if (m_prediction != -1) {
+            m_prediction = -1;
+            qDebug() << "[Controller] Setting prediction = -1";
+            emit predictionChanged(-1);
+        }
+
+        qDebug() << "[Controller] Final state - prediction:" << m_prediction << "hasPrediction:" << m_hasPrediction << "hasError:" << m_hasError;
         setLoading(false);
     });
 
     connect(m_service, &TrailerPredictionService::requestFailed, this, [this](const QString &e){
+        qDebug() << "[Controller] requestFailed received:" << e;
         emit requestFailed(e);
         if (!m_hasError)      { m_hasError = true;       emit hasErrorChanged(true); }
         if (m_hasPrediction)  { m_hasPrediction = false; emit hasPredictionChanged(false); }
