@@ -34,7 +34,6 @@ QtObject {
         poi = null
         if (alertZone) AlertZoneModel.discardChanges()
         alertZone = null
-        console.log("Clearing map mode controller state")
     }
 
     function setActiveMode(mode: BaseMode) {

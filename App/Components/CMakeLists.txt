@@ -4,6 +4,7 @@ set(qml_files
     ComboBox.qml
     DateTime.qml
     EditableRectangle.qml
+    EditableEllipse.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml
@@ -53,6 +54,7 @@ set(qml_files
     floating-window/windowRoutes.js
 
     forms/RectangleFormBase.qml
+    forms/EllipseFormBase.qml
 )
 
 

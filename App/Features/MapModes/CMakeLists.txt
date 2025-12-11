@@ -14,6 +14,7 @@ set(qml_files
     modes/ellipse/EllipseMode.qml
     modes/ellipse/CreateEllipseMode.qml
     modes/ellipse/EditEllipseMode.qml
+    modes/ellipse/EllipseGeometry.js
 
     modes/polygon/PolygonMode.qml
     modes/polygon/CreatePolygonMode.qml
