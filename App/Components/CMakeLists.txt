@@ -3,9 +3,6 @@ set(qml_files
     ButtonOld.qml
     ComboBox.qml
     DateTime.qml
-    EditableRectangle.qml
-    EditableEllipse.qml
-    EditablePolygon.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml
@@ -57,6 +54,10 @@ set(qml_files
     forms/RectangleFormBase.qml
     forms/EllipseFormBase.qml
     forms/PolygonFormBase.qml
+
+    shapes/EditableRectangle.qml
+    shapes/EditableEllipse.qml
+    shapes/EditablePolygon.qml
 )
 
 
