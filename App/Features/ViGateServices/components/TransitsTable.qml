@@ -13,60 +13,55 @@ GroupBox {
 
     required property var model
 
-    onWidthChanged: {
-            console.log("TransitsTable GroupBox width:", width)
-        }
-
     contentItem: ColumnLayout {
-            width: parent.width
-            spacing: Theme.spacing.s2
+        width: parent.width
+        spacing: Theme.spacing.s2
 
-            // Header wrapper with clipping
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Theme.spacing.s10
-                clip: true
+        // Header wrapper with clipping
+        Item {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Theme.spacing.s10
+            clip: true
 
-                TableHeader {
-                    width: parent.width
-                    height: parent.height
-                    columns: ColumnConfig.columns
-                    contentX: listView.contentX
-                }
-            }
-
-            ListView {
-                id: listView
-                Layout.fillWidth: true
-                Layout.preferredHeight: 300
-                Layout.maximumWidth: parent.width
-                clip: true
-                model: root.model
-                contentWidth: ColumnConfig.totalWidth
-
-                flickableDirection: Flickable.HorizontalAndVerticalFlick
-                boundsBehavior: Flickable.StopAtBounds
-
-                // Performance optimizations
-                cacheBuffer: Theme.spacing.s10 * 10
-                reuseItems: true
-
-                // Smooth scrolling
-                maximumFlickVelocity: 2500
-                flickDeceleration: 1500
-
-                delegate: TransitRow {
-                    columns: ColumnConfig.columns
-                }
-
-                ScrollBar.vertical: ScrollBar {
-                    width: 12
-                }
-
-                ScrollBar.horizontal: ScrollBar {
-                    height: 12
-                }
+            TableHeader {
+                width: parent.width
+                height: parent.height
+                columns: ColumnConfig.columns
+                contentX: listView.contentX
             }
         }
 
+        ListView {
+            id: listView
+            Layout.fillWidth: true
+            Layout.preferredHeight: 300
+            Layout.maximumWidth: parent.width
+            clip: true
+            model: root.model
+            contentWidth: ColumnConfig.totalWidth
+
+            flickableDirection: Flickable.HorizontalAndVerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
+
+            // Performance optimizations
+            cacheBuffer: Theme.spacing.s10 * 10
+            reuseItems: true
+
+            // Smooth scrolling
+            maximumFlickVelocity: 2500
+            flickDeceleration: 1500
+
+            delegate: TransitRow {
+                columns: ColumnConfig.columns
+            }
+
+            ScrollBar.vertical: ScrollBar {
+                width: 12
+            }
+
+            ScrollBar.horizontal: ScrollBar {
+                height: 12
+            }
+        }
+    }
 }

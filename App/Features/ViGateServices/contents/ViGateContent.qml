@@ -13,11 +13,31 @@ ColumnLayout {
     width: parent.width
     spacing: Theme.spacing.s4
 
-    required property var controller
+    required property ViGateController controller
+
+    readonly property var startDT: dateTimePicker._combineDateTime(
+        dateTimePicker.startDate,
+        dateTimePicker.selectedHour,
+        dateTimePicker.selectedMinute,
+        dateTimePicker.selectedAMPM
+    )
+    readonly property var endDT: dateTimePicker._combineDateTime(
+        dateTimePicker.endDate,
+        dateTimePicker.endHour,
+        dateTimePicker.endMinute,
+        dateTimePicker.endAMPM
+    )
+    readonly property var selectedGateId: gateComboBox.currentValue
+    readonly property int itemsPerPage: itemsPerPageComboBox.itemsPerPage
+    readonly property bool vehiclesChecked: vehiclesToggle.checked
+    readonly property bool pedestriansChecked: pedestriansToggle.checked
+    readonly property bool canFetch: {
+        return gateComboBox.currentIndex >= 0 && dateTimePicker.hasValidSelection && (vehiclesToggle.checked || pedestriansToggle.checked)
+    }
 
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
-        Layout.topMargin: 300
+        Layout.topMargin: 250
         running: controller.isLoading
         visible: controller.isLoading
         layer.enabled: true
@@ -27,7 +47,6 @@ ColumnLayout {
     ColumnLayout {
         visible: !controller.isLoading
         Layout.fillWidth: true
-        Layout.margins: Theme.spacing.s4
         spacing: Theme.spacing.s3
 
         UI.ComboBox {
@@ -108,6 +127,7 @@ ColumnLayout {
             spacing: Theme.spacing.s3
 
             Text {
+                Layout.fillWidth: true
                 text: `${TranslationManager.revision}` && qsTr("Filters:")
                 font.family: Theme.typography.familySans
                 color: Theme.colors.text
@@ -140,48 +160,6 @@ ColumnLayout {
             }
         }
 
-        UI.Button {
-            Layout.fillWidth: true
-            Layout.preferredHeight: Theme.spacing.s10
-            variant: UI.ButtonStyles.Primary
-            text: `${TranslationManager.revision}` && qsTr("Fetch Data")
-            enabled: canFetch && !controller.isLoading
-
-            readonly property bool canFetch: {
-                return gateComboBox.currentIndex >= 0 &&
-                       dateTimePicker.hasValidSelection &&
-                       (vehiclesToggle.checked || pedestriansToggle.checked)
-            }
-
-            onClicked: {
-                Qt.inputMethod.commit()
-
-                const startDT = dateTimePicker._combineDateTime(
-                    dateTimePicker.startDate,
-                    dateTimePicker.selectedHour,
-                    dateTimePicker.selectedMinute,
-                    dateTimePicker.selectedAMPM
-                )
-                const endDT = dateTimePicker._combineDateTime(
-                    dateTimePicker.endDate,
-                    dateTimePicker.endHour,
-                    dateTimePicker.endMinute,
-                    dateTimePicker.endAMPM
-                )
-
-                const selectedGateId = gateComboBox.currentValue
-                console.log("Fetching data for gate ID:", selectedGateId)
-
-                controller.fetchGateData(
-                    selectedGateId,
-                    startDT,
-                    endDT,
-                    vehiclesToggle.checked,
-                    pedestriansToggle.checked
-                )
-            }
-        }
-
         UI.HorizontalDivider { Layout.fillWidth: true }
     }
 
@@ -210,117 +188,67 @@ ColumnLayout {
             }
         }
 
-        Rectangle {
+        RowLayout {
             width: parent.width
-            Layout.maximumWidth: parent.width - 14
-            Layout.minimumHeight: Theme.spacing.s10
-            color: Theme.colors.surface
-            radius: Theme.radius.sm
+            spacing: Theme.spacing.s3
             visible: controller.totalPages > 0 && !controller.isLoadingPage
 
-            Component.onCompleted: {
-                console.log("=== Pagination Controls ===")
-                console.log("width: ", width)
+            UI.HorizontalSpacer{}
+
+            Text {
+                text: `${TranslationManager.revision}` && qsTr("Page %1 of %2")
+                    .arg(controller.currentPage)
+                    .arg(controller.totalPages)
+                font.family: Theme.typography.familySans
+                font.weight: Theme.typography.weightMedium
+                color: Theme.colors.text
+                horizontalAlignment: Text.AlignHCenter
             }
 
-            onWidthChanged: {
-                    console.log("Pagination Controls width changed to:", width)
-                }
+            UI.VerticalDivider { color: Theme.colors.whiteA10 }
+
+            Text {
+                text: `${TranslationManager.revision}` && qsTr("Total Items: %1")
+                    .arg(controller.totalItems)
+                font.family: Theme.typography.familySans
+                color: Theme.colors.textMuted
+                horizontalAlignment: Text.AlignHCenter
+                elide: Text.ElideRight
+            }
+
+            UI.VerticalDivider { color: Theme.colors.whiteA10 }
 
             RowLayout {
-                anchors.fill: parent
-
                 Text {
-                    Layout.fillWidth: true
-                    text: `${TranslationManager.revision}` && qsTr("Page %1 of %2")
-                        .arg(controller.currentPage)
-                        .arg(controller.totalPages)
+                    text: `${TranslationManager.revision}` && qsTr("Items per page:")
                     font.family: Theme.typography.familySans
-                    font.weight: Theme.typography.weightMedium
                     color: Theme.colors.text
-                    horizontalAlignment: Text.AlignHCenter
                 }
 
-                UI.VerticalDivider {
-                    Layout.fillHeight: true
-                    color: Theme.colors.textMuted
-                }
+                UI.ComboBox {
+                    id: itemsPerPageComboBox
+                    comboBoxHeight: Theme.spacing.s8
+                    itemDelegateHeight: Theme.spacing.s6
+                    model: [25, 50, 100, 200]
+                    currentIndex: 0
 
-                Text {
-                    Layout.fillWidth: true
-                    text: `${TranslationManager.revision}` && qsTr("Total Items: %1")
-                        .arg(controller.totalItems)
-                    font.family: Theme.typography.familySans
-                    color: Theme.colors.textMuted
-                    horizontalAlignment: Text.AlignHCenter
-                    elide: Text.ElideRight
-                }
+                    readonly property int itemsPerPage: model[currentIndex]
 
-                UI.VerticalDivider {
-                    Layout.fillHeight: true
-                    color: Theme.colors.textMuted
-                }
-
-                RowLayout {
-                    Layout.fillWidth: true
-
-                    Text {
-                        text: `${TranslationManager.revision}` && qsTr("Items per page:")
-                        font.family: Theme.typography.familySans
-                        color: Theme.colors.text
-                    }
-
-                    ComboBox {
-                        id: pageSizeCombo
-                        Layout.fillWidth: true
-                        Layout.maximumWidth: 80
-                        model: [25, 50, 100, 200]
-                        currentIndex: 1
-
-                        onCurrentValueChanged: {
-                            if (currentValue) {
-                                controller.pageSize = currentValue
-                            }
-                        }
-
-                        delegate: ItemDelegate {
-                            width: pageSizeCombo.width
-                            contentItem: Text {
-                                text: modelData
-                                color: Theme.colors.text
-                                font: pageSizeCombo.font
-                                elide: Text.ElideRight
-                                verticalAlignment: Text.AlignVCenter
-                            }
-                            highlighted: pageSizeCombo.highlightedIndex === index
-                        }
-
-                        contentItem: Text {
-                            leftPadding: Theme.spacing.s2
-                            rightPadding: pageSizeCombo.indicator.width + pageSizeCombo.spacing
-                            text: pageSizeCombo.displayText
-                            font: pageSizeCombo.font
-                            color: Theme.colors.text
-                            verticalAlignment: Text.AlignVCenter
-                            elide: Text.ElideRight
-                        }
-
-                        background: Rectangle {
-                            implicitWidth: 80
-                            implicitHeight: Theme.spacing.s8
-                            color: Theme.colors.surface
-                            radius: Theme.radius.sm
-                        }
+                    onActivated: function(index) {
+                        console.log("[Items per page] Index is: " + index);
+                        controller.pageSize = model[index]
                     }
                 }
             }
+
+            UI.HorizontalSpacer{}
         }
 
         RowLayout {
             visible: controller.totalPages > 1 && !controller.isLoadingPage
             width: parent.width
             Layout.maximumWidth: parent.width - 14
-            spacing: Theme.spacing.s1
+            spacing: Theme.spacing.s3
 
             Item { Layout.fillWidth: true }
 
@@ -499,7 +427,6 @@ ColumnLayout {
         target: root.controller
         function onHasDataChanged() {
             if (root.controller.hasData) {
-                console.log("ViGateContent: Data loaded, applying initial filter")
                 updateTransitFilter()
             }
         }
@@ -511,7 +438,6 @@ ColumnLayout {
         if (pedestriansToggle.checked) types.push("WALK")
 
         const filterStr = types.length > 0 ? types.join(",") : "NONE"
-        console.log("ViGateContent: Updating filter to", filterStr)
         root.controller.transitsModel.laneTypeFilter = filterStr
     }
 }

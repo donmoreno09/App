@@ -81,7 +81,8 @@ public slots:
                        const QDateTime& startDate,
                        const QDateTime& endDate,
                        bool includeVehicles,
-                       bool includePedestrians);
+                       bool includePedestrians,
+                       int itemsPerPage);
     void nextPage();
     void previousPage();
     void goToPage(int page);

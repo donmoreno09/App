@@ -172,7 +172,8 @@ void ViGateController::fetchGateData(int gateId,
                                      const QDateTime& startDate,
                                      const QDateTime& endDate,
                                      bool includeVehicles,
-                                     bool includePedestrians)
+                                     bool includePedestrians,
+                                     int itemsPerPage)
 {
     qDebug() << "ViGateController::fetchGateData called";
     qDebug() << "  - Gate ID:" << gateId;
@@ -188,6 +189,7 @@ void ViGateController::fetchGateData(int gateId,
     m_includeVehicles = includeVehicles;
     m_includePedestrians = includePedestrians;
     m_currentPage = 1;
+    m_pageSize = itemsPerPage;
 
     fetchCurrentPage();
 }

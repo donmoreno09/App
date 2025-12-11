@@ -52,10 +52,6 @@ Item {
     width: contentRow.implicitWidth
     height: Theme.spacing.s10
 
-    // onWidthChanged: {
-    //         console.log("TransitRow width:", width)
-    //     }
-
     Rectangle {
         anchors.fill: parent
         color: index % 2 === 0 ? Theme.colors.transparent : Theme.colors.surface
