@@ -1,11 +1,14 @@
 .pragma library
 
-function clampLat(v)   { return Math.max(-90, Math.min(90, v)) }
+function clampLat(v) {
+    return Math.max(-90, Math.min(90, v))
+}
+
 function normLon(v) {
-    let x = v
-    while (x < -180) x += 360
-    while (x > 180) x -= 360
-    return x
+    // Wrap to [0, 360)
+    const wrapped = ((v + 180) % 360 + 360) % 360
+    // Shift to [-180, 180)
+    return wrapped - 180
 }
 
 function maxCheckNaN(a, b) {
