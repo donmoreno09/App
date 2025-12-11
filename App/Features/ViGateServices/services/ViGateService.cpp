@@ -7,10 +7,24 @@
 #include <QScopeGuard>
 #include <QJsonArray>
 #include <QDebug>
+#include <QtConcurrent>
 
 ViGateService::ViGateService(QObject* parent)
     : QObject(parent)
-{}
+    , m_parseWatcher(new QFutureWatcher<QJsonObject>(this))
+{
+    connect(m_parseWatcher, &QFutureWatcher<QJsonObject>::finished,
+            this, &ViGateService::onParseFinished);
+}
+
+ViGateService::~ViGateService()
+{
+    // Cancel any ongoing background work
+    if (m_parseWatcher->isRunning()) {
+        m_parseWatcher->cancel();
+        m_parseWatcher->waitForFinished();
+    }
+}
 
 void ViGateService::setHostPort(const QString& host, int port)
 {
@@ -125,91 +139,115 @@ void ViGateService::performGet(const QUrl& url)
             return;
         }
 
-        // Parse JSON response
+        // Get response data and move to background thread for parsing
         QByteArray responseData = reply->readAll();
-        qDebug() << "ViGateService: Received" << responseData.size() << "bytes";
+        qDebug() << "ViGateService: Received" << responseData.size() << "bytes - starting background parse";
 
-        QJsonParseError parseError;
-        QJsonDocument doc = QJsonDocument::fromJson(responseData, &parseError);
-        QJsonObject rootObj = doc.object();
-
-        // *** PROOF: Log what backend actually returned ***
-        qDebug() << "=== BACKEND RESPONSE ANALYSIS ===";
-        qDebug() << "ViGateService: Response structure:" << rootObj.keys();
-        qDebug() << "Backend says pageNumber:" << rootObj["pageNumber"].toInt();
-        qDebug() << "Backend says pageSize:" << rootObj["pageSize"].toInt();
-        qDebug() << "Backend says totalCount:" << rootObj["totalCount"].toInt();
-        qDebug() << "Backend says totalPages:" << rootObj["totalPages"].toInt();
-        qDebug() << "Backend ACTUALLY returned items.length:" << rootObj["items"].toArray().size();
-        qDebug() << "=== EXPECTED vs ACTUAL ===";
-        qDebug() << "EXPECTED items on this page:" << rootObj["pageSize"].toInt();
-        qDebug() << "ACTUAL items received:" << rootObj["items"].toArray().size();
-        qDebug() << "=================================";
-
-        if (parseError.error != QJsonParseError::NoError) {
-            QString error = QStringLiteral("JSON parse error: %1").arg(parseError.errorString());
-            qWarning() << "ViGateService:" << error;
-            qWarning() << "Response data (first 500 chars):" << responseData.left(500);
-            emit requestFailed(error);
-            return;
+        // Cancel any previous parse operation
+        if (m_parseWatcher->isRunning()) {
+            qDebug() << "ViGateService: Cancelling previous parse operation";
+            m_parseWatcher->cancel();
+            m_parseWatcher->waitForFinished();
         }
 
-        if (!rootObj.contains("items") || !rootObj.contains("pageNumber") || !rootObj.contains("summary")) {
-            qWarning() << "ViGateService: Invalid response format - missing items, pageNumber, or summary";
-            emit requestFailed(QStringLiteral("Invalid response format"));
-            return;
-        }
+        // Start background parsing using QtConcurrent
+        QFuture<QJsonObject> future = QtConcurrent::run([responseData]() {
+            return ViGateService::parseAndTransformResponse(responseData);
+        });
 
-        qDebug() << "ViGateService: Detected backend response with summary";
-
-        QJsonArray dataArray = rootObj["items"].toArray();
-        qDebug() << "ViGateService: Processing" << dataArray.size() << "transit items";
-
-        // Transform transit data
-        QJsonArray transformedTransits = transformTransitData(dataArray);
-
-        // Use the provided summary from backend
-        QJsonObject providedSummary = rootObj["summary"].toObject();
-        QJsonObject convertedSummary;
-
-        convertedSummary["total_entries"] = providedSummary.value("totalEntries").toInt();
-        convertedSummary["total_exits"] = providedSummary.value("totalExits").toInt();
-        convertedSummary["total_vehicle_entries"] = providedSummary.value("totalVehiclesEntries").toInt();
-        convertedSummary["total_vehicle_exits"] = providedSummary.value("totalVehiclesExits").toInt();
-        convertedSummary["total_pedestrian_entries"] = providedSummary.value("totalPedestriansEntries").toInt();
-        convertedSummary["total_pedestrian_exits"] = providedSummary.value("totalPedestriansExits").toInt();
-
-        qDebug() << "ViGateService: Using backend summary:";
-        qDebug() << "  - Entries:" << convertedSummary["total_entries"].toInt()
-                 << "(Vehicles:" << convertedSummary["total_vehicle_entries"].toInt()
-                 << ", Pedestrians:" << convertedSummary["total_pedestrian_entries"].toInt() << ")";
-        qDebug() << "  - Exits:" << convertedSummary["total_exits"].toInt()
-                 << "(Vehicles:" << convertedSummary["total_vehicle_exits"].toInt()
-                 << ", Pedestrians:" << convertedSummary["total_pedestrian_exits"].toInt() << ")";
-
-        // Build response
-        QJsonObject response;
-        response["summary"] = convertedSummary;
-        response["transits"] = transformedTransits;
-
-        // Extract pagination info (flat structure, not nested)
-        int currentPage = rootObj["pageNumber"].toInt();
-        int totalPages = rootObj["totalPages"].toInt();
-        int totalItems = rootObj["totalCount"].toInt();
-
-        qDebug() << "ViGateService: Pagination - page" << currentPage
-                 << "of" << totalPages << "(" << totalItems << "total items)";
-
-        emit paginationInfo(currentPage, totalPages, totalItems);
-        emit dataReady(response);
+        m_parseWatcher->setFuture(future);
     });
 }
 
+void ViGateService::onParseFinished()
+{
+    if (m_parseWatcher->isCanceled()) {
+        qDebug() << "ViGateService: Parse operation was cancelled";
+        return;
+    }
+
+    QJsonObject result = m_parseWatcher->result();
+
+    // Check if parsing failed
+    if (result.contains("error")) {
+        QString error = result["error"].toString();
+        qWarning() << "ViGateService: Background parse error:" << error;
+        emit requestFailed(error);
+        return;
+    }
+
+    qDebug() << "ViGateService: Background parsing completed successfully";
+
+    // Extract pagination info
+    int currentPage = result["currentPage"].toInt();
+    int totalPages = result["totalPages"].toInt();
+    int totalItems = result["totalCount"].toInt();
+
+    qDebug() << "ViGateService: Pagination - page" << currentPage
+             << "of" << totalPages << "(" << totalItems << "total items)";
+
+    // Build final response for controller
+    QJsonObject response;
+    response["summary"] = result["summary"];
+    response["transits"] = result["transits"];
+
+    emit paginationInfo(currentPage, totalPages, totalItems);
+    emit dataReady(response);
+}
+
+// Static method - runs in background thread
+QJsonObject ViGateService::parseAndTransformResponse(const QByteArray& responseData)
+{
+    QJsonObject result;
+
+    // Parse JSON
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(responseData, &parseError);
+
+    if (parseError.error != QJsonParseError::NoError) {
+        result["error"] = QStringLiteral("JSON parse error: %1").arg(parseError.errorString());
+        return result;
+    }
+
+    QJsonObject rootObj = doc.object();
+
+    // Validate structure
+    if (!rootObj.contains("items") || !rootObj.contains("pageNumber") || !rootObj.contains("summary")) {
+        result["error"] = QStringLiteral("Invalid response format - missing items, pageNumber, or summary");
+        return result;
+    }
+
+    QJsonArray dataArray = rootObj["items"].toArray();
+    qDebug() << "ViGateService: Background thread processing" << dataArray.size() << "transit items";
+
+    // Transform transit data in background
+    QJsonArray transformedTransits = transformTransitData(dataArray);
+
+    // Convert summary
+    QJsonObject providedSummary = rootObj["summary"].toObject();
+    QJsonObject convertedSummary;
+    convertedSummary["total_entries"] = providedSummary.value("totalEntries").toInt();
+    convertedSummary["total_exits"] = providedSummary.value("totalExits").toInt();
+    convertedSummary["total_vehicle_entries"] = providedSummary.value("totalVehiclesEntries").toInt();
+    convertedSummary["total_vehicle_exits"] = providedSummary.value("totalVehiclesExits").toInt();
+    convertedSummary["total_pedestrian_entries"] = providedSummary.value("totalPedestriansEntries").toInt();
+    convertedSummary["total_pedestrian_exits"] = providedSummary.value("totalPedestriansExits").toInt();
+
+    // Pack results
+    result["summary"] = convertedSummary;
+    result["transits"] = transformedTransits;
+    result["currentPage"] = rootObj["pageNumber"].toInt();
+    result["totalPages"] = rootObj["totalPages"].toInt();
+    result["totalCount"] = rootObj["totalCount"].toInt();
+
+    return result;
+}
+
+// Static method - runs in background thread
 QJsonArray ViGateService::transformTransitData(const QJsonArray& transits)
 {
-    qDebug() << "ViGateService::transformTransitData - Processing" << transits.size() << "transits";
-
     QJsonArray transformedTransits;
+    transformedTransits.reserve(transits.size()); // Pre-allocate
 
     for (int i = 0; i < transits.size(); ++i) {
         const auto& value = transits[i];
@@ -228,7 +266,6 @@ QJsonArray ViGateService::transformTransitData(const QJsonArray& transits)
         }
 
         QJsonObject transit = transitObj["transit"].toObject();
-
         QJsonObject transformed;
 
         // Basic info from root level
@@ -299,7 +336,7 @@ QJsonArray ViGateService::transformTransitData(const QJsonArray& transits)
         transformedTransits.append(transformed);
     }
 
-    qDebug() << "ViGateService::transformTransitData - Transformed" << transformedTransits.size() << "transits";
+    qDebug() << "ViGateService: Background thread transformed" << transformedTransits.size() << "transits";
 
     return transformedTransits;
 }
