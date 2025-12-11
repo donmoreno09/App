@@ -16,9 +16,13 @@ ColumnLayout {
 
     required property TruckArrivalController controller
 
+    property alias startDate: rangePicker.startDate
+    property alias endDate: rangePicker.endDate
+    property alias hasValidSelection: rangePicker.hasValidSelection
+
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
-        Layout.topMargin: 300
+        Layout.topMargin: 250
         running: controller.isLoading
         visible: controller.isLoading
         layer.enabled: true
@@ -27,46 +31,27 @@ ColumnLayout {
 
     UI.DatePicker {
         id: rangePicker
-        mode: "range"
-        standalone: false
+        visible: !controller.isLoading
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
-        Layout.margins: 10
-        visible: !controller.isLoading
+        mode: "range"
+        standalone: false
     }
 
     Text {
         Layout.fillWidth: true
         visible: !controller.isLoading
         horizontalAlignment: Text.AlignHCenter
-        text: (rangePicker.startDate && rangePicker.endDate)
-              ? `${TranslationManager.revision}` && qsTr("Selected: %1 — %2")
-                    .arg(Qt.formatDate(rangePicker.startDate, "dd/MMM/yyyy"))
-                    .arg(Qt.formatDate(rangePicker.endDate,   "dd/MMM/yyyy"))
-              : `${TranslationManager.revision}` && qsTr("Select a date range")
         color: Theme.colors.textMuted
+        text: rangePicker.rangeText
     }
 
     StatCard {
         visible: !controller.isLoading
+        Layout.fillWidth: true
         icon: "qrc:/App/assets/icons/truck.svg"
         title: `${TranslationManager.revision}` && qsTr("Arrivals in range")
         value: controller.dateRangeArrivalCount.toString() + " " + qsTr(" trucks")
-        Layout.fillWidth: true
-    }
-
-    UI.VerticalSpacer {}
-
-    UI.Button {
-        visible: !controller.isLoading
-        variant: UI.ButtonStyles.Primary
-        Layout.fillWidth: true
-        Layout.preferredHeight: 40
-        Layout.margins: 10
-        text: `${TranslationManager.revision}` && qsTr("Fetch Arrivals")
-        enabled: !controller.isLoading && (rangePicker.startDate && rangePicker.endDate)
-
-        onClicked: controller.fetchDateRangeShipArrivals(rangePicker.startDate, rangePicker.endDate)
     }
 
     Component.onCompleted: {
