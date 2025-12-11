@@ -19,6 +19,7 @@ set(qml_files
     modes/polygon/PolygonMode.qml
     modes/polygon/CreatePolygonMode.qml
     modes/polygon/EditPolygonMode.qml
+    modes/polygon/PolygonGeometry.js
 )
 
 set(qml_singletons

@@ -5,6 +5,7 @@ set(qml_files
     DateTime.qml
     EditableRectangle.qml
     EditableEllipse.qml
+    EditablePolygon.qml
     GlobalBackground.qml
     GlobalBackgroundConsumer.qml
     HorizontalDivider.qml
@@ -55,6 +56,7 @@ set(qml_files
 
     forms/RectangleFormBase.qml
     forms/EllipseFormBase.qml
+    forms/PolygonFormBase.qml
 )
 
 
