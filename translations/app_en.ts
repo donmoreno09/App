@@ -1909,7 +1909,7 @@
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="56"/>
-        <source>PoI</source>
+        <source>POI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1924,7 +1924,22 @@
     </message>
     <message>
         <location filename="../App/Features/SideRail/SideRail.qml" line="89"/>
-        <source>Date Arrivals</source>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="107"/>
+        <source>Predictions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="116"/>
+        <source>Stowage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="128"/>
+        <source>Gates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1933,19 +1948,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="107"/>
         <source>Trailer Prediction</source>
-        <translation>Trailer Prediction</translation>
+        <translation type="vanished">Trailer Prediction</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="116"/>
         <source>Ship Stowage</source>
-        <translation>Ship Stowage</translation>
-    </message>
-    <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="128"/>
-        <source>Gate Transit</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Ship Stowage</translation>
     </message>
     <message>
         <source>Leonardo ViGate Services</source>
