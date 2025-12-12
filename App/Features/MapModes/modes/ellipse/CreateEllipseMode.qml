@@ -4,7 +4,10 @@ import QtPositioning 6.8
 
 import App.Themes 1.0
 import App.Features.Map 1.0
-import App.Features.MapModes 1.0
+
+import "../.."
+import "./EllipseGeometry.js" as EllipseGeom
+import App.Components 1.0 as UI
 
 EllipseMode {
     id: root
@@ -15,19 +18,19 @@ EllipseMode {
     property geoCoordinate coord: QtPositioning.coordinate()
     property real radiusA: 0      // longitude half-axis (E/W), shortest wrap
     property real radiusB: 0      // latitude half-axis (N/S)
-    readonly property bool hasEllipse: coord.isValid && radiusA > 0 && radiusB > 0
+    readonly property bool hasEllipse: EllipseGeom.hasEllipse(coord, radiusA, radiusB)
 
     // Listen to map events while drawing
     Connections {
         target: MapController.map
 
         function onBearingChanged() {
-            // Keep the preview rectangle anchored when the map rotates mid-drag
+            // Keep the preview ellipse anchored when the map rotates mid-drag
             updatePreviewEllipse()
         }
 
         function onTiltChanged() {
-            // Keep the preview rectangle anchored when the map tilts mid-drag
+            // Keep the preview ellipse anchored when the map tilts mid-drag
             updatePreviewEllipse()
         }
     }
@@ -37,7 +40,6 @@ EllipseMode {
     property point dragStart: drag.centroid.pressPosition
     property point dragEnd: drag.centroid.position
     property geoCoordinate dragStartCoord: QtPositioning.coordinate()
-    property bool  isDraggingHandler: false
 
     // ----- API -----
     function buildGeometry() {
@@ -51,6 +53,7 @@ EllipseMode {
 
     function resetPreview() {
         coord   = QtPositioning.coordinate()
+        root.coordChanged()
         radiusA = 0
         root.majorAxisChanged()
         radiusB = 0
@@ -58,15 +61,35 @@ EllipseMode {
         dragStartCoord = QtPositioning.coordinate()
     }
 
-    // ----- Helpers -----
-    function clampLat(v)   { return Math.max(-90, Math.min(90, v)) }
-    function normLon(v)    { let x=v; while (x<-180) x+=360; while (x>180) x-=360; return x }
-    function lonDelta(a,b) { // shortest |b-a| on sphere in degrees
-        let d = b - a
-        while (d > 180) d -= 360
-        while (d < -180) d += 360
-        return Math.abs(d)
+    function setCenter(lat, lon) {
+        const la = (lat === undefined || lat === null) ? coord.latitude  : EllipseGeom.clampLat(Number(lat))
+        const lo = (lon === undefined || lon === null) ? coord.longitude : EllipseGeom.normLon(Number(lon))
+        coord = QtPositioning.coordinate(la, lo)
+        root.coordChanged()
     }
+
+    function setCenterLatitude(lat)  { setCenter(lat, undefined) }
+    function setCenterLongitude(lon) { setCenter(undefined, lon) }
+
+    function setRadii(a, b) {
+        if (a !== undefined && a !== null) {
+            const nextA = Math.max(0, Number(a))
+            if (nextA !== radiusA) {
+                radiusA = nextA
+                root.majorAxisChanged()
+            }
+        }
+        if (b !== undefined && b !== null) {
+            const nextB = Math.max(0, Number(b))
+            if (nextB !== radiusB) {
+                radiusB = nextB
+                root.minorAxisChanged()
+            }
+        }
+    }
+
+    function setRadiusA(a) { setRadii(a, undefined) }
+    function setRadiusB(b) { setRadii(undefined, b) }
 
     function updatePreviewEllipse() {
         if (!drag.active) return
@@ -82,58 +105,32 @@ EllipseMode {
         const c2 = MapController.map.toCoordinate(p2, false)
         if (!c1.isValid || !c2.isValid) return
 
-        const n = Math.max(c1.latitude,  c2.latitude)
-        const s = Math.min(c1.latitude,  c2.latitude)
-        const w = Math.min(c1.longitude, c2.longitude)
-        const e = Math.max(c1.longitude, c2.longitude)
-        const tl = QtPositioning.coordinate(n, w)
-        const br = QtPositioning.coordinate(s, e)
+        const ellipse = EllipseGeom.bboxToEllipse(c1, c2, QtPositioning)
+        if (!ellipse) return
 
-        const cLat = (tl.latitude  + br.latitude ) / 2
-        const cLon = (tl.longitude + br.longitude) / 2
-        coord = QtPositioning.coordinate(clampLat(cLat), normLon(cLon))
+        coord = ellipse.center
+        root.coordChanged()
 
-        radiusA = lonDelta(tl.longitude, br.longitude) / 2
-        root.majorAxisChanged()
-        radiusB = Math.abs(br.latitude  - tl.latitude ) / 2
-        root.minorAxisChanged()
-    }
-
-    function setCenter(lat, lon) {
-        const la = (lat === undefined || lat === null) ? coord.latitude  : clampLat(Number(lat))
-        const lo = (lon === undefined || lon === null) ? coord.longitude : normLon(Number(lon))
-        coord = QtPositioning.coordinate(la, lo)
-    }
-
-    function setRadii(a, b) {
-        // a = longitude half-axis, b = latitude half-axis
-        radiusA = Math.max(0, Number(a))
-        root.majorAxisChanged()
-        radiusB = Math.max(0, Number(b))
-        root.minorAxisChanged()
-    }
-
-    // Parametric ellipse to polygon (geo path)
-    function ellipsePath(segments = 72) {
-        if (!coord.isValid || radiusA <= 0 || radiusB <= 0) return []
-        const arr = []
-        const la0 = coord.latitude
-        const lo0 = coord.longitude
-        for (let i = 0; i <= segments; ++i) {
-            const t = (i / segments) * Math.PI * 2
-            const la = la0 + radiusB * Math.sin(t)  // latitude uses radiusB
-            const loOff = radiusA * Math.cos(t)     // longitude uses radiusA
-            const lo = normLon(lo0 + loOff)
-            arr.push(QtPositioning.coordinate(clampLat(la), lo))
+        if (radiusA !== ellipse.radiusA) {
+            radiusA = ellipse.radiusA
+            root.majorAxisChanged()
         }
-        return arr
+        if (radiusB !== ellipse.radiusB) {
+            radiusB = ellipse.radiusB
+            root.minorAxisChanged()
+        }
     }
 
     // ----- Input: click to clear if not dragging/moving -----
     TapHandler {
         id: tap
         acceptedButtons: Qt.LeftButton
-        onPressedChanged: if (!pressed && !drag.active && !moveTap.pressed && !moveDrag.active) root.resetPreview()
+        onPressedChanged: if (!pressed
+                && !drag.active
+                && !committedEllipse.isMovingEllipse
+                && !committedEllipse.isDraggingHandler
+                && !committedEllipse.isBodyPressed)
+            root.resetPreview()
     }
 
     // ----- Initial draw by dragging a bbox -----
@@ -142,7 +139,9 @@ EllipseMode {
         target: null
         acceptedButtons: Qt.LeftButton
         cursorShape: Qt.CrossCursor
-        enabled: !moveTap.pressed && !isDraggingHandler
+        enabled: !committedEllipse.isDraggingHandler
+                 && !committedEllipse.isMovingEllipse
+                 && !committedEllipse.isBodyPressed
 
         onActiveChanged: if (active) {
             const p = MapController.map.mapFromItem(root, dragStart.x, dragStart.y)
@@ -159,7 +158,7 @@ EllipseMode {
     // ----- Preview while dragging -----
     MapPolygon {
         visible: root.dragging
-        path: root.ellipsePath(96)
+        path: EllipseGeom.ellipsePath(root.coord, root.radiusA, root.radiusB, QtPositioning, 96)
         color: "#3388cc88"
         border.color: "orange"
         border.width: 2
@@ -167,101 +166,37 @@ EllipseMode {
     }
 
     // ----- Committed ellipse -----
-    MapPolygon {
+    UI.EditableEllipse {
         id: committedEllipse
-        visible: !root.dragging && hasEllipse
-        path: root.ellipsePath(96)
-        color: "#22448888"
-        border.color: "green"
-        border.width: 2
+        visible: !root.dragging && root.hasEllipse
         z: root.z + 1
 
-        // Move whole ellipse
-        property point _centerPx: Qt.point(0,0)
+        isEditing: true
+        map: MapController.map
+        center: root.coord
+        radiusA: root.radiusA
+        radiusB: root.radiusB
 
-        // Prevent tap propagating below
-        TapHandler { id: moveTap; acceptedButtons: Qt.LeftButton; gesturePolicy: TapHandler.ReleaseWithinBounds }
+        tapEnabled: false
+        showLabel: false
+        fillColor: "#22448888"
+        strokeColor: "green"
+        highlightColor: "white"
 
-        DragHandler {
-            id: moveDrag
-            target: null
-            enabled: !isDraggingHandler
-            acceptedButtons: Qt.LeftButton
-            minimumPointCount: 1
-            maximumPointCount: 1
-            cursorShape: Qt.SizeAllCursor
+        onEllipseChanged: function(c, a, b) {
+            coord = c
+            root.coordChanged()
 
-            onActiveChanged: if (active) {
-                committedEllipse._centerPx = MapController.map.fromCoordinate(root.coord, false)
+            if (radiusA !== a) {
+                radiusA = a
+                root.majorAxisChanged()
             }
-
-            onActiveTranslationChanged: {
-                const p = Qt.point(committedEllipse._centerPx.x + activeTranslation.x,
-                                   committedEllipse._centerPx.y + activeTranslation.y)
-                const c = MapController.map.toCoordinate(p, false)
-                if (c.isValid) root.coord = QtPositioning.coordinate(clampLat(c.latitude), normLon(c.longitude))
+            if (radiusB !== b) {
+                radiusB = b
+                root.minorAxisChanged()
             }
         }
     }
 
     // subtle white halo behind committed border
-    MapPolygon {
-        visible: !root.dragging
-        path: root.ellipsePath(96)
-        color: "transparent"
-        border.color: "white"
-        border.width: committedEllipse.border.width + 4
-        z: committedEllipse.z - 1
-    }
-
-    // ----- Vertex handles (N, E, S, W) -----
-    component EdgeHandle: MapQuickItem {
-        id: h
-        required property int kind // 0: N, 1: E, 2: S, 3: W
-
-        coordinate: (
-            kind === 0 ? QtPositioning.coordinate(root.coord.latitude + root.radiusB, root.coord.longitude) :
-            kind === 1 ? QtPositioning.coordinate(root.coord.latitude, normLon(root.coord.longitude + root.radiusA)) :
-            kind === 2 ? QtPositioning.coordinate(root.coord.latitude - root.radiusB, root.coord.longitude) :
-                         QtPositioning.coordinate(root.coord.latitude, normLon(root.coord.longitude - root.radiusA))
-        )
-
-        anchorPoint: Qt.point(8, 8)
-        sourceItem: Rectangle { width:16; height:16; radius:8; color:"white"; border.color:"green" }
-        visible: !root.dragging
-        z: committedEllipse.z + 1
-
-        TapHandler {
-            acceptedButtons: Qt.LeftButton
-            onPressedChanged: root.isDraggingHandler = pressed
-            gesturePolicy: TapHandler.ReleaseWithinBounds
-        }
-
-        DragHandler {
-            target: null
-            acceptedButtons: Qt.LeftButton
-            grabPermissions: PointerHandler.CanTakeOverFromAnything
-
-            onTranslationChanged: {
-                const p = h.mapToItem(MapController.map, centroid.position.x, centroid.position.y)
-                const c = MapController.map.toCoordinate(p, false)
-                if (!c.isValid) return
-
-                if (h.kind === 0 || h.kind === 2) {
-                    // N/S -> adjust latitude radius (B)
-                    root.radiusB = Math.max(0, Math.abs(c.latitude - root.coord.latitude))
-                    root.minorAxisChanged()
-                } else {
-                    // E/W -> adjust longitude radius (A)
-                    root.radiusA = Math.max(0, lonDelta(root.coord.longitude, c.longitude))
-                    root.majorAxisChanged()
-                }
-            }
-        }
-    }
-
-    EdgeHandle { id: northHandle; kind: 0 }
-    EdgeHandle { id: eastHandle;  kind: 1 }
-    EdgeHandle { id: southHandle; kind: 2 }
-    EdgeHandle { id: westHandle;  kind: 3 }
 }

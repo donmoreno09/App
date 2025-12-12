@@ -1,7 +1,12 @@
 pragma Singleton
 
 import QtQuick 6.8
-import App.Features.MapModes 1.0
+
+import "modes"
+import "modes/ellipse"
+import "modes/point"
+import "modes/polygon"
+import "modes/rectangle"
 
 QtObject {
     property InteractionMode interactionMode: null

@@ -50,6 +50,16 @@ set(qml_files
 
     floating-window/FloatingWindow.qml
     floating-window/windowRoutes.js
+
+    forms/RectangleFormBase.qml
+    forms/EllipseFormBase.qml
+    forms/PolygonFormBase.qml
+    forms/PointFormBase.qml
+
+    shapes/EditableRectangle.qml
+    shapes/EditableEllipse.qml
+    shapes/EditablePolygon.qml
+    shapes/EditablePoint.qml
 )
 
 

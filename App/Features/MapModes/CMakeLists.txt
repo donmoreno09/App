@@ -9,14 +9,17 @@ set(qml_files
     modes/rectangle/RectangleMode.qml
     modes/rectangle/CreateRectangleMode.qml
     modes/rectangle/EditRectangleMode.qml
+    modes/rectangle/RectangleGeometry.js
 
     modes/ellipse/EllipseMode.qml
     modes/ellipse/CreateEllipseMode.qml
     modes/ellipse/EditEllipseMode.qml
+    modes/ellipse/EllipseGeometry.js
 
     modes/polygon/PolygonMode.qml
     modes/polygon/CreatePolygonMode.qml
     modes/polygon/EditPolygonMode.qml
+    modes/polygon/PolygonGeometry.js
 )
 
 set(qml_singletons
