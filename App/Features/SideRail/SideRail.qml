@@ -53,7 +53,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/location-dot.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("PoI")
+                    text: `${TranslationManager.revision}` && qsTr("POI")
                     active: currentPanelPath === Routes.Poi && SidePanelController.isOpen
 
                     onClicked: {
@@ -86,7 +86,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/calendar-days.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Date Arrivals")
+                    text: `${TranslationManager.revision}` && qsTr("Date")
                     active: currentPanelPath === "arrival-date-content" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ArrivalDateContent)
@@ -104,7 +104,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/timeline-arrow.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Trailer Prediction")
+                    text: `${TranslationManager.revision}` && qsTr("Predictions")
                     active: currentPanelPath === "trailer-prediction" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.TrailerPrediction)
@@ -113,7 +113,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/ship.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Ship Stowage")
+                    text: `${TranslationManager.revision}` && qsTr("Stowage")
                     active: currentPanelPath === "shipstowage" && SidePanelController.isOpen
 
                     onClicked: {
@@ -125,7 +125,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/gate.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Gate Transit")
+                    text: `${TranslationManager.revision}` && qsTr("Gates")
                     active: currentPanelPath === "viGate-services" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ViGateServices)
