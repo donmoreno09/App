@@ -100,7 +100,18 @@ void VesselFinderHttpService::onHttpData(const QByteArray& data)
     }
 
     QVector<Track> tracks = parser_->parse(data);
-    trackLayer->trackModel()->upsert(tracks);
+
+    auto* model = trackLayer->trackModel();
+    if (!model)
+        return;
+
+    QMetaObject::invokeMethod(
+        model,
+        [model, tracks]() {
+            model->upsert(tracks);
+        },
+        Qt::QueuedConnection
+    );
 }
 
 void VesselFinderHttpService::onError(const QString& err)

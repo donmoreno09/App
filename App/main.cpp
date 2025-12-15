@@ -104,7 +104,6 @@ int main(int argc, char *argv[])
     QString endpoint = "http://127.0.0.1:8000/tracks";
     vesselHttp->initialize(endpoint, 2000);
     vesselHttp->registerParser(new HttpAisParser());
-    vesselHttp->start();
 
     engine.loadFromModule("App", "Main");
 

@@ -5,21 +5,20 @@
 #include <QTimer>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QSet>
+#include <QUrl>
 
 class HttpVesselFinderTracksPoller : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit HttpVesselFinderTracksPoller(
-        const QString& url,
-        int intervalMs = 2000,
-        QObject* parent = nullptr
-    );
+    explicit HttpVesselFinderTracksPoller(const QString& url,
+                                          int intervalMs,
+                                          QObject* parent = nullptr);
 
     void start();
     void stop();
-    bool isRunning() const { return timer_.isActive(); }
 
 signals:
     void dataReceived(const QByteArray& data);
@@ -32,10 +31,15 @@ private slots:
     void onReplyFinished(QNetworkReply* reply);
 
 private:
-    QString url_;
+    void abortAllReplies();
+
+    QUrl url_;
     int intervalMs_;
+
     QTimer timer_;
     QNetworkAccessManager manager_;
+
+    QSet<QNetworkReply*> activeReplies_;
 };
 
 #endif // HTTPVESSELFINDERTRACKSPOLLER_H
