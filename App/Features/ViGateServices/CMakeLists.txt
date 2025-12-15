@@ -12,10 +12,16 @@ set(qml_files
 set(cpp_sources
     ViGateController.cpp
     ViGateController.h
-    services/ViGateService.cpp
-    services/ViGateService.h
+
+    entities/TransitEntry.h
+    entities/TransitInfo.h
+    entities/TransitPermission.h
+
     models/TransitModel.cpp
     models/TransitModel.h
+
+    services/ViGateService.cpp
+    services/ViGateService.h
 )
 
 set(qml_singletons
@@ -37,4 +43,11 @@ qt_add_qml_module(app_features_vigateservices
     SOURCES ${cpp_sources}
     RESOURCE_PREFIX "/"
     RESOURCES ${icon_resources}
+)
+
+target_link_libraries(app_features_vigateservices
+    PRIVATE
+        Qt6::Concurrent
+        Qt6::Core
+        Qt6::Network
 )

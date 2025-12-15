@@ -58,7 +58,7 @@ QVariant TransitModel::data(const QModelIndex& index, int role) const
     case HasTransitInfoRole:
         return entry.hasTransitInfo;
 
-    // Permission - Complete fields
+    // Transit Permission
     case UidCodeRole:
         return entry.permission.uidCode;
     case AuthRole:
@@ -124,7 +124,7 @@ QHash<int, QByteArray> TransitModel::roleNames() const
         {KemlerRole, "kemler"},
         {HasTransitInfoRole, "hasTransitInfo"},
 
-        // Permission - Complete roles
+        // Transit Permission
         {UidCodeRole, "uidCode"},
         {AuthRole, "auth"},
         {AuthCodeRole, "authCode"},
@@ -150,52 +150,148 @@ void TransitModel::setLaneTypeFilter(const QString& filter)
 {
     if (m_laneTypeFilter == filter) return;
 
-    qDebug() << "TransitModel::setLaneTypeFilter - New filter:" << filter;
+    qDebug() << "TransitModel::setLaneTypeFilter - Old:" << m_laneTypeFilter << "New:" << filter;
     m_laneTypeFilter = filter;
     emit laneTypeFilterChanged();
-    applyFilter();
+
+    applyFilterIncremental();
 }
 
-void TransitModel::applyFilter()
+bool TransitModel::passesFilter(const TransitEntry& entry) const
 {
-    beginResetModel();
-    m_entries.clear();
-
     // Parse filter string (comma-separated list or "ALL")
     QStringList types = m_laneTypeFilter.split(',', Qt::SkipEmptyParts);
 
+    // No filter means show all
     if (types.isEmpty() || m_laneTypeFilter == "ALL" || m_laneTypeFilter.isEmpty()) {
-        // No filter, show all
-        m_entries = m_allEntries;
-        qDebug() << "TransitModel::applyFilter - No filter, showing all" << m_entries.size() << "transits";
-    } else {
-        // Filter by lane types
-        for (const auto& entry : m_allEntries) {
-            if (types.contains(entry.laneTypeId)) {
-                m_entries.append(entry);
-            }
-        }
-        qDebug() << "TransitModel::applyFilter - Filter applied, showing" << m_entries.size()
-                 << "of" << m_allEntries.size() << "transits (filter:" << m_laneTypeFilter << ")";
+        return true;
     }
 
-    endResetModel();
+    // Check if entry's lane type matches any filter type
+    return types.contains(entry.laneTypeId);
+}
+
+void TransitModel::applyFilterIncremental()
+{
+    qDebug() << "TransitModel::applyFilterIncremental - Applying filter:" << m_laneTypeFilter;
+
+    // Strategy: Remove rows that don't pass filter (from end to start to avoid index shifting)
+    // This is MUCH faster than beginResetModel() because delegates aren't destroyed
+
+    for (int i = m_entries.size() - 1; i >= 0; --i) {
+        if (!passesFilter(m_entries[i])) {
+            beginRemoveRows(QModelIndex(), i, i);
+            m_entries.removeAt(i);
+            endRemoveRows();
+        }
+    }
+
+    qDebug() << "TransitModel::applyFilterIncremental - Result:" << m_entries.size() << "items remain";
 }
 
 void TransitModel::clear()
 {
-    beginResetModel();
-    m_allEntries.clear();
-    m_entries.clear();
-    m_laneTypeFilter = "ALL";
-    endResetModel();
+    if (m_entries.isEmpty()) return;
 
-    qDebug() << "TransitModel::clear - All data cleared";
+    qDebug() << "TransitModel::clear - Clearing" << m_entries.size() << "items";
+
+    beginRemoveRows(QModelIndex(), 0, m_entries.size() - 1);
+    m_entries.clear();
+    endRemoveRows();
+
+    m_laneTypeFilter = "ALL";
+}
+
+TransitEntry TransitModel::parseTransitEntry(const QJsonObject& obj) const
+{
+    TransitEntry entry;
+
+    // Basic info
+    entry.transitId = obj.value("transitId").toString();
+    entry.gateName = obj.value("gateName").toString();
+    entry.transitStatus = obj.value("transitStatus").toString();
+
+    // Dates
+    QString startDateStr = obj.value("transitStartDate").toString();
+    entry.transitStartDate = QDateTime::fromString(startDateStr, Qt::ISODate);
+    if (!entry.transitStartDate.isValid()) {
+        qWarning() << "TransitModel: Invalid start date:" << startDateStr;
+    }
+
+    QString endDateStr = obj.value("transitEndDate").toString();
+    entry.transitEndDate = QDateTime::fromString(endDateStr, Qt::ISODate);
+    if (!entry.transitEndDate.isValid()) {
+        qWarning() << "TransitModel: Invalid end date:" << endDateStr;
+    }
+
+    // Lane info
+    entry.laneTypeId = obj.value("laneTypeId").toString();
+    entry.laneStatusId = obj.value("laneStatusId").toString();
+    entry.laneName = obj.value("laneName").toString();
+    entry.transitDirection = obj.value("transitDirection").toString();
+
+    // Transit Info (only for VEHICLE)
+    if (obj.contains("transitInfo") && obj.value("transitInfo").isObject()) {
+        QJsonObject infoObj = obj.value("transitInfo").toObject();
+        entry.transitInfo.color = infoObj.value("color").toString();
+        entry.transitInfo.macroClass = infoObj.value("macroClass").toString();
+        entry.transitInfo.microClass = infoObj.value("microClass").toString();
+        entry.transitInfo.make = infoObj.value("make").toString();
+        entry.transitInfo.model = infoObj.value("model").toString();
+        entry.transitInfo.country = infoObj.value("country").toString();
+        entry.transitInfo.kemler = infoObj.value("kemler").toString();
+        entry.hasTransitInfo = true;
+    } else {
+        entry.hasTransitInfo = false;
+    }
+
+    // Permission (first element only) - Complete fields
+    if (obj.contains("permission") && obj.value("permission").isObject()) {
+        QJsonObject permObj = obj.value("permission").toObject();
+
+        entry.permission.uidCode = permObj.value("uidCode").toString();
+        entry.permission.auth = permObj.value("auth").toString();
+        entry.permission.authCode = permObj.value("authCode").toString();
+        entry.permission.authMessage = permObj.value("authMessage").toString();
+        entry.permission.permissionId = permObj.value("permissionId").toInt();
+        entry.permission.permissionType = permObj.value("permissionType").toString();
+        entry.permission.ownerType = permObj.value("ownerType").toString();
+        entry.permission.vehicleId = permObj.value("vehicleId").toInt();
+        entry.permission.vehiclePlate = permObj.value("vehiclePlate").toString();
+        entry.permission.peopleId = permObj.value("peopleId").toInt();
+        entry.permission.peopleFullname = permObj.value("peopleFullname").toString();
+        entry.permission.peopleBirthdayDate = permObj.value("peopleBirthdayDate").toString();
+        entry.permission.peopleBirthdayPlace = permObj.value("peopleBirthdayPlace").toString();
+        entry.permission.companyId = permObj.value("companyId").toInt();
+        entry.permission.companyFullname = permObj.value("companyFullname").toString();
+        entry.permission.companyCity = permObj.value("companyCity").toString();
+        entry.permission.companyType = permObj.value("companyType").toString();
+
+        entry.hasPermission = true;
+    } else {
+        entry.hasPermission = false;
+    }
+
+    return entry;
 }
 
 void TransitModel::setData(const QJsonArray& transitsArray)
 {
-    m_allEntries.clear();
+    qDebug() << "TransitModel::setData - Receiving" << transitsArray.size() << "new transits";
+
+    // Strategy: Clear old data and insert new data incrementally
+    // This is faster than beginResetModel() for pagination scenarios
+
+    // Step 1: Remove all existing rows
+    if (!m_entries.isEmpty()) {
+        beginRemoveRows(QModelIndex(), 0, m_entries.size() - 1);
+        m_entries.clear();
+        endRemoveRows();
+    }
+
+    // Step 2: Parse and filter new data
+    QList<TransitEntry> newEntries;
+    newEntries.reserve(transitsArray.size());
 
     for (const auto& value : transitsArray) {
         if (!value.isObject()) {
@@ -203,80 +299,21 @@ void TransitModel::setData(const QJsonArray& transitsArray)
             continue;
         }
 
-        QJsonObject obj = value.toObject();
-        TransitEntry entry;
+        TransitEntry entry = parseTransitEntry(value.toObject());
 
-        // Basic info
-        entry.transitId = obj.value("transitId").toString();
-        entry.gateName = obj.value("gateName").toString();
-        entry.transitStatus = obj.value("transitStatus").toString();
-
-        // Dates
-        QString startDateStr = obj.value("transitStartDate").toString();
-        entry.transitStartDate = QDateTime::fromString(startDateStr, Qt::ISODate);
-        if (!entry.transitStartDate.isValid()) {
-            qWarning() << "TransitModel: Invalid start date:" << startDateStr;
+        // Only add if passes current filter
+        if (passesFilter(entry)) {
+            newEntries.append(entry);
         }
-
-        QString endDateStr = obj.value("transitEndDate").toString();
-        entry.transitEndDate = QDateTime::fromString(endDateStr, Qt::ISODate);
-        if (!entry.transitEndDate.isValid()) {
-            qWarning() << "TransitModel: Invalid end date:" << endDateStr;
-        }
-
-        // Lane info
-        entry.laneTypeId = obj.value("laneTypeId").toString();
-        entry.laneStatusId = obj.value("laneStatusId").toString();
-        entry.laneName = obj.value("laneName").toString();
-        entry.transitDirection = obj.value("transitDirection").toString();
-
-        // Transit Info (only for VEHICLE)
-        if (obj.contains("transitInfo") && obj.value("transitInfo").isObject()) {
-            QJsonObject infoObj = obj.value("transitInfo").toObject();
-            entry.transitInfo.color = infoObj.value("color").toString();
-            entry.transitInfo.macroClass = infoObj.value("macroClass").toString();
-            entry.transitInfo.microClass = infoObj.value("microClass").toString();
-            entry.transitInfo.make = infoObj.value("make").toString();
-            entry.transitInfo.model = infoObj.value("model").toString();
-            entry.transitInfo.country = infoObj.value("country").toString();
-            entry.transitInfo.kemler = infoObj.value("kemler").toString();
-            entry.hasTransitInfo = true;
-        } else {
-            entry.hasTransitInfo = false;
-        }
-
-        // Permission (first element only) - Complete fields
-        if (obj.contains("permission") && obj.value("permission").isObject()) {
-            QJsonObject permObj = obj.value("permission").toObject();
-
-            entry.permission.uidCode = permObj.value("uidCode").toString();
-            entry.permission.auth = permObj.value("auth").toString();
-            entry.permission.authCode = permObj.value("authCode").toString();
-            entry.permission.authMessage = permObj.value("authMessage").toString();
-            entry.permission.permissionId = permObj.value("permissionId").toInt();
-            entry.permission.permissionType = permObj.value("permissionType").toString();
-            entry.permission.ownerType = permObj.value("ownerType").toString();
-            entry.permission.vehicleId = permObj.value("vehicleId").toInt();
-            entry.permission.vehiclePlate = permObj.value("vehiclePlate").toString();
-            entry.permission.peopleId = permObj.value("peopleId").toInt();
-            entry.permission.peopleFullname = permObj.value("peopleFullname").toString();
-            entry.permission.peopleBirthdayDate = permObj.value("peopleBirthdayDate").toString();
-            entry.permission.peopleBirthdayPlace = permObj.value("peopleBirthdayPlace").toString();
-            entry.permission.companyId = permObj.value("companyId").toInt();
-            entry.permission.companyFullname = permObj.value("companyFullname").toString();
-            entry.permission.companyCity = permObj.value("companyCity").toString();
-            entry.permission.companyType = permObj.value("companyType").toString();
-
-            entry.hasPermission = true;
-        } else {
-            entry.hasPermission = false;
-        }
-
-        m_allEntries.append(entry);
     }
 
-    qDebug() << "TransitModel::setData - Loaded" << m_allEntries.size() << "transits into buffer";
+    // Step 3: Insert filtered data in one batch
+    if (!newEntries.isEmpty()) {
+        beginInsertRows(QModelIndex(), 0, newEntries.size() - 1);
+        m_entries = newEntries;
+        endInsertRows();
+    }
 
-    // Apply current filter
-    applyFilter();
+    qDebug() << "TransitModel::setData - Loaded and filtered to" << m_entries.size()
+             << "transits (filter:" << m_laneTypeFilter << ")";
 }

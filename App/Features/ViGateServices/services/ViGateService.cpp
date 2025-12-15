@@ -13,8 +13,7 @@ ViGateService::ViGateService(QObject* parent)
     : QObject(parent)
     , m_parseWatcher(new QFutureWatcher<QJsonObject>(this))
 {
-    connect(m_parseWatcher, &QFutureWatcher<QJsonObject>::finished,
-            this, &ViGateService::onParseFinished);
+    connect(m_parseWatcher, &QFutureWatcher<QJsonObject>::finished, this, &ViGateService::onParseFinished);
 }
 
 ViGateService::~ViGateService()
@@ -150,6 +149,21 @@ void ViGateService::performGet(const QUrl& url)
             m_parseWatcher->waitForFinished();
         }
 
+        QJsonParseError parseError;
+        QJsonDocument doc = QJsonDocument::fromJson(responseData, &parseError);
+        QJsonObject rootObj = doc.object();
+
+        qDebug() << "=== BACKEND RESPONSE ANALYSIS ===";
+        qDebug() << "Backend says pageNumber:" << rootObj["pageNumber"].toInt();
+        qDebug() << "Backend says pageSize:" << rootObj["pageSize"].toInt();
+        qDebug() << "Backend says totalCount:" << rootObj["totalCount"].toInt();
+        qDebug() << "Backend says totalPages:" << rootObj["totalPages"].toInt();
+        qDebug() << "Backend ACTUALLY returned items.length:" << rootObj["items"].toArray().size();
+        qDebug() << "=== EXPECTED vs ACTUAL ===";
+        qDebug() << "EXPECTED items on this page:" << rootObj["pageSize"].toInt();
+        qDebug() << "ACTUAL items received:" << rootObj["items"].toArray().size();
+        qDebug() << "=================================";
+
         // Start background parsing using QtConcurrent
         QFuture<QJsonObject> future = QtConcurrent::run([responseData]() {
             return ViGateService::parseAndTransformResponse(responseData);
@@ -247,7 +261,6 @@ QJsonObject ViGateService::parseAndTransformResponse(const QByteArray& responseD
 QJsonArray ViGateService::transformTransitData(const QJsonArray& transits)
 {
     QJsonArray transformedTransits;
-    transformedTransits.reserve(transits.size()); // Pre-allocate
 
     for (int i = 0; i < transits.size(); ++i) {
         const auto& value = transits[i];

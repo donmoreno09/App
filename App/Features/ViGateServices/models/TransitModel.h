@@ -1,61 +1,8 @@
 #pragma once
 #include <QAbstractListModel>
-#include <QDateTime>
 #include <QQmlEngine>
 #include <QJsonArray>
-
-struct TransitInfo {
-    QString color;
-    QString macroClass;
-    QString microClass;
-    QString make;
-    QString model;
-    QString country;
-    QString kemler;
-};
-
-struct TransitPermission {
-    QString uidCode;
-    QString auth;
-    QString authCode;
-    QString authMessage;
-    int permissionId;
-    QString permissionType;
-    QString ownerType;
-    int vehicleId;
-    QString vehiclePlate;
-    int peopleId;
-    QString peopleFullname;
-    QString peopleBirthdayDate;
-    QString peopleBirthdayPlace;
-    int companyId;
-    QString companyFullname;
-    QString companyCity;
-    QString companyType;
-};
-
-struct TransitEntry {
-    // Basic info
-    QString transitId;
-    QString gateName;
-    QDateTime transitStartDate;
-    QDateTime transitEndDate;
-    QString transitStatus;
-
-    // Lane info
-    QString laneTypeId;
-    QString laneStatusId;
-    QString laneName;
-    QString transitDirection;
-
-    // Transit info (only for VEHICLE)
-    TransitInfo transitInfo;
-    bool hasTransitInfo = false;
-
-    // Permission (first element only)
-    TransitPermission permission;
-    bool hasPermission = false;
-};
+#include "../entities/TransitEntry.h"
 
 class TransitModel : public QAbstractListModel
 {
@@ -86,7 +33,7 @@ public:
         KemlerRole,
         HasTransitInfoRole,
 
-        // Permission (first element) - Complete list
+        // Transit Permission
         UidCodeRole,
         AuthRole,
         AuthCodeRole,
@@ -123,9 +70,15 @@ signals:
     void laneTypeFilterChanged();
 
 private:
-    void applyFilter();
+    // Parse JSON to TransitEntry (moved to separate function for clarity)
+    TransitEntry parseTransitEntry(const QJsonObject& obj) const;
+
+    // Check if entry passes current filter
+    bool passesFilter(const TransitEntry& entry) const;
+
+    // Apply filter incrementally without full reset
+    void applyFilterIncremental();
 
     QString m_laneTypeFilter = "ALL";
-    QList<TransitEntry> m_allEntries;  // All data (unfiltered)
-    QList<TransitEntry> m_entries;     // Filtered data (displayed)
+    QList<TransitEntry> m_entries;  // Single source of truth - filtered data displayed
 };
