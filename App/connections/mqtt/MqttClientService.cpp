@@ -106,7 +106,6 @@ void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopi
                 auto* model = engine->singletonInstance<TruckNotificationModel*>("App", "TruckNotificationModel");
                 if (model) {
                     model->upsert(data);
-                    // qDebug() << "[MQTT] Updated" << data.size() << "truck notifications";
                 } else {
                     qWarning() << "[MQTT] TruckNotificationModel singleton not found";
                 }

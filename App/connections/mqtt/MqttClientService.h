@@ -11,7 +11,7 @@
 #include <models/TruckNotificationModel.h>
 #include <layers/BaseTrackMapLayer.h>
 #include <App/config.h>
-#include "parser/IMessageParser.h"
+#include "interfaces/IMessageParser.h"
 
 class MqttClientService : public QObject {
     Q_OBJECT

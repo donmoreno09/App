@@ -34,18 +34,27 @@ set(qml_files
     layers/TirTrackMapLayer.qml
     layers/PoiMapLayer.qml
     layers/MOCPoIStaticLayer.qml
+    layers/VesselFinderMapLayer.qml
 )
 
 set(cpp_sources
     config.h
 
     # Connections
-    connections/mqtt/parser/IMessageParser.h
+    connections/interfaces/IMessageParser.h
+
+    connections/http/parser/httpaisparser.h
+    connections/http/httpvesselfindertrackspoller.cpp
+    connections/http/httpvesselfindertrackspoller.h
+    connections/http/vesselfinderhttpservice.cpp
+    connections/http/vesselfinderhttpservice.h
+
     connections/mqtt/parser/TrackParser.h
     connections/mqtt/parser/TruckNotificationParser.h
     connections/mqtt/parser/TirParser.h
     connections/mqtt/MqttClientService.cpp
     connections/mqtt/MqttClientService.h
+
     connections/ApiEndpoints.h
     connections/ApiEndpoints.cpp
     connections/httpclient.cpp
@@ -171,6 +180,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/connections
         ${CMAKE_CURRENT_SOURCE_DIR}/connections/mqtt
+        ${CMAKE_CURRENT_SOURCE_DIR}/connections/http
         ${CMAKE_CURRENT_SOURCE_DIR}/core
         ${CMAKE_CURRENT_SOURCE_DIR}/events
         ${CMAKE_CURRENT_SOURCE_DIR}/layers
