@@ -9,6 +9,8 @@
 #include <QIcon>
 #include <core/TrackManager.h>
 #include <connections/ApiEndpoints.h>
+#include <connections/http/vesselfinderhttpservice.h>
+#include <connections/http/parser/httpaisparser.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
 #include <connections/mqtt/parser/TruckNotificationParser.h>
@@ -83,6 +85,8 @@ int main(int argc, char *argv[])
 
     engine.addImportPath("qrc:/"); // For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
 
+    // --- MQTT Client Service ---
+
     auto *mqtt = engine.singletonInstance<MqttClientService*>("App", "MqttClientService");
     mqtt->initialize(":/App/config/mqtt_config.json", appConfig);
     mqtt->registerParser("ais", new TrackParser());
@@ -94,6 +98,13 @@ int main(int argc, char *argv[])
     trackManager->deactivate("ais");
     trackManager->deactivate("doc-space");
     trackManager->deactivate("tir");
+
+    // --- HTTP VesselFinder Service ---
+    auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
+    QString endpoint = "http://127.0.0.1:8000/tracks";
+    vesselHttp->initialize(endpoint, 2000);
+    vesselHttp->registerParser(new HttpAisParser());
+    vesselHttp->start();
 
     engine.loadFromModule("App", "Main");
 

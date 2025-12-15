@@ -1,7 +1,7 @@
 #ifndef TIRPARSER_H
 #define TIRPARSER_H
 
-#include "IMessageParser.h"
+#include "interfaces/IMessageParser.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
