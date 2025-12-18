@@ -1,10 +1,11 @@
 import QtQuick 6.8
-import QtQuick.Effects 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
 
 import App.Themes 1.0
-import App.Features.MapModes 1.0
+
+import "../.."
+import App.Components 1.0 as UI
 
 PointMode {
     id: root
@@ -36,41 +37,18 @@ PointMode {
         }
     }
 
-    MapQuickItem {
+    UI.EditablePoint {
         id: mapPoint
-
         coordinate: coord
         z: root.z + 1
-        anchorPoint.x: sourceItem.width / 2
-        anchorPoint.y: sourceItem.height / 2
-        sourceItem:  Image {
-            id: svgIcon
-            width: 24
-            height: 24
-            source: "qrc:/App/assets/icons/poi.svg"
-            smooth: true
-            fillMode: Image.PreserveAspectFit
-            asynchronous: true
-            cache: true
 
-            layer.enabled: true
-            layer.effect: MultiEffect {
-                shadowEnabled: true
-                shadowColor: "white"
-                shadowBlur: 0.0            // 0 = sharp edge
-                shadowHorizontalOffset: 0
-                shadowVerticalOffset: 0
-                shadowScale: 1.12          // thickness of the border
-            }
-        }
+        isEditing: true
+        tapEnabled: false
+        showLabel: false
+        highlightOnEditing: false
 
-        // Prevent tap propagating below
-        TapHandler { id: moveTap; acceptedButtons: Qt.LeftButton; gesturePolicy: TapHandler.ReleaseWithinBounds }
-
-        DragHandler {
-            onTranslationChanged: {
-                coord = mapPoint.coordinate
-            }
+        onPointChanged: function(c) {
+            coord = c
         }
     }
 }

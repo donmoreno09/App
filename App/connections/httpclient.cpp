@@ -5,7 +5,6 @@ HttpClient::HttpClient(QObject *parent)
     : QObject(parent)
 {
     connect(&m_networkManager, &QNetworkAccessManager::finished, this, &HttpClient::requestFinished);
-
 }
 
 void HttpClient::get(const QUrl &url)
@@ -14,7 +13,6 @@ void HttpClient::get(const QUrl &url)
     request.setHeader(QNetworkRequest::UserAgentHeader, "Mozilla/5.0");
     request.setRawHeader("Accept", "application/json");
     request.setRawHeader("ngrok-skip-browser-warning", "69420");
-    qDebug() << "elek: lancio richiesta get";
     m_networkManager.get(request);
 }
 
@@ -36,20 +34,20 @@ void HttpClient::requestFinished(QNetworkReply* reply)
 
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray data = reply->readAll();
-            qDebug() << "✅ Response content type:" << reply->header(QNetworkRequest::ContentTypeHeader).toString();
+            qDebug() << "Response content type:" << reply->header(QNetworkRequest::ContentTypeHeader).toString();
             callback(data);
         } else {
-            qDebug() << "❌ Network error:" << reply->errorString();
-            qDebug() << "❌ HTTP status code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            qDebug() << "Network error:" << reply->errorString();
+            qDebug() << "HTTP status code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
             callback(QByteArray());
         }
     } else {
         // GET senza callback
         if (reply->error() != QNetworkReply::NoError) {
-            qDebug() << "❌ Network error (no callback):" << reply->errorString();
-            qDebug() << "❌ HTTP status code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            qDebug() << "Network error (no callback):" << reply->errorString();
+            qDebug() << "HTTP status code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         } else {
-            qDebug() << "✅ GET senza callback completata con successo";
+            qDebug() << "GET senza callback completata con successo";
         }
     }
 

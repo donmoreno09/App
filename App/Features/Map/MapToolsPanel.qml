@@ -96,9 +96,23 @@ PanelTemplate {
                     Layout.fillWidth: true
                     text: `${TranslationManager.revision}` && qsTr("TRUCK")
                     toggle.checked: TrackManager.getLayer("tir").active
+                    toggle.enabled: VesselFinderHttpService !== null
                     toggle.onCheckedChanged: {
                         if (toggle.checked) TrackManager.activate("tir")
                         else TrackManager.deactivate("tir")
+                    }
+                }
+
+                LayerToggle {
+                    Layout.fillWidth: true
+                    text: `${TranslationManager.revision}` && qsTr("VESSELFINDER")
+                    toggle.checked: VesselFinderHttpService.running
+                    toggle.onCheckedChanged: {
+                        if (toggle.checked) {
+                            VesselFinderHttpService.start()
+                        } else {
+                            VesselFinderHttpService.stop()
+                        }
                     }
                 }
             }

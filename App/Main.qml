@@ -71,6 +71,8 @@ ApplicationWindow {
         TirTrackMapLayer { }
 
         DocSpaceTrackMapLayer { }
+
+        VesselFinderMapLayer { }
     }
 
     Connections {
