@@ -63,7 +63,7 @@ PanelTemplate {
                             contentComponent.endDT,
                             contentComponent.vehiclesChecked,
                             contentComponent.pedestriansChecked,
-                            contentComponent.itemsPerPage
+                            5
                         )
                     }
                 }

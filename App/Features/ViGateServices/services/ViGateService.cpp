@@ -18,18 +18,10 @@ ViGateService::ViGateService(QObject* parent)
 
 ViGateService::~ViGateService()
 {
-    // Cancel any ongoing background work
     if (m_parseWatcher->isRunning()) {
         m_parseWatcher->cancel();
         m_parseWatcher->waitForFinished();
     }
-}
-
-void ViGateService::setHostPort(const QString& host, int port)
-{
-    m_host = host;
-    m_port = port;
-    qDebug() << "ViGateService: Host set to" << m_host << ":" << m_port;
 }
 
 QUrl ViGateService::makeUrl(const QString& host, int port,

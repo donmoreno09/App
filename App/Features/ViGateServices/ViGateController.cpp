@@ -6,12 +6,11 @@
 ViGateController::ViGateController(QObject* parent)
     : QObject(parent)
     , m_transitsModel(new TransitModel(this))
+    , m_transitProxyModel(new TransitProxyModel(this))
+    , m_service(new ViGateService(this))
 {
-    m_service = new ViGateService(this);
-    m_service->setHostPort(m_host, m_port);
+    m_transitProxyModel->setSourceModel(m_transitsModel);
     hookUpService();
-
-    // Load active gates on initialization
     loadActiveGates();
 }
 
@@ -56,7 +55,7 @@ void ViGateController::hookUpService()
 {
     // Handle active gates response
     connect(m_service, &ViGateService::activeGatesReady, this, [this](const QJsonArray& gates) {
-        qDebug() << "ViGateController: Received" << gates.size() << "active gates";
+        qDebug() << "[ViGateController] Received" << gates.size() << "active gates";
 
         m_activeGates.clear();
         for (const auto& gateValue : gates) {
@@ -67,7 +66,7 @@ void ViGateController::hookUpService()
                 gateMap["name"] = gateObj["name"].toString();
                 m_activeGates.append(gateMap);
 
-                qDebug() << "  - Gate" << gateMap["id"].toInt() << ":" << gateMap["name"].toString();
+                qDebug() << "[ViGateController] Gate" << gateMap["id"].toInt() << ":" << gateMap["name"].toString();
             }
         }
 
@@ -187,7 +186,9 @@ void ViGateController::fetchGateData(int gateId,
     m_startDate = startDate;
     m_endDate = endDate;
     m_includeVehicles = includeVehicles;
+    emit vehiclesToggledChanged();
     m_includePedestrians = includePedestrians;
+    emit pedestriansToggledChanged();
     m_currentPage = 1;
     m_pageSize = itemsPerPage;
 
@@ -214,6 +215,7 @@ void ViGateController::fetchCurrentPage()
     if (m_hasData) {
         // We have data, this is a pagination request
         setLoadingPage(true);
+        setLoading(true);
     } else {
         // No data yet, this is the initial fetch
         if (m_hasData) {

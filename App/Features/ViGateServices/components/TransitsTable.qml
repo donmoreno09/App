@@ -6,7 +6,6 @@ import App.Features.ViGateServices
 
 GroupBox {
     id: root
-    title: qsTr("Transits")
     Layout.fillWidth: true
     Layout.fillHeight: true
     Layout.maximumWidth: parent.width
@@ -34,7 +33,7 @@ GroupBox {
         ListView {
             id: listView
             Layout.fillWidth: true
-            Layout.preferredHeight: 300
+            Layout.fillHeight: true
             Layout.maximumWidth: parent.width
             clip: true
             model: root.model

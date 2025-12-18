@@ -279,17 +279,12 @@ void TransitModel::setData(const QJsonArray& transitsArray)
 {
     qDebug() << "TransitModel::setData - Receiving" << transitsArray.size() << "new transits";
 
-    // Strategy: Clear old data and insert new data incrementally
-    // This is faster than beginResetModel() for pagination scenarios
-
-    // Step 1: Remove all existing rows
     if (!m_entries.isEmpty()) {
         beginRemoveRows(QModelIndex(), 0, m_entries.size() - 1);
         m_entries.clear();
         endRemoveRows();
     }
 
-    // Step 2: Parse and filter new data
     QList<TransitEntry> newEntries;
     newEntries.reserve(transitsArray.size());
 
@@ -307,7 +302,6 @@ void TransitModel::setData(const QJsonArray& transitsArray)
         }
     }
 
-    // Step 3: Insert filtered data in one batch
     if (!newEntries.isEmpty()) {
         beginInsertRows(QModelIndex(), 0, newEntries.size() - 1);
         m_entries = newEntries;

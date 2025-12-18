@@ -7,6 +7,8 @@ set(qml_files
     contents/ViGateContent.qml
 
     panels/ViGatePanel.qml
+
+    windows/TransitDetailsWindow.qml
 )
 
 set(cpp_sources
@@ -19,6 +21,8 @@ set(cpp_sources
 
     models/TransitModel.cpp
     models/TransitModel.h
+    models/TransitProxyModel.cpp
+    models/TransitProxyModel.h
 
     services/ViGateService.cpp
     services/ViGateService.h

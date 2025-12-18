@@ -4,8 +4,8 @@
 #include <QDateTime>
 #include <QVariantList>
 #include "models/TransitModel.h"
-
-class ViGateService;
+#include "models/TransitProxyModel.h"
+#include "services/ViGateService.h"
 
 class ViGateController : public QObject
 {
@@ -30,8 +30,12 @@ class ViGateController : public QObject
     // Active Gates
     Q_PROPERTY(QVariantList activeGates READ activeGates NOTIFY activeGatesChanged)
 
-    // Model - Changed to single unified model
-    Q_PROPERTY(TransitModel* transitsModel READ transitsModel CONSTANT)
+    // Filter Properties
+    Q_PROPERTY(bool vehiclesToggled READ vehiclesToggled NOTIFY vehiclesToggledChanged)
+    Q_PROPERTY(bool pedestriansToggled READ pedestriansToggled NOTIFY pedestriansToggledChanged)
+
+    // Model
+    Q_PROPERTY(TransitProxyModel* transitsModel READ transitsModel NOTIFY transitsModelChanged)
 
     // State
     Q_PROPERTY(bool isLoading READ isLoading NOTIFY loadingChanged)
@@ -67,7 +71,10 @@ public:
 
     QVariantList activeGates() const { return m_activeGates; }
 
-    TransitModel* transitsModel() { return m_transitsModel; }
+    bool vehiclesToggled() const { return m_includeVehicles; }
+    bool pedestriansToggled() const { return m_includePedestrians; }
+
+    TransitProxyModel* transitsModel() { return m_transitProxyModel; }
 
     bool isLoading() const { return m_loading; }
     bool isLoadingPage() const { return m_loadingPage; }
@@ -99,6 +106,9 @@ signals:
     void hasErrorChanged(bool);
     void loadingGatesChanged(bool);
     void requestFailed(const QString& error);
+    void transitsModelChanged();
+    void vehiclesToggledChanged();
+    void pedestriansToggledChanged();
 
 private:
     void setLoading(bool loading);
@@ -132,8 +142,9 @@ private:
     // Active Gates
     QVariantList m_activeGates;
 
-    // Model - Changed to single unified model
+    // Models
     TransitModel* m_transitsModel = nullptr;
+    TransitProxyModel* m_transitProxyModel = nullptr;
 
     // State
     bool m_loading = false;
@@ -144,6 +155,4 @@ private:
 
     // Service
     ViGateService* m_service = nullptr;
-    QString m_host = QStringLiteral("localhost");
-    int m_port = 7000;
 };

@@ -15,8 +15,6 @@ public:
     explicit ViGateService(QObject* parent = nullptr);
     ~ViGateService();
 
-    void setHostPort(const QString& host, int port);
-
     Q_INVOKABLE void getActiveGates();
 
     Q_INVOKABLE void getFilteredViGateData(int gateId,
