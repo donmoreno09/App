@@ -34,5 +34,6 @@ private:
     int m_port = 5002;
 
     void performGet(RequestKind kind, const QUrl& url);
+    void emitResult(RequestKind kind, int count, const QString& kindStr);
     static QUrl makeUrl(const QString& host, int port, const QString& path, const std::function<void(QUrlQuery&)>& addQuery = nullptr);
 };

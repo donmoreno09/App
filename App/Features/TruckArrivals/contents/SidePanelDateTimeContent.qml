@@ -16,9 +16,23 @@ ColumnLayout {
 
     required property TruckArrivalController controller
 
+    readonly property var startDT: dtRangePicker._combineDateTime(
+        dtRangePicker.startDate,
+        dtRangePicker.selectedHour,
+        dtRangePicker.selectedMinute,
+        dtRangePicker.selectedAMPM
+    )
+    readonly property var endDT: dtRangePicker._combineDateTime(
+        dtRangePicker.endDate,
+        dtRangePicker.endHour,
+        dtRangePicker.endMinute,
+        dtRangePicker.endAMPM
+    )
+    property alias hasValidSelection: dtRangePicker.hasValidSelection
+
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
-        Layout.topMargin: 300
+        Layout.topMargin: 250
         running: controller.isLoading
         visible: controller.isLoading
         layer.enabled: true
@@ -26,58 +40,33 @@ ColumnLayout {
     }
 
     UI.DateTimePicker {
-        id: dtRange
-        mode: "range"
-        is24Hour: true
+        id: dtRangePicker
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
-        Layout.margins: 10
         visible: !controller.isLoading
+        mode: "range"
+        is24Hour: true
     }
 
     Text {
         visible: !controller.isLoading
         Layout.fillWidth: true
         horizontalAlignment: Text.AlignHCenter
-        color: Theme.colors.text
-
-        function fmt(dt) { return Qt.formatDateTime(dt, "dd/MMM/yyyy HH:mm") }
-
-        text: (dtRange.startDate && dtRange.endDate)
-              ? `${TranslationManager.revision}` && qsTr("Selected: %1 — %2")
-                  .arg(fmt(dtRange._combineDateTime(dtRange.startDate,  dtRange.selectedHour, dtRange.selectedMinute, dtRange.selectedAMPM)))
-                  .arg(fmt(dtRange._combineDateTime(dtRange.endDate, dtRange.endHour, dtRange.endMinute, dtRange.endAMPM)))
-              : `${TranslationManager.revision}` && qsTr("Select a date & time range")
+        color: Theme.colors.textMuted
+        text: dtRangePicker.rangeText
     }
 
     StatCard {
         visible: !controller.isLoading
         icon: "qrc:/App/assets/icons/truck.svg"
         title: `${TranslationManager.revision}` && qsTr("Arriving Trucks")
-        value: controller.dateTimeRangeArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
+        value: controller.dateTimeRangeArrivalCount.toString() + " " + qsTr(" trucks")
         Layout.fillWidth: true
-    }
-
-    UI.VerticalSpacer {}
-
-    UI.Button {
-        visible: !controller.isLoading
-        variant: UI.ButtonStyles.Primary
-        text: `${TranslationManager.revision}` && qsTr("Fetch Arrivals")
-        Layout.fillWidth: true
-        Layout.preferredHeight: 40
-        Layout.margins: 10
-        enabled: dtRange.hasValidSelection && !controller.isLoading
-        onClicked: {
-            const startDT = dtRange._combineDateTime(dtRange.startDate, dtRange.selectedHour, dtRange.selectedMinute, dtRange.selectedAMPM)
-            const endDT   = dtRange._combineDateTime(dtRange.endDate,   dtRange.endHour,     dtRange.endMinute,     dtRange.endAMPM)
-            controller.fetchDateTimeRangeShipArrivals(startDT, endDT)
-        }
     }
 
     Component.onCompleted: {
         const today = new Date()
         const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1)
-        dtRange.setDateRange(today, tomorrow)
+        dtRangePicker.setDateRange(today, tomorrow)
     }
 }

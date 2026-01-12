@@ -5,7 +5,6 @@ import QtQuick.Layouts 6.8
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
-
 Rectangle {
     id: root
 
@@ -37,6 +36,7 @@ Rectangle {
     readonly property bool hasValidSelection: mode === "single" ? !_isEmpty(selectedDate) : (!_isEmpty(startDate) && !_isEmpty(endDate))
     readonly property bool canClear: mode === "single" ? !_isEmpty(selectedDate) : (!_isEmpty(startDate) || !_isEmpty(endDate))
     readonly property date currentDateTime: hasValidSelection ? _combineDateTime(selectedDate, selectedHour, selectedMinute, selectedAMPM) : new Date(NaN)
+    readonly property string rangeText: _getRangeText()
 
     readonly property int _currentHour: {
         const now = new Date()
@@ -387,5 +387,30 @@ Rectangle {
         const endTime24 = is24Hour ? endHour : _to24Hour(endHour, endAMPM)
 
         return (startTime24 * 60 + selectedMinute) < (endTime24 * 60 + endMinute)
+    }
+
+    function _getStartDateTimeText() {
+        if (_isEmpty(startDate)) return ""
+        const dt = _combineDateTime(startDate, selectedHour, selectedMinute, selectedAMPM)
+        return Qt.formatDateTime(dt, "dd/MMMM/yyyy HH:mm")
+    }
+
+    function _getEndDateTimeText() {
+        if (_isEmpty(endDate)) return ""
+        const dt = _combineDateTime(endDate, endHour, endMinute, endAMPM)
+        return Qt.formatDateTime(dt, "dd/MMMM/yyyy HH:mm")
+    }
+
+    function _getRangeText() {
+        const hasStart = !_isEmpty(startDate)
+        const hasEnd = !_isEmpty(endDate)
+
+        if (hasStart && hasEnd) {
+            return qsTr("Selected: %1 — %2").arg(_getStartDateTimeText()).arg(_getEndDateTimeText())
+        } else if (hasStart) {
+            return qsTr("Selected: %1").arg(_getStartDateTimeText())
+        } else {
+            return qsTr("Select a date & time range")
+        }
     }
 }

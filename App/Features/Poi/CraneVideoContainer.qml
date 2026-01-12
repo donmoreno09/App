@@ -3,13 +3,14 @@ import QtQuick.Controls 6.8
 import QtMultimedia 6.8
 import App.Components 1.0 as UI
 import App.Themes 1.0
+import App.Features.Language 1.0
 import QtQuick.Layouts
 
 UI.FloatingWindow {
     id: videoWin
     width: 1200
     height: 740
-    windowTitle: "Video"
+    windowTitle: `${TranslationManager.revision}` && qsTr("Video")
 
     property var parentWindow: null // needed by WindowRouter
     readonly property string title: windowTitle // needed by WindowRouter

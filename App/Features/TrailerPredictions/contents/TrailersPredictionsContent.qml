@@ -15,6 +15,8 @@ ColumnLayout {
 
     required property TrailerPredictionController controller
 
+    property alias trailerIdInput: trailerIdInput.text
+
     // Loading Indicator
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
@@ -30,31 +32,11 @@ ColumnLayout {
         visible: !controller.isLoading
         variant: UI.InputStyles.Success
         Layout.fillWidth: true
-        Layout.margins: 10
         labelText: `${TranslationManager.revision}` && qsTr("Trailer ID")
         placeholderText: `${TranslationManager.revision}` && qsTr("Enter ID")
         textField.inputMethodHints: Qt.ImhDigitsOnly
         textField.horizontalAlignment: TextInput.AlignHCenter
         textField.validator: IntValidator { bottom: 1 }
-    }
-
-    UI.Button {
-        id: fetchButton
-        visible: !controller.isLoading
-        Layout.fillWidth: true
-        Layout.alignment: Qt.AlignHCenter
-        Layout.preferredHeight: Theme.spacing.s10
-        Layout.topMargin: Theme.spacing.s1
-        Layout.leftMargin: 10
-        Layout.rightMargin: 10
-        variant: UI.ButtonStyles.Primary
-        text: `${TranslationManager.revision}` && qsTr("Calculate Prediction")
-        enabled: trailerIdInput.text && !controller.isLoading
-
-        onClicked: {
-            Qt.inputMethod.commit()
-            controller.fetchPredictionByTrailerId(parseInt(trailerIdInput.text))
-        }
     }
 
     // Results Section
@@ -67,8 +49,6 @@ ColumnLayout {
 
         StatCard {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
             icon: "qrc:/App/assets/icons/compass.svg"
             title: `${TranslationManager.revision}` && qsTr("Estimated Time")
             value: formatMinutes(controller.prediction)
@@ -79,8 +59,6 @@ ColumnLayout {
             color: Theme.colors.text
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
-            Layout.leftMargin: Theme.spacing.s4
-            Layout.rightMargin: Theme.spacing.s4
             horizontalAlignment: Text.AlignHCenter
             font {
                 family: Theme.typography.bodySans25Family
@@ -105,19 +83,17 @@ ColumnLayout {
         }
     }
 
-    UI.VerticalSpacer {}
-
     function formatMinutes(minutes) {
         if (minutes === 0) return `${TranslationManager.revision}` && qsTr("Ready")
-        if (minutes < 60) return minutes + `${TranslationManager.revision}` && qsTr(" min")
+        if (minutes < 60) return minutes + " " + (`${TranslationManager.revision}` && qsTr("min"))
 
         const hours = Math.floor(minutes / 60)
         const mins = minutes % 60
 
         if (mins === 0) {
-            return hours + (hours > 1 ?
-                `${TranslationManager.revision}` && qsTr(" hours") :
-                `${TranslationManager.revision}` && qsTr(" hour"))
+            return hours + " " + (hours > 1 ?
+                (`${TranslationManager.revision}` && qsTr("hours")) :
+                (`${TranslationManager.revision}` && qsTr("hour")))
         }
         return hours + "h " + mins + "min"
     }

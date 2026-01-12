@@ -3,9 +3,9 @@ pragma Singleton
 import QtQuick 6.8
 
 import App 1.0
-import App.Features.MapModes 1.0
 import App.Features.SidePanel 1.0
 
+import "modes"
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 QtObject {
@@ -13,10 +13,10 @@ QtObject {
 
     // Properties
     property var poi: null
+    property var alertZone: null
     readonly property bool isCreating: activeMode && activeMode.type === "creating"
-    readonly property bool isEditing: poi != null
-
-    property bool isSwitchingToOtherPoi: false
+    readonly property bool isEditing: poi != null || alertZone != null
+    property bool _willEdit: false
 
     property BaseMode activeMode: null
 
@@ -29,13 +29,16 @@ QtObject {
     }
 
     // Methods
-    function setActiveMode(mode: BaseMode) {
-        if (poi && !isSwitchingToOtherPoi) {
-            poi = null
-            PoiModel.discardChanges()
-        }
+    function clearState() {
+        if (poi) PoiModel.discardChanges()
+        poi = null
+        if (alertZone) AlertZoneModel.discardChanges()
+        alertZone = null
+    }
 
-        if (isSwitchingToOtherPoi) isSwitchingToOtherPoi = false
+    function setActiveMode(mode: BaseMode) {
+        if (!_willEdit) clearState()
+        _willEdit = false
 
         if (activeMode && activeMode.resetPreview) {
             activeMode.resetPreview()
@@ -45,23 +48,43 @@ QtObject {
     }
 
     function editPoi(editablePoi) {
-        if (poi) isSwitchingToOtherPoi = true
+        clearState()
+        _willEdit = true
 
         poi = editablePoi
         switch (poi.shapeTypeId) {
         case MapModeController.PointType:
-            activeMode = MapModeRegistry.editPointMode
+            setActiveMode(MapModeRegistry.editPointMode)
             break;
         case MapModeController.EllipseType:
-            activeMode = MapModeRegistry.editEllipseMode
+            setActiveMode(MapModeRegistry.editEllipseMode)
             break;
         case MapModeController.PolygonType:
-            if (poi.isRectangle) activeMode = MapModeRegistry.editRectangleMode
-            else activeMode = MapModeRegistry.editPolygonMode
+            if (poi.isRectangle) setActiveMode(MapModeRegistry.editRectangleMode)
+            else setActiveMode(MapModeRegistry.editPolygonMode)
             break;
         default:
             console.error("Editing PoI with unknown shape type")
         }
         SidePanelController.openOrRefresh(Routes.Poi)
+    }
+
+    function editAlertZone(editableAlertZone) {
+        clearState()
+        _willEdit = true
+
+        alertZone = editableAlertZone
+        switch (alertZone.shapeTypeId) {
+        case MapModeController.EllipseType:
+            setActiveMode(MapModeRegistry.editEllipseMode)
+            break;
+        case MapModeController.PolygonType:
+            if (alertZone.isRectangle) setActiveMode(MapModeRegistry.editRectangleMode)
+            else setActiveMode(MapModeRegistry.editPolygonMode)
+            break;
+        default:
+            console.error("Editing Alert Zone with unknown shape type")
+        }
+        SidePanelController.openOrRefresh(Routes.AlertZone)
     }
 }

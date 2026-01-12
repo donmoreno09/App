@@ -1,11 +1,16 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QDir>
+#include <App/config.h>
 #include <App/Logger/app_logger.h>
 #include <App/Features/Map/PluginProbe.h>
 #include <QFontDatabase>
 #include <QDebug>
+#include <QIcon>
 #include <core/TrackManager.h>
+#include <connections/ApiEndpoints.h>
+#include <connections/http/vesselfinderhttpservice.h>
+#include <connections/http/parser/httpaisparser.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
 #include <connections/mqtt/parser/TruckNotificationParser.h>
@@ -14,25 +19,32 @@
 
 int main(int argc, char *argv[])
 {
+    // Set QSG_RHI_BACKEND (rendering backend) to OpenGL in order for MapLibre to work.
+    qputenv("QSG_RHI_BACKEND", "opengl");
 
     qputenv("QML_XHR_ALLOW_FILE_READ", "1");
-    // CRITICAL: Configure WebEngine BEFORE creating QGuiApplication
+
     // This tells Chromium to handle GPU gracefully
+    // This flag tells Qt to share OpenGL contexts between different components of the application.
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
-    // Fix GPU issues by running GPU in main process instead of separate process
-    // This prevents the "Failed to create command buffer" error
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS",
-            "--disable-gpu-process-crash-limit "
-            "--in-process-gpu "
-            "--disable-dev-shm-usage "
-            "--no-sandbox");
+            "--disable-gpu-shader-disk-cache " // Might reduce mismatches
+            "--enable-gpu-rasterization " // Chromium creates a dedicated process for GPU rendering
+            "--enable-zero-copy "         // Reduces data copying between CPU and GPU
+            "--enable-hardware-overlays " // Uses hardware layers for faster composition
+            "--num-raster-threads=4 "   // Parallelizes rendering across multiple threads
+            "--disable-logging");
 
-    // Initialize WebEngine BEFORE QGuiApplication
-    // This ensures proper setup of Chromium backend
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/App/assets/logo-app.ico"));
+
+    ensureUserConfigExists();
+    AppConfig appConfig = loadConfig();
+
+    ApiEndpoints::BaseUrl = appConfig.restBaseUrl;
 
     QCoreApplication::setOrganizationName("IRIDESS");
     QCoreApplication::setApplicationName("IRIDESS_FE");
@@ -73,8 +85,10 @@ int main(int argc, char *argv[])
 
     engine.addImportPath("qrc:/"); // For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
 
+    // --- MQTT Client Service ---
+
     auto *mqtt = engine.singletonInstance<MqttClientService*>("App", "MqttClientService");
-    mqtt->initialize(":/App/config/mqtt_config.json");
+    mqtt->initialize(":/App/config/mqtt_config.json", appConfig);
     mqtt->registerParser("ais", new TrackParser());
     mqtt->registerParser("doc-space", new TrackParser());
     mqtt->registerParser("trucknotifications", new TruckNotificationParser());
@@ -84,6 +98,12 @@ int main(int argc, char *argv[])
     trackManager->deactivate("ais");
     trackManager->deactivate("doc-space");
     trackManager->deactivate("tir");
+
+    // --- HTTP VesselFinder Service ---
+    auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
+    QString endpoint = "http://127.0.0.1:8000/tracks";
+    vesselHttp->initialize(endpoint, 2000);
+    vesselHttp->registerParser(new HttpAisParser());
 
     engine.loadFromModule("App", "Main");
 

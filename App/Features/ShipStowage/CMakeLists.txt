@@ -1,11 +1,11 @@
 set(qml_files
-    components/DraggableResizableContainer.qml
     components/WebViewItem.qml
     components/WebViewContainer.qml
 )
 
 set(qml_singletons
     ShipStowageController.qml
+    WebEngineProfileManager.qml
 )
 
 set_source_files_properties(

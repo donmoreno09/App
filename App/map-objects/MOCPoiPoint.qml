@@ -6,7 +6,6 @@ import QtPositioning 6.8
 import App 1.0
 import App.Themes 1.0
 import App.Features.SidePanel 1.0
-import App.Features.MapTools 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
@@ -16,7 +15,7 @@ MapQuickItem {
     readonly property real craneLatitude: 45.47693790805344
     readonly property real craneLongitude: 12.242793773599008
 
-    readonly property bool isSelected: PanelRouter.currentPath === Routes.MOCPoiStaticPanel
+    readonly property bool isSelected: SidePanelController.router.currentPath === Routes.MOCPoiStaticPanel
 
     coordinate: QtPositioning.coordinate(craneLatitude, craneLongitude)
     anchorPoint.x: svgIcon.width / 2

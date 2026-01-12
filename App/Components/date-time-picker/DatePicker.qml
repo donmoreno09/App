@@ -15,6 +15,8 @@ Rectangle {
     property date endDate: new Date(NaN)
 
     property bool standalone: true  // Set to false when used inside containers
+    readonly property bool hasValidSelection: mode === "single" ? !_isEmpty(selectedDate) : (!_isEmpty(startDate) && !_isEmpty(endDate))
+    readonly property string rangeText : _getRangeText()
 
     property date minimumDate: new Date(1900, 0, 1)
     property date maximumDate: new Date(2100, 11, 31)
@@ -182,12 +184,14 @@ Rectangle {
 
     function _handleDateClick(date) {
         if (mode === "single") {
+            selectedDate = date
             dateSelected(selectedDate)
         } else if (mode === "range") {
             if (_isEmpty(_rangeStartTemp)) {
                 _rangeStartTemp = date
                 startDate = date
                 endDate = new Date(NaN)
+                rangeSelected(startDate, endDate)
             } else {
                 if (date >= _rangeStartTemp) {
                     startDate = _rangeStartTemp
@@ -231,5 +235,28 @@ Rectangle {
 
     function _isEmpty(date) {
         return !date || isNaN(date.getTime())
+    }
+
+    function _getStartDateText() {
+        if (_isEmpty(startDate)) return ""
+        return Qt.formatDate(startDate, "dd/MMMM/yyyy")
+    }
+
+    function _getEndDateText() {
+        if (_isEmpty(endDate)) return ""
+        return Qt.formatDate(endDate, "dd/MMMM/yyyy")
+    }
+
+    function _getRangeText() {
+        const hasStart = !_isEmpty(startDate)
+        const hasEnd = !_isEmpty(endDate)
+
+        if (hasStart && hasEnd) {
+            return qsTr("Selected: %1 — %2").arg(_getStartDateText()).arg(_getEndDateText())
+        } else if (hasStart) {
+            return qsTr("Selected: %1").arg(_getStartDateText())
+        } else {
+            return qsTr("Select a date range")
+        }
     }
 }

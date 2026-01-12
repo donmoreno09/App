@@ -21,7 +21,7 @@ ColumnLayout {
 
     BusyIndicator {
         Layout.alignment: Qt.AlignCenter
-        Layout.topMargin: 300
+        Layout.topMargin: 250
         running: controller.isLoading
         visible: controller.isLoading
         layer.enabled: true
@@ -31,7 +31,7 @@ ColumnLayout {
     StatCard {
         icon: "qrc:/App/assets/icons/stopwatch.svg"
         title: `${TranslationManager.revision}` && qsTr("Next Hour")
-        value: controller.currentHourArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
+        value: controller.currentHourArrivalCount.toString() + " " + qsTr(" trucks")
         Layout.fillWidth: true
         visible: !controller.isLoading
     }
@@ -39,21 +39,8 @@ ColumnLayout {
     StatCard {
         icon: "qrc:/App/assets/icons/calendar-arrivals.svg"
         title: `${TranslationManager.revision}` && qsTr("Today")
-        value: controller.todayArrivalCount.toString() + `${TranslationManager.revision}` && qsTr(" trucks")
+        value: controller.todayArrivalCount.toString() + " " + qsTr(" trucks")
         Layout.fillWidth: true
         visible: !controller.isLoading
-    }
-
-
-    UI.VerticalSpacer {}
-
-    UI.Button {
-        visible: !controller.isLoading
-        Layout.fillWidth: true
-        Layout.preferredHeight: 40
-        Layout.margins: 10
-        variant: UI.ButtonStyles.Primary
-        text: `${TranslationManager.revision}` && qsTr("Fetch Arrivals")
-        onClicked: controller.fetchAllArrivalData()
     }
 }

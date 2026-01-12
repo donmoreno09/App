@@ -3,9 +3,9 @@ add_subdirectory(Mission)
 
 # Core UIs
 add_subdirectory(Map)
-add_subdirectory(MapTools)
 add_subdirectory(MapModes)
 add_subdirectory(TitleBar)
+add_subdirectory(Panels)
 add_subdirectory(SideRail)
 add_subdirectory(SidePanel)
 add_subdirectory(ContextPanel)
@@ -17,6 +17,7 @@ add_subdirectory(TrailerPredictions)
 add_subdirectory(ViGateServices)
 add_subdirectory(ShipStowage)
 add_subdirectory(Poi)
+add_subdirectory(AlertZone)
 
 # Modules need to be linked in order to be loaded using qrc.
 # Also, make sure that the RESOURCE_PREFIX of the module is the same as App's (which is "/").
@@ -29,8 +30,8 @@ target_link_libraries(${PROJECT_NAME}
         # Core UIs
         app_features_map
         app_features_mapmodes
-        app_features_maptools
         app_features_titlebar
+        app_features_panels
         app_features_siderail
         app_features_sidepanel
         app_features_contextpanel
@@ -42,4 +43,5 @@ target_link_libraries(${PROJECT_NAME}
         app_features_vigateservices
         app_features_shipstowage
         app_features_poi
+        app_features_alertzone
 )

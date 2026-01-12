@@ -1,5 +1,7 @@
 qt_add_executable(${PROJECT_NAME}
+    WIN32 # Only for Windows; ignored by other platforms.
     main.cpp
+    app.rc
 )
 
 file(GLOB_RECURSE APP_ASSETS
@@ -12,6 +14,9 @@ set(qml_files
     Main.qml
 
     # Map Objects
+    map-objects/AlertZoneEllipse.qml
+    map-objects/AlertZonePolygon.qml
+    map-objects/AlertZoneRectangle.qml
     map-objects/Track.qml
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
@@ -22,24 +27,36 @@ set(qml_files
     map-objects/MOCPoiPoint.qml
 
     # Layers
+    layers/AlertZoneMapLayer.qml
     layers/BaseMapLayer.qml
     layers/AISTrackMapLayer.qml
     layers/DocSpaceTrackMapLayer.qml
     layers/TirTrackMapLayer.qml
-    layers/LayersPanel.qml
     layers/PoiMapLayer.qml
     layers/MOCPoIStaticLayer.qml
+    layers/VesselFinderMapLayer.qml
 )
 
 set(cpp_sources
+    config.h
+
     # Connections
-    connections/mqtt/parser/IMessageParser.h
+    connections/interfaces/IMessageParser.h
+
+    connections/http/parser/httpaisparser.h
+    connections/http/httpvesselfindertrackspoller.cpp
+    connections/http/httpvesselfindertrackspoller.h
+    connections/http/vesselfinderhttpservice.cpp
+    connections/http/vesselfinderhttpservice.h
+
     connections/mqtt/parser/TrackParser.h
     connections/mqtt/parser/TruckNotificationParser.h
     connections/mqtt/parser/TirParser.h
     connections/mqtt/MqttClientService.cpp
     connections/mqtt/MqttClientService.h
-    connections/apiendpoints.h
+
+    connections/ApiEndpoints.h
+    connections/ApiEndpoints.cpp
     connections/httpclient.cpp
     connections/httpclient.h
 
@@ -49,19 +66,14 @@ set(cpp_sources
     core/interactionmodemanager.h
     core/LayerManager.cpp
     core/LayerManager.h
-    core/popupmanager.cpp
-    core/popupmanager.h
     core/TrackManager.cpp
     core/TrackManager.h
-    core/variantlistmodel.cpp
-    core/variantlistmodel.h
     core/PoiOptions.h
     core/PoiOptions.cpp
 
-    # Events
-    events/selectionboxbus.h
-
     # Layers
+    layers/AlertZoneMapLayerController.h
+    layers/AlertZoneMapLayerController.cpp
     layers/AnnotationMapLayer.cpp
     layers/AnnotationMapLayer.h
     layers/BaseLayer.cpp
@@ -79,8 +91,10 @@ set(cpp_sources
     layers/TirMapLayer.h
 
     # Entities
+    entities/AlertZone.h
     entities/metadata/MetadataEntry.h
     entities/metadata/NoteMetadataEntry.h
+    entities/AlertZone.h
     entities/Details.h
     entities/Geometry.h
     entities/Poi.h
@@ -93,6 +107,8 @@ set(cpp_sources
 
 
     # Qt Models
+    models/AlertZoneModel.h
+    models/AlertZoneModel.cpp
     models/ModelHelper.h
     models/ModelHelper.cpp
     models/CoordinatesModel.h
@@ -107,6 +123,8 @@ set(cpp_sources
     models/TirModel.h
 
     # Persistence
+    persistence/alertzonepersistencemanager.h
+    persistence/alertzonepersistencemanager.cpp
     persistence/ipersistable.h
     persistence/ipersistencemanager.h
     persistence/persistencemanagerbase.cpp
@@ -153,12 +171,16 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Concurrent
         Qt6::WebEngineQuick
         Qt6::WebEngineCore
+        QMapLibre::Location
 )
+
+qmaplibre_location_setup_plugins(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/connections
         ${CMAKE_CURRENT_SOURCE_DIR}/connections/mqtt
+        ${CMAKE_CURRENT_SOURCE_DIR}/connections/http
         ${CMAKE_CURRENT_SOURCE_DIR}/core
         ${CMAKE_CURRENT_SOURCE_DIR}/events
         ${CMAKE_CURRENT_SOURCE_DIR}/layers

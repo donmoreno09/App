@@ -1,82 +1,68 @@
-# This file is used to ignore files which are generated
-# ----------------------------------------------------------------------------
-
-*~
+# --- Compilazione CMake / qmake ---
+build/
+install/
+cmake-build-*/
+Makefile
+CMakeFiles/
+CMakeCache.txt
 *.autosave
-*.a
-*.core
-*.moc
-*.o
-*.obj
-*.orig
-*.rej
-*.so
-*.so.*
-*_pch.h.cpp
-*_resource.rc
-*.qm
-.#*
-*.*#
-core
-!core/
-tags
-.DS_Store
-.directory
-*.debug
-Makefile*
-*.prl
-*.app
-moc_*.cpp
-ui_*.h
-qrc_*.cpp
-Thumbs.db
-*.res
-*.rc
-/.qmake.cache
-/.qmake.stash
+*.user
+*.user.*
 
-# qtcreator generated files
+# --- Qt Creator specific files ---
 *.pro.user*
 *.qbs.user*
-CMakeLists.txt.user*
+*.pro.user
+*.qmlproject.user
+*.creator.*
+*.creator
 
-# xemacs temporary files
-*.flc
-
-# Vim temporary files
-.*.swp
-
-# Visual Studio generated files
-*.ib_pdb_index
-*.idb
-*.ilk
-*.pdb
-*.sln
-*.suo
-*.vcproj
-*vcproj.*.*.user
-*.ncb
-*.sdf
-*.opensdf
-*.vcxproj
-*vcxproj.*
-
-# MinGW generated files
-*.Debug
-*.Release
-
-# Python byte code
-*.pyc
-
-# Binaries
-# --------
+# --- File temporanei ---
+*.o
+*.obj
+*.so
+*.a
 *.dll
 *.exe
+*.moc
+*.qrc.depends
+*.qrc.cpp
+*.ts~
+*.rej
+*.gch
 
-# Directories with generated files
-.moc/
-.obj/
-.pch/
-.rcc/
-.uic/
-/build*/
+# --- Qt generated files ---
+moc_*
+ui_*
+qrc_*
+*.moc
+*.rcc
+
+# --- Logs / Backup / Editor files ---
+*.log
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+
+# --- OS / IDE Specific ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.iml
+App/assets/**/*.ini
+
+# --- QML cache / build ---
+.qmlcache/
+__pycache__/
+*.qmlc
+*.jsc
+
+# Optional: ignore compiled resource files if built
+resources.qrc.cpp
+
+# If you use Python tooling in QML dev
+.venv/
+env/

@@ -1,7 +1,7 @@
 #ifndef TRACKPARSER_H
 #define TRACKPARSER_H
 
-#include "IMessageParser.h"
+#include "interfaces/IMessageParser.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>

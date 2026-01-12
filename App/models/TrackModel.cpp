@@ -73,26 +73,40 @@ QVector<Track> &TrackModel::tracks()
 
 void TrackModel::set(const QVector<Track> &tracks)
 {
-
     beginResetModel();
     m_tracks = tracks;
     endResetModel();
 }
 
-void TrackModel::upsert(const QVector<Track> &tracks)
+void TrackModel::upsert(const QVector<Track>& tracks)
 {
     QSet<QString> seen;
-
-    // Update existing track or insert it
     for (const auto& track : tracks) {
         seen.insert(track.trackUid);
+    }
+
+    bool removed = false;
+    for (int row = m_tracks.size() - 1; row >= 0; --row) {
+        if (!seen.contains(m_tracks[row].trackUid)) {
+            beginRemoveRows({}, row, row);
+            m_tracks.removeAt(row);
+            endRemoveRows();
+            removed = true;
+        }
+    }
+
+    m_upsertMap.clear();
+    m_upsertMap.reserve(m_tracks.size());
+    for (int row = 0; row < m_tracks.size(); ++row) {
+        m_upsertMap.insert(m_tracks[row].trackUid, row);
+    }
+
+    for (const auto& track : tracks) {
         auto it = m_upsertMap.find(track.trackUid);
 
         if (it != m_upsertMap.end()) {
-            // Update track
             const int row = it.value();
 
-            // history bool check
             const bool historyWasEmpty = m_tracks[row].history.isEmpty();
             const bool historyWillBeNonEmpty = !track.history.isEmpty();
 
@@ -103,13 +117,14 @@ void TrackModel::upsert(const QVector<Track> &tracks)
                 emit dataChanged(idx, idx, changed);
             }
 
-            // Check history update
             if (historyWasEmpty && historyWillBeNonEmpty) {
-                emit historyPayloadArrived(m_tracks[row].sourceName, m_tracks[row].uidForHistory);
+                emit historyPayloadArrived(
+                    m_tracks[row].sourceName,
+                    m_tracks[row].uidForHistory
+                );
             }
 
         } else {
-            // Insert track
             const int row = m_tracks.size();
 
             beginInsertRows({}, row, row);
@@ -122,29 +137,8 @@ void TrackModel::upsert(const QVector<Track> &tracks)
             }
         }
     }
-
-    // Remove stale tracks
-    bool removed = false;
-    for (int row = m_tracks.size() - 1; row >= 0; row--) {
-        const auto& track = m_tracks[row];
-        if (!seen.contains(track.trackUid)) {
-            beginRemoveRows({}, row, row);
-            m_upsertMap.remove(track.trackUid);
-            m_tracks.removeAt(row);
-            endRemoveRows();
-            removed = true;
-        }
-    }
-
-    // Rebuild map if removed tracks. This is because the indices are now shifted.
-    if (removed) {
-        m_upsertMap.clear();
-        m_upsertMap.reserve(m_tracks.size());
-        for (int row = 0; row < m_tracks.size(); row++) {
-            m_upsertMap.insert(m_tracks[row].trackUid, row);
-        }
-    }
 }
+
 
 QVector<int> TrackModel::diffRoles(const Track &a, const Track &b) const
 {

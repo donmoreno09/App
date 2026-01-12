@@ -26,7 +26,7 @@ QtObject {
 
     // SidePanel
     readonly property int sidePanelWidth: 490
-    readonly property int panelTitleHeight: 88
+    readonly property int panelTitleHeight: 68
 
     // NotificationsBar
     readonly property int notificationsBarWidth: 410

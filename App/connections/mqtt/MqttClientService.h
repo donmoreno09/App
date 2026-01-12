@@ -10,7 +10,8 @@
 #include <entities/TruckNotification.h>
 #include <models/TruckNotificationModel.h>
 #include <layers/BaseTrackMapLayer.h>
-#include "parser/IMessageParser.h"
+#include <App/config.h>
+#include "interfaces/IMessageParser.h"
 
 class MqttClientService : public QObject {
     Q_OBJECT
@@ -20,7 +21,7 @@ class MqttClientService : public QObject {
 public:
     explicit MqttClientService(QObject* parent = nullptr);
 
-    void initialize(const QString& configPath);
+    void initialize(const QString& configPath, const AppConfig& appConfig);
     Q_INVOKABLE void registerLayer(const QString& name, QObject* layer);
 
     void registerParser(const QString& topic, IBaseMessageParser* parser);
@@ -32,7 +33,7 @@ private slots:
     void onDisconnected();
 
 private:
-    void loadConfiguration(const QString& path);
+    void loadConfiguration(const QString& path, const AppConfig& appConfig);
     void connectToBroker();
 
     QMqttClient* client;

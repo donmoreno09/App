@@ -8,6 +8,7 @@ import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.SidePanel
 import App.Features.TitleBar
+import App.Features.MapModes
 import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
 import App.Features.Notifications 1.0
@@ -17,6 +18,8 @@ import "qrc:/App/Features/SidePanel/routes.js" as Routes
 UI.GlobalBackgroundConsumer {
     // TESTING PURPOSES
     property bool devPanelsShown: false
+
+    property string currentPanelPath: SidePanelController.router.currentPath
 
     ColumnLayout {
         anchors.fill: parent
@@ -48,107 +51,90 @@ UI.GlobalBackgroundConsumer {
                 spacing: Theme.spacing.s0
 
                 SideRailItem {
-                    visible: devPanelsShown
-                    source: "qrc:/App/assets/icons/clipboard.svg"
-                    text: `${TranslationManager.revision}` && qsTr("Mission")
-                    active: PanelRouter.currentPath === "mission" && SidePanelController.isOpen
-
-                    onClicked: SidePanelController.toggle(Routes.Mission)
-                }
-
-                SideRailItem {
-                    visible: devPanelsShown
-                    source: "qrc:/App/assets/icons/submarine.svg"
-                    text: `${TranslationManager.revision}` && qsTr("Pod")
-                    active: PanelRouter.currentPath === "pod" && SidePanelController.isOpen
-
-                    onClicked: SidePanelController.toggle(Routes.Pod)
-                }
-
-                SideRailItem {
-                    visible: devPanelsShown
-                    source: "qrc:/App/assets/icons/notification.svg"
-                    text: `${TranslationManager.revision}` && qsTr("Notifications")
-                    active: PanelRouter.currentPath === "notifications" && SidePanelController.isOpen
-
-                    onClicked: SidePanelController.toggle(Routes.Notifications)
-                }
-
-                SideRailItem {
-                    source: "qrc:/App/assets/icons/layers-colored.svg"
-                    text: `${TranslationManager.revision}` && qsTr("Layers")
-                    active: PanelRouter.currentPath === "maplayers" && SidePanelController.isOpen
-
-                    onClicked: SidePanelController.toggle(Routes.MapLayers)
-                }
-
-                SideRailItem {
-                    source: "qrc:/App/assets/icons/poi.svg"
+                    source: "qrc:/App/assets/icons/location-dot.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Point of Interest")
-                    active: PanelRouter.currentPath === Routes.Poi && SidePanelController.isOpen
+                    text: `${TranslationManager.revision}` && qsTr("POI")
+                    active: currentPanelPath === Routes.Poi && SidePanelController.isOpen
 
-                    onClicked: SidePanelController.toggle(Routes.Poi)
+                    onClicked: {
+                        MapModeController.clearState()
+                        SidePanelController.toggle(Routes.Poi)
+                    }
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/truck.svg"
+                    source: "qrc:/App/assets/icons/alert-zone.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Truck Arrivals")
-                    active: PanelRouter.currentPath === "arrival-content" && SidePanelController.isOpen
+                    text: `${TranslationManager.revision}` && qsTr("Alert Zone")
+                    active: currentPanelPath === Routes.AlertZone && SidePanelController.isOpen
+
+                    onClicked: {
+                        MapModeController.clearState()
+                        SidePanelController.toggle(Routes.AlertZone)
+                    }
+                }
+
+                SideRailItem {
+                    source: "qrc:/App/assets/icons/truck-fast.svg"
+                    preserveIconColor: true
+                    text: `${TranslationManager.revision}` && qsTr("Arrivals")
+                    active: currentPanelPath === "arrival-content" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ArrivalContent)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/calendar-arrivals.svg"
+                    source: "qrc:/App/assets/icons/calendar-days.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Truck Date Arrivals")
-                    active: PanelRouter.currentPath === "arrival-date-content" && SidePanelController.isOpen
+                    text: `${TranslationManager.revision}` && qsTr("Date")
+                    active: currentPanelPath === "arrival-date-content" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ArrivalDateContent)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/settings.svg"
+                    source: "qrc:/App/assets/icons/calendar-range.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Truck DT Arrivals")
-                    active: PanelRouter.currentPath === "arrival-date-time-content" && SidePanelController.isOpen
+                    text: `${TranslationManager.revision}` && qsTr("DT Arrivals")
+                    active: currentPanelPath === "arrival-date-time-content" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ArrivalDateTimeContent)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/compass.svg"
+                    source: "qrc:/App/assets/icons/timeline-arrow.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Trailer Prediction")
-                    active: PanelRouter.currentPath === "trailer-prediction" && SidePanelController.isOpen
+                    text: `${TranslationManager.revision}` && qsTr("Predictions")
+                    active: currentPanelPath === "trailer-prediction" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.TrailerPrediction)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/monitor.svg"
+                    source: "qrc:/App/assets/icons/ship.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Ship Stowage")
-                    active: PanelRouter.currentPath === "shipstowage" && SidePanelController.isOpen
+                    text: `${TranslationManager.revision}` && qsTr("Stowage")
+                    active: currentPanelPath === "shipstowage" && SidePanelController.isOpen
 
-                    onClicked: ShipStowageController.openStowageWindow(Window.window)
+                    onClicked: {
+                        SidePanelController.close(true)
+                        ShipStowageController.openStowageWindow(Window.window)
+                    }
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/barrier.svg"
+                    source: "qrc:/App/assets/icons/gate.svg"
                     preserveIconColor: true
-                    text: `${TranslationManager.revision}` && qsTr("Gate Transits")
-                    active: PanelRouter.currentPath === "viGate-services" && SidePanelController.isOpen
+                    text: `${TranslationManager.revision}` && qsTr("Gates")
+                    active: currentPanelPath === "viGate-services" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.ViGateServices)
                 }
 
                 SideRailItem {
-                    source: "qrc:/App/assets/icons/notification-bell-colored.svg"
+                    source: "qrc:/App/assets/icons/bell.svg"
                     text: `${TranslationManager.revision}` && qsTr("Notifications")
-                    active: PanelRouter.currentPath === "notification" && SidePanelController.isOpen
+                    active: currentPanelPath === "notification" && SidePanelController.isOpen
 
                     badgeCount: TruckNotificationModel.count
 
@@ -156,23 +142,23 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
-                    visible: PanelRouter.currentPath === "languages" && SidePanelController.isOpen
+                    visible: currentPanelPath === "languages" && SidePanelController.isOpen
                     source: "qrc:/App/assets/icons/world.svg"
                     icon.width: Theme.icons.sizeMd
                     icon.height: Theme.icons.sizeMd
                     text: `${TranslationManager.revision}` && qsTr("Languages")
-                    active: PanelRouter.currentPath === "languages" && SidePanelController.isOpen
+                    active: currentPanelPath === "languages" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.Languages)
                 }
 
                 SideRailItem {
-                    visible: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
+                    visible: currentPanelPath === "maptilesets" && SidePanelController.isOpen
                     source: "qrc:/App/assets/icons/map.svg"
                     icon.width: Theme.icons.sizeMd
                     icon.height: Theme.icons.sizeMd
                     text: `${TranslationManager.revision}` && qsTr("Tilesets")
-                    active: PanelRouter.currentPath === "maptilesets" && SidePanelController.isOpen
+                    active: currentPanelPath === "maptilesets" && SidePanelController.isOpen
 
                     onClicked: SidePanelController.toggle(Routes.MapTilesets)
                 }
@@ -184,7 +170,7 @@ UI.GlobalBackgroundConsumer {
             Layout.topMargin: Theme.spacing.s4
 
             // Stay visible while fading out, hide only when fully transparent
-            property bool shouldBeVisible: PanelRouter.currentPath !== ""
+            property bool shouldBeVisible: currentPanelPath !== ""
             opacity: shouldBeVisible ? 1 : 0
             visible: shouldBeVisible || opacity > 0
 
@@ -207,7 +193,7 @@ UI.GlobalBackgroundConsumer {
 
                 onClicked: {
                     if (SidePanelController.isOpen) SidePanelController.close()
-                    else SidePanelController.open()
+                    else SidePanelController.show()
                 }
 
                 rotation: SidePanelController.isOpen ? 0 : 180
@@ -219,7 +205,7 @@ UI.GlobalBackgroundConsumer {
         UI.Avatar {
             Layout.preferredWidth: Theme.spacing.s9
             Layout.preferredHeight: Theme.spacing.s9
-            Layout.topMargin: (PanelRouter.currentPath !== "") ? 0 : Theme.spacing.s5
+            Layout.topMargin: (currentPanelPath !== "") ? 0 : Theme.spacing.s5
             Layout.alignment: Qt.AlignCenter
 
             source: "qrc:/App/assets/images/avatar.png"
