@@ -19,6 +19,7 @@ import App.Features.Notifications 1.0
 import App.Features.MapToolbar 1.0
 import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
+import App.Features.MapModes 1.0 as Commands
 
 ApplicationWindow {
     id: app
@@ -239,5 +240,17 @@ ApplicationWindow {
         z: Theme.elevation.modal + 1
 
         mapReference: mapHost
+    }
+
+    Shortcut {
+            sequence: StandardKey.Undo
+            enabled: Commands.CommandManager.canUndo
+            onActivated: Commands.CommandManager.undo()
+        }
+
+    Shortcut {
+        sequence: StandardKey.Redo
+        enabled: Commands.CommandManager.canRedo
+        onActivated: Commands.CommandManager.redo()
     }
 }
