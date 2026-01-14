@@ -17,7 +17,8 @@ PolygonMode {
     type: "creating"
     z: Theme.elevation.z100 + 100
 
-    ListModel { id: coordinatesModel }
+    ListModel { id: _coordinatesModel }
+    property alias coordinatesModel: _coordinatesModel
     property bool closed: false
     readonly property bool isDraggingHandle: committedPolygon.isDraggingHandle
     property var polygonPath: []

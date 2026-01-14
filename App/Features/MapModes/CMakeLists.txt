@@ -23,6 +23,11 @@ set(qml_files
 
     commands/ICommand.js
     commands/PolygonCommands.js
+    commands/polygoncommands/AddPolygonVertexCommand.js
+    commands/polygoncommands/ClosePolygonCommand.js
+    commands/polygoncommands/UpdatePolygonVertexCommand.js
+    commands/polygoncommands/TranslatePolygonCommand.js
+    commands/polygoncommands/TranslatePolygonCreationCommand.js
 )
 
 set(qml_singletons
