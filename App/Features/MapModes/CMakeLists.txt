@@ -20,11 +20,15 @@ set(qml_files
     modes/polygon/CreatePolygonMode.qml
     modes/polygon/EditPolygonMode.qml
     modes/polygon/PolygonGeometry.js
+
+    commands/ICommand.js
+    commands/PolygonCommands.js
 )
 
 set(qml_singletons
     MapModeController.qml
     MapModeRegistry.qml
+    commands/CommandManager.qml
 )
 
 set_source_files_properties(
@@ -40,3 +44,4 @@ qt_add_qml_module(app_features_mapmodes
         ${qml_singletons}
     RESOURCE_PREFIX "/"
 )
+
