@@ -63,7 +63,7 @@ UI.EditablePolygon {
 
     // Commit command when editing ends
     Connections {
-        target: committedPolygon // Reference to EditablePolygon instance
+        target: root
 
         function onEditingFinished() {
             if (!dragStartPath) return;

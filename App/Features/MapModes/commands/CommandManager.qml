@@ -18,10 +18,10 @@ QtObject {
     readonly property bool canRedo: currentIndex < commandStack.length - 1
 
     // UI feedback
-    readonly property string undoDescription: canUndo
+    readonly property string undoDescription: canUndo && commandStack[currentIndex]
         ? commandStack[currentIndex].getDescription()
         : ""
-    readonly property string redoDescription: canRedo
+    readonly property string redoDescription: canRedo && commandStack[currentIndex + 1]
         ? commandStack[currentIndex + 1].getDescription()
         : ""
 
@@ -58,8 +58,8 @@ QtObject {
         console.log("[CommandManager] Executing command...")
         command.execute()
 
-        // Add to stack
-        commandStack.push(command)
+        // Add to stack (reassign to trigger QML binding updates)
+        commandStack = [...commandStack, command]
         currentIndex++
 
         console.log("[CommandManager] Command added. Stack size:", commandStack.length, "Current index:", currentIndex)
