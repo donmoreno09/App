@@ -91,7 +91,7 @@ PolygonMode {
                 console.log("[CreatePolygonMode] Polygon is closed, resetting...")
                 root.resetPreview()
                 Commands.CommandManager.clear()
-                return // ADD THIS RETURN!
+                return
             }
 
             const point = MapController.map.mapFromItem(root, event.position)

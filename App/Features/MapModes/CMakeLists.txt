@@ -28,6 +28,14 @@ set(qml_files
     commands/polygoncommands/UpdatePolygonVertexCommand.js
     commands/polygoncommands/TranslatePolygonCommand.js
     commands/polygoncommands/TranslatePolygonCreationCommand.js
+    commands/RectangleCommands.js
+    commands/rectanglecommands/UpdateRectangleCornerCommand.js
+    commands/rectanglecommands/TranslateRectangleCommand.js
+    commands/rectanglecommands/TranslateRectangleCreationCommand.js
+    commands/EllipseCommands.js
+    commands/ellipsecommands/TranslateEllipseCreationCommand.js
+    commands/ellipsecommands/TranslateEllipseCommand.js
+    commands/ellipsecommands/UpdateEllipseRadiusCommand.js
 )
 
 set(qml_singletons

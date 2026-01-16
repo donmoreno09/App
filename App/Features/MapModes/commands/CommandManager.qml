@@ -41,17 +41,18 @@ QtObject {
         console.log("[CommandManager] executeCommand() called:", command.getDescription())
 
         // Try to merge with previous command
-        if (canUndo && commandStack[currentIndex].canMergeWith(command)) {
+        if (canUndo && commandStack[currentIndex] && commandStack[currentIndex].canMergeWith(command)) {
             console.log("[CommandManager] Merging with previous command")
             commandStack[currentIndex].mergeWith(command)
             commandStack[currentIndex].execute()
+            stackChanged()
             return
         }
 
         // Clear redo history if we're not at the top
         if (currentIndex < commandStack.length - 1) {
             console.log("[CommandManager] Clearing redo history from index:", currentIndex + 1)
-            commandStack.splice(currentIndex + 1)
+            commandStack = commandStack.slice(0, currentIndex + 1)
         }
 
         // Execute the command
@@ -67,7 +68,7 @@ QtObject {
         // Enforce max stack size
         if (commandStack.length > maxStackSize) {
             console.log("[CommandManager] Max stack size reached, removing oldest")
-            commandStack.shift()
+            commandStack = commandStack.slice(1)
             currentIndex--
         }
 
@@ -80,7 +81,7 @@ QtObject {
     function undo() {
         console.log("[CommandManager] undo() called. canUndo:", canUndo, "currentIndex:", currentIndex)
 
-        if (!canUndo) {
+        if (!canUndo || !commandStack[currentIndex]) {
             console.warn("[CommandManager] Cannot undo - stack empty or at beginning")
             return
         }
@@ -100,7 +101,7 @@ QtObject {
     function redo() {
         console.log("[CommandManager] redo() called. canRedo:", canRedo, "currentIndex:", currentIndex)
 
-        if (!canRedo) {
+        if (!canRedo || !commandStack[currentIndex + 1]) {
             console.warn("[CommandManager] Cannot redo - no redo history")
             return
         }

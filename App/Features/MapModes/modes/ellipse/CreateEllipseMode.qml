@@ -8,6 +8,8 @@ import App.Features.Map 1.0
 import "../.."
 import "./EllipseGeometry.js" as EllipseGeom
 import App.Components 1.0 as UI
+import App.Features.MapModes 1.0 as Commands
+import "../../commands/EllipseCommands.js" as EllipseCommands
 
 EllipseMode {
     id: root
@@ -183,18 +185,72 @@ EllipseMode {
         strokeColor: "green"
         highlightColor: "white"
 
+        // Track drag start state for undo/redo
+        property var dragStartCenter: null
+        property real dragStartRadiusA: 0
+        property real dragStartRadiusB: 0
+
         onEllipseChanged: function(c, a, b) {
-            coord = c
+            console.log("[CreateEllipseMode] onEllipseChanged called, dragStartCenter already set:", dragStartCenter !== null)
+
+            // Capture start state on first change
+            if (!dragStartCenter) {
+                console.log("[CreateEllipseMode] CAPTURING - current root.coord:", root.coord.latitude, root.coord.longitude)
+                console.log("[CreateEllipseMode] CAPTURING - current root.radiusA:", root.radiusA, "radiusB:", root.radiusB)
+                console.log("[CreateEllipseMode] CAPTURING - incoming c:", c.latitude, c.longitude, "a:", a, "b:", b)
+
+                dragStartCenter = QtPositioning.coordinate(root.coord.latitude, root.coord.longitude)
+                dragStartRadiusA = root.radiusA
+                dragStartRadiusB = root.radiusB
+                console.log("[CreateEllipseMode] Captured start state:",
+                    "center:", dragStartCenter.latitude, dragStartCenter.longitude,
+                    "radiusA:", dragStartRadiusA, "radiusB:", dragStartRadiusB)
+            }
+
+            // Update root's properties (not the local bound properties)
+            root.coord = c
             root.coordChanged()
 
-            if (radiusA !== a) {
-                radiusA = a
+            if (root.radiusA !== a) {
+                root.radiusA = a
                 root.majorAxisChanged()
             }
-            if (radiusB !== b) {
-                radiusB = b
+            if (root.radiusB !== b) {
+                root.radiusB = b
                 root.minorAxisChanged()
             }
+        }
+
+        onEditingFinished: {
+            console.log("[CreateEllipseMode] onEditingFinished, dragStartCenter:", dragStartCenter)
+            if (!dragStartCenter) return
+
+            const newCenter = QtPositioning.coordinate(root.coord.latitude, root.coord.longitude)
+            const newRadiusA = root.radiusA
+            const newRadiusB = root.radiusB
+
+            console.log("[CreateEllipseMode] Creating command:",
+                "oldCenter:", dragStartCenter.latitude, dragStartCenter.longitude,
+                "newCenter:", newCenter.latitude, newCenter.longitude,
+                "oldRadiusA:", dragStartRadiusA, "newRadiusA:", newRadiusA,
+                "oldRadiusB:", dragStartRadiusB, "newRadiusB:", newRadiusB)
+
+            const cmd = new EllipseCommands.TranslateEllipseCreationCommand(
+                root,
+                dragStartCenter,
+                dragStartRadiusA,
+                dragStartRadiusB,
+                newCenter,
+                newRadiusA,
+                newRadiusB
+            )
+
+            Commands.CommandManager.executeCommand(cmd)
+
+            // Reset tracking state
+            dragStartCenter = null
+            dragStartRadiusA = 0
+            dragStartRadiusB = 0
         }
     }
 
