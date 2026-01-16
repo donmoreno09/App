@@ -235,14 +235,32 @@ ApplicationWindow {
     }
 
     Shortcut {
-            sequence: StandardKey.Undo
-            enabled: Commands.CommandManager.canUndo
-            onActivated: Commands.CommandManager.undo()
+        sequence: "Ctrl+Z"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            console.log("[Shortcut] Undo triggered, canUndo:", Commands.CommandManager.canUndo)
+            if (Commands.CommandManager.canUndo)
+                Commands.CommandManager.undo()
         }
+    }
 
     Shortcut {
-        sequence: StandardKey.Redo
-        enabled: Commands.CommandManager.canRedo
-        onActivated: Commands.CommandManager.redo()
+        sequence: "Ctrl+Y"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            console.log("[Shortcut] Redo triggered, canRedo:", Commands.CommandManager.canRedo)
+            if (Commands.CommandManager.canRedo)
+                Commands.CommandManager.redo()
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Shift+Z"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            console.log("[Shortcut] Redo (Ctrl+Shift+Z) triggered, canRedo:", Commands.CommandManager.canRedo)
+            if (Commands.CommandManager.canRedo)
+                Commands.CommandManager.redo()
+        }
     }
 }

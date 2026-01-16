@@ -34,6 +34,7 @@ MapItemGroup {
 
     signal tapped()
     signal ellipseChanged(geoCoordinate center, real radiusA, real radiusB)
+    signal editingFinished()
 
     property var _path: []
     function _syncPath() {
@@ -97,6 +98,7 @@ MapItemGroup {
             } else {
                 root._startCenter = QtPositioning.coordinate()
                 root._anchorCoord = QtPositioning.coordinate()
+                root.editingFinished()
             }
 
             onActiveTranslationChanged: {
@@ -144,7 +146,6 @@ MapItemGroup {
 
         TapHandler {
             acceptedButtons: Qt.LeftButton
-            onPressedChanged: root.isDraggingHandler = pressed
             gesturePolicy: TapHandler.ReleaseWithinBounds
         }
 
@@ -152,6 +153,12 @@ MapItemGroup {
             target: null
             acceptedButtons: Qt.LeftButton
             grabPermissions: PointerHandler.CanTakeOverFromAnything
+
+            onActiveChanged: {
+                root.isDraggingHandler = active
+                if (!active)
+                    root.editingFinished()
+            }
 
             onTranslationChanged: {
                 const mapItem = root.map
