@@ -8,6 +8,7 @@ import App.Themes 1.0
 import App.Features.Map 1.0
 import App.Features.MapModes 1.0
 import App.Components 1.0 as UI
+import "qrc:/App/Features/MapModes/commands/PolygonCommands.js" as PolygonCommands
 
 UI.EditablePolygon {
     id: root
@@ -36,4 +37,20 @@ UI.EditablePolygon {
 
         MapModeRegistry.editPolygonMode.coordinatesChanged()
     }
+
+    onMidpointDragFinished: function(insertedIndex, originalMidpoint, finalVertex) {
+            console.log("[PoiPolygon] Midpoint drag finished at index", insertedIndex)
+
+            const cmd = new PolygonCommands.InsertPolygonVertexCommand(
+                MapModeRegistry.editPolygonMode,
+                insertedIndex,
+                originalMidpoint,
+                finalVertex
+            )
+
+            CommandManager.commandStack.push(cmd)
+            CommandManager.redoStack = []
+            CommandManager.canUndoChanged()
+            CommandManager.canRedoChanged()
+        }
 }

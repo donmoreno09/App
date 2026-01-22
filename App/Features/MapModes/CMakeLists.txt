@@ -28,6 +28,7 @@ set(qml_files
     commands/polygoncommands/UpdatePolygonVertexCommand.js
     commands/polygoncommands/TranslatePolygonCommand.js
     commands/polygoncommands/TranslatePolygonCreationCommand.js
+    commands/polygoncommands/InsertPolygonVertexCommand.js
     commands/RectangleCommands.js
     commands/rectanglecommands/UpdateRectangleCornerCommand.js
     commands/rectanglecommands/TranslateRectangleCommand.js
@@ -36,6 +37,9 @@ set(qml_files
     commands/ellipsecommands/TranslateEllipseCreationCommand.js
     commands/ellipsecommands/TranslateEllipseCommand.js
     commands/ellipsecommands/UpdateEllipseRadiusCommand.js
+    commands/PointCommands.js
+    commands/pointcommands/SetPointCoordinateCommand.js
+    commands/pointcommands/TranslatePointCommand.js
 )
 
 set(qml_singletons
@@ -57,4 +61,3 @@ qt_add_qml_module(app_features_mapmodes
         ${qml_singletons}
     RESOURCE_PREFIX "/"
 )
-

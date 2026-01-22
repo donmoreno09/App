@@ -168,5 +168,24 @@ PolygonMode {
             const closeCmd = new PolygonCommands.ClosePolygonCommand(root)
             Commands.CommandManager.executeCommand(closeCmd)
         }
+
+        onMidpointDragFinished: function(insertedIndex, originalMidpoint, finalVertex) {
+            console.log("[CreatePolygonMode] Midpoint drag finished, creating command")
+
+            const cmd = new PolygonCommands.InsertPolygonVertexCommand(
+                root,
+                insertedIndex,
+                originalMidpoint,
+                finalVertex
+            )
+
+            // IMPORTANT: Vertex already inserted during drag, just record for undo
+            // We don't call executeCommand() here because that would call execute()
+            // and double-insert the vertex
+            Commands.CommandManager.commandStack.push(cmd)
+            Commands.CommandManager.redoStack = []
+            Commands.CommandManager.canUndoChanged()
+            Commands.CommandManager.canRedoChanged()
+        }
     }
 }

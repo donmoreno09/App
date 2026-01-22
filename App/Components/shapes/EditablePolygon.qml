@@ -40,10 +40,14 @@ MapItemGroup {
     signal pathEdited(var path)
     signal firstPointTapped()
     signal editingFinished()
+    signal midpointDragFinished(int insertedIndex, geoCoordinate originalMidpoint, geoCoordinate finalVertex)
 
     property bool isDraggingHandle: false
     readonly property bool isMovingPolygon: moveDrag.active
     readonly property bool isBodyPressed: moveTap.pressed
+
+    property var _midpoints: []
+    property bool _suppressMidpointUpdate: false
 
     property var _path: []
     property var _startCoords: []
@@ -56,6 +60,43 @@ MapItemGroup {
 
     onPathChanged: _syncPath()
     Component.onCompleted: _syncPath()
+
+    function _updateMidpoints() {
+        if (_suppressMidpointUpdate) return
+
+        // Need at least 2 points to have a midpoint
+        if (!hasPath || _path.length < 2) {
+            _midpoints = []
+            return
+        }
+
+        // Calculate segment count
+        // Open polygon: n-1 segments
+        // Closed polygon: n segments (includes last-to-first)
+        const segmentCount = closed ? _path.length : _path.length - 1
+
+        const mids = []
+        for (let i = 0; i < segmentCount; ++i) {
+            const c1 = _path[i]
+            const c2 = _path[(i + 1) % _path.length]
+
+            if (!c1 || !c1.isValid || !c2 || !c2.isValid) continue
+
+            const midpoint = PolyGeom.calculateMidpoint(c1, c2, QtPositioning)
+            if (!midpoint || !midpoint.isValid) continue
+
+            mids.push({
+                coordinate: midpoint,
+                afterVertex: i
+            })
+        }
+
+        _midpoints = mids
+    }
+
+    // Update midpoints when path or closed state changes
+    on_PathChanged: Qt.callLater(_updateMidpoints)
+    onClosedChanged: Qt.callLater(_updateMidpoints)
 
     MapPolyline {
         id: preview
@@ -239,6 +280,127 @@ MapItemGroup {
                     root.isDraggingHandle = active
                     if (!active)
                         root.editingFinished()
+                }
+            }
+        }
+    }
+
+    MapItemView {
+        z: (root.closed ? polygon.z : preview.z) + 2
+        model: root._midpoints.length
+
+        delegate: MapQuickItem {
+            id: midpointHandle
+
+            required property int index
+
+            property var midpointData: index < root._midpoints.length ? root._midpoints[index] : null
+            property geoCoordinate _coordinate: midpointData ? midpointData.coordinate : QtPositioning.coordinate()
+
+            coordinate: _coordinate
+            anchorPoint: Qt.point(6, 6)
+
+            sourceItem: Rectangle {
+                width: 12
+                height: 12
+                radius: 6
+                color: "white"
+                opacity: 0.7
+                border.color: root.strokeColor
+                border.width: 1.5
+
+                scale: midpointHover.hovered ? 1.2 : 1.0
+                Behavior on scale { NumberAnimation { duration: 150 } }
+
+                HoverHandler {
+                    id: midpointHover
+                    cursorShape: Qt.PointingHandCursor
+                }
+            }
+
+            visible: root.isEditing && root.hasPath
+
+            property bool isConverted: false
+            property int insertedVertexIndex: -1
+            property geoCoordinate originalMidpointCoord: QtPositioning.coordinate()
+
+            TapHandler {
+                acceptedButtons: Qt.LeftButton
+                gesturePolicy: TapHandler.ReleaseWithinBounds
+                enabled: !isConverted
+            }
+
+            DragHandler {
+                id: midpointDrag
+                target: null
+                acceptedButtons: Qt.LeftButton
+                grabPermissions: PointerHandler.CanTakeOverFromAnything
+                cursorShape: Qt.ClosedHandCursor
+
+                onActiveChanged: {
+                    if (active) {
+                        // DRAG START: Convert midpoint to vertex
+                        if (midpointHandle.isConverted) return
+                        if (!midpointHandle.midpointData) return
+
+                        const insertIndex = midpointHandle.midpointData.afterVertex + 1
+                        const midCoord = midpointHandle.midpointData.coordinate
+
+                        console.log("[Midpoint] Converting to vertex at index", insertIndex)
+
+                        midpointHandle.originalMidpointCoord = QtPositioning.coordinate(
+                            midCoord.latitude,
+                            midCoord.longitude
+                        )
+                        midpointHandle.insertedVertexIndex = insertIndex
+
+                        const nextPath = PolyGeom.clonePath(root._path, QtPositioning)
+                        nextPath.splice(insertIndex, 0, midCoord)
+
+                        root._suppressMidpointUpdate = true
+                        root._path = nextPath
+                        root.pathEdited(nextPath)
+                        root._suppressMidpointUpdate = false
+
+                        midpointHandle.isConverted = true
+
+                        Qt.callLater(root._updateMidpoints)
+
+                    } else {
+                        // DRAG END: Finalize
+                        if (midpointHandle.isConverted && midpointHandle.insertedVertexIndex >= 0) {
+                            console.log("[Midpoint] Drag ended, finalizing vertex insertion")
+
+                            const finalCoord = root._path[midpointHandle.insertedVertexIndex]
+                            root.midpointDragFinished(
+                                midpointHandle.insertedVertexIndex,
+                                midpointHandle.originalMidpointCoord,
+                                finalCoord
+                            )
+
+                            midpointHandle.isConverted = false
+                            midpointHandle.insertedVertexIndex = -1
+                            midpointHandle.originalMidpointCoord = QtPositioning.coordinate()
+                        }
+                    }
+                }
+
+                onTranslationChanged: {
+                    if (!midpointHandle.isConverted) return
+                    if (!root.map) return
+                    if (midpointHandle.insertedVertexIndex < 0) return
+
+                    const p = midpointHandle.mapToItem(root.map, centroid.position.x, centroid.position.y)
+                    const c = root.map.toCoordinate(p, false)
+                    if (!c.isValid) return
+
+                    const nextPath = PolyGeom.clonePath(root._path, QtPositioning)
+                    nextPath[midpointHandle.insertedVertexIndex] = c
+
+                    root._suppressMidpointUpdate = true
+                    root._path = nextPath
+                    root.pathEdited(nextPath)
+                    root._suppressMidpointUpdate = false
                 }
             }
         }

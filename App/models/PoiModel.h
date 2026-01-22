@@ -73,6 +73,10 @@ public:
 
     Q_INVOKABLE void setCoordinate(int row, int coordIndex, const QGeoCoordinate& coord);
 
+    Q_INVOKABLE void insertCoordinate(int row, int coordIndex, const QGeoCoordinate& coord);
+
+    Q_INVOKABLE void removeCoordinate(int row, int coordIndex);
+
     Q_INVOKABLE void append(const QVariantMap &data);
 
     Q_INVOKABLE void update(const QVariantMap &data);

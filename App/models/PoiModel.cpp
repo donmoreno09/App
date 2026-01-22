@@ -343,6 +343,53 @@ void PoiModel::setCoordinate(int row, int coordIndex, const QGeoCoordinate &coor
     }
 }
 
+void PoiModel::insertCoordinate(int row, int coordIndex, const QGeoCoordinate &coord)
+{
+    const QModelIndex idx = index(row, 0);
+    if (!idx.isValid() || row < 0 || row >= m_pois.size())
+        return;
+
+    auto& coordinates = m_pois[row].geometry.coordinates;
+
+    if (coordIndex < 0 || coordIndex > coordinates.length())
+        return;
+
+    const QVector2D point(coord.longitude(), coord.latitude());
+    coordinates.insert(coordIndex, point);
+
+    // Update closing point if inserting at the beginning
+    if (coordIndex == 0 && coordinates.length() > 1) {
+        coordinates[coordinates.length() - 1] = point;
+    }
+
+    emit dataChanged(idx, idx, { CoordinatesRole });
+}
+
+void PoiModel::removeCoordinate(int row, int coordIndex)
+{
+    const QModelIndex idx = index(row, 0);
+    if (!idx.isValid() || row < 0 || row >= m_pois.size())
+        return;
+
+    auto& coordinates = m_pois[row].geometry.coordinates;
+
+    if (coordIndex < 0 || coordIndex >= coordinates.length())
+        return;
+
+    // Prevent invalid polygons (minimum 3 unique points + 1 closing = 4 total)
+    if (coordinates.length() <= 4)
+        return;
+
+    coordinates.removeAt(coordIndex);
+
+    // Update closing point if we removed the first point
+    if (coordIndex == 0 && coordinates.length() > 0) {
+        coordinates[coordinates.length() - 1] = coordinates[0];
+    }
+
+    emit dataChanged(idx, idx, { CoordinatesRole });
+}
+
 void PoiModel::append(const QVariantMap &data)
 {
     setLoading(true);

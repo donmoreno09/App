@@ -103,3 +103,26 @@ function translateByDelta(startCoords, dx, dy, map, QtPositioning) {
 function hasPolygon(path) {
     return path && path.length >= 3
 }
+
+function calculateMidpoint(c1, c2, QtPositioning) {
+    // Input validation
+    if (!c1 || !c1.isValid || !c2 || !c2.isValid)
+        return QtPositioning.coordinate()
+
+    // Calculate longitude delta with dateline wrapping
+    let dLon = c2.longitude - c1.longitude
+
+    // Handle dateline wrapping
+    if (dLon > 180)
+        dLon -= 360
+    else if (dLon < -180)
+        dLon += 360
+
+    // Latitude: simple average
+    const midLat = (c1.latitude + c2.latitude) / 2
+
+    // Longitude: average with wrapping correction
+    const midLon = normLon(c1.longitude + dLon / 2)
+
+    return QtPositioning.coordinate(clampLat(midLat), midLon)
+}
