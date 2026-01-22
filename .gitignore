@@ -1,4 +1,5 @@
 # --- Compilazione CMake / qmake ---
+.claude/
 build/
 install/
 cmake-build-*/
