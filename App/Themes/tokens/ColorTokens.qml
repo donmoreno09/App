@@ -59,6 +59,16 @@ QtObject {
     readonly property color border: secondary450
     readonly property color glassBorder: whiteA20
 
+    // Alert Zones
+    readonly property color alertZoneLowHover: "#FFCF26"
+    readonly property color alertZoneLow: hexWithAlpha(alertZoneLowHover, 0.2)
+    readonly property color alertZoneMediumHover: "#FA8500"
+    readonly property color alertZoneMedium: hexWithAlpha(alertZoneMediumHover, 0.2)
+    readonly property color alertZoneHighHover: "#F64D4D"
+    readonly property color alertZoneHigh: hexWithAlpha(alertZoneHighHover, 0.2)
+    readonly property color alertZoneDisabledHover: "#FFFFFF"
+    readonly property color alertZoneDisabled: hexWithAlpha(alertZoneDisabledHover, 0.2)
+
     // -------------------------- // PRIMITIVES // -------------------------- //
 
     // Black

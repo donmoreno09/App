@@ -68,21 +68,20 @@ void SignalRClientService::registerParser(int eventType, IBaseSignalRMessagePars
 
 void SignalRClientService::handleNotification(const QVariantList& args)
 {
-    if (args.size() < 4) {
-        qWarning() << "[SignalR] handleNotification: expected 4 args, got " << args.size();
+    if (args.isEmpty()) {
+        qWarning() << "[SignalR] handleNotification: no arguments received";
         return;
     }
 
-    QString id = args[0].toString();
-    QString payloadStr = args[1].toString();
-    QString eventTypeName = args[2].toString();
-    QString timestamp = args[3].toString();
+    // New format: args[0] contains the full envelope object
+    QVariantMap envelope = args[0].toMap();
 
-    qDebug() << "[SignalR] Processing notification: ";
-    qDebug() << "[SignalR]   ID: " << id;
-    qDebug() << "[SignalR]   EventType: " << eventTypeName;
-    qDebug() << "[SignalR]   Payload: " << payloadStr;
-    qDebug() << "[SignalR]   Timestamp: " << timestamp;
+    QString id = envelope["id"].toString();
+    QString eventTypeName = envelope["eventType"].toString();
+
+    qDebug() << "[SignalR] Processing notification:";
+    qDebug() << "[SignalR]   ID:" << id;
+    qDebug() << "[SignalR]   EventType:" << eventTypeName;
 
     int eventType = -1;
     if (eventTypeName == "TirAppIssueCreated") {
@@ -92,23 +91,16 @@ void SignalRClientService::handleNotification(const QVariantList& args)
     } else if (eventTypeName == "ControlRoomAlertZoneIntrusion") {
         eventType = 2;
     } else {
-        qWarning() << "[SignalR] Unknown EventTypeName: " << eventTypeName;
+        qWarning() << "[SignalR] Unknown EventTypeName:" << eventTypeName;
         return;
     }
 
-    qDebug() << "[SignalR] Mapped EventType: " << eventType;
+    qDebug() << "[SignalR] Mapped EventType:" << eventType;
 
     if (!m_eventTypeParsers.contains(eventType)) {
-        qWarning() << "[SignalR] No parser registered for EventType: " << eventType;
+        qWarning() << "[SignalR] No parser registered for EventType:" << eventType;
         return;
     }
-
-    QVariantMap envelope;
-    envelope["Id"] = id;
-    envelope["EventType"] = eventType;
-    envelope["Payload"] = payloadStr;
-    envelope["Timestamp"] = timestamp;
-    envelope["UserId"] = "control-room-user";
 
     auto* baseParser = m_eventTypeParsers.value(eventType);
 
@@ -122,7 +114,7 @@ void SignalRClientService::handleNotification(const QVariantList& args)
         // Truck notifications
         auto* parser = dynamic_cast<ISignalRMessageParser<TruckNotification>*>(baseParser);
         if (!parser) {
-            qWarning() << "[SignalR] Invalid parser type for EventType: " << eventType;
+            qWarning() << "[SignalR] Invalid parser type for EventType:" << eventType;
             return;
         }
 
@@ -133,14 +125,14 @@ void SignalRClientService::handleNotification(const QVariantList& args)
             model->upsert(notifications);
             qDebug() << "[SignalR] Truck notification added to model";
         } else {
-            qWarning() << "[SignalR] TruckNotificationModel singleton not found ";
+            qWarning() << "[SignalR] TruckNotificationModel singleton not found";
         }
 
     } else if (eventType == 2) {
         // Alert zone notifications
         auto* parser = dynamic_cast<ISignalRMessageParser<AlertZoneNotification>*>(baseParser);
         if (!parser) {
-            qWarning() << "[SignalR] Invalid parser type for EventType: " << eventType;
+            qWarning() << "[SignalR] Invalid parser type for EventType:" << eventType;
             return;
         }
 
@@ -217,11 +209,13 @@ void SignalRClientService::onWebSocketDisconnected()
 
 void SignalRClientService::onTextMessageReceived(const QString& message)
 {
-    // qDebug() << "[SignalR] Message received:" << message;
+    qDebug() << "[SignalR] Raw message received:" << message.left(500);
 
     // SignalR messages end with \x1e
     // Can receive multiple messages concatenated
     QStringList messages = message.split(QChar(RECORD_SEPARATOR), Qt::SkipEmptyParts);
+
+    qDebug() << "[SignalR] Split into" << messages.size() << "messages";
 
     for (int i = 0; i < messages.size(); ++i) {
         parseMessage(messages[i]);
@@ -285,11 +279,13 @@ void SignalRClientService::sendMessage(const QJsonObject& message)
 
 void SignalRClientService::parseMessage(const QString& message)
 {
+    qDebug() << "[SignalR] parseMessage called with:" << message.left(300);
+
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8(), &parseError);
 
     if (parseError.error != QJsonParseError::NoError) {
-        qWarning() << "[SignalR] JSON parse error: " << parseError.errorString();
+        qWarning() << "[SignalR] JSON parse error:" << parseError.errorString() << "at offset" << parseError.offset;
         return;
     }
 
@@ -299,6 +295,7 @@ void SignalRClientService::parseMessage(const QString& message)
     }
 
     QJsonObject obj = doc.object();
+    qDebug() << "[SignalR] Parsed JSON keys:" << obj.keys();
 
     // Check if this is handshake response (empty object = success)
     if (obj.isEmpty()) {
@@ -314,10 +311,38 @@ void SignalRClientService::parseMessage(const QString& message)
         return;
     }
 
+    // Check for new format with ClientMethod/Data (from RabbitMQ)
+    if (obj.contains("ClientMethod")) {
+        QString target = obj["ClientMethod"].toString();
+        QJsonArray dataArray = obj["Data"].toArray();
+
+        qDebug() << "[SignalR] ClientMethod format detected";
+        qDebug() << "[SignalR]   Target:" << target;
+        qDebug() << "[SignalR]   Data array size:" << dataArray.size();
+
+        QVariantList args;
+        args.reserve(dataArray.size());
+
+        for (int i = 0; i < dataArray.size(); ++i) {
+            args.append(dataArray[i].toVariant());
+            qDebug() << "[SignalR]   Data[" << i << "]:" << QJsonDocument(dataArray[i].toObject()).toJson(QJsonDocument::Compact).left(200);
+        }
+
+        // Route to registered handler
+        if (m_methodHandlers.contains(target)) {
+            qDebug() << "[SignalR] Calling handler for:" << target;
+            m_methodHandlers[target](args);
+        } else {
+            qWarning() << "[SignalR] No handler registered for method:" << target;
+            qDebug() << "[SignalR] Registered handlers:" << m_methodHandlers.keys();
+        }
+        return;
+    }
+
     int type = obj["type"].toInt();
 
     switch (type) {
-    case 1: {  // Invocation (server calling client method)
+    case 1: {  // Invocation (server calling client method) - standard SignalR protocol
         QString target = obj["target"].toString();
         QJsonArray argsArray = obj["arguments"].toArray();
 
@@ -348,33 +373,69 @@ void SignalRClientService::parseMessage(const QString& message)
             QJsonArray resultArray = obj["result"].toArray();
             qDebug() << "[SignalR] Received" << resultArray.size() << "unread notifications";
 
-            // Process each notification
+            auto* engine = qmlEngine(this);
+            if (!engine) {
+                qWarning() << "[SignalR] QML engine not available";
+                break;
+            }
+
+            // Process each notification directly with its full envelope
             for (const QJsonValue& val : resultArray) {
                 QJsonObject notifObj = val.toObject();
+                QVariantMap envelope = notifObj.toVariantMap();
 
-                // Convert backend format to handleNotification format
-                QVariantList args;
-                args << notifObj["id"].toString();                    // args[0]: Id
-                args << notifObj["payload"].toString();               // args[1]: Payload
-                args << notifObj["eventType"].toString();             // args[2]: EventTypeName
-                args << notifObj["createdAt"].toString();             // args[3]: Timestamp (using createdAt)
+                QString eventTypeName = notifObj["eventType"].toString();
+                int eventType = -1;
 
-                handleNotification(args);
+                if (eventTypeName == "TirAppIssueCreated") {
+                    eventType = 0;
+                } else if (eventTypeName == "TirAppIssueResolved") {
+                    eventType = 1;
+                } else if (eventTypeName == "ControlRoomAlertZoneIntrusion") {
+                    eventType = 2;
+                } else {
+                    qWarning() << "[SignalR] Unknown EventTypeName in unread:" << eventTypeName;
+                    continue;
+                }
+
+                if (!m_eventTypeParsers.contains(eventType)) {
+                    qWarning() << "[SignalR] No parser registered for EventType:" << eventType;
+                    continue;
+                }
+
+                auto* baseParser = m_eventTypeParsers.value(eventType);
+
+                if (eventType == 0 || eventType == 1) {
+                    auto* parser = dynamic_cast<ISignalRMessageParser<TruckNotification>*>(baseParser);
+                    if (parser) {
+                        QVector<TruckNotification> notifications = parser->parse(envelope);
+                        auto* model = engine->singletonInstance<TruckNotificationModel*>("App", "TruckNotificationModel");
+                        if (model) {
+                            model->upsert(notifications);
+                        }
+                    }
+                } else if (eventType == 2) {
+                    auto* parser = dynamic_cast<ISignalRMessageParser<AlertZoneNotification>*>(baseParser);
+                    if (parser) {
+                        QVector<AlertZoneNotification> notifications = parser->parse(envelope);
+                        auto* model = engine->singletonInstance<AlertZoneNotificationModel*>("App", "AlertZoneNotificationModel");
+                        if (model) {
+                            model->upsert(notifications);
+                        }
+                    }
+                }
             }
 
             qDebug() << "[SignalR] Finished loading unread notifications into models";
 
-            auto* engine = qmlEngine(this);
-            if (engine) {
-                auto* truckModel = engine->singletonInstance<TruckNotificationModel*>("App", "TruckNotificationModel");
-                if (truckModel) {
-                    truckModel->setInitialLoadComplete(true);
-                }
+            auto* truckModel = engine->singletonInstance<TruckNotificationModel*>("App", "TruckNotificationModel");
+            if (truckModel) {
+                truckModel->setInitialLoadComplete(true);
+            }
 
-                auto* alertModel = engine->singletonInstance<AlertZoneNotificationModel*>("App", "AlertZoneNotificationModel");
-                if (alertModel) {
-                    alertModel->setInitialLoadComplete(true);
-                }
+            auto* alertModel = engine->singletonInstance<AlertZoneNotificationModel*>("App", "AlertZoneNotificationModel");
+            if (alertModel) {
+                alertModel->setInitialLoadComplete(true);
             }
         }
         break;
