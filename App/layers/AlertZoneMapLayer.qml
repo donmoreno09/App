@@ -10,6 +10,7 @@ import App.Features.MapModes 1.0
 BaseMapLayer {
     id: root
     _mapLayer: alertZoneMapLayer
+    z: Theme.elevation.layerShapes
 
     property alias alertZoneMapLayer: alertZoneMapLayer
 
