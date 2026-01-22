@@ -10,6 +10,7 @@ import App.Features.MapModes 1.0
 BaseMapLayer {
     id: root
     _mapLayer: poiMapLayer
+    z: Theme.elevation.layerShapes
 
     property alias poiMapLayer: poiMapLayer
 

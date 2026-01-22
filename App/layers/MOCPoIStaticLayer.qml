@@ -9,6 +9,7 @@ import App.Features.Map 1.0
 
 BaseMapLayer {
     id: root
+    z: Theme.elevation.layerTracks
 
     MOCPoiPoint { }
 }
