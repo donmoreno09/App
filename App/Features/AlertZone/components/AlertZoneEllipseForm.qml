@@ -9,126 +9,62 @@ import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
 import App.Features.Language 1.0
 
-ColumnLayout {
-    spacing: Theme.spacing.s4
+UI.EllipseFormBase {
+    id: form
 
-    function validate() {
+    modeTarget: MapModeController.activeMode
+    isEditing: MapModeController.isEditing
+
+    centerLatLabel: `${TranslationManager.revision}` && qsTr("Center Latitude(*)")
+    centerLonLabel: `${TranslationManager.revision}` && qsTr("Center Longitude(*)")
+    majorAxisLabel: `${TranslationManager.revision}` && qsTr("Major Axis(*)")
+    minorAxisLabel: `${TranslationManager.revision}` && qsTr("Minor Axis(*)")
+    majorAxisPlaceholder: `${TranslationManager.revision}` && qsTr("Type length")
+    minorAxisPlaceholder: `${TranslationManager.revision}` && qsTr("Type length")
+
+    validateFn: function() {
         if (MapModeController.isEditing) return true
-
-        return MapModeRegistry.createEllipseMode.coord.isValid
-                && MapModeRegistry.createEllipseMode.radiusA > 0
-                && MapModeRegistry.createEllipseMode.radiusB > 0
+        return MapModeRegistry.createEllipseMode.coord.isValid &&
+                MapModeRegistry.createEllipseMode.radiusA > 0 &&
+                MapModeRegistry.createEllipseMode.radiusB > 0
     }
 
-    Connections {
-        target: MapModeController.activeMode
-        ignoreUnknownSignals: true
-
-        function onCoordChanged() {
-            centerLatInput.updateText()
-            centerLonInput.updateText()
-        }
-
-        function onMajorAxisChanged() {
-            majorAxisInput.updateText()
-        }
-
-        function onMinorAxisChanged() {
-            minorAxisInput.updateText()
-        }
+    readCenter: function() {
+        return MapModeController.isEditing ? MapModeController.alertZone.coordinate
+                                           : MapModeRegistry.createEllipseMode.coord
+    }
+    readRadiusA: function() {
+        return MapModeController.isEditing ? MapModeController.alertZone.radiusA
+                                           : MapModeRegistry.createEllipseMode.radiusA
+    }
+    readRadiusB: function() {
+        return MapModeController.isEditing ? MapModeController.alertZone.radiusB
+                                           : MapModeRegistry.createEllipseMode.radiusB
     }
 
-    RowLayout {
-        spacing: Theme.spacing.s4
-
-        UI.InputCoordinate {
-            id: centerLatInput
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            labelText: `${TranslationManager.revision}` && qsTr("Center Latitude(*)")
-
-            onValueChanged: {
-                if (MapModeController.isEditing) MapModeController.alertZone.coordinate = QtPositioning.coordinate(value, MapModeController.alertZone.coordinate.longitude)
-                else MapModeRegistry.createEllipseMode.coord.latitude = value
-            }
-
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.alertZone.coordinate.latitude : MapModeRegistry.createEllipseMode.coord.latitude) }
-            Component.onCompleted: updateText()
-        }
-
-        UI.InputCoordinate {
-            id: centerLonInput
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            labelText: `${TranslationManager.revision}` && qsTr("Center Longitude(*)")
-            type: UI.InputCoordinate.Longitude
-
-            onValueChanged: {
-                if (MapModeController.isEditing) MapModeController.alertZone.coordinate = QtPositioning.coordinate(MapModeController.alertZone.coordinate.latitude, value)
-                else MapModeRegistry.createEllipseMode.coord.longitude = value
-            }
-
-            function updateText() { setText((MapModeController.isEditing) ? MapModeController.alertZone.coordinate.longitude : MapModeRegistry.createEllipseMode.coord.longitude) }
-            Component.onCompleted: updateText()
-        }
+    writeCenterLat: function(value) {
+        if (MapModeController.isEditing)
+            MapModeController.alertZone.coordinate = QtPositioning.coordinate(value, MapModeController.alertZone.coordinate.longitude)
+        else
+            MapModeRegistry.createEllipseMode.setCenterLatitude(value)
+    }
+    writeCenterLon: function(value) {
+        if (MapModeController.isEditing)
+            MapModeController.alertZone.coordinate = QtPositioning.coordinate(MapModeController.alertZone.coordinate.latitude, value)
+        else
+            MapModeRegistry.createEllipseMode.setCenterLongitude(value)
     }
 
-    RowLayout {
-        spacing: Theme.spacing.s4
-
-        UI.Input {
-            id: majorAxisInput
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            labelText: `${TranslationManager.revision}` && qsTr("Major Axis(*)")
-            placeholderText: `${TranslationManager.revision}` && qsTr("Type length")
-            validator: DoubleValidator {
-                bottom: 0
-                top: 9999
-                notation: DoubleValidator.StandardNotation
-                locale: "C"
-            }
-
-            onTextEdited: {
-                const value = Number(text) || 0
-                if (MapModeController.isEditing) MapModeController.alertZone.radiusA = value
-                else MapModeRegistry.createEllipseMode.radiusA = value
-            }
-
-            function updateText() {
-                const value = (MapModeController.isEditing) ? MapModeController.alertZone.radiusA : MapModeRegistry.createEllipseMode.radiusA
-                text = value.toFixed(6)
-            }
-
-            Component.onCompleted: updateText()
-        }
-
-        UI.Input {
-            id: minorAxisInput
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            labelText: `${TranslationManager.revision}` && qsTr("Minor Axis(*)")
-            placeholderText: `${TranslationManager.revision}` && qsTr("Type length")
-            validator: DoubleValidator {
-                bottom: 0
-                top: 9999
-                notation: DoubleValidator.StandardNotation
-                locale: "C"
-            }
-
-            onTextEdited: {
-                const value = Number(text) || 0
-                console.log("text:", text, "value:", value)
-                if (MapModeController.isEditing) MapModeController.alertZone.radiusB = value
-                else MapModeRegistry.createEllipseMode.radiusB = value
-            }
-
-            function updateText() {
-                const value = (MapModeController.isEditing) ? MapModeController.alertZone.radiusB : MapModeRegistry.createEllipseMode.radiusB
-                text = value.toFixed(6)
-            }
-
-            Component.onCompleted: updateText()
-        }
+    writeRadiusA: function(value) {
+        if (MapModeController.isEditing)
+            MapModeController.alertZone.radiusA = Math.max(0, value)
+        else
+            MapModeRegistry.createEllipseMode.setRadiusA(value)
+    }
+    writeRadiusB: function(value) {
+        if (MapModeController.isEditing)
+            MapModeController.alertZone.radiusB = Math.max(0, value)
+        else
+            MapModeRegistry.createEllipseMode.setRadiusB(value)
     }
 }

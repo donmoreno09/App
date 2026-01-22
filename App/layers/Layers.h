@@ -16,6 +16,7 @@ public:
     Q_INVOKABLE QString poiMapLayer() const { return QStringLiteral("PoiMapLayer"); }
     Q_INVOKABLE QString alertZoneMapLayer() const { return QStringLiteral("AlertZoneMapLayer"); }
     Q_INVOKABLE QString annotationMapLayer() const { return QStringLiteral("AnnotationMapLayer"); }
+    Q_INVOKABLE QString vesselFinderMapLayer() const { return QStringLiteral("VesselFinderMapLayer"); }
 };
 
 #endif // LAYERS_H

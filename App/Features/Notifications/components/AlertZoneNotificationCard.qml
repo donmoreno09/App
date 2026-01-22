@@ -12,14 +12,12 @@ import "../NotificationUtils.js" as Utils
 UI.Accordion {
     id: root
 
-    // Data properties
     property string cardNotificationId: ""
     property string cardTimestamp: ""
     property string cardTrackName: ""
     property string cardAlertZoneName: ""
     property var cardLocation: null
 
-    // Signals
     signal deleteRequested(string id)
     signal viewOnMapRequested(var cardLocation)
 
@@ -48,6 +46,7 @@ UI.Accordion {
                 font.family: Theme.typography.bodySans25StrongFamily
                 font.pointSize: Theme.typography.bodySans25StrongSize
                 font.weight: Theme.typography.weightBold
+                elide: Text.ElideRight
                 Layout.fillWidth: true
             }
 

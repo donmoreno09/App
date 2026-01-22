@@ -20,7 +20,7 @@ ColumnLayout {
 
     Pane {
         Layout.fillWidth: true
-        padding: Theme.spacing.s3
+        padding: Theme.spacing.s8
         background: Rectangle { color: Theme.colors.transparent }
 
         RowLayout {

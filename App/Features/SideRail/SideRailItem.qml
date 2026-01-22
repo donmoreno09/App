@@ -87,7 +87,6 @@ UI.Button {
                 color: Theme.colors.text
                 font.family: Theme.typography.bodySans15Family
                 font.pointSize: Theme.typography.fontSize100
-                font.capitalization: Font.AllUppercase
             }
 
             // tiny spacer so text doesn't kiss the bottom edge

@@ -3,9 +3,9 @@ pragma Singleton
 import QtQuick 6.8
 
 import App 1.0
-import App.Features.MapModes 1.0
 import App.Features.SidePanel 1.0
 
+import "modes"
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 QtObject {
@@ -34,7 +34,6 @@ QtObject {
         poi = null
         if (alertZone) AlertZoneModel.discardChanges()
         alertZone = null
-        console.log("Clearing map mode controller state")
     }
 
     function setActiveMode(mode: BaseMode) {

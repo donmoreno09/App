@@ -1,87 +1,31 @@
 import QtQuick 6.8
-import QtQuick.Effects 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
 
 import App 1.0
 import App.Themes 1.0
 import App.Features.MapModes 1.0
+import App.Components 1.0 as UI
 
-MapQuickItem {
+UI.EditablePoint {
     id: root
-    z: Theme.elevation.z100 + (isEditing) ? 100 : 0
+    z: Theme.elevation.z100 + (isEditing ? 100 : 0)
 
-    readonly property bool isEditing: MapModeController.poi && id === MapModeController.poi.id
-
+    isEditing: MapModeController.poi && id === MapModeController.poi.id
     coordinate: model.coordinate
-    anchorPoint.x: svgIcon.width / 2
-    anchorPoint.y: svgIcon.height / 2
+    iconSource: "qrc:/App/assets/icons/poi.svg"
 
-    sourceItem: Item {
-        width: svgIcon.width
-        height: svgIcon.height
+    tapEnabled: !root.isEditing && !MapModeController.isCreating
+    onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
 
-        Image {
-            id: svgIcon
-            width: 24
-            height: 24
-            source: "qrc:/App/assets/icons/poi.svg"
-            smooth: true
-            fillMode: Image.PreserveAspectFit
-            asynchronous: true
-            cache: true
+    labelText: label
+    labelFillColor: Theme.colors.hexWithAlpha("#539E07", 0.6)
+    labelBorderColor: Theme.colors.white
+    labelTextColor: Theme.colors.white
+    labelBorderWidth: Theme.borders.b1
 
-            layer.enabled: isEditing
-            layer.effect: MultiEffect {
-                shadowEnabled: true
-                shadowColor: "white"
-                shadowBlur: 0.0            // 0 = sharp edge
-                shadowHorizontalOffset: 0
-                shadowVerticalOffset: 0
-                shadowScale: 1.12          // thickness of the border
-            }
-        }
-
-        Rectangle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: svgIcon.bottom
-            anchors.topMargin: Theme.spacing.s1
-            width: text.width + Theme.spacing.s3
-            height: text.height + Theme.spacing.s1
-            radius: Theme.radius.sm
-            color: Theme.colors.hexWithAlpha("#539E07", 0.6)
-            border.color: Theme.colors.white
-            border.width: isEditing ? Theme.borders.b1 : Theme.borders.b0
-
-            Text {
-                anchors.centerIn: parent
-                id: text
-                text: label
-                font.pixelSize: Theme.typography.fontSize150
-                color: Theme.colors.white
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                wrapMode: Text.Wrap
-            }
-        }
-    }
-
-    // Block input going through
-    TapHandler { gesturePolicy: TapHandler.ReleaseWithinBounds }
-
-    TapHandler {
-        enabled: !isEditing && !MapModeController.isCreating
-        acceptedButtons: Qt.LeftButton
-        onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
-    }
-
-    DragHandler {
-        id: handler
-        enabled: isEditing
-
-        onTranslationChanged: {
-            model.coordinate = coordinate
-            MapModeRegistry.editPointMode.coordChanged()
-        }
+    onPointChanged: function(c) {
+        model.coordinate = c
+        MapModeRegistry.editPointMode.coordChanged()
     }
 }

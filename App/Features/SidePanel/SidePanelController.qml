@@ -14,14 +14,6 @@ PanelController {
     router: PanelRouter {
         routes: Routes
 
-        onStackWillChange: function (_cd, _nd, _fp, toPath) {
-            // To prevent the panels for PoI and AlertZone to be in an invalid state,
-            // clear their state first before opening their panel.
-            if (router.currentPath === Routes.Poi || router.currentPath === Routes.AlertZone) {
-                MapModeController.clearState()
-            }
-        }
-
         onStackChanged: {
             // This is where we return back to interaction mode
             if (router.currentPath === Routes.Poi || router.currentPath === Routes.AlertZone) {
