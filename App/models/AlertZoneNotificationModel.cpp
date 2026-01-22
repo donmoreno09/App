@@ -22,15 +22,59 @@ QVariant AlertZoneNotificationModel::data(const QModelIndex &index, int role) co
     switch (role) {
     case IdRole: return notif.id;
     case UserIdRole: return notif.userId;
-    case TitleRole: return notif.title;
-    case MessageRole: return notif.message;
-    case TimestampRole: return notif.timestamp;
-    case TrackIdRole: return notif.trackId;
-    case TrackNameRole: return notif.trackName;
-    case AlertZoneIdRole: return notif.alertZoneId;
-    case AlertZoneNameRole: return notif.alertZoneName;
-    case LocationRole: return QVariant::fromValue(notif.location);
+    case AlertZoneRole: {
+        QVariantMap map;
+        map["id"] = notif.alertZone.id;
+        map["label"] = notif.alertZone.label;
+        map["severity"] = notif.alertZone.severity;
+        map["active"] = notif.alertZone.active;
+
+        QVariantMap layersMap;
+        for (auto it = notif.alertZone.layers.begin(); it != notif.alertZone.layers.end(); ++it) {
+            layersMap[it.key()] = it.value();
+        }
+        map["layers"] = layersMap;
+
+        QVariantMap geometryMap;
+        geometryMap["shapeTypeId"] = notif.alertZone.geometry.shapeTypeId;
+        geometryMap["surface"] = notif.alertZone.geometry.surface;
+        geometryMap["height"] = notif.alertZone.geometry.height;
+        geometryMap["radiusA"] = notif.alertZone.geometry.radiusA;
+        geometryMap["radiusB"] = notif.alertZone.geometry.radiusB;
+        geometryMap["coordinate"] = QVariantMap{
+            {"x", notif.alertZone.geometry.coordinate.x()},
+            {"y", notif.alertZone.geometry.coordinate.y()}
+        };
+        QVariantList coordsList;
+        for (const auto& coord : notif.alertZone.geometry.coordinates) {
+            coordsList.append(QVariantMap{{"x", coord.x()}, {"y", coord.y()}});
+        }
+        geometryMap["coordinates"] = coordsList;
+        map["geometry"] = geometryMap;
+
+        return map;
+    }
+    case TrackDataRole: {
+        QVariantMap map;
+        map["id"] = notif.trackData.id;
+        map["operationCode"] = notif.trackData.operationCode;
+        map["position"] = QVariant::fromValue(notif.trackData.position);
+        map["velocity"] = notif.trackData.velocity;
+        map["cog"] = notif.trackData.cog;
+        map["time"] = notif.trackData.time;
+        map["state"] = notif.trackData.state;
+        map["isDeleted"] = notif.trackData.isDeleted;
+        map["createdAt"] = notif.trackData.createdAt;
+        map["updatedAt"] = notif.trackData.updatedAt;
+        return map;
+    }
+    case TrackTypeRole: return notif.trackType;
+    case TopicRole: return notif.topic;
+    case StatusRole: return notif.status;
+    case DetectedAtRole: return notif.detectedAt;
+    case SentAtRole: return notif.sentAt;
     case CreatedAtRole: return notif.createdAt;
+    case UpdatedAtRole: return notif.updatedAt;
     case IsReadRole: return notif.isRead;
     case IsDeletedRole: return notif.isDeleted;
     default: return {};
@@ -42,15 +86,15 @@ QHash<int, QByteArray> AlertZoneNotificationModel::roleNames() const
     return {
         { IdRole, "id" },
         { UserIdRole, "userId" },
-        { TitleRole, "title" },
-        { MessageRole, "message" },
-        { TimestampRole, "timestamp" },
-        { TrackIdRole, "trackId" },
-        { TrackNameRole, "trackName" },
-        { AlertZoneIdRole, "alertZoneId" },
-        { AlertZoneNameRole, "alertZoneName" },
-        { LocationRole, "location" },
+        { AlertZoneRole, "alertZone" },
+        { TrackDataRole, "trackData" },
+        { TrackTypeRole, "trackType" },
+        { TopicRole, "topic" },
+        { StatusRole, "status" },
+        { DetectedAtRole, "detectedAt" },
+        { SentAtRole, "sentAt" },
         { CreatedAtRole, "createdAt" },
+        { UpdatedAtRole, "updatedAt" },
         { IsReadRole, "isRead" },
         { IsDeletedRole, "isDeleted" },
     };
@@ -137,15 +181,17 @@ QVector<int> AlertZoneNotificationModel::diffRoles(const AlertZoneNotification &
 
     if (a.id != b.id) roles << IdRole;
     if (a.userId != b.userId) roles << UserIdRole;
-    if (a.title != b.title) roles << TitleRole;
-    if (a.message != b.message) roles << MessageRole;
-    if (a.timestamp != b.timestamp) roles << TimestampRole;
-    if (a.trackId != b.trackId) roles << TrackIdRole;
-    if (a.trackName != b.trackName) roles << TrackNameRole;
-    if (a.alertZoneId != b.alertZoneId) roles << AlertZoneIdRole;
-    if (a.alertZoneName != b.alertZoneName) roles << AlertZoneNameRole;
-    if (a.location != b.location) roles << LocationRole;
+    if (a.alertZone.id != b.alertZone.id || a.alertZone.label != b.alertZone.label ||
+        a.alertZone.severity != b.alertZone.severity) roles << AlertZoneRole;
+    if (a.trackData.id != b.trackData.id || a.trackData.operationCode != b.trackData.operationCode ||
+        a.trackData.position != b.trackData.position) roles << TrackDataRole;
+    if (a.trackType != b.trackType) roles << TrackTypeRole;
+    if (a.topic != b.topic) roles << TopicRole;
+    if (a.status != b.status) roles << StatusRole;
+    if (a.detectedAt != b.detectedAt) roles << DetectedAtRole;
+    if (a.sentAt != b.sentAt) roles << SentAtRole;
     if (a.createdAt != b.createdAt) roles << CreatedAtRole;
+    if (a.updatedAt != b.updatedAt) roles << UpdatedAtRole;
     if (a.isRead != b.isRead) roles << IsReadRole;
     if (a.isDeleted != b.isDeleted) roles << IsDeletedRole;
 

@@ -44,21 +44,27 @@ struct Geometry {
 
     static Geometry fromJson(const QJsonObject& obj) {
         Geometry g;
-        g.shapeTypeId = obj["shapeTypeId"].toInt();
-        g.surface = obj["surface"].toDouble();
-        g.height = obj["height"].toDouble();
 
-        QJsonArray coordsArray = obj["coordinates"].toArray();
+        // Support both PascalCase and lowercase keys
+        g.shapeTypeId = obj.contains("ShapeTypeId") ? obj["ShapeTypeId"].toInt() : obj["shapeTypeId"].toInt();
+        g.surface = obj.contains("Surface") ? obj["Surface"].toDouble() : obj["surface"].toDouble();
+        g.height = obj.contains("Height") ? obj["Height"].toDouble() : obj["height"].toDouble();
+
+        QJsonArray coordsArray = obj.contains("Coordinates") ? obj["Coordinates"].toArray() : obj["coordinates"].toArray();
         for (const QJsonValue& val : coordsArray) {
             QJsonObject p = val.toObject();
-            g.coordinates.append(QVector2D(p["x"].toDouble(), p["y"].toDouble()));
+            double x = p.contains("X") ? p["X"].toDouble() : p["x"].toDouble();
+            double y = p.contains("Y") ? p["Y"].toDouble() : p["y"].toDouble();
+            g.coordinates.append(QVector2D(x, y));
         }
 
-        QJsonObject coordObj = obj["coordinate"].toObject();
-        g.coordinate = QVector2D(coordObj["x"].toDouble(), coordObj["y"].toDouble());
+        QJsonObject coordObj = obj.contains("Coordinate") ? obj["Coordinate"].toObject() : obj["coordinate"].toObject();
+        double cx = coordObj.contains("X") ? coordObj["X"].toDouble() : coordObj["x"].toDouble();
+        double cy = coordObj.contains("Y") ? coordObj["Y"].toDouble() : coordObj["y"].toDouble();
+        g.coordinate = QVector2D(cx, cy);
 
-        g.radiusA = obj["radiusA"].toDouble();
-        g.radiusB = obj["radiusB"].toDouble();
+        g.radiusA = obj.contains("RadiusA") ? obj["RadiusA"].toDouble() : obj["radiusA"].toDouble();
+        g.radiusB = obj.contains("RadiusB") ? obj["RadiusB"].toDouble() : obj["radiusB"].toDouble();
 
         return g;
     }

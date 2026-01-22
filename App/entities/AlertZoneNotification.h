@@ -2,8 +2,9 @@
 #define ALERTZONENOTIFICATION_H
 
 #include <QString>
-#include <QGeoCoordinate>
 #include <QDateTime>
+#include "AlertZone.h"
+#include "NotificationTrackData.h"
 
 class AlertZoneNotification
 {
@@ -11,19 +12,24 @@ public:
     QString id;
     QString userId;
 
-    QString title;                 // Title of notification
-    QString message;               // Message content
-    QString timestamp;             // ISO8601 timestamp
-    QString trackId;               // Track that triggered the alert (if available)
-    QString trackName;             // Track name (if available)
-    QString alertZoneId;           // Alert zone ID (if available)
-    QString alertZoneName;         // Alert zone name (if available)
-    QGeoCoordinate location;       // Location where intrusion occurred (if available)
+    // Nested objects
+    AlertZone alertZone;
+    NotificationTrackData trackData;
 
-    // Metadata
-    QString createdAt;             // When notification was created
-    bool isRead;                   // Whether user has read the notification
-    bool isDeleted;                // Local deletion flag
+    // Payload-level fields
+    QString trackType;
+    QString topic;
+    QString detectedAt;
+
+    // Envelope-level fields
+    int status = 0;
+    QString sentAt;
+    QString createdAt;
+    QString updatedAt;
+
+    // Local metadata
+    bool isRead = false;
+    bool isDeleted = false;
 };
 
 #endif // ALERTZONENOTIFICATION_H

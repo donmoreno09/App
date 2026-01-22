@@ -40,16 +40,14 @@ PanelTemplate {
 
                     delegate: AlertZoneNotificationCard {
                         required property string id
-                        required property string timestamp
-                        required property string trackName
-                        required property string alertZoneName
-                        required property var location
+                        required property string detectedAt
+                        required property var alertZone
+                        required property var trackData
 
                         cardNotificationId: id
-                        cardTimestamp: timestamp
-                        cardTrackName: trackName || ""
-                        cardAlertZoneName: alertZoneName || ""
-                        cardLocation: location
+                        cardTimestamp: detectedAt
+                        alertZone: alertZone
+                        trackData: trackData
 
                         onDeleteRequested: (id) => {
                             console.log("[NotificationsPanel] Confirming read for AlertZone:", id)

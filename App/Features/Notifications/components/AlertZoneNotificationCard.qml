@@ -14,12 +14,11 @@ UI.Accordion {
 
     property string cardNotificationId: ""
     property string cardTimestamp: ""
-    property string cardTrackName: ""
-    property string cardAlertZoneName: ""
-    property var cardLocation: null
+    property var alertZone: null
+    property var trackData: null
 
     signal deleteRequested(string id)
-    signal viewOnMapRequested(var cardLocation)
+    signal viewOnMapRequested(var location)
 
     Layout.fillWidth: true
     variant: UI.AccordionStyles.Urgent
@@ -41,7 +40,7 @@ UI.Accordion {
             spacing: Theme.spacing.s1
 
             Text {
-                text: `${TranslationManager.revision}` && qsTr("Alert Zone: ") + qsTr("Name of the alert zone.")
+                text: `${TranslationManager.revision}` && qsTr("Alert Zone: %1").arg(root.alertZone?.label ?? "")
                 color: Theme.colors.text
                 font.family: Theme.typography.bodySans25StrongFamily
                 font.pointSize: Theme.typography.bodySans25StrongSize
@@ -107,16 +106,16 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.cardTrackName !== "" && root.cardTrackName !== null
-            text: `${TranslationManager.revision}` && qsTr("Track: %1").arg(root.cardTrackName)
+            visible: root.trackData?.operationCode !== undefined && root.trackData?.operationCode !== ""
+            text: `${TranslationManager.revision}` && qsTr("Track: %1").arg(root.trackData?.operationCode ?? "")
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
             font.pointSize: Theme.typography.bodySans15Size
         }
 
         Text {
-            visible: root.cardAlertZoneName !== "" && root.cardAlertZoneName !== null
-            text: `${TranslationManager.revision}` && qsTr("Alert Zone: %1").arg(root.cardAlertZoneName)
+            visible: root.alertZone?.label !== undefined && root.alertZone?.label !== ""
+            text: `${TranslationManager.revision}` && qsTr("Alert Zone: %1").arg(root.alertZone?.label ?? "")
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
             font.pointSize: Theme.typography.bodySans15Size
@@ -124,15 +123,15 @@ UI.Accordion {
 
         Text {
             visible: {
-                if (!root.cardLocation) return false
-                if (typeof root.cardLocation !== 'object') return false
-                return root.cardLocation.isValid === true
+                if (!root.trackData?.position) return false
+                if (typeof root.trackData.position !== 'object') return false
+                return root.trackData.position.isValid === true
             }
             text: {
-                if (!root.cardLocation || !root.cardLocation.isValid) return ""
+                if (!root.trackData?.position || !root.trackData.position.isValid) return ""
                 return `${TranslationManager.revision}` && qsTr("Location: Lat %1°, Lon %2°")
-                    .arg(root.cardLocation.latitude.toFixed(4))
-                    .arg(root.cardLocation.longitude.toFixed(4))
+                    .arg(root.trackData.position.latitude.toFixed(4))
+                    .arg(root.trackData.position.longitude.toFixed(4))
             }
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
@@ -144,9 +143,9 @@ UI.Accordion {
 
             UI.Button {
                 visible: {
-                    if (!root.cardLocation) return false
-                    if (typeof root.cardLocation !== 'object') return false
-                    return root.cardLocation.isValid === true
+                    if (!root.trackData?.position) return false
+                    if (typeof root.trackData.position !== 'object') return false
+                    return root.trackData.position.isValid === true
                 }
                 text: `${TranslationManager.revision}` && qsTr("View on Map")
                 variant: UI.ButtonStyles.Primary
@@ -156,8 +155,8 @@ UI.Accordion {
                 Layout.preferredHeight: Theme.spacing.s8
 
                 onClicked: {
-                    if (root.cardLocation && root.cardLocation.isValid) {
-                        root.viewOnMapRequested(root.cardLocation)
+                    if (root.trackData?.position && root.trackData.position.isValid) {
+                        root.viewOnMapRequested(root.trackData.position)
                     }
                 }
             }
