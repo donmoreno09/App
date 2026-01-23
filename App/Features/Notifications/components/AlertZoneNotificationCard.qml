@@ -20,6 +20,16 @@ UI.Accordion {
     signal deleteRequested(string id)
     signal viewOnMapRequested(var location)
 
+    readonly property color severityColor: {
+        const severity = root.cardAlertZone?.severity ?? 0
+        switch (severity) {
+        case 2: return Theme.colors.alertZoneHighHover
+        case 1: return Theme.colors.alertZoneMediumHover
+        case 0:
+        default: return Theme.colors.alertZoneLowHover
+        }
+    }
+
     Layout.fillWidth: true
     variant: UI.AccordionStyles.Urgent
     expanded: false
@@ -32,7 +42,7 @@ UI.Accordion {
             width: 16
             height: 16
             radius: 8
-            color: "#FFCC00"
+            color: root.severityColor
         }
 
         ColumnLayout {
@@ -66,12 +76,12 @@ UI.Accordion {
             Layout.preferredWidth: Theme.spacing.s20
             Layout.preferredHeight: Theme.spacing.s6
             radius: Theme.radius.sm
-            color: Theme.colors.warning500
+            color: root.severityColor
 
             Text {
                 anchors.centerIn: parent
                 text: `${TranslationManager.revision}` && qsTr("NEW")
-                color: Theme.colors.text
+                color: Theme.colors.white
                 font.family: Theme.typography.bodySans15Family
                 font.pointSize: Theme.typography.bodySans15Size
                 font.weight: Theme.typography.bodySans15StrongWeight

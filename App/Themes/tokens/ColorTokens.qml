@@ -66,7 +66,7 @@ QtObject {
     readonly property color alertZoneMedium: hexWithAlpha(alertZoneMediumHover, 0.2)
     readonly property color alertZoneHighHover: "#F64D4D"
     readonly property color alertZoneHigh: hexWithAlpha(alertZoneHighHover, 0.2)
-    readonly property color alertZoneDisabledHover: "#FFFFFF"
+    readonly property color alertZoneDisabledHover: "#888888"
     readonly property color alertZoneDisabled: hexWithAlpha(alertZoneDisabledHover, 0.2)
 
     // -------------------------- // PRIMITIVES // -------------------------- //
