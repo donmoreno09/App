@@ -14,9 +14,9 @@ UI.ComboBox {
     textRole: "name"
 
     model: ListModel {
-        ListElement { value: 0; name: qsTr("Low"); color: "#FFCC00" }
-        ListElement { value: 1; name: qsTr("Medium"); color: "#FF6600" }
-        ListElement { value: 2; name: qsTr("High"); color: "#FF0000" }
+        ListElement { value: 0; name: qsTr("Low"); color: "#FFE8A3" }
+        ListElement { value: 1; name: qsTr("Medium"); color: "#E5A000" }
+        ListElement { value: 2; name: qsTr("High"); color: "#EC221F" }
     }
 
     comboBox.delegate: ItemDelegate {

@@ -72,8 +72,8 @@ UI.Accordion {
             Layout.preferredHeight: Theme.spacing.s6
             radius: Theme.radius.sm
             color: {
-                if (root.cardOperationState === "BLOCKED") return Theme.colors.warning500
-                if (root.cardOperationState === "ACTIVE") return Theme.colors.success500
+                if (root.cardOperationState === "BLOCKED") return Theme.colors.blocked
+                if (root.cardOperationState === "ACTIVE") return Theme.colors.active
                 return Theme.colors.caution500
             }
 
