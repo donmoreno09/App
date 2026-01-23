@@ -27,16 +27,15 @@ QVariant TruckNotificationModel::data(const QModelIndex &index, int role) const
     case OperationIdRole: return notif.operationId;
     case OperationCodeRole: return notif.operationCode;
     case LocationRole: return QVariant::fromValue(notif.location);
-    case OperationIssueTypeIdRole: return notif.operationIssueTypeId;
+    case IssueTypeRole: return notif.issueType;
     case OperationStateRole: return notif.operationState;
-    case OperationIssueSolutionTypeIdRole: return notif.operationIssueSolutionTypeId;
+    case SolutionTypeRole: return notif.solutionType;
     case EstimatedArrivalRole: return notif.estimatedArrival;
     case NoteRole: return notif.note;
     case ReportedAtRole: return notif.reportedAt;
     case SolvedAtRole: return notif.solvedAt;
-    case IsDeletedRole: return notif.isDeleted;
     case CreatedAtRole: return notif.createdAt;
-    case UpdatedAtRole: return notif.updatedAt;
+    case TimestampRole: return notif.timestamp;
     default: return {};
     }
 }
@@ -50,16 +49,15 @@ QHash<int, QByteArray> TruckNotificationModel::roleNames() const
         { OperationIdRole, "operationId" },
         { OperationCodeRole, "operationCode" },
         { LocationRole, "location" },
-        { OperationIssueTypeIdRole, "operationIssueTypeId" },
+        { IssueTypeRole, "issueType" },
         { OperationStateRole, "operationState" },
-        { OperationIssueSolutionTypeIdRole, "operationIssueSolutionTypeId" },
+        { SolutionTypeRole, "solutionType" },
         { EstimatedArrivalRole, "estimatedArrival" },
         { NoteRole, "note" },
         { ReportedAtRole, "reportedAt" },
         { SolvedAtRole, "solvedAt" },
-        { IsDeletedRole, "isDeleted" },
         { CreatedAtRole, "createdAt" },
-        { UpdatedAtRole, "updatedAt" },
+        { TimestampRole, "timestamp" },
         { BadgeTypeRole, "badgeType" },
         { VariantTypeRole, "variantType" }
     };
@@ -150,16 +148,15 @@ QVector<int> TruckNotificationModel::diffRoles(const TruckNotification &a, const
     if (a.operationId != b.operationId) roles << OperationIdRole;
     if (a.operationCode != b.operationCode) roles << OperationCodeRole;
     if (a.location != b.location) roles << LocationRole;
-    if (a.operationIssueTypeId != b.operationIssueTypeId) roles << OperationIssueTypeIdRole;
+    if (a.issueType != b.issueType) roles << IssueTypeRole;
     if (a.operationState != b.operationState) roles << OperationStateRole;
-    if (a.operationIssueSolutionTypeId != b.operationIssueSolutionTypeId) roles << OperationIssueSolutionTypeIdRole;
+    if (a.solutionType != b.solutionType) roles << SolutionTypeRole;
     if (a.estimatedArrival != b.estimatedArrival) roles << EstimatedArrivalRole;
     if (a.note != b.note) roles << NoteRole;
     if (a.reportedAt != b.reportedAt) roles << ReportedAtRole;
     if (a.solvedAt != b.solvedAt) roles << SolvedAtRole;
-    if (a.isDeleted != b.isDeleted) roles << IsDeletedRole;
     if (a.createdAt != b.createdAt) roles << CreatedAtRole;
-    if (a.updatedAt != b.updatedAt) roles << UpdatedAtRole;
+    if (a.timestamp != b.timestamp) roles << TimestampRole;
 
     return roles;
 }
