@@ -8,7 +8,7 @@
 
 struct NotificationTrackData {
     QString id;
-    QString operationCode;
+    QString trackingId;
     QGeoCoordinate position;
     double velocity = 0;
     double cog = 0;
@@ -22,7 +22,12 @@ struct NotificationTrackData {
         NotificationTrackData data;
 
         data.id = obj.contains("Id") ? obj["Id"].toString() : obj["id"].toString();
-        data.operationCode = obj.contains("OperationCode") ? obj["OperationCode"].toString() : obj["operationCode"].toString();
+
+        if (obj.contains("Track_uid") && !obj["Track_uid"].toString().isEmpty()) {
+            data.trackingId = obj["Track_uid"].toString();
+        } else {
+            data.trackingId = obj.contains("OperationCode") ? obj["OperationCode"].toString() : obj["operationCode"].toString();
+        }
 
         // Parse position from Pos array [lat, lon]
         QJsonArray posArray = obj.contains("Pos") ? obj["Pos"].toArray() : obj["pos"].toArray();
