@@ -94,7 +94,7 @@ UI.Accordion {
         spacing: Theme.spacing.s3
 
         Text {
-            text: root.cardNotificationId
+            text: root.cardTrackData?.trackingId ?? ""
             color: Theme.colors.text
             font.family: Theme.typography.bodySans25Family
             font.pointSize: Theme.typography.bodySans25Size
@@ -116,8 +116,8 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.cardTrackData?.operationCode !== undefined && root.cardTrackData?.operationCode !== ""
-            text: `${TranslationManager.revision}` && qsTr("Track: %1").arg(root.cardTrackData?.operationCode ?? "")
+            visible: root.cardTrackData?.trackingId !== undefined && root.cardTrackData?.trackingId !== ""
+            text: `${TranslationManager.revision}` && qsTr("Track: %1").arg(root.cardTrackData?.trackingId ?? "")
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
             font.pointSize: Theme.typography.bodySans15Size

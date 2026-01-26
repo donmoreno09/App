@@ -57,7 +57,7 @@ QVariant AlertZoneNotificationModel::data(const QModelIndex &index, int role) co
     case TrackDataRole: {
         QVariantMap map;
         map["id"] = notif.trackData.id;
-        map["operationCode"] = notif.trackData.operationCode;
+        map["trackingId"] = notif.trackData.trackingId;
         map["position"] = QVariant::fromValue(notif.trackData.position);
         map["velocity"] = notif.trackData.velocity;
         map["cog"] = notif.trackData.cog;
@@ -183,7 +183,7 @@ QVector<int> AlertZoneNotificationModel::diffRoles(const AlertZoneNotification &
     if (a.userId != b.userId) roles << UserIdRole;
     if (a.alertZone.id != b.alertZone.id || a.alertZone.label != b.alertZone.label ||
         a.alertZone.severity != b.alertZone.severity) roles << AlertZoneRole;
-    if (a.trackData.id != b.trackData.id || a.trackData.operationCode != b.trackData.operationCode ||
+    if (a.trackData.id != b.trackData.id || a.trackData.trackingId != b.trackData.trackingId ||
         a.trackData.position != b.trackData.position) roles << TrackDataRole;
     if (a.trackType != b.trackType) roles << TrackTypeRole;
     if (a.topic != b.topic) roles << TopicRole;
