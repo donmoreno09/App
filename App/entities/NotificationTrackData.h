@@ -24,11 +24,11 @@ struct NotificationTrackData {
         data.id = obj.contains("Id") ? obj["Id"].toString() : obj["id"].toString();
         data.operationCode = obj.contains("OperationCode") ? obj["OperationCode"].toString() : obj["operationCode"].toString();
 
-        // Parse position from Pos array [lon, lat]
+        // Parse position from Pos array [lat, lon]
         QJsonArray posArray = obj.contains("Pos") ? obj["Pos"].toArray() : obj["pos"].toArray();
         if (posArray.size() >= 2) {
-            double lon = posArray[0].toDouble();
-            double lat = posArray[1].toDouble();
+            double lat = posArray[0].toDouble();
+            double lon = posArray[1].toDouble();
             data.position = QGeoCoordinate(lat, lon);
         }
 

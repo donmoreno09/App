@@ -84,20 +84,20 @@ QVariant AlertZoneNotificationModel::data(const QModelIndex &index, int role) co
 QHash<int, QByteArray> AlertZoneNotificationModel::roleNames() const
 {
     return {
-        { IdRole, "id" },
-        { UserIdRole, "userId" },
-        { AlertZoneRole, "alertZone" },
-        { TrackDataRole, "trackData" },
-        { TrackTypeRole, "trackType" },
-        { TopicRole, "topic" },
-        { StatusRole, "status" },
-        { DetectedAtRole, "detectedAt" },
-        { SentAtRole, "sentAt" },
-        { CreatedAtRole, "createdAt" },
-        { UpdatedAtRole, "updatedAt" },
-        { IsReadRole, "isRead" },
-        { IsDeletedRole, "isDeleted" },
-    };
+            { IdRole, "id" },
+            { UserIdRole, "userId" },
+            { AlertZoneRole, "alertZone" },
+            { TrackDataRole, "trackData" },
+            { TrackTypeRole, "trackType" },
+            { TopicRole, "topic" },
+            { StatusRole, "status" },
+            { DetectedAtRole, "detectedAt" },
+            { SentAtRole, "sentAt" },
+            { CreatedAtRole, "createdAt" },
+            { UpdatedAtRole, "updatedAt" },
+            { IsReadRole, "isRead" },
+            { IsDeletedRole, "isDeleted" },
+            };
 }
 
 Qt::ItemFlags AlertZoneNotificationModel::flags(const QModelIndex &index) const
@@ -242,9 +242,9 @@ void AlertZoneNotificationModel::clearAll()
     qDebug() << "[AlertZoneNotificationModel] Cleared all notifications";
 }
 
-QQmlPropertyMap *AlertZoneNotificationModel::getEditableNotification(int index)
+QVariantMap AlertZoneNotificationModel::getEditableNotification(int index)
 {
-    return m_helper->map(index);
+    return m_helper->data(index);
 }
 
 void AlertZoneNotificationModel::setInitialLoadComplete(bool complete)

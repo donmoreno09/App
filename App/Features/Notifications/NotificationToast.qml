@@ -16,6 +16,7 @@ Item {
     property Item mapReference: null
 
     readonly property int maxVisibleToasts: 3
+    readonly property int maxQueuedToasts: 3
     property var toastQueue: []
 
     // ListModel declared separately so we can manipulate it
@@ -65,7 +66,10 @@ Item {
 
             if (!TruckNotificationModel.initialLoadComplete) { return }
 
-            for (let i = first; i <= last; i++) {
+            const batchSize = last - first + 1
+            const startIndex = batchSize > maxVisibleToasts ? last - maxVisibleToasts + 1 : first
+
+            for (let i = startIndex; i <= last; i++) {
                 const notification = TruckNotificationModel.getEditableNotification(i)
                 if (!notification) continue
 
@@ -86,7 +90,10 @@ Item {
 
             if (!AlertZoneNotificationModel.initialLoadComplete) { return }
 
-            for (let i = first; i <= last; i++) {
+            const batchSize = last - first + 1
+            const startIndex = batchSize > maxVisibleToasts ? last - maxVisibleToasts + 1 : first
+
+            for (let i = startIndex; i <= last; i++) {
                 const notification = AlertZoneNotificationModel.getEditableNotification(i)
                 if (!notification) continue
 
@@ -102,10 +109,11 @@ Item {
 
     function _addToast(toastData) {
         if (toastsModel.count < maxVisibleToasts) {
-            // Add directly to visible toasts (insert at top = index 0)
             toastsModel.insert(0, toastData)
         } else {
-            // Queue it
+            if (toastQueue.length >= maxQueuedToasts) {
+                toastQueue.shift()
+            }
             toastQueue.push(toastData)
         }
     }

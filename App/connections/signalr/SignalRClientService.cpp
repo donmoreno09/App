@@ -68,21 +68,72 @@ void SignalRClientService::registerParser(int eventType, IBaseSignalRMessagePars
 
 void SignalRClientService::handleNotification(const QVariantList& args)
 {
+    if (args.isEmpty()) {
+        qWarning() << "[SignalR] handleNotification: no arguments received";
+        return;
+    }
+
+    // Collect notifications to process (handles both single and batch)
+    QVariantList notificationsToProcess;
+
+    // Detect format: check if first arg is a notification object (new format)
+    if (args[0].typeId() == QMetaType::QVariantMap) {
+        QVariantMap firstArg = args[0].toMap();
+        if (firstArg.contains("id") && firstArg.contains("eventType") && firstArg.contains("payload")) {
+            // New format: each arg is a notification object
+            for (const QVariant& arg : args) {
+                notificationsToProcess.append(arg);
+            }
+        }
+    } else if (args[0].typeId() == QMetaType::QVariantList) {
+        // args[0] is an array of notification objects
+        notificationsToProcess = args[0].toList();
+    }
+
+    // Process new format notifications
+    if (!notificationsToProcess.isEmpty()) {
+        for (const QVariant& notifVar : notificationsToProcess) {
+            QVariantMap notifObj = notifVar.toMap();
+
+            QString id = notifObj["id"].toString();
+            QString eventTypeName = notifObj["eventType"].toString();
+            QVariant payloadVar = notifObj["payload"];
+
+            // Extract timestamp from payload's DetectedAt
+            QString timestamp;
+            if (payloadVar.typeId() == QMetaType::QVariantMap) {
+                QVariantMap payloadMap = payloadVar.toMap();
+                timestamp = payloadMap.contains("DetectedAt")
+                                ? payloadMap["DetectedAt"].toString()
+                                : payloadMap["detectedAt"].toString();
+            }
+
+            processNotificationInternal(id, payloadVar, eventTypeName, timestamp);
+        }
+        return;
+    }
+
+    // Old format: 4 separate arguments [id, payloadStr, eventTypeName, timestamp]
     if (args.size() < 4) {
-        qWarning() << "[SignalR] handleNotification: expected 4 args, got " << args.size();
+        qWarning() << "[SignalR] handleNotification: expected 4 args, got" << args.size();
         return;
     }
 
     QString id = args[0].toString();
-    QString payloadStr = args[1].toString();
+    QVariant payloadVar = args[1];
     QString eventTypeName = args[2].toString();
     QString timestamp = args[3].toString();
 
-    qDebug() << "[SignalR] Processing notification: ";
-    qDebug() << "[SignalR]   ID: " << id;
-    qDebug() << "[SignalR]   EventType: " << eventTypeName;
-    qDebug() << "[SignalR]   Payload: " << payloadStr;
-    qDebug() << "[SignalR]   Timestamp: " << timestamp;
+    processNotificationInternal(id, payloadVar, eventTypeName, timestamp);
+}
+
+void SignalRClientService::processNotificationInternal(const QString& id, const QVariant& payloadVar,
+                                                       const QString& eventTypeName, const QString& timestamp)
+{
+    qDebug() << "[SignalR] Processing notification:";
+    qDebug() << "[SignalR]   ID:" << id;
+    qDebug() << "[SignalR]   EventType:" << eventTypeName;
+    qDebug() << "[SignalR]   Timestamp:" << timestamp;
 
     int eventType = -1;
     if (eventTypeName == "TirAppIssueCreated") {
@@ -92,21 +143,21 @@ void SignalRClientService::handleNotification(const QVariantList& args)
     } else if (eventTypeName == "ControlRoomAlertZoneIntrusion") {
         eventType = 2;
     } else {
-        qWarning() << "[SignalR] Unknown EventTypeName: " << eventTypeName;
+        qWarning() << "[SignalR] Unknown EventTypeName:" << eventTypeName;
         return;
     }
 
-    qDebug() << "[SignalR] Mapped EventType: " << eventType;
+    qDebug() << "[SignalR] Mapped EventType:" << eventType;
 
     if (!m_eventTypeParsers.contains(eventType)) {
-        qWarning() << "[SignalR] No parser registered for EventType: " << eventType;
+        qWarning() << "[SignalR] No parser registered for EventType:" << eventType;
         return;
     }
 
     QVariantMap envelope;
     envelope["Id"] = id;
     envelope["EventType"] = eventType;
-    envelope["Payload"] = payloadStr;
+    envelope["Payload"] = payloadVar;  // Can be string or object - parser handles both
     envelope["Timestamp"] = timestamp;
     envelope["UserId"] = "control-room-user";
 
@@ -122,7 +173,7 @@ void SignalRClientService::handleNotification(const QVariantList& args)
         // Truck notifications
         auto* parser = dynamic_cast<ISignalRMessageParser<TruckNotification>*>(baseParser);
         if (!parser) {
-            qWarning() << "[SignalR] Invalid parser type for EventType: " << eventType;
+            qWarning() << "[SignalR] Invalid parser type for EventType:" << eventType;
             return;
         }
 
@@ -133,14 +184,14 @@ void SignalRClientService::handleNotification(const QVariantList& args)
             model->upsert(notifications);
             qDebug() << "[SignalR] Truck notification added to model";
         } else {
-            qWarning() << "[SignalR] TruckNotificationModel singleton not found ";
+            qWarning() << "[SignalR] TruckNotificationModel singleton not found";
         }
 
     } else if (eventType == 2) {
         // Alert zone notifications
         auto* parser = dynamic_cast<ISignalRMessageParser<AlertZoneNotification>*>(baseParser);
         if (!parser) {
-            qWarning() << "[SignalR] Invalid parser type for EventType: " << eventType;
+            qWarning() << "[SignalR] Invalid parser type for EventType:" << eventType;
             return;
         }
 
@@ -217,7 +268,7 @@ void SignalRClientService::onWebSocketDisconnected()
 
 void SignalRClientService::onTextMessageReceived(const QString& message)
 {
-    // qDebug() << "[SignalR] Message received:" << message;
+    qDebug() << "[SignalR] Message received:" << message;
 
     // SignalR messages end with \x1e
     // Can receive multiple messages concatenated
@@ -285,11 +336,13 @@ void SignalRClientService::sendMessage(const QJsonObject& message)
 
 void SignalRClientService::parseMessage(const QString& message)
 {
+    qDebug() << "[SignalR] RAW MESSAGE:" << message;
+
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8(), &parseError);
 
     if (parseError.error != QJsonParseError::NoError) {
-        qWarning() << "[SignalR] JSON parse error: " << parseError.errorString();
+        qWarning() << "[SignalR] JSON parse error:" << parseError.errorString();
         return;
     }
 

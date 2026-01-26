@@ -60,7 +60,7 @@ public:
     // Invokable methods for QML
     Q_INVOKABLE void removeNotification(const QString& id);
     Q_INVOKABLE void clearAll();
-    Q_INVOKABLE QQmlPropertyMap* getEditableNotification(int index);
+    Q_INVOKABLE QVariantMap getEditableNotification(int index);
 
 signals:
     void countChanged();

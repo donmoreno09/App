@@ -17,8 +17,8 @@ UI.Accordion {
     property string cardOperationCode: ""
     property string cardOperationState: ""
     property string cardReportedAt: ""
-    property int cardOperationIssueTypeId: -1
-    property int cardOperationIssueSolutionTypeId: -1
+    property string cardIssueType: ""
+    property string cardSolutionType: ""
     property string cardEstimatedArrival: ""
     property var cardLocation: null
     property string cardNote: ""
@@ -72,8 +72,8 @@ UI.Accordion {
             Layout.preferredHeight: Theme.spacing.s6
             radius: Theme.radius.sm
             color: {
-                if (root.cardOperationState === "BLOCKED") return Theme.colors.warning500
-                if (root.cardOperationState === "ACTIVE") return Theme.colors.success500
+                if (root.cardOperationState === "BLOCKED") return Theme.colors.blocked
+                if (root.cardOperationState === "ACTIVE") return Theme.colors.active
                 return Theme.colors.caution500
             }
 
@@ -117,10 +117,10 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.cardOperationState === "ACTIVE" && root.cardOperationIssueTypeId > 0
+            visible: root.cardOperationState === "ACTIVE" && root.cardIssueType !== ""
             text: {
-                if (root.cardOperationState === "ACTIVE" && root.cardOperationIssueTypeId > 0) {
-                    const issueType = NotificationsTranslations.getIssueTypeName(root.cardOperationIssueTypeId)
+                if (root.cardOperationState === "ACTIVE" && root.cardIssueType !== "") {
+                    const issueType = NotificationsTranslations.getIssueTypeName(root.cardIssueType)
                     return `${TranslationManager.revision}` && qsTr("Issue: %1").arg(issueType)
                 }
                 return ""
@@ -133,10 +133,10 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.cardOperationState === "ACTIVE" && root.cardOperationIssueSolutionTypeId > 0
+            visible: root.cardOperationState === "ACTIVE" && root.cardSolutionType !== ""
             text: {
-                if (root.cardOperationState === "ACTIVE" && root.cardOperationIssueSolutionTypeId > 0) {
-                    const solutionType = NotificationsTranslations.getSolutionTypeName(root.cardOperationIssueSolutionTypeId)
+                if (root.cardOperationState === "ACTIVE" && root.cardSolutionType !== "") {
+                    const solutionType = NotificationsTranslations.getSolutionTypeName(root.cardSolutionType)
                     return `${TranslationManager.revision}` && qsTr("Resolution: %1").arg(solutionType)
                 }
                 return ""
@@ -200,7 +200,7 @@ UI.Accordion {
                 icon.width: 16
                 icon.height: 16
                 Layout.preferredHeight: Theme.spacing.s8
-                enabled: root.cardLocation && typeof root.cardLocation === 'object' && root.cardLocation.isValid === true
+                visible: root.cardLocation && typeof root.cardLocation === 'object' && root.cardLocation.isValid === true
 
                 onClicked: {
                     if (root.cardLocation && root.cardLocation.isValid) {

@@ -2,6 +2,6 @@
     "topics": {
         "ais": "AISTrackMapLayer",
         "doc-space": "DocSpaceTrackMapLayer",
-        "tir": "TirTrackMapLayer",
+        "tir": "TirTrackMapLayer"
     }
 }

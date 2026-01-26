@@ -103,6 +103,7 @@ set(cpp_sources
     entities/AlertZone.h
     entities/Details.h
     entities/Geometry.h
+    entities/NotificationTrackData.h
     entities/Poi.h
     entities/shape.h
     entities/BaseTrack.h

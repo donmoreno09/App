@@ -46,8 +46,8 @@ PanelTemplate {
 
                         cardNotificationId: id
                         cardTimestamp: detectedAt
-                        alertZone: alertZone
-                        trackData: trackData
+                        cardAlertZone: alertZone
+                        cardTrackData: trackData
 
                         onDeleteRequested: (id) => {
                             console.log("[NotificationsPanel] Confirming read for AlertZone:", id)
@@ -81,8 +81,8 @@ PanelTemplate {
                         required property string operationCode
                         required property string operationState
                         required property string reportedAt
-                        required property int operationIssueTypeId
-                        required property int operationIssueSolutionTypeId
+                        required property string issueType
+                        required property string solutionType
                         required property string estimatedArrival
                         required property var location
                         required property string note
@@ -92,8 +92,8 @@ PanelTemplate {
                         cardOperationCode: operationCode
                         cardOperationState: operationState
                         cardReportedAt: reportedAt
-                        cardOperationIssueTypeId: operationIssueTypeId
-                        cardOperationIssueSolutionTypeId: operationIssueSolutionTypeId
+                        cardIssueType: issueType
+                        cardSolutionType: solutionType
                         cardEstimatedArrival: estimatedArrival || ""
                         cardLocation: location
                         cardNote: note || ""

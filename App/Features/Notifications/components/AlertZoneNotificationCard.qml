@@ -14,11 +14,21 @@ UI.Accordion {
 
     property string cardNotificationId: ""
     property string cardTimestamp: ""
-    property var alertZone: null
-    property var trackData: null
+    property var cardAlertZone: null
+    property var cardTrackData: null
 
     signal deleteRequested(string id)
     signal viewOnMapRequested(var location)
+
+    readonly property color severityColor: {
+        const severity = root.cardAlertZone?.severity ?? 0
+        switch (severity) {
+        case 2: return Theme.colors.alertZoneHighHover
+        case 1: return Theme.colors.alertZoneMediumHover
+        case 0:
+        default: return Theme.colors.alertZoneLowHover
+        }
+    }
 
     Layout.fillWidth: true
     variant: UI.AccordionStyles.Urgent
@@ -32,7 +42,7 @@ UI.Accordion {
             width: 16
             height: 16
             radius: 8
-            color: "#FFCC00"
+            color: root.severityColor
         }
 
         ColumnLayout {
@@ -40,7 +50,7 @@ UI.Accordion {
             spacing: Theme.spacing.s1
 
             Text {
-                text: `${TranslationManager.revision}` && qsTr("Alert Zone: %1").arg(root.alertZone?.label ?? "")
+                text: `${TranslationManager.revision}` && qsTr("Alert Zone: %1").arg(root.cardAlertZone?.label ?? "")
                 color: Theme.colors.text
                 font.family: Theme.typography.bodySans25StrongFamily
                 font.pointSize: Theme.typography.bodySans25StrongSize
@@ -66,12 +76,12 @@ UI.Accordion {
             Layout.preferredWidth: Theme.spacing.s20
             Layout.preferredHeight: Theme.spacing.s6
             radius: Theme.radius.sm
-            color: Theme.colors.warning500
+            color: Theme.colors.alertZoneBadgeColor
 
             Text {
                 anchors.centerIn: parent
                 text: `${TranslationManager.revision}` && qsTr("NEW")
-                color: Theme.colors.text
+                color: Theme.colors.white
                 font.family: Theme.typography.bodySans15Family
                 font.pointSize: Theme.typography.bodySans15Size
                 font.weight: Theme.typography.bodySans15StrongWeight
@@ -106,16 +116,16 @@ UI.Accordion {
         }
 
         Text {
-            visible: root.trackData?.operationCode !== undefined && root.trackData?.operationCode !== ""
-            text: `${TranslationManager.revision}` && qsTr("Track: %1").arg(root.trackData?.operationCode ?? "")
+            visible: root.cardTrackData?.operationCode !== undefined && root.cardTrackData?.operationCode !== ""
+            text: `${TranslationManager.revision}` && qsTr("Track: %1").arg(root.cardTrackData?.operationCode ?? "")
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
             font.pointSize: Theme.typography.bodySans15Size
         }
 
         Text {
-            visible: root.alertZone?.label !== undefined && root.alertZone?.label !== ""
-            text: `${TranslationManager.revision}` && qsTr("Alert Zone: %1").arg(root.alertZone?.label ?? "")
+            visible: root.cardAlertZone?.label !== undefined && root.cardAlertZone?.label !== ""
+            text: `${TranslationManager.revision}` && qsTr("Alert Zone: %1").arg(root.cardAlertZone?.label ?? "")
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
             font.pointSize: Theme.typography.bodySans15Size
@@ -123,15 +133,15 @@ UI.Accordion {
 
         Text {
             visible: {
-                if (!root.trackData?.position) return false
-                if (typeof root.trackData.position !== 'object') return false
-                return root.trackData.position.isValid === true
+                if (!root.cardTrackData?.position) return false
+                if (typeof root.cardTrackData.position !== 'object') return false
+                return root.cardTrackData.position.isValid === true
             }
             text: {
-                if (!root.trackData?.position || !root.trackData.position.isValid) return ""
+                if (!root.cardTrackData?.position || !root.cardTrackData.position.isValid) return ""
                 return `${TranslationManager.revision}` && qsTr("Location: Lat %1°, Lon %2°")
-                    .arg(root.trackData.position.latitude.toFixed(4))
-                    .arg(root.trackData.position.longitude.toFixed(4))
+                    .arg(root.cardTrackData.position.latitude.toFixed(4))
+                    .arg(root.cardTrackData.position.longitude.toFixed(4))
             }
             color: Theme.colors.textMuted
             font.family: Theme.typography.bodySans15Family
@@ -143,9 +153,9 @@ UI.Accordion {
 
             UI.Button {
                 visible: {
-                    if (!root.trackData?.position) return false
-                    if (typeof root.trackData.position !== 'object') return false
-                    return root.trackData.position.isValid === true
+                    if (!root.cardTrackData?.position) return false
+                    if (typeof root.cardTrackData.position !== 'object') return false
+                    return root.cardTrackData.position.isValid === true
                 }
                 text: `${TranslationManager.revision}` && qsTr("View on Map")
                 variant: UI.ButtonStyles.Primary
@@ -155,8 +165,8 @@ UI.Accordion {
                 Layout.preferredHeight: Theme.spacing.s8
 
                 onClicked: {
-                    if (root.trackData?.position && root.trackData.position.isValid) {
-                        root.viewOnMapRequested(root.trackData.position)
+                    if (root.cardTrackData?.position && root.cardTrackData.position.isValid) {
+                        root.viewOnMapRequested(root.cardTrackData.position)
                     }
                 }
             }

@@ -55,6 +55,8 @@ private:
     void parseMessage(const QString& message);
     void fetchUnreadNotifications();
     QString generateInvocationId();
+    void processNotificationInternal(const QString& id, const QVariant& payloadVar,
+                                     const QString& eventTypeName, const QString& timestamp);
 
     QWebSocket* m_webSocket;
     QTimer* m_pingTimer;
