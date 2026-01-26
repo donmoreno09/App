@@ -76,7 +76,7 @@ UI.Accordion {
             Layout.preferredWidth: Theme.spacing.s20
             Layout.preferredHeight: Theme.spacing.s6
             radius: Theme.radius.sm
-            color: root.severityColor
+            color: Theme.colors.alertZoneBadgeColor
 
             Text {
                 anchors.centerIn: parent

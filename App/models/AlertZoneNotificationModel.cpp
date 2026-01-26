@@ -242,9 +242,9 @@ void AlertZoneNotificationModel::clearAll()
     qDebug() << "[AlertZoneNotificationModel] Cleared all notifications";
 }
 
-QQmlPropertyMap *AlertZoneNotificationModel::getEditableNotification(int index)
+QVariantMap AlertZoneNotificationModel::getEditableNotification(int index)
 {
-    return m_helper->map(index);
+    return m_helper->data(index);
 }
 
 void AlertZoneNotificationModel::setInitialLoadComplete(bool complete)

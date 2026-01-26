@@ -71,6 +71,7 @@ QtObject {
     readonly property color severityLow: "#FFE8A3"
     readonly property color severityMedium: "#E5A000"
     readonly property color severityHigh: "#EC221F"
+    readonly property color alertZoneBadgeColor: "#FF8D28"
 
     // Truck Notification
     readonly property color blocked: "#FF8D28"
