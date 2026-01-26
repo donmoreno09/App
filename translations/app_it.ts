@@ -49,6 +49,55 @@
     </message>
 </context>
 <context>
+    <name>AlertZoneNotificationCard</name>
+    <message>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="44"/>
+        <source>Alert Zone: </source>
+        <translation>Zona di Allerta: </translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="44"/>
+        <source>Name of the alert zone.</source>
+        <translation>Nome della zona di allerta.</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="56"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="100"/>
+        <source>Reported at %1 of %2</source>
+        <translation>Segnalato alle %1 del %2 </translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="74"/>
+        <source>NEW</source>
+        <translation>NUOVA</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="111"/>
+        <source>Track: %1</source>
+        <translation>Traccia: %1</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="119"/>
+        <source>Alert Zone: %1</source>
+        <translation>Zona di Allerta: %1</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="133"/>
+        <source>Location: Lat %1°, Lon %2°</source>
+        <translation>Posizione: Lat %1°, Lon %2°</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="151"/>
+        <source>View on Map</source>
+        <translation>Visualizza su Mappa</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="166"/>
+        <source>Delete</source>
+        <translation>Elimina</translation>
+    </message>
+</context>
+<context>
     <name>AlertZonePanel</name>
     <message>
         <location filename="../App/Features/AlertZone/AlertZonePanel.qml" line="18"/>
@@ -1047,6 +1096,11 @@
         <source>TRUCK</source>
         <translation>TIR</translation>
     </message>
+    <message>
+        <location filename="../App/Features/Map/MapToolsPanel.qml" line="108"/>
+        <source>VESSELFINDER</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MissionOverview</name>
@@ -1156,77 +1210,128 @@
     </message>
 </context>
 <context>
+    <name>NotificationEmptyState</name>
+    <message>
+        <location filename="../App/Features/Notifications/components/NotificationEmptyState.qml" line="8"/>
+        <source>No notifications</source>
+        <translation>Nessuna notifica</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationFooter</name>
+    <message>
+        <location filename="../App/Features/Notifications/components/NotificationFooter.qml" line="35"/>
+        <source>Delete All</source>
+        <translation>Elimina Tutto</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationToast</name>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="73"/>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="94"/>
+        <source>New Notification</source>
+        <translation>Nuova Notifica</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="74"/>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="95"/>
+        <source>From </source>
+        <translation>Da </translation>
+    </message>
+</context>
+<context>
     <name>NotificationsPanel</name>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="13"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="14"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="29"/>
         <source>No notifications</source>
-        <translation>Nessuna notifica</translation>
+        <translation type="vanished">Nessuna notifica</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="60"/>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="113"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="34"/>
+        <source>Alert Zone Intrusions</source>
+        <translation>Intrusioni Zona di Allerta</translation>
+    </message>
+    <message>
+        <source>Alert Zone: </source>
+        <translation type="vanished">Zona di Allerta: </translation>
+    </message>
+    <message>
+        <source>Name of the alert zone.</source>
+        <translation type="vanished">Nome della zona di allerta.</translation>
+    </message>
+    <message>
+        <source>Reported at %1 of %2</source>
+        <translation type="vanished">Segnalato alle %1 del %2 </translation>
+    </message>
+    <message>
+        <source>Track: %1</source>
+        <translation type="vanished">Traccia: %1</translation>
+    </message>
+    <message>
+        <source>Alert Zone: %1</source>
+        <translation type="vanished">Zona di Allerta: %1</translation>
+    </message>
+    <message>
+        <source>View on Map</source>
+        <translation type="vanished">Visualizza su Mappa</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="73"/>
+        <source>Truck Operations</source>
+        <translation>Operazioni Camion</translation>
+    </message>
+    <message>
         <source>Truck: </source>
-        <translation>TIR: </translation>
+        <translation type="vanished">TIR: </translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="72"/>
         <source>Reported at %1</source>
-        <translation>Segnalato il %1</translation>
+        <translation type="vanished">Segnalato il %1</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="96"/>
         <source>NEW</source>
-        <translation>NUOVA</translation>
+        <translation type="vanished">NUOVA</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="97"/>
         <source>UPDATED</source>
-        <translation>AGGIORNATA</translation>
+        <translation type="vanished">AGGIORNATA</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="129"/>
         <source>Issue: %1</source>
-        <translation>Problema: %1</translation>
+        <translation type="vanished">Problema: %1</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="149"/>
         <source>Resolution: %1</source>
-        <translation>Risoluzione: %1</translation>
+        <translation type="vanished">Risoluzione: %1</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="166"/>
         <source>Estimated arrival: %1</source>
-        <translation>Arrivo stimato: %1</translation>
+        <translation type="vanished">Arrivo stimato: %1</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="179"/>
         <source>Location: Lat %1°, Lon %2°</source>
-        <translation>Posizione: Lat %1°, Lon %2°</translation>
+        <translation type="vanished">Posizione: Lat %1°, Lon %2°</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="191"/>
         <source>Note: %1</source>
-        <translation>Nota: %1</translation>
+        <translation type="vanished">Nota: %1</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="202"/>
         <source>Delete</source>
-        <translation>Elimina</translation>
+        <translation type="vanished">Elimina</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="233"/>
         <source>Back</source>
-        <translation>Indietro</translation>
+        <translation type="vanished">Indietro</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="248"/>
         <source>Delete All</source>
-        <translation>Elimina Tutto</translation>
+        <translation type="vanished">Elimina Tutto</translation>
     </message>
     <message>
         <source>Generate Urgent Notification</source>
@@ -1285,19 +1390,16 @@
         <translation>Altro</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsTranslations.qml" line="33"/>
         <source>Blocked</source>
-        <translation>Bloccato</translation>
+        <translation type="vanished">Bloccato</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsTranslations.qml" line="34"/>
         <source>Active</source>
-        <translation>Attivo</translation>
+        <translation type="vanished">Attivo</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsTranslations.qml" line="35"/>
         <source>Warning</source>
-        <translation>Avviso</translation>
+        <translation type="vanished">Avviso</translation>
     </message>
 </context>
 <context>
@@ -2382,6 +2484,14 @@
     </message>
 </context>
 <context>
+    <name>ToastNotification</name>
+    <message>
+        <location filename="../App/Components/ToastNotification.qml" line="13"/>
+        <source>New Notification</source>
+        <translation>Nuova Notifica</translation>
+    </message>
+</context>
+<context>
     <name>TogglePanel</name>
     <message>
         <location filename="../App/Playground/TogglePanel.qml" line="11"/>
@@ -2545,6 +2655,65 @@
         <location filename="../App/Features/ViGateServices/components/TransitsTable.qml" line="9"/>
         <source>Transits</source>
         <translation>Transiti</translation>
+    </message>
+</context>
+<context>
+    <name>TruckNotificationCard</name>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="49"/>
+        <source>Truck: </source>
+        <translation>TIR: </translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="60"/>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="110"/>
+        <source>Reported at %1 of %2</source>
+        <translation>Segnalato alle %1 del %2 </translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="83"/>
+        <source>NEW</source>
+        <translation>NUOVA</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="84"/>
+        <source>UPDATED</source>
+        <translation>AGGIORNATA</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="124"/>
+        <source>Issue: %1</source>
+        <translation>Problema: %1</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="140"/>
+        <source>Resolution: %1</source>
+        <translation>Risoluzione: %1</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="157"/>
+        <source>Estimated arrival: %1</source>
+        <translation>Arrivo stimato: %1</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="174"/>
+        <source>Location: Lat %1°, Lon %2°</source>
+        <translation>Posizione: Lat %1°, Lon %2°</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="185"/>
+        <source>Note: %1</source>
+        <translation>Nota: %1</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="197"/>
+        <source>View on Map</source>
+        <translation>Visualizza su Mappa</translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="213"/>
+        <source>Delete</source>
+        <translation>Elimina</translation>
     </message>
 </context>
 <context>

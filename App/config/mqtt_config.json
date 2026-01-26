@@ -2,7 +2,6 @@
     "topics": {
         "ais": "AISTrackMapLayer",
         "doc-space": "DocSpaceTrackMapLayer",
-        "tir": "TirTrackMapLayer",
-        "trucknotifications": "NotificationsLayer"
+        "tir": "TirTrackMapLayer"
     }
 }
