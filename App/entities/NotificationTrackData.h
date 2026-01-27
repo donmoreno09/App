@@ -21,29 +21,34 @@ struct NotificationTrackData {
     static NotificationTrackData fromJson(const QJsonObject& obj) {
         NotificationTrackData data;
 
-        data.id = obj.contains("Id") ? obj["Id"].toString() : obj["id"].toString();
+        // Id for TIR, Iridess_uid for AIS/DOC-SPACE
+        data.id = obj.contains("Id") ? obj["Id"].toString() : obj["Iridess_uid"].toString();
 
+        // Track_uid for AIS/DOC-SPACE, OperationCode for TIR
         if (obj.contains("Track_uid") && !obj["Track_uid"].toString().isEmpty()) {
             data.trackingId = obj["Track_uid"].toString();
         } else {
-            data.trackingId = obj.contains("OperationCode") ? obj["OperationCode"].toString() : obj["operationCode"].toString();
+            data.trackingId = obj["OperationCode"].toString();
         }
 
-        // Parse position from Pos array [lat, lon]
-        QJsonArray posArray = obj.contains("Pos") ? obj["Pos"].toArray() : obj["pos"].toArray();
+        // Parse position from Pos array [lat, lon] or [lat, lon, altitude]
+        QJsonArray posArray = obj["Pos"].toArray();
         if (posArray.size() >= 2) {
             double lat = posArray[0].toDouble();
             double lon = posArray[1].toDouble();
             data.position = QGeoCoordinate(lat, lon);
+            if (posArray.size() >= 3) {
+                data.position.setAltitude(posArray[2].toDouble());
+            }
         }
 
-        data.velocity = obj.contains("Vel") ? obj["Vel"].toDouble() : obj["vel"].toDouble();
-        data.cog = obj.contains("Cog") ? obj["Cog"].toDouble() : obj["cog"].toDouble();
-        data.time = obj.contains("Time") ? obj["Time"].toVariant().toLongLong() : obj["time"].toVariant().toLongLong();
-        data.state = obj.contains("State") ? obj["State"].toString() : obj["state"].toString();
-        data.isDeleted = obj.contains("IsDeleted") ? obj["IsDeleted"].toBool() : obj["isDeleted"].toBool();
-        data.createdAt = obj.contains("CreatedAt") ? obj["CreatedAt"].toString() : obj["createdAt"].toString();
-        data.updatedAt = obj.contains("UpdatedAt") ? obj["UpdatedAt"].toString() : obj["updatedAt"].toString();
+        data.velocity = obj["Vel"].toDouble();
+        data.cog = obj["Cog"].toDouble();
+        data.time = obj["Time"].toVariant().toLongLong();
+        data.state = obj["State"].toString();
+        data.isDeleted = obj["IsDeleted"].toBool();
+        data.createdAt = obj["CreatedAt"].toString();
+        data.updatedAt = obj["UpdatedAt"].toString();
 
         return data;
     }
