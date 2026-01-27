@@ -405,12 +405,25 @@ void SignalRClientService::parseMessage(const QString& message)
             for (const QJsonValue& val : resultArray) {
                 QJsonObject notifObj = val.toObject();
 
-                // Convert backend format to handleNotification format
+                // Parse the stringified payload into an object
+                QString payloadStr = notifObj["payload"].toString();
+                QJsonDocument payloadDoc = QJsonDocument::fromJson(payloadStr.toUtf8());
+                QVariant payloadVariant;
+                if (payloadDoc.isObject()) {
+                    payloadVariant = payloadDoc.object().toVariantMap();
+                } else {
+                    qWarning() << "[SignalR] Failed to parse payload string as JSON object";
+                    payloadVariant = payloadStr;  // Fallback to string
+                }
+
+                // Build notification object matching real-time format
+                QVariantMap notifForHandler;
+                notifForHandler["id"] = notifObj["id"].toString();
+                notifForHandler["eventType"] = notifObj["eventType"].toString();
+                notifForHandler["payload"] = payloadVariant;
+
                 QVariantList args;
-                args << notifObj["id"].toString();                    // args[0]: Id
-                args << notifObj["payload"].toString();               // args[1]: Payload
-                args << notifObj["eventType"].toString();             // args[2]: EventTypeName
-                args << notifObj["createdAt"].toString();             // args[3]: Timestamp (using createdAt)
+                args << notifForHandler;
 
                 handleNotification(args);
             }
