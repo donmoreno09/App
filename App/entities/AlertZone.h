@@ -43,21 +43,24 @@ public:
     }
 
     void fromJson(const QJsonObject &obj) override {
-        id = obj["Id"].toString();
-        label = obj["Label"].toString();
-        severity = obj["Severity"].toInt(0);
-        active = obj["Enabled"].toBool(true);
+        // Support both PascalCase and lowercase keys
+        id = obj.contains("Id") ? obj["Id"].toString() : obj["id"].toString();
+        label = obj.contains("Label") ? obj["Label"].toString() : obj["label"].toString();
+        severity = obj.contains("Severity") ? obj["Severity"].toInt(0) : obj["severity"].toInt(0);
+        active = obj.contains("Enabled") ? obj["Enabled"].toBool(true) : obj["enabled"].toBool(true);
 
         layers.clear();
-        const QJsonObject layersObj = obj["Layers"].toObject();
+        const QJsonObject layersObj = obj.contains("Layers") ? obj["Layers"].toObject() : obj["layers"].toObject();
         for (auto it = layersObj.begin(); it != layersObj.end(); ++it) {
             layers.insert(it.key(), it.value().toBool());
         }
 
-        geometry = Geometry::fromJson(obj["Geometry"].toObject());
+        QJsonObject geometryObj = obj.contains("Geometry") ? obj["Geometry"].toObject() : obj["geometry"].toObject();
+        geometry = Geometry::fromJson(geometryObj);
 
-        if (obj.contains("Details") && !obj["Details"].isNull()) {
-            details.fromJson(obj["Details"].toObject());
+        if (obj.contains("details") || obj.contains("Details")) {
+            QJsonObject detailsObj = obj.contains("Details") ? obj["Details"].toObject() : obj["details"].toObject();
+            details.fromJson(detailsObj);
         }
     }
 };
