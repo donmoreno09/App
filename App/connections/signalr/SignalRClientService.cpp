@@ -73,58 +73,26 @@ void SignalRClientService::handleNotification(const QVariantList& args)
         return;
     }
 
-    // Collect notifications to process (handles both single and batch)
-    QVariantList notificationsToProcess;
+    // Process each notification object in args
+    for (const QVariant& arg : args) {
+        QVariantMap notifObj = arg.toMap();
 
-    // Detect format: check if first arg is a notification object (new format)
-    if (args[0].typeId() == QMetaType::QVariantMap) {
-        QVariantMap firstArg = args[0].toMap();
-        if (firstArg.contains("id") && firstArg.contains("eventType") && firstArg.contains("payload")) {
-            // New format: each arg is a notification object
-            for (const QVariant& arg : args) {
-                notificationsToProcess.append(arg);
-            }
+        if (!notifObj.contains("id") || !notifObj.contains("eventType") || !notifObj.contains("payload")) {
+            qWarning() << "[SignalR] Invalid notification format - missing required fields";
+            continue;
         }
-    } else if (args[0].typeId() == QMetaType::QVariantList) {
-        // args[0] is an array of notification objects
-        notificationsToProcess = args[0].toList();
+
+        QString id = notifObj["id"].toString();
+        QString eventTypeName = notifObj["eventType"].toString();
+        QVariant payloadVar = notifObj["payload"];
+
+        // Extract timestamp from payload's DetectedAt
+        QString timestamp;
+        QVariantMap payloadMap = payloadVar.toMap();
+        timestamp = payloadMap["DetectedAt"].toString();
+
+        processNotificationInternal(id, payloadVar, eventTypeName, timestamp);
     }
-
-    // Process new format notifications
-    if (!notificationsToProcess.isEmpty()) {
-        for (const QVariant& notifVar : notificationsToProcess) {
-            QVariantMap notifObj = notifVar.toMap();
-
-            QString id = notifObj["id"].toString();
-            QString eventTypeName = notifObj["eventType"].toString();
-            QVariant payloadVar = notifObj["payload"];
-
-            // Extract timestamp from payload's DetectedAt
-            QString timestamp;
-            if (payloadVar.typeId() == QMetaType::QVariantMap) {
-                QVariantMap payloadMap = payloadVar.toMap();
-                timestamp = payloadMap.contains("DetectedAt")
-                                ? payloadMap["DetectedAt"].toString()
-                                : payloadMap["detectedAt"].toString();
-            }
-
-            processNotificationInternal(id, payloadVar, eventTypeName, timestamp);
-        }
-        return;
-    }
-
-    // Old format: 4 separate arguments [id, payloadStr, eventTypeName, timestamp]
-    if (args.size() < 4) {
-        qWarning() << "[SignalR] handleNotification: expected 4 args, got" << args.size();
-        return;
-    }
-
-    QString id = args[0].toString();
-    QVariant payloadVar = args[1];
-    QString eventTypeName = args[2].toString();
-    QString timestamp = args[3].toString();
-
-    processNotificationInternal(id, payloadVar, eventTypeName, timestamp);
 }
 
 void SignalRClientService::processNotificationInternal(const QString& id, const QVariant& payloadVar,
@@ -157,7 +125,7 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
     QVariantMap envelope;
     envelope["Id"] = id;
     envelope["EventType"] = eventType;
-    envelope["Payload"] = payloadVar;  // Can be string or object - parser handles both
+    envelope["Payload"] = payloadVar;
     envelope["Timestamp"] = timestamp;
     envelope["UserId"] = "control-room-user";
 
@@ -268,7 +236,7 @@ void SignalRClientService::onWebSocketDisconnected()
 
 void SignalRClientService::onTextMessageReceived(const QString& message)
 {
-    // qDebug() << "[SignalR] Message received:" << message;
+    qDebug() << "[SignalR] Message received:" << message;
 
     // SignalR messages end with \x1e
     // Can receive multiple messages concatenated
@@ -336,7 +304,7 @@ void SignalRClientService::sendMessage(const QJsonObject& message)
 
 void SignalRClientService::parseMessage(const QString& message)
 {
-    // qDebug() << "[SignalR] RAW MESSAGE:" << message;
+    qDebug() << "[SignalR] RAW MESSAGE:" << message;
 
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8(), &parseError);
@@ -405,12 +373,25 @@ void SignalRClientService::parseMessage(const QString& message)
             for (const QJsonValue& val : resultArray) {
                 QJsonObject notifObj = val.toObject();
 
-                // Convert backend format to handleNotification format
+                // Parse the stringified payload into an object
+                QString payloadStr = notifObj["payload"].toString();
+                QJsonDocument payloadDoc = QJsonDocument::fromJson(payloadStr.toUtf8());
+                QVariant payloadVariant;
+                if (payloadDoc.isObject()) {
+                    payloadVariant = payloadDoc.object().toVariantMap();
+                } else {
+                    qWarning() << "[SignalR] Failed to parse payload string as JSON object";
+                    payloadVariant = payloadStr;  // Fallback to string
+                }
+
+                // Build notification object matching real-time format
+                QVariantMap notifForHandler;
+                notifForHandler["id"] = notifObj["id"].toString();
+                notifForHandler["eventType"] = notifObj["eventType"].toString();
+                notifForHandler["payload"] = payloadVariant;
+
                 QVariantList args;
-                args << notifObj["id"].toString();                    // args[0]: Id
-                args << notifObj["payload"].toString();               // args[1]: Payload
-                args << notifObj["eventType"].toString();             // args[2]: EventTypeName
-                args << notifObj["createdAt"].toString();             // args[3]: Timestamp (using createdAt)
+                args << notifForHandler;
 
                 handleNotification(args);
             }
