@@ -59,6 +59,24 @@ QtObject {
     readonly property color border: secondary450
     readonly property color glassBorder: whiteA20
 
+    // Alert Zones
+    readonly property color alertZoneLowHover: "#FFCF26"
+    readonly property color alertZoneLow: hexWithAlpha(alertZoneLowHover, 0.2)
+    readonly property color alertZoneMediumHover: "#FA8500"
+    readonly property color alertZoneMedium: hexWithAlpha(alertZoneMediumHover, 0.2)
+    readonly property color alertZoneHighHover: "#F64D4D"
+    readonly property color alertZoneHigh: hexWithAlpha(alertZoneHighHover, 0.2)
+    readonly property color alertZoneDisabledHover: "#888888"
+    readonly property color alertZoneDisabled: hexWithAlpha(alertZoneDisabledHover, 0.2)
+    readonly property color severityLow: "#FFE8A3"
+    readonly property color severityMedium: "#E5A000"
+    readonly property color severityHigh: "#EC221F"
+    readonly property color alertZoneBadgeColor: "#FF8D28"
+
+    // Truck Notification
+    readonly property color blocked: "#FF8D28"
+    readonly property color active: "#3D7E00"
+
     // -------------------------- // PRIMITIVES // -------------------------- //
 
     // Black

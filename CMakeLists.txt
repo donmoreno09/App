@@ -20,6 +20,7 @@ find_package(Qt6 6.8 REQUIRED
         LinguistTools
         QuickTest
         Sql
+        WebSockets
 )
 find_package(QMapLibre COMPONENTS Location REQUIRED)
 

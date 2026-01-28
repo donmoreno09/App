@@ -1,15 +1,15 @@
-#ifndef TRUCKNOTIFICATIONMODEL_H
-#define TRUCKNOTIFICATIONMODEL_H
+#ifndef ALERTZONENOTIFICATIONMODEL_H
+#define ALERTZONENOTIFICATIONMODEL_H
 
 #include <QAbstractListModel>
 #include <QVector>
 #include <QHash>
 #include <QPointer>
 #include <QQmlEngine>
-#include <entities/TruckNotification.h>
+#include <entities/AlertZoneNotification.h>
 #include "ModelHelper.h"
 
-class TruckNotificationModel : public QAbstractListModel
+class AlertZoneNotificationModel : public QAbstractListModel
 {
     Q_OBJECT
     QML_ELEMENT
@@ -19,26 +19,22 @@ class TruckNotificationModel : public QAbstractListModel
     Q_PROPERTY(bool initialLoadComplete READ initialLoadComplete NOTIFY initialLoadCompleteChanged)
 
 public:
-    explicit TruckNotificationModel(QObject *parent = nullptr);
+    explicit AlertZoneNotificationModel(QObject *parent = nullptr);
 
     enum Roles {
         IdRole = Qt::UserRole + 1,
-        EnvelopeIdRole,
         UserIdRole,
-        OperationIdRole,
-        OperationCodeRole,
-        LocationRole,
-        IssueTypeRole,
-        OperationStateRole,
-        SolutionTypeRole,
-        EstimatedArrivalRole,
-        NoteRole,
-        ReportedAtRole,
-        SolvedAtRole,
+        AlertZoneRole,
+        TrackDataRole,
+        TrackTypeRole,
+        TopicRole,
+        StatusRole,
+        DetectedAtRole,
+        SentAtRole,
         CreatedAtRole,
-        TimestampRole,
-        BadgeTypeRole,
-        VariantTypeRole
+        UpdatedAtRole,
+        IsReadRole,
+        IsDeletedRole,
     };
 
     Q_ENUM(Roles)
@@ -55,30 +51,29 @@ public:
     void setInitialLoadComplete(bool complete);
 
     // Data access
-    QVector<TruckNotification> &notifications();
+    QVector<AlertZoneNotification> &notifications();
 
     // Data manipulation
-    void set(const QVector<TruckNotification> &notifications);
-    void upsert(const QVector<TruckNotification> &notifications);
+    void set(const QVector<AlertZoneNotification> &notifications);
+    void upsert(const QVector<AlertZoneNotification> &notifications);
 
     // Invokable methods for QML
     Q_INVOKABLE void removeNotification(const QString& id);
     Q_INVOKABLE void clearAll();
-    Q_INVOKABLE QQmlPropertyMap* getEditableNotification(int index);
+    Q_INVOKABLE QVariantMap getEditableNotification(int index);
 
 signals:
     void countChanged();
-    void stateCountsChanged();
     void initialLoadCompleteChanged();
 
 private:
-    QVector<int> diffRoles(const TruckNotification &a, const TruckNotification &b) const;
+    QVector<int> diffRoles(const AlertZoneNotification &a, const AlertZoneNotification &b) const;
 
-    QVector<TruckNotification> m_notifications;
+    QVector<AlertZoneNotification> m_notifications;
     QHash<QString, int> m_upsertMap;
     QSet<QString> m_deletedIds;
     QPointer<ModelHelper> m_helper;
     bool m_initialLoadComplete = false;
 };
 
-#endif // TRUCKNOTIFICATIONMODEL_H
+#endif // ALERTZONENOTIFICATIONMODEL_H

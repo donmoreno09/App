@@ -51,6 +51,7 @@ ApplicationWindow {
     }
 
     MapHost {
+        id: mapHost
         anchors.fill: parent
         initialPlugin: MapPlugins.osmDefault
 
@@ -231,5 +232,12 @@ ApplicationWindow {
                 }
             }
         }
+    }
+
+    NotificationToast {
+        anchors.fill: parent
+        z: Theme.elevation.modal + 1
+
+        mapReference: mapHost
     }
 }
