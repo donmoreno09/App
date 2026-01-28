@@ -22,12 +22,11 @@ public:
     virtual QVector<T> parse(const QVariantMap& envelope) = 0;
 
 protected:
-    // Parse coordinate array [lat, lon] or [lat, lon, altitude]
-    QGeoCoordinate parseCoordinateArray(const QJsonArray& arr) {
+    QGeoCoordinate parseCoordinateArray(const QJsonArray& arr, bool swap = false) {
         QGeoCoordinate coord;
         if (arr.size() >= 2) {
-            coord.setLatitude(arr[0].toDouble());
-            coord.setLongitude(arr[1].toDouble());
+            coord.setLatitude(arr[swap ? 1 : 0].toDouble());
+            coord.setLongitude(arr[swap ? 0 : 1].toDouble());
             if (arr.size() >= 3) {
                 coord.setAltitude(arr[2].toDouble());
             }

@@ -9,7 +9,7 @@ public:
     QVector<AlertZoneNotification> parse(const QVariantMap& envelope) override {
         AlertZoneNotification notif;
 
-        // Envelope fields (built by SignalRClientService with PascalCase)
+        // Envelope fields
         notif.id = envelope["Id"].toString();
         notif.userId = envelope["UserId"].toString();
         notif.status = envelope["Status"].toInt();
