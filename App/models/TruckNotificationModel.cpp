@@ -94,12 +94,12 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
         return;
     }
 
-    qDebug() << "[TruckNotificationModel] upsert() called with" << notifications.size() << "notifications";
+    // qDebug() << "[TruckNotificationModel] upsert() called with" << notifications.size() << "notifications";
 
     bool countChanged = false;
 
     for (const auto& notif : notifications) {
-        qDebug() << "[TruckNotificationModel] Processing notification:" << notif.id;
+        // qDebug() << "[TruckNotificationModel] Processing notification:" << notif.id;
 
         if (m_deletedIds.contains(notif.id)) {
             qWarning() << "[TruckNotificationModel] Skipping deleted notification:" << notif.id;
@@ -116,9 +116,9 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
-                qDebug() << "[TruckNotificationModel] Updated notification at row" << row;
+                // qDebug() << "[TruckNotificationModel] Updated notification at row" << row;
             } else {
-                qDebug() << "[TruckNotificationModel] No changes for notification at row" << row;
+                // qDebug() << "[TruckNotificationModel] No changes for notification at row" << row;
             }
         } else {
             const int row = m_notifications.size();
@@ -129,12 +129,12 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
             endInsertRows();
             countChanged = true;
 
-            qDebug() << "[TruckNotificationModel] Inserted new notification at row" << row;
+            // qDebug() << "[TruckNotificationModel] Inserted new notification at row" << row;
         }
     }
 
     if (countChanged) {
-        qDebug() << "[TruckNotificationModel] Count changed to:" << m_notifications.size();
+        // qDebug() << "[TruckNotificationModel] Count changed to:" << m_notifications.size();
         emit this->countChanged();
     }
 }
@@ -185,7 +185,7 @@ void TruckNotificationModel::removeNotification(const QString &id)
     }
 
     emit countChanged();
-    qDebug() << "[TruckNotificationModel] Removed notification:" << id;
+    // qDebug() << "[TruckNotificationModel] Removed notification:" << id;
 }
 
 void TruckNotificationModel::clearAll()
@@ -202,7 +202,7 @@ void TruckNotificationModel::clearAll()
     endResetModel();
 
     emit countChanged();
-    qDebug() << "[TruckNotificationModel] Cleared all notifications";
+    // qDebug() << "[TruckNotificationModel] Cleared all notifications";
 }
 
 QQmlPropertyMap *TruckNotificationModel::getEditableNotification(int index)
@@ -215,6 +215,6 @@ void TruckNotificationModel::setInitialLoadComplete(bool complete)
     if (m_initialLoadComplete != complete) {
         m_initialLoadComplete = complete;
         emit initialLoadCompleteChanged();
-        qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
+        // qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
     }
 }

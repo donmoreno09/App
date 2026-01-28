@@ -57,13 +57,13 @@ void SignalRClientService::initialize(const AppConfig& appConfig)
 void SignalRClientService::registerHandler(const QString& methodName, MessageHandler handler)
 {
     m_methodHandlers[methodName] = handler;
-    qDebug() << "[SignalR] Handler registered for method: " << methodName;
+    // qDebug() << "[SignalR] Handler registered for method: " << methodName;
 }
 
 void SignalRClientService::registerParser(int eventType, IBaseSignalRMessageParser* parser)
 {
     m_eventTypeParsers[eventType] = parser;
-    qDebug() << "[SignalR] Parser registered for EventType: " << eventType;
+    // qDebug() << "[SignalR] Parser registered for EventType: " << eventType;
 }
 
 void SignalRClientService::handleNotification(const QVariantList& args)
@@ -98,10 +98,10 @@ void SignalRClientService::handleNotification(const QVariantList& args)
 void SignalRClientService::processNotificationInternal(const QString& id, const QVariant& payloadVar,
                                                        const QString& eventTypeName, const QString& timestamp)
 {
-    qDebug() << "[SignalR] Processing notification:";
-    qDebug() << "[SignalR]   ID:" << id;
-    qDebug() << "[SignalR]   EventType:" << eventTypeName;
-    qDebug() << "[SignalR]   Timestamp:" << timestamp;
+    // qDebug() << "[SignalR] Processing notification:";
+    // qDebug() << "[SignalR]   ID:" << id;
+    // qDebug() << "[SignalR]   EventType:" << eventTypeName;
+    // qDebug() << "[SignalR]   Timestamp:" << timestamp;
 
     int eventType = -1;
     if (eventTypeName == "TirAppIssueCreated") {
@@ -115,7 +115,7 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
         return;
     }
 
-    qDebug() << "[SignalR] Mapped EventType:" << eventType;
+    // qDebug() << "[SignalR] Mapped EventType:" << eventType;
 
     if (!m_eventTypeParsers.contains(eventType)) {
         qWarning() << "[SignalR] No parser registered for EventType:" << eventType;
@@ -150,7 +150,7 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
         auto* model = engine->singletonInstance<TruckNotificationModel*>("App", "TruckNotificationModel");
         if (model) {
             model->upsert(notifications);
-            qDebug() << "[SignalR] Truck notification added to model";
+            // qDebug() << "[SignalR] Truck notification added to model";
         } else {
             qWarning() << "[SignalR] TruckNotificationModel singleton not found";
         }
@@ -168,7 +168,7 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
         auto* model = engine->singletonInstance<AlertZoneNotificationModel*>("App", "AlertZoneNotificationModel");
         if (model) {
             model->upsert(notifications);
-            qDebug() << "[SignalR] AlertZone notification added to model";
+            // qDebug() << "[SignalR] AlertZone notification added to model";
         } else {
             qWarning() << "[SignalR] AlertZoneNotificationModel singleton not found";
         }
@@ -199,7 +199,7 @@ void SignalRClientService::invoke(const QString& methodName, const QVariantList&
 
     sendMessage(message);
 
-    qDebug() << "[SignalR] Invoked: " << methodName << " with args: " << args;
+    // qDebug() << "[SignalR] Invoked: " << methodName << " with args: " << args;
 }
 
 bool SignalRClientService::connected() const
@@ -236,7 +236,7 @@ void SignalRClientService::onWebSocketDisconnected()
 
 void SignalRClientService::onTextMessageReceived(const QString& message)
 {
-    qDebug() << "[SignalR] Message received:" << message;
+    // qDebug() << "[SignalR] Message received:" << message;
 
     // SignalR messages end with \x1e
     // Can receive multiple messages concatenated
@@ -304,7 +304,7 @@ void SignalRClientService::sendMessage(const QJsonObject& message)
 
 void SignalRClientService::parseMessage(const QString& message)
 {
-    qDebug() << "[SignalR] RAW MESSAGE:" << message;
+    // qDebug() << "[SignalR] RAW MESSAGE:" << message;
 
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8(), &parseError);
@@ -348,7 +348,7 @@ void SignalRClientService::parseMessage(const QString& message)
         for (int i = 0; i < argsArray.size(); ++i) {
             args.append(argsArray[i].toVariant());
         }
-        qDebug() << "[SignalR] Server invoked:" << target;
+        // qDebug() << "[SignalR] Server invoked:" << target;
 
         // Route to registered handler
         if (m_methodHandlers.contains(target)) {
@@ -363,11 +363,11 @@ void SignalRClientService::parseMessage(const QString& message)
         QString invocationId = obj["invocationId"].toString();
         QString methodName = m_pendingInvocations.take(invocationId);
 
-        qDebug() << "[SignalR] Invocation completed:" << methodName;
+        // qDebug() << "[SignalR] Invocation completed:" << methodName;
 
         if (methodName == "GetUnreadNotifications" && obj.contains("result")) {
             QJsonArray resultArray = obj["result"].toArray();
-            qDebug() << "[SignalR] Received" << resultArray.size() << "unread notifications";
+            // qDebug() << "[SignalR] Received" << resultArray.size() << "unread notifications";
 
             // Process each notification
             for (const QJsonValue& val : resultArray) {
@@ -396,7 +396,7 @@ void SignalRClientService::parseMessage(const QString& message)
                 handleNotification(args);
             }
 
-            qDebug() << "[SignalR] Finished loading unread notifications into models";
+            // qDebug() << "[SignalR] Finished loading unread notifications into models";
 
             auto* engine = qmlEngine(this);
             if (engine) {
@@ -440,7 +440,7 @@ void SignalRClientService::fetchUnreadNotifications()
         return;
     }
 
-    qDebug() << "[SignalR] Fetching unread notifications for user:" << m_userId;
+    // qDebug() << "[SignalR] Fetching unread notifications for user:" << m_userId;
     invoke("GetUnreadNotifications", QVariantList() << m_userId);
 }
 
