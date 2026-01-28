@@ -6,8 +6,33 @@ qt_add_executable(${PROJECT_NAME}
 
 file(GLOB_RECURSE APP_ASSETS
     RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+    CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/assets/*.*"
 )
+
+# Remove everything under assets/icons/ from APP_ASSETS
+list(FILTER APP_ASSETS EXCLUDE REGEX "^assets/icons/")
+
+# Handle icon assets
+# They're handled here to prevent big build times
+# If you add/modify/delete icons, DON'T FORGET to reconfigure CMake!
+file(GLOB_RECURSE ICON_SVGS
+    RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+    CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/assets/icons/*.svg"
+)
+
+set(GEN_QRC "${CMAKE_CURRENT_BINARY_DIR}/icons_autogen.qrc")
+file(WRITE "${GEN_QRC}" "<RCC>\n  <qresource prefix=\"/App\">\n")
+foreach(rel IN LISTS ICON_SVGS)
+  file(APPEND "${GEN_QRC}"
+    "    <file alias=\"${rel}\">${CMAKE_CURRENT_SOURCE_DIR}/${rel}</file>\n")
+endforeach()
+file(APPEND "${GEN_QRC}" "  </qresource>\n</RCC>\n")
+
+qt_add_big_resources(ICON_OBJS "${GEN_QRC}")
+target_sources(${PROJECT_NAME} PRIVATE ${ICON_OBJS})
+# End of handling icon assets
 
 set(qml_files
     Main.qml
