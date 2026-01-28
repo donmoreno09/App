@@ -36,6 +36,9 @@ set(qml_files
     commands/ellipsecommands/TranslateEllipseCreationCommand.js
     commands/ellipsecommands/TranslateEllipseCommand.js
     commands/ellipsecommands/UpdateEllipseRadiusCommand.js
+    commands/PointCommands.js
+    commands/pointcommands/SetPointCoordinateCommand.js
+    commands/pointcommands/TranslatePointCommand.js
 )
 
 set(qml_singletons
