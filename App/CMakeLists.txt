@@ -16,6 +16,7 @@ set(qml_files
     map-objects/AlertZoneEllipse.qml
     map-objects/AlertZonePolygon.qml
     map-objects/AlertZoneRectangle.qml
+    map-objects/CircleMarker.qml
     map-objects/Track.qml
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
