@@ -169,10 +169,10 @@ void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &no
         }
     }
 
-    // if (countChanged) {
-    //     qDebug() << "[AlertZoneNotificationModel] Count changed to:" << m_notifications.size();
-    //     emit this->countChanged();
-    // }
+    if (countChanged) {
+        // qDebug() << "[AlertZoneNotificationModel] Count changed to:" << m_notifications.size();
+        emit this->countChanged();
+    }
 }
 
 QVector<int> AlertZoneNotificationModel::diffRoles(const AlertZoneNotification &a, const AlertZoneNotification &b) const
