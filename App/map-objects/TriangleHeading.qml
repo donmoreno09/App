@@ -14,7 +14,7 @@ Item {
     property real triBase: 14
     property real triHeight: 10
     property color triFill: Theme.colors.accent
-    property color triStroke: Theme.colors.black
+    property color triStroke: Theme.colors.white
     property real triStrokeWidth: 0
     property real baseRotationDeg: 0
 
