@@ -15,8 +15,10 @@ MapItemGroup {
     property bool showHighlight: true
     property bool showLabel: true
     property color fillColor: "#22448888"
+    property color fillColorHover: "#22448888"
     property color strokeColor: "green"
     property color highlightColor: "white"
+    property real strokeWidth: 2
     property color labelFillColor: Theme.colors.hexWithAlpha("#539E07", 0.6)
     property color labelBorderColor: Theme.colors.white
     property color labelTextColor: Theme.colors.white
@@ -32,7 +34,6 @@ MapItemGroup {
 
     signal tapped()
     signal cornersChanged(geoCoordinate topLeft, geoCoordinate bottomRight)
-    signal editingFinished()
 
     // Internal working geometry
     property geoCoordinate _tl: QtPositioning.coordinate()
@@ -40,6 +41,32 @@ MapItemGroup {
     property bool isDraggingHandler: false
     readonly property bool isMovingRectangle: moveRect.active
     readonly property bool isBodyPressed: moveRectTap.pressed
+
+    property bool isHovered: false
+    property bool hoverEnabled: false
+    property bool labelOnHover: false
+    property real strokeWidthHover: strokeWidth
+    property bool disableHoverStroke: false
+
+    readonly property bool hoverActive: root.isHovered && !root.isEditing
+    readonly property bool labelVisible: {
+        if (!root.showLabel || root.labelText === "")
+            return false
+
+        if (root.labelOnHover)
+            return root.hoverActive
+
+        return true
+    }
+    readonly property real effectiveStrokeWidth: {
+        if (root.disableHoverStroke && !root.isEditing)
+            return 0
+
+        if (root.hoverActive && !root.disableHoverStroke)
+            return strokeWidthHover
+
+        return strokeWidth
+    }
 
     function _syncGeometry() {
         const norm = RectGeom.normalizeCorners(topLeft, bottomRight, QtPositioning)
@@ -58,9 +85,9 @@ MapItemGroup {
         id: committedRect
         topLeft: root._tl
         bottomRight: root._br
-        color: root.fillColor
+        color: (root.hoverEnabled && root.hoverActive) ? root.fillColorHover : root.fillColor
         border.color: root.strokeColor
-        border.width: 2
+        border.width: root.effectiveStrokeWidth
         z: root.z
 
         // Scratch state for drag
@@ -146,7 +173,6 @@ MapItemGroup {
                 committedRect._startTLCoord = QtPositioning.coordinate()
                 committedRect._startBRCoord = QtPositioning.coordinate()
                 committedRect._anchorCoord = QtPositioning.coordinate()
-                root.editingFinished()
             }
 
             onActiveTranslationChanged: {
@@ -159,6 +185,12 @@ MapItemGroup {
                 committedRect._lastScenePos = scenePos
                 committedRect.applyMoveDelta()
             }
+        }
+
+        HoverHandler {
+            acceptedDevices: PointerDevice.Mouse
+            enabled: root.hoverEnabled
+            onHoveredChanged: root.isHovered = root.hoverEnabled && hovered
         }
     }
 
@@ -223,11 +255,7 @@ MapItemGroup {
             // and disable it while the body drag is active
             enabled: root.isEditing && !moveRect.active
 
-            onActiveChanged: {
-                root.isDraggingHandler = active
-                if (!active)
-                    root.editingFinished()
-            }
+            onActiveChanged: root.isDraggingHandler = active
 
             onTranslationChanged: {
                 const mapItem = root.map
@@ -270,7 +298,7 @@ MapItemGroup {
 
     Rectangle {
         anchors.centerIn: committedRect
-        visible: root.showLabel && root.labelText !== ""
+        visible: root.labelVisible
         width: text.width + Theme.spacing.s3
         height: text.height + Theme.spacing.s1
         radius: Theme.radius.sm

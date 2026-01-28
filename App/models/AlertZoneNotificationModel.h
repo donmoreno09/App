@@ -1,0 +1,79 @@
+#ifndef ALERTZONENOTIFICATIONMODEL_H
+#define ALERTZONENOTIFICATIONMODEL_H
+
+#include <QAbstractListModel>
+#include <QVector>
+#include <QHash>
+#include <QPointer>
+#include <QQmlEngine>
+#include <entities/AlertZoneNotification.h>
+#include "ModelHelper.h"
+
+class AlertZoneNotificationModel : public QAbstractListModel
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
+
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(bool initialLoadComplete READ initialLoadComplete NOTIFY initialLoadCompleteChanged)
+
+public:
+    explicit AlertZoneNotificationModel(QObject *parent = nullptr);
+
+    enum Roles {
+        IdRole = Qt::UserRole + 1,
+        UserIdRole,
+        AlertZoneRole,
+        TrackDataRole,
+        TrackTypeRole,
+        TopicRole,
+        StatusRole,
+        DetectedAtRole,
+        SentAtRole,
+        CreatedAtRole,
+        UpdatedAtRole,
+        IsReadRole,
+        IsDeletedRole,
+    };
+
+    Q_ENUM(Roles)
+
+    // QAbstractListModel interface
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QHash<int, QByteArray> roleNames() const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+    // Property getters
+    int count() const { return m_notifications.size(); }
+    bool initialLoadComplete() const { return m_initialLoadComplete; }
+    void setInitialLoadComplete(bool complete);
+
+    // Data access
+    QVector<AlertZoneNotification> &notifications();
+
+    // Data manipulation
+    void set(const QVector<AlertZoneNotification> &notifications);
+    void upsert(const QVector<AlertZoneNotification> &notifications);
+
+    // Invokable methods for QML
+    Q_INVOKABLE void removeNotification(const QString& id);
+    Q_INVOKABLE void clearAll();
+    Q_INVOKABLE QVariantMap getEditableNotification(int index);
+
+signals:
+    void countChanged();
+    void initialLoadCompleteChanged();
+
+private:
+    QVector<int> diffRoles(const AlertZoneNotification &a, const AlertZoneNotification &b) const;
+
+    QVector<AlertZoneNotification> m_notifications;
+    QHash<QString, int> m_upsertMap;
+    QSet<QString> m_deletedIds;
+    QPointer<ModelHelper> m_helper;
+    bool m_initialLoadComplete = false;
+};
+
+#endif // ALERTZONENOTIFICATIONMODEL_H

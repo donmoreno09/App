@@ -20,28 +20,11 @@ set(qml_files
     modes/polygon/CreatePolygonMode.qml
     modes/polygon/EditPolygonMode.qml
     modes/polygon/PolygonGeometry.js
-
-    commands/ICommand.js
-    commands/PolygonCommands.js
-    commands/polygoncommands/AddPolygonVertexCommand.js
-    commands/polygoncommands/ClosePolygonCommand.js
-    commands/polygoncommands/UpdatePolygonVertexCommand.js
-    commands/polygoncommands/TranslatePolygonCommand.js
-    commands/polygoncommands/TranslatePolygonCreationCommand.js
-    commands/RectangleCommands.js
-    commands/rectanglecommands/UpdateRectangleCornerCommand.js
-    commands/rectanglecommands/TranslateRectangleCommand.js
-    commands/rectanglecommands/TranslateRectangleCreationCommand.js
-    commands/EllipseCommands.js
-    commands/ellipsecommands/TranslateEllipseCreationCommand.js
-    commands/ellipsecommands/TranslateEllipseCommand.js
-    commands/ellipsecommands/UpdateEllipseRadiusCommand.js
 )
 
 set(qml_singletons
     MapModeController.qml
     MapModeRegistry.qml
-    commands/CommandManager.qml
 )
 
 set_source_files_properties(
@@ -57,4 +40,3 @@ qt_add_qml_module(app_features_mapmodes
         ${qml_singletons}
     RESOURCE_PREFIX "/"
 )
-

@@ -15,8 +15,10 @@ MapItemGroup {
     property bool showHighlight: true
     property bool showLabel: true
     property color fillColor: "#22448888"
+    property color fillColorHover: "#22448888"
     property color strokeColor: "green"
     property color highlightColor: "white"
+    property real strokeWidth: 2
     property color labelFillColor: Theme.colors.hexWithAlpha("#539E07", 0.6)
     property color labelBorderColor: Theme.colors.white
     property color labelTextColor: Theme.colors.white
@@ -34,7 +36,6 @@ MapItemGroup {
 
     signal tapped()
     signal ellipseChanged(geoCoordinate center, real radiusA, real radiusB)
-    signal editingFinished()
 
     property var _path: []
     function _syncPath() {
@@ -55,12 +56,38 @@ MapItemGroup {
     readonly property bool isMovingEllipse: moveDrag.active
     readonly property bool isBodyPressed: moveTap.pressed
 
+    property bool isHovered: false
+    property bool hoverEnabled: false
+    property bool labelOnHover: false
+    property real strokeWidthHover: strokeWidth
+    property bool disableHoverStroke: false
+
+    readonly property bool hoverActive: root.isHovered && !root.isEditing
+    readonly property bool labelVisible: {
+        if (!root.showLabel || !root.hasEllipse || root.labelText === "")
+            return false
+
+        if (root.labelOnHover)
+            return root.hoverActive
+
+        return true
+    }
+    readonly property real effectiveStrokeWidth: {
+        if (root.disableHoverStroke && !root.isEditing)
+            return 0
+
+        if (root.hoverActive && !root.disableHoverStroke)
+            return strokeWidthHover
+
+        return strokeWidth
+    }
+
     MapPolygon {
         id: ellipse
         path: root._path
-        color: root.fillColor
+        color: (root.hoverEnabled && root.hoverActive) ? root.fillColorHover : root.fillColor
         border.color: root.strokeColor
-        border.width: 2
+        border.width: root.effectiveStrokeWidth
         z: root.z
         visible: root.hasEllipse
 
@@ -98,7 +125,6 @@ MapItemGroup {
             } else {
                 root._startCenter = QtPositioning.coordinate()
                 root._anchorCoord = QtPositioning.coordinate()
-                root.editingFinished()
             }
 
             onActiveTranslationChanged: {
@@ -115,6 +141,12 @@ MapItemGroup {
 
                 root.ellipseChanged(newCenter, root.radiusA, root.radiusB)
             }
+        }
+
+        HoverHandler {
+            acceptedDevices: PointerDevice.Mouse
+            enabled: root.hoverEnabled
+            onHoveredChanged: root.isHovered = root.hoverEnabled && hovered
         }
     }
 
@@ -146,6 +178,7 @@ MapItemGroup {
 
         TapHandler {
             acceptedButtons: Qt.LeftButton
+            onPressedChanged: root.isDraggingHandler = pressed
             gesturePolicy: TapHandler.ReleaseWithinBounds
         }
 
@@ -153,12 +186,6 @@ MapItemGroup {
             target: null
             acceptedButtons: Qt.LeftButton
             grabPermissions: PointerHandler.CanTakeOverFromAnything
-
-            onActiveChanged: {
-                root.isDraggingHandler = active
-                if (!active)
-                    root.editingFinished()
-            }
 
             onTranslationChanged: {
                 const mapItem = root.map
@@ -190,7 +217,7 @@ MapItemGroup {
         border.color: root.labelBorderColor
         border.width: root.isEditing ? root.labelBorderWidth : Theme.borders.b0
         z: ellipse.z + 2
-        visible: root.showLabel && root.hasEllipse && root.labelText !== ""
+        visible: root.labelVisible
 
         Text {
             id: text

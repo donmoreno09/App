@@ -19,7 +19,6 @@ import App.Features.Notifications 1.0
 import App.Features.MapToolbar 1.0
 import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
-import App.Features.MapModes 1.0 as Commands
 
 ApplicationWindow {
     id: app
@@ -52,6 +51,7 @@ ApplicationWindow {
     }
 
     MapHost {
+        id: mapHost
         anchors.fill: parent
         initialPlugin: MapPlugins.osmDefault
 
@@ -234,33 +234,10 @@ ApplicationWindow {
         }
     }
 
-    Shortcut {
-        sequence: "Ctrl+Z"
-        context: Qt.ApplicationShortcut
-        onActivated: {
-            console.log("[Shortcut] Undo triggered, canUndo:", Commands.CommandManager.canUndo)
-            if (Commands.CommandManager.canUndo)
-                Commands.CommandManager.undo()
-        }
-    }
+    NotificationToast {
+        anchors.fill: parent
+        z: Theme.elevation.modal + 1
 
-    Shortcut {
-        sequence: "Ctrl+Y"
-        context: Qt.ApplicationShortcut
-        onActivated: {
-            console.log("[Shortcut] Redo triggered, canRedo:", Commands.CommandManager.canRedo)
-            if (Commands.CommandManager.canRedo)
-                Commands.CommandManager.redo()
-        }
-    }
-
-    Shortcut {
-        sequence: "Ctrl+Shift+Z"
-        context: Qt.ApplicationShortcut
-        onActivated: {
-            console.log("[Shortcut] Redo (Ctrl+Shift+Z) triggered, canRedo:", Commands.CommandManager.canRedo)
-            if (Commands.CommandManager.canRedo)
-                Commands.CommandManager.redo()
-        }
+        mapReference: mapHost
     }
 }

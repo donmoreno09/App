@@ -16,6 +16,7 @@ MapItemGroup {
     property bool showLabel: true
     property bool closed: true
     property color fillColor: "#22448888"
+    property color fillColorHover: "#22448888"
     property color strokeColor: "green"
     property color highlightColor: "white"
     property real strokeWidth: 2
@@ -36,10 +37,36 @@ MapItemGroup {
     readonly property bool hasPolygon: PolyGeom.hasPolygon(_path) && closed
     readonly property bool hasPath: _path.length > 0
 
+    property bool isHovered: false
+    property bool hoverEnabled: false
+    property bool labelOnHover: false
+    property real strokeWidthHover: strokeWidth
+    property bool disableHoverStroke: false
+
+    readonly property bool hoverActive: root.isHovered && !root.isEditing
+    readonly property bool labelVisible: {
+        if (!root.showLabel || !root.hasPolygon || root.labelText === "")
+            return false
+
+        if (root.labelOnHover)
+            return root.hoverActive
+
+        return true
+    }
+    readonly property real effectiveStrokeWidth: {
+        if (root.disableHoverStroke && !root.isEditing)
+            return 0
+
+        if (root.hoverActive && !root.disableHoverStroke)
+            return strokeWidthHover
+
+        return strokeWidth
+    }
+
+
     signal tapped()
     signal pathEdited(var path)
     signal firstPointTapped()
-    signal editingFinished()
 
     property bool isDraggingHandle: false
     readonly property bool isMovingPolygon: moveDrag.active
@@ -70,9 +97,9 @@ MapItemGroup {
         id: polygon
         visible: root.closed && root.hasPath
         path: root._path
-        color: root.fillColor
+        color: (root.hoverEnabled && root.hoverActive) ? root.fillColorHover : root.fillColor
         border.color: root.strokeColor
-        border.width: root.strokeWidth
+        border.width: root.effectiveStrokeWidth
         z: root.z
 
         // Prevent tap propagating below
@@ -117,7 +144,6 @@ MapItemGroup {
                 root._startCoords = []
                 root._anchorCoord = QtPositioning.coordinate()
                 root._lastScenePos = Qt.point(0, 0)
-                root.editingFinished()
             }
 
             onActiveTranslationChanged: {
@@ -165,6 +191,12 @@ MapItemGroup {
                 root._path = next
                 root.pathEdited(PolyGeom.clonePath(next, QtPositioning))
             }
+        }
+
+        HoverHandler {
+            acceptedDevices: PointerDevice.Mouse
+            enabled: root.hoverEnabled
+            onHoveredChanged: root.isHovered = root.hoverEnabled && hovered
         }
     }
 
@@ -235,18 +267,14 @@ MapItemGroup {
                     root.pathEdited(next)
                 }
 
-                onActiveChanged: {
-                    root.isDraggingHandle = active
-                    if (!active)
-                        root.editingFinished()
-                }
+                onActiveChanged: root.isDraggingHandle = active
             }
         }
     }
 
     Rectangle {
         anchors.centerIn: polygon
-        visible: root.showLabel && root.hasPolygon && root.labelText !== ""
+        visible: root.labelVisible
         width: text.width + Theme.spacing.s3
         height: text.height + Theme.spacing.s1
         radius: Theme.radius.sm

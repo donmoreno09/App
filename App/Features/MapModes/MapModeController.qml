@@ -7,7 +7,6 @@ import App.Features.SidePanel 1.0
 
 import "modes"
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
-import App.Features.MapModes 1.0 as Commands
 
 QtObject {
     id: root
@@ -38,11 +37,6 @@ QtObject {
     }
 
     function setActiveMode(mode: BaseMode) {
-        // Clear undo history when switching modes
-        if (activeMode !== mode) {
-            Commands.CommandManager.clear()
-        }
-
         if (!_willEdit) clearState()
         _willEdit = false
 
