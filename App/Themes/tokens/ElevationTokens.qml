@@ -57,4 +57,7 @@ QtObject {
     readonly property int modal:      z40
     readonly property int toast:      z50
     readonly property int system:     z100
+
+    readonly property int layerShapes: 3
+    readonly property int layerTracks: 5
 }

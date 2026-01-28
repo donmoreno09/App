@@ -50,10 +50,15 @@ set(cpp_sources
     connections/http/vesselfinderhttpservice.h
 
     connections/mqtt/parser/TrackParser.h
-    connections/mqtt/parser/TruckNotificationParser.h
     connections/mqtt/parser/TirParser.h
     connections/mqtt/MqttClientService.cpp
     connections/mqtt/MqttClientService.h
+
+    connections/signalr/SignalRClientService.h
+    connections/signalr/SignalRClientService.cpp
+    connections/signalr/parser/ISignalRMessageParser.h
+    connections/signalr/parser/TruckNotificationSignalRParser.h
+    connections/signalr/parser/AlertZoneNotificationParser.h
 
     connections/ApiEndpoints.h
     connections/ApiEndpoints.cpp
@@ -92,11 +97,13 @@ set(cpp_sources
 
     # Entities
     entities/AlertZone.h
+    entities/AlertZoneNotification.h
     entities/metadata/MetadataEntry.h
     entities/metadata/NoteMetadataEntry.h
     entities/AlertZone.h
     entities/Details.h
     entities/Geometry.h
+    entities/NotificationTrackData.h
     entities/Poi.h
     entities/shape.h
     entities/BaseTrack.h
@@ -109,6 +116,8 @@ set(cpp_sources
     # Qt Models
     models/AlertZoneModel.h
     models/AlertZoneModel.cpp
+    models/AlertZoneNotificationModel.h
+    models/AlertZoneNotificationModel.cpp
     models/ModelHelper.h
     models/ModelHelper.cpp
     models/CoordinatesModel.h
@@ -172,6 +181,7 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::WebEngineQuick
         Qt6::WebEngineCore
         QMapLibre::Location
+        Qt6::WebSockets
 )
 
 qmaplibre_location_setup_plugins(${PROJECT_NAME})
@@ -180,6 +190,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/connections
         ${CMAKE_CURRENT_SOURCE_DIR}/connections/mqtt
+        ${CMAKE_CURRENT_SOURCE_DIR}/connections/signalr
         ${CMAKE_CURRENT_SOURCE_DIR}/connections/http
         ${CMAKE_CURRENT_SOURCE_DIR}/core
         ${CMAKE_CURRENT_SOURCE_DIR}/events

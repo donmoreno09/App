@@ -3,8 +3,7 @@
 
 TruckNotificationModel::TruckNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
-{
-}
+{}
 
 int TruckNotificationModel::rowCount(const QModelIndex &parent) const
 {
@@ -23,22 +22,20 @@ QVariant TruckNotificationModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case IdRole: return notif.id;
+    case EnvelopeIdRole: return notif.envelopeId;
     case UserIdRole: return notif.userId;
     case OperationIdRole: return notif.operationId;
     case OperationCodeRole: return notif.operationCode;
     case LocationRole: return QVariant::fromValue(notif.location);
-    case OperationIssueTypeIdRole: return notif.operationIssueTypeId;
+    case IssueTypeRole: return notif.issueType;
     case OperationStateRole: return notif.operationState;
-    case OperationIssueSolutionTypeIdRole: return notif.operationIssueSolutionTypeId;
+    case SolutionTypeRole: return notif.solutionType;
     case EstimatedArrivalRole: return notif.estimatedArrival;
     case NoteRole: return notif.note;
     case ReportedAtRole: return notif.reportedAt;
     case SolvedAtRole: return notif.solvedAt;
-    case IsDeletedRole: return notif.isDeleted;
     case CreatedAtRole: return notif.createdAt;
-    case UpdatedAtRole: return notif.updatedAt;
-    case BadgeTypeRole: return notif.getBadgeType();
-    case VariantTypeRole: return notif.getVariantType();
+    case TimestampRole: return notif.timestamp;
     default: return {};
     }
 }
@@ -47,20 +44,20 @@ QHash<int, QByteArray> TruckNotificationModel::roleNames() const
 {
     return {
         { IdRole, "id" },
+        { EnvelopeIdRole, "envelopeId"},
         { UserIdRole, "userId" },
         { OperationIdRole, "operationId" },
         { OperationCodeRole, "operationCode" },
         { LocationRole, "location" },
-        { OperationIssueTypeIdRole, "operationIssueTypeId" },
+        { IssueTypeRole, "issueType" },
         { OperationStateRole, "operationState" },
-        { OperationIssueSolutionTypeIdRole, "operationIssueSolutionTypeId" },
+        { SolutionTypeRole, "solutionType" },
         { EstimatedArrivalRole, "estimatedArrival" },
         { NoteRole, "note" },
         { ReportedAtRole, "reportedAt" },
         { SolvedAtRole, "solvedAt" },
-        { IsDeletedRole, "isDeleted" },
         { CreatedAtRole, "createdAt" },
-        { UpdatedAtRole, "updatedAt" },
+        { TimestampRole, "timestamp" },
         { BadgeTypeRole, "badgeType" },
         { VariantTypeRole, "variantType" }
     };
@@ -93,20 +90,25 @@ void TruckNotificationModel::set(const QVector<TruckNotification> &notifications
 
 void TruckNotificationModel::upsert(const QVector<TruckNotification> &notifications)
 {
-    QSet<QString> seen;
+    if (notifications.isEmpty()) {
+        return;
+    }
+
+    qDebug() << "[TruckNotificationModel] upsert() called with" << notifications.size() << "notifications";
+
     bool countChanged = false;
 
-    // Update existing notification or insert it
     for (const auto& notif : notifications) {
+        qDebug() << "[TruckNotificationModel] Processing notification:" << notif.id;
+
         if (m_deletedIds.contains(notif.id)) {
+            qWarning() << "[TruckNotificationModel] Skipping deleted notification:" << notif.id;
             continue;
         }
 
-        seen.insert(notif.id);
         auto it = m_upsertMap.find(notif.id);
 
         if (it != m_upsertMap.end()) {
-            // Update existing notification
             const int row = it.value();
 
             QVector<int> changed = diffRoles(m_notifications[row], notif);
@@ -114,9 +116,11 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
+                qDebug() << "[TruckNotificationModel] Updated notification at row" << row;
+            } else {
+                qDebug() << "[TruckNotificationModel] No changes for notification at row" << row;
             }
         } else {
-            // Insert new notification
             const int row = m_notifications.size();
 
             beginInsertRows({}, row, row);
@@ -124,33 +128,13 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
             m_upsertMap.insert(notif.id, row);
             endInsertRows();
             countChanged = true;
-        }
-    }
 
-    // Remove stale notifications (not in current batch)
-    bool removed = false;
-    for (int row = m_notifications.size() - 1; row >= 0; row--) {
-        const auto& notif = m_notifications[row];
-        if (!seen.contains(notif.id)) {
-            beginRemoveRows({}, row, row);
-            m_upsertMap.remove(notif.id);
-            m_notifications.removeAt(row);
-            endRemoveRows();
-            removed = true;
-            countChanged = true;
-        }
-    }
-
-    // Rebuild map if removed notifications (indices shifted)
-    if (removed) {
-        m_upsertMap.clear();
-        m_upsertMap.reserve(m_notifications.size());
-        for (int row = 0; row < m_notifications.size(); row++) {
-            m_upsertMap.insert(m_notifications[row].id, row);
+            qDebug() << "[TruckNotificationModel] Inserted new notification at row" << row;
         }
     }
 
     if (countChanged) {
+        qDebug() << "[TruckNotificationModel] Count changed to:" << m_notifications.size();
         emit this->countChanged();
     }
 }
@@ -164,33 +148,17 @@ QVector<int> TruckNotificationModel::diffRoles(const TruckNotification &a, const
     if (a.operationId != b.operationId) roles << OperationIdRole;
     if (a.operationCode != b.operationCode) roles << OperationCodeRole;
     if (a.location != b.location) roles << LocationRole;
-    if (a.operationIssueTypeId != b.operationIssueTypeId) roles << OperationIssueTypeIdRole;
+    if (a.issueType != b.issueType) roles << IssueTypeRole;
     if (a.operationState != b.operationState) roles << OperationStateRole;
-    if (a.operationIssueSolutionTypeId != b.operationIssueSolutionTypeId) roles << OperationIssueSolutionTypeIdRole;
+    if (a.solutionType != b.solutionType) roles << SolutionTypeRole;
     if (a.estimatedArrival != b.estimatedArrival) roles << EstimatedArrivalRole;
     if (a.note != b.note) roles << NoteRole;
     if (a.reportedAt != b.reportedAt) roles << ReportedAtRole;
     if (a.solvedAt != b.solvedAt) roles << SolvedAtRole;
-    if (a.isDeleted != b.isDeleted) roles << IsDeletedRole;
     if (a.createdAt != b.createdAt) roles << CreatedAtRole;
-    if (a.updatedAt != b.updatedAt) roles << UpdatedAtRole;
-
-    // Check helper roles
-    if (a.getBadgeType() != b.getBadgeType()) roles << BadgeTypeRole;
-    if (a.getVariantType() != b.getVariantType()) roles << VariantTypeRole;
+    if (a.timestamp != b.timestamp) roles << TimestampRole;
 
     return roles;
-}
-
-int TruckNotificationModel::countByState(const QString &state) const
-{
-    int count = 0;
-    for (const auto& notif : m_notifications) {
-        if (notif.operationState == state) {
-            count++;
-        }
-    }
-    return count;
 }
 
 void TruckNotificationModel::removeNotification(const QString &id)
@@ -210,7 +178,6 @@ void TruckNotificationModel::removeNotification(const QString &id)
     m_notifications.removeAt(row);
     endRemoveRows();
 
-    // Rebuild map (indices shifted)
     m_upsertMap.clear();
     m_upsertMap.reserve(m_notifications.size());
     for (int i = 0; i < m_notifications.size(); i++) {
@@ -241,4 +208,13 @@ void TruckNotificationModel::clearAll()
 QQmlPropertyMap *TruckNotificationModel::getEditableNotification(int index)
 {
     return m_helper->map(index);
+}
+
+void TruckNotificationModel::setInitialLoadComplete(bool complete)
+{
+    if (m_initialLoadComplete != complete) {
+        m_initialLoadComplete = complete;
+        emit initialLoadCompleteChanged();
+        qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
+    }
 }

@@ -18,6 +18,7 @@ set(qml_files
     Switcher.qml
     TextArea.qml
     Title.qml
+    ToastNotification.qml
     VerticalDivider.qml
     VerticalPadding.qml
     VerticalSpacer.qml

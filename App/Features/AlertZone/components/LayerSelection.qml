@@ -12,7 +12,7 @@ ColumnLayout {
     readonly property var selectedLayers: {
        var layers = {}
        layers["ais"] = aisToggle.checked
-       layers["docSpace"] = docSpaceToggle.checked
+       layers["doc-space"] = docSpaceToggle.checked
        layers["tir"] = tirToggle.checked
        layers["poi"] = poiToggle.checked
 
@@ -29,7 +29,7 @@ ColumnLayout {
 
     function setLayers(layersMap) {
         aisToggle.checked = layersMap["ais"] === true
-        docSpaceToggle.checked = layersMap["docSpace"] === true
+        docSpaceToggle.checked = layersMap["doc-space"] === true
         tirToggle.checked = layersMap["tir"] === true
         poiToggle.checked = layersMap["poi"] === true
     }

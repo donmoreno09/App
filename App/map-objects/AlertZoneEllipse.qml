@@ -14,13 +14,22 @@ UI.EditableEllipse {
     z: Theme.elevation.z100 + (isEditing ? 100 : 0)
 
     readonly property color zoneColor: {
-        console.log("AlertZone", label, "active:", active, "severity:", severity)
-        if (!active) return "#888888"
+        if (!active) return Theme.colors.alertZoneDisabled
         switch(severity) {
-        case 2: return "#FF0000"
-        case 1: return "#FF6600"
+        case 2: return Theme.colors.alertZoneHigh
+        case 1: return Theme.colors.alertZoneMedium
         case 0:
-        default: return "#FFCC00"
+        default: return Theme.colors.alertZoneLow
+        }
+    }
+
+    readonly property color zoneColorHover: {
+        if (!active) return Theme.colors.alertZoneDisabledHover
+        switch(severity) {
+        case 2: return Theme.colors.alertZoneHighHover
+        case 1: return Theme.colors.alertZoneMediumHover
+        case 0:
+        default: return Theme.colors.alertZoneLowHover
         }
     }
 
@@ -37,15 +46,19 @@ UI.EditableEllipse {
     radiusA: model.radiusA
     radiusB: model.radiusB
 
-    fillColor: Qt.rgba(zoneColor.r, zoneColor.g, zoneColor.b, 0.13)
-    strokeColor: zoneColor
+    fillColor: root.zoneColor
+    labelOnHover: true
+    hoverEnabled: true
+    disableHoverStroke: true
+    fillColorHover: root.zoneColorHover
+    strokeColor: root.zoneColorHover
     highlightColor: "white"
 
     tapEnabled: !root.isEditing && !MapModeController.isCreating
     onTapped: MapModeController.editAlertZone(AlertZoneModel.getEditableAlertZone(index))
 
     labelText: label
-    labelFillColor: Theme.colors.hexWithAlpha(zoneColor, 0.8)
+    labelFillColor: Theme.colors.hexWithAlpha(root.zoneColorHover, 0.8)
     labelBorderColor: Theme.colors.white
     labelTextColor: Theme.colors.white
     labelBorderWidth: Theme.borders.b1
