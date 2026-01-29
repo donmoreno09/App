@@ -1,8 +1,10 @@
 import QtQuick 6.8
+import QtQuick.Controls 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
 
 import App 1.0
+import App.Themes 1.0
 import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.TrackPanel 1.0
@@ -30,46 +32,15 @@ MapItemGroup {
         anchorPoint.x: sourceItem.width / 2
         anchorPoint.y: sourceItem.height / 2
 
-        sourceItem: Item {
-            id: trackRect
-            width: 40
-            height: 40
-            opacity: root.state === 'STALE' ? 0.5 : 1.0
-
-            TriangleHeading {
-                heading: root.cog
-                centerItem: image
-            }
-
-            Image {
-                id: image
-                anchors.fill: parent
-                anchors.centerIn: parent
-                source: "qrc:/App/assets/icons/track/smartport/" + root.code.substring(0,2) + "/" + root.code.substring(2,4) + "/" + root.code.substring(4,6) + "/" + root.code + ".svg"
-                fillMode: Image.PreserveAspectFit
-                smooth: true
-                opacity: root.state === 'STALE' ? 0.5 : 1.0
-            }
-
-            Text {
-                id: trackLabel
-                text: "T" + root.trackNumber.toString()
-                font.pixelSize: 12
-                color: "black"
-                anchors.left: parent.right
-                anchors.leftMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-                wrapMode: Text.Wrap
-            }
-
-            TapHandler {
-                id: tapHandler
-                acceptedButtons: Qt.LeftButton
-                gesturePolicy: TapHandler.ReleaseWithinBounds
-                onTapped: (event) => {
-                    SidePanelController.openOrRefresh(Routes.TrackPanel)
-                    SelectedTrackState.select(root.trackModel.getEditableTrack(root.index))
-                }
+        sourceItem: CircleMarker {
+            color: Theme.colors.accent
+            iconColor: Theme.colors.white
+            iconSource: "qrc:/App/assets/icons/fa/ship.svg"
+            labelText: "T" + root.trackNumber.toString()
+            heading: root.cog
+            onTapped: {
+                SidePanelController.openOrRefresh(Routes.TrackPanel)
+                SelectedTrackState.select(root.trackModel.getEditableTrack(root.index))
             }
         }
     }
