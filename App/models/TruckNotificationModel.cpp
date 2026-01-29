@@ -1,5 +1,6 @@
 #include "TruckNotificationModel.h"
 #include <QDebug>
+#include <algorithm>
 
 TruckNotificationModel::TruckNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
@@ -80,6 +81,13 @@ void TruckNotificationModel::set(const QVector<TruckNotification> &notifications
 {
     beginResetModel();
     m_notifications = notifications;
+
+    // Sort by timestamp descending (most recent first)
+    std::sort(m_notifications.begin(), m_notifications.end(),
+              [](const TruckNotification &a, const TruckNotification &b) {
+                  return a.timestamp > b.timestamp;
+              });
+
     m_upsertMap.clear();
     for (int i = 0; i < m_notifications.size(); ++i) {
         m_upsertMap.insert(m_notifications[i].id, i);
@@ -121,15 +129,20 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
                 // qDebug() << "[TruckNotificationModel] No changes for notification at row" << row;
             }
         } else {
-            const int row = m_notifications.size();
+            // Prepend new notifications at the top (row 0)
+            beginInsertRows({}, 0, 0);
+            m_notifications.prepend(notif);
 
-            beginInsertRows({}, row, row);
-            m_notifications.append(notif);
-            m_upsertMap.insert(notif.id, row);
+            // Rebuild upsertMap since all indices shifted
+            m_upsertMap.clear();
+            for (int i = 0; i < m_notifications.size(); ++i) {
+                m_upsertMap.insert(m_notifications[i].id, i);
+            }
+
             endInsertRows();
             countChanged = true;
 
-            // qDebug() << "[TruckNotificationModel] Inserted new notification at row" << row;
+            // qDebug() << "[TruckNotificationModel] Inserted new notification at row 0";
         }
     }
 

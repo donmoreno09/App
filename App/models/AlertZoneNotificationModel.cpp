@@ -1,5 +1,6 @@
 #include "AlertZoneNotificationModel.h"
 #include <QDebug>
+#include <algorithm>
 
 AlertZoneNotificationModel::AlertZoneNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
@@ -116,6 +117,13 @@ void AlertZoneNotificationModel::set(const QVector<AlertZoneNotification> &notif
 {
     beginResetModel();
     m_notifications = notifications;
+
+    // Sort by detectedAt descending (most recent first)
+    std::sort(m_notifications.begin(), m_notifications.end(),
+              [](const AlertZoneNotification &a, const AlertZoneNotification &b) {
+                  return a.detectedAt > b.detectedAt;
+              });
+
     m_upsertMap.clear();
     for (int i = 0; i < m_notifications.size(); ++i) {
         m_upsertMap.insert(m_notifications[i].id, i);
@@ -156,16 +164,20 @@ void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &no
                 // qDebug() << "[AlertZoneNotificationModel] No changes for notification at row" << row;
             }
         } else {
-            // Insert new notification
-            const int row = m_notifications.size();
+            // Prepend new notifications at the top (row 0)
+            beginInsertRows({}, 0, 0);
+            m_notifications.prepend(notif);
 
-            beginInsertRows({}, row, row);
-            m_notifications.append(notif);
-            m_upsertMap.insert(notif.id, row);
+            // Rebuild upsertMap since all indices shifted
+            m_upsertMap.clear();
+            for (int i = 0; i < m_notifications.size(); ++i) {
+                m_upsertMap.insert(m_notifications[i].id, i);
+            }
+
             endInsertRows();
             countChanged = true;
 
-            // qDebug() << "[AlertZoneNotificationModel] Inserted new notification at row" << row;
+            // qDebug() << "[AlertZoneNotificationModel] Inserted new notification at row 0";
         }
     }
 
