@@ -45,6 +45,7 @@ Item {
             icon.height: parent.height * 0.6
             icon.cache: true
             anchors.centerIn: parent
+            onClicked: root.tapped()
         }
     }
 
@@ -63,6 +64,6 @@ Item {
     TapHandler {
         acceptedButtons: Qt.LeftButton
         gesturePolicy: TapHandler.ReleaseWithinBounds
-        onTapped: tapped()
+        onTapped: root.tapped()
     }
 }

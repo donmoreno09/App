@@ -38,7 +38,7 @@ MapItemGroup {
             iconSource: "qrc:/App/assets/icons/fa/ship.svg"
             labelText: "T" + root.trackNumber.toString()
             heading: root.cog
-            onTapped: function () {
+            onTapped: {
                 SidePanelController.openOrRefresh(Routes.TrackPanel)
                 SelectedTrackState.select(root.trackModel.getEditableTrack(root.index))
             }

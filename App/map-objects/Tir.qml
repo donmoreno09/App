@@ -37,7 +37,7 @@ MapQuickItem {
         iconSource: "qrc:/App/assets/icons/fa/truck.svg"
         labelText: root.operationCode
         heading: root.cog
-        onTapped: function () {
+        onTapped: {
             SidePanelController.openOrRefresh(Routes.TirPanel)
             SelectedTrackState.select(root.tirModel.getEditableTir(root.index))
         }
