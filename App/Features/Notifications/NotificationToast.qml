@@ -185,7 +185,7 @@ Item {
                 // Multiple - aggregate
                 _addToast({
                     toastTitle: `${TranslationManager.revision}` && qsTr("Alert Zone Intrusions"),
-                    toastMessage: `${TranslationManager.revision}` && qsTr("%n new intrusion(s) detected", "", alertZoneCount),
+                    toastMessage: `${TranslationManager.revision}` && qsTr("%1 new intrusions detected ").arg(alertZoneCount),
                     toastType: "alertzone",
                     toastId: "aggregate-alertzone"
                 })
@@ -207,7 +207,7 @@ Item {
                 // Multiple - aggregate
                 _addToast({
                     toastTitle: `${TranslationManager.revision}` && qsTr("Truck Notifications"),
-                    toastMessage: `${TranslationManager.revision}` && qsTr("%n new notification(s)", "", truckCount),
+                    toastMessage: `${TranslationManager.revision}` && qsTr("%1 new notifications ").arg(truckCount),
                     toastType: "truck",
                     toastId: "aggregate-truck"
                 })
