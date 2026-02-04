@@ -11,106 +11,147 @@ import App.Features.Notifications 1.0
 import App.Features.Map 1.0
 
 PanelTemplate {
+    id: root
     title.text: `${TranslationManager.revision}` && qsTr("Notifications")
 
-    ScrollView {
+    readonly property int alertZoneCount: AlertZoneNotificationModel.count
+    readonly property int truckCount: TruckNotificationModel.count
+    readonly property bool hasAlertZone: alertZoneCount > 0
+    readonly property bool hasTruck: truckCount > 0
+
+    NotificationEmptyState {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: Theme.spacing.s16
+        visible: !hasAlertZone && !hasTruck
+    }
+
+    ColumnLayout {
         anchors.fill: parent
-        contentWidth: availableWidth
+        anchors.margins: Theme.spacing.s8
+        spacing: Theme.spacing.s4
+        visible: hasAlertZone || hasTruck
 
-        Pane {
-            anchors.fill: parent
-            padding: Theme.spacing.s8
-            background: Rectangle { color: Theme.colors.transparent }
+        // Alert Zone Section Header (fixed)
+        NotificationSectionHeader {
+            Layout.fillWidth: true
+            sectionTitle: qsTr("Alert Zone Intrusions")
+            visible: hasAlertZone
+        }
 
-            ColumnLayout {
-                width: parent.width
-                spacing: Theme.spacing.s4
+        // Alert Zone ListView
+        ListView {
+            id: alertZoneList
+            Layout.fillWidth: true
+            Layout.fillHeight: hasTruck ? false : true
+            Layout.preferredHeight: hasTruck ? Math.min(contentHeight, root.height * 0.4) : -1
+            spacing: Theme.spacing.s4
+            clip: true
+            visible: hasAlertZone
 
-                NotificationEmptyState {
-                    visible: TruckNotificationModel.count === 0 && AlertZoneNotificationModel.count === 0
+            cacheBuffer: 400
+            reuseItems: true
+
+            model: AlertZoneNotificationModel
+
+            delegate: AlertZoneNotificationCard {
+                width: alertZoneList.width
+
+                required property int index
+                required property string id
+                required property string detectedAt
+                required property var alertZone
+                required property var trackData
+
+                cardNotificationId: id
+                cardTimestamp: detectedAt
+                cardAlertZone: alertZone ?? {}
+                cardTrackData: trackData ?? {}
+
+                onDeleteRequested: (notifId) => {
+                    console.log("[NotificationsPanel] Confirming read for AlertZone:", notifId)
+                    SignalRClientService.invoke("ConfirmRead", [notifId])
+                    AlertZoneNotificationModel.removeNotification(notifId)
                 }
 
-                NotificationSectionHeader {
-                    sectionTitle: qsTr("Alert Zone Intrusions")
-                    visible: AlertZoneNotificationModel.count > 0
+                onViewOnMapRequested: (loc) => {
+                    MapController.setMapCenter(loc)
+                }
+            }
+
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AsNeeded
+            }
+        }
+
+        // Divider (fixed)
+        UI.HorizontalDivider {
+            Layout.fillWidth: true
+            Layout.topMargin: Theme.spacing.s4
+            Layout.bottomMargin: Theme.spacing.s4
+            visible: hasAlertZone && hasTruck
+        }
+
+        // Truck Section Header (fixed)
+        NotificationSectionHeader {
+            Layout.fillWidth: true
+            sectionTitle: qsTr("Truck Operations")
+            visible: hasTruck
+        }
+
+        // Truck ListView
+        ListView {
+            id: truckList
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: Theme.spacing.s4
+            clip: true
+            visible: hasTruck
+
+            cacheBuffer: 400
+            reuseItems: true
+
+            model: TruckNotificationModel
+
+            delegate: TruckNotificationCard {
+                width: truckList.width
+
+                required property int index
+                required property string id
+                required property string envelopeId
+                required property string operationCode
+                required property string operationState
+                required property string reportedAt
+                required property string issueType
+                required property string solutionType
+                required property string estimatedArrival
+                required property var location
+                required property string note
+
+                cardNotificationId: id
+                cardEnvelopeId: envelopeId
+                cardOperationCode: operationCode
+                cardOperationState: operationState
+                cardReportedAt: reportedAt
+                cardIssueType: issueType
+                cardSolutionType: solutionType
+                cardEstimatedArrival: estimatedArrival ?? ""
+                cardLocation: location ?? null
+                cardNote: note ?? ""
+
+                onDeleteRequested: (envId, notifId) => {
+                    console.log("[NotificationsPanel] Confirming read for Truck:", envId)
+                    SignalRClientService.invoke("ConfirmRead", [envId])
+                    TruckNotificationModel.removeNotification(notifId)
                 }
 
-                Repeater {
-                    model: AlertZoneNotificationModel
-
-                    delegate: AlertZoneNotificationCard {
-                        required property string id
-                        required property string detectedAt
-                        required property var alertZone
-                        required property var trackData
-
-                        cardNotificationId: id
-                        cardTimestamp: detectedAt
-                        cardAlertZone: alertZone
-                        cardTrackData: trackData
-
-                        onDeleteRequested: (id) => {
-                            console.log("[NotificationsPanel] Confirming read for AlertZone:", id)
-                            SignalRClientService.invoke("ConfirmRead", [id])
-                            AlertZoneNotificationModel.removeNotification(id)
-                        }
-
-                        onViewOnMapRequested: (loc) => {
-                            MapController.setMapCenter(loc)
-                        }
-                    }
+                onViewOnMapRequested: (loc) => {
+                    MapController.setMapCenter(loc)
                 }
+            }
 
-                UI.HorizontalDivider {
-                    visible: AlertZoneNotificationModel.count > 0 && TruckNotificationModel.count > 0
-                    Layout.topMargin: Theme.spacing.s4
-                    Layout.bottomMargin: Theme.spacing.s4
-                }
-
-                NotificationSectionHeader {
-                    sectionTitle: qsTr("Truck Operations")
-                    visible: TruckNotificationModel.count > 0
-                }
-
-                Repeater {
-                    model: TruckNotificationModel
-
-                    delegate: TruckNotificationCard {
-                        required property string id
-                        required property string envelopeId
-                        required property string operationCode
-                        required property string operationState
-                        required property string reportedAt
-                        required property string issueType
-                        required property string solutionType
-                        required property string estimatedArrival
-                        required property var location
-                        required property string note
-
-                        cardNotificationId: id
-                        cardEnvelopeId: envelopeId
-                        cardOperationCode: operationCode
-                        cardOperationState: operationState
-                        cardReportedAt: reportedAt
-                        cardIssueType: issueType
-                        cardSolutionType: solutionType
-                        cardEstimatedArrival: estimatedArrival || ""
-                        cardLocation: location
-                        cardNote: note || ""
-
-                        onDeleteRequested: (envelopeId, id) => {
-                            console.log("[NotificationsPanel] Confirming read for Truck:", envelopeId)
-                            SignalRClientService.invoke("ConfirmRead", [envelopeId])
-                            TruckNotificationModel.removeNotification(id)
-                        }
-
-                        onViewOnMapRequested: (loc) => {
-                            MapController.setMapCenter(loc)
-                        }
-                    }
-                }
-
-                UI.VerticalSpacer {}
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AsNeeded
             }
         }
     }
@@ -133,8 +174,8 @@ PanelTemplate {
             }
 
             if (allIds.length > 0) {
-                for (let id of allIds) {
-                    SignalRClientService.invoke("ConfirmRead", [id])
+                for (let k = 0; k < allIds.length; k++) {
+                    SignalRClientService.invoke("ConfirmRead", [allIds[k]])
                 }
             }
 

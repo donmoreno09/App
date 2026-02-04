@@ -22,14 +22,6 @@ public:
     virtual QVector<T> parse(const QVariantMap& envelope) = 0;
 
 protected:
-    QJsonObject parsePayload(const QString& payloadStr) {
-        QJsonDocument doc = QJsonDocument::fromJson(payloadStr.toUtf8());
-        if (doc.isNull() || !doc.isObject()) {
-            return QJsonObject();
-        }
-        return doc.object();
-    }
-
     QGeoCoordinate parseCoordinateArray(const QJsonArray& arr, bool swap = false) {
         QGeoCoordinate coord;
         if (arr.size() >= 2) {
@@ -40,17 +32,6 @@ protected:
             }
         }
         return coord;
-    }
-
-    QString extractUserId(const QVariantMap& envelope) {
-        QVariant userIdVar = envelope["UserId"];
-        if (userIdVar.canConvert<QVariantList>()) {
-            QVariantList userIds = userIdVar.toList();
-            if (!userIds.isEmpty()) {
-                return userIds[0].toString();
-            }
-        }
-        return userIdVar.toString();
     }
 };
 

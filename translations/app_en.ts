@@ -51,48 +51,39 @@
 <context>
     <name>AlertZoneNotificationCard</name>
     <message>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="44"/>
-        <source>Alert Zone: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="44"/>
-        <source>Name of the alert zone.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="56"/>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="100"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="65"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="109"/>
         <source>Reported at %1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="74"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="83"/>
         <source>NEW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="111"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="120"/>
         <source>Track: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="119"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="53"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="128"/>
         <source>Alert Zone: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="133"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="142"/>
         <source>Location: Lat %1°, Lon %2°</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="151"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="160"/>
         <source>View on Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="166"/>
+        <location filename="../App/Features/Notifications/components/AlertZoneNotificationCard.qml" line="175"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -163,7 +154,7 @@
 <context>
     <name>AlertZonePolygonForm</name>
     <message>
-        <location filename="../App/Features/AlertZone/components/AlertZonePolygonForm.qml" line="11"/>
+        <location filename="../App/Features/AlertZone/components/AlertZonePolygonForm.qml" line="12"/>
         <source>No coordinates inserted. Click on the map to add points.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1173,32 +1164,59 @@
 <context>
     <name>NotificationToast</name>
     <message>
-        <location filename="../App/Features/Notifications/NotificationToast.qml" line="73"/>
-        <location filename="../App/Features/Notifications/NotificationToast.qml" line="94"/>
-        <source>New Notification</source>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="152"/>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="179"/>
+        <source>Alert Zone Intrusion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationToast.qml" line="74"/>
-        <location filename="../App/Features/Notifications/NotificationToast.qml" line="95"/>
-        <source>From </source>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="153"/>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="164"/>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="202"/>
+        <source>From %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="163"/>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="201"/>
+        <source>Truck Notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="187"/>
+        <source>Alert Zone Intrusions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="188"/>
+        <source>%1 new intrusions detected </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="210"/>
+        <source>%1 new notifications </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../App/Features/Notifications/NotificationToast.qml" line="209"/>
+        <source>Truck Notifications</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>NotificationsPanel</name>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="14"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="15"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="34"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="38"/>
         <source>Alert Zone Intrusions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="73"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="98"/>
         <source>Truck Operations</source>
         <translation type="unfinished"></translation>
     </message>

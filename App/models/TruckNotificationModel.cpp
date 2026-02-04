@@ -1,5 +1,6 @@
 #include "TruckNotificationModel.h"
 #include <QDebug>
+#include <algorithm>
 
 TruckNotificationModel::TruckNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
@@ -80,6 +81,13 @@ void TruckNotificationModel::set(const QVector<TruckNotification> &notifications
 {
     beginResetModel();
     m_notifications = notifications;
+
+    // Sort by timestamp descending (most recent first)
+    std::sort(m_notifications.begin(), m_notifications.end(),
+              [](const TruckNotification &a, const TruckNotification &b) {
+                  return a.timestamp > b.timestamp;
+              });
+
     m_upsertMap.clear();
     for (int i = 0; i < m_notifications.size(); ++i) {
         m_upsertMap.insert(m_notifications[i].id, i);
@@ -94,12 +102,12 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
         return;
     }
 
-    qDebug() << "[TruckNotificationModel] upsert() called with" << notifications.size() << "notifications";
+    // qDebug() << "[TruckNotificationModel] upsert() called with" << notifications.size() << "notifications";
 
     bool countChanged = false;
 
     for (const auto& notif : notifications) {
-        qDebug() << "[TruckNotificationModel] Processing notification:" << notif.id;
+        // qDebug() << "[TruckNotificationModel] Processing notification:" << notif.id;
 
         if (m_deletedIds.contains(notif.id)) {
             qWarning() << "[TruckNotificationModel] Skipping deleted notification:" << notif.id;
@@ -116,25 +124,30 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
-                qDebug() << "[TruckNotificationModel] Updated notification at row" << row;
+                // qDebug() << "[TruckNotificationModel] Updated notification at row" << row;
             } else {
-                qDebug() << "[TruckNotificationModel] No changes for notification at row" << row;
+                // qDebug() << "[TruckNotificationModel] No changes for notification at row" << row;
             }
         } else {
-            const int row = m_notifications.size();
+            // Prepend new notifications at the top (row 0)
+            beginInsertRows({}, 0, 0);
+            m_notifications.prepend(notif);
 
-            beginInsertRows({}, row, row);
-            m_notifications.append(notif);
-            m_upsertMap.insert(notif.id, row);
+            // Rebuild upsertMap since all indices shifted
+            m_upsertMap.clear();
+            for (int i = 0; i < m_notifications.size(); ++i) {
+                m_upsertMap.insert(m_notifications[i].id, i);
+            }
+
             endInsertRows();
             countChanged = true;
 
-            qDebug() << "[TruckNotificationModel] Inserted new notification at row" << row;
+            // qDebug() << "[TruckNotificationModel] Inserted new notification at row 0";
         }
     }
 
     if (countChanged) {
-        qDebug() << "[TruckNotificationModel] Count changed to:" << m_notifications.size();
+        // qDebug() << "[TruckNotificationModel] Count changed to:" << m_notifications.size();
         emit this->countChanged();
     }
 }
@@ -185,7 +198,7 @@ void TruckNotificationModel::removeNotification(const QString &id)
     }
 
     emit countChanged();
-    qDebug() << "[TruckNotificationModel] Removed notification:" << id;
+    // qDebug() << "[TruckNotificationModel] Removed notification:" << id;
 }
 
 void TruckNotificationModel::clearAll()
@@ -202,7 +215,7 @@ void TruckNotificationModel::clearAll()
     endResetModel();
 
     emit countChanged();
-    qDebug() << "[TruckNotificationModel] Cleared all notifications";
+    // qDebug() << "[TruckNotificationModel] Cleared all notifications";
 }
 
 QQmlPropertyMap *TruckNotificationModel::getEditableNotification(int index)
@@ -215,6 +228,6 @@ void TruckNotificationModel::setInitialLoadComplete(bool complete)
     if (m_initialLoadComplete != complete) {
         m_initialLoadComplete = complete;
         emit initialLoadCompleteChanged();
-        qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
+        // qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
     }
 }
