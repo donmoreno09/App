@@ -27,6 +27,8 @@ public:
     void registerParser(const QString& topic, IBaseMessageParser* parser);
     Q_INVOKABLE QString getTopicFromLayer(const QString& layer);
 
+    void connectToBroker();
+
 private slots:
     void handleMessage(const QByteArray &message, const QMqttTopicName &topic);
     void onConnected();
@@ -34,7 +36,6 @@ private slots:
 
 private:
     void loadConfiguration(const QString& path, const AppConfig& appConfig);
-    void connectToBroker();
 
     QMqttClient* client;
     QMap<QString, QString> topicToLayer;
