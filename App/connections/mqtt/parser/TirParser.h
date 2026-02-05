@@ -29,7 +29,7 @@ public:
             tir.uidForHistory = tirVal["operationCode"].toString();
             tir.name = tirVal["operationCode"].toString();
             tir.operationCode = tirVal["operationCode"].toString();
-            tir.pos = parseCoordinateArray(tirVal["pos"].toArray(), false);
+            tir.pos = parseCoordinateArray(tirVal["pos"].toArray(), true);
             tir.sourceName = "Tir";
             tir.cog = tirVal["cog"].toDouble();
             tir.time = tirVal["time"].toInt();
