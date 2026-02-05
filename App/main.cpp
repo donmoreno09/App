@@ -101,6 +101,12 @@ int main(int argc, char *argv[])
     trackManager->deactivate("doc-space");
     trackManager->deactivate("tir");
 
+    // If MqttClientService for some reason didn't connect or was disconnected,
+    // reconnect when a track has been activated.
+    QObject::connect(trackManager, &TrackManager::activated, mqtt, [mqtt]{
+        mqtt->connectToBroker();
+    });
+
     // SIGNALR SETUP
     auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
 

@@ -49,6 +49,12 @@ void MqttClientService::loadConfiguration(const QString& path, const AppConfig& 
 }
 
 void MqttClientService::connectToBroker() {
+    if (!client) return;
+
+    const auto s = client->state();
+    if (s == QMqttClient::Connected || s == QMqttClient::Connecting)
+        return; // already connected / in progress
+
     client->setClientId("RaiseMqttClient");
     client->connectToHost();
 }
