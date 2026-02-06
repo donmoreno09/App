@@ -1,5 +1,6 @@
 #include "AlertZoneNotificationModel.h"
 #include <QDebug>
+#include <algorithm>
 
 AlertZoneNotificationModel::AlertZoneNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
@@ -107,33 +108,16 @@ Qt::ItemFlags AlertZoneNotificationModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable;
 }
 
-QVector<AlertZoneNotification> &AlertZoneNotificationModel::notifications()
-{
-    return m_notifications;
-}
-
-void AlertZoneNotificationModel::set(const QVector<AlertZoneNotification> &notifications)
-{
-    beginResetModel();
-    m_notifications = notifications;
-    m_upsertMap.clear();
-    for (int i = 0; i < m_notifications.size(); ++i) {
-        m_upsertMap.insert(m_notifications[i].id, i);
-    }
-    endResetModel();
-    emit countChanged();
-}
-
 void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &notifications)
 {
     if (notifications.isEmpty()) { return; }
 
-    qDebug() << "[AlertZoneNotificationModel] upsert() called with" << notifications.size() << "notifications";
+    // qDebug() << "[AlertZoneNotificationModel] upsert() called with" << notifications.size() << "notifications";
 
     bool countChanged = false;
 
     for (const auto& notif : notifications) {
-        qDebug() << "[AlertZoneNotificationModel] Processing notification: " << notif.id;
+        // qDebug() << "[AlertZoneNotificationModel] Processing notification: " << notif.id;
 
         // Skip if already deleted
         if (m_deletedIds.contains(notif.id)) {
@@ -151,26 +135,30 @@ void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &no
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
-                qDebug() << "[AlertZoneNotificationModel] Updated notification at row" << row;
+                // qDebug() << "[AlertZoneNotificationModel] Updated notification at row" << row;
             } else {
-                qDebug() << "[AlertZoneNotificationModel] No changes for notification at row" << row;
+                // qDebug() << "[AlertZoneNotificationModel] No changes for notification at row" << row;
             }
         } else {
-            // Insert new notification
-            const int row = m_notifications.size();
+            // Prepend new notifications at the top (row 0)
+            beginInsertRows({}, 0, 0);
+            m_notifications.prepend(notif);
 
-            beginInsertRows({}, row, row);
-            m_notifications.append(notif);
-            m_upsertMap.insert(notif.id, row);
+            // Rebuild upsertMap since all indices shifted
+            m_upsertMap.clear();
+            for (int i = 0; i < m_notifications.size(); ++i) {
+                m_upsertMap.insert(m_notifications[i].id, i);
+            }
+
             endInsertRows();
             countChanged = true;
 
-            qDebug() << "[AlertZoneNotificationModel] Inserted new notification at row" << row;
+            // qDebug() << "[AlertZoneNotificationModel] Inserted new notification at row 0";
         }
     }
 
     if (countChanged) {
-        qDebug() << "[AlertZoneNotificationModel] Count changed to:" << m_notifications.size();
+        // qDebug() << "[AlertZoneNotificationModel] Count changed to:" << m_notifications.size();
         emit this->countChanged();
     }
 }
@@ -222,7 +210,7 @@ void AlertZoneNotificationModel::removeNotification(const QString &id)
     }
 
     emit countChanged();
-    qDebug() << "[AlertZoneNotificationModel] Removed notification:" << id;
+    // qDebug() << "[AlertZoneNotificationModel] Removed notification:" << id;
 }
 
 void AlertZoneNotificationModel::clearAll()
@@ -251,7 +239,23 @@ void AlertZoneNotificationModel::setInitialLoadComplete(bool complete)
 {
     if (m_initialLoadComplete != complete) {
         m_initialLoadComplete = complete;
+
+        if (complete && !m_notifications.isEmpty()) {
+            // Sort by detectedAt descending (most recent first)
+            beginResetModel();
+            std::sort(m_notifications.begin(), m_notifications.end(),
+                      [](const AlertZoneNotification &a, const AlertZoneNotification &b) {
+                          return a.detectedAt > b.detectedAt;
+                      });
+
+            // Rebuild upsertMap with new indices
+            m_upsertMap.clear();
+            for (int i = 0; i < m_notifications.size(); ++i) {
+                m_upsertMap.insert(m_notifications[i].id, i);
+            }
+            endResetModel();
+        }
+
         emit initialLoadCompleteChanged();
-        qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
     }
 }
