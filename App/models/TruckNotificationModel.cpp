@@ -72,30 +72,6 @@ Qt::ItemFlags TruckNotificationModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable;
 }
 
-QVector<TruckNotification> &TruckNotificationModel::notifications()
-{
-    return m_notifications;
-}
-
-void TruckNotificationModel::set(const QVector<TruckNotification> &notifications)
-{
-    beginResetModel();
-    m_notifications = notifications;
-
-    // Sort by timestamp descending (most recent first)
-    std::sort(m_notifications.begin(), m_notifications.end(),
-              [](const TruckNotification &a, const TruckNotification &b) {
-                  return a.timestamp > b.timestamp;
-              });
-
-    m_upsertMap.clear();
-    for (int i = 0; i < m_notifications.size(); ++i) {
-        m_upsertMap.insert(m_notifications[i].id, i);
-    }
-    endResetModel();
-    emit countChanged();
-}
-
 void TruckNotificationModel::upsert(const QVector<TruckNotification> &notifications)
 {
     if (notifications.isEmpty()) {
@@ -227,6 +203,23 @@ void TruckNotificationModel::setInitialLoadComplete(bool complete)
 {
     if (m_initialLoadComplete != complete) {
         m_initialLoadComplete = complete;
+
+        if (complete && !m_notifications.isEmpty()) {
+            // Sort by timestamp descending (most recent first)
+            beginResetModel();
+            std::sort(m_notifications.begin(), m_notifications.end(),
+                      [](const TruckNotification &a, const TruckNotification &b) {
+                          return a.timestamp > b.timestamp;
+                      });
+
+            // Rebuild upsertMap with new indices
+            m_upsertMap.clear();
+            for (int i = 0; i < m_notifications.size(); ++i) {
+                m_upsertMap.insert(m_notifications[i].id, i);
+            }
+            endResetModel();
+        }
+
         emit initialLoadCompleteChanged();
         // qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
     }
