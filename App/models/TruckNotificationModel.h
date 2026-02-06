@@ -54,11 +54,7 @@ public:
     bool initialLoadComplete() const { return m_initialLoadComplete; }
     void setInitialLoadComplete(bool complete);
 
-    // Data access
-    QVector<TruckNotification> &notifications();
-
     // Data manipulation
-    void set(const QVector<TruckNotification> &notifications);
     void upsert(const QVector<TruckNotification> &notifications);
 
     // Invokable methods for QML
@@ -68,7 +64,6 @@ public:
 
 signals:
     void countChanged();
-    void stateCountsChanged();
     void initialLoadCompleteChanged();
 
 private:
