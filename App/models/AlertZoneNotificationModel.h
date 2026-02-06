@@ -50,11 +50,7 @@ public:
     bool initialLoadComplete() const { return m_initialLoadComplete; }
     void setInitialLoadComplete(bool complete);
 
-    // Data access
-    QVector<AlertZoneNotification> &notifications();
-
     // Data manipulation
-    void set(const QVector<AlertZoneNotification> &notifications);
     void upsert(const QVector<AlertZoneNotification> &notifications);
 
     // Invokable methods for QML
