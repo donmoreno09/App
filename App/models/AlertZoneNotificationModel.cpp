@@ -108,30 +108,6 @@ Qt::ItemFlags AlertZoneNotificationModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable;
 }
 
-QVector<AlertZoneNotification> &AlertZoneNotificationModel::notifications()
-{
-    return m_notifications;
-}
-
-void AlertZoneNotificationModel::set(const QVector<AlertZoneNotification> &notifications)
-{
-    beginResetModel();
-    m_notifications = notifications;
-
-    // Sort by detectedAt descending (most recent first)
-    std::sort(m_notifications.begin(), m_notifications.end(),
-              [](const AlertZoneNotification &a, const AlertZoneNotification &b) {
-                  return a.detectedAt > b.detectedAt;
-              });
-
-    m_upsertMap.clear();
-    for (int i = 0; i < m_notifications.size(); ++i) {
-        m_upsertMap.insert(m_notifications[i].id, i);
-    }
-    endResetModel();
-    emit countChanged();
-}
-
 void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &notifications)
 {
     if (notifications.isEmpty()) { return; }
@@ -263,7 +239,23 @@ void AlertZoneNotificationModel::setInitialLoadComplete(bool complete)
 {
     if (m_initialLoadComplete != complete) {
         m_initialLoadComplete = complete;
+
+        if (complete && !m_notifications.isEmpty()) {
+            // Sort by detectedAt descending (most recent first)
+            beginResetModel();
+            std::sort(m_notifications.begin(), m_notifications.end(),
+                      [](const AlertZoneNotification &a, const AlertZoneNotification &b) {
+                          return a.detectedAt > b.detectedAt;
+                      });
+
+            // Rebuild upsertMap with new indices
+            m_upsertMap.clear();
+            for (int i = 0; i < m_notifications.size(); ++i) {
+                m_upsertMap.insert(m_notifications[i].id, i);
+            }
+            endResetModel();
+        }
+
         emit initialLoadCompleteChanged();
-        // qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
     }
 }
