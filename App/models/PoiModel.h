@@ -8,8 +8,8 @@
 #include <QQmlEngine>
 #include <entities/Poi.h>
 #include <QtPositioning/QGeoCoordinate>
-#include <Networking/HttpClient.h>
-#include <Networking/apis/PoiApi.h>
+#include "Networking/HttpClient.h"
+#include "Networking/apis/PoiApi.h"
 #include "ModelHelper.h"
 
 class PoiModel : public QAbstractListModel
@@ -101,6 +101,7 @@ private:
     bool m_loading = false;
     // TODO: The PoiModel shouldn't really know about what poi is being saved,
     //       perhaps modify the httpclient class to give back the poi on response.
+    //       Update 2026/02/09: Okay the HttpClient class now returns the PoI.
     std::unique_ptr<Poi> m_poiSave = nullptr;
     std::unique_ptr<Poi> m_oldPoi = nullptr;
     HttpClient m_httpClient{this};

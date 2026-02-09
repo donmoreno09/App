@@ -357,6 +357,7 @@ void PoiModel::append(const QVariantMap &data)
     setLoading(true);
     buildPoiSave(data);
 
+    // Copy poi to prevent lambda from possibly referincing freed pointer
     auto poiCopy = *m_poiSave;
 
     m_api.post(poiCopy, [this, poiCopy](const QString& uuid) mutable {
@@ -380,6 +381,7 @@ void PoiModel::update(const QVariantMap &data)
     setLoading(true);
     buildPoiSave(data);
     m_poiSave->id = data.value("id").toString();
+
     m_api.put(*m_poiSave, [this] {
         m_oldPoi = nullptr;
         emit updated();
@@ -396,7 +398,7 @@ void PoiModel::remove(const QString &id)
 
     m_api.remove(id, [this] {
         int row = -1;
-        for (int i = 0; i < m_pois.size(); ++i) {
+        for (int i = 0; i < m_pois.size(); i++) {
             if (m_oldPoi == nullptr) break;
             if (m_pois[i].id == m_oldPoi->id) {
                 row = i;
@@ -433,7 +435,7 @@ QQmlPropertyMap *PoiModel::getEditablePoi(int index)
     m_api.get(m_oldPoi->id, [this](const Poi& poi) {
         // Find the corresponding row in the model
         int row = -1;
-        for (int i = 0; i < m_pois.size(); ++i) {
+        for (int i = 0; i < m_pois.size(); i++) {
             if (m_pois[i].id == poi.id) {
                 row = i;
                 break;
@@ -460,7 +462,7 @@ void PoiModel::discardChanges()
         return;
 
     int row = -1;
-    for (int i = 0; i < m_pois.size(); ++i) {
+    for (int i = 0; i < m_pois.size(); i++) {
         if (m_pois[i].id == m_oldPoi->id) {
             row = i;
             break;
@@ -541,7 +543,7 @@ QList<QVector2D> PoiModel::parseCoordinatesVariant(const QVariant &v)
 bool PoiModel::compareCoords(const QList<QVector2D> &a, const QList<QVector2D> &b)
 {
     if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i) {
+    for (int i = 0; i < a.size(); i++) {
         if (!qFuzzyCompare(a[i].x(), b[i].x()) || !qFuzzyCompare(a[i].y(), b[i].y()))
             return false;
     }
@@ -623,7 +625,7 @@ void PoiModel::buildPoiSave(const QVariantMap &data)
     QVariantMap detailsMap = data.value("details").toMap(); // maps to JSON field "details"
     QVariantMap metadataMap = detailsMap.value("metadata").toMap(); // maps to "details.metadata"
 
-    for (auto it = metadataMap.begin(); it != metadataMap.end(); ++it) {
+    for (auto it = metadataMap.begin(); it != metadataMap.end(); it++) {
         QString key = it.key();
 
         if (key == "note") {

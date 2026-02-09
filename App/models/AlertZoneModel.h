@@ -8,6 +8,8 @@
 #include <QQmlEngine>
 #include <entities/AlertZone.h>
 #include <QtPositioning/QGeoCoordinate>
+#include "Networking/HttpClient.h"
+#include "Networking/apis/AlertZoneApi.h"
 #include "ModelHelper.h"
 
 class AlertZoneModel : public QAbstractListModel
@@ -86,10 +88,11 @@ signals:
 
 private:
     bool m_loading = false;
+    // TODO: Read the TODO in PoiModel.h regarding these unique ptrs
     std::unique_ptr<AlertZone> m_alertZoneSave = nullptr;
     std::unique_ptr<AlertZone> m_oldAlertZone = nullptr;
-    // TODO: Replace client with the Networking one
-    // QPointer<AlertZonePersistenceManager> m_persistenceManager;
+    HttpClient m_httpClient{this};
+    AlertZoneApi m_api{&m_httpClient};
     QVector<AlertZone> m_alertZones;
     QPointer<ModelHelper> m_helper;
 
@@ -98,13 +101,6 @@ private:
     static bool isRectangle(const Geometry& geom);
 
     void buildAlertZoneSave(const QVariantMap &data);
-
-private slots:
-    void handleObjectsLoaded(const QList<IPersistable*> &objects);
-    void handleAlertZoneSaved(bool success, const QString &uuid);
-    void handleAlertZoneUpdated(bool success);
-    void handleAlertZoneGot(const IPersistable *object);
-    void handleAlertZoneRemoved(bool success);
 };
 
 #endif // ALERTZONEMODEL_H

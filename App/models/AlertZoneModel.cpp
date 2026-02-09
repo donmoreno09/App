@@ -7,14 +7,21 @@ Q_DECLARE_METATYPE(QList<QGeoCoordinate>)
 AlertZoneModel::AlertZoneModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
 {
-    // TODO: Replace client with the Networking one
-    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectsLoaded, this, &AlertZoneModel::handleObjectsLoaded, Qt::UniqueConnection);
-    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectSaved, this, &AlertZoneModel::handleAlertZoneSaved, Qt::UniqueConnection);
-    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectGot, this, &AlertZoneModel::handleAlertZoneGot, Qt::UniqueConnection);
-    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectUpdated, this, &AlertZoneModel::handleAlertZoneUpdated, Qt::UniqueConnection);
-    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectRemoved, this, &AlertZoneModel::handleAlertZoneRemoved, Qt::UniqueConnection);
+    // Load alert zones
+    m_api.getMany([this](const QVector<AlertZone>& zones) {
+        beginResetModel();
 
-    // m_persistenceManager->load();
+        // Rebuild backing store
+        m_alertZones.clear();
+        m_alertZones.reserve(zones.size());
+        for (auto& az : zones) {
+            m_alertZones.push_back(az);
+        }
+
+        endResetModel();
+    }, [this](const ErrorResult& er) {
+        qDebug().noquote() << "[AlertZoneModel] Could not load alert zones:" << er.message;
+    });
 }
 
 int AlertZoneModel::rowCount(const QModelIndex &parent) const
@@ -350,8 +357,24 @@ void AlertZoneModel::append(const QVariantMap &data)
 {
     setLoading(true);
     buildAlertZoneSave(data);
-    // TODO: Replace client with the Networking one
-    // m_persistenceManager->save(*m_alertZoneSave);
+
+    // Copy poi to prevent lambda from possibly referincing freed pointer
+    auto azCopy = *m_alertZoneSave;
+
+    m_api.post(azCopy, [this, azCopy](const QString& uuid) mutable {
+        const int index = m_alertZones.size();
+        beginInsertRows(QModelIndex(), index, index);
+
+        azCopy.id = uuid;
+        m_alertZones.push_back(azCopy);
+
+        endInsertRows();
+        emit appended();
+        setLoading(false);
+    }, [this](const ErrorResult& er) {
+        qDebug().noquote() << "[AlertZoneModel] Could not save alert zone:" << er.message;
+        setLoading(false);
+    });
 }
 
 void AlertZoneModel::update(const QVariantMap &data)
@@ -360,22 +383,61 @@ void AlertZoneModel::update(const QVariantMap &data)
     buildAlertZoneSave(data);
     m_alertZoneSave->id = data.value("id").toString();
 
-    if (m_alertZoneSave->id.isEmpty()) {
-        qCritical() << "[AlertZoneModel] Cannot update: ID is empty";
-        setLoading(false);
-        return;
-    }
+    m_api.put(*m_alertZoneSave, [this] {
+        int row = -1;
+        for (int i = 0; i < m_alertZones.size(); i++) {
+            if(m_alertZones[i].id == m_alertZoneSave->id){
+                row = i;
+                break;
+            }
+        }
 
-    // TODO: Replace client with the Networking one
-    // m_persistenceManager->update(*m_alertZoneSave);
+        if (row >= 0) {
+            m_alertZones[row] = *m_alertZoneSave;
+
+            QModelIndex idx = index(row, 0);
+            emit dataChanged(idx, idx);
+        }
+
+        m_oldAlertZone = nullptr;
+        emit updated();
+        setLoading(false);
+    }, [this](const ErrorResult& er) {
+        qDebug().noquote().nospace() << "[AlertZoneModel] Could not update alert zone with id " << m_alertZoneSave->id << ": " << er.message;
+        setLoading(false);
+    });
 }
 
 void AlertZoneModel::remove(const QString &id)
 {
     setLoading(true);
 
-    // TODO: Replace client with the Networking one
-    // m_persistenceManager->remove(id);
+    m_api.remove(id, [this] {
+        int row = -1;
+        for (int i = 0; i < m_alertZones.size(); i++) {
+            if (m_oldAlertZone == nullptr) break;
+            if (m_alertZones[i].id == m_oldAlertZone->id) {
+                row = i;
+                break;
+            }
+        }
+
+        if (row < 0) { // nothing to remove
+            setLoading(false);
+            return;
+        }
+
+        beginRemoveRows(QModelIndex(), row, row);
+        m_alertZones.remove(row);
+        endRemoveRows();
+
+        m_oldAlertZone = nullptr;
+        emit removed();
+        setLoading(false);
+    }, [this, id](const ErrorResult& er) {
+        qDebug().noquote().nospace() << "[AlertZoneModel] Could not delete alert zone with id " << id << ": " << er.message;
+        setLoading(false);
+    });
 }
 
 QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
@@ -386,8 +448,26 @@ QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
     discardChanges();
 
     m_oldAlertZone = std::make_unique<AlertZone>(m_alertZones[index]);
-    // TODO: Replace client with the Networking one
-    // m_persistenceManager->get(m_oldAlertZone->id);
+    m_api.get(m_oldAlertZone->id, [this](const AlertZone& az) {
+        // Find the corresponding row in the model
+        int row = -1;
+        for (int i = 0; i < m_alertZones.size(); i++) {
+            if (m_alertZones[i].id == az.id) {
+                row = i;
+                break;
+            }
+        }
+
+        // If the POI exists in our model, update it
+        if (row >= 0) {
+            m_alertZones[row] = az;
+            QModelIndex idx = this->index(row, 0);
+            emit dataChanged(idx, idx);
+            emit fetched(az.id);
+        }
+    }, [this](const auto& er) {
+        qDebug().noquote() << "[AlertZoneModel] Could not get alert zone:" << m_oldAlertZone->id;
+    });
 
     return m_helper->map(index, 0);
 }
@@ -566,122 +646,4 @@ void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
             m_alertZoneSave->details.metadata.insert(key, entry);
         }
     }
-}
-
-void AlertZoneModel::handleAlertZoneSaved(bool success, const QString &uuid)
-{
-    if (!success || uuid.isEmpty()) {
-        qCritical() << "[AlertZoneModel] Backend failed to save alert zone";
-        setLoading(false);
-        return;
-    }
-
-    m_alertZoneSave->id = uuid;
-
-    const int row = m_alertZones.size();
-    beginInsertRows(QModelIndex(), row, row);
-    m_alertZones.push_back(*m_alertZoneSave);
-    endInsertRows();
-
-    setLoading(false);
-    emit appended();
-
-    qDebug() << "[AlertZoneModel] handleAlertZoneSaved() - Success:" << success << "| UUID:" << uuid;
-}
-
-void AlertZoneModel::handleAlertZoneUpdated(bool success)
-{
-    if(!success) {
-        qWarning() << "Error: Could not updare Alert Zone with id '" << m_alertZoneSave->id << "' Check logs.";
-        setLoading(false);
-        return;
-    }
-
-    int row = -1;
-    for(int i = 0; i < m_alertZones.size(); ++i) {
-        if(m_alertZones[i].id == m_alertZoneSave->id){
-            row = i;
-            break;
-        }
-    }
-
-    if (row >= 0) {
-        m_alertZones[row] = *m_alertZoneSave;
-
-        QModelIndex idx = index(row, 0);
-        emit dataChanged(idx, idx);
-
-        qDebug() << "[AlertZoneModel] Updated AlertZone at row " << row << " with severity " << m_alertZoneSave->severity;
-    }
-
-    m_oldAlertZone = nullptr;
-    setLoading(false);
-    emit updated();
-}
-
-void AlertZoneModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
-{
-    beginResetModel();
-
-    m_alertZones.clear();
-    m_alertZones.reserve(objects.size());
-    for (IPersistable* obj : objects) {
-        if (AlertZone* alertZone = dynamic_cast<AlertZone*>(obj)) {
-            m_alertZones.push_back(*alertZone);
-            delete alertZone;
-        }
-    }
-
-    endResetModel();
-}
-
-void AlertZoneModel::handleAlertZoneGot(const IPersistable *object)
-{
-    const AlertZone* alertZone = dynamic_cast<const AlertZone*>(object);
-    if (!alertZone) return;
-
-    qDebug() << "[handleAlertZoneGot] ID: " << alertZone->id;
-    qDebug() << "[handleAlertZoneGot] active: " << alertZone->active;
-
-
-    // Find the corresponding row in the model
-    int row = -1;
-    for (int i = 0; i < m_alertZones.size(); ++i) {
-        if (m_alertZones[i].id == alertZone->id) {
-            row = i;
-            break;
-        }
-    }
-
-    // If the Alert Zone exists in our model, update it
-    if (row >= 0) {
-        m_alertZones[row] = *alertZone;
-        QModelIndex idx = index(row, 0);
-        emit dataChanged(idx, idx);
-        emit fetched(alertZone->id);
-    }
-}
-
-void AlertZoneModel::handleAlertZoneRemoved(bool success)
-{
-    if (!success) {
-        qWarning() << "[AlertZoneModel] Error: Could not remove alert zone. Check logs.";
-    } else {
-        int row = -1;
-        for (int i = 0; i < m_alertZones.size(); ++i) {
-            if (m_alertZones[i].id == m_oldAlertZone->id) {
-                row = i;
-                break;
-            }
-        }
-
-        beginRemoveRows(QModelIndex(), row, row);
-        m_alertZones.remove(row);
-        endRemoveRows();
-
-        m_oldAlertZone = nullptr;
-        emit removed();
-    }
-
-    setLoading(false);
 }

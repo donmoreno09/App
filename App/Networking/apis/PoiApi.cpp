@@ -55,7 +55,7 @@ void PoiApi::post(const Poi& poi, std::function<void(const QString&)> successCb,
 
     client()->post(ApiEndpoints::BaseUrlPoi(), body.toJson(), [
         successCb = std::move(successCb),
-        errorCb   = std::move(errorCb)
+        errorCb = std::move(errorCb)
     ](QRestReply& reply) mutable {
         expectString(reply, errorCb, [&](const QString& uuid) {
             if (!successCb) return;
