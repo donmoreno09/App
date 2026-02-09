@@ -78,6 +78,12 @@ MapItemGroup {
     property point _lastScenePos: Qt.point(0, 0)
 
     function _syncPath() {
+        // During a handle or body drag _path is authoritative — skip the
+        // round-trip through external bindings which may arrive one
+        // coordinate at a time and produce partially-updated intermediate values.
+        if (isDraggingHandle || moveDrag.active)
+            return
+
         _path = PolyGeom.clonePath(path, QtPositioning)
     }
 
