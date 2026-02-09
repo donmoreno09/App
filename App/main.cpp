@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("IRIDESS_FE");
     QCoreApplication::setApplicationVersion("1.0.0");
 
-    auto& logger = AppLogger::get();
-    logger.info("App start", {kv("version", "1.0.0")});
+    // auto& logger = AppLogger::get();
+    // logger.info("App start", {kv("version", "1.0.0")});
 
     QQmlApplicationEngine engine;
 
@@ -107,29 +107,29 @@ int main(int argc, char *argv[])
         mqtt->connectToBroker();
     });
 
-    // SIGNALR SETUP
-    auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
+    // // SIGNALR SETUP
+    // auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
 
-    // Register parsers for each EventType
-    signalR->registerParser(0, new TruckNotificationSignalRParser());  // TirAppIssueCreated
-    signalR->registerParser(1, new TruckNotificationSignalRParser());  // TirAppIssueResolved
-    signalR->registerParser(2, new AlertZoneNotificationParser());     // ControlRoomAlertZoneIntrusion
+    // // Register parsers for each EventType
+    // signalR->registerParser(0, new TruckNotificationSignalRParser());  // TirAppIssueCreated
+    // signalR->registerParser(1, new TruckNotificationSignalRParser());  // TirAppIssueResolved
+    // signalR->registerParser(2, new AlertZoneNotificationParser());     // ControlRoomAlertZoneIntrusion
 
-    // Register handler
-    signalR->registerHandler("ReceiveNotification", [signalR](const QVariantList& args) {
-        signalR->handleNotification(args);
-    });
+    // // Register handler
+    // signalR->registerHandler("ReceiveNotification", [signalR](const QVariantList& args) {
+    //     signalR->handleNotification(args);
+    // });
 
-    // Initialize connection
-    signalR->initialize(appConfig);
+    // // Initialize connection
+    // signalR->initialize(appConfig);
 
-    qDebug() << "[Main] SignalR service initialized";
+    // qDebug() << "[Main] SignalR service initialized";
 
-    // --- HTTP VesselFinder Service ---
-    auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
-    QString endpoint = "http://127.0.0.1:8000/tracks";
-    vesselHttp->initialize(endpoint, 2000);
-    vesselHttp->registerParser(new HttpAisParser());
+    // // --- HTTP VesselFinder Service ---
+    // auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
+    // QString endpoint = "http://127.0.0.1:8000/tracks";
+    // vesselHttp->initialize(endpoint, 2000);
+    // vesselHttp->registerParser(new HttpAisParser());
 
     engine.loadFromModule("App", "Main");
 

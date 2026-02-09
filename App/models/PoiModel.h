@@ -7,8 +7,9 @@
 #include <QPointer>
 #include <QQmlEngine>
 #include <entities/Poi.h>
-#include <persistence/poipersistencemanager.h>
 #include <QtPositioning/QGeoCoordinate>
+#include <Networking/HttpClient.h>
+#include <Networking/apis/PoiApi.h>
 #include "ModelHelper.h"
 
 class PoiModel : public QAbstractListModel
@@ -102,7 +103,8 @@ private:
     //       perhaps modify the httpclient class to give back the poi on response.
     std::unique_ptr<Poi> m_poiSave = nullptr;
     std::unique_ptr<Poi> m_oldPoi = nullptr;
-    QPointer<PoiPersistenceManager> m_persistenceManager;
+    HttpClient m_httpClient{this};
+    PoiApi m_api{&m_httpClient};
     QVector<Poi> m_pois;
     QPointer<ModelHelper> m_helper;
 
@@ -113,13 +115,6 @@ private:
     static bool isRectangle(const Geometry& geom);
 
     void buildPoiSave(const QVariantMap &data);
-
-private slots:
-    void handleObjectsLoaded(const QList<IPersistable*> &objects);
-    void handlePoiSaved(bool success, const QString &uuid);
-    void handlePoiUpdated(bool success);
-    void handlePoiGot(const IPersistable *object);
-    void handlePoiRemoved(bool success);
 };
 
 #endif // POIMODEL_H

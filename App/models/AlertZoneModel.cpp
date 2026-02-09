@@ -5,15 +5,16 @@
 Q_DECLARE_METATYPE(QList<QGeoCoordinate>)
 
 AlertZoneModel::AlertZoneModel(QObject *parent)
-    : QAbstractListModel(parent), m_helper(new ModelHelper(this)), m_persistenceManager(new AlertZonePersistenceManager(this))
+    : QAbstractListModel(parent), m_helper(new ModelHelper(this))
 {
-    connect(m_persistenceManager, &AlertZonePersistenceManager::objectsLoaded, this, &AlertZoneModel::handleObjectsLoaded, Qt::UniqueConnection);
-    connect(m_persistenceManager, &AlertZonePersistenceManager::objectSaved, this, &AlertZoneModel::handleAlertZoneSaved, Qt::UniqueConnection);
-    connect(m_persistenceManager, &AlertZonePersistenceManager::objectGot, this, &AlertZoneModel::handleAlertZoneGot, Qt::UniqueConnection);
-    connect(m_persistenceManager, &AlertZonePersistenceManager::objectUpdated, this, &AlertZoneModel::handleAlertZoneUpdated, Qt::UniqueConnection);
-    connect(m_persistenceManager, &AlertZonePersistenceManager::objectRemoved, this, &AlertZoneModel::handleAlertZoneRemoved, Qt::UniqueConnection);
+    // TODO: Replace client with the Networking one
+    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectsLoaded, this, &AlertZoneModel::handleObjectsLoaded, Qt::UniqueConnection);
+    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectSaved, this, &AlertZoneModel::handleAlertZoneSaved, Qt::UniqueConnection);
+    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectGot, this, &AlertZoneModel::handleAlertZoneGot, Qt::UniqueConnection);
+    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectUpdated, this, &AlertZoneModel::handleAlertZoneUpdated, Qt::UniqueConnection);
+    // connect(m_persistenceManager, &AlertZonePersistenceManager::objectRemoved, this, &AlertZoneModel::handleAlertZoneRemoved, Qt::UniqueConnection);
 
-    m_persistenceManager->load();
+    // m_persistenceManager->load();
 }
 
 int AlertZoneModel::rowCount(const QModelIndex &parent) const
@@ -349,7 +350,8 @@ void AlertZoneModel::append(const QVariantMap &data)
 {
     setLoading(true);
     buildAlertZoneSave(data);
-    m_persistenceManager->save(*m_alertZoneSave);
+    // TODO: Replace client with the Networking one
+    // m_persistenceManager->save(*m_alertZoneSave);
 }
 
 void AlertZoneModel::update(const QVariantMap &data)
@@ -364,13 +366,16 @@ void AlertZoneModel::update(const QVariantMap &data)
         return;
     }
 
-    m_persistenceManager->update(*m_alertZoneSave);
+    // TODO: Replace client with the Networking one
+    // m_persistenceManager->update(*m_alertZoneSave);
 }
 
 void AlertZoneModel::remove(const QString &id)
 {
     setLoading(true);
-    m_persistenceManager->remove(id);
+
+    // TODO: Replace client with the Networking one
+    // m_persistenceManager->remove(id);
 }
 
 QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
@@ -381,7 +386,8 @@ QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
     discardChanges();
 
     m_oldAlertZone = std::make_unique<AlertZone>(m_alertZones[index]);
-    m_persistenceManager->get(m_oldAlertZone->id);
+    // TODO: Replace client with the Networking one
+    // m_persistenceManager->get(m_oldAlertZone->id);
 
     return m_helper->map(index, 0);
 }
