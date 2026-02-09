@@ -53,7 +53,7 @@ install(SCRIPT ${deploy_script})
 install(TARGETS app_logger RUNTIME DESTINATION bin LIBRARY DESTINATION bin)
 
 # Manually add missing MapLibre *.dll and *.qml
-set(MAPLIBRE_INSTALL_PREFIX "C:/Qt/6.8.3/msvc2022_64/install")
+set(MAPLIBRE_INSTALL_PREFIX "C:/Qt/6.8.3/msvc2022_64/maplibre-native-qt/install")
 
 install(DIRECTORY
     "${MAPLIBRE_INSTALL_PREFIX}/bin/"
