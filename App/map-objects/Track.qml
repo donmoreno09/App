@@ -49,9 +49,13 @@ MapItemGroup {
         id: historyLine
 
         // reactive: recomputed whenever root.history changes
-        property var _path: (root.history && root.history.length)
-                            ? root.history.map(t => QtPositioning.coordinate(t[0], t[1], t[2]))
-                            : []
+        property var _path: {
+            if (!root.history || !root.history.length)
+                return []
+            var points = root.history.map(t => QtPositioning.coordinate(t[0], t[1], t[2]))
+            points.push(root.pos)
+            return points
+        }
 
         path: _path
         line.width: 2
