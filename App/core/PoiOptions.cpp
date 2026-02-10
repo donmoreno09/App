@@ -1,12 +1,11 @@
 #include "PoiOptions.h"
-#include <connections/httpclient.h>
-#include <connections/apiendpoints.h>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QVariantMap>
 #include <QHash>
+#include <QDebug>
 
 PoiOptions::PoiOptions(QObject* parent)
     : QObject(parent)
@@ -16,19 +15,25 @@ PoiOptions::PoiOptions(QObject* parent)
 
 void PoiOptions::fetchAll() {
     // Parse categories + build typesByCategory from the same payload
-    m_httpClient.get(QUrl(ApiEndpoints::GetTypes()), [this](QByteArray data){
-        rawCategoriesTypes = QJsonDocument::fromJson(data).array();
+    m_api.getCategoriesTypes([this](const QJsonArray& arr) {
+        rawCategoriesTypes = arr;
         buildCategoriesTypes();
+    }, [this](const ErrorResult& er) {
+        qDebug().noquote() << "[PoiOptions] Could not load categories types:" << er.message;
     });
 
-    m_httpClient.get(QUrl(ApiEndpoints::GetHealthStatuses()), [this](QByteArray data){
-        rawHealthStatuses = QJsonDocument::fromJson(data).array();
+    m_api.getHealthStatuses([this](const QJsonArray& arr) {
+        rawHealthStatuses = arr;
         buildHealthStatuses();
+    }, [this](const ErrorResult& er) {
+        qDebug().noquote() << "[PoiOptions] Could not load health statuses:" << er.message;
     });
 
-    m_httpClient.get(QUrl(ApiEndpoints::GetOperationalStates()), [this](QByteArray data){
-        rawOperationalStates = QJsonDocument::fromJson(data).array();
+    m_api.getOperationalStates([this](const QJsonArray& arr) {
+        rawOperationalStates = arr;
         buildOperationalStates();
+    }, [this](const ErrorResult& er) {
+        qDebug().noquote() << "[PoiOptions] Could not load operational states:" << er.message;
     });
 }
 
@@ -38,22 +43,6 @@ void PoiOptions::updateTranslations()
     buildCategoriesTypes();
     buildHealthStatuses();
     buildOperationalStates();
-}
-
-void PoiOptions::fetch(const QString& endpoint, std::function<void(QVariantList)> callback)
-{
-    QUrl url(endpoint);
-    m_httpClient.get(url, [callback](QByteArray data){
-        QList<QVariant> list;
-        const QJsonDocument doc = QJsonDocument::fromJson(data);
-        if (doc.isArray()) {
-            const QJsonArray arr = doc.array();
-            for (int i = 0, n = arr.size(); i < n; ++i) {
-                list.append(arr.at(i).toVariant());
-            }
-        }
-        callback(list);
-    });
 }
 
 QVariantList PoiOptions::typesForCategory(int categoryKey) const {

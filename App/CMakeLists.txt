@@ -87,8 +87,6 @@ set(cpp_sources
 
     connections/ApiEndpoints.h
     connections/ApiEndpoints.cpp
-    connections/httpclient.cpp
-    connections/httpclient.h
 
     # Core
     core/GeoSelectionUtils.h
@@ -104,8 +102,6 @@ set(cpp_sources
     # Layers
     layers/AlertZoneMapLayerController.h
     layers/AlertZoneMapLayerController.cpp
-    layers/AnnotationMapLayer.cpp
-    layers/AnnotationMapLayer.h
     layers/BaseLayer.cpp
     layers/BaseLayer.h
     layers/BaseMapLayer.cpp
@@ -136,7 +132,7 @@ set(cpp_sources
     entities/TruckNotification.h
     entities/Tir.h
     entities/Velocity.h
-
+    entities/IPersistable.h
 
     # Qt Models
     models/AlertZoneModel.h
@@ -155,18 +151,6 @@ set(cpp_sources
     models/TruckNotificationModel.cpp
     models/TirModel.cpp
     models/TirModel.h
-
-    # Persistence
-    persistence/alertzonepersistencemanager.h
-    persistence/alertzonepersistencemanager.cpp
-    persistence/ipersistable.h
-    persistence/ipersistencemanager.h
-    persistence/persistencemanagerbase.cpp
-    persistence/persistencemanagerbase.h
-    persistence/poipersistencemanager.cpp
-    persistence/poipersistencemanager.h
-    persistence/shapepersistencemanager.cpp
-    persistence/shapepersistencemanager.h
 )
 
 qt_add_qml_module(${PROJECT_NAME}
@@ -186,10 +170,12 @@ add_subdirectory(Features)
 add_subdirectory(Playground)
 add_subdirectory(Themes)
 add_subdirectory(Logger)
+add_subdirectory(Networking)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         app_logger
+        app_networking
 )
 
 target_link_libraries(${PROJECT_NAME}

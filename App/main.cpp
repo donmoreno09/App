@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
         mqtt->connectToBroker();
     });
 
-    // SIGNALR SETUP
+    // // SIGNALR SETUP
     auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
 
     // Register parsers for each EventType
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "[Main] SignalR service initialized";
 
-    // --- HTTP VesselFinder Service ---
+    // // --- HTTP VesselFinder Service ---
     auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
     QString endpoint = "http://127.0.0.1:8000/tracks";
     vesselHttp->initialize(endpoint, 2000);

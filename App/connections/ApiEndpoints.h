@@ -3,10 +3,12 @@
 
 #include <QString>
 
+// TODO: Move ApiEndpoints.{h,cpp} to Networking module
 namespace ApiEndpoints {
     extern QString BaseUrl;
 
     QString BaseUrlAlertZone();
+    QString GetAllAlertZone();
 
     QString BaseUrlPoi();
     QString GetAllPoiSByLayerId();
