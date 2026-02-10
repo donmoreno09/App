@@ -6,7 +6,7 @@
 #include <QJsonArray>
 #include <QMap>
 #include <QSharedPointer>
-#include "../persistence/ipersistable.h"
+#include "IPersistable.h"
 #include "Geometry.h"
 #include "Details.h"
 
