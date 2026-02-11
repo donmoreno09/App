@@ -1,4 +1,3 @@
-// PoiEllipse.qml
 import QtQuick 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
@@ -29,15 +28,12 @@ UI.EditableEllipse {
     labelBorderWidth: Theme.borders.b1
 
     onEllipseChanged: function(c, a, b) {
-        // Batch the internal geometry update
         updateGeometry(c, a, b)
 
-        // Update model (this is fast, just property assignments)
         model.coordinate = c
         model.radiusA = a
         model.radiusB = b
 
-        // Only emit signals when NOT actively dragging
         if (!isMovingEllipse && !isDraggingHandler) {
             MapModeRegistry.editEllipseMode.coordChanged()
             MapModeRegistry.editEllipseMode.majorAxisChanged()
@@ -45,7 +41,6 @@ UI.EditableEllipse {
         }
     }
 
-    // Emit signals when drag/handle manipulation ends
     onIsMovingEllipseChanged: {
         if (!isMovingEllipse) {
             MapModeRegistry.editEllipseMode.coordChanged()
