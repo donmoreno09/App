@@ -67,7 +67,6 @@ MapItemGroup {
     signal tapped()
     signal pathEdited(var path)
     signal firstPointTapped()
-    signal editingFinished()
 
     property bool isDraggingHandle: false
     readonly property bool isMovingPolygon: moveDrag.active
@@ -79,6 +78,12 @@ MapItemGroup {
     property point _lastScenePos: Qt.point(0, 0)
 
     function _syncPath() {
+        // During a handle or body drag _path is authoritative — skip the
+        // round-trip through external bindings which may arrive one
+        // coordinate at a time and produce partially-updated intermediate values.
+        if (isDraggingHandle || moveDrag.active)
+            return
+
         _path = PolyGeom.clonePath(path, QtPositioning)
     }
 
@@ -145,7 +150,6 @@ MapItemGroup {
                 root._startCoords = []
                 root._anchorCoord = QtPositioning.coordinate()
                 root._lastScenePos = Qt.point(0, 0)
-                root.editingFinished()
             }
 
             onActiveTranslationChanged: {
@@ -269,11 +273,7 @@ MapItemGroup {
                     root.pathEdited(next)
                 }
 
-                onActiveChanged: {
-                    root.isDraggingHandle = active
-                    if (!active)
-                        root.editingFinished()
-                }
+                onActiveChanged: root.isDraggingHandle = active
             }
         }
     }

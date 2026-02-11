@@ -221,5 +221,6 @@ void TruckNotificationModel::setInitialLoadComplete(bool complete)
         }
 
         emit initialLoadCompleteChanged();
+        // qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
     }
 }

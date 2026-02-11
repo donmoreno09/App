@@ -5,15 +5,24 @@
 Q_DECLARE_METATYPE(QList<QGeoCoordinate>) // declare the list type
 
 PoiModel::PoiModel(QObject *parent)
-    : QAbstractListModel(parent), m_helper(new ModelHelper(this)), m_persistenceManager(new PoiPersistenceManager(this))
+    : QAbstractListModel(parent)
+    , m_helper(new ModelHelper(this))
 {
-    connect(m_persistenceManager, &PoiPersistenceManager::objectsLoaded, this, &PoiModel::handleObjectsLoaded, Qt::UniqueConnection);
-    connect(m_persistenceManager, &PoiPersistenceManager::objectSaved, this, &PoiModel::handlePoiSaved, Qt::UniqueConnection);
-    connect(m_persistenceManager, &PoiPersistenceManager::objectGot, this, &PoiModel::handlePoiGot, Qt::UniqueConnection);
-    connect(m_persistenceManager, &PoiPersistenceManager::objectUpdated, this, &PoiModel::handlePoiUpdated, Qt::UniqueConnection);
-    connect(m_persistenceManager, &PoiPersistenceManager::objectRemoved, this, &PoiModel::handlePoiRemoved, Qt::UniqueConnection);
+    // Load pois
+    m_api.getMany([this](const QVector<Poi>& pois) {
+        beginResetModel();
 
-    m_persistenceManager->load();
+        // Rebuild backing store
+        m_pois.clear();
+        m_pois.reserve(pois.size());
+        for (auto& poi : pois) {
+            m_pois.push_back(poi);
+        }
+
+        endResetModel();
+    }, [this](const ErrorResult& er) {
+        qDebug().noquote() << "[PoiModel] Could not load pois:" << er.message;
+    });
 }
 
 int PoiModel::rowCount(const QModelIndex &parent) const
@@ -347,7 +356,24 @@ void PoiModel::append(const QVariantMap &data)
 {
     setLoading(true);
     buildPoiSave(data);
-    m_persistenceManager->save(*m_poiSave);
+
+    // Copy poi to prevent lambda from possibly referincing freed pointer
+    auto poiCopy = *m_poiSave;
+
+    m_api.post(poiCopy, [this, poiCopy](const QString& uuid) mutable {
+        const int index = m_pois.size();
+        beginInsertRows(QModelIndex(), index, index);
+
+        poiCopy.id = uuid;
+        m_pois.push_back(poiCopy);
+
+        endInsertRows();
+        emit appended();
+        setLoading(false);
+    }, [this](const ErrorResult& er) {
+        qDebug().noquote() << "[PoiModel] Could not save poi:" << er.message;
+        setLoading(false);
+    });
 }
 
 void PoiModel::update(const QVariantMap &data)
@@ -355,13 +381,47 @@ void PoiModel::update(const QVariantMap &data)
     setLoading(true);
     buildPoiSave(data);
     m_poiSave->id = data.value("id").toString();
-    m_persistenceManager->update(*m_poiSave);
+
+    m_api.put(*m_poiSave, [this] {
+        m_oldPoi = nullptr;
+        emit updated();
+        setLoading(false);
+    }, [this](const ErrorResult& er) {
+        qDebug().noquote().nospace() << "[PoiModel] Could not update poi with id " << m_poiSave->id << ": " << er.message;
+        setLoading(false);
+    });
 }
 
 void PoiModel::remove(const QString &id)
 {
     setLoading(true);
-    m_persistenceManager->remove(id);
+
+    m_api.remove(id, [this] {
+        int row = -1;
+        for (int i = 0; i < m_pois.size(); i++) {
+            if (m_oldPoi == nullptr) break;
+            if (m_pois[i].id == m_oldPoi->id) {
+                row = i;
+                break;
+            }
+        }
+
+        if (row < 0) { // nothing to remove
+            setLoading(false);
+            return;
+        }
+
+        beginRemoveRows(QModelIndex(), row, row);
+        m_pois.remove(row);
+        endRemoveRows();
+
+        m_oldPoi = nullptr;
+        emit removed();
+        setLoading(false);
+    }, [this, id](const ErrorResult& er) {
+        qDebug().noquote().nospace() << "[PoiModel] Could not delete poi with id " << id << ": " << er.message;
+        setLoading(false);
+    });
 }
 
 QQmlPropertyMap *PoiModel::getEditablePoi(int index)
@@ -372,7 +432,26 @@ QQmlPropertyMap *PoiModel::getEditablePoi(int index)
     discardChanges();
 
     m_oldPoi = std::make_unique<Poi>(m_pois[index]);
-    m_persistenceManager->get(m_oldPoi->id);
+    m_api.get(m_oldPoi->id, [this](const Poi& poi) {
+        // Find the corresponding row in the model
+        int row = -1;
+        for (int i = 0; i < m_pois.size(); i++) {
+            if (m_pois[i].id == poi.id) {
+                row = i;
+                break;
+            }
+        }
+
+        // If the POI exists in our model, update it
+        if (row >= 0) {
+            m_pois[row] = poi;
+            QModelIndex idx = this->index(row, 0);
+            emit dataChanged(idx, idx);
+            emit fetched(poi.id);
+        }
+    }, [this](const auto& er) {
+        qDebug().noquote() << "[PoiModel] Could not get poi:" << m_oldPoi->id;
+    });
 
     return m_helper->map(index, 0);
 }
@@ -383,7 +462,7 @@ void PoiModel::discardChanges()
         return;
 
     int row = -1;
-    for (int i = 0; i < m_pois.size(); ++i) {
+    for (int i = 0; i < m_pois.size(); i++) {
         if (m_pois[i].id == m_oldPoi->id) {
             row = i;
             break;
@@ -464,7 +543,7 @@ QList<QVector2D> PoiModel::parseCoordinatesVariant(const QVariant &v)
 bool PoiModel::compareCoords(const QList<QVector2D> &a, const QList<QVector2D> &b)
 {
     if (a.size() != b.size()) return false;
-    for (int i = 0; i < a.size(); ++i) {
+    for (int i = 0; i < a.size(); i++) {
         if (!qFuzzyCompare(a[i].x(), b[i].x()) || !qFuzzyCompare(a[i].y(), b[i].y()))
             return false;
     }
@@ -546,7 +625,7 @@ void PoiModel::buildPoiSave(const QVariantMap &data)
     QVariantMap detailsMap = data.value("details").toMap(); // maps to JSON field "details"
     QVariantMap metadataMap = detailsMap.value("metadata").toMap(); // maps to "details.metadata"
 
-    for (auto it = metadataMap.begin(); it != metadataMap.end(); ++it) {
+    for (auto it = metadataMap.begin(); it != metadataMap.end(); it++) {
         QString key = it.key();
 
         if (key == "note") {
@@ -556,98 +635,3 @@ void PoiModel::buildPoiSave(const QVariantMap &data)
         }
     }
 }
-
-void PoiModel::handlePoiSaved(bool success, const QString &uuid)
-{
-    if (!success) {
-        qWarning() << "Error: Could not save PoI with label '" << (m_poiSave != nullptr ? m_poiSave->label : "unknown") << "'. Check logs.";
-    } else {
-        const int index = m_pois.size();
-        beginInsertRows(QModelIndex(), index, index);
-
-        m_poiSave->id = uuid;
-        m_pois.push_back(*m_poiSave);
-
-        endInsertRows();
-        emit appended();
-    }
-
-    setLoading(false);
-}
-
-void PoiModel::handlePoiUpdated(bool success)
-{
-    if (!success) {
-        qWarning() << "Error: Could not update PoI with id '" << m_poiSave->id << "'. Check logs.";
-    } else {
-        m_oldPoi = nullptr;
-        emit updated();
-    }
-
-    setLoading(false);
-}
-
-void PoiModel::handleObjectsLoaded(const QList<IPersistable*> &objects)
-{
-    beginResetModel();
-
-    // Rebuild backing store
-    m_pois.clear();
-    m_pois.reserve(objects.size());
-    for (IPersistable* obj : objects) {
-        if (auto* poi = dynamic_cast<Poi*>(obj)) {
-            m_pois.push_back(*poi); // copy value object
-            delete poi; // free this here since it's copied above anyway and it isn't freed elsewhere
-        }
-    }
-
-    endResetModel();
-}
-
-void PoiModel::handlePoiGot(const IPersistable *object)
-{
-    const Poi* poi = dynamic_cast<const Poi*>(object);
-    if (!poi) return;
-
-    // Find the corresponding row in the model
-    int row = -1;
-    for (int i = 0; i < m_pois.size(); ++i) {
-        if (m_pois[i].id == poi->id) {
-            row = i;
-            break;
-        }
-    }
-
-    // If the POI exists in our model, update it
-    if (row >= 0) {
-        m_pois[row] = *poi;
-        QModelIndex idx = index(row, 0);
-        emit dataChanged(idx, idx);
-        emit fetched(poi->id);
-    }
-}
-
-void PoiModel::handlePoiRemoved(bool success)
-{
-    if (!success) {
-        qWarning() << "Error: Could not remove PoI with id '" << m_poiSave->id << "'. Check logs.";
-    } else {
-        int row = -1;
-        for (int i = 0; i < m_pois.size(); ++i) {
-            if (m_pois[i].id == m_oldPoi->id) {
-                row = i;
-                break;
-            }
-        }
-
-        beginRemoveRows(QModelIndex(), row, row);
-        m_pois.remove(row);
-        endRemoveRows();
-
-        m_oldPoi = nullptr;
-        emit removed();
-    }
-
-    setLoading(false);
-}
-

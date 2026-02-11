@@ -29,8 +29,6 @@ PanelTemplate {
 
     Component.onCompleted: {
         syncData()
-        CommandManager.clear() // Clear any previous undo history
-
         if (!MapModeController.isEditing) {
             MapModeController.setActiveMode(MapModeRegistry.createPolygonMode)
         }
@@ -186,9 +184,6 @@ PanelTemplate {
         } else {
             AlertZoneModel.append(data)
         }
-
-        // Clear undo history after successful save
-        CommandManager.clear()
     }
 
     footer: ColumnLayout {
@@ -215,10 +210,7 @@ PanelTemplate {
                     variant: UI.ButtonStyles.Ghost
                     backgroundRect.border.width: Theme.borders.b0
                     text: `${TranslationManager.revision}` && qsTr("Back")
-                    onClicked: {
-                        CommandManager.clear() // Clear history on cancel
-                        SidePanelController.close(true)
-                    }
+                    onClicked: SidePanelController.close(true)
                 }
 
                 UI.Button {

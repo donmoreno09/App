@@ -5,6 +5,7 @@ namespace ApiEndpoints {
 
     // TODO: Alert Zone: route to be updated when be is done
     QString BaseUrlAlertZone () { return BaseUrl + "/alertzone"; }
+    QString GetAllAlertZone () { return BaseUrlAlertZone() + "/all"; }
 
     QString BaseUrlPoi() { return BaseUrl + "/pointofinterest"; }
     QString GetAllPoiSByLayerId() { return BaseUrlPoi() + "/layer"; }

@@ -34,7 +34,6 @@ MapItemGroup {
 
     signal tapped()
     signal cornersChanged(geoCoordinate topLeft, geoCoordinate bottomRight)
-    signal editingFinished()
 
     // Internal working geometry
     property geoCoordinate _tl: QtPositioning.coordinate()
@@ -70,6 +69,11 @@ MapItemGroup {
     }
 
     function _syncGeometry() {
+        // During a handle drag _tl/_br are authoritative — skip the
+        // round-trip through external bindings which may arrive one
+        // property at a time and produce mismatched intermediate values.
+        if (isDraggingHandler)
+            return
         const norm = RectGeom.normalizeCorners(topLeft, bottomRight, QtPositioning)
         _tl = norm.topLeft
         _br = norm.bottomRight
@@ -174,7 +178,6 @@ MapItemGroup {
                 committedRect._startTLCoord = QtPositioning.coordinate()
                 committedRect._startBRCoord = QtPositioning.coordinate()
                 committedRect._anchorCoord = QtPositioning.coordinate()
-                root.editingFinished()
             }
 
             onActiveTranslationChanged: {
@@ -228,6 +231,8 @@ MapItemGroup {
     component VertexHandle: MapQuickItem {
         id: h
         required property int kind // 0 TL, 1 TR, 2 BR, 3 BL
+        // The diagonally opposite corner, fixed for the entire drag
+        property geoCoordinate _anchorCoord: QtPositioning.coordinate()
         coordinate: (
             kind === 0 ? root._tl :
             kind === 1 ? QtPositioning.coordinate(root._tl.latitude, root._br.longitude) :
@@ -259,13 +264,23 @@ MapItemGroup {
 
             onActiveChanged: {
                 root.isDraggingHandler = active
-                if (!active)
-                    root.editingFinished()
+                if (active) {
+                    if (h.kind === 0)
+                        h._anchorCoord = root._br
+                    else if (h.kind === 1)
+                        h._anchorCoord = QtPositioning.coordinate(root._br.latitude, root._tl.longitude)
+                    else if (h.kind === 2)
+                        h._anchorCoord = root._tl
+                    else
+                        h._anchorCoord = QtPositioning.coordinate(root._tl.latitude, root._br.longitude)
+                } else {
+                    h._anchorCoord = QtPositioning.coordinate()
+                }
             }
 
             onTranslationChanged: {
                 const mapItem = root.map
-                if (!mapItem)
+                if (!mapItem || !h._anchorCoord.isValid)
                     return
 
                 const p = h.mapToItem(mapItem, centroid.position.x, centroid.position.y)
@@ -273,7 +288,8 @@ MapItemGroup {
                 if (!c.isValid)
                     return
 
-                const next = RectGeom.applyHandleMove(h.kind, c, root._tl, root._br, QtPositioning)
+                // Rectangle = dragged corner + fixed anchor
+                const next = RectGeom.normalizeCorners(c, h._anchorCoord, QtPositioning)
                 root._tl = next.topLeft
                 root._br = next.bottomRight
                 root.cornersChanged(root._tl, root._br)

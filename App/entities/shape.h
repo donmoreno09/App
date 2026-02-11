@@ -1,7 +1,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-#include "../persistence/ipersistable.h"
+#include "IPersistable.h"
 #include "Geometry.h"
 
 #include <QString>

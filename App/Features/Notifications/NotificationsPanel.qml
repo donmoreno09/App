@@ -43,8 +43,8 @@ PanelTemplate {
         ListView {
             id: alertZoneList
             Layout.fillWidth: true
-            Layout.fillHeight: !hasTruck
-            Layout.preferredHeight: hasTruck ? parent.height / 2 : -1
+            Layout.fillHeight: hasTruck ? false : true
+            Layout.preferredHeight: hasTruck ? Math.min(contentHeight, root.height * 0.4) : -1
             spacing: Theme.spacing.s4
             clip: true
             visible: hasAlertZone
@@ -103,8 +103,7 @@ PanelTemplate {
         ListView {
             id: truckList
             Layout.fillWidth: true
-            Layout.fillHeight: !hasAlertZone
-            Layout.preferredHeight: hasAlertZone ? parent.height / 2 : -1
+            Layout.fillHeight: true
             spacing: Theme.spacing.s4
             clip: true
             visible: hasTruck

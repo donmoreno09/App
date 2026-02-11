@@ -150,15 +150,15 @@ Item {
             let notif = _pendingAlertZone[i]
             _addToast({
                 toastTitle: `${TranslationManager.revision}` && qsTr("Alert Zone Intrusion"),
-                toastMessage: notif.label || notif.trackingId,
+                toastMessage: `${TranslationManager.revision}` && qsTr("From %1").arg(notif.trackingId),
                 toastType: "alertzone",
                 toastId: notif.id
             })
         }
 
         // Then Truck toasts
-        for (let i = 0; i < _pendingTruck.length; i++) {
-            let notif = _pendingTruck[i]
+        for (let j = 0; j < _pendingTruck.length; j++) {
+            let notif = _pendingTruck[j]
             _addToast({
                 toastTitle: `${TranslationManager.revision}` && qsTr("Truck Notification"),
                 toastMessage: `${TranslationManager.revision}` && qsTr("From %1").arg(notif.operationCode),
@@ -185,7 +185,7 @@ Item {
                 // Multiple - aggregate
                 _addToast({
                     toastTitle: `${TranslationManager.revision}` && qsTr("Alert Zone Intrusions"),
-                    toastMessage: `${TranslationManager.revision}` && qsTr("%n new intrusion(s) detected", "", alertZoneCount),
+                    toastMessage: `${TranslationManager.revision}` && qsTr("%1 new intrusions detected ").arg(alertZoneCount),
                     toastType: "alertzone",
                     toastId: "aggregate-alertzone"
                 })
@@ -207,7 +207,7 @@ Item {
                 // Multiple - aggregate
                 _addToast({
                     toastTitle: `${TranslationManager.revision}` && qsTr("Truck Notifications"),
-                    toastMessage: `${TranslationManager.revision}` && qsTr("%n new notification(s)", "", truckCount),
+                    toastMessage: `${TranslationManager.revision}` && qsTr("%1 new notifications ").arg(truckCount),
                     toastType: "truck",
                     toastId: "aggregate-truck"
                 })

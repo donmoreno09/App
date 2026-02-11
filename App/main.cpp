@@ -101,7 +101,13 @@ int main(int argc, char *argv[])
     trackManager->deactivate("doc-space");
     trackManager->deactivate("tir");
 
-    // SIGNALR SETUP
+    // If MqttClientService for some reason didn't connect or was disconnected,
+    // reconnect when a track has been activated.
+    QObject::connect(trackManager, &TrackManager::activated, mqtt, [mqtt]{
+        mqtt->connectToBroker();
+    });
+
+    // // SIGNALR SETUP
     auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
 
     // Register parsers for each EventType
@@ -119,7 +125,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "[Main] SignalR service initialized";
 
-    // --- HTTP VesselFinder Service ---
+    // // --- HTTP VesselFinder Service ---
     auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
     QString endpoint = "http://127.0.0.1:8000/tracks";
     vesselHttp->initialize(endpoint, 2000);
