@@ -18,6 +18,12 @@
 #include <connections/signalr/parser/TruckNotificationSignalRParser.h>
 #include <connections/signalr/parser/AlertZoneNotificationParser.h>
 
+#include <core/AuthService.h>
+#include <core/PermissionManager.h>
+#include <core/SecureTokenStorage.h>
+#include <Networking/apis/AuthApi.h>
+#include <Networking/HttpClient.h>
+
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
 
 int main(int argc, char *argv[])
@@ -87,6 +93,20 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
 
     engine.addImportPath("qrc:/"); // For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
+
+    // --- Auth Service ---
+
+    auto* authHttpClient = new HttpClient(&app);
+    auto* authApi = new AuthApi(authHttpClient, &app);
+    auto* tokenStorage = new SecureTokenStorage(&app);
+
+    auto* authService = engine.singletonInstance<AuthService*>("App", "AuthService");
+    auto* permManager = engine.singletonInstance<PermissionManager*>("App", "PermissionManager");
+
+    authService->initialize(authApi, tokenStorage, permManager);
+    authService->tryAutoLogin();
+
+    qDebug() << "[Main] Auth service initialized";
 
     // --- MQTT Client Service ---
 

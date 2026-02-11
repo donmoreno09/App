@@ -19,6 +19,11 @@ namespace ApiEndpoints {
 
     QString BaseUrlShapes();
 
+    // Auth
+    QString AuthLogin();
+    QString AuthRefresh();
+    QString AuthLogout();
+
     QString BaseTrackSenderUrl();
     QString TrackSenderStart(const QString& topic);
     QString TrackSenderStop(const QString& topic);

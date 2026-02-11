@@ -88,6 +88,15 @@ set(cpp_sources
     connections/ApiEndpoints.h
     connections/ApiEndpoints.cpp
 
+    # Auth
+    core/AuthState.h
+    core/AuthService.h
+    core/AuthService.cpp
+    core/PermissionManager.h
+    core/PermissionManager.cpp
+    core/SecureTokenStorage.h
+    core/SecureTokenStorage.cpp
+
     # Core
     core/GeoSelectionUtils.h
     core/interactionmodemanager.cpp
@@ -133,6 +142,8 @@ set(cpp_sources
     entities/Tir.h
     entities/Velocity.h
     entities/IPersistable.h
+    entities/UserSession.h
+    entities/AuthTokens.h
 
     # Qt Models
     models/AlertZoneModel.h

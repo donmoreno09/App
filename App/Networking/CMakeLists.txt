@@ -10,6 +10,8 @@ set(cpp_files
     apis/PoiApi.cpp
     apis/AlertZoneApi.h
     apis/AlertZoneApi.cpp
+    apis/AuthApi.h
+    apis/AuthApi.cpp
 
     # TODO: Adhoc solution, need to turn
     #       connections into its own module or

@@ -14,6 +14,11 @@ namespace ApiEndpoints {
     QString GetOperationalStates() { return BaseUrlPoi() + "/getOperationalStates"; }
     QString GetTypes() { return BaseUrlPoi() + "/getTypes"; }
 
+    // Auth
+    QString AuthLogin() { return BaseUrl + "/auth/login"; }
+    QString AuthRefresh() { return BaseUrl + "/auth/refresh"; }
+    QString AuthLogout() { return BaseUrl + "/auth/logout"; }
+
     QString BaseUrlShapes() { return BaseUrl + "/shape"; }
 
     QString BaseUrlMenuManager() { return BaseUrl + "/menumanager"; }

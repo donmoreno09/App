@@ -18,6 +18,7 @@ import App.Features.ContextPanel 1.0
 import App.Features.Notifications 1.0
 import App.Features.MapToolbar 1.0
 import App.Features.Language 1.0
+import App.Features.Auth 1.0
 import App.Features.ShipStowage 1.0
 
 ApplicationWindow {
@@ -239,5 +240,14 @@ ApplicationWindow {
         z: Theme.elevation.modal + 1
 
         mapReference: mapHost
+    }
+
+    // Auth guard — covers entire window when not authenticated
+    Loader {
+        anchors.fill: parent
+        z: Theme.elevation.modal + 100
+        active: AuthService.state !== AuthStateEnum.Authenticated
+
+        sourceComponent: LoginPage {}
     }
 }
