@@ -38,8 +38,20 @@ MapItemGroup {
     signal ellipseChanged(geoCoordinate center, real radiusA, real radiusB)
 
     property var _path: []
+    property bool _batchingUpdates: false
     function _syncPath() {
+        if (_batchingUpdates)
+            return
         _path = EllipseGeom.ellipsePath(center, radiusA, radiusB, QtPositioning, 96)
+    }
+
+    function updateGeometry(newCenter, newRadiusA, newRadiusB) {
+        _batchingUpdates = true
+        center = newCenter
+        radiusA = newRadiusA
+        radiusB = newRadiusB
+        _batchingUpdates = false
+        _syncPath()
     }
 
     onCenterChanged: _syncPath()
