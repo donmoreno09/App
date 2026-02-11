@@ -51,7 +51,7 @@ MapItemGroup {
         radiusA = newRadiusA
         radiusB = newRadiusB
         _batchingUpdates = false
-        _syncPath()  // Single recalculation instead of 3
+        _syncPath()
     }
 
     onCenterChanged: _syncPath()

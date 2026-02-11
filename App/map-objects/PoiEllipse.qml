@@ -40,17 +40,4 @@ UI.EditableEllipse {
             MapModeRegistry.editEllipseMode.minorAxisChanged()
         }
     }
-
-    onIsMovingEllipseChanged: {
-        if (!isMovingEllipse) {
-            MapModeRegistry.editEllipseMode.coordChanged()
-        }
-    }
-
-    onIsDraggingHandlerChanged: {
-        if (!isDraggingHandler) {
-            MapModeRegistry.editEllipseMode.majorAxisChanged()
-            MapModeRegistry.editEllipseMode.minorAxisChanged()
-        }
-    }
 }
