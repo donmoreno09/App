@@ -412,11 +412,10 @@ void AlertZoneModel::remove(const QString &id)
 {
     setLoading(true);
 
-    m_api.remove(id, [this] {
+    m_api.remove(id, [this, id] {
         int row = -1;
         for (int i = 0; i < m_alertZones.size(); i++) {
-            if (m_oldAlertZone == nullptr) break;
-            if (m_alertZones[i].id == m_oldAlertZone->id) {
+            if (m_alertZones[i].id == id) {
                 row = i;
                 break;
             }

@@ -48,7 +48,6 @@ QtObject {
     }
 
     function editPoi(editablePoi) {
-        clearState()
         _willEdit = true
 
         poi = editablePoi
@@ -70,7 +69,6 @@ QtObject {
     }
 
     function editAlertZone(editableAlertZone) {
-        clearState()
         _willEdit = true
 
         alertZone = editableAlertZone
