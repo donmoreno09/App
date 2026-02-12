@@ -396,11 +396,10 @@ void PoiModel::remove(const QString &id)
 {
     setLoading(true);
 
-    m_api.remove(id, [this] {
+    m_api.remove(id, [this, id] {
         int row = -1;
         for (int i = 0; i < m_pois.size(); i++) {
-            if (m_oldPoi == nullptr) break;
-            if (m_pois[i].id == m_oldPoi->id) {
+            if (m_pois[i].id == id) {
                 row = i;
                 break;
             }
