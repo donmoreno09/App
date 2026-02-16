@@ -26,138 +26,154 @@ PanelTemplate {
         visible: !hasAlertZone && !hasTruck
     }
 
-    ColumnLayout {
+    ScrollView {
         anchors.fill: parent
-        anchors.margins: Theme.spacing.s8
-        spacing: Theme.spacing.s4
         visible: hasAlertZone || hasTruck
+        contentWidth: availableWidth
 
-        // Alert Zone Section Header (fixed)
-        NotificationSectionHeader {
-            Layout.fillWidth: true
-            sectionTitle: qsTr("Alert Zone Intrusions")
-            visible: hasAlertZone
-        }
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.vertical.policy: ScrollBar.AsNeeded
+        clip: true
 
-        // Alert Zone ListView
-        ListView {
-            id: alertZoneList
-            Layout.fillWidth: true
-            Layout.fillHeight: hasTruck ? false : true
-            Layout.preferredHeight: hasTruck ? Math.min(contentHeight, root.height * 0.4) : -1
-            spacing: Theme.spacing.s4
-            clip: true
-            visible: hasAlertZone
+        Pane {
+            width: parent.width
+            padding: Theme.spacing.s8
+            background: Rectangle { color: "transparent" }
 
-            cacheBuffer: 400
-            reuseItems: true
+            ColumnLayout {
+                width: parent.width
+                spacing: Theme.spacing.s4
 
-            model: AlertZoneNotificationModel
-
-            delegate: AlertZoneNotificationCard {
-                width: alertZoneList.width
-
-                required property int index
-                required property string id
-                required property string detectedAt
-                required property var alertZone
-                required property var trackData
-
-                cardNotificationId: id
-                cardTimestamp: detectedAt
-                cardAlertZone: alertZone ?? {}
-                cardTrackData: trackData ?? {}
-
-                onDeleteRequested: (notifId) => {
-                    console.log("[NotificationsPanel] Confirming read for AlertZone:", notifId)
-                    SignalRClientService.invoke("ConfirmRead", [notifId])
-                    AlertZoneNotificationModel.removeNotification(notifId)
+                // Alert Zone Section Header
+                NotificationSectionHeader {
+                    Layout.fillWidth: true
+                    sectionTitle: qsTr("Alert Zone Intrusions")
+                    visible: hasAlertZone
                 }
 
-                onViewOnMapRequested: (loc) => {
-                    MapController.setMapCenter(loc)
-                }
-            }
+                // Alert Zone ListView
+                ListView {
+                    id: alertZoneList
+                    Layout.fillWidth: true
+                    Layout.minimumHeight: 180
+                    Layout.preferredHeight: contentHeight
+                    Layout.maximumHeight: 400
+                    spacing: Theme.spacing.s4
+                    clip: true
+                    visible: hasAlertZone
 
-            ScrollBar.vertical: ScrollBar {
-                policy: ScrollBar.AsNeeded
-            }
-        }
+                    cacheBuffer: 500
+                    reuseItems: true
 
-        // Divider (fixed)
-        UI.HorizontalDivider {
-            Layout.fillWidth: true
-            Layout.topMargin: Theme.spacing.s4
-            Layout.bottomMargin: Theme.spacing.s4
-            visible: hasAlertZone && hasTruck
-        }
+                    model: AlertZoneNotificationModel
 
-        // Truck Section Header (fixed)
-        NotificationSectionHeader {
-            Layout.fillWidth: true
-            sectionTitle: qsTr("Truck Operations")
-            visible: hasTruck
-        }
+                    delegate: AlertZoneNotificationCard {
+                        width: alertZoneList.width
 
-        // Truck ListView
-        ListView {
-            id: truckList
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            spacing: Theme.spacing.s4
-            clip: true
-            visible: hasTruck
+                        required property int index
+                        required property string id
+                        required property string detectedAt
+                        required property var alertZone
+                        required property var trackData
 
-            cacheBuffer: 400
-            reuseItems: true
+                        cardNotificationId: id
+                        cardTimestamp: detectedAt
+                        cardAlertZone: alertZone ?? {}
+                        cardTrackData: trackData ?? {}
 
-            model: TruckNotificationModel
+                        onDeleteRequested: (notifId) => {
+                            console.log("[NotificationsPanel] Confirming read for AlertZone:", notifId)
+                            SignalRClientService.invoke("ConfirmRead", [notifId])
+                            AlertZoneNotificationModel.removeNotification(notifId)
+                        }
 
-            delegate: TruckNotificationCard {
-                width: truckList.width
+                        onViewOnMapRequested: (loc) => {
+                            MapController.setMapCenter(loc)
+                        }
+                    }
 
-                required property int index
-                required property string id
-                required property string envelopeId
-                required property string operationCode
-                required property string operationState
-                required property string reportedAt
-                required property string issueType
-                required property string solutionType
-                required property string estimatedArrival
-                required property var location
-                required property string note
-
-                cardNotificationId: id
-                cardEnvelopeId: envelopeId
-                cardOperationCode: operationCode
-                cardOperationState: operationState
-                cardReportedAt: reportedAt
-                cardIssueType: issueType
-                cardSolutionType: solutionType
-                cardEstimatedArrival: estimatedArrival ?? ""
-                cardLocation: location ?? null
-                cardNote: note ?? ""
-
-                onDeleteRequested: (envId, notifId) => {
-                    console.log("[NotificationsPanel] Confirming read for Truck:", envId)
-                    SignalRClientService.invoke("ConfirmRead", [envId])
-                    TruckNotificationModel.removeNotification(notifId)
+                    ScrollBar.vertical: ScrollBar {
+                        policy: ScrollBar.AsNeeded
+                    }
                 }
 
-                onViewOnMapRequested: (loc) => {
-                    MapController.setMapCenter(loc)
+                // Divider
+                UI.HorizontalDivider {
+                    Layout.fillWidth: true
+                    Layout.topMargin: Theme.spacing.s4
+                    Layout.bottomMargin: Theme.spacing.s4
+                    visible: hasAlertZone && hasTruck
                 }
-            }
 
-            ScrollBar.vertical: ScrollBar {
-                policy: ScrollBar.AsNeeded
+                // Truck Section Header
+                NotificationSectionHeader {
+                    Layout.fillWidth: true
+                    sectionTitle: qsTr("Truck Operations")
+                    visible: hasTruck
+                }
+
+                // Truck ListView
+                ListView {
+                    id: truckList
+                    Layout.fillWidth: true
+                    Layout.minimumHeight: 180
+                    Layout.preferredHeight: contentHeight
+                    Layout.maximumHeight: 400
+                    spacing: Theme.spacing.s4
+                    clip: true
+                    visible: hasTruck
+
+                    cacheBuffer: 500
+                    reuseItems: true
+
+                    model: TruckNotificationModel
+
+                    delegate: TruckNotificationCard {
+                        width: truckList.width
+
+                        required property int index
+                        required property string id
+                        required property string envelopeId
+                        required property string operationCode
+                        required property string operationState
+                        required property string reportedAt
+                        required property string issueType
+                        required property string solutionType
+                        required property string estimatedArrival
+                        required property var location
+                        required property string note
+
+                        cardNotificationId: id
+                        cardEnvelopeId: envelopeId
+                        cardOperationCode: operationCode
+                        cardOperationState: operationState
+                        cardReportedAt: reportedAt
+                        cardIssueType: issueType
+                        cardSolutionType: solutionType
+                        cardEstimatedArrival: estimatedArrival ?? ""
+                        cardLocation: location ?? null
+                        cardNote: note ?? ""
+
+                        onDeleteRequested: (envId, notifId) => {
+                            console.log("[NotificationsPanel] Confirming read for Truck:", envId)
+                            SignalRClientService.invoke("ConfirmRead", [envId])
+                            TruckNotificationModel.removeNotification(notifId)
+                        }
+
+                        onViewOnMapRequested: (loc) => {
+                            MapController.setMapCenter(loc)
+                        }
+                    }
+
+                    ScrollBar.vertical: ScrollBar {
+                        policy: ScrollBar.AsNeeded
+                    }
+                }
             }
         }
     }
 
     footer: NotificationFooter {
-
         onDeleteAllRequested: {
             console.log("[NotificationsPanel] Confirming read for all notifications")
 
