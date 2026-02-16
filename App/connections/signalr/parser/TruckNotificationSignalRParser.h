@@ -19,7 +19,7 @@ public:
 
         TruckNotification notif;
 
-        notif.id = payload["IssueId"].toString();
+        notif.id = envelopeId;
         notif.envelopeId = envelopeId;
         notif.userId = payload["UserId"].toString();
         notif.operationCode = payload["OperationCode"].toString();
