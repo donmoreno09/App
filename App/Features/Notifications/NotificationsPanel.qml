@@ -55,10 +55,15 @@ PanelTemplate {
                 ListView {
                     id: alertZoneList
                     Layout.fillWidth: true
+                    Layout.minimumHeight: 180
                     Layout.preferredHeight: contentHeight
+                    Layout.maximumHeight: 400
                     spacing: Theme.spacing.s4
-                    interactive: false
+                    clip: true
                     visible: hasAlertZone
+
+                    cacheBuffer: 500
+                    reuseItems: true
 
                     model: AlertZoneNotificationModel
 
@@ -86,6 +91,10 @@ PanelTemplate {
                             MapController.setMapCenter(loc)
                         }
                     }
+
+                    ScrollBar.vertical: ScrollBar {
+                        policy: ScrollBar.AsNeeded
+                    }
                 }
 
                 // Divider
@@ -107,10 +116,15 @@ PanelTemplate {
                 ListView {
                     id: truckList
                     Layout.fillWidth: true
+                    Layout.minimumHeight: 180
                     Layout.preferredHeight: contentHeight
+                    Layout.maximumHeight: 400
                     spacing: Theme.spacing.s4
-                    interactive: false
+                    clip: true
                     visible: hasTruck
+
+                    cacheBuffer: 500
+                    reuseItems: true
 
                     model: TruckNotificationModel
 
@@ -149,6 +163,10 @@ PanelTemplate {
                         onViewOnMapRequested: (loc) => {
                             MapController.setMapCenter(loc)
                         }
+                    }
+
+                    ScrollBar.vertical: ScrollBar {
+                        policy: ScrollBar.AsNeeded
                     }
                 }
             }
