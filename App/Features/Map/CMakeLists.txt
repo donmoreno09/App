@@ -41,6 +41,7 @@ generate_export_header(app_features_map
 
 target_link_libraries(app_features_map
     PRIVATE
+        Qt6::Core
         Qt6::Gui
         Qt6::Qml
         Qt6::Quick
