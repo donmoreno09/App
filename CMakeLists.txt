@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 6.8 REQUIRED
     COMPONENTS
+        Core
         Gui
         Qml
         Quick
