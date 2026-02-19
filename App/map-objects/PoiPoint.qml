@@ -4,6 +4,7 @@ import QtPositioning 6.8
 
 import App 1.0
 import App.Themes 1.0
+import App.Features.Map 1.0
 import App.Features.MapModes 1.0
 import App.Components 1.0 as UI
 
@@ -12,6 +13,7 @@ UI.EditablePoint {
     z: Theme.elevation.z100 + (isEditing ? 100 : 0)
 
     isEditing: MapModeController.poi && id === MapModeController.poi.id
+    mapItem: MapController.map
     coordinate: model.coordinate
     iconSource: "qrc:/App/assets/icons/poi.svg"
 

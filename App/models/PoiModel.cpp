@@ -174,7 +174,7 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
     }
     case CoordinateRole: {
         const QGeoCoordinate coord = value.value<QGeoCoordinate>();
-        const QVector2D point(coord.longitude(), coord.latitude());
+        const QPointF point(coord.longitude(), coord.latitude());
         if (!qFuzzyCompare(point.x(), poi.geometry.coordinate.x()) || !qFuzzyCompare(point.y(), poi.geometry.coordinate.y())) {
             poi.geometry.coordinate = point;
             changed = true;
@@ -182,16 +182,16 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
         break;
     }
     case CoordinatesRole: {
-        QList<QVector2D> newCoords;
+        QList<QPointF> newCoords;
 
         // Preferred: direct QList<QGeoCoordinate>
         if (value.canConvert<QList<QGeoCoordinate>>()) {
             const auto list = value.value<QList<QGeoCoordinate>>();
             newCoords.reserve(list.size());
             for (const auto &c : list)
-                newCoords.append(QVector2D(c.longitude(), c.latitude())); // x=lon, y=lat
+                newCoords.append(QPointF(c.longitude(), c.latitude())); // x=lon, y=lat
         } else {
-            // Fallbacks: [{x,y}], [[x,y]], QList<QVector2D>, etc.
+            // Fallbacks: [{x,y}], [[x,y]], QList<QPointF>, etc.
             newCoords = parseCoordinatesVariant(value);
         }
 
@@ -205,19 +205,19 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
         if (!isRectangle(poi.geometry)) return false;
 
         const QGeoCoordinate c = value.value<QGeoCoordinate>();
-        const QVector2D topLeft(c.longitude(), c.latitude()); // x=lon, y=lat
+        const QPointF topLeft(c.longitude(), c.latitude()); // x=lon, y=lat
 
         // Opposite corner from current geometry if present, otherwise degenerate
-        QVector2D bottomRight = topLeft;
+        QPointF bottomRight = topLeft;
         if (poi.geometry.coordinates.size() >= 3) {
             bottomRight = poi.geometry.coordinates[2]; // index 2 is bottom right
         }
 
         // Rebuild rectangle: TL, TR, BR, BL, TL
-        QList<QVector2D> rect;
+        QList<QPointF> rect;
         rect.reserve(5);
-        const QVector2D topRight(bottomRight.x(), topLeft.y());
-        const QVector2D bottomLeft(topLeft.x(), bottomRight.y());
+        const QPointF topRight(bottomRight.x(), topLeft.y());
+        const QPointF bottomLeft(topLeft.x(), bottomRight.y());
         rect << topLeft << topRight << bottomRight << bottomLeft << topLeft;
 
         if (!compareCoords(poi.geometry.coordinates, rect)) {
@@ -230,19 +230,19 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
         if (!isRectangle(poi.geometry)) return false;
 
         const QGeoCoordinate c = value.value<QGeoCoordinate>();
-        const QVector2D BR(c.longitude(), c.latitude()); // x=lon, y=lat
+        const QPointF BR(c.longitude(), c.latitude()); // x=lon, y=lat
 
         // Opposite corner from current geometry if present, otherwise degenerate
-        QVector2D TL = BR;
+        QPointF TL = BR;
         if (poi.geometry.coordinates.size() >= 1) {
             TL = poi.geometry.coordinates[0]; // index 0 is top left
         }
 
         // Rebuild rectangle: TL, TR, BR, BL, TL
-        QList<QVector2D> rect;
+        QList<QPointF> rect;
         rect.reserve(5);
-        const QVector2D TR(BR.x(), TL.y());
-        const QVector2D BL(TL.x(), BR.y());
+        const QPointF TR(BR.x(), TL.y());
+        const QPointF BL(TL.x(), BR.y());
         rect << TL << TR << BR << BL << TL;
 
         if (!compareCoords(poi.geometry.coordinates, rect)) {
@@ -340,8 +340,8 @@ void PoiModel::setCoordinate(int row, int coordIndex, const QGeoCoordinate &coor
     if (coordIndex < 0 || coordIndex >= coordinates.length())
         return;
 
-    const QVector2D oldPoint = coordinates.at(coordIndex);
-    const QVector2D point(coord.longitude(), coord.latitude());
+    const QPointF oldPoint = coordinates.at(coordIndex);
+    const QPointF point(coord.longitude(), coord.latitude());
     if (!qFuzzyCompare(point.x(), oldPoint.x()) || !qFuzzyCompare(point.y(), oldPoint.y())) {
         coordinates[coordIndex] = point;
 
@@ -499,9 +499,9 @@ void PoiModel::setLoading(bool newLoading)
     emit loadingChanged();
 }
 
-QList<QVector2D> PoiModel::parseCoordinatesVariant(const QVariant &v)
+QList<QPointF> PoiModel::parseCoordinatesVariant(const QVariant &v)
 {
-    QList<QVector2D> out;
+    QList<QPointF> out;
 
     // 1) QVariantList of maps: [{x:..., y:...}, ...]
     if (v.typeId() == QMetaType::QVariantList) {
@@ -510,16 +510,16 @@ QList<QVector2D> PoiModel::parseCoordinatesVariant(const QVariant &v)
         for (const auto& item : list) {
             const auto m = item.toMap();
             // Accept either x/y or lon/lat naming if you want to be lenient
-            const float x = m.value(QStringLiteral("x"), m.value(QStringLiteral("lon"))).toFloat();
-            const float y = m.value(QStringLiteral("y"), m.value(QStringLiteral("lat"))).toFloat();
-            out.push_back(QVector2D(x, y));
+            const double x = m.value(QStringLiteral("x"), m.value(QStringLiteral("lon"))).toDouble();
+            const double y = m.value(QStringLiteral("y"), m.value(QStringLiteral("lat"))).toDouble();
+            out.push_back(QPointF(x, y));
         }
         return out;
     }
 
-    // 2) QList<QVector2D> directly wrapped in a QVariant
-    if (v.canConvert<QList<QVector2D>>()) {
-        return v.value<QList<QVector2D>>();
+    // 2) QList<QPointF> directly wrapped in a QVariant
+    if (v.canConvert<QList<QPointF>>()) {
+        return v.value<QList<QPointF>>();
     }
 
     // 3) QVariantList of 2-element arrays: [[x,y], [x,y], ...]
@@ -529,7 +529,7 @@ QList<QVector2D> PoiModel::parseCoordinatesVariant(const QVariant &v)
         for (const auto& item : list) {
             const auto arr = item.toList();
             if (arr.size() >= 2) {
-                out.push_back(QVector2D(arr[0].toFloat(), arr[1].toFloat()));
+                out.push_back(QPointF(arr[0].toDouble(), arr[1].toDouble()));
             }
         }
         return out;
@@ -539,7 +539,7 @@ QList<QVector2D> PoiModel::parseCoordinatesVariant(const QVariant &v)
     return out;
 }
 
-bool PoiModel::compareCoords(const QList<QVector2D> &a, const QList<QVector2D> &b)
+bool PoiModel::compareCoords(const QList<QPointF> &a, const QList<QPointF> &b)
 {
     if (a.size() != b.size()) return false;
     for (int i = 0; i < a.size(); i++) {
@@ -555,11 +555,11 @@ bool PoiModel::isRectangle(const Geometry &geom)
     if (geom.shapeTypeId != 3 || geom.coordinates.size() != 5)
         return false;
 
-    const QVector2D& TL = geom.coordinates[0];
-    const QVector2D& TR = geom.coordinates[1];
-    const QVector2D& BR = geom.coordinates[2];
-    const QVector2D& BL = geom.coordinates[3];
-    const QVector2D& backToTL = geom.coordinates[4];
+    const QPointF& TL = geom.coordinates[0];
+    const QPointF& TR = geom.coordinates[1];
+    const QPointF& BR = geom.coordinates[2];
+    const QPointF& BL = geom.coordinates[3];
+    const QPointF& backToTL = geom.coordinates[4];
 
     // Ensure closure (last == first)
     if (!qFuzzyCompare(TL.x(), backToTL.x()) || !qFuzzyCompare(TL.y(), backToTL.y()))
@@ -607,12 +607,12 @@ void PoiModel::buildPoiSave(const QVariantMap &data)
     geom.radiusB = geomMap.value("radiusB").toDouble();
 
     QVariantList coordList = geomMap.value("coordinates").toList();
-    QList<QVector2D> coords;
+    QList<QPointF> coords;
     for (const QVariant &coordVar : std::as_const(coordList)) {
         QVariantMap coordMap = coordVar.toMap();
-        float x = static_cast<float>(coordMap.value("x").toDouble());
-        float y = static_cast<float>(coordMap.value("y").toDouble());
-        coords.append(QVector2D(x, y));
+        const double x = coordMap.value("x").toDouble();
+        const double y = coordMap.value("y").toDouble();
+        coords.append(QPointF(x, y));
     }
 
     if (!coords.isEmpty())
