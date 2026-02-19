@@ -3,15 +3,15 @@
 
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QVector2D>
+#include <QPointF>
 
 struct Geometry {
     int shapeTypeId = 0;
     double surface = 0.0;
     double height = 0.0;
 
-    QList<QVector2D> coordinates;
-    QVector2D coordinate;
+    QList<QPointF> coordinates;
+    QPointF coordinate;
 
     double radiusA = 0.0;
     double radiusB = 0.0;
@@ -55,13 +55,13 @@ struct Geometry {
             QJsonObject p = val.toObject();
             double x = p.contains("X") ? p["X"].toDouble() : p["x"].toDouble();
             double y = p.contains("Y") ? p["Y"].toDouble() : p["y"].toDouble();
-            g.coordinates.append(QVector2D(x, y));
+            g.coordinates.append(QPointF(x, y));
         }
 
         QJsonObject coordObj = obj.contains("Coordinate") ? obj["Coordinate"].toObject() : obj["coordinate"].toObject();
         double cx = coordObj.contains("X") ? coordObj["X"].toDouble() : coordObj["x"].toDouble();
         double cy = coordObj.contains("Y") ? coordObj["Y"].toDouble() : coordObj["y"].toDouble();
-        g.coordinate = QVector2D(cx, cy);
+        g.coordinate = QPointF(cx, cy);
 
         g.radiusA = obj.contains("RadiusA") ? obj["RadiusA"].toDouble() : obj["radiusA"].toDouble();
         g.radiusB = obj.contains("RadiusB") ? obj["RadiusB"].toDouble() : obj["radiusB"].toDouble();

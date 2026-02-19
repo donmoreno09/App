@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QHash>
 #include <QPointer>
+#include <QPointF>
 #include <QQmlEngine>
 #include <entities/Poi.h>
 #include <QtPositioning/QGeoCoordinate>
@@ -109,9 +110,9 @@ private:
     QVector<Poi> m_pois;
     QPointer<ModelHelper> m_helper;
 
-    static QList<QVector2D> parseCoordinatesVariant(const QVariant& v);
+    static QList<QPointF> parseCoordinatesVariant(const QVariant& v);
 
-    static bool compareCoords(const QList<QVector2D>& a, const QList<QVector2D>& b);
+    static bool compareCoords(const QList<QPointF>& a, const QList<QPointF>& b);
 
     static bool isRectangle(const Geometry& geom);
 
