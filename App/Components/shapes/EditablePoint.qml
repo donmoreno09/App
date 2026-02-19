@@ -26,10 +26,42 @@ MapQuickItem {
     property color highlightColor: "white"
     property real highlightScale: 1.12
 
+    // The map instance used for coordinate conversions. Must be provided by callers.
+    property var mapItem: null
+
     property bool isDragging: false
 
     signal tapped()
     signal pointChanged(geoCoordinate coord)
+
+    // Scratch state for move drag
+    property geoCoordinate _startCoord: QtPositioning.coordinate()
+    property geoCoordinate _anchorCoord: QtPositioning.coordinate()
+    property point _lastScenePos: Qt.point(0, 0)
+
+    function _translateCoord(startCoord, anchorCoord, pointerCoord) {
+        if (!startCoord || !startCoord.isValid
+                || !anchorCoord || !anchorCoord.isValid
+                || !pointerCoord || !pointerCoord.isValid) {
+            return QtPositioning.coordinate()
+        }
+
+        let dLat = pointerCoord.latitude - anchorCoord.latitude
+        let dLon = pointerCoord.longitude - anchorCoord.longitude
+        if (dLon > 180)
+            dLon -= 360
+        else if (dLon < -180)
+            dLon += 360
+
+        const nextLat = Math.max(-90, Math.min(90, startCoord.latitude + dLat))
+        let nextLon = startCoord.longitude + dLon
+        while (nextLon > 180)
+            nextLon -= 360
+        while (nextLon <= -180)
+            nextLon += 360
+
+        return QtPositioning.coordinate(nextLat, nextLon)
+    }
 
     anchorPoint.x: marker.width / 2
     anchorPoint.y: icon.height / 2
@@ -95,13 +127,57 @@ MapQuickItem {
 
     DragHandler {
         id: handler
+        target: null
         enabled: root.isEditing
+        acceptedButtons: Qt.LeftButton
+        minimumPointCount: 1
+        maximumPointCount: 1
+        cursorShape: Qt.SizeAllCursor
 
-        onActiveChanged: root.isDragging = active
+        onActiveChanged: {
+            root.isDragging = active
 
-        onTranslationChanged: {
-            // Dragging a MapQuickItem updates its coordinate automatically; propagate it out.
-            root.pointChanged(root.coordinate)
+            const map = root.mapItem
+            if (active) {
+                if (!map)
+                    return
+
+                root._startCoord = root.coordinate
+
+                const pressScene = handler.centroid.scenePressPosition
+                root._lastScenePos = pressScene
+
+                const pressPx = map.mapFromItem(null, pressScene.x, pressScene.y)
+                root._anchorCoord = map.toCoordinate(pressPx, false)
+            } else {
+                root._startCoord = QtPositioning.coordinate()
+                root._anchorCoord = QtPositioning.coordinate()
+            }
+        }
+
+        onActiveTranslationChanged: {
+            const map = root.mapItem
+            if (!map || !active || !root._startCoord.isValid || !root._anchorCoord.isValid)
+                return
+
+            const scenePos = centroid.scenePosition
+            if (scenePos.x === root._lastScenePos.x &&
+                    scenePos.y === root._lastScenePos.y) {
+                return
+            }
+
+            root._lastScenePos = scenePos
+
+            const pointerPx = map.mapFromItem(null, scenePos.x, scenePos.y)
+            const pointerCoord = map.toCoordinate(pointerPx, false)
+            if (!pointerCoord.isValid)
+                return
+
+            const nextCoord = root._translateCoord(root._startCoord, root._anchorCoord, pointerCoord)
+            if (!nextCoord.isValid)
+                return
+
+            root.pointChanged(nextCoord)
         }
     }
 }

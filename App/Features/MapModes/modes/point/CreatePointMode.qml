@@ -6,6 +6,7 @@ import App.Themes 1.0
 
 import "../.."
 import App.Components 1.0 as UI
+import App.Features.Map 1.0
 
 PointMode {
     id: root
@@ -39,6 +40,7 @@ PointMode {
 
     UI.EditablePoint {
         id: mapPoint
+        mapItem: MapController.map
         coordinate: coord
         z: root.z + 1
 
