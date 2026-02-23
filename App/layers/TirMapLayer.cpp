@@ -1,12 +1,22 @@
 #include "TirMapLayer.h"
+
 #include <QDebug>
-#include <core/GeoSelectionUtils.h>
+
+#include "core/GeoSelectionUtils.h"
+#include "core/TrackManager.h"
 
 TirMapLayer::TirMapLayer(QObject* parent)
     : BaseTrackMapLayer(parent)
 {
     setObjectName("TirMapLayer");
     m_tirModel = new TirModel(this);
+
+    if (auto* tm = TrackManager::instance()) {
+        QObject::connect(m_tirModel, &TirModel::historyPayloadArrived,
+                         tm, &TrackManager::onHistoryPayloadArrived);
+    } else {
+        qWarning() << "[TrackModel] TrackManager singleton not yet constructed.";
+    }
 
     m_clearTirsTimer = new QTimer(this);
     m_clearTirsTimer->setSingleShot(true);

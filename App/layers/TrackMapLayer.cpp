@@ -1,8 +1,9 @@
 #include "TrackMapLayer.h"
-#include <QDebug>
-#include <core/GeoSelectionUtils.h>
-#include <core/TrackManager.h>
 
+#include <QDebug>
+
+#include "core/GeoSelectionUtils.h"
+#include "core/TrackManager.h"
 
 TrackMapLayer::TrackMapLayer(QObject* parent)
     : BaseTrackMapLayer(parent)

@@ -1,12 +1,11 @@
 #ifndef TRACKMODEL_H
 #define TRACKMODEL_H
 
-#include "BaseTrackModel.h"
 #include <QVector>
 #include <QHash>
 #include <QQmlEngine>
-#include <entities/Track.h>
-#include "ModelHelper.h"
+#include "BaseTrackModel.h"
+#include "entities/Track.h"
 
 class TrackModel : public BaseTrackModel<Track>
 {
@@ -56,21 +55,9 @@ public:
 
     Q_INVOKABLE QVariant getRoleData(int idx, int role) const;
 
-    static QVariant historyToVariant(const QVector<HistoryPoint>& hist) {
-        QVariantList out;
-        out.reserve(hist.size());
-        for (const auto& hp : hist) {
-            // array compatti e cache-friendly: [lat, lon, alt, time]
-            QVariantList tuple;
-            tuple.reserve(4);
-            tuple << hp.lat << hp.lon << hp.alt << static_cast<double>(hp.time);
-            out.push_back(tuple);
-        }
-        return out;
-    }
-
 signals:
     void historyPayloadArrived(const QString& topic, const QString& uid);
+
 private:
     QVector<Track> m_tracks;
     QHash<QString, int> m_upsertMap;

@@ -1,12 +1,13 @@
 #ifndef TRACKMAPLAYER_H
 #define TRACKMAPLAYER_H
 
-#include "BaseTrackMapLayer.h"
 #include <QGeoCoordinate>
 #include <QVariantList>
 #include <QTimer>
 #include <QQmlEngine>
-#include <models/TrackModel.h>
+
+#include "BaseTrackMapLayer.h"
+#include "models/TrackModel.h"
 
 class TrackMapLayer : public BaseTrackMapLayer
 {

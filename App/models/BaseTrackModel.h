@@ -5,7 +5,8 @@
 #include <QVector>
 #include <QGeoCoordinate>
 #include "ModelHelper.h"
-#include <entities/Velocity.h>
+#include "entities/Velocity.h"
+#include "entities/HistoryPoint.h"
 
 template <class T>
 class BaseTrackModel : public QAbstractListModel
@@ -38,6 +39,19 @@ protected:
         return std::abs(a.vx - b.vx) < epsilon &&
                std::abs(a.vy - b.vy) < epsilon &&
                std::abs(a.vz - b.vz) < epsilon;
+    }
+
+    static QVariant historyToVariant(const QVector<HistoryPoint>& hist) {
+        QVariantList out;
+        out.reserve(hist.size());
+        for (const auto& hp : hist) {
+            // array compatti e cache-friendly: [lat, lon, alt, time]
+            QVariantList tuple;
+            tuple.reserve(4);
+            tuple << hp.lat << hp.lon << hp.alt << static_cast<double>(hp.time);
+            out.push_back(tuple);
+        }
+        return out;
     }
 };
 

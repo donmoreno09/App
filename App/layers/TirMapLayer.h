@@ -1,12 +1,13 @@
 #ifndef TIRMAPLAYER_H
 #define TIRMAPLAYER_H
 
-#include "BaseTrackMapLayer.h"
 #include <QGeoCoordinate>
 #include <QVariantList>
 #include <QTimer>
 #include <QQmlEngine>
-#include <models/TirModel.h>
+
+#include "BaseTrackMapLayer.h"
+#include "models/TirModel.h"
 
 class TirMapLayer : public BaseTrackMapLayer
 {

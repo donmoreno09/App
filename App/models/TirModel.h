@@ -1,11 +1,11 @@
 #ifndef TIRMODEL_H
 #define TIRMODEL_H
 
-#include "BaseTrackModel.h"
 #include <QVector>
 #include <QHash>
 #include <QQmlEngine>
-#include <entities/Tir.h>
+#include "BaseTrackModel.h"
+#include "entities/Tir.h"
 
 class TirModel : public BaseTrackModel<Tir>
 {
@@ -25,6 +25,7 @@ public:
         OperationCodeRole,
         SourceNameRole,
         UidForHistoryRole,
+        HistoryRole,
     };
 
     Q_ENUM(Roles)
@@ -50,6 +51,9 @@ public:
     Q_INVOKABLE void clear();
 
     Q_INVOKABLE QVariant getRoleData(int idx, int role) const;
+
+signals:
+    void historyPayloadArrived(const QString& topic, const QString& uid);
 
 private:
     QVector<Tir> m_tirs;

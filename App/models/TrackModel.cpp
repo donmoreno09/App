@@ -80,27 +80,29 @@ void TrackModel::set(const QVector<Track> &tracks)
 
 void TrackModel::upsert(const QVector<Track>& tracks)
 {
+    // 1) Build "seen" keys from incoming payload
     QSet<QString> seen;
     for (const auto& track : tracks) {
         seen.insert(track.trackUid);
     }
 
-    bool removed = false;
+    // 2) Remove stale items (not present anymore)
     for (int row = m_tracks.size() - 1; row >= 0; --row) {
         if (!seen.contains(m_tracks[row].trackUid)) {
             beginRemoveRows({}, row, row);
             m_tracks.removeAt(row);
             endRemoveRows();
-            removed = true;
         }
     }
 
+    // 3) Rebuild upsert map (indices may have shifted)
     m_upsertMap.clear();
     m_upsertMap.reserve(m_tracks.size());
     for (int row = 0; row < m_tracks.size(); ++row) {
         m_upsertMap.insert(m_tracks[row].trackUid, row);
     }
 
+    // 4) Upsert (update existing, or insert new)
     for (const auto& track : tracks) {
         auto it = m_upsertMap.find(track.trackUid);
 
@@ -139,8 +141,7 @@ void TrackModel::upsert(const QVector<Track>& tracks)
     }
 }
 
-
-QVector<int> TrackModel::diffRoles(const Track &a, const Track &b) const
+QVector<int> TrackModel::diffRoles(const Track& a, const Track& b) const
 {
     QVector<int> roles;
 
@@ -157,7 +158,7 @@ QVector<int> TrackModel::diffRoles(const Track &a, const Track &b) const
     if (a.name != b.name) roles << NameRole;
     if (a.uidForHistory != b.uidForHistory) roles << UidForHistoryRole;
 
-    // History: check if it's updated
+    // History: check if it's updated (size or last timestamp changed)
     const int asz   = a.history.size();
     const int bsz   = b.history.size();
     const int alast = asz ? a.history.constLast().time : std::numeric_limits<int>::min();
