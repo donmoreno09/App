@@ -45,9 +45,15 @@ MapItemGroup {
         }
     }
 
-    HistoryOverlay {
+    HistoryPath {
+        id: historyLine
         history: root.history
         pos: root.pos
+        state: root.state
+    }
+
+    HistoryStartPoint {
+        line: historyLine
         state: root.state
     }
 }

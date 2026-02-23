@@ -42,7 +42,8 @@ set(qml_files
     map-objects/AlertZonePolygon.qml
     map-objects/AlertZoneRectangle.qml
     map-objects/CircleMarker.qml
-    map-objects/HistoryOverlay.qml
+    map-objects/HistoryStartPoint.qml
+    map-objects/HistoryPath.qml
     map-objects/Track.qml
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
