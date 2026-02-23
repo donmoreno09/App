@@ -11,8 +11,7 @@ import App.Features.TrackPanel 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
-
-MapQuickItem {
+MapItemGroup {
     id: root
 
     required property string operationCode
@@ -23,23 +22,31 @@ MapQuickItem {
     // Index Data
     required property int index
     required property TirModel tirModel
+    required property var history
 
-    property color markerColor: Theme.colors.accent
-    property color iconColor: Theme.colors.white
+    MapQuickItem {
+        id: tir
 
-    coordinate: root.pos
-    anchorPoint.x: sourceItem.width / 2
-    anchorPoint.y: sourceItem.height / 2
+        coordinate: root.pos
+        anchorPoint.x: sourceItem.width / 2
+        anchorPoint.y: sourceItem.height / 2
 
-    sourceItem: CircleMarker {
-        color: Theme.colors.accent
-        iconColor: Theme.colors.white
-        iconSource: "qrc:/App/assets/icons/fa/truck.svg"
-        labelText: root.operationCode
-        heading: root.cog
-        onTapped: {
-            SidePanelController.openOrRefresh(Routes.TirPanel)
-            SelectedTrackState.select(root.tirModel.getEditableTir(root.index))
+        sourceItem: CircleMarker {
+            color: Theme.colors.accent
+            iconColor: Theme.colors.white
+            iconSource: "qrc:/App/assets/icons/fa/truck.svg"
+            labelText: root.operationCode
+            heading: root.cog
+            onTapped: {
+                SidePanelController.openOrRefresh(Routes.TirPanel)
+                SelectedTrackState.select(root.tirModel.getEditableTir(root.index))
+            }
         }
+    }
+
+    HistoryOverlay {
+        history: root.history
+        pos: root.pos
+        state: root.state
     }
 }
