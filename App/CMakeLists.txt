@@ -76,6 +76,7 @@ set(cpp_sources
 
     connections/mqtt/parser/TrackParser.h
     connections/mqtt/parser/TirParser.h
+    connections/mqtt/parser/HistoryParser.h
     connections/mqtt/MqttClientService.cpp
     connections/mqtt/MqttClientService.h
 
