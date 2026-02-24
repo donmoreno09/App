@@ -4,23 +4,21 @@
 #include <QObject>
 #include <QQmlEngine>
 
-class AuthStateEnum
+namespace AuthStateEnum
 {
-    Q_GADGET
-    QML_ELEMENT
-    QML_UNCREATABLE("Enum-only type")
+Q_NAMESPACE
+QML_ELEMENT
 
-public:
-    enum Value {
-        Initializing = 0,
-        Unauthenticated,
-        AutoLoggingIn,
-        LoggingIn,
-        Authenticated,
-        Error
-    };
-    Q_ENUM(Value)
+enum Value {
+    Initializing = 0,
+    Unauthenticated,
+    AutoLoggingIn,
+    LoggingIn,
+    Authenticated,
+    Error
 };
+Q_ENUM_NS(Value)
+}
 
 using AuthState = AuthStateEnum::Value;
 

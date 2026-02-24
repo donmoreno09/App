@@ -12,6 +12,7 @@ import App.Features.MapModes
 import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
 import App.Features.Notifications 1.0
+import App.Features.Auth 1.0
 
 import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
@@ -202,14 +203,37 @@ UI.GlobalBackgroundConsumer {
             UI.VerticalPadding { }
         }
 
-        UI.Avatar {
+        Item {
             Layout.preferredWidth: Theme.spacing.s9
             Layout.preferredHeight: Theme.spacing.s9
             Layout.topMargin: (currentPanelPath !== "") ? 0 : Theme.spacing.s5
             Layout.alignment: Qt.AlignCenter
 
-            source: "qrc:/App/assets/images/avatar.png"
-            radius: Theme.radius.circle(width, height)
+            UI.Avatar {
+                anchors.fill: parent
+                source: "qrc:/App/assets/images/avatar.png"
+                radius: Theme.radius.circle(width, height)
+                opacity: avatarHover.hovered ? 0.75 : 1.0
+
+                Behavior on opacity {
+                    NumberAnimation { duration: 150; easing.type: Easing.OutCubic }
+                }
+            }
+
+            HoverHandler {
+                id: avatarHover
+                cursorShape: Qt.PointingHandCursor
+            }
+
+            TapHandler {
+                onTapped: userMenu.open()
+            }
+
+            UserMenuPopup {
+                id: userMenu
+                x: parent.width + Theme.spacing.s2
+                y: parent.height - implicitHeight
+            }
         }
 
         UI.VerticalPadding { }

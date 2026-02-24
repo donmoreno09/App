@@ -5,6 +5,7 @@ import QtQuick.Layouts 6.8
 import App 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.TitleBar 1.0
 
 Rectangle {
     id: root
@@ -14,118 +15,146 @@ Rectangle {
                                    || AuthService.state === AuthStateEnum.AutoLoggingIn
     readonly property bool hasError: AuthService.state === AuthStateEnum.Error
 
-    ColumnLayout {
+    WindowControlsBar {
+        anchors.top:   parent.top
+        anchors.left:  parent.left
+        anchors.right: parent.right
+    }
+
+    Rectangle {
+        id: card
         anchors.centerIn: parent
-        width: 400
-        spacing: Theme.spacing.s5
+        width:        Theme.layout.loginCardWidth
+        height:       cardContent.implicitHeight + Theme.spacing.s8 * 2
+        radius:       Theme.radius.lg
+        color:        Theme.colors.whiteA5
+        border.color: Theme.colors.whiteA10
+        border.width: Theme.borders.b1
 
-        // Logo
-        Image {
-            source: "qrc:/App/assets/logo-app.ico"
-            Layout.preferredWidth: 64
-            Layout.preferredHeight: 64
-            Layout.alignment: Qt.AlignHCenter
-            fillMode: Image.PreserveAspectFit
-        }
-
-        // Title
-        Text {
-            text: "IRIDESS"
-            color: Theme.colors.text
-            font {
-                family: Theme.typography.familySans
-                pointSize: 24
-                weight: Font.Bold
+        ColumnLayout {
+            id: cardContent
+            anchors {
+                top:         parent.top
+                left:        parent.left
+                right:       parent.right
+                topMargin:   Theme.spacing.s8
+                leftMargin:  Theme.spacing.s6
+                rightMargin: Theme.spacing.s6
             }
-            Layout.alignment: Qt.AlignHCenter
-        }
+            spacing: Theme.spacing.s4
 
-        // Subtitle
-        Text {
-            text: qsTr("Maritime Monitoring System")
-            color: Theme.colors.textMuted
-            font {
-                family: Theme.typography.familySans
-                pointSize: Theme.typography.bodySans25Size
+            Text {
+                Layout.alignment: Qt.AlignHCenter
+                text:               "FINCANTIERI"
+                color:              Theme.colors.text
+                font.family:        Theme.typography.familySans
+                font.pointSize:     Theme.typography.fontSize200
+                font.weight:        Theme.typography.weightBold
+                font.letterSpacing: Theme.typography.letterSpacingLoose
             }
-            Layout.alignment: Qt.AlignHCenter
-        }
 
-        // Spacer
-        Item { Layout.preferredHeight: Theme.spacing.s3 }
-
-        // Auto-login message
-        Text {
-            text: qsTr("Restoring session...")
-            color: Theme.colors.textMuted
-            font {
-                family: Theme.typography.familySans
-                pointSize: Theme.typography.bodySans25Size
+            Text {
+                Layout.alignment: Qt.AlignHCenter
+                text:           qsTr("Log in Fincantieri Digital Ecosystem")
+                color:          Theme.colors.textMuted
+                font.family:    Theme.typography.familySans
+                font.pointSize: Theme.typography.bodySans25Size
             }
-            visible: AuthService.state === AuthStateEnum.AutoLoggingIn
-            Layout.alignment: Qt.AlignHCenter
-        }
 
-        // Username
-        UI.Input {
-            id: usernameInput
-            labelText: qsTr("Username")
-            placeholderText: qsTr("Enter username")
-            Layout.fillWidth: true
-            enabled: !root.isBusy
-            visible: AuthService.state !== AuthStateEnum.AutoLoggingIn
-            variant: root.hasError ? InputStyles.Error : InputStyles.Default
-        }
-
-        // Password
-        UI.Input {
-            id: passwordInput
-            labelText: qsTr("Password")
-            placeholderText: qsTr("Enter password")
-            echoMode: TextInput.Password
-            Layout.fillWidth: true
-            enabled: !root.isBusy
-            visible: AuthService.state !== AuthStateEnum.AutoLoggingIn
-            variant: root.hasError ? InputStyles.Error : InputStyles.Default
-
-            textField.Keys.onReturnPressed: {
-                if (loginButton.enabled) loginButton.clicked()
+            Text {
+                Layout.alignment: Qt.AlignHCenter
+                visible:        AuthService.state === AuthStateEnum.AutoLoggingIn
+                text:           qsTr("Restoring session...")
+                color:          Theme.colors.textMuted
+                font.family:    Theme.typography.familySans
+                font.pointSize: Theme.typography.bodySans25Size
             }
-        }
 
-        // Error message
-        Text {
-            text: AuthService.errorMessage
-            color: Theme.colors.error
-            font {
-                family: Theme.typography.familySans
-                pointSize: Theme.typography.bodySans25Size
+            ColumnLayout {
+                Layout.fillWidth: true
+                visible: AuthService.state !== AuthStateEnum.AutoLoggingIn
+                spacing: Theme.spacing.s4
+
+                UI.Input {
+                    id: authIdInput
+                    Layout.fillWidth: true
+                    labelText: qsTr("Authentication ID")
+                    enabled:   !root.isBusy
+                    variant:   root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
+                    textField.Keys.onReturnPressed: if (loginBtn.canLogin) loginBtn.doLogin()
+                }
+
+                UI.Input {
+                    id: passwordInput
+                    Layout.fillWidth: true
+                    labelText: qsTr("Password")
+                    echoMode:  TextInput.Password
+                    enabled:   !root.isBusy
+                    variant:   root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
+                    textField.Keys.onReturnPressed: if (loginBtn.canLogin) loginBtn.doLogin()
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: Theme.spacing.s2
+
+                    UI.Checkbox {
+                        id:      rememberMeCheck
+                        text:    qsTr("Remember me")
+                        enabled: !root.isBusy
+                    }
+
+                    Item { Layout.fillWidth: true }
+
+                    Text {
+                        text:           qsTr("Forgot password?")
+                        color:          Theme.colors.textMuted
+                        font.family:    Theme.typography.familySans
+                        font.pointSize: Theme.typography.bodySans15Size
+                        font.underline: true
+                        HoverHandler { cursorShape: Qt.PointingHandCursor }
+                        TapHandler   { onTapped: console.log("[Login] Forgot password") }
+                    }
+                }
+
+                Text {
+                    Layout.fillWidth: true
+                    visible:             root.hasError && AuthService.errorMessage !== ""
+                    text:                AuthService.errorMessage
+                    color:               Theme.colors.error
+                    wrapMode:            Text.WordWrap
+                    horizontalAlignment: Text.AlignHCenter
+                    font.family:         Theme.typography.familySans
+                    font.pointSize:      Theme.typography.bodySans25Size
+                }
+
+                UI.Button {
+                    id: loginBtn
+                    Layout.fillWidth: true
+
+                    readonly property bool canLogin: !root.isBusy
+                                                     && authIdInput.text.length > 0
+                                                     && passwordInput.text.length > 0
+
+                    function doLogin() {
+                        AuthService.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
+                    }
+
+                    variant: UI.ButtonStyles.Primary
+                    enabled: canLogin
+                    text:    AuthService.state === AuthStateEnum.LoggingIn
+                             ? qsTr("Logging in...") : qsTr("Login")
+
+                    onClicked: doLogin()
+                }
             }
-            visible: root.hasError && AuthService.errorMessage !== ""
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            horizontalAlignment: Text.AlignHCenter
-        }
-
-        // Login button
-        UI.Button {
-            id: loginButton
-            text: AuthService.state === AuthStateEnum.LoggingIn
-                  ? qsTr("Logging in...") : qsTr("Login")
-            Layout.fillWidth: true
-            visible: AuthService.state !== AuthStateEnum.AutoLoggingIn
-            enabled: !root.isBusy
-                     && usernameInput.text.length > 0
-                     && passwordInput.text.length > 0
-            onClicked: AuthService.login(usernameInput.text, passwordInput.text)
         }
     }
 
-    // Clear fields on successful login
     Connections {
         target: AuthService
         function onLoginSucceeded() {
-            usernameInput.text = ""
+            authIdInput.text   = ""
             passwordInput.text = ""
         }
     }

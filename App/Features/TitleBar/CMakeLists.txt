@@ -1,5 +1,6 @@
 set(qml_files
     TitleBar.qml
+    WindowControlsBar.qml
     components/SystemButton.qml
 )
 

@@ -1,5 +1,6 @@
 set(qml_files
     LoginPage.qml
+    UserMenuPopup.qml
 )
 
 qt_add_qml_module(app_features_auth
@@ -14,4 +15,5 @@ target_link_libraries(app_features_auth
         Qt6::Quick
         Qt6::Gui
         Qt6::Qml
+        app_features_titlebar
 )

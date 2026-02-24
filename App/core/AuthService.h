@@ -36,7 +36,7 @@ public:
                     SecureTokenStorage* storage,
                     PermissionManager* permissions);
 
-    Q_INVOKABLE void login(const QString& username, const QString& password);
+    Q_INVOKABLE void login(const QString& username, const QString& password, bool rememberMe = false);
     Q_INVOKABLE void logout();
     Q_INVOKABLE void tryAutoLogin();
 
@@ -77,6 +77,7 @@ private:
     AuthState m_state = AuthState::Initializing;
     QString m_errorMessage;
     QTimer m_refreshTimer;
+    bool m_rememberMe = false;
 
     // User State
     UserSession m_session;

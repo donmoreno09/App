@@ -36,8 +36,10 @@ void AuthService::initialize(AuthApi* api,
     m_permissions = permissions;
 }
 
-void AuthService::login(const QString& username, const QString& password)
+void AuthService::login(const QString& username, const QString& password, bool rememberMe)
 {
+    m_rememberMe = rememberMe;
+
     if (m_state != AuthState::Unauthenticated && m_state != AuthState::Error) {
         qWarning() << "[AuthService] login() called in invalid state:" << static_cast<int>(m_state);
         return;
@@ -97,6 +99,7 @@ void AuthService::tryAutoLogin()
         return;
     }
 
+    m_rememberMe = true; // stored tokens imply the user previously chose to remember
     setState(AuthState::AutoLoggingIn);
     qDebug() << "[AuthService] Attempting auto-login with stored token";
 
@@ -126,7 +129,7 @@ void AuthService::handleLoginResult(const LoginResult& result)
     m_tokens = result.tokens;
     m_session = result.user;
 
-    if (m_storage) {
+    if (m_storage && m_rememberMe) {
         m_storage->saveTokens(m_tokens);
         m_storage->saveUserSession(m_session);
     }

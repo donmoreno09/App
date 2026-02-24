@@ -309,6 +309,7 @@ QtObject {
     readonly property real letterSpacingWide:     0.25
     readonly property real letterSpacingWider:    0.5
     readonly property real letterSpacingWidest:   1.0
+    readonly property real letterSpacingLoose:    3.0
 
     // Word spacing (px) — Text.font.wordSpacing
     readonly property real wordSpacingTight:  -1.0
