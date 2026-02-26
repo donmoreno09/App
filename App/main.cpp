@@ -18,11 +18,14 @@
 #include <connections/signalr/parser/TruckNotificationSignalRParser.h>
 #include <connections/signalr/parser/AlertZoneNotificationParser.h>
 
-#include <core/AuthManager.h>
-#include <core/PermissionManager.h>
-#include <core/SecureTokenStorage.h>
+#include <Auth/AuthManager.h>
+#include <Auth/PermissionManager.h>
+#include <Auth/SecureTokenStorage.h>
 #include <Networking/apis/AuthApi.h>
 #include <Networking/HttpClient.h>
+#include <QtQml/qqmlextensionplugin.h>
+
+Q_IMPORT_QML_PLUGIN(App_AuthPlugin)
 
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
 
@@ -100,8 +103,8 @@ int main(int argc, char *argv[])
     auto* authApi = new AuthApi(authHttpClient, &app);
     auto* tokenStorage = new SecureTokenStorage(&app);
 
-    auto* authManager = engine.singletonInstance<AuthManager*>("App", "AuthManager");
-    auto* permManager = engine.singletonInstance<PermissionManager*>("App", "PermissionManager");
+    auto* authManager = engine.singletonInstance<AuthManager*>("App.Auth", "AuthManager");
+    auto* permManager = engine.singletonInstance<PermissionManager*>("App.Auth", "PermissionManager");
 
     authManager->initialize(authApi, tokenStorage, permManager);
     authManager->tryAutoLogin();

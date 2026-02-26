@@ -5,13 +5,11 @@
 #include <QTimer>
 #include <QQmlEngine>
 #include "AuthState.h"
+#include "SecureTokenStorage.h"
+#include "PermissionManager.h"
+#include "Networking/apis/AuthApi.h"
 #include "entities/UserSession.h"
 #include "entities/AuthTokens.h"
-
-class AuthApi;
-class SecureTokenStorage;
-class PermissionManager;
-struct LoginResult;
 
 class AuthManager : public QObject
 {

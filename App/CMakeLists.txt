@@ -88,15 +88,6 @@ set(cpp_sources
     connections/ApiEndpoints.h
     connections/ApiEndpoints.cpp
 
-    # Auth
-    core/AuthState.h
-    core/AuthManager.h
-    core/AuthManager.cpp
-    core/PermissionManager.h
-    core/PermissionManager.cpp
-    core/SecureTokenStorage.h
-    core/SecureTokenStorage.cpp
-
     # Core
     core/GeoSelectionUtils.h
     core/interactionmodemanager.cpp
@@ -182,11 +173,14 @@ add_subdirectory(Playground)
 add_subdirectory(Themes)
 add_subdirectory(Logger)
 add_subdirectory(Networking)
+add_subdirectory(Auth)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         app_logger
         app_networking
+        app_auth
+        app_authplugin
 )
 
 target_link_libraries(${PROJECT_NAME}

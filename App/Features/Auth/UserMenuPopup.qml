@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Layouts 6.8
 
 import App 1.0
+import App.Auth 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
@@ -104,7 +105,7 @@ UI.Overlay {
                     margins: Theme.spacing.s2
                 }
 
-                variant: ButtonStyles.Danger
+                variant: UI.ButtonStyles.Danger
                 text: qsTr("Log out")
 
                 onClicked: {

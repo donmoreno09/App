@@ -1,8 +1,10 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import QtQuick.Shapes 6.8
 
 import App 1.0
+import App.Auth 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.TitleBar 1.0
@@ -11,8 +13,7 @@ Rectangle {
     id: root
     color: Theme.colors.background
 
-    readonly property bool isBusy: AuthManager.state === AuthStateEnum.LoggingIn
-                                   || AuthManager.state === AuthStateEnum.AutoLoggingIn
+    readonly property bool isBusy: AuthManager.state === AuthStateEnum.Logging || AuthManager.state === AuthStateEnum.AutoLoggingIn
     readonly property bool hasError: AuthManager.state === AuthStateEnum.Error
 
     WindowControlsBar {
@@ -21,15 +22,32 @@ Rectangle {
         anchors.right: parent.right
     }
 
-    Rectangle {
+    Item {
         id: card
         anchors.centerIn: parent
-        width:        Theme.layout.loginCardWidth
-        height:       cardContent.implicitHeight + Theme.spacing.s8 * 2
-        radius:       Theme.radius.lg
-        color:        Theme.colors.whiteA5
-        border.color: Theme.colors.whiteA10
-        border.width: Theme.borders.b1
+        width:  Theme.layout.loginCardWidth
+        height: cardContent.implicitHeight + Theme.spacing.s8 * 2
+
+        readonly property real chamferSize: 24
+        readonly property real borderWidth: Theme.borders.b1
+
+        Shape {
+            anchors.fill: parent
+
+            ShapePath {
+                fillColor:   Theme.colors.whiteA5
+                strokeColor: Theme.colors.whiteA10
+                strokeWidth: card.borderWidth
+                startX: 0
+                startY: 0
+
+                PathLine { x: card.width - card.chamferSize; y: 0 }
+                PathLine { x: card.width;                    y: card.chamferSize }
+                PathLine { x: card.width;                    y: card.height }
+                PathLine { x: 0;                             y: card.height }
+                PathLine { x: 0;                             y: 0 }
+            }
+        }
 
         ColumnLayout {
             id: cardContent
@@ -132,9 +150,7 @@ Rectangle {
                     id: loginBtn
                     Layout.fillWidth: true
 
-                    readonly property bool canLogin: !root.isBusy
-                                                     && authIdInput.text.length > 0
-                                                     && passwordInput.text.length > 0
+                    readonly property bool canLogin: !root.isBusy && authIdInput.text.length > 0 && passwordInput.text.length > 0
 
                     function doLogin() {
                         AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
@@ -142,8 +158,7 @@ Rectangle {
 
                     variant: UI.ButtonStyles.Primary
                     enabled: canLogin
-                    text:    AuthManager.state === AuthStateEnum.LoggingIn
-                             ? qsTr("Logging in...") : qsTr("Login")
+                    text:    AuthManager.state === AuthStateEnum.LoggingIn ? qsTr("Logging in...") : qsTr("Login")
 
                     onClicked: doLogin()
                 }
