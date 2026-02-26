@@ -11,7 +11,7 @@ import App.Features.TitleBar 1.0
 
 Rectangle {
     id: root
-    color: Theme.colors.background
+    color: Theme.colors.loginPage
 
     readonly property bool isBusy: AuthManager.state === AuthStateEnum.Logging || AuthManager.state === AuthStateEnum.AutoLoggingIn
     readonly property bool hasError: AuthManager.state === AuthStateEnum.Error
@@ -35,7 +35,7 @@ Rectangle {
             anchors.fill: parent
 
             ShapePath {
-                fillColor:   Theme.colors.whiteA5
+                fillColor:   Theme.colors.loginCard
                 strokeColor: Theme.colors.whiteA10
                 strokeWidth: card.borderWidth
                 startX: 0
@@ -152,15 +152,10 @@ Rectangle {
 
                     readonly property bool canLogin: !root.isBusy && authIdInput.text.length > 0 && passwordInput.text.length > 0
 
-                    function doLogin() {
-                        AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
-                    }
-
                     variant: UI.ButtonStyles.Primary
-                    enabled: canLogin
                     text:    AuthManager.state === AuthStateEnum.LoggingIn ? qsTr("Logging in...") : qsTr("Login")
 
-                    onClicked: doLogin()
+                    onClicked: AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
                 }
             }
         }
