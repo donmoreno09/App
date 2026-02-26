@@ -9,3 +9,8 @@ qt_add_qml_module(app_features_siderail
     QML_FILES ${qml_files}
     RESOURCE_PREFIX "/"
 )
+
+target_link_libraries(app_features_siderail
+    PRIVATE
+        app_auth
+)

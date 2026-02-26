@@ -6,6 +6,7 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 import App 1.0
+import App.Auth 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.StubComponents 1.0 as UI
@@ -239,5 +240,15 @@ ApplicationWindow {
         z: Theme.elevation.modal + 1
 
         mapReference: mapHost
+    }
+
+
+    // Auth guard
+    Loader {
+        anchors.fill: parent
+        z: Theme.elevation.modal + 100
+        active: AuthManager.state !== AuthStateEnum.Authenticated
+
+        sourceComponent: LoginPage {}
     }
 }

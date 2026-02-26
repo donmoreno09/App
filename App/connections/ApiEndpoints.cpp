@@ -3,6 +3,11 @@
 namespace ApiEndpoints {
     QString BaseUrl = "http://localhost:7000";
 
+    // Auth
+    QString AuthLogin() { return BaseUrl + "/auth/login"; }
+    QString AuthRefresh() { return BaseUrl + "/auth/refresh"; }
+    QString AuthLogout() { return BaseUrl + "/auth/logout"; }
+
     // TODO: Alert Zone: route to be updated when be is done
     QString BaseUrlAlertZone () { return BaseUrl + "/alertzone"; }
     QString GetAllAlertZone () { return BaseUrlAlertZone() + "/all"; }

@@ -323,6 +323,7 @@ QtObject {
     readonly property real leadingNormal:  1.50
     readonly property real leadingRelaxed: 1.75
     readonly property real leadingLoose:   2.00
+    readonly property real letterSpacingLoose:    3.0
 
     // Text transform (capitalization) — Text.font.capitalization
     readonly property int transformNone:       Font.MixedCase

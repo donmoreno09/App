@@ -7,6 +7,11 @@
 namespace ApiEndpoints {
     extern QString BaseUrl;
 
+    // Auth
+    QString AuthLogin();
+    QString AuthRefresh();
+    QString AuthLogout();
+
     QString BaseUrlAlertZone();
     QString GetAllAlertZone();
 

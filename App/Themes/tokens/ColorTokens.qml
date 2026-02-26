@@ -77,6 +77,10 @@ QtObject {
     readonly property color blocked: "#FF8D28"
     readonly property color active: "#3D7E00"
 
+    // Login
+    readonly property color loginPage: "#383737"
+    readonly property color loginCard: "#4B4B4B"
+
     // -------------------------- // PRIMITIVES // -------------------------- //
 
     // Black

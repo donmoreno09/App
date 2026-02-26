@@ -7,6 +7,10 @@
 #include <QFontDatabase>
 #include <QDebug>
 #include <QIcon>
+#include <Auth/AuthManager.h>
+#include <Auth/PermissionManager.h>
+#include <Auth/SecureTokenStorage.h>
+#include <Networking/apis/AuthApi.h>
 #include <core/TrackManager.h>
 #include <connections/ApiEndpoints.h>
 #include <connections/http/vesselfinderhttpservice.h>
@@ -19,6 +23,8 @@
 #include <connections/signalr/parser/AlertZoneNotificationParser.h>
 
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
+
+Q_IMPORT_QML_PLUGIN(App_AuthPlugin)
 
 int main(int argc, char *argv[])
 {
@@ -87,6 +93,18 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
 
     engine.addImportPath("qrc:/"); // For more info: https://doc.qt.io/qt-6/qt-add-qml-module.html#resource-prefix
+
+    // --- Auth Service ---
+
+    auto* authHttpClient = new HttpClient(&app);
+    auto* authApi = new AuthApi(authHttpClient, &app);
+    auto* tokenStorage = new SecureTokenStorage(&app);
+
+    auto* authManager = engine.singletonInstance<AuthManager*>("App.Auth", "AuthManager");
+    auto* permManager = engine.singletonInstance<PermissionManager*>("App.Auth", "PermissionManager");
+
+    authManager->initialize(authApi, tokenStorage, permManager);
+    authManager->tryAutoLogin();
 
     // --- MQTT Client Service ---
 

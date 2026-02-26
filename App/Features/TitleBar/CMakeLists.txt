@@ -1,6 +1,7 @@
 set(qml_files
     TitleBar.qml
     components/SystemButton.qml
+    WindowControlsBar.qml
 )
 
 set(cpp_singletons
