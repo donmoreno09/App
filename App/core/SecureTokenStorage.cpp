@@ -1,19 +1,22 @@
 #include "SecureTokenStorage.h"
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QDateTime>
 
 SecureTokenStorage::SecureTokenStorage(QObject* parent)
     : QObject(parent)
 {
-    // Uses org=IRIDESS, app=IRIDESS_FE (set in main.cpp via QCoreApplication)
 }
 
 void SecureTokenStorage::saveTokens(const AuthTokens& tokens)
 {
+    const qint64 expiresAt = QDateTime::currentSecsSinceEpoch() + tokens.expiresIn;
+
     m_settings.beginGroup("auth");
-    m_settings.setValue("accessToken", tokens.accessToken);
+    m_settings.setValue("accessToken",  tokens.accessToken);
     m_settings.setValue("refreshToken", tokens.refreshToken);
-    m_settings.setValue("expiresIn", tokens.expiresIn);
+    m_settings.setValue("expiresIn",    tokens.expiresIn);
+    m_settings.setValue("expiresAt",    expiresAt);
     m_settings.endGroup();
     m_settings.sync();
 }
@@ -56,6 +59,15 @@ void SecureTokenStorage::clearAll()
     m_settings.remove("");
     m_settings.endGroup();
     m_settings.sync();
+}
+
+qint64 SecureTokenStorage::loadExpiresAt() const
+{
+    QSettings s;
+    s.beginGroup("auth");
+    const qint64 expiresAt = s.value("expiresAt", 0).toLongLong();
+    s.endGroup();
+    return expiresAt;
 }
 
 bool SecureTokenStorage::hasStoredTokens() const

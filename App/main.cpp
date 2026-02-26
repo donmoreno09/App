@@ -18,7 +18,7 @@
 #include <connections/signalr/parser/TruckNotificationSignalRParser.h>
 #include <connections/signalr/parser/AlertZoneNotificationParser.h>
 
-#include <core/AuthService.h>
+#include <core/AuthManager.h>
 #include <core/PermissionManager.h>
 #include <core/SecureTokenStorage.h>
 #include <Networking/apis/AuthApi.h>
@@ -100,11 +100,11 @@ int main(int argc, char *argv[])
     auto* authApi = new AuthApi(authHttpClient, &app);
     auto* tokenStorage = new SecureTokenStorage(&app);
 
-    auto* authService = engine.singletonInstance<AuthService*>("App", "AuthService");
+    auto* authManager = engine.singletonInstance<AuthManager*>("App", "AuthService");
     auto* permManager = engine.singletonInstance<PermissionManager*>("App", "PermissionManager");
 
-    authService->initialize(authApi, tokenStorage, permManager);
-    authService->tryAutoLogin();
+    authManager->initialize(authApi, tokenStorage, permManager);
+    authManager->tryAutoLogin();
 
     qDebug() << "[Main] Auth service initialized";
 

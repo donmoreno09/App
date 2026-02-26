@@ -90,8 +90,8 @@ set(cpp_sources
 
     # Auth
     core/AuthState.h
-    core/AuthService.h
-    core/AuthService.cpp
+    core/AuthManager.h
+    core/AuthManager.cpp
     core/PermissionManager.h
     core/PermissionManager.cpp
     core/SecureTokenStorage.h
