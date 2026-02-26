@@ -93,6 +93,14 @@ Rectangle {
                 visible: AuthManager.state !== AuthStateEnum.AutoLoggingIn
                 spacing: Theme.spacing.s4
 
+                UI.AlertBanner {
+                    Layout.fillWidth: true
+                    visible: root.hasError
+                    variant: UI.AlertBannerStyles.Error
+                    title:   qsTr("The credentials you entered are invalid.")
+                    message: qsTr("Please enter valid credentials and try again.")
+                }
+
                 UI.Input {
                     id: authIdInput
                     Layout.fillWidth: true
@@ -133,17 +141,6 @@ Rectangle {
                         HoverHandler { cursorShape: Qt.PointingHandCursor }
                         TapHandler   { onTapped: console.log("[Login] Forgot password") }
                     }
-                }
-
-                Text {
-                    Layout.fillWidth: true
-                    visible:             root.hasError && AuthManager.errorMessage !== ""
-                    text:                AuthManager.errorMessage
-                    color:               Theme.colors.error
-                    wrapMode:            Text.WordWrap
-                    horizontalAlignment: Text.AlignHCenter
-                    font.family:         Theme.typography.familySans
-                    font.pointSize:      Theme.typography.bodySans25Size
                 }
 
                 UI.Button {

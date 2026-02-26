@@ -27,6 +27,9 @@ set(qml_files
     accordion/Accordion.qml
     accordion/AccordionStyle.qml
 
+    alert-banner/AlertBanner.qml
+    alert-banner/AlertBannerStyle.qml
+
     button/ButtonStyle.qml
     button/Button.qml
 
@@ -67,6 +70,7 @@ set(qml_files
 
 set(qml_singletons
     accordion/AccordionStyles.qml
+    alert-banner/AlertBannerStyles.qml
     button/ButtonStyles.qml
     input/InputStyles.qml
     toggle/ToggleStyles.qml
