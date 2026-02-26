@@ -11,5 +11,5 @@ qt_add_qml_module(app_features_siderail
 )
 
 target_link_libraries(app_features_siderail
-    PRIVATE app_features_auth
+    PRIVATE app_auth
 )

@@ -1,4 +1,3 @@
-add_subdirectory(Auth)
 add_subdirectory(Language)
 add_subdirectory(Mission)
 
@@ -25,7 +24,6 @@ add_subdirectory(AlertZone)
 # Lastly, import the module in SidePanel.qml otherwise it still won't find the module.
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        app_features_auth
         app_features_language
         app_features_mission
 

@@ -19,7 +19,6 @@ import App.Features.Notifications 1.0
 import App.Features.MapToolbar 1.0
 import App.Features.Language 1.0
 import App.Auth 1.0
-import App.Features.Auth 1.0
 import App.Features.ShipStowage 1.0
 
 ApplicationWindow {

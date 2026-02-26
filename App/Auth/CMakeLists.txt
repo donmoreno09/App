@@ -10,10 +10,17 @@ set(cpp_files
     SecureTokenStorage.cpp
 )
 
+set(qml_files
+    UI/LoginPage.qml
+    UI/UserMenuPopup.qml
+)
+
 qt_add_qml_module(app_auth
     URI App.Auth
     VERSION 1.0
     SOURCES ${cpp_files}
+    QML_FILES ${qml_files}
+    RESOURCE_PREFIX "/"
 )
 
 target_include_directories(app_auth
@@ -28,4 +35,7 @@ target_link_libraries(app_auth
     PRIVATE
         app_networking
         Qt6::Core
+        Qt6::Quick
+        Qt6::Gui
+        app_features_titlebar
 )

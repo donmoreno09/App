@@ -13,8 +13,9 @@ Rectangle {
     id: root
     color: Theme.colors.loginPage
 
-    readonly property bool isBusy: AuthManager.state === AuthStateEnum.Logging || AuthManager.state === AuthStateEnum.AutoLoggingIn
+    readonly property bool isBusy:   AuthManager.state === AuthStateEnum.LoggingIn || AuthManager.state === AuthStateEnum.AutoLoggingIn
     readonly property bool hasError: AuthManager.state === AuthStateEnum.Error
+    readonly property bool canLogin: !isBusy && authIdInput.text !== "" && passwordInput.text !== ""
 
     WindowControlsBar {
         anchors.top:   parent.top
@@ -38,8 +39,7 @@ Rectangle {
                 fillColor:   Theme.colors.loginCard
                 strokeColor: Theme.colors.whiteA10
                 strokeWidth: card.borderWidth
-                startX: 0
-                startY: 0
+                startX: 0; startY: 0
 
                 PathLine { x: card.width - card.chamferSize; y: 0 }
                 PathLine { x: card.width;                    y: card.chamferSize }
@@ -99,7 +99,7 @@ Rectangle {
                     labelText: qsTr("Authentication ID")
                     enabled:   !root.isBusy
                     variant:   root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
-                    textField.Keys.onReturnPressed: if (loginBtn.canLogin) loginBtn.doLogin()
+                    textField.Keys.onReturnPressed: if (root.canLogin) root.doLogin()
                 }
 
                 UI.Input {
@@ -109,7 +109,7 @@ Rectangle {
                     echoMode:  TextInput.Password
                     enabled:   !root.isBusy
                     variant:   root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
-                    textField.Keys.onReturnPressed: if (loginBtn.canLogin) loginBtn.doLogin()
+                    textField.Keys.onReturnPressed: if (root.canLogin) AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
                 }
 
                 RowLayout {
@@ -147,14 +147,10 @@ Rectangle {
                 }
 
                 UI.Button {
-                    id: loginBtn
                     Layout.fillWidth: true
-
-                    readonly property bool canLogin: !root.isBusy && authIdInput.text.length > 0 && passwordInput.text.length > 0
-
-                    variant: UI.ButtonStyles.Primary
-                    text:    AuthManager.state === AuthStateEnum.LoggingIn ? qsTr("Logging in...") : qsTr("Login")
-
+                    enabled:  root.canLogin
+                    variant:  UI.ButtonStyles.Primary
+                    text:     AuthManager.state === AuthStateEnum.LoggingIn ? qsTr("Logging in...") : qsTr("Login")
                     onClicked: AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
                 }
             }
