@@ -11,9 +11,9 @@ Rectangle {
     id: root
     color: Theme.colors.background
 
-    readonly property bool isBusy: AuthService.state === AuthStateEnum.LoggingIn
-                                   || AuthService.state === AuthStateEnum.AutoLoggingIn
-    readonly property bool hasError: AuthService.state === AuthStateEnum.Error
+    readonly property bool isBusy: AuthManager.state === AuthStateEnum.LoggingIn
+                                   || AuthManager.state === AuthStateEnum.AutoLoggingIn
+    readonly property bool hasError: AuthManager.state === AuthStateEnum.Error
 
     WindowControlsBar {
         anchors.top:   parent.top
@@ -63,7 +63,7 @@ Rectangle {
 
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                visible:        AuthService.state === AuthStateEnum.AutoLoggingIn
+                visible:        AuthManager.state === AuthStateEnum.AutoLoggingIn
                 text:           qsTr("Restoring session...")
                 color:          Theme.colors.textMuted
                 font.family:    Theme.typography.familySans
@@ -72,7 +72,7 @@ Rectangle {
 
             ColumnLayout {
                 Layout.fillWidth: true
-                visible: AuthService.state !== AuthStateEnum.AutoLoggingIn
+                visible: AuthManager.state !== AuthStateEnum.AutoLoggingIn
                 spacing: Theme.spacing.s4
 
                 UI.Input {
@@ -119,8 +119,8 @@ Rectangle {
 
                 Text {
                     Layout.fillWidth: true
-                    visible:             root.hasError && AuthService.errorMessage !== ""
-                    text:                AuthService.errorMessage
+                    visible:             root.hasError && AuthManager.errorMessage !== ""
+                    text:                AuthManager.errorMessage
                     color:               Theme.colors.error
                     wrapMode:            Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
@@ -137,12 +137,12 @@ Rectangle {
                                                      && passwordInput.text.length > 0
 
                     function doLogin() {
-                        AuthService.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
+                        AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
                     }
 
                     variant: UI.ButtonStyles.Primary
                     enabled: canLogin
-                    text:    AuthService.state === AuthStateEnum.LoggingIn
+                    text:    AuthManager.state === AuthStateEnum.LoggingIn
                              ? qsTr("Logging in...") : qsTr("Login")
 
                     onClicked: doLogin()
@@ -152,7 +152,7 @@ Rectangle {
     }
 
     Connections {
-        target: AuthService
+        target: AuthManager
         function onLoginSucceeded() {
             authIdInput.text   = ""
             passwordInput.text = ""

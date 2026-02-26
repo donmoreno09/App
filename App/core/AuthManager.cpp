@@ -39,8 +39,10 @@ void AuthManager::initialize(AuthApi* api,
     m_permissions = permissions;
 }
 
-void AuthManager::login(const QString& username, const QString& password)
+void AuthManager::login(const QString& username, const QString& password, bool rememberMe)
 {
+    m_rememberMe = rememberMe;
+
     if (m_state != AuthState::Unauthenticated && m_state != AuthState::Error) {
         qWarning() << "[AuthManager] login() called in invalid state:" << static_cast<int>(m_state);
         return;
@@ -121,6 +123,7 @@ void AuthManager::tryAutoLogin()
         return;
     }
 
+    m_rememberMe = true;
     setState(AuthState::AutoLoggingIn);
     qDebug() << "[AuthManager] Access token expired or close to expiry, refreshing";
 
@@ -149,7 +152,7 @@ void AuthManager::handleLoginResult(const LoginResult& result)
     m_tokens = result.tokens;
     m_session = result.user;
 
-    if (m_storage) {
+    if (m_storage && m_rememberMe) {
         m_storage->saveTokens(m_tokens);
         m_storage->saveUserSession(m_session);
     }

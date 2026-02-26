@@ -246,7 +246,7 @@ ApplicationWindow {
     Loader {
         anchors.fill: parent
         z: Theme.elevation.modal + 100
-        active: AuthService.state !== AuthStateEnum.Authenticated
+        active: AuthManager.state !== AuthStateEnum.Authenticated
 
         sourceComponent: LoginPage {}
     }

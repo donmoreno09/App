@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     auto* authApi = new AuthApi(authHttpClient, &app);
     auto* tokenStorage = new SecureTokenStorage(&app);
 
-    auto* authManager = engine.singletonInstance<AuthManager*>("App", "AuthService");
+    auto* authManager = engine.singletonInstance<AuthManager*>("App", "AuthManager");
     auto* permManager = engine.singletonInstance<PermissionManager*>("App", "PermissionManager");
 
     authManager->initialize(authApi, tokenStorage, permManager);

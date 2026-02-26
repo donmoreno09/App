@@ -58,7 +58,7 @@ UI.Overlay {
 
                 Text {
                     Layout.fillWidth: true
-                    text: AuthService.displayName
+                    text: AuthManager.displayName
                     color: Theme.colors.text
                     font.family: Theme.typography.bodySans50StrongFamily
                     font.pointSize: Theme.typography.bodySans50StrongSize
@@ -68,7 +68,7 @@ UI.Overlay {
 
                 Text {
                     Layout.fillWidth: true
-                    text: "@" + AuthService.username
+                    text: "@" + AuthManager.username
                     color: Theme.colors.textMuted
                     font.family: Theme.typography.bodySans25Family
                     font.pointSize: Theme.typography.bodySans25Size
@@ -78,7 +78,7 @@ UI.Overlay {
 
                 Text {
                     Layout.fillWidth: true
-                    text: AuthService.email
+                    text: AuthManager.email
                     color: Theme.colors.textMuted
                     font.family: Theme.typography.bodySans25Family
                     font.pointSize: Theme.typography.bodySans25Size
@@ -109,7 +109,7 @@ UI.Overlay {
 
                 onClicked: {
                     root.close()
-                    AuthService.logout()
+                    AuthManager.logout()
                 }
             }
         }
