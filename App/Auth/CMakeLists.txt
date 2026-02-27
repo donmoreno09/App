@@ -11,8 +11,8 @@ set(cpp_files
 )
 
 set(qml_files
-    UI/LoginPage.qml
-    UI/UserMenuPopup.qml
+    ui/LoginPage.qml
+    ui/UserMenuPopup.qml
 )
 
 qt_add_qml_module(app_auth
