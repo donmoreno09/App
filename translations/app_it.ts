@@ -893,6 +893,59 @@
     </message>
 </context>
 <context>
+    <name>LoginPage</name>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="76"/>
+        <source>Log in Fincantieri Digital Ecosystem</source>
+        <translation>Accedi a Fincantieri Digital Ecosystem</translation>
+    </message>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="85"/>
+        <source>Restoring session...</source>
+        <translation>Ripristino della sessione in corso...</translation>
+    </message>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="100"/>
+        <source>The credentials you entered are invalid.</source>
+        <translation>Le credenziali inserite non sono valide.</translation>
+    </message>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="101"/>
+        <source>Please enter valid credentials and try again.</source>
+        <translation>Inserisci credenziali valide e riprova.</translation>
+    </message>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="107"/>
+        <source>Authentication ID</source>
+        <translation>ID Utente</translation>
+    </message>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="116"/>
+        <source>Password</source>
+        <translation>Password</translation>
+    </message>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="129"/>
+        <source>Remember me</source>
+        <translation>Ricordami</translation>
+    </message>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="136"/>
+        <source>Forgot password?</source>
+        <translation>Password dimenticata?</translation>
+    </message>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="151"/>
+        <source>Logging in...</source>
+        <translation>Accesso in corso...</translation>
+    </message>
+    <message>
+        <location filename="../App/Auth/ui/LoginPage.qml" line="151"/>
+        <source>Login</source>
+        <translation>Accedi</translation>
+    </message>
+</context>
+<context>
     <name>MOCPoiPanel</name>
     <message>
         <location filename="../App/Features/Poi/MOCPoiPanel.qml" line="16"/>
@@ -1013,7 +1066,7 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../App/Main.qml" line="28"/>
+        <location filename="../App/Main.qml" line="29"/>
         <source>IRIDESS FE</source>
         <translation>IRIDESS FE</translation>
     </message>
@@ -1300,7 +1353,7 @@
         <translation type="vanished">Nessuna notifica</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="38"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="50"/>
         <source>Alert Zone Intrusions</source>
         <translation>Intrusioni Zona di Allerta</translation>
     </message>
@@ -1329,7 +1382,7 @@
         <translation type="vanished">Visualizza su Mappa</translation>
     </message>
     <message>
-        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="98"/>
+        <location filename="../App/Features/Notifications/NotificationsPanel.qml" line="111"/>
         <source>Truck Operations</source>
         <translation>Operazioni Camion</translation>
     </message>
@@ -1536,312 +1589,312 @@
 <context>
     <name>PoiOptions</name>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="70"/>
+        <location filename="../App/core/PoiOptions.cpp" line="59"/>
         <source>Administrative and Control Buildings</source>
         <translation>Edifici amministrativi e di controllo</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="71"/>
+        <location filename="../App/core/PoiOptions.cpp" line="60"/>
         <source>Personnel and Operational Support Buildings</source>
         <translation>Edifici per il personale e il supporto operativo</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="72"/>
+        <location filename="../App/core/PoiOptions.cpp" line="61"/>
         <source>Cargo Handling and Storage Facilities</source>
         <translation>Strutture per la movimentazione e lo stoccaggio delle merci</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="73"/>
+        <location filename="../App/core/PoiOptions.cpp" line="62"/>
         <source>Production, Technical and Maintenance Buildings</source>
         <translation>Edifici di produzione, tecnici e di manutenzione</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="74"/>
+        <location filename="../App/core/PoiOptions.cpp" line="63"/>
         <source>Transport and Logistics Infrastructure</source>
         <translation>Infrastrutture di trasporto e logistica</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="75"/>
+        <location filename="../App/core/PoiOptions.cpp" line="64"/>
         <source>Passenger and Ferry Terminals</source>
         <translation>Terminal passeggeri e traghetti</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="76"/>
+        <location filename="../App/core/PoiOptions.cpp" line="65"/>
         <source>Assets</source>
         <translation>Attrezzature</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="77"/>
+        <location filename="../App/core/PoiOptions.cpp" line="66"/>
         <source>Terminals</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="78"/>
+        <location filename="../App/core/PoiOptions.cpp" line="67"/>
         <source>Security</source>
         <translation>Sicurezza</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="82"/>
+        <location filename="../App/core/PoiOptions.cpp" line="71"/>
         <source>Port Authority Headquarters</source>
         <translation>Sede dell’Autorità Portuale</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="83"/>
+        <location filename="../App/core/PoiOptions.cpp" line="72"/>
         <source>Control Tower / Vessel Traffic Service (VTS) Center</source>
         <translation>Torre di controllo / Centro VTS (Vessel Traffic Service)</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="84"/>
+        <location filename="../App/core/PoiOptions.cpp" line="73"/>
         <source>Customs and Border Control Offices</source>
         <translation>Uffici doganali e di controllo di frontiera</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="85"/>
+        <location filename="../App/core/PoiOptions.cpp" line="74"/>
         <source>Security and Surveillance Center</source>
         <translation>Centro di sicurezza e sorveglianza</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="87"/>
+        <location filename="../App/core/PoiOptions.cpp" line="76"/>
         <source>Crew Accommodation / Seafarers’ Center</source>
         <translation>Alloggi equipaggi / Centro per marittimi</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="88"/>
+        <location filename="../App/core/PoiOptions.cpp" line="77"/>
         <source>Administrative Offices for Port Operators</source>
         <translation>Uffici amministrativi degli operatori portuali</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="89"/>
+        <location filename="../App/core/PoiOptions.cpp" line="78"/>
         <source>Security Posts / Gatehouses</source>
         <translation>Postazioni di sicurezza / Portinerie</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="90"/>
+        <location filename="../App/core/PoiOptions.cpp" line="79"/>
         <source>Firefighting Stations</source>
         <translation>Stazioni antincendio</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="91"/>
+        <location filename="../App/core/PoiOptions.cpp" line="80"/>
         <source>Medical / First Aid Center</source>
         <translation>Centro medico / Primo soccorso</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="92"/>
+        <location filename="../App/core/PoiOptions.cpp" line="81"/>
         <source>Training Centers</source>
         <translation>Centri di formazione</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="94"/>
+        <location filename="../App/core/PoiOptions.cpp" line="83"/>
         <source>Warehouses</source>
         <translation>Magazzini</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="95"/>
+        <location filename="../App/core/PoiOptions.cpp" line="84"/>
         <source>Cold Storage / Refrigerated Warehouses</source>
         <translation>Celle frigorifere / Magazzini refrigerati</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="96"/>
+        <location filename="../App/core/PoiOptions.cpp" line="85"/>
         <source>Bulk Storage Silos</source>
         <translation>Silos per stoccaggio alla rinfusa</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="97"/>
+        <location filename="../App/core/PoiOptions.cpp" line="86"/>
         <source>Cargo Consolidation Centers</source>
         <translation>Centri di consolidamento merci</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="99"/>
+        <location filename="../App/core/PoiOptions.cpp" line="88"/>
         <source>Power Substations and Pumping Stations</source>
         <translation>Sottostazioni elettriche e stazioni di pompaggio</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="100"/>
+        <location filename="../App/core/PoiOptions.cpp" line="89"/>
         <source>Panel Line</source>
         <translation>Linea pannelli</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="101"/>
+        <location filename="../App/core/PoiOptions.cpp" line="90"/>
         <source>Steel Cutting and Forming</source>
         <translation>Taglio e formatura dell’acciaio</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="102"/>
+        <location filename="../App/core/PoiOptions.cpp" line="91"/>
         <source>Welding and Assembly Halls</source>
         <translation>Capannoni di saldatura e assemblaggio</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="103"/>
+        <location filename="../App/core/PoiOptions.cpp" line="92"/>
         <source>Surface Treatment and Painting Halls</source>
         <translation>Capannoni di trattamento superficiale e verniciatura</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="104"/>
+        <location filename="../App/core/PoiOptions.cpp" line="93"/>
         <source>Fitting-out and Integration Halls</source>
         <translation>Capannoni di allestimento e integrazione</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="106"/>
+        <location filename="../App/core/PoiOptions.cpp" line="95"/>
         <source>Freight Forwarding Offices</source>
         <translation>Uffici spedizionieri</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="107"/>
+        <location filename="../App/core/PoiOptions.cpp" line="96"/>
         <source>Truck Parking Areas and Inspection Stations</source>
         <translation>Aree parcheggio TIR e stazioni di ispezione</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="108"/>
+        <location filename="../App/core/PoiOptions.cpp" line="97"/>
         <source>Weighbridges</source>
         <translation>Pese a ponte</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="109"/>
+        <location filename="../App/core/PoiOptions.cpp" line="98"/>
         <source>Container Freight Stations (CFS)</source>
         <translation>Stazioni di consolidamento container (CFS)</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="110"/>
+        <location filename="../App/core/PoiOptions.cpp" line="99"/>
         <source>Rail Terminals / Intermodal Facilities</source>
         <translation>Terminal ferroviari / Impianti intermodali</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="111"/>
+        <location filename="../App/core/PoiOptions.cpp" line="100"/>
         <source>Parking Areas &amp; Maintenance Depots</source>
         <translation>Aree di sosta &amp; depositi di manutenzione</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="113"/>
+        <location filename="../App/core/PoiOptions.cpp" line="102"/>
         <source>Cruise Terminals</source>
         <translation>Terminal crociere</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="114"/>
+        <location filename="../App/core/PoiOptions.cpp" line="103"/>
         <source>Ferry Terminals</source>
         <translation>Terminal traghetti</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="115"/>
+        <location filename="../App/core/PoiOptions.cpp" line="104"/>
         <source>Ticketing &amp; Check-in Buildings</source>
         <translation>Edifici biglietteria &amp; check-in</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="116"/>
+        <location filename="../App/core/PoiOptions.cpp" line="105"/>
         <source>Visitor &amp; Information Centers</source>
         <translation>Centri visitatori &amp; informazioni</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="117"/>
+        <location filename="../App/core/PoiOptions.cpp" line="106"/>
         <source>Security &amp; Customs Posts</source>
         <translation>Posti di sicurezza &amp; dogana</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="119"/>
+        <location filename="../App/core/PoiOptions.cpp" line="108"/>
         <source>Goliath Cranes</source>
         <translation>Gru Goliath</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="120"/>
+        <location filename="../App/core/PoiOptions.cpp" line="109"/>
         <source>Portal Cranes</source>
         <translation>Gru a portale</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="121"/>
+        <location filename="../App/core/PoiOptions.cpp" line="110"/>
         <source>Tower Cranes</source>
         <translation>Gru a torre</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="122"/>
+        <location filename="../App/core/PoiOptions.cpp" line="111"/>
         <source>Mobile Cranes</source>
         <translation>Gru mobili</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="123"/>
+        <location filename="../App/core/PoiOptions.cpp" line="112"/>
         <source>Self-Propelled Modular Transporters (SPMTs)</source>
         <translation>Trasportatori modulari semoventi (SPMT)</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="124"/>
+        <location filename="../App/core/PoiOptions.cpp" line="113"/>
         <source>Block Transporters / Heavy-load Trailers</source>
         <translation>Trasportatori di blocchi / Rimorchi per carichi pesanti</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="125"/>
+        <location filename="../App/core/PoiOptions.cpp" line="114"/>
         <source>Monorail Systems, Hoists, and Winches</source>
         <translation>Sistemi monorotaia, paranchi e argani</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="127"/>
+        <location filename="../App/core/PoiOptions.cpp" line="116"/>
         <source>Container Yards / Terminals</source>
         <translation>Piazzali / terminal container</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="128"/>
+        <location filename="../App/core/PoiOptions.cpp" line="117"/>
         <source>Ro-Ro (Roll-on/Roll-off) Terminals</source>
         <translation>Terminal Ro-Ro (Roll-on/Roll-off)</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="129"/>
+        <location filename="../App/core/PoiOptions.cpp" line="118"/>
         <source>Ship Repair Docks / Dry Docks</source>
         <translation>Bacini di riparazione navale / bacini di carenaggio</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="131"/>
+        <location filename="../App/core/PoiOptions.cpp" line="120"/>
         <source>CCTV</source>
         <translation>TVCC</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="132"/>
+        <location filename="../App/core/PoiOptions.cpp" line="121"/>
         <source>Access Control Servers</source>
         <translation>Server di controllo accessi</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="133"/>
+        <location filename="../App/core/PoiOptions.cpp" line="122"/>
         <source>Network Video Recorders (NVRs) with Cybersecurity Hardening</source>
         <translation>Videoregistratori di rete (NVR) con hardening di cybersecurity</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="134"/>
+        <location filename="../App/core/PoiOptions.cpp" line="123"/>
         <source>Digital Twin / Situational Awareness Systems (GIS-based Threat Visualization)</source>
         <translation>Digital Twin / Sistemi di situational awareness (visualizzazione delle minacce basata su GIS)</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="138"/>
+        <location filename="../App/core/PoiOptions.cpp" line="127"/>
         <source>Active</source>
         <translation>Attivo</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="139"/>
+        <location filename="../App/core/PoiOptions.cpp" line="128"/>
         <source>Off</source>
         <translation>Spento</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="140"/>
+        <location filename="../App/core/PoiOptions.cpp" line="129"/>
         <source>Degraded</source>
         <translation>Degradato</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="141"/>
+        <location filename="../App/core/PoiOptions.cpp" line="130"/>
         <source>Maintenance</source>
         <translation>Manutenzione</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="145"/>
+        <location filename="../App/core/PoiOptions.cpp" line="134"/>
         <source>Standby</source>
         <translation>Standby</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="146"/>
+        <location filename="../App/core/PoiOptions.cpp" line="135"/>
         <source>Operating</source>
         <translation>In funzione</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="147"/>
+        <location filename="../App/core/PoiOptions.cpp" line="136"/>
         <source>In transit</source>
         <translation>In transito</translation>
     </message>
     <message>
-        <location filename="../App/core/PoiOptions.cpp" line="148"/>
+        <location filename="../App/core/PoiOptions.cpp" line="137"/>
         <source>Waiting</source>
         <translation>In attesa</translation>
     </message>
@@ -2147,37 +2200,37 @@
         <translation type="vanished">Data e Ora Arrivi TIR</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="56"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="57"/>
         <source>POI</source>
         <translation>POI</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="68"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="69"/>
         <source>Alert Zone</source>
         <translation>Zona di Allerta</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="80"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="81"/>
         <source>Arrivals</source>
         <translation>Arrivi</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="89"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="90"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="107"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="108"/>
         <source>Predictions</source>
         <translation>Previsioni</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="116"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="117"/>
         <source>Stowage</source>
         <translation>Stivaggio</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="128"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="129"/>
         <source>Gates</source>
         <translation>Varchi</translation>
     </message>
@@ -2186,7 +2239,7 @@
         <translation type="vanished">Data Arrivi</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="98"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="99"/>
         <source>DT Arrivals</source>
         <translation>DO Arrivi</translation>
     </message>
@@ -2211,7 +2264,7 @@
         <translation type="vanished">Servizi Leonardo ViGate</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="149"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="150"/>
         <source>Languages</source>
         <translation>Lingue</translation>
     </message>
@@ -2220,12 +2273,12 @@
         <translation type="vanished">Lingue</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="160"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="161"/>
         <source>Tilesets</source>
         <translation>Tilesets</translation>
     </message>
     <message>
-        <location filename="../App/Features/SideRail/SideRail.qml" line="136"/>
+        <location filename="../App/Features/SideRail/SideRail.qml" line="137"/>
         <source>Notifications</source>
         <translation>Notifiche</translation>
     </message>
@@ -2762,6 +2815,14 @@
         <location filename="../App/Features/Notifications/components/TruckNotificationCard.qml" line="213"/>
         <source>Delete</source>
         <translation>Elimina</translation>
+    </message>
+</context>
+<context>
+    <name>UserMenuPopup</name>
+    <message>
+        <location filename="../App/Auth/ui/UserMenuPopup.qml" line="109"/>
+        <source>Log out</source>
+        <translation>Esci</translation>
     </message>
 </context>
 <context>

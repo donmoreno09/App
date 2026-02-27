@@ -147,6 +147,7 @@ Rectangle {
                     Layout.fillWidth: true
                     enabled:  root.canLogin
                     variant:  UI.ButtonStyles.Primary
+                    radius: Theme.radius.none
                     text:     AuthManager.state === AuthStateEnum.LoggingIn ? qsTr("Logging in...") : qsTr("Login")
                     onClicked: AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
                 }
