@@ -17,7 +17,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: root._style.backgroundColor
+        color: Theme.colors.input
         radius: Theme.radius.xs
         border.width: Theme.borders.b1
         border.color: root._style.borderColor
@@ -80,7 +80,7 @@ Item {
             rightMargin: Theme.borders.b1
             bottomMargin: Theme.borders.b1
         }
-        height: Theme.borders.b2
+        height: Theme.borders.b4
         radius: Theme.radius.xs
         color: root._style.accentColor
     }
