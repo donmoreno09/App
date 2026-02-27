@@ -3,6 +3,7 @@ import QtQuick.Layouts 6.8
 
 import App 1.0
 import App.Auth 1.0
+import App.Features.Language 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
@@ -106,7 +107,7 @@ UI.Overlay {
                 }
 
                 variant: UI.ButtonStyles.Primary
-                text: qsTr("Log out")
+                text: `${TranslationManager.revision}` && qsTr("Log out")
 
                 onClicked: {
                     root.close()
