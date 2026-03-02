@@ -1,4 +1,5 @@
 #include "PermissionManager.h"
+#include "QDebug"
 
 PermissionManager::PermissionManager(QObject* parent)
     : QObject(parent) {}
@@ -26,6 +27,15 @@ void PermissionManager::loadFromSession(const QStringList& roles, const QStringL
 {
     m_roles = QSet<QString>(roles.begin(), roles.end());
     m_permissions = QSet<QString>(permissions.begin(), permissions.end());
+
+    qDebug() << "Roles loaded:";
+    for (const auto& role : m_roles)
+        qDebug() << role;
+
+    qDebug() << "Permissions loaded:";
+    for (const auto& perm : m_permissions)
+        qDebug() << perm;
+
     ++m_revision;
     emit permissionsChanged();
 }
