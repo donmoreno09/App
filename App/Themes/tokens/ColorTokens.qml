@@ -81,6 +81,9 @@ QtObject {
     readonly property color loginPage: "#383737"
     readonly property color loginCard: "#4B4B4B"
 
+    // Background
+    readonly property color bg: "#000D1A"
+
     // -------------------------- // PRIMITIVES // -------------------------- //
 
     // Black
@@ -227,6 +230,80 @@ QtObject {
     readonly property color cautionA20: hexWithAlpha(caution500, 0.2)
     readonly property color cautionA10: hexWithAlpha(caution500, 0.1)
     readonly property color cautionA5:  hexWithAlpha(caution500, 0.05)
+
+    // ----------------------- // DARK MODE PALETTE // ----------------------- //
+
+    // Accent – Dark Mode
+    readonly property color accentDarkMode700: "#2438D1"
+    readonly property color accentDarkMode600: "#2C48E4"
+    readonly property color accentDarkMode500: "#3C66EF"
+    readonly property color accentDarkMode400: "#6591F5"
+    readonly property color accentDarkMode300: "#97B7F9"
+    readonly property color accentDarkModeA40: hexWithAlpha(accentDarkMode500, 0.4)
+    readonly property color accentDarkModeA30: hexWithAlpha(accentDarkMode500, 0.3)
+    readonly property color accentDarkModeA20: hexWithAlpha(accentDarkMode500, 0.2)
+    readonly property color accentDarkModeA10: hexWithAlpha(accentDarkMode500, 0.1)
+    readonly property color accentDarkModeA5:  hexWithAlpha(accentDarkMode500, 0.05)
+
+    // Success – Dark Mode
+    readonly property color successDarkMode700: "#458406"
+    readonly property color successDarkMode600: "#539E07"
+    readonly property color successDarkMode500: "#67CA00"
+    readonly property color successDarkMode400: "#93FB20"
+    readonly property color successDarkMode300: "#B3FF53"
+    readonly property color successDarkModeA40: hexWithAlpha(successDarkMode500, 0.4)
+    readonly property color successDarkModeA30: hexWithAlpha(successDarkMode500, 0.3)
+    readonly property color successDarkModeA20: hexWithAlpha(successDarkMode500, 0.2)
+    readonly property color successDarkModeA10: hexWithAlpha(successDarkMode500, 0.1)
+    readonly property color successDarkModeA5:  hexWithAlpha(successDarkMode500, 0.05)
+
+    // Critical – Dark Mode
+    readonly property color criticalDarkMode700: "#F41B1B"
+    readonly property color criticalDarkMode600: "#F53333"
+    readonly property color criticalDarkMode500: "#F64D4D"
+    readonly property color criticalDarkMode400: "#FD6C6C"
+    readonly property color criticalDarkMode300: "#FFA2A2"
+    readonly property color criticalDarkModeA40: hexWithAlpha(criticalDarkMode500, 0.4)
+    readonly property color criticalDarkModeA30: hexWithAlpha(criticalDarkMode500, 0.3)
+    readonly property color criticalDarkModeA20: hexWithAlpha(criticalDarkMode500, 0.2)
+    readonly property color criticalDarkModeA10: hexWithAlpha(criticalDarkMode500, 0.1)
+    readonly property color criticalDarkModeA5:  hexWithAlpha(criticalDarkMode500, 0.05)
+
+    // Error – Dark Mode
+    readonly property color errorDarkMode700: "#F41B1B"
+    readonly property color errorDarkMode600: "#F53333"
+    readonly property color errorDarkMode500: "#F64D4D"
+    readonly property color errorDarkMode400: "#FD6C6C"
+    readonly property color errorDarkMode300: "#FFA2A2"
+    readonly property color errorDarkModeA40: hexWithAlpha(errorDarkMode500, 0.4)
+    readonly property color errorDarkModeA30: hexWithAlpha(errorDarkMode500, 0.3)
+    readonly property color errorDarkModeA20: hexWithAlpha(errorDarkMode500, 0.2)
+    readonly property color errorDarkModeA10: hexWithAlpha(errorDarkMode500, 0.1)
+    readonly property color errorDarkModeA5:  hexWithAlpha(errorDarkMode500, 0.05)
+
+    // Warning – Dark Mode
+    readonly property color warningDarkMode700: "#865000"
+    readonly property color warningDarkMode600: "#CB6A00"
+    readonly property color warningDarkMode500: "#FA8500"
+    readonly property color warningDarkMode400: "#FB911A"
+    readonly property color warningDarkMode300: "#FCAA4D"
+    readonly property color warningDarkModeA40: hexWithAlpha(warningDarkMode500, 0.4)
+    readonly property color warningDarkModeA30: hexWithAlpha(warningDarkMode500, 0.3)
+    readonly property color warningDarkModeA20: hexWithAlpha(warningDarkMode500, 0.2)
+    readonly property color warningDarkModeA10: hexWithAlpha(warningDarkMode500, 0.1)
+    readonly property color warningDarkModeA5:  hexWithAlpha(warningDarkMode500, 0.05)
+
+    // Caution – Dark Mode
+    readonly property color cautionDarkMode700: "#CE8800"
+    readonly property color cautionDarkMode600: "#FFB103"
+    readonly property color cautionDarkMode500: "#FFCF26"
+    readonly property color cautionDarkMode400: "#FFDF43"
+    readonly property color cautionDarkMode300: "#FFF087"
+    readonly property color cautionDarkModeA40: hexWithAlpha(cautionDarkMode500, 0.4)
+    readonly property color cautionDarkModeA30: hexWithAlpha(cautionDarkMode500, 0.3)
+    readonly property color cautionDarkModeA20: hexWithAlpha(cautionDarkMode500, 0.2)
+    readonly property color cautionDarkModeA10: hexWithAlpha(cautionDarkMode500, 0.1)
+    readonly property color cautionDarkModeA5:  hexWithAlpha(cautionDarkMode500, 0.05)
 
     // Helper functions
     function hexWithAlpha(hex: string, alpha: real): string {

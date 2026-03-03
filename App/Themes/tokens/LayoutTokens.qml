@@ -37,6 +37,6 @@ QtObject {
     readonly property int contextPanelWidth: 486
 
     // Auth
-    readonly property int loginCardWidth: 480
+    readonly property int loginCardWidth: 400
     readonly property int userMenuWidth:  240
 }

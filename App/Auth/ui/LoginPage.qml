@@ -9,17 +9,13 @@ import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.TitleBar 1.0
 
-Item {
+Rectangle {
     id: root
+    color: Theme.colors.bg
 
     readonly property bool isBusy:   AuthManager.state === AuthStateEnum.LoggingIn || AuthManager.state === AuthStateEnum.AutoLoggingIn
     readonly property bool hasError: AuthManager.state === AuthStateEnum.Error
     readonly property bool canLogin: !isBusy && authIdInput.text !== "" && passwordInput.text !== ""
-
-    UI.GlobalBackground {
-        anchors.fill: parent
-        visible: true
-    }
 
     WindowControlsBar {
         anchors.top:   parent.top
