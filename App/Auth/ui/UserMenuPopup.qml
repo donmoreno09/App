@@ -106,7 +106,7 @@ UI.Overlay {
                     margins: Theme.spacing.s2
                 }
 
-                variant: UI.ButtonStyles.Primary
+                variant: UI.ButtonStyles.PrimaryDarkMode
                 text: `${TranslationManager.revision}` && qsTr("Log out")
 
                 onClicked: {
