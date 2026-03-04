@@ -11,7 +11,7 @@ import App.Features.TitleBar 1.0
 
 Rectangle {
     id: root
-    color: Theme.colors.loginPage
+    color: Theme.colors.bg
 
     readonly property bool isBusy:   AuthManager.state === AuthStateEnum.LoggingIn || AuthManager.state === AuthStateEnum.AutoLoggingIn
     readonly property bool hasError: AuthManager.state === AuthStateEnum.Error
@@ -22,6 +22,9 @@ Rectangle {
         anchors.left:  parent.left
         anchors.right: parent.right
     }
+
+    TapHandler    { acceptedButtons: Qt.AllButtons }
+    HoverHandler  { }
 
     Item {
         id: card
@@ -61,14 +64,12 @@ Rectangle {
             }
             spacing: Theme.spacing.s4
 
-            Text {
-                Layout.alignment: Qt.AlignHCenter
-                text:               "FINCANTIERI"
-                color:              Theme.colors.text
-                font.family:        Theme.typography.familySans
-                font.pointSize:     Theme.typography.fontSize200
-                font.weight:        Theme.typography.weightBold
-                font.letterSpacing: Theme.typography.letterSpacingLoose
+            Image {
+                Layout.alignment:      Qt.AlignHCenter
+                Layout.preferredHeight: Theme.icons.sizeXs
+                source:               "qrc:/App/assets/icons/fincantieri.svg"
+                fillMode:             Image.PreserveAspectFit
+                sourceSize.height:    Theme.icons.sizeLogo
             }
 
             Text {
@@ -146,7 +147,8 @@ Rectangle {
                 UI.Button {
                     Layout.fillWidth: true
                     enabled:  root.canLogin
-                    variant:  UI.ButtonStyles.Primary
+                    variant:  UI.ButtonStyles.PrimaryDarkMode
+                    radius: Theme.radius.none
                     text:     AuthManager.state === AuthStateEnum.LoggingIn ? qsTr("Logging in...") : qsTr("Login")
                     onClicked: AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
                 }
