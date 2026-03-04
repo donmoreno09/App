@@ -1,3 +1,5 @@
+qt_add_library(app_components STATIC)
+
 set(qml_files
     Avatar.qml
     ButtonOld.qml
@@ -19,6 +21,7 @@ set(qml_files
     TextArea.qml
     Title.qml
     ToastNotification.qml
+    TrackIcon.qml
     VerticalDivider.qml
     VerticalPadding.qml
     VerticalSpacer.qml
@@ -62,7 +65,6 @@ set(qml_files
     shapes/EditablePolygon.qml
     shapes/EditablePoint.qml
 )
-
 
 set(qml_singletons
     accordion/AccordionStyles.qml

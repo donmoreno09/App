@@ -5,6 +5,7 @@ import QtPositioning 6.8
 
 import App 1.0
 import App.Themes 1.0
+import App.Components 1.0
 import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.TrackPanel 1.0
@@ -32,12 +33,14 @@ MapItemGroup {
         anchorPoint.x: sourceItem.width / 2
         anchorPoint.y: sourceItem.height / 2
 
-        sourceItem: CircleMarker {
-            color: Theme.colors.accent
-            iconColor: Theme.colors.white
-            iconSource: "qrc:/App/assets/icons/fa/ship.svg"
-            labelText: "T" + root.trackNumber.toString()
+        sourceItem: TrackIcon {
+            domain: TrackIcon.Cruise
+            severity: TrackIcon.Neutral
+            motion: TrackIcon.Moving
+            ui: TrackIcon.Default
             heading: root.cog
+            labelText: "T" + root.trackNumber.toString()
+
             onTapped: {
                 SidePanelController.openOrRefresh(Routes.TrackPanel)
                 SelectedTrackState.select(root.trackModel.getEditableTrack(root.index))
