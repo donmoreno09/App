@@ -35,6 +35,7 @@ public:
 
     Q_INVOKABLE void login(const QString& username, const QString& password, bool rememberMe = false);
     Q_INVOKABLE void logout();
+    Q_INVOKABLE void requestLogout();
     Q_INVOKABLE void tryAutoLogin();
 
     AuthState state() const;
@@ -55,6 +56,7 @@ signals:
     void loginFailed(const QString& error);
     void loggedOut();
     void sessionExpired();
+    void logoutConfirmationRequested();
     void tokenChanged(const QByteArray& token);
 
 private:

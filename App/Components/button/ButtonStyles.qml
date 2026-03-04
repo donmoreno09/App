@@ -11,10 +11,7 @@ QtObject {
         Ghost,
         Success,
         Warning,
-        PrimaryDarkMode,
-        ErrorDarkMode,
-        SuccessDarkMode,
-        WarningDarkMode
+        PrimaryDarkMode
     }
 
     readonly property var defaultSizeConfig: ({
@@ -115,52 +112,13 @@ QtObject {
     }
 
     property ButtonStyle _primaryDarkMode: ButtonStyle {
-        background:         Theme.colors.accentDarkMode500
-        backgroundHover:    Theme.colors.accentDarkMode600
-        backgroundPressed:  Theme.colors.accentDarkMode700
+        background:         Theme.colors.accent500
+        backgroundHover:    Theme.colors.accent600
+        backgroundPressed:  Theme.colors.accent700
         backgroundDisabled: Theme.colors.greyA20
-        backgroundActive:   Theme.colors.accentDarkMode600
+        backgroundActive:   Theme.colors.accent600
         border:             Theme.borders.b0
-        borderColor:        Theme.colors.accentDarkMode500
-        textColor:          Theme.colors.white500
-        textColorDisabled:  Theme.colors.whiteA60
-        sizeConfig:         defaultSizeConfig
-    }
-
-    property ButtonStyle _errorDarkMode: ButtonStyle {
-        background:         Theme.colors.errorDarkMode500
-        backgroundHover:    Theme.colors.errorDarkMode600
-        backgroundPressed:  Theme.colors.errorDarkMode700
-        backgroundDisabled: Theme.colors.greyA20
-        backgroundActive:   Theme.colors.errorDarkMode600
-        border:             Theme.borders.b0
-        borderColor:        Theme.colors.errorDarkMode500
-        textColor:          Theme.colors.white500
-        textColorDisabled:  Theme.colors.whiteA60
-        sizeConfig:         defaultSizeConfig
-    }
-
-    property ButtonStyle _successDarkMode: ButtonStyle {
-        background:         Theme.colors.successDarkMode500
-        backgroundHover:    Theme.colors.successDarkMode600
-        backgroundPressed:  Theme.colors.successDarkMode700
-        backgroundDisabled: Theme.colors.greyA20
-        backgroundActive:   Theme.colors.successDarkMode600
-        border:             Theme.borders.b0
-        borderColor:        Theme.colors.successDarkMode500
-        textColor:          Theme.colors.white500
-        textColorDisabled:  Theme.colors.whiteA60
-        sizeConfig:         defaultSizeConfig
-    }
-
-    property ButtonStyle _warningDarkMode: ButtonStyle {
-        background:         Theme.colors.warningDarkMode500
-        backgroundHover:    Theme.colors.warningDarkMode600
-        backgroundPressed:  Theme.colors.warningDarkMode700
-        backgroundDisabled: Theme.colors.greyA20
-        backgroundActive:   Theme.colors.warningDarkMode600
-        border:             Theme.borders.b0
-        borderColor:        Theme.colors.warningDarkMode500
+        borderColor:        Theme.colors.accent500
         textColor:          Theme.colors.white500
         textColorDisabled:  Theme.colors.whiteA60
         sizeConfig:         defaultSizeConfig
@@ -175,9 +133,6 @@ QtObject {
         case ButtonStyles.Success: return _success
         case ButtonStyles.Warning: return _warning
         case ButtonStyles.PrimaryDarkMode: return _primaryDarkMode
-        case ButtonStyles.ErrorDarkMode:   return _errorDarkMode
-        case ButtonStyles.SuccessDarkMode: return _successDarkMode
-        case ButtonStyles.WarningDarkMode: return _warningDarkMode
         default: {
             console.warn("Invalid ButtonStyle variant:", variant)
             return _primary

@@ -251,4 +251,13 @@ ApplicationWindow {
 
         sourceComponent: LoginPage {}
     }
+
+    LogoutDialog {
+        id: logoutDialog
+    }
+
+    Connections {
+        target: AuthManager
+        function onLogoutConfirmationRequested() { logoutDialog.open() }
+    }
 }

@@ -10,7 +10,7 @@ QtObject {
 
     property InputStyle _default: InputStyle {
         borderColor: Theme.colors.textMuted
-        borderColorFocused: Theme.colors.accent
+        borderColorFocused: Theme.colors.accent500
         msgIconSource: "qrc:/App/assets/icons/circle-info.svg"
     }
 

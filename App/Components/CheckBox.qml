@@ -23,7 +23,7 @@ CheckBox {
         implicitHeight: root._size.indicator
         anchors.verticalCenter: parent.verticalCenter
         radius:         Theme.radius.xs
-        color:          root.checked ? Theme.colors.accent : Theme.colors.transparent
+        color:          root.checked ? Theme.colors.accent500 : Theme.colors.transparent
         border.color:   root.checked
                         ? Theme.colors.accent
                         : root.enabled ? Qt.rgba(1, 1, 1, 0.45) : Theme.colors.textMuted

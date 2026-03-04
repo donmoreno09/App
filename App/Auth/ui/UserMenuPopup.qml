@@ -1,17 +1,17 @@
 import QtQuick 6.8
 import QtQuick.Layouts 6.8
+import QtQuick.Effects 6.8
 
-import App 1.0
 import App.Auth 1.0
-import App.Features.Language 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
 UI.Overlay {
     id: root
 
+    signal settingsRequested()
+
     width: Theme.layout.userMenuWidth
-    modal: true
     showBackdrop: false
     anchors.centerIn: undefined
     transformOrigin: Item.BottomLeft
@@ -19,101 +19,118 @@ UI.Overlay {
 
     background: Rectangle {
         radius: Theme.radius.lg
-        color: Theme.colors.surface
+        color: Theme.colors.blackA20
         border.width: Theme.borders.b1
         border.color: Theme.colors.whiteA10
     }
 
     enter: Transition {
         ParallelAnimation {
-            NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 200; easing.type: Easing.OutBack }
-            NumberAnimation { property: "scale"; from: 0.92; to: 1.0; duration: 200; easing.type: Easing.OutBack }
+            NumberAnimation { property: "opacity"; from: 0;    to: 1.0;  duration: 200; easing.type: Easing.OutBack }
+            NumberAnimation { property: "scale";   from: 0.92; to: 1.0;  duration: 200; easing.type: Easing.OutBack }
         }
     }
 
     exit: Transition {
         ParallelAnimation {
-            NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 150; easing.type: Easing.InCubic }
-            NumberAnimation { property: "scale"; from: 1.0; to: 0.92; duration: 150; easing.type: Easing.InCubic }
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0;    duration: 150; easing.type: Easing.InCubic }
+            NumberAnimation { property: "scale";   from: 1.0; to: 0.92; duration: 150; easing.type: Easing.InCubic }
         }
+    }
+
+    function _labelFor(action) {
+        if (action === "settings") return qsTr("Settings")
+        if (action === "logout")   return qsTr("Log out")
+        return ""
+    }
+
+    function _handleAction(action) {
+        root.close()
+        if      (action === "settings") root.settingsRequested()
+        else if (action === "logout")   AuthManager.requestLogout()
+    }
+
+    ListModel {
+        id: menuModel
+        ListElement { action: "settings"; icon: "" }
+        ListElement { action: "logout";   icon: "qrc:/App/assets/icons/logout.svg" }
     }
 
     contentItem: ColumnLayout {
         spacing: 0
 
-        // Profile header
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.margins: Theme.spacing.s4
-            spacing: Theme.spacing.s3
-
-            UI.Avatar {
-                Layout.preferredWidth: Theme.spacing.s9
-                Layout.preferredHeight: Theme.spacing.s9
-                source: "qrc:/App/assets/images/avatar.png"
-                radius: Theme.radius.circle(Theme.spacing.s9, Theme.spacing.s9)
-            }
-
-            ColumnLayout {
+        Repeater {
+            model: menuModel
+            delegate: ColumnLayout {
                 Layout.fillWidth: true
-                spacing: Theme.spacing.s0_5
+                spacing: 0
 
-                Text {
+                MenuRow {
                     Layout.fillWidth: true
-                    text: AuthManager.displayName
-                    color: Theme.colors.text
-                    font.family: Theme.typography.bodySans50StrongFamily
-                    font.pointSize: Theme.typography.bodySans50StrongSize
-                    font.weight: Theme.typography.bodySans50StrongWeight
-                    elide: Text.ElideRight
-                }
-
-                Text {
-                    Layout.fillWidth: true
-                    text: "@" + AuthManager.username
-                    color: Theme.colors.textMuted
-                    font.family: Theme.typography.bodySans25Family
-                    font.pointSize: Theme.typography.bodySans25Size
-                    font.weight: Theme.typography.bodySans25Weight
-                    elide: Text.ElideRight
-                }
-
-                Text {
-                    Layout.fillWidth: true
-                    text: AuthManager.email
-                    color: Theme.colors.textMuted
-                    font.family: Theme.typography.bodySans25Family
-                    font.pointSize: Theme.typography.bodySans25Size
-                    font.weight: Theme.typography.bodySans25Weight
-                    elide: Text.ElideRight
+                    text: root._labelFor(model.action)
+                    iconSource: model.icon
+                    onClicked: root._handleAction(model.action)
                 }
             }
         }
+    }
 
-        UI.HorizontalDivider {}
+    component MenuRow: Rectangle {
+        id: menuRow
 
-        // Logout button
-        Item {
-            Layout.fillWidth: true
-            implicitHeight: logoutButton.implicitHeight + Theme.spacing.s2 * 2
+        property alias text: label.text
+        property string iconSource
 
-            UI.Button {
-                id: logoutButton
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    top: parent.top
-                    margins: Theme.spacing.s2
-                }
+        signal clicked()
 
-                variant: UI.ButtonStyles.PrimaryDarkMode
-                text: `${TranslationManager.revision}` && qsTr("Log out")
+        implicitHeight: Theme.spacing.s10
+        color: hoverHandler.hovered ? Theme.colors.whiteA5 : "transparent"
+        radius: Theme.radius.lg
 
-                onClicked: {
-                    root.close()
-                    AuthManager.logout()
+        Behavior on color {
+            ColorAnimation { duration: 120; easing.type: Easing.OutCubic }
+        }
+
+        RowLayout {
+            anchors {
+                left: parent.left
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+                leftMargin: Theme.spacing.s4
+                rightMargin: Theme.spacing.s4
+            }
+            spacing: Theme.spacing.s2
+
+            Image {
+                visible: menuRow.iconSource.length > 0
+                source: menuRow.iconSource
+                fillMode: Image.PreserveAspectFit
+                Layout.preferredWidth: Theme.icons.sizeSm
+                Layout.preferredHeight: Theme.icons.sizeSm
+
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    colorizationColor: Theme.colors.text
+                    colorization: 1.0
                 }
             }
+
+            Text {
+                id: label
+                color: Theme.colors.text
+                font.family:    Theme.typography.bodySans25Family
+                font.pointSize: Theme.typography.bodySans25Size
+                font.weight:    Theme.typography.bodySans25Weight
+            }
+        }
+
+        HoverHandler {
+            id: hoverHandler
+            cursorShape: Qt.PointingHandCursor
+        }
+
+        TapHandler {
+            onTapped: menuRow.clicked()
         }
     }
 }

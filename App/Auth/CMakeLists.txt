@@ -13,6 +13,7 @@ set(cpp_files
 set(qml_files
     ui/LoginPage.qml
     ui/UserMenuPopup.qml
+    ui/LogoutDialog.qml
 )
 
 qt_add_qml_module(app_auth

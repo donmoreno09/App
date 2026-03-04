@@ -39,7 +39,7 @@ Rectangle {
             anchors.fill: parent
 
             ShapePath {
-                fillColor:   Theme.colors.loginCard
+                fillColor:   Theme.colors.whiteA10
                 strokeColor: Theme.colors.whiteA10
                 strokeWidth: card.borderWidth
                 startX: 0; startY: 0

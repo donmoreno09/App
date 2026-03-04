@@ -73,6 +73,11 @@ void AuthManager::login(const QString& username, const QString& password, bool r
                  });
 }
 
+void AuthManager::requestLogout()
+{
+    emit logoutConfirmationRequested();
+}
+
 void AuthManager::logout()
 {
     if (m_state != AuthState::Authenticated) return;
