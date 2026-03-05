@@ -34,7 +34,23 @@ PanelTemplate {
                 Layout.rightMargin: Theme.spacing.s8
 
                 TilesetGridItem {
-                    text: `${TranslationManager.revision}` && qsTr("Map")
+                    text: `${TranslationManager.revision}` && qsTr("Light")
+                    source: "qrc:/App/assets/images/tileset-light.png"
+                    selected: MapController._currentPlugin === MapPlugins.maplibreLight
+
+                    onClicked: MapController.setPlugin(MapPlugins.maplibreLight)
+                }
+
+                TilesetGridItem {
+                    text: `${TranslationManager.revision}` && qsTr("Dark")
+                    source: "qrc:/App/assets/images/tileset-dark.png"
+                    selected: MapController._currentPlugin === MapPlugins.maplibreDark
+
+                    onClicked: MapController.setPlugin(MapPlugins.maplibreDark)
+                }
+
+                TilesetGridItem {
+                    text: `${TranslationManager.revision}` && qsTr("Normal")
                     source: "qrc:/App/assets/images/tileset-map.png"
                     selected: MapController._currentPlugin === MapPlugins.osmDefault
 
@@ -48,9 +64,6 @@ PanelTemplate {
 
                     onClicked: MapController.setPlugin(MapPlugins.maplibreSatellite)
                 }
-
-                TilesetGridItem { opacity: 0; enabled: false }
-                TilesetGridItem { opacity: 0; enabled: false }
             }
 
             UI.HorizontalDivider {

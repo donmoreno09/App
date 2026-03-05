@@ -40,6 +40,24 @@ QtObject {
         }
     }
 
+    readonly property Plugin maplibreLight: Plugin {
+        name: "maplibre"
+
+        PluginParameter {
+           name: "maplibre.map.styles"
+           value: "https://api.maptiler.com/maps/019cb918-c81c-7afe-b5ca-eee71c1bd607/style.json?key=r8wW6WpMdHaIGV3JI9Ov"
+        }
+    }
+
+    readonly property Plugin maplibreDark: Plugin {
+        name: "maplibre"
+
+        PluginParameter {
+           name: "maplibre.map.styles"
+           value: "https://api.maptiler.com/maps/019cb835-5526-73d7-9426-fc6c2a697036/style.json?key=r8wW6WpMdHaIGV3JI9Ov"
+        }
+    }
+
     readonly property Plugin maplibreSatellite: Plugin {
         name: "maplibre"
 
