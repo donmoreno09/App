@@ -37,7 +37,7 @@ MapItemGroup {
             domain: TrackIcon.Cruise
             severity: TrackIcon.Neutral
             motion: TrackIcon.Moving
-            ui: TrackIcon.Default
+            ui: root.state === 'STALE' ? TrackIcon.Disabled : TrackIcon.Default
             heading: root.cog
             labelText: "T" + root.trackNumber.toString()
 

@@ -36,7 +36,7 @@ MapItemGroup {
             domain: TrackIcon.Land
             severity: TrackIcon.Neutral
             motion: TrackIcon.Moving
-            ui: TrackIcon.Default
+            ui: root.state === 'STALE' ? TrackIcon.Disabled : TrackIcon.Default
             heading: cog
             labelText: root.operationCode
 
