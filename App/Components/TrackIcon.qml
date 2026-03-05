@@ -43,7 +43,7 @@ Item {
         visible: root.labelText !== ""
         text: root.labelText
         font.pixelSize: 12
-        color: Theme.colors.black
+        color: MapController._currentPlugin.isDark ? Theme.colors.white : Theme.colors.black
         anchors.top: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
