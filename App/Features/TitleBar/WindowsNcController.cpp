@@ -60,40 +60,82 @@ QQuickWindow *WindowsNcController::window() const
 }
 
 #ifdef Q_OS_WIN
-void WindowsNcController::applyWinStyles() {
+void WindowsNcController::applyWinStyles()
+{
     if (!m_hwnd) return;
 
     LONG style = ::GetWindowLongW(m_hwnd, GWL_STYLE);
     style |= WS_THICKFRAME | WS_CAPTION | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_SYSMENU;
-    SetWindowLongW(m_hwnd, GWL_STYLE, style);
+    ::SetWindowLongW(m_hwnd, GWL_STYLE, style);
 
-    const MARGINS margins{1,1,1,1};
-    DwmExtendFrameIntoClientArea(m_hwnd, &margins);
+    // only extend the top border into client area
+    const MARGINS margins{0, 0, 1, 0};
+    ::DwmExtendFrameIntoClientArea(m_hwnd, &margins);
 }
 
-bool WindowsNcController::nativeEventFilter(const QByteArray& t, void* msg, qintptr* res) {
-    if (t != "windows_generic_MSG" && t != "windows_dispatcher_MSG") {
+bool WindowsNcController::nativeEventFilter(const QByteArray& t, void* msg, qintptr* res)
+{
+    if (t != "windows_generic_MSG")
         return false;
-    }
 
     MSG* m = static_cast<MSG*>(msg);
 
+    if (!m_hwnd || m->hwnd != m_hwnd)
+        return false;
+
     switch (m->message) {
     case WM_NCCALCSIZE: {
-        // eat non-client painting (no native titlebar drawn)
+        const UINT dpi = GetDpiForWindow(m_hwnd);
+        const int pad = GetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi);
+        const int borderX = GetSystemMetricsForDpi(SM_CXSIZEFRAME, dpi) + pad;
+        const int borderY = GetSystemMetricsForDpi(SM_CYSIZEFRAME, dpi) + pad;
+
+        RECT* rect = nullptr;
+        if (m->wParam) {
+            auto* params = reinterpret_cast<NCCALCSIZE_PARAMS*>(m->lParam);
+            rect = &params->rgrc[0];
+        } else {
+            rect = reinterpret_cast<RECT*>(m->lParam);
+        }
+
+        // Preserve native outer resize border behavior
+        rect->left   += borderX;
+        rect->right  -= borderX;
+        rect->bottom -= borderY;
+
+        // Only when maximized
+        if (IsZoomed(m_hwnd)) {
+            rect->top += borderY;
+        }
+
         *res = 0;
         return true;
     }
-    case WM_NCHITTEST: {
-        if (!m_hwnd) return false;
 
-        // Native resize borders
+    case WM_NCHITTEST: {
+        LRESULT lr = 0;
+        if (DwmDefWindowProc(m_hwnd, m->message, m->wParam, m->lParam, &lr)) {
+            *res = lr;
+            return true;
+        }
+
         const LONG x = GET_X_LPARAM(m->lParam);
         const LONG y = GET_Y_LPARAM(m->lParam);
-        RECT r; GetWindowRect(m_hwnd, &r);
-        const int b = borderThickness(m_hwnd);
-        const bool L = x <  r.left  + b, R = x >= r.right - b;
-        const bool T = y <  r.top   + b, B = y >= r.bottom- b;
+
+        RECT r{};
+        GetWindowRect(m_hwnd, &r);
+
+        const UINT dpi = GetDpiForWindow(m_hwnd);
+        const int bx = GetSystemMetricsForDpi(SM_CXSIZEFRAME, dpi)
+                       + GetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi);
+        const int by = GetSystemMetricsForDpi(SM_CYSIZEFRAME, dpi)
+                       + GetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi);
+
+        const bool L = x <  r.left   + bx;
+        const bool R = x >= r.right  - bx;
+        const bool T = y <  r.top    + by;
+        const bool B = y >= r.bottom - by;
+
         if (T && L) { *res = HTTOPLEFT;     return true; }
         if (T && R) { *res = HTTOPRIGHT;    return true; }
         if (B && L) { *res = HTBOTTOMLEFT;  return true; }
@@ -102,8 +144,10 @@ bool WindowsNcController::nativeEventFilter(const QByteArray& t, void* msg, qint
         if (R)      { *res = HTRIGHT;       return true; }
         if (T)      { *res = HTTOP;         return true; }
         if (B)      { *res = HTBOTTOM;      return true; }
-        return false; // client area; QML header handles dragging
-    }}
+
+        return false;
+    }
+    }
 
     return false;
 }
