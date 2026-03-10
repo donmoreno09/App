@@ -29,8 +29,8 @@ UI.Overlay {
 
     exit: Transition {
         ParallelAnimation {
-            NumberAnimation { property: "opacity"; from: 1.0; to: 0;    duration: 150; easing.type: Easing.InCubic }
-            NumberAnimation { property: "scale";   from: 1.0; to: 0.95; duration: 150; easing.type: Easing.InCubic }
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0;    duration: 15; easing.type: Easing.InCubic }
+            NumberAnimation { property: "scale";   from: 1.0; to: 0.95; duration: 15; easing.type: Easing.InCubic }
         }
     }
 

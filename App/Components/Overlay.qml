@@ -20,9 +20,11 @@ Popup {
         id: backdropComponent
 
         MultiEffect {
+            layer.enabled: true
             source: ShaderEffectSource {
                 sourceItem: (Overlay.overlay && Overlay.overlay.parent) ? Overlay.overlay.parent : null
                 hideSource: false
+                live: false
             }
 
             blurEnabled: true

@@ -56,7 +56,6 @@ Item {
                 wrapMode: Text.WordWrap
                 font.family: Theme.typography.familySans
                 font.pointSize: Theme.typography.bodySans25Size
-                font.weight: Theme.typography.weightSemibold
             }
 
             Text {
@@ -81,7 +80,8 @@ Item {
             bottomMargin: Theme.borders.b1
         }
         height: Theme.borders.b4
-        radius: Theme.radius.xs
+        bottomLeftRadius: Theme.radius.xs
+        bottomRightRadius: Theme.radius.xs
         color: root._style.accentColor
     }
 }

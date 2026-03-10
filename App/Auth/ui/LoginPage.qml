@@ -66,18 +66,25 @@ Rectangle {
 
             Image {
                 Layout.alignment:      Qt.AlignHCenter
-                Layout.preferredHeight: Theme.icons.sizeXs
+                Layout.preferredHeight: Theme.icons.sizeSm
                 source:               "qrc:/App/assets/icons/fincantieri.svg"
                 fillMode:             Image.PreserveAspectFit
                 sourceSize.height:    Theme.icons.sizeLogo
             }
 
+            Image {
+                Layout.alignment:      Qt.AlignHCenter
+                Layout.preferredHeight: Theme.icons.loginDivider
+                source:               "qrc:/App/assets/icons/login_divider.svg"
+                fillMode:             Image.PreserveAspectFit
+            }
+
             Text {
                 Layout.alignment: Qt.AlignHCenter
                 text:           qsTr("Log in Fincantieri Digital Ecosystem")
-                color:          Theme.colors.textMuted
+                color:          Theme.colors.text
                 font.family:    Theme.typography.familySans
-                font.pointSize: Theme.typography.bodySans25Size
+                font.pointSize: Theme.typography.bodySans50Size
             }
 
             Text {
@@ -96,16 +103,23 @@ Rectangle {
 
                 UI.AlertBanner {
                     Layout.fillWidth: true
+                    visible: AuthManager.sessionExpired
+                    variant: UI.AlertBannerStyles.Error
+                    title:   qsTr("Your session has ended.")
+                    message: qsTr("To continue, please log in again.")
+                }
+
+                UI.AlertBanner {
+                    Layout.fillWidth: true
                     visible: root.hasError
                     variant: UI.AlertBannerStyles.Error
-                    title:   qsTr("The credentials you entered are invalid.")
-                    message: qsTr("Please enter valid credentials and try again.")
+                    title: qsTr("The credentials you entered are invalid. Please enter valid credentials and try again.")
                 }
 
                 UI.Input {
                     id: authIdInput
                     Layout.fillWidth: true
-                    labelText: qsTr("Authentication ID")
+                    labelText: qsTr("E-mail")
                     enabled:   !root.isBusy
                     variant:   root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
                     textField.Keys.onReturnPressed: if (root.canLogin) root.doLogin()
@@ -127,20 +141,46 @@ Rectangle {
 
                     UI.Checkbox {
                         id:      rememberMeCheck
+                        size:    "lg"
                         text:    qsTr("Remember me")
                         enabled: !root.isBusy
                     }
 
                     Item { Layout.fillWidth: true }
 
-                    Text {
-                        text:           qsTr("Forgot password?")
-                        color:          Theme.colors.textMuted
-                        font.family:    Theme.typography.familySans
-                        font.pointSize: Theme.typography.bodySans15Size
-                        font.underline: true
+                    Item {
+                        implicitWidth: forgotText.implicitWidth
+                        implicitHeight: forgotText.implicitHeight + 4
+
                         HoverHandler { cursorShape: Qt.PointingHandCursor }
-                        TapHandler   { onTapped: console.log("[Login] Forgot password") }
+                        TapHandler { onTapped: console.log("[Login] Forgot password") }
+
+                        Text {
+                            id: forgotText
+                            text: qsTr("Forgot password?")
+                            color: Theme.colors.text
+                            font.family: Theme.typography.familySans
+                            font.pointSize: Theme.typography.bodySans50Size
+                        }
+
+                        Shape {
+                            anchors.top: forgotText.bottom
+                            anchors.topMargin: 2
+                            width: forgotText.width
+                            height: 2
+
+                            ShapePath {
+                                strokeWidth: 1
+                                strokeColor: Theme.colors.text
+                                fillColor: "transparent"
+                                strokeStyle: ShapePath.DashLine
+                                dashPattern: [1, 2]
+
+                                startX: 0
+                                startY: 1
+                                PathLine { x: forgotText.width; y: 1 }
+                            }
+                        }
                     }
                 }
 

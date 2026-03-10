@@ -9,9 +9,9 @@ CheckBox {
     property string size: "md"
 
     readonly property var _sizeConfig: ({
-        "sm": { indicator: 14, fontSize: Theme.typography.bodySans15Size, spacing: Theme.spacing.s1 },
-        "md": { indicator: 16, fontSize: Theme.typography.bodySans25Size, spacing: Theme.spacing.s2 },
-        "lg": { indicator: 20, fontSize: Theme.typography.bodySans50Size, spacing: Theme.spacing.s3 }
+        "sm": { indicator: 12, fontSize: Theme.typography.bodySans15Size},
+        "md": { indicator: 14, fontSize: Theme.typography.bodySans25Size},
+        "lg": { indicator: 16, fontSize: Theme.typography.bodySans50Size}
     })
 
     readonly property var _size: _sizeConfig[size] || _sizeConfig["md"]
@@ -22,11 +22,9 @@ CheckBox {
         implicitWidth:  root._size.indicator
         implicitHeight: root._size.indicator
         anchors.verticalCenter: parent.verticalCenter
-        radius:         Theme.radius.xs
+        radius:         Theme.radius.sm
         color:          root.checked ? Theme.colors.accent500 : Theme.colors.transparent
-        border.color:   root.checked
-                        ? Theme.colors.accent
-                        : root.enabled ? Qt.rgba(1, 1, 1, 0.45) : Theme.colors.textMuted
+        border.color:   root.checked ? Theme.colors.accent500 : Theme.colors.text
         border.width:   Theme.borders.b1
 
         Behavior on color       { ColorAnimation { duration: 150 } }
@@ -44,9 +42,9 @@ CheckBox {
     }
 
     contentItem: Text {
-        leftPadding:    root.indicator.implicitWidth + root.spacing
+        leftPadding:    root.indicator.implicitWidth + Theme.spacing.s1
         text:           root.text
-        color:          root.enabled ? Theme.colors.text : Theme.colors.textMuted
+        color:          Theme.colors.text
         font.family:    Theme.typography.familySans
         font.pointSize: root._size.fontSize
         verticalAlignment: Text.AlignVCenter

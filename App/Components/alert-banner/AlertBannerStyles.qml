@@ -8,7 +8,7 @@ QtObject {
 
     property AlertBannerStyle _error: AlertBannerStyle {
         backgroundColor: Theme.colors.errorA5
-        borderColor: Theme.colors.errorA20
+        borderColor: Theme.colors.transparent
         accentColor: Theme.colors.error
         iconColor: Theme.colors.error
         titleColor: Theme.colors.text

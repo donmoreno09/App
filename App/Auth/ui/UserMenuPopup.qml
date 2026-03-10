@@ -19,7 +19,7 @@ UI.Overlay {
 
     background: Rectangle {
         radius: Theme.radius.lg
-        color: Theme.colors.blackA20
+        color: Theme.colors.whiteA10
         border.width: Theme.borders.b1
         border.color: Theme.colors.whiteA10
     }

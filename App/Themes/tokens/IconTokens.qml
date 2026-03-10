@@ -46,4 +46,7 @@ QtObject {
     // (empty for now, feel free to add when needed)
     // Example: readonly property int sizeButton: sizeLg
     readonly property int sizeLogo: 36
+
+    //Login Divider
+    readonly property real loginDivider: 1
 }

@@ -37,7 +37,7 @@ QtObject {
     readonly property int contextPanelWidth: 486
 
     // Auth
-    readonly property int loginCardWidth: 400
+    readonly property int loginCardWidth: 438
     readonly property int userMenuWidth:  145
     readonly property int logoutDialogWidth:  446
     readonly property int logoutDialogHeight:  169
