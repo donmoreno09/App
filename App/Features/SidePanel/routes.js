@@ -29,6 +29,7 @@ const NotFound = "*";
 
 // MOC Pages
 const MOCPoiStaticPanel = "moc-poi-static-panel";
+const MOCClusterPanel = "moc-cluster-panel";
 
 // Build the map using the constants
 const routes = {
