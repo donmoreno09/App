@@ -143,6 +143,14 @@ UI.GlobalBackgroundConsumer {
                 }
 
                 SideRailItem {
+                    source: "qrc:/App/assets/icons/test.svg"
+                    text: `${TranslationManager.revision}` && qsTr("Cluster Component")
+                    active: currentPanelPath === "moc-cluster-panel" && SidePanelController.isOpen
+
+                    onClicked: SidePanelController.toggle(Routes.MOCClusterPanel)
+                }
+
+                SideRailItem {
                     visible: currentPanelPath === "languages" && SidePanelController.isOpen
                     source: "qrc:/App/assets/icons/world.svg"
                     icon.width: Theme.icons.sizeMd

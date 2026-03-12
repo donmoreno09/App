@@ -2,6 +2,7 @@ set(qml_files
     Avatar.qml
     ButtonOld.qml
     Checkbox.qml
+    Cluster.qml
     ComboBox.qml
     DateTime.qml
     GlobalBackground.qml

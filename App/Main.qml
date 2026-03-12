@@ -252,11 +252,11 @@ ApplicationWindow {
     }
 
     // Auth guard — covers entire window when not authenticated
-    Loader {
-        anchors.fill: parent
-        z: Theme.elevation.modal + 100
-        active: AuthManager.state !== AuthStateEnum.Authenticated
+    // Loader {
+    //     anchors.fill: parent
+    //     z: Theme.elevation.modal + 100
+    //     active: AuthManager.state !== AuthStateEnum.Authenticated
 
-        sourceComponent: LoginPage {}
-    }
+    //     sourceComponent: LoginPage {}
+    // }
 }

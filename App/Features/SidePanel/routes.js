@@ -29,6 +29,7 @@ const NotFound = "*";
 
 // MOC Pages
 const MOCPoiStaticPanel = "moc-poi-static-panel";
+const MOCClusterPanel = "moc-cluster-panel";
 
 // Build the map using the constants
 const routes = {
@@ -57,6 +58,7 @@ const routes = {
   [ViGateServices] : "qrc:/App/Features/ViGateServices/panels/ViGatePanel.qml",
   [Notification] : "qrc:/App/Features/Notifications/NotificationsPanel.qml",
   [NotFound]: "qrc:/App/Features/SidePanel/NotFoundPanel.qml",
+  [MOCClusterPanel]: "qrc:/App/Playground/ClusterPanel.qml"
 };
 
 // Resolver utility

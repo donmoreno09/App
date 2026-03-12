@@ -1,6 +1,7 @@
 set(qml_files
     ButtonGroupTest.qml
     ComboBoxPanel.qml
+    ClusterPanel.qml
     DateTimePickerPanel.qml
     IconButtonsTest.qml
     DateTimeTest.qml
