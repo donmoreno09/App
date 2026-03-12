@@ -1,6 +1,7 @@
 set(qml_files
     Avatar.qml
     ButtonOld.qml
+    Cluster.qml
     Checkbox.qml
     ComboBox.qml
     DateTime.qml
