@@ -24,6 +24,8 @@ AuthManager::AuthManager(QObject* parent)
                        [this](const ErrorResult& err) {
                            qWarning() << "[AuthManager] Token refresh failed:" << err.message;
                            clearSession();
+                           m_sessionExpired = true;
+                           emit sessionExpiredFlagChanged();
                            setState(AuthState::Unauthenticated);
                            emit sessionExpired();
                        });
@@ -55,6 +57,8 @@ void AuthManager::login(const QString& username, const QString& password, bool r
 
     m_errorMessage.clear();
     emit errorMessageChanged();
+    m_sessionExpired = false;
+    emit sessionExpiredFlagChanged();
     setState(AuthState::LoggingIn);
 
     m_api->login(username, password,
@@ -71,6 +75,11 @@ void AuthManager::login(const QString& username, const QString& password, bool r
                      handleAuthError(message);
                      emit loginFailed(message);
                  });
+}
+
+void AuthManager::requestLogout()
+{
+    emit logoutConfirmationRequested();
 }
 
 void AuthManager::logout()
@@ -182,7 +191,11 @@ void AuthManager::scheduleTokenRefresh()
 
     if (m_tokens.expiresIn <= 0) return;
 
-    int refreshInMs = qMax(10, m_tokens.expiresIn - 120) * 1000;
+    // Refresh 20% before expiry, capped at 120 s for long-lived tokens.
+    // This keeps the timer sensible for short test tokens (e.g. 30 s → fires at 24 s)
+    // while preserving the 2-minute head-start for production tokens.
+    const int marginSecs = qMin(120, m_tokens.expiresIn / 5);
+    const int refreshInMs = qMax(5, m_tokens.expiresIn - marginSecs) * 1000;
 
     qDebug() << "[AuthManager] Scheduling token refresh in" << refreshInMs / 1000 << "seconds";
     m_refreshTimer.start(refreshInMs);
@@ -204,6 +217,7 @@ void AuthManager::clearSession()
 
 AuthState AuthManager::state() const { return m_state; }
 QString AuthManager::errorMessage() const { return m_errorMessage; }
+bool AuthManager::isSessionExpired() const { return m_sessionExpired; }
 QString AuthManager::username() const { return m_session.username; }
 QString AuthManager::displayName() const { return m_session.displayName; }
 QString AuthManager::email() const { return m_session.email; }

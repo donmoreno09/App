@@ -39,7 +39,7 @@ Rectangle {
             anchors.fill: parent
 
             ShapePath {
-                fillColor:   Theme.colors.loginCard
+                fillColor:   Theme.colors.whiteA10
                 strokeColor: Theme.colors.whiteA10
                 strokeWidth: card.borderWidth
                 startX: 0; startY: 0
@@ -93,6 +93,14 @@ Rectangle {
                 Layout.fillWidth: true
                 visible: AuthManager.state !== AuthStateEnum.AutoLoggingIn
                 spacing: Theme.spacing.s4
+
+                UI.AlertBanner {
+                    Layout.fillWidth: true
+                    visible: AuthManager.sessionExpired
+                    variant: UI.AlertBannerStyles.Error
+                    title:   qsTr("Your session has ended.")
+                    message: qsTr("To continue, please log in again.")
+                }
 
                 UI.AlertBanner {
                     Layout.fillWidth: true

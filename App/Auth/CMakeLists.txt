@@ -11,8 +11,9 @@ set(cpp_files
 )
 
 set(qml_files
-    UI/LoginPage.qml
-    UI/UserMenuPopup.qml
+    ui/LoginPage.qml
+    ui/UserMenuPopup.qml
+    ui/LogoutDialog.qml
 )
 
 qt_add_qml_module(app_auth
@@ -33,9 +34,9 @@ target_link_libraries(app_auth
     PUBLIC
         Qt6::Qml
     PRIVATE
-        app_networking
         Qt6::Core
         Qt6::Quick
         Qt6::Gui
         app_features_titlebar
+        app_networking
 )

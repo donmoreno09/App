@@ -25,7 +25,7 @@
 #include <Networking/HttpClient.h>
 #include <QtQml/qqmlextensionplugin.h>
 
-Q_IMPORT_QML_PLUGIN(App_AuthPlugin)
+// Q_IMPORT_QML_PLUGIN(App_AuthPlugin)
 
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
 

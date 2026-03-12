@@ -231,7 +231,7 @@ UI.GlobalBackgroundConsumer {
 
             UserMenuPopup {
                 id: userMenu
-                x: parent.width + Theme.spacing.s2
+                x: parent.width + Theme.spacing.s10
                 y: parent.height - implicitHeight
             }
         }

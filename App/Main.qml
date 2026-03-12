@@ -242,6 +242,15 @@ ApplicationWindow {
         mapReference: mapHost
     }
 
+    LogoutDialog {
+        id: logoutDialog
+    }
+
+    Connections {
+        target: AuthManager
+        function onLogoutConfirmationRequested() { logoutDialog.open() }
+    }
+
     // Auth guard — covers entire window when not authenticated
     Loader {
         anchors.fill: parent
