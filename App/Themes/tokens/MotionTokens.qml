@@ -11,6 +11,7 @@ import QtQuick 6.8
 QtObject {
     // Semantic Tokens
     readonly property int pulseMs: 1000
+    readonly property int interactiveMs: 150
     readonly property int panelTransitionMs: 220
     readonly property real panelTransitionEasing: Easing.OutCubic
 }

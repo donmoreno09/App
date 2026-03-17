@@ -3,6 +3,7 @@ qt_add_library(app_components STATIC)
 set(qml_files
     Avatar.qml
     ButtonOld.qml
+    Cluster.qml
     ComboBox.qml
     DateTime.qml
     GlobalBackground.qml
