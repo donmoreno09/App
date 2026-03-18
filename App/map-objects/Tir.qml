@@ -5,6 +5,7 @@ import QtQuick.Controls 6.8
 
 import App 1.0
 import App.Themes 1.0
+import App.Components 1.0
 import App.Features.TitleBar 1.0
 import App.Features.SidePanel 1.0
 import App.Features.TrackPanel 1.0
@@ -31,12 +32,14 @@ MapItemGroup {
         anchorPoint.x: sourceItem.width / 2
         anchorPoint.y: sourceItem.height / 2
 
-        sourceItem: CircleMarker {
-            color: Theme.colors.accent
-            iconColor: Theme.colors.white
-            iconSource: "qrc:/App/assets/icons/fa/truck.svg"
+        sourceItem: TrackIcon {
+            domain: TrackIcon.Land
+            severity: TrackIcon.Neutral
+            motion: TrackIcon.Moving
+            ui: root.state === 'STALE' ? TrackIcon.Disabled : TrackIcon.Default
+            heading: cog
             labelText: root.operationCode
-            heading: root.cog
+
             onTapped: {
                 SidePanelController.openOrRefresh(Routes.TirPanel)
                 SelectedTrackState.select(root.tirModel.getEditableTir(root.index))

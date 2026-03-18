@@ -145,8 +145,7 @@ int main(int argc, char *argv[])
 
     // // --- HTTP VesselFinder Service ---
     auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
-    QString endpoint = "http://127.0.0.1:8000/tracks";
-    vesselHttp->initialize(endpoint, 2000);
+    vesselHttp->initialize(appConfig.vesselFinderBaseUrl + "/simulation/" + appConfig.vesselFinderSimId + "/vessels", 2000);
     vesselHttp->registerParser(new HttpAisParser());
 
     engine.loadFromModule("App", "Main");

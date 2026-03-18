@@ -2,6 +2,9 @@ import QtQuick 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
 
+import App.Themes 1.0
+import App.Features.Map 1.0
+
 MapPolyline {
     id: root
     z: -1
@@ -15,7 +18,7 @@ MapPolyline {
     property real freshOpacityLine: 0.7
 
     line.width: root.lineWidth
-    line.color: "black"
+    line.color: MapController._currentPlugin.isDark ?  "#B1BAFF" :  "#0D27F2" // for now these colors are hardcoded, check isDark comment in MapPlugins file
     opacity: root.state === "STALE" ? root.staleOpacityLine : root.freshOpacityLine
     antialiasing: true
     visible: path.length > 1

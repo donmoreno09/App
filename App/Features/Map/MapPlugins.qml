@@ -20,14 +20,23 @@ QtObject {
         return cachePath.length > 0 ? (cachePath + "/osm_cache") : ""
     }
 
-    readonly property Plugin osm: Plugin {
-        name: "osm"
-        locales: "it"
+    component CustomPlugin : Plugin {
+        // Adhoc to tell whether the map is a dark variant;
+        // prefrerably use the theming system but it'll require major refactor
+        // for many components
+        required property bool isDark
     }
 
-    readonly property Plugin osmDefault: Plugin {
+    readonly property CustomPlugin osm: CustomPlugin {
         name: "osm"
         locales: "it"
+        isDark: false
+    }
+
+    readonly property CustomPlugin osmDefault: CustomPlugin {
+        name: "osm"
+        locales: "it"
+        isDark: false
 
         PluginParameter {
             name: "osm.mapping.providersrepository.disabled"
@@ -40,8 +49,29 @@ QtObject {
         }
     }
 
-    readonly property Plugin maplibreSatellite: Plugin {
+    readonly property CustomPlugin maplibreLight: CustomPlugin {
         name: "maplibre"
+        isDark: false
+
+        PluginParameter {
+           name: "maplibre.map.styles"
+           value: "https://api.maptiler.com/maps/019cb918-c81c-7afe-b5ca-eee71c1bd607/style.json?key=r8wW6WpMdHaIGV3JI9Ov"
+        }
+    }
+
+    readonly property CustomPlugin maplibreDark: CustomPlugin {
+        name: "maplibre"
+        isDark: true
+
+        PluginParameter {
+           name: "maplibre.map.styles"
+           value: "https://api.maptiler.com/maps/019cb835-5526-73d7-9426-fc6c2a697036/style.json?key=r8wW6WpMdHaIGV3JI9Ov"
+        }
+    }
+
+    readonly property CustomPlugin maplibreSatellite: CustomPlugin {
+        name: "maplibre"
+        isDark: true
 
         PluginParameter {
            name: "maplibre.map.styles"
