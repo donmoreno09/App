@@ -9,7 +9,7 @@ class Tir : public BaseTrack
 {
 public:
     QString operationCode;  // operationCode:  string
-    QString sourceName;     // sourceName: string
+    QString sourceName;     // sourceName:     string
     double vel;             // vel:            number
 };
 

@@ -19,7 +19,11 @@ BaseMapLayer {
         model: trackMapLayer.trackModel
 
         delegate: Track {
+            // Model properties
+            required property string name
+
             trackModel: trackMapLayer.trackModel
+            uiName: name
         }
     }
 

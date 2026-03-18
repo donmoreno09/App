@@ -15,16 +15,21 @@ import "qrc:/App/Features/SidePanel/routes.js" as Routes
 MapItemGroup {
     id: root
 
+    // Model properties
+    required property string trackUid
     required property string code
     required property geoCoordinate pos
     required property double cog
     required property string state
-    required property int trackNumber
 
     // Index Data
     required property int index
     required property TrackModel trackModel
     required property var history
+
+    // QML properties
+    required property string uiName
+    readonly property bool isSelected: SelectedTrackState.selectedItem && SelectedTrackState.selectedItem.trackUid === root.trackUid
 
     MapQuickItem {
         id: track
@@ -34,12 +39,17 @@ MapItemGroup {
         anchorPoint.y: sourceItem.height / 2
 
         sourceItem: TrackIcon {
+            heading: root.cog
+            labelText: root.uiName
             domain: TrackIcon.Cruise
             severity: TrackIcon.Neutral
             motion: TrackIcon.Moving
-            ui: root.state === 'STALE' ? TrackIcon.Disabled : TrackIcon.Default
-            heading: root.cog
-            labelText: "T" + root.trackNumber.toString()
+            ui: {
+                if (isSelected) return TrackIcon.Selected
+                if (hovered) return TrackIcon.Hover
+                if (root.state === 'STALE') return TrackIcon.Disabled
+                return TrackIcon.Default
+            }
 
             onTapped: {
                 SidePanelController.openOrRefresh(Routes.TrackPanel)

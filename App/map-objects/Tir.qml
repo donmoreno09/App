@@ -15,6 +15,7 @@ import "qrc:/App/Features/SidePanel/routes.js" as Routes
 MapItemGroup {
     id: root
 
+    // Model properties
     required property string operationCode
     required property geoCoordinate pos
     required property double cog
@@ -25,6 +26,9 @@ MapItemGroup {
     required property TirModel tirModel
     required property var history
 
+    // QML properties
+    readonly property bool isSelected: SelectedTrackState.selectedItem && SelectedTrackState.selectedItem.operationCode === root.operationCode
+
     MapQuickItem {
         id: tir
 
@@ -33,12 +37,17 @@ MapItemGroup {
         anchorPoint.y: sourceItem.height / 2
 
         sourceItem: TrackIcon {
+            heading: cog
+            labelText: root.operationCode
             domain: TrackIcon.Land
             severity: TrackIcon.Neutral
             motion: TrackIcon.Moving
-            ui: root.state === 'STALE' ? TrackIcon.Disabled : TrackIcon.Default
-            heading: cog
-            labelText: root.operationCode
+            ui: {
+                if (isSelected) return TrackIcon.Selected
+                if (hovered) return TrackIcon.Hover
+                if (root.state === 'STALE') return TrackIcon.Disabled
+                return TrackIcon.Default
+            }
 
             onTapped: {
                 SidePanelController.openOrRefresh(Routes.TirPanel)
