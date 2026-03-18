@@ -177,6 +177,8 @@ add_subdirectory(Networking)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
+        app_components
+        app_componentsplugin
         app_logger
         app_networking
 )

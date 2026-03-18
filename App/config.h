@@ -10,6 +10,8 @@ struct AppConfig {
     QString mqttHost;
     int     mqttPort;
     QString restBaseUrl;
+    QString vesselFinderBaseUrl;
+    QString vesselFinderSimId;
 
     // SignalR settings
     QString signalRHost;
@@ -39,9 +41,11 @@ static AppConfig loadConfig()
     QSettings s(userCfgPath, QSettings::IniFormat);
 
     AppConfig cfg;
-    cfg.mqttHost      = s.value("mqtt/host", "localhost").toString();
-    cfg.mqttPort      = s.value("mqtt/port", 1883).toInt();
-    cfg.restBaseUrl   = s.value("rest/baseUrl", "http://localhost:7000").toString();
+    cfg.mqttHost            = s.value("mqtt/host", "localhost").toString();
+    cfg.mqttPort            = s.value("mqtt/port", 1883).toInt();
+    cfg.restBaseUrl         = s.value("rest/baseUrl", "http://localhost:7000").toString();
+    cfg.vesselFinderBaseUrl = s.value("rest/vesselFinderBaseUrl", "http://localhost:8000").toString();
+    cfg.vesselFinderSimId   = s.value("rest/vesselFinderSimId", "not-set").toString();
 
     // Load SignalR settings
     cfg.signalRHost   = s.value("signalr/host", "localhost").toString();
