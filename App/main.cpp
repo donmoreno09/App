@@ -10,7 +10,7 @@
 #include <core/TrackManager.h>
 #include <connections/ApiEndpoints.h>
 #include <connections/http/vesselfinderhttpservice.h>
-#include <connections/http/parser/httpaisparser.h>
+#include <connections/http/parser/HttpVesselParser.h>
 #include <connections/mqtt/MqttClientService.h>
 #include <connections/mqtt/parser/TrackParser.h>
 #include <connections/mqtt/parser/TirParser.h>
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     // // --- HTTP VesselFinder Service ---
     auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
     vesselHttp->initialize(appConfig.vesselFinderBaseUrl + "/simulation/" + appConfig.vesselFinderSimId + "/vessels", 2000);
-    vesselHttp->registerParser(new HttpAisParser());
+    vesselHttp->registerParser(new HttpVesselParser());
 
     engine.loadFromModule("App", "Main");
 

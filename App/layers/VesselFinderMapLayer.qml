@@ -8,30 +8,30 @@ import App.Features.Map 1.0
 
 BaseMapLayer {
     id: root
-    _mapLayer: trackMapLayer
+    _mapLayer: vesselMapLayer
     z: Theme.elevation.layerTracks
 
-    property alias trackMapLayer: trackMapLayer
+    property alias vesselMapLayer: vesselMapLayer
 
     visible: true
 
     MapItemView {
-        model: trackMapLayer.trackModel
+        model: vesselMapLayer.vesselModel
 
-        delegate: Track {
-            trackModel: trackMapLayer.trackModel
+        delegate: Vessel {
+            vesselModel: vesselMapLayer.vesselModel
         }
     }
 
-    TrackMapLayer {
-        id: trackMapLayer
+    VesselMapLayer {
+        id: vesselMapLayer
         layerName: Layers.vesselFinderMapLayer()
 
         Component.onCompleted: {
-            LayerManager.registerLayer(trackMapLayer)
-            TrackManager.registerLayer("vesselfinder", trackMapLayer)
-            VesselFinderHttpService.registerLayer(Layers.vesselFinderMapLayer(), trackMapLayer)
-            trackMapLayer.map = MapController.map
+            LayerManager.registerLayer(vesselMapLayer)
+            TrackManager.registerLayer("vesselfinder", vesselMapLayer)
+            VesselFinderHttpService.registerLayer(Layers.vesselFinderMapLayer(), vesselMapLayer)
+            vesselMapLayer.map = MapController.map
         }
     }
 }

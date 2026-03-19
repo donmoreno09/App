@@ -51,6 +51,7 @@ set(qml_files
     map-objects/PoiRectangle.qml
     map-objects/PoiEllipse.qml
     map-objects/PoiPolygon.qml
+    map-objects/Vessel.qml
     map-objects/MOCPoiPoint.qml
 
     # Layers
@@ -118,6 +119,8 @@ set(cpp_sources
     layers/TrackMapLayer.h
     layers/TirMapLayer.cpp
     layers/TirMapLayer.h
+    layers/VesselMapLayer.h
+    layers/VesselMapLayer.cpp
 
     # Entities
     entities/AlertZone.h
@@ -155,6 +158,8 @@ set(cpp_sources
     models/TruckNotificationModel.cpp
     models/TirModel.cpp
     models/TirModel.h
+    models/VesselModel.h
+    models/VesselModel.cpp
 )
 
 qt_add_qml_module(${PROJECT_NAME}
@@ -166,10 +171,6 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         ${APP_ASSETS}
         config/mqtt_config.json
-        SOURCES entities/Vessel.h
-        SOURCES models/VesselModel.h models/VesselModel.cpp
-        SOURCES layers/VesselMapLayer.h layers/VesselMapLayer.cpp
-        SOURCES connections/http/parser/HttpVesselParser.h
 )
 
 add_subdirectory(Components)
