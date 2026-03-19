@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QPointer>
-#include <entities/Track.h>
+#include <entities/Vessel.h>
 #include <layers/BaseTrackMapLayer.h>
 
 #include "./httpvesselfindertrackspoller.h"
@@ -25,7 +25,7 @@ public:
     void initialize(const QString& endpointUrl, int pollMs = 2000);
 
     Q_INVOKABLE void registerLayer(const QString& name, QObject* layer);
-    Q_INVOKABLE void registerParser(IMessageParser<Track>* parser);
+    Q_INVOKABLE void registerParser(IMessageParser<Vessel>* parser);
 
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
@@ -40,10 +40,10 @@ private slots:
     void onError(const QString& err);
 
 private:
-    void clearTracks();
+    void clearVessels();
 
     HttpVesselFinderTracksPoller* poller_ = nullptr;
-    IMessageParser<Track>* parser_ = nullptr;
+    IMessageParser<Vessel>* parser_ = nullptr;
     QPointer<BaseTrackMapLayer> targetLayer_;
 
     bool running_ = false;

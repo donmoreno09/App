@@ -169,6 +169,7 @@ qt_add_qml_module(${PROJECT_NAME}
         SOURCES entities/Vessel.h
         SOURCES models/VesselModel.h models/VesselModel.cpp
         SOURCES layers/VesselMapLayer.h layers/VesselMapLayer.cpp
+        SOURCES connections/http/parser/HttpVesselParser.h
 )
 
 add_subdirectory(Components)
