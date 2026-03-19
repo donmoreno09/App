@@ -168,6 +168,7 @@ qt_add_qml_module(${PROJECT_NAME}
         config/mqtt_config.json
         SOURCES entities/Vessel.h
         SOURCES models/VesselModel.h models/VesselModel.cpp
+        SOURCES layers/VesselMapLayer.h layers/VesselMapLayer.cpp
 )
 
 add_subdirectory(Components)
