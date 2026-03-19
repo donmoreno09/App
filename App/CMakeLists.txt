@@ -135,6 +135,7 @@ set(cpp_sources
     entities/TruckNotification.h
     entities/Tir.h
     entities/Velocity.h
+    entities/Vessel.h
     entities/IPersistable.h
 
     # Qt Models
@@ -165,6 +166,8 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         ${APP_ASSETS}
         config/mqtt_config.json
+        SOURCES entities/Vessel.h
+        SOURCES models/VesselModel.h models/VesselModel.cpp
 )
 
 add_subdirectory(Components)
