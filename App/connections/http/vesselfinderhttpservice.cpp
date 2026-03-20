@@ -1,7 +1,7 @@
 #include "./vesselfinderhttpservice.h"
 #include <QDebug>
 #include <QMetaObject>
-#include <layers/TrackMapLayer.h>
+#include <layers/VesselMapLayer.h>
 
 VesselFinderHttpService::VesselFinderHttpService(QObject* parent)
     : QObject(parent)
@@ -38,7 +38,7 @@ void VesselFinderHttpService::registerLayer(const QString& name, QObject* layer)
     qDebug() << "[VF-HTTP] Layer registered:" << targetLayer_.data();
 }
 
-void VesselFinderHttpService::registerParser(IMessageParser<Track>* parser)
+void VesselFinderHttpService::registerParser(IMessageParser<Vessel>* parser)
 {
     parser_ = parser;
     qDebug() << "[VF-HTTP] Parser registered";
@@ -70,7 +70,7 @@ void VesselFinderHttpService::stop()
 
     running_ = false;
     poller_->stop();
-    clearTracks();   // deferred
+    clearVessels();   // deferred
 
     emit runningChanged(false);
 
@@ -93,25 +93,25 @@ void VesselFinderHttpService::onHttpData(const QByteArray& data)
         return;
     }
 
-    auto* trackLayer = qobject_cast<TrackMapLayer*>(targetLayer_.data());
-    if (!trackLayer) {
-        qWarning() << "[VF-HTTP] Target layer is not TrackMapLayer";
+    auto* vesselLayer = qobject_cast<VesselMapLayer*>(targetLayer_.data());
+    if (!vesselLayer) {
+        qWarning() << "[VF-HTTP] Target layer is not VesselMapLayer";
         return;
     }
 
-    QVector<Track> tracks = parser_->parse(data);
+    QVector<Vessel> vessels = parser_->parse(data);
 
-    auto* model = trackLayer->trackModel();
+    auto* model = vesselLayer->vesselModel();
     if (!model)
         return;
 
     QMetaObject::invokeMethod(
         model,
-        [model, tracks]() {
-            model->upsert(tracks);
+        [model, vessels]() {
+            model->upsert(vessels);
         },
         Qt::QueuedConnection
-    );
+        );
 }
 
 void VesselFinderHttpService::onError(const QString& err)
@@ -120,18 +120,18 @@ void VesselFinderHttpService::onError(const QString& err)
     qWarning() << "[VF-HTTP] Poll error:" << err;
 }
 
-void VesselFinderHttpService::clearTracks()
+void VesselFinderHttpService::clearVessels()
 {
     if (!targetLayer_) {
-        qDebug() << "[VF-HTTP] clearTracks(): layer destroyed, skipping";
+        qDebug() << "[VF-HTTP] clearVessels(): layer destroyed, skipping";
         return;
     }
 
-    auto* trackLayer = qobject_cast<TrackMapLayer*>(targetLayer_.data());
-    if (!trackLayer)
+    auto* vesselLayer = qobject_cast<VesselMapLayer*>(targetLayer_.data());
+    if (!vesselLayer)
         return;
 
-    auto* model = trackLayer->trackModel();
+    auto* model = vesselLayer->vesselModel();
 
     QMetaObject::invokeMethod(
         model,
@@ -139,5 +139,5 @@ void VesselFinderHttpService::clearTracks()
             model->clear();
         },
         Qt::QueuedConnection
-    );
+        );
 }

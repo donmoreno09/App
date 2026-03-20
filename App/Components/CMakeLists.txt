@@ -26,6 +26,7 @@ set(qml_files
     VerticalDivider.qml
     VerticalPadding.qml
     VerticalSpacer.qml
+    VesselIcon.qml
 
     accordion/Accordion.qml
     accordion/AccordionStyle.qml

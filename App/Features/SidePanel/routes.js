@@ -25,6 +25,7 @@ const ViGateServices = "viGate-services"
 const Notification = "notification"
 const TrackPanel = "trackpanel"
 const TirPanel = "tirpanel"
+const VesselPanel = "vesselpanel"
 const NotFound = "*";
 
 // MOC Pages
@@ -40,6 +41,7 @@ const routes = {
   [AlertZone]: "qrc:/App/Features/AlertZone/AlertZonePanel.qml",
   [TrackPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
   [TirPanel]: "qrc:/App/Features/TrackPanel/TrackPanel.qml",
+  [VesselPanel]: "qrc:/App/Features/VesselPanel/VesselPanel.qml",
   [MOCPoiStaticPanel]: "qrc:/App/Features/Poi/MOCPoiPanel.qml",
   [DateTimeTest]: "qrc:/App/Playground/DateTimePickerPanel.qml",
   [ToggleTest]: "qrc:/App/Playground/TogglePanel.qml",
