@@ -45,7 +45,8 @@ static AppConfig loadConfig()
     cfg.mqttPort            = s.value("mqtt/port", 1883).toInt();
     cfg.restBaseUrl         = s.value("rest/baseUrl", "http://localhost:7000").toString();
     cfg.vesselFinderBaseUrl = s.value("rest/vesselFinderBaseUrl", "http://localhost:8000").toString();
-    cfg.vesselFinderSimId   = s.value("rest/vesselFinderSimId", "69bbb2c0f517a25246937dae").toString();
+    cfg.vesselFinderSimId   = s.value("rest/vesselFinderSimId", "").toString();
+    if (cfg.vesselFinderSimId == "put-simulation-id-here") cfg.vesselFinderSimId = "";
 
     // Load SignalR settings
     cfg.signalRHost   = s.value("signalr/host", "localhost").toString();
