@@ -19,12 +19,13 @@ Item {
     property int motion
     required property int ui
 
-
     property string labelText: ""
     required property real heading
     property real baseRotationDeg: 0
 
     signal tapped()
+    signal hoverChanged(bool hovered)
+    property alias hovered: hoverHandler.hovered
 
     width: Theme.spacing.s12
     height: Theme.spacing.s12
@@ -39,22 +40,44 @@ Item {
         rotation: baseRotationDeg + heading - (MapController.map ? MapController.map.bearing : 0)
     }
 
-    Text {
+    Rectangle {
+        id: labelBubble
         visible: root.labelText !== ""
-        text: root.labelText
-        font.pixelSize: 12
-        color: MapController._currentPlugin.isDark ? Theme.colors.white : Theme.colors.black
+
         anchors.top: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        horizontalAlignment: Text.AlignHCenter
-        wrapMode: Text.Wrap
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: Theme.colors.transparent
+
+        width: Math.min(Theme.spacing.s16, Math.max(root.width, label.implicitWidth + 8))
+        height: label.implicitHeight + 8
+
+        Text {
+            id: label
+
+            anchors.fill: parent
+            anchors.margins: 4
+
+            text: root.labelText
+            font.pixelSize: Theme.typography.fontSize125
+            color: MapController._currentPlugin.isDark ? Theme.colors.white : Theme.colors.black
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
+            maximumLineCount: 1
+            elide: Text.ElideRight
+        }
     }
 
     TapHandler {
         acceptedButtons: Qt.LeftButton
         gesturePolicy: TapHandler.ReleaseWithinBounds
         onTapped: root.tapped()
+    }
+
+    HoverHandler {
+        id: hoverHandler
+        onHoveredChanged: root.hoverChanged(hovered)
     }
 
     function _resolveUrl(): string {

@@ -19,7 +19,11 @@ BaseMapLayer {
         model: trackMapLayer.trackModel
 
         delegate: Track {
+            // Model properties
+            required property int trackNumber
+
             trackModel: trackMapLayer.trackModel
+            uiName: "T" + trackNumber.toString()
         }
     }
 

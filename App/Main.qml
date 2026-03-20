@@ -19,6 +19,7 @@ import App.Features.Notifications 1.0
 import App.Features.MapToolbar 1.0
 import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
+import App.Features.TrackPanel 1.0
 
 ApplicationWindow {
     id: app
@@ -88,6 +89,17 @@ ApplicationWindow {
 
         function onRevisionChanged() {
             PoiOptions.updateTranslations()
+        }
+    }
+
+    Connections {
+        target: SidePanelController
+
+        function onRouteChanged(route: string) {
+            // Remove selected track in trackpanel when changed to an unrelated panel
+            if (!route.startsWith('trackpanel')) {
+                SelectedTrackState.selectedItem = null
+            }
         }
     }
 
