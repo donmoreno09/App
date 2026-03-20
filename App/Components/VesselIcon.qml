@@ -52,7 +52,7 @@ Item {
     readonly property real midOffX: pxWidth  / 2 - antX
     readonly property real midOffY: pxLength / 2 - antY
 
-    readonly property real headingRad: (displayHeading + 45) * Math.PI / 180
+    readonly property real headingRad: (displayHeading + 44) * Math.PI / 180
 
     readonly property real shipCenterX: halfDiag + midOffX * Math.cos(headingRad) - midOffY * Math.sin(headingRad)
     readonly property real shipCenterY: halfDiag + midOffX * Math.sin(headingRad) + midOffY * Math.cos(headingRad)
@@ -70,7 +70,7 @@ Item {
         fillMode: Image.PreserveAspectFit
         smooth: true
         transform: Rotation {
-            angle:    root.displayHeading + 45
+            angle:    root.displayHeading + 44
             origin.x: root.antX
             origin.y: root.antY
         }

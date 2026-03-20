@@ -43,7 +43,7 @@ MapItemGroup {
         sourceItem: VesselIcon {
             domain:         TrackIcon.Cruise
             severity:       TrackIcon.Neutral
-            motion:         root.speed > 0.5 ? TrackIcon.Moving : TrackIcon.Stationary
+            motion:         TrackIcon.Moving
             ui: {
                 if (isSelected) return TrackIcon.Selected
                 if (hovered) return TrackIcon.Hover
