@@ -5,11 +5,18 @@ import QtPositioning 6.8
 import App 1.0
 import App.Themes 1.0
 import App.Components 1.0
+import App.Features.TitleBar 1.0
+import App.Features.SidePanel 1.0
+import App.Features.TrackPanel 1.0
+
+import "qrc:/App/Features/SidePanel/routes.js" as Routes
 
 MapItemGroup {
     id: root
 
     required property VesselModel vesselModel
+    required property int index
+    readonly property bool isSelected: SelectedTrackState.selectedItem && SelectedTrackState.selectedItem.mmsi === root.mmsi
 
     required property geoCoordinate pos
     required property double        displayHeading
@@ -24,6 +31,7 @@ MapItemGroup {
     required property int           shipWidth
     required property bool          hasDimensions
     required property var           history
+    required property string        mmsi
 
     MapQuickItem {
         id: vessel
@@ -36,7 +44,12 @@ MapItemGroup {
             domain:         TrackIcon.Cruise
             severity:       TrackIcon.Neutral
             motion:         root.speed > 0.5 ? TrackIcon.Moving : TrackIcon.Stationary
-            ui:             root.state === "STALE" ? TrackIcon.Disabled : TrackIcon.Default
+            ui: {
+                if (isSelected) return TrackIcon.Selected
+                if (hovered) return TrackIcon.Hover
+                if (root.state === 'STALE') return TrackIcon.Disabled
+                return TrackIcon.Default
+            }
             heading:        root.displayHeading
             labelText:      root.name
             displayHeading: root.displayHeading
@@ -47,6 +60,11 @@ MapItemGroup {
             shipLength:     root.shipLength
             shipWidth:      root.shipWidth
             hasDimensions:  root.hasDimensions
+
+            onTapped: {
+                SidePanelController.openOrRefresh(Routes.VesselPanel)
+                SelectedTrackState.select(root.vesselModel.getEditableVessel(root.index))
+            }
         }
     }
 

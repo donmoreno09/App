@@ -18,6 +18,7 @@ add_subdirectory(ViGateServices)
 add_subdirectory(ShipStowage)
 add_subdirectory(Poi)
 add_subdirectory(AlertZone)
+add_subdirectory(VesselPanel)
 
 # Modules need to be linked in order to be loaded using qrc.
 # Also, make sure that the RESOURCE_PREFIX of the module is the same as App's (which is "/").
@@ -44,4 +45,5 @@ target_link_libraries(${PROJECT_NAME}
         app_features_shipstowage
         app_features_poi
         app_features_alertzone
+        app_features_vesselpanel
 )

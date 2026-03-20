@@ -15,6 +15,8 @@ Item {
     property  real           baseRotationDeg: 0
 
     signal tapped()
+    signal hoverChanged(bool hovered)
+    readonly property alias hovered: trackIcon.hovered
 
     required property double displayHeading
     required property int    a
@@ -75,8 +77,10 @@ Item {
     }
 
     TrackIcon {
+        id: trackIcon
         x:      root.shipCenterX - root.pinSize / 2
         y:      root.shipCenterY - root.pinSize / 2
+        z: 1
         width:  root.pinSize
         height: root.pinSize
 
@@ -88,6 +92,7 @@ Item {
         labelText:        root.labelText
         baseRotationDeg:  root.baseRotationDeg
 
-        onTapped: root.tapped()
+        onTapped:        root.tapped()
+        onHoverChanged:  root.hoverChanged(hovered)
     }
 }

@@ -71,7 +71,7 @@ set(cpp_sources
     # Connections
     connections/interfaces/IMessageParser.h
 
-    connections/http/parser/httpaisparser.h
+    connections/http/parser/HttpVesselParser.h
     connections/http/httpvesselfindertrackspoller.cpp
     connections/http/httpvesselfindertrackspoller.h
     connections/http/vesselfinderhttpservice.cpp
@@ -171,6 +171,8 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         ${APP_ASSETS}
         config/mqtt_config.json
+        RESOURCES Features/VesselPanel/CMakeLists.txt
+        QML_FILES Features/VesselPanel/VesselPanel.qml
 )
 
 add_subdirectory(Components)
