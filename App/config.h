@@ -11,7 +11,10 @@ struct AppConfig {
     int     mqttPort;
     QString restBaseUrl;
     QString vesselFinderBaseUrl;
-    QString vesselFinderSimId;
+    bool    useVesselFinderSim;
+
+    // Used for testing purposes. Expected string if used: {simulationId}/vessels?any-potential-options
+    QString vesselsOverrideUri;
 
     // SignalR settings
     QString signalRHost;
@@ -45,7 +48,8 @@ static AppConfig loadConfig()
     cfg.mqttPort            = s.value("mqtt/port", 1883).toInt();
     cfg.restBaseUrl         = s.value("rest/baseUrl", "http://localhost:7000").toString();
     cfg.vesselFinderBaseUrl = s.value("rest/vesselFinderBaseUrl", "http://localhost:8000").toString();
-    cfg.vesselFinderSimId   = s.value("rest/vesselFinderSimId", "69bbb2c0f517a25246937dae").toString();
+    cfg.useVesselFinderSim  = s.value("rest/useVesselFinderSim", false).toBool();
+    cfg.vesselsOverrideUri  = s.value("rest/vesselsOverrideUri", "").toString(); // Expected string if used: {simulationId}/vessels?any-potential-options
 
     // Load SignalR settings
     cfg.signalRHost   = s.value("signalr/host", "localhost").toString();

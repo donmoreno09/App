@@ -15,6 +15,7 @@ void VesselFinderHttpService::initialize(const QString& endpointUrl, int pollMs)
         return;
     }
 
+    qDebug().noquote() << "[VF-HTTP] Initializing with endpoint:" << endpointUrl;
     poller_ = new HttpVesselFinderTracksPoller(endpointUrl, pollMs, this);
 
     connect(poller_, &HttpVesselFinderTracksPoller::dataReceived,
