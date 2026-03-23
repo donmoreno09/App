@@ -130,7 +130,9 @@ int main(int argc, char *argv[])
     // // --- HTTP VesselFinder Service ---
     auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
     vesselHttp->registerParser(new HttpVesselParser());
-    if (appConfig.vesselsOverrideUri != "") {
+    if (!appConfig.useVesselFinderSim) {
+        vesselHttp->initialize(appConfig.vesselFinderBaseUrl, 2000);
+    } else if (appConfig.vesselsOverrideUri != "") {
         vesselHttp->initialize(appConfig.vesselFinderBaseUrl + "/simulation/" + appConfig.vesselsOverrideUri, 2000);
     } else {
         HttpClient* httpClient = new HttpClient(&engine);
