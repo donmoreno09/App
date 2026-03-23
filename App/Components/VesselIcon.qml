@@ -30,12 +30,12 @@ Item {
 
     readonly property real zoomLevel: MapController.map ? MapController.map.zoomLevel : 8
 
-    readonly property real pinSize: Math.max(48 - (zoomLevel - 8) * 5, 30)
+    readonly property real pinSize: Math.max(48 - (zoomLevel - 8) * 5, 36)
 
-    readonly property real zoomScale: Math.pow(2, zoomLevel - 10)
+    readonly property real zoomScale: Math.pow(2, zoomLevel - 14)
 
-    readonly property real rawPxLength: hasDimensions ? Math.min(shipLength, 500) * zoomScale / 7 : 0
-    readonly property real rawPxWidth:  hasDimensions ? Math.min(shipWidth,  80)  * zoomScale / 7 : 0
+    readonly property real rawPxLength: hasDimensions ? Math.min(shipLength, 500) * zoomScale / 10 : 0
+    readonly property real rawPxWidth:  hasDimensions ? Math.min(shipWidth,  80)  * zoomScale / 10 : 0
 
     readonly property real zf:          Math.max(zoomLevel - 10, 0)
     readonly property real minPxLength: 4 + zf * 2
@@ -52,7 +52,7 @@ Item {
     readonly property real midOffX: pxWidth  / 2 - antX
     readonly property real midOffY: pxLength / 2 - antY
 
-    readonly property real headingRad: (displayHeading + 44) * Math.PI / 180
+    readonly property real headingRad: displayHeading * Math.PI / 180
 
     readonly property real shipCenterX: halfDiag + midOffX * Math.cos(headingRad) - midOffY * Math.sin(headingRad)
     readonly property real shipCenterY: halfDiag + midOffX * Math.sin(headingRad) + midOffY * Math.cos(headingRad)
@@ -70,7 +70,7 @@ Item {
         fillMode: Image.PreserveAspectFit
         smooth: true
         transform: Rotation {
-            angle:    root.displayHeading + 44
+            angle:    root.displayHeading
             origin.x: root.antX
             origin.y: root.antY
         }
