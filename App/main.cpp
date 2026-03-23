@@ -26,6 +26,8 @@
 
 Q_IMPORT_QML_PLUGIN(App_AuthPlugin)
 
+#include "HttpClient.h"
+
 int main(int argc, char *argv[])
 {
     // Set QSG_RHI_BACKEND (rendering backend) to OpenGL in order for MapLibre to work.
@@ -145,8 +147,32 @@ int main(int argc, char *argv[])
 
     // // --- HTTP VesselFinder Service ---
     auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");
-    vesselHttp->initialize(appConfig.vesselFinderBaseUrl + "/simulation/" + appConfig.vesselFinderSimId + "/vessels", 2000);
     vesselHttp->registerParser(new HttpVesselParser());
+    if (!appConfig.useVesselFinderSim) {
+        vesselHttp->initialize(appConfig.vesselFinderBaseUrl, 2000);
+    } else if (appConfig.vesselsOverrideUri != "") {
+        vesselHttp->initialize(appConfig.vesselFinderBaseUrl + "/simulation/" + appConfig.vesselsOverrideUri, 2000);
+    } else {
+        HttpClient* httpClient = new HttpClient(&engine);
+        httpClient->post(appConfig.vesselFinderBaseUrl + "/simulation", {}, [&vesselHttp, &engine, &appConfig](QRestReply& reply) {
+            if (!reply.isSuccess()) {
+                qDebug().noquote() << "[VesselFinder] Could not create simulation";
+                return;
+            }
+
+            auto doc = reply.readJson();
+            if (!doc || !doc->isObject()) {
+                qDebug().noquote() << "[VesselFinder] Unexpected JSON type while creating simulation";
+                return;
+            }
+
+            auto obj = doc->object();
+            QString simulationId = obj["simulationId"].toString();
+            qDebug().noquote() << "[VesselFinder] Created simulation with id:" << simulationId;
+
+            vesselHttp->initialize(appConfig.vesselFinderBaseUrl + "/simulation/" + simulationId + "/vessels", 2000);
+        });
+    }
 
     engine.loadFromModule("App", "Main");
 
