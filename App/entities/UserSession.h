@@ -12,19 +12,20 @@ class UserSession : public IPersistable
 {
 public:
     QString userId;
-    QString username;
-    QString displayName;
+    QString firstName;
+    QString lastName;
     QString email;
     QStringList roles;
     QStringList permissions;
 
-    bool isValid() const { return !userId.isEmpty() && !username.isEmpty(); }
+    QString displayName() const { return (firstName + " " + lastName).trimmed(); }
+    bool isValid() const { return !userId.isEmpty(); }
 
     void clear()
     {
         userId.clear();
-        username.clear();
-        displayName.clear();
+        firstName.clear();
+        lastName.clear();
         email.clear();
         roles.clear();
         permissions.clear();
@@ -34,8 +35,8 @@ public:
     {
         QJsonObject obj;
         obj["id"] = userId;
-        obj["username"] = username;
-        obj["displayName"] = displayName;
+        obj["firstName"] = firstName;
+        obj["lastName"] = lastName;
         obj["email"] = email;
         obj["roles"] = QJsonArray::fromStringList(roles);
         obj["permissions"] = QJsonArray::fromStringList(permissions);
@@ -45,8 +46,8 @@ public:
     void fromJson(const QJsonObject& obj) override
     {
         userId = obj["id"].toString();
-        username = obj["username"].toString();
-        displayName = obj["displayName"].toString();
+        firstName = obj["firstName"].toString();
+        lastName = obj["lastName"].toString();
         email = obj["email"].toString();
 
         roles.clear();

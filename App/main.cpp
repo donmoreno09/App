@@ -11,6 +11,9 @@
 #include <Auth/PermissionManager.h>
 #include <Auth/SecureTokenStorage.h>
 #include <Networking/apis/AuthApi.h>
+#include <models/AlertZoneModel.h>
+#include <models/PoiModel.h>
+#include <core/PoiOptions.h>
 #include <core/TrackManager.h>
 #include <connections/ApiEndpoints.h>
 #include <connections/http/vesselfinderhttpservice.h>
@@ -98,12 +101,38 @@ int main(int argc, char *argv[])
 
     // --- Auth Service ---
 
-    auto* authHttpClient = new HttpClient(&app);
-    auto* authApi = new AuthApi(authHttpClient, &app);
+    auto* authHttpClient = new HttpClient(&app);                              // auth endpoints only — no Bearer token needed
+    auto* appHttpClient  = new HttpClient(QUrl(appConfig.restBaseUrl), &app); // shared authenticated client for all protected APIs
+
+    auto* authApi      = new AuthApi(authHttpClient, &app);
     auto* tokenStorage = new SecureTokenStorage(&app);
 
-    auto* authManager = engine.singletonInstance<AuthManager*>("App.Auth", "AuthManager");
-    auto* permManager = engine.singletonInstance<PermissionManager*>("App.Auth", "PermissionManager");
+    auto* authManager    = engine.singletonInstance<AuthManager*>("App.Auth", "AuthManager");
+    auto* permManager    = engine.singletonInstance<PermissionManager*>("App.Auth", "PermissionManager");
+    auto* alertZoneModel = engine.singletonInstance<AlertZoneModel*>("App", "AlertZoneModel");
+    auto* poiModel       = engine.singletonInstance<PoiModel*>("App", "PoiModel");
+    auto* poiOptions     = engine.singletonInstance<PoiOptions*>("App", "PoiOptions");
+
+    // Single token connection covers all singletons via the shared client
+    QObject::connect(authManager, &AuthManager::tokenChanged, appHttpClient, [appHttpClient](const QByteArray& token) {
+        if (token.isEmpty())
+            appHttpClient->clearBearerToken();
+        else
+            appHttpClient->setBearerToken(token);
+    });
+
+    // Inject the shared client — no fetch yet, all singletons are inert until authenticated
+    alertZoneModel->initialize(appHttpClient);
+    poiModel->initialize(appHttpClient);
+    poiOptions->initialize(appHttpClient);
+
+    // Fetch data once authenticated, clear it on logout
+    QObject::connect(authManager, &AuthManager::loginSucceeded, alertZoneModel, &AlertZoneModel::fetch);
+    QObject::connect(authManager, &AuthManager::loginSucceeded, poiModel,       &PoiModel::fetch);
+    QObject::connect(authManager, &AuthManager::loginSucceeded, poiOptions,     &PoiOptions::fetchAll);
+    QObject::connect(authManager, &AuthManager::loggedOut,      alertZoneModel, &AlertZoneModel::clear);
+    QObject::connect(authManager, &AuthManager::loggedOut,      poiModel,       &PoiModel::clear);
+    QObject::connect(authManager, &AuthManager::loggedOut,      poiOptions,     &PoiOptions::clear);
 
     authManager->initialize(authApi, tokenStorage, permManager);
     authManager->tryAutoLogin();

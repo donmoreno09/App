@@ -18,7 +18,7 @@ class AuthApi : public BaseApi
 public:
     explicit AuthApi(HttpClient* client, QObject* parent = nullptr);
 
-    void login(const QString& username,
+    void login(const QString& email,
                const QString& password,
                std::function<void(const LoginResult&)> successCb,
                ErrorCb errorCb);

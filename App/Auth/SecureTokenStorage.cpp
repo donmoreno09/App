@@ -1,7 +1,6 @@
 #include "SecureTokenStorage.h"
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QDateTime>
 
 SecureTokenStorage::SecureTokenStorage(QObject* parent)
     : QObject(parent)
@@ -10,13 +9,10 @@ SecureTokenStorage::SecureTokenStorage(QObject* parent)
 
 void SecureTokenStorage::saveTokens(const AuthTokens& tokens)
 {
-    const qint64 expiresAt = QDateTime::currentSecsSinceEpoch() + tokens.expiresIn;
-
     m_settings.beginGroup("auth");
     m_settings.setValue("accessToken",  tokens.accessToken);
     m_settings.setValue("refreshToken", tokens.refreshToken);
-    m_settings.setValue("expiresIn",    tokens.expiresIn);
-    m_settings.setValue("expiresAt",    expiresAt);
+    m_settings.setValue("expiresAt",    tokens.expiresAt);
     m_settings.endGroup();
     m_settings.sync();
 }
@@ -26,9 +22,9 @@ AuthTokens SecureTokenStorage::loadTokens() const
     AuthTokens tokens;
     QSettings s;
     s.beginGroup("auth");
-    tokens.accessToken = s.value("accessToken").toString();
+    tokens.accessToken  = s.value("accessToken").toString();
     tokens.refreshToken = s.value("refreshToken").toString();
-    tokens.expiresIn = s.value("expiresIn", 0).toInt();
+    tokens.expiresAt    = s.value("expiresAt", 0).toLongLong();
     s.endGroup();
     return tokens;
 }

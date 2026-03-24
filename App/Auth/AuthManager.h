@@ -15,11 +15,11 @@ class AuthManager : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
-    QML_UNCREATABLE("Not intended for instantiation. Use it as a singleton.")
     QML_SINGLETON
 
     Q_PROPERTY(AuthState state READ state NOTIFY stateChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
+    Q_PROPERTY(bool sessionExpired READ isSessionExpired NOTIFY sessionExpiredFlagChanged)
 
     Q_PROPERTY(QString username READ username NOTIFY userChanged)
     Q_PROPERTY(QString displayName READ displayName NOTIFY userChanged)
@@ -33,13 +33,14 @@ public:
                     SecureTokenStorage* storage,
                     PermissionManager* permissions);
 
-    Q_INVOKABLE void login(const QString& username, const QString& password, bool rememberMe = false);
+    Q_INVOKABLE void login(const QString& email, const QString& password, bool rememberMe = false);
     Q_INVOKABLE void logout();
     Q_INVOKABLE void requestLogout();
     Q_INVOKABLE void tryAutoLogin();
 
     AuthState state() const;
     QString errorMessage() const;
+    bool isSessionExpired() const;
 
     QString username() const;
     QString displayName() const;
@@ -56,6 +57,7 @@ signals:
     void loginFailed(const QString& error);
     void loggedOut();
     void sessionExpired();
+    void sessionExpiredFlagChanged();
     void logoutConfirmationRequested();
     void tokenChanged(const QByteArray& token);
 
@@ -72,6 +74,7 @@ private:
 
     AuthState m_state = AuthState::Initializing;
     QString m_errorMessage;
+    bool m_sessionExpired = false;
     QTimer m_refreshTimer;
     bool m_rememberMe = false;
 

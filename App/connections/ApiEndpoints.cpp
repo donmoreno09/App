@@ -5,7 +5,7 @@ namespace ApiEndpoints {
 
     // Auth
     QString AuthLogin() { return BaseUrl + "/auth/login"; }
-    QString AuthRefresh() { return BaseUrl + "/auth/refresh"; }
+    QString AuthRefresh() { return BaseUrl + "/auth/refreshtoken/control-room"; }
     QString AuthLogout() { return BaseUrl + "/auth/logout"; }
 
     // TODO: Alert Zone: route to be updated when be is done

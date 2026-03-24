@@ -7,21 +7,36 @@ Q_DECLARE_METATYPE(QList<QGeoCoordinate>)
 AlertZoneModel::AlertZoneModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
 {
-    // Load alert zones
-    m_api.getMany([this](const QVector<AlertZone>& zones) {
-        beginResetModel();
+}
 
-        // Rebuild backing store
+void AlertZoneModel::initialize(HttpClient* client)
+{
+    Q_ASSERT(client);
+    m_httpClient = client;
+    m_api = new AlertZoneApi(client, this);
+}
+
+void AlertZoneModel::fetch()
+{
+    if (!m_api) return;
+
+    m_api->getMany([this](const QVector<AlertZone>& zones) {
+        beginResetModel();
         m_alertZones.clear();
         m_alertZones.reserve(zones.size());
-        for (auto& az : zones) {
+        for (auto& az : zones)
             m_alertZones.push_back(az);
-        }
-
         endResetModel();
-    }, [this](const ErrorResult& er) {
+    }, [](const ErrorResult& er) {
         qDebug().noquote() << "[AlertZoneModel] Could not load alert zones:" << er.message;
     });
+}
+
+void AlertZoneModel::clear()
+{
+    beginResetModel();
+    m_alertZones.clear();
+    endResetModel();
 }
 
 int AlertZoneModel::rowCount(const QModelIndex &parent) const
@@ -361,7 +376,7 @@ void AlertZoneModel::append(const QVariantMap &data)
     // Copy poi to prevent lambda from possibly referincing freed pointer
     auto azCopy = *m_alertZoneSave;
 
-    m_api.post(azCopy, [this, azCopy](const QString& uuid) mutable {
+    m_api->post(azCopy, [this, azCopy](const QString& uuid) mutable {
         const int index = m_alertZones.size();
         beginInsertRows(QModelIndex(), index, index);
 
@@ -383,7 +398,7 @@ void AlertZoneModel::update(const QVariantMap &data)
     buildAlertZoneSave(data);
     m_alertZoneSave->id = data.value("id").toString();
 
-    m_api.put(*m_alertZoneSave, [this] {
+    m_api->put(*m_alertZoneSave, [this] {
         int row = -1;
         for (int i = 0; i < m_alertZones.size(); i++) {
             if(m_alertZones[i].id == m_alertZoneSave->id){
@@ -412,7 +427,7 @@ void AlertZoneModel::remove(const QString &id)
 {
     setLoading(true);
 
-    m_api.remove(id, [this, id] {
+    m_api->remove(id, [this, id] {
         int row = -1;
         for (int i = 0; i < m_alertZones.size(); i++) {
             if (m_alertZones[i].id == id) {
@@ -447,7 +462,7 @@ QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
     discardChanges();
 
     m_oldAlertZone = std::make_unique<AlertZone>(m_alertZones[index]);
-    m_api.get(m_oldAlertZone->id, [this](const AlertZone& az) {
+    m_api->get(m_oldAlertZone->id, [this](const AlertZone& az) {
         // Find the corresponding row in the model
         int row = -1;
         for (int i = 0; i < m_alertZones.size(); i++) {

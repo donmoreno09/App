@@ -87,6 +87,10 @@ public:
 
     Q_INVOKABLE void printData();
 
+    void initialize(HttpClient* client);
+    void fetch();
+    void clear();
+
     bool loading() const;
     void setLoading(bool newLoading);
 
@@ -105,8 +109,8 @@ private:
     //       Update 2026/02/09: Okay the HttpClient class now returns the PoI.
     std::unique_ptr<Poi> m_poiSave = nullptr;
     std::unique_ptr<Poi> m_oldPoi = nullptr;
-    HttpClient m_httpClient{this};
-    PoiApi m_api{&m_httpClient};
+    HttpClient* m_httpClient = nullptr;
+    PoiApi*     m_api        = nullptr;
     QVector<Poi> m_pois;
     QPointer<ModelHelper> m_helper;
 

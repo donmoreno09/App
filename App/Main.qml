@@ -36,7 +36,6 @@ ApplicationWindow {
     property bool appLoaded: false
 
     Component.onCompleted: {
-        PoiOptions.fetchAll()
         WindowsNcController.attachToWindow(app)
         ShipStowageController.initialize(app)
         appLoaded = true

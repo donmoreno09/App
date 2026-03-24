@@ -76,6 +76,10 @@ public:
 
     Q_INVOKABLE void printData();
 
+    void initialize(HttpClient* client);
+    void fetch();
+    void clear();
+
     bool loading() const;
     void setLoading(bool newLoading);
 
@@ -92,8 +96,8 @@ private:
     // TODO: Read the TODO in PoiModel.h regarding these unique ptrs
     std::unique_ptr<AlertZone> m_alertZoneSave = nullptr;
     std::unique_ptr<AlertZone> m_oldAlertZone = nullptr;
-    HttpClient m_httpClient{this};
-    AlertZoneApi m_api{&m_httpClient};
+    HttpClient*    m_httpClient = nullptr;
+    AlertZoneApi*  m_api        = nullptr;
     QVector<AlertZone> m_alertZones;
     QPointer<ModelHelper> m_helper;
 

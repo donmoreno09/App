@@ -8,21 +8,36 @@ PoiModel::PoiModel(QObject *parent)
     : QAbstractListModel(parent)
     , m_helper(new ModelHelper(this))
 {
-    // Load pois
-    m_api.getMany([this](const QVector<Poi>& pois) {
-        beginResetModel();
+}
 
-        // Rebuild backing store
+void PoiModel::initialize(HttpClient* client)
+{
+    Q_ASSERT(client);
+    m_httpClient = client;
+    m_api = new PoiApi(client, this);
+}
+
+void PoiModel::fetch()
+{
+    if (!m_api) return;
+
+    m_api->getMany([this](const QVector<Poi>& pois) {
+        beginResetModel();
         m_pois.clear();
         m_pois.reserve(pois.size());
-        for (auto& poi : pois) {
+        for (auto& poi : pois)
             m_pois.push_back(poi);
-        }
-
         endResetModel();
-    }, [this](const ErrorResult& er) {
+    }, [](const ErrorResult& er) {
         qDebug().noquote() << "[PoiModel] Could not load pois:" << er.message;
     });
+}
+
+void PoiModel::clear()
+{
+    beginResetModel();
+    m_pois.clear();
+    endResetModel();
 }
 
 int PoiModel::rowCount(const QModelIndex &parent) const
@@ -360,7 +375,7 @@ void PoiModel::append(const QVariantMap &data)
     // Copy poi to prevent lambda from possibly referincing freed pointer
     auto poiCopy = *m_poiSave;
 
-    m_api.post(poiCopy, [this, poiCopy](const QString& uuid) mutable {
+    m_api->post(poiCopy, [this, poiCopy](const QString& uuid) mutable {
         const int index = m_pois.size();
         beginInsertRows(QModelIndex(), index, index);
 
@@ -382,7 +397,7 @@ void PoiModel::update(const QVariantMap &data)
     buildPoiSave(data);
     m_poiSave->id = data.value("id").toString();
 
-    m_api.put(*m_poiSave, [this] {
+    m_api->put(*m_poiSave, [this] {
         m_oldPoi = nullptr;
         emit updated();
         setLoading(false);
@@ -396,7 +411,7 @@ void PoiModel::remove(const QString &id)
 {
     setLoading(true);
 
-    m_api.remove(id, [this, id] {
+    m_api->remove(id, [this, id] {
         int row = -1;
         for (int i = 0; i < m_pois.size(); i++) {
             if (m_pois[i].id == id) {
@@ -431,7 +446,7 @@ QQmlPropertyMap *PoiModel::getEditablePoi(int index)
     discardChanges();
 
     m_oldPoi = std::make_unique<Poi>(m_pois[index]);
-    m_api.get(m_oldPoi->id, [this](const Poi& poi) {
+    m_api->get(m_oldPoi->id, [this](const Poi& poi) {
         // Find the corresponding row in the model
         int row = -1;
         for (int i = 0; i < m_pois.size(); i++) {

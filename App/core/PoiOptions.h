@@ -21,6 +21,9 @@ class PoiOptions : public QObject
 public:
     explicit PoiOptions(QObject* parent = nullptr);
 
+    void initialize(HttpClient* client);
+    void clear();
+
     Q_INVOKABLE void fetchAll();
     Q_INVOKABLE void updateTranslations(); // Check Main.qml; on language changed, it calls this method from there.
     Q_INVOKABLE QVariantList typesForCategory(int categoryKey) const;
@@ -35,8 +38,8 @@ signals:
     void operationalStatesChanged();
 
 private:
-    HttpClient m_httpClient{this};
-    PoiApi m_api{&m_httpClient};
+    HttpClient* m_httpClient = nullptr;
+    PoiApi*     m_api        = nullptr;
     QVariantList m_categories;
     QVariantList m_healthStatuses;
     QVariantList m_operationalStates;

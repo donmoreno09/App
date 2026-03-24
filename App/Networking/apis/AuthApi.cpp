@@ -6,7 +6,7 @@
 AuthApi::AuthApi(HttpClient* client, QObject* parent)
     : BaseApi(client, parent) {}
 
-void AuthApi::login(const QString& username,
+void AuthApi::login(const QString& email,
                     const QString& password,
                     std::function<void(const LoginResult&)> successCb,
                     ErrorCb errorCb)
@@ -14,7 +14,7 @@ void AuthApi::login(const QString& username,
     if (!ensureClient(errorCb)) return;
 
     QJsonObject body;
-    body["username"] = username;
+    body["email"]    = email;
     body["password"] = password;
 
     client()->post(ApiEndpoints::AuthLogin(), QJsonDocument(body).toJson(QJsonDocument::Compact), [
@@ -25,10 +25,9 @@ void AuthApi::login(const QString& username,
             if (!successCb) return;
 
             LoginResult result;
-            result.tokens.accessToken = obj["accessToken"].toString();
+            result.tokens.accessToken = obj["token"].toString();
             result.tokens.refreshToken = obj["refreshToken"].toString();
-            result.tokens.expiresIn = obj["expiresIn"].toInt();
-            result.user.fromJson(obj["user"].toObject());
+            result.user.fromJson(obj);
 
             successCb(result);
         });
@@ -52,10 +51,9 @@ void AuthApi::refresh(const QString& refreshToken,
             if (!successCb) return;
 
             LoginResult result;
-            result.tokens.accessToken = obj["accessToken"].toString();
+            result.tokens.accessToken = obj["token"].toString();
             result.tokens.refreshToken = obj["refreshToken"].toString();
-            result.tokens.expiresIn = obj["expiresIn"].toInt();
-            result.user.fromJson(obj["user"].toObject());
+            result.user.fromJson(obj);
 
             successCb(result);
         });

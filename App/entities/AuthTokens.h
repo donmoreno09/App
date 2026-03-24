@@ -2,11 +2,12 @@
 #define AUTHTOKENS_H
 
 #include <QString>
+#include <QtTypes>
 
 struct AuthTokens {
     QString accessToken;
     QString refreshToken;
-    int expiresIn = 0;
+    qint64  expiresAt = 0;  // Unix timestamp sourced from the JWT exp claim
 
     bool isValid() const { return !accessToken.isEmpty(); }
 
@@ -14,7 +15,7 @@ struct AuthTokens {
     {
         accessToken.clear();
         refreshToken.clear();
-        expiresIn = 0;
+        expiresAt = 0;
     }
 };
 

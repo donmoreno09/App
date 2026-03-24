@@ -2,6 +2,7 @@
 #include "SecureTokenStorage.h"
 #include "PermissionManager.h"
 #include "Networking/apis/AuthApi.h"
+#include "JwtUtils.h"
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -24,6 +25,8 @@ AuthManager::AuthManager(QObject* parent)
                        [this](const ErrorResult& err) {
                            qWarning() << "[AuthManager] Token refresh failed:" << err.message;
                            clearSession();
+                           m_sessionExpired = true;
+                           emit sessionExpiredFlagChanged();
                            setState(AuthState::Unauthenticated);
                            emit sessionExpired();
                        });
@@ -39,7 +42,7 @@ void AuthManager::initialize(AuthApi* api,
     m_permissions = permissions;
 }
 
-void AuthManager::login(const QString& username, const QString& password, bool rememberMe)
+void AuthManager::login(const QString& email, const QString& password, bool rememberMe)
 {
     m_rememberMe = rememberMe;
 
@@ -55,13 +58,15 @@ void AuthManager::login(const QString& username, const QString& password, bool r
 
     m_errorMessage.clear();
     emit errorMessageChanged();
+    m_sessionExpired = false;
+    emit sessionExpiredFlagChanged();
     setState(AuthState::LoggingIn);
 
-    m_api->login(username, password,
+    m_api->login(email, password,
                  [this](const LoginResult& result) {
                      handleLoginResult(result);
                      emit loginSucceeded();
-                     qDebug() << "[AuthManager] Login succeeded for" << m_session.username;
+                     qDebug() << "[AuthManager] Login succeeded for" << m_session.displayName();
                  },
                  [this](const ErrorResult& err) {
                      const QByteArray raw = err.reply ? err.reply->readAll() : QByteArray{};
@@ -82,7 +87,7 @@ void AuthManager::logout()
 {
     if (m_state != AuthState::Authenticated) return;
 
-    qDebug() << "[AuthManager] Logging out" << m_session.username;
+    qDebug() << "[AuthManager] Logging out" << m_session.displayName();
 
     if (m_api) {
         m_api->logout([]() {}, [](const ErrorResult&) {});
@@ -136,7 +141,7 @@ void AuthManager::tryAutoLogin()
                    [this](const LoginResult& result) {
                        handleLoginResult(result);
                        emit loginSucceeded();
-                       qDebug() << "[AuthManager] Auto-login succeeded for" << m_session.username;
+                       qDebug() << "[AuthManager] Auto-login succeeded for" << m_session.displayName();
                    },
                    [this](const ErrorResult& err) {
                        qWarning() << "[AuthManager] Auto-login failed:" << err.message;
@@ -154,8 +159,17 @@ void AuthManager::setState(AuthState newState)
 
 void AuthManager::handleLoginResult(const LoginResult& result)
 {
-    m_tokens = result.tokens;
+    m_tokens  = result.tokens;
     m_session = result.user;
+
+    const QJsonObject claims = JwtUtils::decodePayload(m_tokens.accessToken);
+    if (!claims.isEmpty()) {
+        m_session.roles.clear();
+        const QString iposRole = claims["IPOSRole"].toString();
+        if (!iposRole.isEmpty()) m_session.roles.append(iposRole);
+
+        m_tokens.expiresAt = claims["exp"].toInteger();
+    }
 
     if (m_storage && m_rememberMe) {
         m_storage->saveTokens(m_tokens);
@@ -185,9 +199,16 @@ void AuthManager::scheduleTokenRefresh()
 {
     m_refreshTimer.stop();
 
-    if (m_tokens.expiresIn <= 0) return;
+    if (m_tokens.expiresAt <= 0) return;
 
-    int refreshInMs = qMax(10, m_tokens.expiresIn - 120) * 1000;
+    const qint64 now = QDateTime::currentSecsSinceEpoch();
+    const qint64 ttl = m_tokens.expiresAt - now;
+
+    if (ttl <= 0) return;
+
+    // Refresh 20% before expiry, capped at 120 s for long-lived tokens.
+    const qint64 marginSecs  = qMin<qint64>(120, ttl / 5);
+    const int    refreshInMs = static_cast<int>(qMax<qint64>(5, ttl - marginSecs)) * 1000;
 
     qDebug() << "[AuthManager] Scheduling token refresh in" << refreshInMs / 1000 << "seconds";
     m_refreshTimer.start(refreshInMs);
@@ -209,8 +230,9 @@ void AuthManager::clearSession()
 
 AuthState AuthManager::state() const { return m_state; }
 QString AuthManager::errorMessage() const { return m_errorMessage; }
-QString AuthManager::username() const { return m_session.username; }
-QString AuthManager::displayName() const { return m_session.displayName; }
+bool AuthManager::isSessionExpired() const { return m_sessionExpired; }
+QString AuthManager::username() const { return m_session.email; }
+QString AuthManager::displayName() const { return m_session.displayName(); }
 QString AuthManager::email() const { return m_session.email; }
 QStringList AuthManager::roles() const { return m_session.roles; }
 QString AuthManager::accessToken() const { return m_tokens.accessToken; }

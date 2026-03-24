@@ -13,23 +13,48 @@ PoiOptions::PoiOptions(QObject* parent)
     buildTranslationMaps();
 }
 
+void PoiOptions::initialize(HttpClient* client)
+{
+    Q_ASSERT(client);
+    m_httpClient = client;
+    m_api = new PoiApi(client, this);
+}
+
+void PoiOptions::clear()
+{
+    rawCategoriesTypes  = {};
+    rawHealthStatuses   = {};
+    rawOperationalStates = {};
+
+    m_categories.clear();
+    m_healthStatuses.clear();
+    m_operationalStates.clear();
+    m_typesByCategory.clear();
+
+    emit categoriesChanged();
+    emit healthStatusesChanged();
+    emit operationalStatesChanged();
+}
+
 void PoiOptions::fetchAll() {
+    if (!m_api) return;
+
     // Parse categories + build typesByCategory from the same payload
-    m_api.getCategoriesTypes([this](const QJsonArray& arr) {
+    m_api->getCategoriesTypes([this](const QJsonArray& arr) {
         rawCategoriesTypes = arr;
         buildCategoriesTypes();
     }, [this](const ErrorResult& er) {
         qDebug().noquote() << "[PoiOptions] Could not load categories types:" << er.message;
     });
 
-    m_api.getHealthStatuses([this](const QJsonArray& arr) {
+    m_api->getHealthStatuses([this](const QJsonArray& arr) {
         rawHealthStatuses = arr;
         buildHealthStatuses();
     }, [this](const ErrorResult& er) {
         qDebug().noquote() << "[PoiOptions] Could not load health statuses:" << er.message;
     });
 
-    m_api.getOperationalStates([this](const QJsonArray& arr) {
+    m_api->getOperationalStates([this](const QJsonArray& arr) {
         rawOperationalStates = arr;
         buildOperationalStates();
     }, [this](const ErrorResult& er) {
