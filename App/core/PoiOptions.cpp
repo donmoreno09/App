@@ -15,26 +15,15 @@ PoiOptions::PoiOptions(QObject* parent)
 
 void PoiOptions::initialize(HttpClient* client)
 {
-    Q_ASSERT(client);
+    if (!client)
+        qFatal("[PoiOptions] initialize() called with null client");
+    if (m_api)
+        qFatal("[PoiOptions] initialize() called more than once");
+
     m_httpClient = client;
     m_api = new PoiApi(client, this);
 }
 
-void PoiOptions::clear()
-{
-    rawCategoriesTypes  = {};
-    rawHealthStatuses   = {};
-    rawOperationalStates = {};
-
-    m_categories.clear();
-    m_healthStatuses.clear();
-    m_operationalStates.clear();
-    m_typesByCategory.clear();
-
-    emit categoriesChanged();
-    emit healthStatusesChanged();
-    emit operationalStatesChanged();
-}
 
 void PoiOptions::fetchAll() {
     if (!m_api) return;

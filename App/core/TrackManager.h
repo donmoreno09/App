@@ -3,10 +3,9 @@
 
 #include <QObject>
 #include <QQmlEngine>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QHash>
 #include <layers/BaseTrackMapLayer.h>
+#include "Networking/HttpClient.h"
 
 class TrackManager : public  QObject
 {
@@ -18,6 +17,8 @@ public:
     explicit TrackManager(QObject* parent = nullptr);
     static TrackManager* instance();
 
+    void initialize(HttpClient* http);
+
     Q_INVOKABLE void registerLayer(const QString& track, QObject* layer);
 
     Q_INVOKABLE void unregisterLayer(const QString& track);
@@ -27,8 +28,6 @@ public:
 
     Q_INVOKABLE void deactivate(const QString& track);
     Q_INVOKABLE void deactivateHistory(const QString& topic, const QString& track_iridess_uid);
-
-    Q_INVOKABLE void deactivateSync(const QString& track);
 
     Q_INVOKABLE BaseTrackMapLayer* getLayer(const QString& track);
 
@@ -53,8 +52,8 @@ signals:
     void requestClearHistory(const QString& topic, const QString& uid);
 
 private:
+    HttpClient* m_http = nullptr;
     QHash<QString, BaseTrackMapLayer*> m_trackToLayer;
-    QNetworkAccessManager m_networkManager;
     QHash<QString, HistoryState> m_histState;
 
     static TrackManager* s_instance;

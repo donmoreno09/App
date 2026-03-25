@@ -11,7 +11,11 @@ AlertZoneModel::AlertZoneModel(QObject *parent)
 
 void AlertZoneModel::initialize(HttpClient* client)
 {
-    Q_ASSERT(client);
+    if (!client)
+        qFatal("[AlertZoneModel] initialize() called with null client");
+    if (m_api)
+        qFatal("[AlertZoneModel] initialize() called more than once");
+
     m_httpClient = client;
     m_api = new AlertZoneApi(client, this);
 }
@@ -32,12 +36,6 @@ void AlertZoneModel::fetch()
     });
 }
 
-void AlertZoneModel::clear()
-{
-    beginResetModel();
-    m_alertZones.clear();
-    endResetModel();
-}
 
 int AlertZoneModel::rowCount(const QModelIndex &parent) const
 {

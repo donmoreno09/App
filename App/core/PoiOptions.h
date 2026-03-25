@@ -22,7 +22,6 @@ public:
     explicit PoiOptions(QObject* parent = nullptr);
 
     void initialize(HttpClient* client);
-    void clear();
 
     Q_INVOKABLE void fetchAll();
     Q_INVOKABLE void updateTranslations(); // Check Main.qml; on language changed, it calls this method from there.

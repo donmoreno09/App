@@ -1,6 +1,4 @@
 #include "TrackManager.h"
-#include <QEventLoop>
-#include <QTimer>
 #include <connections/apiendpoints.h>
 
 TrackManager* TrackManager::s_instance = nullptr;
@@ -11,6 +9,11 @@ TrackManager* TrackManager::instance()
 {
     // Note: returns nullptr if the QML engine hasn't created the singleton yet.
     return s_instance;
+}
+
+void TrackManager::initialize(HttpClient* http)
+{
+    m_http = http;
 }
 
 void TrackManager::registerLayer(const QString &track, QObject *layer)
@@ -31,17 +34,13 @@ void TrackManager::unregisterLayer(const QString &track)
 
 void TrackManager::activate(const QString &track)
 {
-    const QUrl url(ApiEndpoints::TrackSenderStart(track));
-    QNetworkReply* reply = m_networkManager.post(QNetworkRequest(url), QByteArray{});
+    if (!m_http) return;
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, track]() {
-        reply->deleteLater();
-
-        if (reply->error() != QNetworkReply::NoError) {
-            qWarning() << "[TrackManager] Failed to activate track '" << track << "':" << reply->errorString();
+    m_http->post(ApiEndpoints::TrackSenderStart(track), QByteArray{}, [this, track](QRestReply& reply) {
+        if (!reply.isSuccess()) {
+            qWarning() << "[TrackManager] Failed to activate track '" << track << "': HTTP" << reply.httpStatus() << reply.errorString();
             return;
         }
-
         if (m_trackToLayer.contains(track)) {
             m_trackToLayer.value(track)->setActive(true);
             emit activated(track);
@@ -51,24 +50,16 @@ void TrackManager::activate(const QString &track)
 
 void TrackManager::activateHistory(const QString &topic, const QString &track_iridess_uidd)
 {
-    const QUrl url(ApiEndpoints::TrackHistorySenderStart(topic, track_iridess_uidd));
-    QNetworkReply* reply = m_networkManager.post(QNetworkRequest(url), QByteArray{});
+    if (!m_http) return;
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, topic, track_iridess_uidd]() {
-        reply->deleteLater();
-
-        if (reply->error() != QNetworkReply::NoError) {
-            qWarning() << "[TrackManager] Failed to activate track history for '" << topic << "':" << reply->errorString();
-
-            // Rollback state to Inactive if the request itself failed.
+    m_http->post(ApiEndpoints::TrackHistorySenderStart(topic, track_iridess_uidd), QByteArray{}, [this, topic, track_iridess_uidd](QRestReply& reply) {
+        if (!reply.isSuccess()) {
+            qWarning() << "[TrackManager] Failed to activate track history for '" << topic << "': HTTP" << reply.httpStatus() << reply.errorString();
             const QString k = key(topic, track_iridess_uidd);
             m_histState.insert(k, Inactive);
             emit historyStateChanged(topic, track_iridess_uidd, Inactive);
-
             return;
         }
-
-        // Request accepted: keep state in Loading until first history payload arrives.
         qDebug() << "[TrackManager] Activate History request OK (awaiting payload)";
         emit activatedHistory(topic, track_iridess_uidd);
     });
@@ -76,17 +67,14 @@ void TrackManager::activateHistory(const QString &topic, const QString &track_ir
 
 void TrackManager::deactivate(const QString &track)
 {
-    const QUrl url(ApiEndpoints::TrackSenderStop(track));
-    QNetworkReply* reply = m_networkManager.post(QNetworkRequest(url), QByteArray{});
+    if (!m_http) return;
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, track]() {
-        reply->deleteLater();
-
-        if (reply->error() != QNetworkReply::NoError) {
-            qWarning() << "[TrackManager] Failed to deactivate track '" << track << "':" << reply->errorString();
+    m_http->post(ApiEndpoints::TrackSenderStop(track), QByteArray{}, [this, track](QRestReply& reply) {
+        if (!reply.isSuccess()) {
+            if (reply.httpStatus() != 404)
+                qWarning() << "[TrackManager] Failed to deactivate track '" << track << "': HTTP" << reply.httpStatus() << reply.errorString();
             return;
         }
-
         if (m_trackToLayer.contains(track)) {
             m_trackToLayer.value(track)->setActive(false);
             emit deactivated(track);
@@ -96,57 +84,22 @@ void TrackManager::deactivate(const QString &track)
 
 void TrackManager::deactivateHistory(const QString &topic, const QString &track_iridess_uid)
 {
-    const QUrl url(ApiEndpoints::TrackHistorySenderStop(topic, track_iridess_uid));
-    QNetworkReply* reply = m_networkManager.post(QNetworkRequest(url), QByteArray{});
+    if (!m_http) return;
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, topic, track_iridess_uid]() {
-        reply->deleteLater();
-
-        if (reply->error() != QNetworkReply::NoError) {
-            qWarning() << "[TrackManager] Failed to deactivate track history for '" << topic << "':" << reply->errorString();
+    m_http->post(ApiEndpoints::TrackHistorySenderStop(topic, track_iridess_uid), QByteArray{}, [this, topic, track_iridess_uid](QRestReply& reply) {
+        if (!reply.isSuccess()) {
+            qWarning() << "[TrackManager] Failed to deactivate track history for '" << topic << "': HTTP" << reply.httpStatus() << reply.errorString();
             return;
         }
-
         qDebug() << "[TrackManager] Deactivate History OK";
         emit deactivatedHistory(topic, track_iridess_uid);
-
-        // Ensure the state is set to Inactive after a successful stop.
         const QString k = key(topic, track_iridess_uid);
         m_histState.insert(k, Inactive);
         emit historyStateChanged(topic, track_iridess_uid, Inactive);
-
-        // Optional: ask views/models to clear local polyline immediately.
         emit requestClearHistory(topic, track_iridess_uid);
     });
 }
 
-void TrackManager::deactivateSync(const QString &track)
-{
-    QNetworkRequest request(ApiEndpoints::TrackSenderStop(track));
-    QNetworkReply* reply = m_networkManager.post(request, QByteArray{});
-
-    QEventLoop loop;
-    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-
-    // Timeout opzionale per evitare blocchi infiniti
-    QTimer timeoutTimer;
-    timeoutTimer.setSingleShot(true);
-    QObject::connect(&timeoutTimer, &QTimer::timeout, &loop, &QEventLoop::quit);
-    timeoutTimer.start(3000); // max 3s
-
-    loop.exec(); // blocca finché termina reply o timeout
-
-    if (reply->error() != QNetworkReply::NoError) {
-        qWarning() << "[TrackManager] Failed to deactivate track '" << track << "':" << reply->errorString();
-    } else {
-        if (m_trackToLayer.contains(track)) {
-            m_trackToLayer.value(track)->setActive(false);
-            emit deactivated(track);
-        }
-    }
-
-    reply->deleteLater();
-}
 
 BaseTrackMapLayer* TrackManager::getLayer(const QString &track)
 {

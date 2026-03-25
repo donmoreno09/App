@@ -17,10 +17,7 @@ struct AppConfig {
     QString vesselsOverrideUri;
 
     // SignalR settings
-    QString signalRHost;
-    int     signalRPort;
-    QString signalRApiKey;
-    QString signalRUserId;
+    QString signalRBaseUrl;
 };
 
 static void ensureUserConfigExists()
@@ -52,11 +49,7 @@ static AppConfig loadConfig()
     cfg.vesselsOverrideUri  = s.value("rest/vesselsOverrideUri", "").toString(); // Expected string if used: {simulationId}/vessels?any-potential-options
 
     // Load SignalR settings
-    cfg.signalRHost   = s.value("signalr/host", "localhost").toString();
-    cfg.signalRPort   = s.value("signalr/port", 7007).toInt();
-    cfg.signalRApiKey = s.value("signalr/apiKey", "IRIDESS_CONTROL_ROOM").toString();
-    cfg.signalRUserId = s.value("signalr/userId", "control-room-user").toString();
-
+    cfg.signalRBaseUrl   = s.value("signalr/baseUrl", "ws://localhost:7000/hubs/notifications").toString();
     return cfg;
 }
 

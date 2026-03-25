@@ -12,7 +12,11 @@ PoiModel::PoiModel(QObject *parent)
 
 void PoiModel::initialize(HttpClient* client)
 {
-    Q_ASSERT(client);
+    if (!client)
+        qFatal("[PoiModel] initialize() called with null client");
+    if (m_api)
+        qFatal("[PoiModel] initialize() called more than once");
+
     m_httpClient = client;
     m_api = new PoiApi(client, this);
 }
@@ -33,12 +37,6 @@ void PoiModel::fetch()
     });
 }
 
-void PoiModel::clear()
-{
-    beginResetModel();
-    m_pois.clear();
-    endResetModel();
-}
 
 int PoiModel::rowCount(const QModelIndex &parent) const
 {

@@ -231,6 +231,7 @@ void AuthManager::clearSession()
 AuthState AuthManager::state() const { return m_state; }
 QString AuthManager::errorMessage() const { return m_errorMessage; }
 bool AuthManager::isSessionExpired() const { return m_sessionExpired; }
+QString AuthManager::userId() const { return m_session.userId; }
 QString AuthManager::username() const { return m_session.email; }
 QString AuthManager::displayName() const { return m_session.displayName(); }
 QString AuthManager::email() const { return m_session.email; }

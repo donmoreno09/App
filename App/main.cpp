@@ -112,6 +112,7 @@ int main(int argc, char *argv[])
     auto* alertZoneModel = engine.singletonInstance<AlertZoneModel*>("App", "AlertZoneModel");
     auto* poiModel       = engine.singletonInstance<PoiModel*>("App", "PoiModel");
     auto* poiOptions     = engine.singletonInstance<PoiOptions*>("App", "PoiOptions");
+    auto* trackManager   = engine.singletonInstance<TrackManager*>("App", "TrackManager");
 
     // Single token connection covers all singletons via the shared client
     QObject::connect(authManager, &AuthManager::tokenChanged, appHttpClient, [appHttpClient](const QByteArray& token) {
@@ -125,14 +126,28 @@ int main(int argc, char *argv[])
     alertZoneModel->initialize(appHttpClient);
     poiModel->initialize(appHttpClient);
     poiOptions->initialize(appHttpClient);
+    trackManager->initialize(appHttpClient);
 
-    // Fetch data once authenticated, clear it on logout
+    // --- SignalR Setup ---
+    auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
+
+    signalR->registerParser(0, new TruckNotificationSignalRParser());  // TirAppIssueCreated
+    signalR->registerParser(1, new TruckNotificationSignalRParser());  // TirAppIssueResolved
+    signalR->registerParser(2, new AlertZoneNotificationParser());     // ControlRoomAlertZoneIntrusion
+
+    signalR->registerHandler("ReceiveNotification", [signalR](const QVariantList& args) {
+        signalR->handleNotification(args);
+    });
+
+    // Wire all loginSucceeded/loggedOut connections BEFORE tryAutoLogin()
+    // so auto-login (which fires loginSucceeded synchronously) is caught correctly.
     QObject::connect(authManager, &AuthManager::loginSucceeded, alertZoneModel, &AlertZoneModel::fetch);
     QObject::connect(authManager, &AuthManager::loginSucceeded, poiModel,       &PoiModel::fetch);
     QObject::connect(authManager, &AuthManager::loginSucceeded, poiOptions,     &PoiOptions::fetchAll);
-    QObject::connect(authManager, &AuthManager::loggedOut,      alertZoneModel, &AlertZoneModel::clear);
-    QObject::connect(authManager, &AuthManager::loggedOut,      poiModel,       &PoiModel::clear);
-    QObject::connect(authManager, &AuthManager::loggedOut,      poiOptions,     &PoiOptions::clear);
+    QObject::connect(authManager, &AuthManager::loginSucceeded, signalR, [signalR, appConfig, authManager]() {
+        signalR->initialize(appConfig, authManager->accessToken(), authManager->userId());
+    });
+    QObject::connect(authManager, &AuthManager::loggedOut, signalR, &SignalRClientService::disconnectFromHub);
 
     authManager->initialize(authApi, tokenStorage, permManager);
     authManager->tryAutoLogin();
@@ -145,7 +160,6 @@ int main(int argc, char *argv[])
     mqtt->registerParser("doc-space", new TrackParser());
     mqtt->registerParser("tir", new TirParser());
 
-    auto *trackManager = engine.singletonInstance<TrackManager*>("App", "TrackManager");
     trackManager->deactivate("ais");
     trackManager->deactivate("doc-space");
     trackManager->deactivate("tir");
@@ -155,24 +169,6 @@ int main(int argc, char *argv[])
     QObject::connect(trackManager, &TrackManager::activated, mqtt, [mqtt]{
         mqtt->connectToBroker();
     });
-
-    // // SIGNALR SETUP
-    auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
-
-    // Register parsers for each EventType
-    signalR->registerParser(0, new TruckNotificationSignalRParser());  // TirAppIssueCreated
-    signalR->registerParser(1, new TruckNotificationSignalRParser());  // TirAppIssueResolved
-    signalR->registerParser(2, new AlertZoneNotificationParser());     // ControlRoomAlertZoneIntrusion
-
-    // Register handler
-    signalR->registerHandler("ReceiveNotification", [signalR](const QVariantList& args) {
-        signalR->handleNotification(args);
-    });
-
-    // Initialize connection
-    signalR->initialize(appConfig);
-
-    qDebug() << "[Main] SignalR service initialized";
 
     // // --- HTTP VesselFinder Service ---
     auto* vesselHttp = engine.singletonInstance<VesselFinderHttpService*>("App", "VesselFinderHttpService");

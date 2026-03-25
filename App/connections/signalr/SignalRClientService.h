@@ -26,13 +26,14 @@ public:
     explicit SignalRClientService(QObject* parent = nullptr);
     ~SignalRClientService();
 
-    void initialize(const AppConfig& appConfig);
+    void initialize(const AppConfig& appConfig, const QString& accessToken, const QString& userId);
     void registerParser(int eventType, class IBaseSignalRMessageParser* parser);
     void registerHandler(const QString& methodName, MessageHandler handler);
     void handleNotification(const QVariantList& args);
 
 
     Q_INVOKABLE void invoke(const QString& methodName, const QVariantList& args = QVariantList());
+    Q_INVOKABLE void disconnectFromHub();
     Q_INVOKABLE bool connected() const;
     Q_INVOKABLE QString connectionState() const;
 
@@ -60,7 +61,6 @@ private:
 
     QWebSocket* m_webSocket;
     QTimer* m_pingTimer;
-    QString m_hubUrl;
     bool m_connected;
     int m_invocationCounter;
     QString m_connectionState;

@@ -89,7 +89,6 @@ public:
 
     void initialize(HttpClient* client);
     void fetch();
-    void clear();
 
     bool loading() const;
     void setLoading(bool newLoading);

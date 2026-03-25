@@ -4,6 +4,7 @@
 #include <models/AlertZoneNotificationModel.h>
 #include <QUrlQuery>
 #include <QDebug>
+#include <QNetworkRequest>
 
 SignalRClientService::SignalRClientService(QObject* parent)
     : QObject(parent)
@@ -27,7 +28,7 @@ SignalRClientService::~SignalRClientService()
     if (m_connected) { m_webSocket->close(); }
 }
 
-void SignalRClientService::initialize(const AppConfig& appConfig)
+void SignalRClientService::initialize(const AppConfig& appConfig, const QString& accessToken, const QString& userId)
 {
     qDebug() << "[SignalR] Initializing...";
 
@@ -36,22 +37,18 @@ void SignalRClientService::initialize(const AppConfig& appConfig)
         return;
     }
 
-    m_userId = appConfig.signalRUserId;
+    m_userId = userId;
 
-    QString hubUrl = QString("ws://%1:%2/hubs/notifications").arg(appConfig.signalRHost).arg(appConfig.signalRPort);
+    QUrl url(appConfig.signalRBaseUrl);
 
-    QUrl url(hubUrl);
-    QUrlQuery query;
-    query.addQueryItem("apiKey", appConfig.signalRApiKey);
-    query.addQueryItem("userId", appConfig.signalRUserId);
-    url.setQuery(query);
+    QNetworkRequest request(url);
+    request.setRawHeader("Authorization", QString("Bearer %1").arg(accessToken).toUtf8());
 
-    m_hubUrl = hubUrl;
     m_connectionState = "Connecting";
     emit connectionStateChanged();
 
-    qDebug() << "[SignalR] Connecting to: " << url.toString();
-    m_webSocket->open(url);
+    qDebug().noquote() << "[SignalR] Connecting to:" << url.toString();
+    m_webSocket->open(request);
 }
 
 void SignalRClientService::registerHandler(const QString& methodName, MessageHandler handler)
@@ -202,6 +199,15 @@ void SignalRClientService::invoke(const QString& methodName, const QVariantList&
     // qDebug() << "[SignalR] Invoked: " << methodName << " with args: " << args;
 }
 
+void SignalRClientService::disconnectFromHub()
+{
+    m_userId.clear();
+    m_pendingInvocations.clear();
+
+    if (m_webSocket->state() != QAbstractSocket::UnconnectedState)
+        m_webSocket->close();
+}
+
 bool SignalRClientService::connected() const
 {
     return m_connected;
@@ -304,7 +310,7 @@ void SignalRClientService::sendMessage(const QJsonObject& message)
 
 void SignalRClientService::parseMessage(const QString& message)
 {
-    // qDebug() << "[SignalR] RAW MESSAGE:" << message;
+    qDebug() << "[SignalR] RAW MESSAGE:" << message;
 
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8(), &parseError);
@@ -440,8 +446,8 @@ void SignalRClientService::fetchUnreadNotifications()
         return;
     }
 
-    // qDebug() << "[SignalR] Fetching unread notifications for user:" << m_userId;
-    invoke("GetUnreadNotifications", QVariantList() << m_userId);
+    qDebug() << "[SignalR] Fetching unread notifications";
+    invoke("GetUnreadNotifications");
 }
 
 QString SignalRClientService::generateInvocationId()

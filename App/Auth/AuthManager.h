@@ -42,6 +42,7 @@ public:
     QString errorMessage() const;
     bool isSessionExpired() const;
 
+    QString userId() const;
     QString username() const;
     QString displayName() const;
     QString email() const;
