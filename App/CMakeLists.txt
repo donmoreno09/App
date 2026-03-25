@@ -192,6 +192,7 @@ target_link_libraries(${PROJECT_NAME}
         app_networking
         app_auth
         app_authplugin
+        app_features_vigateservicesplugin
 )
 
 target_link_libraries(${PROJECT_NAME}

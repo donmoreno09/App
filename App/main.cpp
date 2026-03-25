@@ -24,10 +24,9 @@
 #include <connections/signalr/SignalRClientService.h>
 #include <connections/signalr/parser/TruckNotificationSignalRParser.h>
 #include <connections/signalr/parser/AlertZoneNotificationParser.h>
+#include <ViGateController.h>
 
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
-
-Q_IMPORT_QML_PLUGIN(App_AuthPlugin)
 
 #include "HttpClient.h"
 
@@ -109,10 +108,11 @@ int main(int argc, char *argv[])
 
     auto* authManager    = engine.singletonInstance<AuthManager*>("App.Auth", "AuthManager");
     auto* permManager    = engine.singletonInstance<PermissionManager*>("App.Auth", "PermissionManager");
-    auto* alertZoneModel = engine.singletonInstance<AlertZoneModel*>("App", "AlertZoneModel");
-    auto* poiModel       = engine.singletonInstance<PoiModel*>("App", "PoiModel");
-    auto* poiOptions     = engine.singletonInstance<PoiOptions*>("App", "PoiOptions");
-    auto* trackManager   = engine.singletonInstance<TrackManager*>("App", "TrackManager");
+    auto* alertZoneModel  = engine.singletonInstance<AlertZoneModel*>("App", "AlertZoneModel");
+    auto* poiModel        = engine.singletonInstance<PoiModel*>("App", "PoiModel");
+    auto* poiOptions      = engine.singletonInstance<PoiOptions*>("App", "PoiOptions");
+    auto* trackManager    = engine.singletonInstance<TrackManager*>("App", "TrackManager");
+    auto* viGateController = engine.singletonInstance<ViGateController*>("App.Features.ViGateServices", "ViGateController");
 
     // Single token connection covers all singletons via the shared client
     QObject::connect(authManager, &AuthManager::tokenChanged, appHttpClient, [appHttpClient](const QByteArray& token) {
@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
     poiModel->initialize(appHttpClient);
     poiOptions->initialize(appHttpClient);
     trackManager->initialize(appHttpClient);
+    viGateController->initialize(appHttpClient);
 
     // --- SignalR Setup ---
     auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
@@ -141,9 +142,10 @@ int main(int argc, char *argv[])
 
     // Wire all loginSucceeded/loggedOut connections BEFORE tryAutoLogin()
     // so auto-login (which fires loginSucceeded synchronously) is caught correctly.
-    QObject::connect(authManager, &AuthManager::loginSucceeded, alertZoneModel, &AlertZoneModel::fetch);
-    QObject::connect(authManager, &AuthManager::loginSucceeded, poiModel,       &PoiModel::fetch);
-    QObject::connect(authManager, &AuthManager::loginSucceeded, poiOptions,     &PoiOptions::fetchAll);
+    QObject::connect(authManager, &AuthManager::loginSucceeded, alertZoneModel,   &AlertZoneModel::fetch);
+    QObject::connect(authManager, &AuthManager::loginSucceeded, poiModel,         &PoiModel::fetch);
+    QObject::connect(authManager, &AuthManager::loginSucceeded, poiOptions,       &PoiOptions::fetchAll);
+    QObject::connect(authManager, &AuthManager::loginSucceeded, viGateController, &ViGateController::loadActiveGates);
     QObject::connect(authManager, &AuthManager::loginSucceeded, signalR, [signalR, appConfig, authManager]() {
         signalR->initialize(appConfig, authManager->accessToken(), authManager->userId());
     });

@@ -150,7 +150,6 @@ void TransitModel::setLaneTypeFilter(const QString& filter)
 {
     if (m_laneTypeFilter == filter) return;
 
-    qDebug() << "TransitModel::setLaneTypeFilter - New filter:" << filter;
     m_laneTypeFilter = filter;
     emit laneTypeFilterChanged();
     applyFilter();
@@ -167,7 +166,6 @@ void TransitModel::applyFilter()
     if (types.isEmpty() || m_laneTypeFilter == "ALL" || m_laneTypeFilter.isEmpty()) {
         // No filter, show all
         m_entries = m_allEntries;
-        qDebug() << "TransitModel::applyFilter - No filter, showing all" << m_entries.size() << "transits";
     } else {
         // Filter by lane types
         for (const auto& entry : m_allEntries) {
@@ -175,8 +173,6 @@ void TransitModel::applyFilter()
                 m_entries.append(entry);
             }
         }
-        qDebug() << "TransitModel::applyFilter - Filter applied, showing" << m_entries.size()
-                 << "of" << m_allEntries.size() << "transits (filter:" << m_laneTypeFilter << ")";
     }
 
     endResetModel();
@@ -189,8 +185,6 @@ void TransitModel::clear()
     m_entries.clear();
     m_laneTypeFilter = "ALL";
     endResetModel();
-
-    qDebug() << "TransitModel::clear - All data cleared";
 }
 
 void TransitModel::setData(const QJsonArray& transitsArray)
@@ -274,8 +268,6 @@ void TransitModel::setData(const QJsonArray& transitsArray)
 
         m_allEntries.append(entry);
     }
-
-    qDebug() << "TransitModel::setData - Loaded" << m_allEntries.size() << "transits into buffer";
 
     // Apply current filter
     applyFilter();

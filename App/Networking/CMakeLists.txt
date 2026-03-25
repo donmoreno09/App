@@ -12,6 +12,8 @@ set(cpp_files
     apis/AlertZoneApi.cpp
     apis/AuthApi.h
     apis/AuthApi.cpp
+    apis/ViGateApi.h
+    apis/ViGateApi.cpp
 
     # TODO: Adhoc solution, need to turn
     #       connections into its own module or

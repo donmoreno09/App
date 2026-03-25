@@ -13,10 +13,6 @@ GroupBox {
 
     required property var model
 
-    onWidthChanged: {
-            console.log("TransitsTable GroupBox width:", width)
-        }
-
     contentItem: ColumnLayout {
             width: parent.width
             spacing: Theme.spacing.s2

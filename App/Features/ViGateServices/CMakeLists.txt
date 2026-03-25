@@ -1,3 +1,5 @@
+qt_add_library(app_features_vigateservices STATIC)
+
 set(qml_files
     components/SummaryTable.qml
     components/TableHeader.qml
@@ -12,8 +14,6 @@ set(qml_files
 set(cpp_sources
     ViGateController.cpp
     ViGateController.h
-    services/ViGateService.cpp
-    services/ViGateService.h
     models/TransitModel.cpp
     models/TransitModel.h
 )
@@ -37,4 +37,13 @@ qt_add_qml_module(app_features_vigateservices
     SOURCES ${cpp_sources}
     RESOURCE_PREFIX "/"
     RESOURCES ${icon_resources}
+)
+
+target_include_directories(app_features_vigateservices
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(app_features_vigateservices
+    PRIVATE app_networking
 )

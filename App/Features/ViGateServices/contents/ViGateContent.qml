@@ -218,14 +218,6 @@ ColumnLayout {
             radius: Theme.radius.sm
             visible: controller.totalPages > 0 && !controller.isLoadingPage
 
-            Component.onCompleted: {
-                console.log("=== Pagination Controls ===")
-                console.log("width: ", width)
-            }
-
-            onWidthChanged: {
-                    console.log("Pagination Controls width changed to:", width)
-                }
 
             RowLayout {
                 anchors.fill: parent
@@ -511,7 +503,6 @@ ColumnLayout {
         if (pedestriansToggle.checked) types.push("WALK")
 
         const filterStr = types.length > 0 ? types.join(",") : "NONE"
-        console.log("ViGateContent: Updating filter to", filterStr)
         root.controller.transitsModel.laneTypeFilter = filterStr
     }
 }

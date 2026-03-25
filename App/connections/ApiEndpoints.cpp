@@ -38,4 +38,7 @@ namespace ApiEndpoints {
                                    const QString &track_iridess_uid) {
         return BaseTrackSenderUrl() + "/" + topic + "/history/" + track_iridess_uid + "/stop";
     }
+
+    QString ViGateGetActiveGates()  { return BaseUrl + "/vigate/GetActiveGates"; }
+    QString ViGateGetFilteredData() { return BaseUrl + "/vigate/GetFilteredViGateData"; }
 }

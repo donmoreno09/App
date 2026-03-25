@@ -31,6 +31,9 @@ namespace ApiEndpoints {
                                     const QString &track_iridess_uid);
     QString TrackHistorySenderStop(const QString& topic,
                                    const QString &track_iridess_uid);
+
+    QString ViGateGetActiveGates();
+    QString ViGateGetFilteredData();
 }
 
 #endif // APIENDPOINTS_H

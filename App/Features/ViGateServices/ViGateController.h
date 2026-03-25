@@ -3,9 +3,12 @@
 #include <QQmlEngine>
 #include <QDateTime>
 #include <QVariantList>
+#include <QJsonArray>
+#include <QJsonObject>
 #include "models/TransitModel.h"
 
-class ViGateService;
+class HttpClient;
+class ViGateApi;
 
 class ViGateController : public QObject
 {
@@ -30,7 +33,7 @@ class ViGateController : public QObject
     // Active Gates
     Q_PROPERTY(QVariantList activeGates READ activeGates NOTIFY activeGatesChanged)
 
-    // Model - Changed to single unified model
+    // Model
     Q_PROPERTY(TransitModel* transitsModel READ transitsModel CONSTANT)
 
     // State
@@ -51,6 +54,8 @@ public:
         return instance;
     }
 
+    void initialize(HttpClient* http);
+
     // Getters
     int totalEntries() const { return m_totalEntries; }
     int totalExits() const { return m_totalExits; }
@@ -66,7 +71,6 @@ public:
     void setPageSize(int size);
 
     QVariantList activeGates() const { return m_activeGates; }
-
     TransitModel* transitsModel() { return m_transitsModel; }
 
     bool isLoading() const { return m_loading; }
@@ -103,9 +107,10 @@ private:
     void setLoading(bool loading);
     void setLoadingPage(bool loading);
     void setLoadingGates(bool loading);
-    void hookUpService();
     void processSummary(const QJsonObject& summary);
     void fetchCurrentPage();
+
+    static QJsonArray transformTransitData(const QJsonArray& transits);
 
     // Summary data
     int m_totalEntries = 0;
@@ -131,7 +136,7 @@ private:
     // Active Gates
     QVariantList m_activeGates;
 
-    // Model - Changed to single unified model
+    // Model
     TransitModel* m_transitsModel = nullptr;
 
     // State
@@ -141,8 +146,5 @@ private:
     bool m_hasError = false;
     bool m_loadingGates = false;
 
-    // Service
-    ViGateService* m_service = nullptr;
-    QString m_host = QStringLiteral("localhost");
-    int m_port = 7000;
+    ViGateApi* m_api = nullptr;
 };
