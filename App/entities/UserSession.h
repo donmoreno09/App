@@ -3,7 +3,6 @@
 
 #include <QString>
 #include <QStringList>
-#include <QDateTime>
 #include <QJsonObject>
 #include <QJsonArray>
 #include "IPersistable.h"
@@ -15,7 +14,7 @@ public:
     QString firstName;
     QString lastName;
     QString email;
-    QStringList roles;
+    QString role;
     QStringList permissions;
 
     QString displayName() const { return (firstName + " " + lastName).trimmed(); }
@@ -27,7 +26,7 @@ public:
         firstName.clear();
         lastName.clear();
         email.clear();
-        roles.clear();
+        role.clear();
         permissions.clear();
     }
 
@@ -38,7 +37,7 @@ public:
         obj["firstName"] = firstName;
         obj["lastName"] = lastName;
         obj["email"] = email;
-        obj["roles"] = QJsonArray::fromStringList(roles);
+        obj["role"] = role;
         obj["permissions"] = QJsonArray::fromStringList(permissions);
         return obj;
     }
@@ -49,10 +48,7 @@ public:
         firstName = obj["firstName"].toString();
         lastName = obj["lastName"].toString();
         email = obj["email"].toString();
-
-        roles.clear();
-        for (const auto& v : obj["roles"].toArray())
-            if (v.isString()) roles.append(v.toString());
+        role = obj["role"].toString();
 
         permissions.clear();
         for (const auto& v : obj["permissions"].toArray())

@@ -22,7 +22,7 @@ public:
     Q_INVOKABLE bool hasRole(const QString& role) const;
     Q_INVOKABLE bool hasAnyPermission(const QStringList& permissions) const;
 
-    void loadFromSession(const QStringList& roles, const QStringList& permissions);
+    void loadFromSession(const QString& role, const QStringList& permissions);
     void clear();
 
     int revision() const { return m_revision; }
@@ -32,7 +32,7 @@ signals:
 
 private:
     QSet<QString> m_permissions;
-    QSet<QString> m_roles;
+    QString m_role;
     int m_revision = 0;
 };
 

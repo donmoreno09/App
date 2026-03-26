@@ -3,6 +3,7 @@
 #include "PermissionManager.h"
 #include "Networking/apis/AuthApi.h"
 #include "JwtUtils.h"
+#include "RolePermissions.h"
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -164,10 +165,7 @@ void AuthManager::handleLoginResult(const LoginResult& result)
 
     const QJsonObject claims = JwtUtils::decodePayload(m_tokens.accessToken);
     if (!claims.isEmpty()) {
-        m_session.roles.clear();
-        const QString iposRole = claims["IPOSRole"].toString();
-        if (!iposRole.isEmpty()) m_session.roles.append(iposRole);
-
+        m_session.role = claims["IPOSRole"].toString();
         m_tokens.expiresAt = claims["exp"].toInteger();
     }
 
@@ -177,7 +175,7 @@ void AuthManager::handleLoginResult(const LoginResult& result)
     }
 
     if (m_permissions) {
-        m_permissions->loadFromSession(m_session.roles, m_session.permissions);
+        m_permissions->loadFromSession(m_session.role, RolePermissions::permissionsFor(m_session.role));
     }
 
     emit tokenChanged(m_tokens.accessToken.toUtf8());
@@ -235,5 +233,5 @@ QString AuthManager::userId() const { return m_session.userId; }
 QString AuthManager::username() const { return m_session.email; }
 QString AuthManager::displayName() const { return m_session.displayName(); }
 QString AuthManager::email() const { return m_session.email; }
-QStringList AuthManager::roles() const { return m_session.roles; }
+QString AuthManager::role() const { return m_session.role; }
 QString AuthManager::accessToken() const { return m_tokens.accessToken; }

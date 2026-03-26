@@ -11,7 +11,7 @@ bool PermissionManager::hasPermission(const QString& permission) const
 
 bool PermissionManager::hasRole(const QString& role) const
 {
-    return m_roles.contains(role);
+    return m_role == role;
 }
 
 bool PermissionManager::hasAnyPermission(const QStringList& permissions) const
@@ -23,14 +23,12 @@ bool PermissionManager::hasAnyPermission(const QStringList& permissions) const
     return false;
 }
 
-void PermissionManager::loadFromSession(const QStringList& roles, const QStringList& permissions)
+void PermissionManager::loadFromSession(const QString& role, const QStringList& permissions)
 {
-    m_roles = QSet<QString>(roles.begin(), roles.end());
+    m_role = role;
     m_permissions = QSet<QString>(permissions.begin(), permissions.end());
 
-    qDebug() << "Roles loaded:";
-    for (const auto& role : m_roles)
-        qDebug() << role;
+    qDebug() << "Role loaded:" << m_role;
 
     qDebug() << "Permissions loaded:";
     for (const auto& perm : m_permissions)
@@ -42,7 +40,7 @@ void PermissionManager::loadFromSession(const QStringList& roles, const QStringL
 
 void PermissionManager::clear()
 {
-    m_roles.clear();
+    m_role.clear();
     m_permissions.clear();
     ++m_revision;
     emit permissionsChanged();

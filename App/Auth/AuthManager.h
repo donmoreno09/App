@@ -24,7 +24,7 @@ class AuthManager : public QObject
     Q_PROPERTY(QString username READ username NOTIFY userChanged)
     Q_PROPERTY(QString displayName READ displayName NOTIFY userChanged)
     Q_PROPERTY(QString email READ email NOTIFY userChanged)
-    Q_PROPERTY(QStringList roles READ roles NOTIFY userChanged)
+    Q_PROPERTY(QString role READ role NOTIFY userChanged)
 
 public:
     explicit AuthManager(QObject* parent = nullptr);
@@ -46,7 +46,7 @@ public:
     QString username() const;
     QString displayName() const;
     QString email() const;
-    QStringList roles() const;
+    QString role() const;
 
     QString accessToken() const;
 
