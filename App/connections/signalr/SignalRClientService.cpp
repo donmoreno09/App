@@ -10,7 +10,10 @@ SignalRClientService::SignalRClientService(QObject* parent)
     : QObject(parent)
     , m_webSocket(new QWebSocket(QString(), QWebSocketProtocol::VersionLatest, this))
     , m_pingTimer(new QTimer(this))
+    , m_reconnectTimer(new QTimer(this))
+    , m_handshakeTimer(new QTimer(this))
     , m_connected(false)
+    , m_intentionalDisconnect(false)
     , m_invocationCounter(0)
     , m_connectionState("Disconnected")
 {
@@ -21,6 +24,17 @@ SignalRClientService::SignalRClientService(QObject* parent)
 
     m_pingTimer->setInterval(PING_INTERVAL_MS);
     connect(m_pingTimer, &QTimer::timeout, this, &SignalRClientService::sendPing);
+
+    m_reconnectTimer->setSingleShot(true);
+    m_reconnectTimer->setInterval(RECONNECT_DELAY_MS);
+    connect(m_reconnectTimer, &QTimer::timeout, this, &SignalRClientService::attemptReconnect);
+
+    m_handshakeTimer->setSingleShot(true);
+    m_handshakeTimer->setInterval(HANDSHAKE_TIMEOUT_MS);
+    connect(m_handshakeTimer, &QTimer::timeout, this, [this]() {
+        qWarning() << "[SignalR] Handshake timeout — closing socket";
+        m_webSocket->close();
+    });
 }
 
 SignalRClientService::~SignalRClientService()
@@ -32,10 +46,15 @@ void SignalRClientService::initialize(const AppConfig& appConfig, const QString&
 {
     qDebug() << "[SignalR] Initializing...";
 
-    if (m_connected) {
-        qWarning() << "[SignalR] Already connected";
+    if (m_connected || m_webSocket->state() != QAbstractSocket::UnconnectedState) {
+        qWarning() << "[SignalR] Already connected or connecting";
         return;
     }
+
+    m_lastConfig      = appConfig;
+    m_lastAccessToken = accessToken;
+    m_lastUserId      = userId;
+    m_intentionalDisconnect = false;
 
     m_userId = userId;
 
@@ -201,11 +220,22 @@ void SignalRClientService::invoke(const QString& methodName, const QVariantList&
 
 void SignalRClientService::disconnectFromHub()
 {
+    m_intentionalDisconnect = true;
+    m_reconnectTimer->stop();
+    m_handshakeTimer->stop();
     m_userId.clear();
+    m_lastAccessToken.clear();
     m_pendingInvocations.clear();
 
-    if (m_webSocket->state() != QAbstractSocket::UnconnectedState)
+    if (m_webSocket->state() != QAbstractSocket::UnconnectedState) {
         m_webSocket->close();
+    } else {
+        // Socket already disconnected — reset state manually since the signal won't fire
+        m_connected = false;
+        m_connectionState = "Disconnected";
+        emit connectedChanged();
+        emit connectionStateChanged();
+    }
 }
 
 bool SignalRClientService::connected() const
@@ -225,6 +255,7 @@ void SignalRClientService::onWebSocketConnected()
     m_connectionState = "Handshaking";
     emit connectionStateChanged();
 
+    m_handshakeTimer->start();
     sendHandshake();
 }
 
@@ -235,9 +266,15 @@ void SignalRClientService::onWebSocketDisconnected()
     m_connected = false;
     m_connectionState = "Disconnected";
     m_pingTimer->stop();
+    m_handshakeTimer->stop();
 
     emit connectedChanged();
     emit connectionStateChanged();
+
+    if (!m_intentionalDisconnect && !m_lastAccessToken.isEmpty()) {
+        qDebug() << "[SignalR] Unexpected disconnect — reconnecting in" << RECONNECT_DELAY_MS << "ms";
+        m_reconnectTimer->start();
+    }
 }
 
 void SignalRClientService::onTextMessageReceived(const QString& message)
@@ -330,6 +367,7 @@ void SignalRClientService::parseMessage(const QString& message)
     // Check if this is handshake response (empty object = success)
     if (obj.isEmpty()) {
         qDebug() << "[SignalR] Handshake successful";
+        m_handshakeTimer->stop();
         m_connected = true;
         m_connectionState = "Connected";
         m_pingTimer->start();
@@ -453,4 +491,10 @@ void SignalRClientService::fetchUnreadNotifications()
 QString SignalRClientService::generateInvocationId()
 {
     return QString::number(++m_invocationCounter);
+}
+
+void SignalRClientService::attemptReconnect()
+{
+    qDebug() << "[SignalR] Attempting reconnect...";
+    initialize(m_lastConfig, m_lastAccessToken, m_lastUserId);
 }

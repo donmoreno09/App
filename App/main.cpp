@@ -113,6 +113,7 @@ int main(int argc, char *argv[])
     auto* poiOptions      = engine.singletonInstance<PoiOptions*>("App", "PoiOptions");
     auto* trackManager    = engine.singletonInstance<TrackManager*>("App", "TrackManager");
     auto* viGateController = engine.singletonInstance<ViGateController*>("App.Features.ViGateServices", "ViGateController");
+    auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
 
     // Single token connection covers all singletons via the shared client
     QObject::connect(authManager, &AuthManager::tokenChanged, appHttpClient, [appHttpClient](const QByteArray& token) {
@@ -130,7 +131,6 @@ int main(int argc, char *argv[])
     viGateController->initialize(appHttpClient);
 
     // --- SignalR Setup ---
-    auto *signalR = engine.singletonInstance<SignalRClientService*>("App", "SignalRClientService");
 
     signalR->registerParser(0, new TruckNotificationSignalRParser());  // TirAppIssueCreated
     signalR->registerParser(1, new TruckNotificationSignalRParser());  // TirAppIssueResolved

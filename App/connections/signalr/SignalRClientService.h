@@ -58,20 +58,30 @@ private:
     QString generateInvocationId();
     void processNotificationInternal(const QString& id, const QVariant& payloadVar,
                                      const QString& eventTypeName, const QString& timestamp);
+    void attemptReconnect();
 
     QWebSocket* m_webSocket;
     QTimer* m_pingTimer;
+    QTimer* m_reconnectTimer;
+    QTimer* m_handshakeTimer;
     bool m_connected;
+    bool m_intentionalDisconnect;
     int m_invocationCounter;
     QString m_connectionState;
     QString m_userId;
+
+    AppConfig m_lastConfig;
+    QString m_lastAccessToken;
+    QString m_lastUserId;
 
     QMap<QString, MessageHandler> m_methodHandlers;
     QMap<int, class IBaseSignalRMessageParser*> m_eventTypeParsers;
     QMap<QString, QString> m_pendingInvocations;
 
-    static constexpr int PING_INTERVAL_MS = 15000;
-    static constexpr char RECORD_SEPARATOR = '\x1e';
+    static constexpr int PING_INTERVAL_MS     = 15000;
+    static constexpr int RECONNECT_DELAY_MS   = 5000;
+    static constexpr int HANDSHAKE_TIMEOUT_MS = 10000;
+    static constexpr char RECORD_SEPARATOR    = '\x1e';
 };
 
 #endif // SIGNALRCLIENTSERVICE_H
