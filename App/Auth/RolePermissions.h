@@ -1,12 +1,15 @@
-#pragma once
+#ifndef ROLEPERMISSIONS_H
+#define ROLEPERMISSIONS_H
 
 #include <QMap>
 #include <QString>
 #include <QStringList>
 
-// Client-side role → permission mapping.
+// NOTE
+// This is a client-side role permission mapping.
 // Used until the backend sends granular permissions in the JWT.
-// To remove: delete this file and update AuthManager::handleLoginResult().
+// TO DO: delete this file and update AuthManager::handleLoginResult().
+
 namespace RolePermissions {
 
 inline QStringList permissionsFor(const QString& role)
@@ -14,11 +17,13 @@ inline QStringList permissionsFor(const QString& role)
     static const QMap<QString, QStringList> map = {
         {
             "IPOS_CONTROL_ROOM_OPERATOR", {
-                "track.read",
+                "track.activate",
                 "notification.read",
                 "alertzone.read",
+                "alertzone.create",
                 "poi.read",
-                "vigate.read",
+                "poi.create",
+                "vigate.fetch",
             }
         },
         {
@@ -33,13 +38,12 @@ inline QStringList permissionsFor(const QString& role)
                 "poi.create",
                 "poi.edit",
                 "poi.delete",
-                "vigate.read",
-                "vigate.manage",
+                "vigate.fetch",
             }
         },
         {
             "IPOS_CONTROL_ROOM_ADMIN", {
-                "track.read",
+                "track.activate",
                 "notification.read",
                 "alertzone.read",
                 "alertzone.create",
@@ -49,8 +53,7 @@ inline QStringList permissionsFor(const QString& role)
                 "poi.create",
                 "poi.edit",
                 "poi.delete",
-                "vigate.read",
-                "vigate.manage",
+                "vigate.fetch",
                 "settings.read",
                 "settings.edit",
             }
@@ -60,4 +63,6 @@ inline QStringList permissionsFor(const QString& role)
     return map.value(role, {});
 }
 
-} // namespace RolePermissions
+}
+
+#endif // ROLEPERMISSIONS_H

@@ -6,6 +6,7 @@ import QtPositioning 6.8
 import App 1.0
 import App.Themes 1.0
 import App.Features.Map 1.0
+import App.Auth 1.0
 import App.Features.MapModes 1.0
 import App.Components 1.0 as UI
 
@@ -46,6 +47,7 @@ UI.EditablePolygon {
     highlightColor: "white"
 
     tapEnabled: !root.isEditing && !MapModeController.isCreating
+               && PermissionManager.revision && PermissionManager.hasPermission("alertzone.read")
     onTapped: MapModeController.editAlertZone(AlertZoneModel.getEditableAlertZone(index))
 
     labelText: label

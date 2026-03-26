@@ -4,6 +4,7 @@ import QtQuick.Layouts 6.8
 import QtPositioning 6.8
 
 import App 1.0
+import App.Auth 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
@@ -216,6 +217,7 @@ PanelTemplate {
                 UI.Button {
                     visible: !!MapModeController.alertZone
                     enabled: !AlertZoneModel.loading
+                             && PermissionManager.revision && PermissionManager.hasPermission("alertzone.delete")
                     Layout.preferredWidth: 1
                     Layout.fillWidth: true
                     variant: UI.ButtonStyles.Danger
@@ -229,6 +231,9 @@ PanelTemplate {
                     Layout.fillWidth: true
                     text: `${TranslationManager.revision}` && qsTr("Save")
                     enabled: !AlertZoneModel.loading && validate()
+                             && (MapModeController.alertZone
+                                 ? PermissionManager.revision && PermissionManager.hasPermission("alertzone.edit")
+                                 : PermissionManager.revision && PermissionManager.hasPermission("alertzone.create"))
                     onClicked: save()
                 }
             }

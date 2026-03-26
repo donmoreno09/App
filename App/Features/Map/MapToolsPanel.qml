@@ -3,6 +3,7 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 import App 1.0
+import App.Auth 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.Panels 1.0
@@ -89,6 +90,7 @@ PanelTemplate {
                     Layout.fillWidth: true
                     text: `${TranslationManager.revision}` && qsTr("AIS")
                     toggle.checked: TrackManager.getLayer("ais").active
+                    toggle.enabled: PermissionManager.revision && PermissionManager.hasPermission("track.activate")
                     toggle.onCheckedChanged: {
                         if (toggle.checked) TrackManager.activate("ais")
                         else TrackManager.deactivate("ais")
@@ -99,6 +101,7 @@ PanelTemplate {
                     Layout.fillWidth: true
                     text: `${TranslationManager.revision}` && qsTr("DOC - SPACE")
                     toggle.checked: TrackManager.getLayer("doc-space").active
+                    toggle.enabled: PermissionManager.revision && PermissionManager.hasPermission("track.activate")
                     toggle.onCheckedChanged: {
                         if (toggle.checked) TrackManager.activate("doc-space")
                         else TrackManager.deactivate("doc-space")
@@ -109,7 +112,8 @@ PanelTemplate {
                     Layout.fillWidth: true
                     text: `${TranslationManager.revision}` && qsTr("TRUCK")
                     toggle.checked: TrackManager.getLayer("tir").active
-                    toggle.enabled: VesselFinderHttpService !== null
+                    toggle.enabled: (VesselFinderHttpService !== null)
+                                    && PermissionManager.revision && PermissionManager.hasPermission("track.activate")
                     toggle.onCheckedChanged: {
                         if (toggle.checked) TrackManager.activate("tir")
                         else TrackManager.deactivate("tir")
@@ -120,6 +124,7 @@ PanelTemplate {
                     Layout.fillWidth: true
                     text: `${TranslationManager.revision}` && qsTr("VESSELFINDER")
                     toggle.checked: VesselFinderHttpService.running
+                    toggle.enabled: PermissionManager.revision && PermissionManager.hasPermission("track.activate")
                     toggle.onCheckedChanged: {
                         if (toggle.checked) {
                             VesselFinderHttpService.start()

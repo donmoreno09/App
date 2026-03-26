@@ -119,36 +119,27 @@ void AuthManager::tryAutoLogin()
 
     const qint64 expiresAt = m_storage->loadExpiresAt();
     const qint64 now       = QDateTime::currentSecsSinceEpoch();
-    const qint64 margin    = 120;
 
-    if (expiresAt - now > margin) {
-        qDebug() << "[AuthManager] Access token still valid for" << (expiresAt - now) << "seconds, skipping refresh";
-
-        LoginResult result;
-        result.tokens = stored;
-        result.user   = m_storage->loadUserSession();
-
-        setState(AuthState::AutoLoggingIn);
-        handleLoginResult(result);
-        emit loginSucceeded();
+    if (expiresAt - now <= 0) {
+        qDebug() << "[AuthManager] Stored access token is expired, session expired";
+        m_storage->clearAll();
+        m_sessionExpired = true;
+        emit sessionExpiredFlagChanged();
+        setState(AuthState::Unauthenticated);
+        emit sessionExpired();
         return;
     }
 
+    qDebug() << "[AuthManager] Access token still valid for" << (expiresAt - now) << "seconds";
+
+    LoginResult result;
+    result.tokens = stored;
+    result.user   = m_storage->loadUserSession();
+
     m_rememberMe = true;
     setState(AuthState::AutoLoggingIn);
-    qDebug() << "[AuthManager] Access token expired or close to expiry, refreshing";
-
-    m_api->refresh(stored.refreshToken,
-                   [this](const LoginResult& result) {
-                       handleLoginResult(result);
-                       emit loginSucceeded();
-                       qDebug() << "[AuthManager] Auto-login succeeded for" << m_session.displayName();
-                   },
-                   [this](const ErrorResult& err) {
-                       qWarning() << "[AuthManager] Auto-login failed:" << err.message;
-                       if (m_storage) m_storage->clearAll();
-                       setState(AuthState::Unauthenticated);
-                   });
+    handleLoginResult(result);
+    emit loginSucceeded();
 }
 
 void AuthManager::setState(AuthState newState)

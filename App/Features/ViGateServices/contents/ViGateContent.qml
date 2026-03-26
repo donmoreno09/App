@@ -3,6 +3,7 @@ import QtQuick.Layouts 6.8
 import QtQuick.Controls 6.8
 import Qt5Compat.GraphicalEffects
 
+import App.Auth 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.Language 1.0
@@ -146,6 +147,7 @@ ColumnLayout {
             variant: UI.ButtonStyles.Primary
             text: `${TranslationManager.revision}` && qsTr("Fetch Data")
             enabled: canFetch && !controller.isLoading
+                     && PermissionManager.revision && PermissionManager.hasPermission("vigate.fetch")
 
             readonly property bool canFetch: {
                 return gateComboBox.currentIndex >= 0 &&

@@ -54,6 +54,7 @@ UI.GlobalBackgroundConsumer {
                 SideRailItem {
                     source: "qrc:/App/assets/icons/location-dot.svg"
                     preserveIconColor: true
+                    enabled: PermissionManager.revision && PermissionManager.hasAnyPermission(["poi.create", "poi.edit"])
                     text: `${TranslationManager.revision}` && qsTr("POI")
                     active: currentPanelPath === Routes.Poi && SidePanelController.isOpen
 
@@ -65,7 +66,7 @@ UI.GlobalBackgroundConsumer {
 
                 SideRailItem {
                     source: "qrc:/App/assets/icons/alert-zone.svg"
-                    enabled: PermissionManager.revision && PermissionManager.hasPermission("alertzone.create")
+                    enabled: PermissionManager.revision && PermissionManager.hasAnyPermission(["alertzone.create", "alertzone.edit"])
                     preserveIconColor: true
                     text: `${TranslationManager.revision}` && qsTr("Alert Zone")
                     active: currentPanelPath === Routes.AlertZone && SidePanelController.isOpen
@@ -227,7 +228,10 @@ UI.GlobalBackgroundConsumer {
             }
 
             TapHandler {
-                onTapped: userMenu.open()
+                onTapped: {
+                    SidePanelController.close()
+                    userMenu.open()
+                }
             }
 
             UserMenuPopup {

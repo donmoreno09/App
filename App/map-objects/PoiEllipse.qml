@@ -5,6 +5,7 @@ import QtPositioning 6.8
 import App 1.0
 import App.Themes 1.0
 import App.Features.Map 1.0
+import App.Auth 1.0
 import App.Features.MapModes 1.0
 import App.Components 1.0 as UI
 
@@ -20,6 +21,7 @@ UI.EditableEllipse {
     strokeColor: "green"
     highlightColor: "white"
     tapEnabled: !root.isEditing && !MapModeController.isCreating
+               && PermissionManager.revision && PermissionManager.hasPermission("poi.read")
     onTapped: MapModeController.editPoi(PoiModel.getEditablePoi(index))
     labelText: label
     labelFillColor: Theme.colors.hexWithAlpha("#539E07", 0.6)
