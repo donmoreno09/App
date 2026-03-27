@@ -5,9 +5,12 @@ import QtQuick.Effects 6.8
 import App.Auth 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
+import App.Features.Map 1.0
 
 UI.Overlay {
     id: root
+
+    readonly property bool isDark: MapController._currentPlugin.isDark
 
     signal settingsRequested()
 
@@ -19,9 +22,9 @@ UI.Overlay {
 
     background: Rectangle {
         radius: Theme.radius.lg
-        color: Theme.colors.whiteA10
+        color: root.isDark ? Theme.colors.whiteA10  : Theme.colors.white500
         border.width: Theme.borders.b1
-        border.color: Theme.colors.whiteA10
+        border.color: root.isDark ? Theme.colors.whiteA10 : Theme.colors.blackA10
     }
 
     enter: Transition {
@@ -61,16 +64,11 @@ UI.Overlay {
 
         Repeater {
             model: menuModel
-            delegate: ColumnLayout {
+            delegate: MenuRow {
                 Layout.fillWidth: true
-                spacing: 0
-
-                MenuRow {
-                    Layout.fillWidth: true
-                    text: root._labelFor(model.action)
-                    iconSource: model.icon
-                    onClicked: root._handleAction(model.action)
-                }
+                text: root._labelFor(model.action)
+                iconSource: model.icon
+                onClicked: root._handleAction(model.action)
             }
         }
     }
@@ -84,7 +82,7 @@ UI.Overlay {
         signal clicked()
 
         implicitHeight: Theme.spacing.s10
-        color: hoverHandler.hovered ? Theme.colors.whiteA5 : "transparent"
+        color: hoverHandler.hovered ? (root.isDark ? Theme.colors.whiteA5 : Theme.colors.blackA5) : "transparent"
         radius: Theme.radius.lg
 
         Behavior on color {
@@ -108,16 +106,16 @@ UI.Overlay {
                 Layout.preferredWidth: Theme.icons.sizeSm
                 Layout.preferredHeight: Theme.icons.sizeSm
 
-                layer.enabled: true
+                layer.enabled: menuRow.iconSource.length > 0
                 layer.effect: MultiEffect {
-                    colorizationColor: Theme.colors.text
+                    colorizationColor: root.isDark ? Theme.colors.text : Theme.colors.black500
                     colorization: 1.0
                 }
             }
 
             Text {
                 id: label
-                color: Theme.colors.text
+                color: root.isDark ? Theme.colors.text : Theme.colors.black500
                 font.family:    Theme.typography.bodySans25Family
                 font.pointSize: Theme.typography.bodySans25Size
                 font.weight:    Theme.typography.bodySans25Weight

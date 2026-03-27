@@ -26,10 +26,12 @@ Item {
     property string iconSource: ""
     property int variant: InputStyles.Default
 
-    property alias textField: textField
+    property alias textField:  textField
+    property alias iconButton: textFieldIcon
 
     signal textEdited()
     signal textEditingFinished()
+    signal iconClicked()
 
     // Forward other TextField's properties for convenience
     property alias echoMode: textField.echoMode
@@ -139,14 +141,16 @@ Item {
                     id: textFieldIcon
                     display: AbstractButton.IconOnly
                     icon.source: iconSource
-                    icon.color: input.enabled ? _style.iconColor : _style.iconColorDisabled
-                    icon.width: Theme.icons.sizeLg
+                    icon.color:  input.enabled ? _style.iconColor : _style.iconColorDisabled
+                    icon.width:  Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
                     enabled: input.enabled
                     visible: iconSource
                     background: Rectangle { color: Theme.colors.transparent }
                     padding: 0
+                    onClicked: input.iconClicked()
 
+                    HoverHandler { cursorShape: Qt.PointingHandCursor }
                     UI.OutlineRect { }
                 }
             }

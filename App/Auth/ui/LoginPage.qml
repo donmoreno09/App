@@ -17,6 +17,8 @@ Rectangle {
     readonly property bool hasError: AuthManager.state === AuthStateEnum.Error
     readonly property bool canLogin: !isBusy && authIdInput.text !== "" && passwordInput.text !== ""
 
+    property bool passwordVisible: false
+
     WindowControlsBar {
         anchors.top:   parent.top
         anchors.left:  parent.left
@@ -32,7 +34,7 @@ Rectangle {
         width:  Theme.layout.loginCardWidth
         height: cardContent.implicitHeight + Theme.spacing.s8 * 2
 
-        readonly property real chamferSize: 24
+        readonly property real chamferSize: Theme.spacing.s5
         readonly property real borderWidth: Theme.borders.b1
 
         Shape {
@@ -48,7 +50,6 @@ Rectangle {
                 PathLine { x: card.width;                    y: card.chamferSize }
                 PathLine { x: card.width;                    y: card.height }
                 PathLine { x: 0;                             y: card.height }
-                PathLine { x: 0;                             y: 0 }
             }
         }
 
@@ -122,17 +123,22 @@ Rectangle {
                     labelText: qsTr("E-mail")
                     enabled:   !root.isBusy
                     variant:   root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
-                    textField.Keys.onReturnPressed: if (root.canLogin) root.doLogin()
+                    textField.Keys.onReturnPressed: if (root.canLogin) AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
                 }
 
                 UI.Input {
                     id: passwordInput
                     Layout.fillWidth: true
-                    labelText: qsTr("Password")
-                    echoMode:  TextInput.Password
-                    enabled:   !root.isBusy
-                    variant:   root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
+                    labelText:         qsTr("Password")
+                    echoMode:          passwordVisible ? TextInput.Normal : TextInput.Password
+                    iconSource:              "qrc:/App/assets/icons/login-eye.svg"
+                    iconButton.icon.color:   Qt.rgba(0, 0, 0, 0)
+                    iconButton.icon.width:   16
+                    iconButton.icon.height:  13
+                    enabled:           !root.isBusy
+                    variant:           root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
                     textField.Keys.onReturnPressed: if (root.canLogin) AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
+                    onIconClicked: passwordVisible = !passwordVisible
                 }
 
                 RowLayout {
@@ -150,7 +156,7 @@ Rectangle {
 
                     Item {
                         implicitWidth: forgotText.implicitWidth
-                        implicitHeight: forgotText.implicitHeight + 4
+                        implicitHeight: forgotText.implicitHeight + Theme.spacing.s1
 
                         HoverHandler { cursorShape: Qt.PointingHandCursor }
                         TapHandler { onTapped: console.log("[Login] Forgot password") }
@@ -165,12 +171,12 @@ Rectangle {
 
                         Shape {
                             anchors.top: forgotText.bottom
-                            anchors.topMargin: 2
+                            anchors.topMargin: Theme.spacing.s0_5
                             width: forgotText.width
-                            height: 2
+                            height: Theme.spacing.s0_5
 
                             ShapePath {
-                                strokeWidth: 1
+                                strokeWidth: Theme.borders.b1
                                 strokeColor: Theme.colors.text
                                 fillColor: "transparent"
                                 strokeStyle: ShapePath.DashLine

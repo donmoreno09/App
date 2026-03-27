@@ -3,11 +3,14 @@ import QtQuick.Layouts 6.8
 import QtQuick.Effects 6.8
 
 import App.Auth 1.0
+import App.Features.Map 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
 UI.Overlay {
     id: root
+
+    readonly property bool isDark: MapController._currentPlugin.isDark
 
     padding: Theme.spacing.s5
     width: Theme.layout.logoutDialogWidth
@@ -15,9 +18,9 @@ UI.Overlay {
 
     background: Rectangle {
         radius: Theme.radius.sm
-        color: Theme.colors.bg
+        color: root.isDark ? Theme.colors.bg : Theme.colors.white500
         border.width: Theme.borders.b1
-        border.color: Theme.colors.whiteA10
+        border.color: root.isDark ? Theme.colors.whiteA10 : Theme.colors.white500
     }
 
     enter: Transition {
@@ -43,7 +46,7 @@ UI.Overlay {
 
             Text {
                 text: qsTr("Logging out")
-                color: Theme.colors.text
+                color: root.isDark ? Theme.colors.text : Theme.colors.black500
                 font.family:    Theme.typography.bodySans50Family
                 font.pointSize: Theme.typography.bodySans50Size
                 font.weight:    Theme.typography.weightSemibold
@@ -58,12 +61,12 @@ UI.Overlay {
                     anchors.centerIn: parent
                     source:   "qrc:/App/assets/icons/x-close.svg"
                     fillMode: Image.PreserveAspectFit
-                    width:    Theme.icons.sizeSm - 2
-                    height:   Theme.icons.sizeSm - 2
+                    width:    Theme.icons.sizeSm - Theme.borders.b2
+                    height:   Theme.icons.sizeSm - Theme.borders.b2
 
                     layer.enabled: true
                     layer.effect: MultiEffect {
-                        colorizationColor: Theme.colors.text
+                        colorizationColor: root.isDark ? Theme.colors.text : Theme.colors.black500
                         colorization: 1.0
                     }
                 }
@@ -79,7 +82,7 @@ UI.Overlay {
 
             Text {
                 text: qsTr("Do you want to log out?")
-                color: Theme.colors.text
+                color: root.isDark ? Theme.colors.text : Theme.colors.black500
                 font.family:    Theme.typography.bodySans25Family
                 font.pointSize: Theme.typography.bodySans25Size
                 font.weight:    Theme.typography.bodySans25Weight
@@ -92,8 +95,9 @@ UI.Overlay {
 
                 UI.Button {
                     text: qsTr("Yes, log out")
+                    backgroundRect.color: root.isDark ? "#3C66EF" : "#0D27F2"
                     variant: UI.ButtonStyles.PrimaryDarkMode
-                    Layout.preferredWidth: 88
+                    Layout.preferredWidth: Theme.layout.logoutButtonWidth
                     radius: Theme.radius.sm
                     onClicked: {
                         root.close()
