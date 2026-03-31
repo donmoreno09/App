@@ -59,8 +59,8 @@ signals:
     void networkError(QString message, int httpStatus);
 
 public:
-    explicit HttpClient(QObject *parent = nullptr);
     explicit HttpClient(const QUrl& baseUrl = {}, QObject *parent = nullptr);
+    explicit HttpClient(QObject *parent = nullptr);
 
     void setBaseUrl(const QUrl& baseUrl);
     void setBearerToken(const QByteArray& token);
@@ -70,7 +70,7 @@ public:
     QNetworkRequestFactory& factory() { return m_factory; }
 
     template<typename Functor>
-    requires std::invocable<Functor, QRestReply &>
+        requires std::invocable<Functor, QRestReply &>
     RequestHandle* get(const QString& urlOrPath, Functor&& callback)
     {
         // Since Qt's MOC doesn't like having a default parameter with a
@@ -80,18 +80,18 @@ public:
     }
 
     template<typename Functor>
-    requires std::invocable<Functor, QRestReply &>
+        requires std::invocable<Functor, QRestReply &>
     RequestHandle* get(const QString& urlOrPath, Functor&& callback, RetryPolicy policy)
     {
         auto* handle = new RequestHandle(this);
         autoDeleteHandle(handle);
 
         auto doAttempt = [
-            this,
-            handle,
-            urlOrPath,
-            cb = std::forward<Functor>(callback),
-            policy
+                             this,
+                             handle,
+                             urlOrPath,
+                             cb = std::forward<Functor>(callback),
+                             policy
         ](auto&& self, int attemptNo) mutable -> void {
             if (handle->aborted()) return;
             emit handle->attempt(attemptNo);
@@ -137,7 +137,7 @@ public:
     }
 
     template<typename Functor>
-    requires std::invocable<Functor, QRestReply&>
+        requires std::invocable<Functor, QRestReply&>
     RequestHandle* post(const QString& urlOrPath, const QByteArray& data, Functor&& callback)
     {
         auto* handle = new RequestHandle(this);
@@ -157,7 +157,7 @@ public:
     }
 
     template<typename Functor>
-    requires std::invocable<Functor, QRestReply&>
+        requires std::invocable<Functor, QRestReply&>
     RequestHandle* put(const QString& urlOrPath, const QByteArray& data, Functor&& callback)
     {
         auto* handle = new RequestHandle(this);
@@ -177,7 +177,7 @@ public:
     }
 
     template<typename Functor>
-    requires std::invocable<Functor, QRestReply&>
+        requires std::invocable<Functor, QRestReply&>
     RequestHandle* patch(const QString& urlOrPath, const QByteArray& data, Functor&& callback)
     {
         auto* handle = new RequestHandle(this);
@@ -197,7 +197,7 @@ public:
     }
 
     template<typename Functor>
-    requires std::invocable<Functor, QRestReply&>
+        requires std::invocable<Functor, QRestReply&>
     RequestHandle* remove(const QString& urlOrPath, Functor&& callback)
     {
         auto* handle = new RequestHandle(this);
@@ -220,7 +220,7 @@ private:
     QNetworkRequest buildRequest(const QString& urlOrPath) const;
 
     template<typename Functor>
-    requires std::invocable<Functor, QRestReply&>
+        requires std::invocable<Functor, QRestReply&>
     auto makeReplyHandler(RequestHandle* handle, Functor&& callback)
     {
         return [this, handle, cb = std::forward<Functor>(callback)](QRestReply& reply) mutable {

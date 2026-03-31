@@ -41,4 +41,5 @@ QtObject {
     readonly property int userMenuWidth:  145
     readonly property int logoutDialogWidth:  446
     readonly property int logoutDialogHeight:  169
+    readonly property int logoutButtonWidth:  88
 }

@@ -347,7 +347,7 @@ void SignalRClientService::sendMessage(const QJsonObject& message)
 
 void SignalRClientService::parseMessage(const QString& message)
 {
-    qDebug() << "[SignalR] RAW MESSAGE:" << message;
+    // qDebug() << "[SignalR] RAW MESSAGE:" << message;
 
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8(), &parseError);

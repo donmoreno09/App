@@ -4,10 +4,10 @@
 #include <QtGlobal>
 #include <cmath>
 
-HttpClient::HttpClient(QObject *parent)
+HttpClient::HttpClient(const QUrl& baseUrl, QObject *parent)
     : QObject(parent)
     , m_rest(&m_nam, this)
-    , m_factory(QUrl())
+    , m_factory(baseUrl)
 {
     // Common headers
     QHttpHeaders headers;
@@ -20,20 +20,9 @@ HttpClient::HttpClient(QObject *parent)
     m_factory.setTransferTimeout(std::chrono::seconds(15));
 }
 
-HttpClient::HttpClient(const QUrl& baseUrl, QObject *parent)
-    : QObject(parent)
-    , m_rest(&m_nam, this)
-    , m_factory(baseUrl)
-{
-    // Common headers
-    QHttpHeaders headers;
-    headers.append(QHttpHeaders::WellKnownHeader::Accept, "application/json");
-    headers.append(QHttpHeaders::WellKnownHeader::ContentType, "application/json");
-    m_factory.setCommonHeaders(headers);
-
-    // Timeout
-    m_factory.setTransferTimeout(std::chrono::seconds(15));
-}
+HttpClient::HttpClient(QObject *parent)
+    : HttpClient(QUrl(), parent)
+{}
 
 void HttpClient::setBaseUrl(const QUrl& baseUrl)
 {
