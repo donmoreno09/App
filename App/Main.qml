@@ -54,7 +54,7 @@ ApplicationWindow {
     MapHost {
         id: mapHost
         anchors.fill: parent
-        initialPlugin: MapPlugins.maplibreLight
+        initialPlugin: MapPlugins.osmDefault
 
         onInitialLoaded: {
             map.center = QtPositioning.coordinate(44.4071, 8.9347)
