@@ -9,6 +9,7 @@ import App.Features.Map 1.0
 import App.Auth 1.0
 import App.Features.MapModes 1.0
 import App.Components 1.0 as UI
+import "qrc:/App/Features/MapModes/commands/PolygonCommands.js" as PolygonCommands
 
 UI.EditablePolygon {
     id: root
@@ -34,6 +35,9 @@ UI.EditablePolygon {
         }
     }
 
+    property var dragStartPath: null
+    property bool wasMovingPolygon: false
+
     isEditing: MapModeController.alertZone && id === MapModeController.alertZone.id
     map: MapController.map
     path: coordinates
@@ -57,9 +61,54 @@ UI.EditablePolygon {
     labelBorderWidth: Theme.borders.b1
 
     onPathEdited: function(nextPath) {
+        // Capture old state on first change
+        if (!dragStartPath) {
+            dragStartPath = [];
+            for (let i = 0; i < coordinates.length; ++i) {
+                dragStartPath.push(coordinates[i]);
+            }
+        }
+
+        // Apply changes directly (immediate feedback)
         for (let i = 0; i < nextPath.length; ++i)
             AlertZoneModel.setCoordinate(modelIndex, i, nextPath[i])
 
         MapModeRegistry.editPolygonMode.coordinatesChanged()
+    }
+
+    onIsMovingPolygonChanged: {
+        if (isMovingPolygon) {
+            wasMovingPolygon = true
+        }
+    }
+
+    onEditingFinished: {
+        if (!dragStartPath) return;
+
+        const newPath = [];
+        for (let i = 0; i < coordinates.length; ++i) {
+            newPath.push(coordinates[i]);
+        }
+
+        var cmd
+        if (wasMovingPolygon) {
+            cmd = new PolygonCommands.TranslatePolygonCommand(
+                AlertZoneModel,
+                id,
+                dragStartPath,
+                newPath
+            )
+        } else {
+            cmd = new PolygonCommands.UpdatePolygonVertexCommand(
+                AlertZoneModel,
+                id,
+                dragStartPath,
+                newPath
+            )
+        }
+
+        CommandManager.executeCommand(cmd);
+        dragStartPath = null;
+        wasMovingPolygon = false;
     }
 }

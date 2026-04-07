@@ -9,6 +9,7 @@ import App.Features.Map 1.0
 import App.Auth 1.0
 import App.Features.MapModes 1.0
 import App.Components 1.0 as UI
+import "qrc:/App/Features/MapModes/commands/PolygonCommands.js" as PolygonCommands
 
 UI.EditablePolygon {
     id: root
@@ -17,6 +18,8 @@ UI.EditablePolygon {
     isEditing: MapModeController.poi && id === MapModeController.poi.id
     map: MapController.map
     path: coordinates
+
+    property var dragStartPath: null
 
     fillColor: "#22448888"
     strokeColor: "green"
@@ -33,9 +36,36 @@ UI.EditablePolygon {
     labelBorderWidth: Theme.borders.b1
 
     onPathEdited: function(nextPath) {
-        for (let i = 0; i < nextPath.length; ++i)
-            PoiModel.setCoordinate(modelIndex, i, nextPath[i])
+        // Capture old state on first change
+        if (!dragStartPath) {
+            dragStartPath = [];
+            for (let i = 0; i < coordinates.length; ++i) {
+                dragStartPath.push(coordinates[i]);
+            }
+        }
+
+        for (let j = 0; j < nextPath.length; ++j)
+            PoiModel.setCoordinate(modelIndex, j, nextPath[j])
 
         MapModeRegistry.editPolygonMode.coordinatesChanged()
+    }
+
+    onEditingFinished: {
+        if (!dragStartPath) return;
+
+        const newPath = [];
+        for (let i = 0; i < coordinates.length; ++i) {
+            newPath.push(coordinates[i]);
+        }
+
+        const cmd = new PolygonCommands.TranslatePolygonCommand(
+            PoiModel,
+            id,
+            dragStartPath,
+            newPath
+        );
+
+        CommandManager.executeCommand(cmd);
+        dragStartPath = null;
     }
 }

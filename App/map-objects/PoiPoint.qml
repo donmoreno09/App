@@ -8,6 +8,7 @@ import App.Features.Map 1.0
 import App.Auth 1.0
 import App.Features.MapModes 1.0
 import App.Components 1.0 as UI
+import "qrc:/App/Features/MapModes/commands/PointCommands.js" as PointCommands
 
 UI.EditablePoint {
     id: root
@@ -27,6 +28,46 @@ UI.EditablePoint {
     labelBorderColor: Theme.colors.white
     labelTextColor: Theme.colors.white
     labelBorderWidth: Theme.borders.b1
+
+    // Track drag start state for undo/redo
+    property var dragStartCoord: null
+
+    onIsDraggingChanged: {
+        if (!isEditing) return
+
+        if (isDragging) {
+            // Capture start state when drag begins
+            if (model.coordinate.isValid) {
+                dragStartCoord = QtPositioning.coordinate(
+                    model.coordinate.latitude,
+                    model.coordinate.longitude
+                )
+                console.log("[PoiPoint] Drag started, captured coord:",
+                    dragStartCoord.latitude, dragStartCoord.longitude)
+            }
+        } else {
+            // Drag ended, create command if we have start state
+            if (dragStartCoord && model.coordinate.isValid) {
+                const newCoord = QtPositioning.coordinate(
+                    model.coordinate.latitude,
+                    model.coordinate.longitude
+                )
+
+                console.log("[PoiPoint] Drag ended, creating command:",
+                    "old:", dragStartCoord.latitude, dragStartCoord.longitude,
+                    "new:", newCoord.latitude, newCoord.longitude)
+
+                const cmd = new PointCommands.TranslatePointCommand(
+                    MapModeController.poi,
+                    dragStartCoord,
+                    newCoord
+                )
+                CommandManager.executeCommand(cmd)
+
+                dragStartCoord = null
+            }
+        }
+    }
 
     onPointChanged: function(c) {
         model.coordinate = c

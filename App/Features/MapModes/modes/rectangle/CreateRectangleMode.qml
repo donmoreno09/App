@@ -8,6 +8,8 @@ import App.Features.Map 1.0
 import "../.."
 import "./RectangleGeometry.js" as RectGeom
 import App.Components 1.0 as UI
+import App.Features.MapModes 1.0 as Commands
+import "../../commands/RectangleCommands.js" as RectangleCommands
 
 RectangleMode {
     id: root
@@ -162,8 +164,39 @@ RectangleMode {
         strokeColor: "green"
         highlightColor: "white"
 
+        // Track drag start state for undo/redo
+        property var dragStartTopLeft: null
+        property var dragStartBottomRight: null
+
         onCornersChanged: function(tl, br) {
+            // Capture start state on first change
+            if (!dragStartTopLeft) {
+                dragStartTopLeft = QtPositioning.coordinate(root.topLeft.latitude, root.topLeft.longitude)
+                dragStartBottomRight = QtPositioning.coordinate(root.bottomRight.latitude, root.bottomRight.longitude)
+            }
+
             root.applyNormalized(tl, br)
+        }
+
+        onEditingFinished: {
+            if (!dragStartTopLeft) return
+
+            const newTopLeft = QtPositioning.coordinate(root.topLeft.latitude, root.topLeft.longitude)
+            const newBottomRight = QtPositioning.coordinate(root.bottomRight.latitude, root.bottomRight.longitude)
+
+            const cmd = new RectangleCommands.TranslateRectangleCreationCommand(
+                root,
+                dragStartTopLeft,
+                dragStartBottomRight,
+                newTopLeft,
+                newBottomRight
+            )
+
+            Commands.CommandManager.executeCommand(cmd)
+
+            // Reset tracking state
+            dragStartTopLeft = null
+            dragStartBottomRight = null
         }
     }
 }

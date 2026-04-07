@@ -34,6 +34,7 @@ MapItemGroup {
 
     signal tapped()
     signal cornersChanged(geoCoordinate topLeft, geoCoordinate bottomRight)
+    signal editingFinished()
 
     // Internal working geometry
     property geoCoordinate _tl: QtPositioning.coordinate()
@@ -178,6 +179,7 @@ MapItemGroup {
                 committedRect._startTLCoord = QtPositioning.coordinate()
                 committedRect._startBRCoord = QtPositioning.coordinate()
                 committedRect._anchorCoord = QtPositioning.coordinate()
+                root.editingFinished()
             }
 
             onActiveTranslationChanged: {
@@ -264,6 +266,10 @@ MapItemGroup {
 
             onActiveChanged: {
                 root.isDraggingHandler = active
+
+                if (!active)
+                    root.editingFinished()
+
                 if (active) {
                     if (h.kind === 0)
                         h._anchorCoord = root._br
