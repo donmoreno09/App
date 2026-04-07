@@ -3,7 +3,6 @@
 #include <QtLocation/QGeoServiceProvider>
 #include <QtCore/QVariantMap>
 #include <QtCore/QStringList>
-#include <QtCore/QDebug>
 #include "app_features_map_export.h"
 
 struct APP_FEATURES_MAP_EXPORT PluginInfo {

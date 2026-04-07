@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
+import App.Logger 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.Panels 1.0
@@ -235,11 +236,11 @@ PanelTemplate {
         id: modal
 
         onDialogOpened: (dialog) => {
-            console.log("Dialog opened:", dialog.id)
+            AppLogger.withService("PLAYGROUND-MODAL").info("Dialog opened", { dialogId: dialog.id })
         }
 
         onDialogClosed: (dialog) => {
-            console.log("Dialog closed:", dialog.id)
+            AppLogger.withService("PLAYGROUND-MODAL").info("Dialog closed", { dialogId: dialog.id })
         }
     }
 }

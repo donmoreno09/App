@@ -1,5 +1,17 @@
 #include "TrailerPredictionController.h"
+
 #include "services/TrailerPredictionService.h"
+#include "TrailerPredictionsLogger.h"
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = TrailerPredictionsLogger::get().child({
+        {"service", "TRAILER_PREDICTION_CONTROLLER"}
+    });
+    return logger;
+}
+}
 
 TrailerPredictionController::TrailerPredictionController(QObject* parent)
     : QObject(parent)
@@ -16,50 +28,71 @@ void TrailerPredictionController::setLoading(bool loading) {
 
 void TrailerPredictionController::hookUpService() {
     connect(m_service, &TrailerPredictionService::predictionReady, this, [this](int v){
-        qDebug() << "[Controller] predictionReady received:" << v;
+        _logger().info("predictionReady received", {
+            kv("prediction", v)
+        });
+
         if (m_prediction != v) { m_prediction = v; emit predictionChanged(v); }
         if (!m_hasPrediction) { m_hasPrediction = true; emit hasPredictionChanged(true); }
         if (m_hasError)       { m_hasError = false;     emit hasErrorChanged(false); }
+
         setLoading(false);
     });
 
     connect(m_service, &TrailerPredictionService::notFound, this, [this]{
-        qDebug() << "[Controller] notFound received";
-        qDebug() << "[Controller] Current state - prediction:" << m_prediction << "hasPrediction:" << m_hasPrediction << "hasError:" << m_hasError;
+        _logger().info("Current state before notFound handling", {
+            kv("prediction", m_prediction),
+            kv("hasPrediction", m_hasPrediction),
+            kv("hasError", m_hasError)
+        });
 
         if (m_hasPrediction)  {
             m_hasPrediction = false;
-            qDebug() << "[Controller] Setting hasPrediction = false";
+            _logger().info("Setting hasPrediction = false");
             emit hasPredictionChanged(false);
         }
         if (!m_hasError) {
             m_hasError = true;
-            qDebug() << "[Controller] Setting hasError = true";
+            _logger().info("Setting hasError = true");
             emit hasErrorChanged(true);
         }
         if (m_prediction != -1) {
             m_prediction = -1;
-            qDebug() << "[Controller] Setting prediction = -1";
+            _logger().info("Setting prediction = -1");
             emit predictionChanged(-1);
         }
 
-        qDebug() << "[Controller] Final state - prediction:" << m_prediction << "hasPrediction:" << m_hasPrediction << "hasError:" << m_hasError;
+        _logger().info("Final state after notFound handling", {
+            kv("prediction", m_prediction),
+            kv("hasPrediction", m_hasPrediction),
+            kv("hasError", m_hasError)
+        });
         setLoading(false);
     });
 
     connect(m_service, &TrailerPredictionService::requestFailed, this, [this](const QString &e){
-        qDebug() << "[Controller] requestFailed received:" << e;
+        _logger().warn("requestFailed received", {
+            kv("error", e)
+        });
+
         emit requestFailed(e);
+
         if (!m_hasError)      { m_hasError = true;       emit hasErrorChanged(true); }
         if (m_hasPrediction)  { m_hasPrediction = false; emit hasPredictionChanged(false); }
+
         setLoading(false);
     });
 }
 
 void TrailerPredictionController::fetchPredictionByTrailerId(int id) {
+    _logger().info("Fetching prediction by trailer id", {
+        kv("trailerId", id)
+    });
+
     if (m_loading) return;
     if (m_hasPrediction) { m_hasPrediction = false; emit hasPredictionChanged(false); }
     if (m_hasError)      { m_hasError = false;      emit hasErrorChanged(false); }
+
     setLoading(true);
     m_service->getPredictionByTrailerId(id);
 }

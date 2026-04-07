@@ -6,6 +6,7 @@ import QtQuick.Shapes 6.8
 import App 1.0
 import App.Auth 1.0
 import App.Themes 1.0
+import App.Logger 1.0
 import App.Components 1.0 as UI
 import App.Features.TitleBar 1.0
 
@@ -129,16 +130,16 @@ Rectangle {
                 UI.Input {
                     id: passwordInput
                     Layout.fillWidth: true
-                    labelText:         qsTr("Password")
-                    echoMode:          passwordVisible ? TextInput.Normal : TextInput.Password
-                    iconSource:              "qrc:/App/assets/icons/login-eye.svg"
-                    iconButton.icon.color:   Qt.rgba(0, 0, 0, 0)
-                    iconButton.icon.width:   16
-                    iconButton.icon.height:  13
-                    enabled:           !root.isBusy
-                    variant:           root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
+                    labelText: qsTr("Password")
+                    echoMode:  root.passwordVisible? TextInput.Normal : TextInput.Password
+                    iconSource: "qrc:/App/assets/icons/show-password.svg"
+                    iconButton.icon.color: Theme.colors.text
+                    iconButton.icon.width: Theme.spacing.s4
+                    iconButton.icon.height: Theme.spacing.s3 + 1
+                    enabled:   !root.isBusy
+                    variant:   root.hasError ? UI.InputStyles.Error : UI.InputStyles.Default
                     textField.Keys.onReturnPressed: if (root.canLogin) AuthManager.login(authIdInput.text, passwordInput.text, rememberMeCheck.checked)
-                    onIconClicked: passwordVisible = !passwordVisible
+                    onIconClicked: root.passwordVisible = !root.passwordVisible
                 }
 
                 RowLayout {
@@ -159,7 +160,7 @@ Rectangle {
                         implicitHeight: forgotText.implicitHeight + Theme.spacing.s1
 
                         HoverHandler { cursorShape: Qt.PointingHandCursor }
-                        TapHandler { onTapped: console.log("[Login] Forgot password") }
+                        TapHandler { onTapped: AppLogger.withService("LOGIN-PAGE").info("Forgot password") }
 
                         Text {
                             id: forgotText

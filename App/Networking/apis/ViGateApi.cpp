@@ -1,21 +1,35 @@
 #include "ViGateApi.h"
-#include <QDebug>
+
 #include <QUrlQuery>
+
+#include "NetworkingLogger.h"
 #include "connections/ApiEndpoints.h"
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = NetworkingLogger::get().child({
+        {"service", "VI-GATE-API"}
+    });
+    return logger;
+}
+}
 
 ViGateApi::ViGateApi(HttpClient* client, QObject* parent)
     : BaseApi(client, parent) {}
 
 void ViGateApi::getActiveGates(std::function<void(const QJsonArray&)> successCb,
-                                ErrorCb errorCb)
+                               ErrorCb errorCb)
 {
     if (!ensureClient(errorCb)) return;
 
-    qDebug().noquote() << "[ViGateApi] GET" << ApiEndpoints::ViGateGetActiveGates();
+    _logger().info("GET active gates", {
+        kv("url", ApiEndpoints::ViGateGetActiveGates())
+    });
 
     client()->get(ApiEndpoints::ViGateGetActiveGates(), [
-        successCb = std::move(successCb),
-        errorCb   = std::move(errorCb)
+                                                            successCb = std::move(successCb),
+                                                            errorCb   = std::move(errorCb)
     ](QRestReply& reply) mutable {
         expectArray(reply, errorCb, [&](const QJsonArray& arr) {
             if (successCb) successCb(arr);
@@ -24,16 +38,16 @@ void ViGateApi::getActiveGates(std::function<void(const QJsonArray&)> successCb,
 }
 
 void ViGateApi::getFilteredData(int gateId,
-                                 const QDateTime& startDate,
-                                 const QDateTime& endDate,
-                                 bool pedestrian,
-                                 bool vehicle,
-                                 int pageNumber,
-                                 int pageSize,
-                                 const QString& sortBy,
-                                 bool sortDescending,
-                                 std::function<void(const QJsonObject&)> successCb,
-                                 ErrorCb errorCb)
+                                const QDateTime& startDate,
+                                const QDateTime& endDate,
+                                bool pedestrian,
+                                bool vehicle,
+                                int pageNumber,
+                                int pageSize,
+                                const QString& sortBy,
+                                bool sortDescending,
+                                std::function<void(const QJsonObject&)> successCb,
+                                ErrorCb errorCb)
 {
     if (!ensureClient(errorCb)) return;
 
@@ -52,11 +66,13 @@ void ViGateApi::getFilteredData(int gateId,
 
     const QString url = ApiEndpoints::ViGateGetFilteredData() + "?" + q.toString();
 
-    qDebug().noquote() << "[ViGateApi] GET" << url;
+    _logger().info("GET filtered data", {
+        kv("url", url)
+    });
 
     client()->get(url, [
-        successCb = std::move(successCb),
-        errorCb   = std::move(errorCb)
+                           successCb = std::move(successCb),
+                           errorCb   = std::move(errorCb)
     ](QRestReply& reply) mutable {
         expectObject(reply, errorCb, [&](const QJsonObject& obj) {
             if (successCb) successCb(obj);

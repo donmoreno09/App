@@ -1,3 +1,5 @@
+qt_add_library(app_features_truckarrivals STATIC)
+
 set(qml_files
     components/StatCard.qml
 
@@ -13,6 +15,7 @@ set(qml_files
 set(cpp_sources
     TruckArrivalController.cpp
     TruckArrivalController.h
+    TruckArrivalsLogger.h
     services/TruckArrivalService.cpp
     services/TruckArrivalService.h
 )
@@ -24,4 +27,15 @@ qt_add_qml_module(app_features_truckarrivals
     SOURCES ${cpp_sources}
     RESOURCE_PREFIX "/"
     RESOURCES ${icon_resources}
+)
+
+target_link_libraries(app_features_truckarrivals
+    PRIVATE
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Qml
+        Qt6::Quick
+
+        app_logger
+        app_loggerplugin
 )

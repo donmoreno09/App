@@ -1,11 +1,24 @@
 #include "PoiOptions.h"
+
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QVariantMap>
 #include <QHash>
-#include <QDebug>
+
+#include "AppLogger.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "POI-OPTIONS"}
+    });
+    return logger;
+}
+}
 
 PoiOptions::PoiOptions(QObject* parent)
     : QObject(parent)
@@ -15,10 +28,14 @@ PoiOptions::PoiOptions(QObject* parent)
 
 void PoiOptions::initialize(HttpClient* client)
 {
-    if (!client)
-        qFatal("[PoiOptions] initialize() called with null client");
-    if (m_api)
-        qFatal("[PoiOptions] initialize() called more than once");
+    if (!client) {
+        _logger().error("initialize() called with null client");
+        return;
+    }
+    if (m_api) {
+        _logger().error("initialize() called more than once");
+        return;
+    }
 
     m_httpClient = client;
     m_api = new PoiApi(client, this);
@@ -33,21 +50,21 @@ void PoiOptions::fetchAll() {
         rawCategoriesTypes = arr;
         buildCategoriesTypes();
     }, [this](const ErrorResult& er) {
-        qDebug().noquote() << "[PoiOptions] Could not load categories types:" << er.message;
+        _logger().warn("Could not load categories types", { kv("error", er.message) });
     });
 
     m_api->getHealthStatuses([this](const QJsonArray& arr) {
         rawHealthStatuses = arr;
         buildHealthStatuses();
     }, [this](const ErrorResult& er) {
-        qDebug().noquote() << "[PoiOptions] Could not load health statuses:" << er.message;
+        _logger().warn("Could not load health statuses", { kv("error", er.message) });
     });
 
     m_api->getOperationalStates([this](const QJsonArray& arr) {
         rawOperationalStates = arr;
         buildOperationalStates();
     }, [this](const ErrorResult& er) {
-        qDebug().noquote() << "[PoiOptions] Could not load operational states:" << er.message;
+        _logger().warn("Could not load operational states", { kv("error", er.message) });
     });
 }
 
@@ -70,86 +87,86 @@ QVariantList PoiOptions::operationalStates() const { return m_operationalStates;
 void PoiOptions::buildTranslationMaps()
 {
     trCategoryMap = {
-        { QStringLiteral("ADMIN_CONTROL_BUILDINGS"),        tr("Administrative and Control Buildings") },
-        { QStringLiteral("PERSONNEL_OPERATIONAL_SUPPORT"),  tr("Personnel and Operational Support Buildings") },
-        { QStringLiteral("CARGO_HANDLING_STORAGE"),         tr("Cargo Handling and Storage Facilities") },
-        { QStringLiteral("PRODUCTION_TECH_MAINTENANCE"),    tr("Production, Technical and Maintenance Buildings") },
-        { QStringLiteral("TRANSPORT_LOGISTICS_INFRA"),      tr("Transport and Logistics Infrastructure") },
-        { QStringLiteral("PASSENGER_FERRY_TERMINALS"),      tr("Passenger and Ferry Terminals") },
-        { QStringLiteral("ASSETS"),                         tr("Assets") },
-        { QStringLiteral("TERMINALS"),                      tr("Terminals") },
-        { QStringLiteral("SECURITY"),                       tr("Security") },
-    };
+                     { QStringLiteral("ADMIN_CONTROL_BUILDINGS"),        tr("Administrative and Control Buildings") },
+                     { QStringLiteral("PERSONNEL_OPERATIONAL_SUPPORT"),  tr("Personnel and Operational Support Buildings") },
+                     { QStringLiteral("CARGO_HANDLING_STORAGE"),         tr("Cargo Handling and Storage Facilities") },
+                     { QStringLiteral("PRODUCTION_TECH_MAINTENANCE"),    tr("Production, Technical and Maintenance Buildings") },
+                     { QStringLiteral("TRANSPORT_LOGISTICS_INFRA"),      tr("Transport and Logistics Infrastructure") },
+                     { QStringLiteral("PASSENGER_FERRY_TERMINALS"),      tr("Passenger and Ferry Terminals") },
+                     { QStringLiteral("ASSETS"),                         tr("Assets") },
+                     { QStringLiteral("TERMINALS"),                      tr("Terminals") },
+                     { QStringLiteral("SECURITY"),                       tr("Security") },
+                     };
 
     trTypeMap = {
-        { QStringLiteral("PORT_AUTHORITY_HQ"),                   tr("Port Authority Headquarters") },
-        { QStringLiteral("CONTROL_TOWER_VTS"),                   tr("Control Tower / Vessel Traffic Service (VTS) Center") },
-        { QStringLiteral("CUSTOMS_BORDER_CONTROL"),              tr("Customs and Border Control Offices") },
-        { QStringLiteral("SECURITY_SURVEILLANCE_CENTER"),        tr("Security and Surveillance Center") },
+                 { QStringLiteral("PORT_AUTHORITY_HQ"),                   tr("Port Authority Headquarters") },
+                 { QStringLiteral("CONTROL_TOWER_VTS"),                   tr("Control Tower / Vessel Traffic Service (VTS) Center") },
+                 { QStringLiteral("CUSTOMS_BORDER_CONTROL"),              tr("Customs and Border Control Offices") },
+                 { QStringLiteral("SECURITY_SURVEILLANCE_CENTER"),        tr("Security and Surveillance Center") },
 
-        { QStringLiteral("CREW_ACCOMMODATION"),                  tr("Crew Accommodation / Seafarers’ Center") },
-        { QStringLiteral("ADMIN_OFFICES_PORT_OPERATORS"),        tr("Administrative Offices for Port Operators") },
-        { QStringLiteral("SECURITY_POSTS_GATEHOUSES"),           tr("Security Posts / Gatehouses") },
-        { QStringLiteral("FIREFIGHTING_STATIONS"),               tr("Firefighting Stations") },
-        { QStringLiteral("MEDICAL_FIRST_AID_CENTER"),            tr("Medical / First Aid Center") },
-        { QStringLiteral("TRAINING_CENTERS"),                    tr("Training Centers") },
+                 { QStringLiteral("CREW_ACCOMMODATION"),                  tr("Crew Accommodation / Seafarers’ Center") },
+                 { QStringLiteral("ADMIN_OFFICES_PORT_OPERATORS"),        tr("Administrative Offices for Port Operators") },
+                 { QStringLiteral("SECURITY_POSTS_GATEHOUSES"),           tr("Security Posts / Gatehouses") },
+                 { QStringLiteral("FIREFIGHTING_STATIONS"),               tr("Firefighting Stations") },
+                 { QStringLiteral("MEDICAL_FIRST_AID_CENTER"),            tr("Medical / First Aid Center") },
+                 { QStringLiteral("TRAINING_CENTERS"),                    tr("Training Centers") },
 
-        { QStringLiteral("WAREHOUSES"),                          tr("Warehouses") },
-        { QStringLiteral("COLD_STORAGE"),                        tr("Cold Storage / Refrigerated Warehouses") },
-        { QStringLiteral("BULK_STORAGE_SILOS"),                  tr("Bulk Storage Silos") },
-        { QStringLiteral("CARGO_CONSOLIDATION_CENTERS"),         tr("Cargo Consolidation Centers") },
+                 { QStringLiteral("WAREHOUSES"),                          tr("Warehouses") },
+                 { QStringLiteral("COLD_STORAGE"),                        tr("Cold Storage / Refrigerated Warehouses") },
+                 { QStringLiteral("BULK_STORAGE_SILOS"),                  tr("Bulk Storage Silos") },
+                 { QStringLiteral("CARGO_CONSOLIDATION_CENTERS"),         tr("Cargo Consolidation Centers") },
 
-        { QStringLiteral("POWER_PUMPING_STATIONS"),              tr("Power Substations and Pumping Stations") },
-        { QStringLiteral("PANEL_LINE"),                          tr("Panel Line") },
-        { QStringLiteral("STEEL_CUTTING_FORMING"),               tr("Steel Cutting and Forming") },
-        { QStringLiteral("WELDING_ASSEMBLY_HALLS"),              tr("Welding and Assembly Halls") },
-        { QStringLiteral("SURFACE_TREATMENT_PAINTING_HALLS"),    tr("Surface Treatment and Painting Halls") },
-        { QStringLiteral("FITTING_OUT_INTEGRATION_HALLS"),       tr("Fitting-out and Integration Halls") },
+                 { QStringLiteral("POWER_PUMPING_STATIONS"),              tr("Power Substations and Pumping Stations") },
+                 { QStringLiteral("PANEL_LINE"),                          tr("Panel Line") },
+                 { QStringLiteral("STEEL_CUTTING_FORMING"),               tr("Steel Cutting and Forming") },
+                 { QStringLiteral("WELDING_ASSEMBLY_HALLS"),              tr("Welding and Assembly Halls") },
+                 { QStringLiteral("SURFACE_TREATMENT_PAINTING_HALLS"),    tr("Surface Treatment and Painting Halls") },
+                 { QStringLiteral("FITTING_OUT_INTEGRATION_HALLS"),       tr("Fitting-out and Integration Halls") },
 
-        { QStringLiteral("FREIGHT_FORWARDING_OFFICES"),          tr("Freight Forwarding Offices") },
-        { QStringLiteral("TRUCK_PARKING_INSPECTION"),            tr("Truck Parking Areas and Inspection Stations") },
-        { QStringLiteral("WEIGHBRIDGES"),                        tr("Weighbridges") },
-        { QStringLiteral("CONTAINER_FREIGHT_STATIONS"),          tr("Container Freight Stations (CFS)") },
-        { QStringLiteral("RAIL_TERMINALS_INTERMODAL"),           tr("Rail Terminals / Intermodal Facilities") },
-        { QStringLiteral("PARKING_MAINTENANCE_DEPOTS"),          tr("Parking Areas & Maintenance Depots") },
+                 { QStringLiteral("FREIGHT_FORWARDING_OFFICES"),          tr("Freight Forwarding Offices") },
+                 { QStringLiteral("TRUCK_PARKING_INSPECTION"),            tr("Truck Parking Areas and Inspection Stations") },
+                 { QStringLiteral("WEIGHBRIDGES"),                        tr("Weighbridges") },
+                 { QStringLiteral("CONTAINER_FREIGHT_STATIONS"),          tr("Container Freight Stations (CFS)") },
+                 { QStringLiteral("RAIL_TERMINALS_INTERMODAL"),           tr("Rail Terminals / Intermodal Facilities") },
+                 { QStringLiteral("PARKING_MAINTENANCE_DEPOTS"),          tr("Parking Areas & Maintenance Depots") },
 
-        { QStringLiteral("CRUISE_TERMINALS"),                    tr("Cruise Terminals") },
-        { QStringLiteral("FERRY_TERMINALS"),                     tr("Ferry Terminals") },
-        { QStringLiteral("TICKETING_CHECKIN"),                   tr("Ticketing & Check-in Buildings") },
-        { QStringLiteral("VISITOR_INFO_CENTERS"),                tr("Visitor & Information Centers") },
-        { QStringLiteral("SECURITY_CUSTOMS_POSTS"),              tr("Security & Customs Posts") },
+                 { QStringLiteral("CRUISE_TERMINALS"),                    tr("Cruise Terminals") },
+                 { QStringLiteral("FERRY_TERMINALS"),                     tr("Ferry Terminals") },
+                 { QStringLiteral("TICKETING_CHECKIN"),                   tr("Ticketing & Check-in Buildings") },
+                 { QStringLiteral("VISITOR_INFO_CENTERS"),                tr("Visitor & Information Centers") },
+                 { QStringLiteral("SECURITY_CUSTOMS_POSTS"),              tr("Security & Customs Posts") },
 
-        { QStringLiteral("GOLIATH_CRANES"),                      tr("Goliath Cranes") },
-        { QStringLiteral("PORTAL_CRANES"),                       tr("Portal Cranes") },
-        { QStringLiteral("TOWER_CRANES"),                        tr("Tower Cranes") },
-        { QStringLiteral("MOBILE_CRANES"),                       tr("Mobile Cranes") },
-        { QStringLiteral("SPMTS"),                               tr("Self-Propelled Modular Transporters (SPMTs)") },
-        { QStringLiteral("BLOCK_TRANSPORTERS"),                  tr("Block Transporters / Heavy-load Trailers") },
-        { QStringLiteral("MONORAIL_HOISTS_WINCHES"),             tr("Monorail Systems, Hoists, and Winches") },
+                 { QStringLiteral("GOLIATH_CRANES"),                      tr("Goliath Cranes") },
+                 { QStringLiteral("PORTAL_CRANES"),                       tr("Portal Cranes") },
+                 { QStringLiteral("TOWER_CRANES"),                        tr("Tower Cranes") },
+                 { QStringLiteral("MOBILE_CRANES"),                       tr("Mobile Cranes") },
+                 { QStringLiteral("SPMTS"),                               tr("Self-Propelled Modular Transporters (SPMTs)") },
+                 { QStringLiteral("BLOCK_TRANSPORTERS"),                  tr("Block Transporters / Heavy-load Trailers") },
+                 { QStringLiteral("MONORAIL_HOISTS_WINCHES"),             tr("Monorail Systems, Hoists, and Winches") },
 
-        { QStringLiteral("CONTAINER_TERMINALS"),                 tr("Container Yards / Terminals") },
-        { QStringLiteral("RORO_TERMINALS"),                      tr("Ro-Ro (Roll-on/Roll-off) Terminals") },
-        { QStringLiteral("SHIP_REPAIR_DOCKS"),                   tr("Ship Repair Docks / Dry Docks") },
+                 { QStringLiteral("CONTAINER_TERMINALS"),                 tr("Container Yards / Terminals") },
+                 { QStringLiteral("RORO_TERMINALS"),                      tr("Ro-Ro (Roll-on/Roll-off) Terminals") },
+                 { QStringLiteral("SHIP_REPAIR_DOCKS"),                   tr("Ship Repair Docks / Dry Docks") },
 
-        { QStringLiteral("CCTV"),                                tr("CCTV") },
-        { QStringLiteral("ACCESS_CONTROL_SERVERS"),              tr("Access Control Servers") },
-        { QStringLiteral("NVR_CYBER_HARDENED"),                  tr("Network Video Recorders (NVRs) with Cybersecurity Hardening") },
-        { QStringLiteral("DIGITAL_TWIN_SITUATIONAL_AWARENESS"),  tr("Digital Twin / Situational Awareness Systems (GIS-based Threat Visualization)") },
-    };
+                 { QStringLiteral("CCTV"),                                tr("CCTV") },
+                 { QStringLiteral("ACCESS_CONTROL_SERVERS"),              tr("Access Control Servers") },
+                 { QStringLiteral("NVR_CYBER_HARDENED"),                  tr("Network Video Recorders (NVRs) with Cybersecurity Hardening") },
+                 { QStringLiteral("DIGITAL_TWIN_SITUATIONAL_AWARENESS"),  tr("Digital Twin / Situational Awareness Systems (GIS-based Threat Visualization)") },
+                 };
 
     trHealthStatusesMap = {
-        { 1, tr("Active") },
-        { 2, tr("Off") },
-        { 3, tr("Degraded") },
-        { 4, tr("Maintenance") },
-    };
+                           { 1, tr("Active") },
+                           { 2, tr("Off") },
+                           { 3, tr("Degraded") },
+                           { 4, tr("Maintenance") },
+                           };
 
     trOperationalStatesMap = {
-        { 1, tr("Standby") },
-        { 2, tr("Operating") },
-        { 3, tr("In transit") },
-        { 4, tr("Waiting") },
-    };
+                              { 1, tr("Standby") },
+                              { 2, tr("Operating") },
+                              { 3, tr("In transit") },
+                              { 4, tr("Waiting") },
+                              };
 }
 
 void PoiOptions::buildCategoriesTypes()

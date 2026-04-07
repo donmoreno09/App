@@ -1,7 +1,7 @@
 #ifndef ILOGSINK_H
 #define ILOGSINK_H
 
-#include "log_record.h"
+#include "../core/LogRecord.h"
 
 // Abstract interface for log sinks
 // A sink is a target that receives fully-formed log records
@@ -16,6 +16,11 @@ public:
     virtual void flush() {}
 
     virtual void shutdown() {}
+
+protected:
+    static QString toJson(const QVariantMap& m) {
+        return QString::fromUtf8(QJsonDocument(QJsonObject::fromVariantMap(m)).toJson(QJsonDocument::Compact));
+    }
 };
 
 #endif // ILOGSINK_H

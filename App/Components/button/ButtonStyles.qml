@@ -1,6 +1,7 @@
 pragma Singleton
 
 import QtQuick 6.8
+import App.Logger 1.0
 import App.Themes 1.0
 
 QtObject {
@@ -134,7 +135,7 @@ QtObject {
         case ButtonStyles.Warning: return _warning
         case ButtonStyles.PrimaryDarkMode: return _primaryDarkMode
         default: {
-            console.warn("Invalid ButtonStyle variant:", variant)
+            AppLogger.withService("BUTTON-STYLES").warn("Invalid ButtonStyle variant", { variant: variant })
             return _primary
         }
         }

@@ -1,6 +1,8 @@
 pragma Singleton
 
-import QtQuick
+import QtQuick 6.8
+
+import App.Logger 1.0
 
 import "tokens"
 import "variants"
@@ -45,19 +47,19 @@ QtObject {
             url = Qt.resolvedUrl("variants/FincantieriDark.qml")
             break
         default:
-            console.error("Theme.setTheme: unknown variant:", variant)
+            AppLogger.withService("THEME").error("Setting unknown variant", { variant: variant })
             return false
         }
 
         const themeComponent = Qt.createComponent(url)
         if (themeComponent.status === Component.Error) {
-            console.error("Theme: load error:", themeComponent.errorString())
+            AppLogger.withService("THEME").error("Load error", { error: themeComponent.errorString() })
             return false
         }
 
         const theme = themeComponent.createObject(root)
         if (!theme) {
-            console.error("Theme: invalid BaseTheme instance for", url)
+            AppLogger.withService("THEME").error("Invalid BaseTheme instance", { url: url })
             if (theme) theme.destroy()
             return false
         }

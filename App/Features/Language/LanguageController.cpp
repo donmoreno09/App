@@ -1,10 +1,22 @@
 #include "LanguageController.h"
-#include "LanguageEnum.h"
 #include <QCoreApplication>
 #include <QGuiApplication>
 #include <QSettings>
 #include <QLocale>
-#include <QDebug>
+
+#include "LanguageEnum.h"
+#include "LanguageLogger.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = LanguageLogger::get().child({
+        {"service", "LANGUAGE_CONTROLLER"}
+    });
+    return logger;
+}
+}
 
 LanguageController *LanguageController::s_instance = nullptr;
 
@@ -43,19 +55,20 @@ void LanguageController::setCurrentLanguage(const QString &language)
 {
     // Validate input
     if (language.isEmpty()) {
-        qWarning() << "LanguageController: Empty language code provided";
+        _logger().warn("Rejected empty language code");
         return;
     }
 
     if (!Language::isSupported(language)) {
         QString availableList = Language::getAllCodes().join(", ");
-        qWarning() << "LanguageController: Unsupported language" << language
-                   << "Available:" << availableList;
+        _logger().warn("Rejected unsupported language", {
+            kv("language", language),
+            kv("available", availableList)
+        });
         return;
     }
 
     if (m_currentLanguage == language) {
-        qDebug() << "Language" << language << "is already current";
         return; // Already current language
     }
 
@@ -86,7 +99,7 @@ QString LanguageController::initializeLanguage()
     QString savedLanguage = settings.value("language").toString();
 
     if (!savedLanguage.isEmpty() && Language::isSupported(savedLanguage)) {
-        qDebug() << "Restored saved language:" << savedLanguage;
+        _logger().info("Restored saved language", { kv("language", savedLanguage) });
         return savedLanguage;
     }
 
@@ -94,12 +107,12 @@ QString LanguageController::initializeLanguage()
     QString systemLocale = QLocale::system().name().left(2);
 
     if (Language::isSupported(systemLocale)) {
-        qDebug() << "Using system language:" << systemLocale;
+        _logger().info("Using system language", { kv("language", systemLocale) });
         return systemLocale;
     }
 
     // Final fallback to English
-    qDebug() << "Using default language: en";
+    _logger().info("Falling back to default language", { kv("language", "en") });
     return "en";
 }
 
@@ -113,7 +126,10 @@ void LanguageController::loadLanguage(const QString &language)
     // Fallback to system language if different from requested
     QString systemLang = QLocale::system().name().left(2);
     if (language != systemLang && tryLoadLanguage(systemLang)) {
-        qWarning() << "Requested language" << language << "failed, using system language" << systemLang;
+        _logger().warn("Requested language failed; using system language", {
+            kv("requested", language),
+            kv("fallback", systemLang)
+        });
         m_currentLanguage = systemLang; // Update current language to reflect reality
         emit currentLanguageChanged();
         return;
@@ -121,14 +137,14 @@ void LanguageController::loadLanguage(const QString &language)
 
     // Final fallback to English
     if (language != "en" && tryLoadLanguage("en")) {
-        qWarning() << "Language" << language << "failed, falling back to English";
+        _logger().warn("Language load failed; falling back to English", { kv("requested", language) });
         m_currentLanguage = "en"; // Update current language to reflect reality
         emit currentLanguageChanged();
         return;
     }
 
     // Critical error - log and continue without translator
-    qCritical() << "All language fallbacks failed for:" << language;
+    _logger().warn("All language fallbacks failed", { kv("requested", language) });
 }
 
 bool LanguageController::tryLoadLanguage(const QString &language)
@@ -141,10 +157,16 @@ bool LanguageController::tryLoadLanguage(const QString &language)
 
     if (m_translator->load(resourcePath)) {
         QCoreApplication::installTranslator(m_translator);
-        qDebug() << "Successfully loaded language:" << language << "from" << resourcePath;
+        _logger().info("Loaded translation file", {
+            kv("language", language),
+            kv("path", resourcePath)
+        });
         return true;
     }
 
-    qDebug() << "Failed to load language file:" << resourcePath;
+    _logger().warn("Translation file not found", {
+        kv("language", language),
+        kv("path", resourcePath)
+    });
     return false;
 }

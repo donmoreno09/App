@@ -7,6 +7,7 @@
 import QtQuick 6.8
 import QtLocation 6.8
 import QtPositioning 6.8
+import App.Logger 1.0
 
 QtObject {
     id: mapState
@@ -92,7 +93,7 @@ QtObject {
             try {
                 toObj[key] = value
             } catch (error) {
-                console.error(`Cannot sync "${key}":`, error)
+                AppLogger.withService("MAP-STATE").error(`Cannot sync "${key}"`, { error: String(error) })
             }
         }
     }

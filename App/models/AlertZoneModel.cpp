@@ -1,8 +1,20 @@
 #include "AlertZoneModel.h"
-#include <QDebug>
+
 #include <QMetaType>
 
+#include "AppLogger.h"
+
 Q_DECLARE_METATYPE(QList<QGeoCoordinate>)
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "ALERT-ZONE-MODEL"}
+    });
+    return logger;
+}
+}
 
 AlertZoneModel::AlertZoneModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
@@ -11,10 +23,14 @@ AlertZoneModel::AlertZoneModel(QObject *parent)
 
 void AlertZoneModel::initialize(HttpClient* client)
 {
-    if (!client)
-        qFatal("[AlertZoneModel] initialize() called with null client");
-    if (m_api)
-        qFatal("[AlertZoneModel] initialize() called more than once");
+    if (!client) {
+        _logger().error("initialize() called with null client");
+        return;
+    }
+    if (m_api) {
+        _logger().error("initialize() called more than once");
+        return;
+    }
 
     m_httpClient = client;
     m_api = new AlertZoneApi(client, this);
@@ -31,8 +47,8 @@ void AlertZoneModel::fetch()
         for (auto& az : zones)
             m_alertZones.push_back(az);
         endResetModel();
-    }, [](const ErrorResult& er) {
-        qDebug().noquote() << "[AlertZoneModel] Could not load alert zones:" << er.message;
+    }, [this](const ErrorResult& er) {
+        _logger().warn("Could not load alert zones", { kv("error", er.message) });
     });
 }
 
@@ -385,7 +401,7 @@ void AlertZoneModel::append(const QVariantMap &data)
         emit appended();
         setLoading(false);
     }, [this](const ErrorResult& er) {
-        qDebug().noquote() << "[AlertZoneModel] Could not save alert zone:" << er.message;
+        _logger().warn("Could not save alert zone", { kv("error", er.message) });
         setLoading(false);
     });
 }
@@ -416,7 +432,10 @@ void AlertZoneModel::update(const QVariantMap &data)
         emit updated();
         setLoading(false);
     }, [this](const ErrorResult& er) {
-        qDebug().noquote().nospace() << "[AlertZoneModel] Could not update alert zone with id " << m_alertZoneSave->id << ": " << er.message;
+        _logger().warn("Could not update alert zone", {
+            kv("id", m_alertZoneSave->id),
+            kv("error", er.message)
+        });
         setLoading(false);
     });
 }
@@ -447,7 +466,10 @@ void AlertZoneModel::remove(const QString &id)
         emit removed();
         setLoading(false);
     }, [this, id](const ErrorResult& er) {
-        qDebug().noquote().nospace() << "[AlertZoneModel] Could not delete alert zone with id " << id << ": " << er.message;
+        _logger().warn("Could not delete alert zone", {
+            kv("id", id),
+            kv("error", er.message)
+        });
         setLoading(false);
     });
 }
@@ -478,7 +500,10 @@ QQmlPropertyMap *AlertZoneModel::getEditableAlertZone(int index)
             emit fetched(az.id);
         }
     }, [this](const auto& er) {
-        qDebug().noquote() << "[AlertZoneModel] Could not get alert zone:" << m_oldAlertZone->id;
+        _logger().warn("Could not get alert zone", {
+            kv("id", m_oldAlertZone->id),
+            kv("error", er.message)
+        });
     });
 
     return m_helper->map(index, 0);
@@ -507,11 +532,18 @@ void AlertZoneModel::discardChanges()
 
 void AlertZoneModel::printData()
 {
-    for (const auto& alertZone : std::as_const(m_alertZones)) {
-        qDebug() << "ID: " << alertZone.id << " -------------------";
-        qDebug() << "Label: " << alertZone.label;
-        qDebug() << "Coordinates count:" << alertZone.geometry.coordinates.size();
+    QVariantList zones;
+    zones.reserve(m_alertZones.size());
+
+    for (const auto &alertZone : std::as_const(m_alertZones)) {
+        QVariantMap m;
+        m.insert("id", alertZone.id);
+        m.insert("label", alertZone.label);
+        m.insert("coordinatesCount", alertZone.geometry.coordinates.size());
+        zones.append(m);
     }
+
+    _logger().info("Alert zones data", { kv("zones", zones) });
 }
 
 bool AlertZoneModel::loading() const
@@ -606,7 +638,9 @@ void AlertZoneModel::buildAlertZoneSave(const QVariantMap &data)
     m_alertZoneSave->active = data.value("active", true).toBool();
     m_alertZoneSave->severity = data.value("severity", "low").toInt();
 
-    qDebug() << "[buildAlertZoneSave] Active: " << m_alertZoneSave->active;
+    _logger().info("Building alert zone save payload", {
+        kv("active", m_alertZoneSave->active)
+    });
 
     QVariantMap layersMap = data.value("layers").toMap();
     for (auto it = layersMap.begin(); it != layersMap.end(); ++it) {

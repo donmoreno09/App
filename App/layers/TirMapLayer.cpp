@@ -1,9 +1,19 @@
 #include "TirMapLayer.h"
 
-#include <QDebug>
-
+#include "AppLogger.h"
 #include "core/GeoSelectionUtils.h"
 #include "core/TrackManager.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "TIR-MAP-LAYER"}
+    });
+    return logger;
+}
+}
 
 TirMapLayer::TirMapLayer(QObject* parent)
     : BaseTrackMapLayer(parent)
@@ -15,7 +25,7 @@ TirMapLayer::TirMapLayer(QObject* parent)
         QObject::connect(m_tirModel, &TirModel::historyPayloadArrived,
                          tm, &TrackManager::onHistoryPayloadArrived);
     } else {
-        qWarning() << "[TrackModel] TrackManager singleton not yet constructed.";
+        _logger().warn("TrackManager singleton not yet constructed.");
     }
 
     m_clearTirsTimer = new QTimer(this);
@@ -23,9 +33,10 @@ TirMapLayer::TirMapLayer(QObject* parent)
     m_clearTirsTimer->setInterval(60 * 1000); // 60 seconds
 
     connect(m_clearTirsTimer, &QTimer::timeout, this, [this]() {
-        if (!m_tirModel->tirs().isEmpty()) {
-            qDebug() << "[TirMapLayer] Timeout: clearing tirs due to inactivity";
+        if (!m_tirModel->tirs().isEmpty() || clusterModel()->rowCount() > 0) {
+            _logger().info("Timeout: clearing tirs and clusters due to inactivity");
             m_tirModel->clear();
+            clusterModel()->clear();
         }
     });
 }
@@ -53,7 +64,7 @@ void TirMapLayer::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordina
     }
 
     QVariantList selectedTirs = GeoSelection::selectInRect(geoTirs, topLeft, bottomRight);
-    qDebug() << "[TirMapLayer] selectedTirs: " << selectedTirs;
+    _logger().info("selectedTirs", { kv("selectedTirs", selectedTirs) });
     m_selectedTirs = selectedTirs;
     emit selectedInRect();
 }

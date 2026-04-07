@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 
+import App.Logger 1.0
 import App.Themes 1.0
 
 QtObject {
@@ -39,7 +40,7 @@ QtObject {
         case InputStyles.Warning: return _warning
         case InputStyles.Error: return _error
         default: {
-            console.warn("Invalid InputStyle: ", variant)
+            AppLogger.withService("INPUT-STYLES").warn("Invalid InputStyle", { variant: variant })
             return _default
         }
         }

@@ -4,6 +4,7 @@ set(cpp_files
     AuthState.h
     AuthManager.h
     AuthManager.cpp
+    JwtUtils.h
     PermissionManager.h
     PermissionManager.cpp
     SecureTokenStorage.h
@@ -27,16 +28,21 @@ qt_add_qml_module(app_auth
 target_include_directories(app_auth
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_include_directories(app_auth
+    PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
 target_link_libraries(app_auth
-    PUBLIC
-        Qt6::Qml
     PRIVATE
-        app_networking
         Qt6::Core
+        Qt6::Qml
         Qt6::Quick
         Qt6::Gui
+
         app_features_titlebar
+        app_networking
+        app_logger
 )

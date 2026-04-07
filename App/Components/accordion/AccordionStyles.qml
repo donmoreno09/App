@@ -1,6 +1,7 @@
 pragma Singleton
 
 import QtQuick 6.8
+import App.Logger 1.0
 import App.Themes 1.0
 
 QtObject {
@@ -45,7 +46,7 @@ QtObject {
         case AccordionStyles.Warning: return _warning
         case AccordionStyles.Success: return _success
         default: {
-            console.warn("Invalid AccordionStyle variant:", variant)
+            AppLogger.withService("ACCORDION-STYLES").warn("Invalid AccordionStyle variant", { variant: variant })
             return _default
         }
         }

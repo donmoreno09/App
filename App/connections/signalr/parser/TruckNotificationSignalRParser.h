@@ -1,8 +1,9 @@
 #ifndef TRUCKNOTIFICATIONSIGNALRPARSER_H
 #define TRUCKNOTIFICATIONSIGNALRPARSER_H
 
+#include "AppLogger.h"
 #include "ISignalRMessageParser.h"
-#include <entities/TruckNotification.h>
+#include "entities/TruckNotification.h"
 
 class TruckNotificationSignalRParser : public ISignalRMessageParser<TruckNotification> {
 public:
@@ -13,7 +14,8 @@ public:
         QJsonObject payload = QJsonObject::fromVariantMap(payloadVar.toMap());
 
         if (payload.isEmpty()) {
-            qWarning() << "[TruckNotificationSignalRParser] Payload is empty or invalid";
+            auto logger = AppLogger::get();
+            logger.withService("TruckNotificationSignalRParser").warn("Payload is empty or invalid");
             return {};
         }
 

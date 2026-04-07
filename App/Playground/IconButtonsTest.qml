@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Layouts 6.8
 import QtQuick.Controls 6.8
+import App.Logger 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.Language 1.0
@@ -57,7 +58,7 @@ Item {
 
                     text: `${TranslationManager.revision}` && qsTr("Mission")
 
-                    onClicked: console.log("Mission clipboard clicked")
+                    onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Mission clipboard clicked")
 
                     ToolTip {
                         visible: parent.hovered
@@ -75,7 +76,7 @@ Item {
                     icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
 
-                    onClicked: console.log("Map clicked")
+                    onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Map clicked")
 
                     ToolTip {
                         visible: parent.hovered
@@ -94,7 +95,7 @@ Item {
                     icon.height: Theme.icons.sizeLg
 
 
-                    onClicked: console.log("Home clicked")
+                    onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Home clicked")
 
                     ToolTip {
                         visible: parent.hovered
@@ -113,7 +114,7 @@ Item {
                     icon.height: Theme.icons.sizeLg
 
 
-                    onClicked: console.log("Send clicked")
+                    onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Send clicked")
 
                     ToolTip {
                         visible: parent.hovered
@@ -132,7 +133,7 @@ Item {
                     icon.height: Theme.icons.sizeLg
 
 
-                    onClicked: console.log("Add clicked")
+                    onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Add clicked")
 
                     ToolTip {
                         visible: parent.hovered
@@ -151,7 +152,7 @@ Item {
                     icon.height: Theme.icons.sizeLg
 
 
-                    onClicked: console.log("Remove clicked")
+                    onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Remove clicked")
 
                     ToolTip {
                         visible: parent.hovered
@@ -290,7 +291,7 @@ Item {
 
                         radius: Theme.radius.md
 
-                        onClicked: console.log("Mission selected")
+                        onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Mission selected")
 
                         ToolTip {
                             visible: parent.hovered
@@ -312,7 +313,7 @@ Item {
 
                         radius: Theme.radius.md
 
-                        onClicked: console.log("Map selected")
+                        onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Map selected")
 
                         ToolTip {
                             visible: parent.hovered
@@ -334,7 +335,7 @@ Item {
 
                         radius: Theme.radius.md
 
-                        onClicked: console.log("Home selected")
+                        onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Home selected")
 
                         ToolTip {
                             visible: parent.hovered
@@ -356,7 +357,7 @@ Item {
 
                         radius: Theme.radius.md
 
-                        onClicked: console.log("Send selected")
+                        onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Send selected")
 
                         ToolTip {
                             visible: parent.hovered
@@ -378,7 +379,7 @@ Item {
 
                         radius: Theme.radius.md
 
-                        onClicked: console.log("Add selected")
+                        onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Add selected")
 
                         ToolTip {
                             visible: parent.hovered
@@ -400,7 +401,7 @@ Item {
 
                         radius: Theme.radius.md
 
-                        onClicked: console.log("Remove selected")
+                        onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Remove selected")
 
                         ToolTip {
                             visible: parent.hovered
@@ -446,7 +447,7 @@ Item {
                     icon.height: Theme.icons.sizeLg
 
 
-                    onClicked: console.log("Enabled button clicked")
+                    onClicked: AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Enabled button clicked")
 
                     ToolTip {
                         visible: parent.hovered
@@ -487,7 +488,9 @@ Item {
 
                     onClicked: {
                         isActive = !isActive
-                        console.log("Toggle: " + (isActive ? "ACTIVE" : "INACTIVE"))
+                        AppLogger.withService("PLAYGROUND-ICON-BUTTONS").info("Toggle changed", {
+                            state: isActive ? "ACTIVE" : "INACTIVE"
+                        })
                     }
 
                     ToolTip {

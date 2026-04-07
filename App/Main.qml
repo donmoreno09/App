@@ -6,6 +6,7 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 import App 1.0
+import App.Logger 1.0
 import App.Auth 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
@@ -20,8 +21,8 @@ import App.Features.Notifications 1.0
 import App.Features.MapToolbar 1.0
 import App.Features.Language 1.0
 import App.Features.ShipStowage 1.0
-import App.Features.TrackPanel 1.0
 import App.Features.MapModes 1.0 as Commands
+import App.Features.TrackPanel 1.0
 
 ApplicationWindow {
     id: app
@@ -37,14 +38,45 @@ ApplicationWindow {
     property bool appLoaded: false
 
     Component.onCompleted: {
+        PoiOptions.fetchAll()
         WindowsNcController.attachToWindow(app)
         ShipStowageController.initialize(app)
         appLoaded = true
     }
 
-    Component.onDestruction: {
-        console.log("Main window destroying, cleaning up...")
+    // Adhoc way to let deactivating all tracks first before closing the application
+    // NOTE: An analysis should be done on how to handle asynchronous cleanups
+    property bool shutdownApproved: false
+    property bool shutdownStarted: false
+
+    onClosing: function close(close) {
+        if (shutdownApproved) return
+        close.accepted = false
+        if (shutdownStarted) return
+        shutdownStarted = true
+
+        AppLogger.info("App closing, cleaning up first...")
+        TrackManager.deactivateAll()
         ShipStowageController.cleanup()
+    }
+
+    Connections {
+        target: TrackManager
+
+        function onDeactivateAllFinished() {
+            if (!app.shutdownStarted) return
+
+            app.shutdownApproved = true
+            app.close()
+        }
+
+        function onDeactivateAllFailed() {
+            if (!app.shutdownStarted) return
+
+            // Close app regardless
+            app.shutdownApproved = true
+            app.close()
+        }
     }
 
     UI.GlobalBackground {
@@ -81,7 +113,15 @@ ApplicationWindow {
         target: LayerManager
 
         function onAllLayersReady() {
-            console.log("OK!")
+            AppLogger.info("All layers ready!")
+        }
+    }
+
+    Connections {
+        target: MapController.map
+
+        function onBeZoomLevelChanged() {
+            TrackManager.syncZoomLevel(MapController.map.beZoomLevel)
         }
     }
 
@@ -247,6 +287,18 @@ ApplicationWindow {
         }
     }
 
+    Shortcut {
+        sequence: StandardKey.Undo
+        enabled: Commands.CommandManager.canUndo
+        onActivated: Commands.CommandManager.undo()
+    }
+
+    Shortcut {
+        sequence: StandardKey.Redo
+        enabled: Commands.CommandManager.canRedo
+        onActivated: Commands.CommandManager.redo()
+    }
+
     NotificationToast {
         anchors.fill: parent
         z: Theme.elevation.modal + 1
@@ -271,17 +323,5 @@ ApplicationWindow {
     Connections {
         target: AuthManager
         function onLogoutConfirmationRequested() { logoutDialog.open() }
-    }
-
-    Shortcut {
-        sequence: StandardKey.Undo
-        enabled: Commands.CommandManager.canUndo
-        onActivated: Commands.CommandManager.undo()
-    }
-
-    Shortcut {
-        sequence: StandardKey.Redo
-        enabled: Commands.CommandManager.canRedo
-        onActivated: Commands.CommandManager.redo()
     }
 }

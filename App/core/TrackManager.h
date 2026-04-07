@@ -6,6 +6,7 @@
 #include <QHash>
 #include <layers/BaseTrackMapLayer.h>
 #include "Networking/HttpClient.h"
+#include "Networking/Debouncer.h"
 
 class TrackManager : public  QObject
 {
@@ -20,14 +21,17 @@ public:
     void initialize(HttpClient* http);
 
     Q_INVOKABLE void registerLayer(const QString& track, QObject* layer);
-
     Q_INVOKABLE void unregisterLayer(const QString& track);
 
-    Q_INVOKABLE void activate(const QString& topic);
+    Q_INVOKABLE void activate(const QString& topic, int zoomLevel);
     Q_INVOKABLE void activateHistory(const QString& topic, const QString& track_iridess_uid);
 
     Q_INVOKABLE void deactivate(const QString& track);
     Q_INVOKABLE void deactivateHistory(const QString& topic, const QString& track_iridess_uid);
+
+    Q_INVOKABLE void deactivateAll();
+
+    Q_INVOKABLE void syncZoomLevel(int zoomLevel);
 
     Q_INVOKABLE BaseTrackMapLayer* getLayer(const QString& track);
 
@@ -42,6 +46,7 @@ public:
 
 public slots:
     void onHistoryPayloadArrived(const QString& topic, const QString& uid);
+
 signals:
     void activated(const QString& track);
     void deactivated(const QString& track);
@@ -51,10 +56,14 @@ signals:
     void historyStateChanged(const QString& topic, const QString& uid, int state);
     void requestClearHistory(const QString& topic, const QString& uid);
 
+    void deactivateAllFinished();
+    void deactivateAllFailed();
+
 private:
     HttpClient* m_http = nullptr;
     QHash<QString, BaseTrackMapLayer*> m_trackToLayer;
     QHash<QString, HistoryState> m_histState;
+    Debouncer m_zoomSyncDebouncer;
 
     static TrackManager* s_instance;
 

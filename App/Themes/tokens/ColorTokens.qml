@@ -91,6 +91,7 @@ QtObject {
     readonly property color blackA80: hexWithAlpha(black500, 0.8)
     readonly property color blackA60: hexWithAlpha(black500, 0.6)
     readonly property color blackA40: hexWithAlpha(black500, 0.4)
+    readonly property color blackA30: hexWithAlpha(black500, 0.3)
     readonly property color blackA20: hexWithAlpha(black500, 0.2)
     readonly property color blackA10: hexWithAlpha(black500, 0.1)
     readonly property color blackA5:  hexWithAlpha(black500, 0.05)

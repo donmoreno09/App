@@ -26,7 +26,7 @@ Item {
     property string iconSource: ""
     property int variant: InputStyles.Default
 
-    property alias textField:  textField
+    property alias textField: textField
     property alias iconButton: textFieldIcon
 
     signal textEdited()
@@ -141,8 +141,8 @@ Item {
                     id: textFieldIcon
                     display: AbstractButton.IconOnly
                     icon.source: iconSource
-                    icon.color:  input.enabled ? _style.iconColor : _style.iconColorDisabled
-                    icon.width:  Theme.icons.sizeLg
+                    icon.color: input.enabled ? _style.iconColor : _style.iconColorDisabled
+                    icon.width: Theme.icons.sizeLg
                     icon.height: Theme.icons.sizeLg
                     enabled: input.enabled
                     visible: iconSource

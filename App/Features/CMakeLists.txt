@@ -26,6 +26,7 @@ add_subdirectory(VesselPanel)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         app_features_language
+        app_features_languageplugin
         app_features_mission
 
         # Core UIs
@@ -40,8 +41,11 @@ target_link_libraries(${PROJECT_NAME}
         app_features_maptoolbar
         app_features_trackpanel
         app_features_truckarrivals
+        app_features_truckarrivalsplugin
         app_features_trailerpredictions
+        app_features_trailerpredictionsplugin
         app_features_vigateservices
+        app_features_vigateservicesplugin
         app_features_shipstowage
         app_features_poi
         app_features_alertzone

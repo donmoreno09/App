@@ -18,8 +18,8 @@ void AuthApi::login(const QString& email,
     body["password"] = password;
 
     client()->post(ApiEndpoints::AuthLogin(), QJsonDocument(body).toJson(QJsonDocument::Compact), [
-        successCb = std::move(successCb),
-        errorCb = std::move(errorCb)
+                                                                                                      successCb = std::move(successCb),
+                                                                                                      errorCb = std::move(errorCb)
     ](QRestReply& reply) mutable {
         expectObject(reply, errorCb, [&](const QJsonObject& obj) {
             if (!successCb) return;
@@ -44,8 +44,8 @@ void AuthApi::refresh(const QString& refreshToken,
     body["refreshToken"] = refreshToken;
 
     client()->post(ApiEndpoints::AuthRefresh(), QJsonDocument(body).toJson(QJsonDocument::Compact), [
-        successCb = std::move(successCb),
-        errorCb = std::move(errorCb)
+                                                                                                        successCb = std::move(successCb),
+                                                                                                        errorCb = std::move(errorCb)
     ](QRestReply& reply) mutable {
         expectObject(reply, errorCb, [&](const QJsonObject& obj) {
             if (!successCb) return;
@@ -65,8 +65,8 @@ void AuthApi::logout(std::function<void()> successCb, ErrorCb errorCb)
     if (!ensureClient(errorCb)) return;
 
     client()->post(ApiEndpoints::AuthLogout(), QByteArray{}, [
-        successCb = std::move(successCb),
-        errorCb = std::move(errorCb)
+                                                                 successCb = std::move(successCb),
+                                                                 errorCb = std::move(errorCb)
     ](QRestReply& reply) mutable {
         if (!reply.isSuccess()) {
             emitError(errorCb, fromReply(reply));

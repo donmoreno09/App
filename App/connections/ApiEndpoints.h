@@ -27,6 +27,12 @@ namespace ApiEndpoints {
     QString BaseTrackSenderUrl();
     QString TrackSenderStart(const QString& topic);
     QString TrackSenderStop(const QString& topic);
+    QString TrackSenderStopAll();
+
+    extern QString BaseClustersUrl;
+    QString ClustersStart();
+    QString ClustersStop();
+
     QString TrackHistorySenderStart(const QString& topic,
                                     const QString &track_iridess_uid);
     QString TrackHistorySenderStop(const QString& topic,

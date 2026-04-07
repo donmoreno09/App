@@ -3,6 +3,7 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 import App 1.0
+import App.Logger 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.Panels 1.0
@@ -131,7 +132,7 @@ PanelTemplate {
                             csvSource: "qrc:/App/assets/resources/Export_MH3_Goliath.csv"
                         })
                         if (!window) {
-                            console.warn("[MOCPoiPanel] I can't open floating window");
+                            AppLogger.withService("MOC-POI-PANEL").warn("I can't open floating window")
                         } else {
                             SidePanelController.close(true)
                         }
@@ -155,7 +156,7 @@ PanelTemplate {
                             source: "qrc:/App/assets/resources/Monitoraggio Goliath 2.mp4"
                         })
                         if (!window) {
-                            console.warn("[MOCPoiPanel] I can't open floating window");
+                            AppLogger.withService("MOC-POI-PANEL").warn("I can't open floating window")
                         } else {
                             SidePanelController.close(true)
                         }
@@ -179,7 +180,7 @@ PanelTemplate {
                             source: "qrc:/App/assets/resources/Goliath_Lifted_Loads.jpg"
                         })
                         if (!window) {
-                            console.warn("[MOCPoiPanel] I can't open floating window");
+                            AppLogger.withService("MOC-POI-PANEL").warn("I can't open floating window")
                         } else {
                             SidePanelController.close(true)
                         }

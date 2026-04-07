@@ -1,6 +1,7 @@
 pragma Singleton
 
 import QtQuick 6.8
+import App.Logger 1.0
 import App.Themes 1.0
 
 QtObject {
@@ -26,7 +27,7 @@ QtObject {
         switch (variant) {
         case ToggleStyles.Primary: return _primary
         default: {
-            console.warn("Invalid ToggleStyle variant:", variant)
+            AppLogger.withService("TOGGLE-STYLES").warn("Invalid ToggleStyle variant", { variant: variant })
             return _primary
         }
         }

@@ -1,8 +1,21 @@
 #include "AlertZoneMapLayerController.h"
-#include <QDebug>
-#include <core/GeoSelectionUtils.h>
-#include <entities/AlertZone.h>
+
 #include <QQmlEngine>
+
+#include "AppLogger.h"
+#include "core/GeoSelectionUtils.h"
+#include "entities/AlertZone.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "ALERT-ZONE-MAP-LAYER-CONTROLLER"}
+    });
+    return logger;
+}
+}
 
 AlertZoneMapLayerController::AlertZoneMapLayerController(QObject* parent)
     : BaseMapLayer(parent)
@@ -19,10 +32,22 @@ void AlertZoneMapLayerController::initialize()
 {
     auto* engine = qmlEngine(this);
     m_alertZoneModel = engine->singletonInstance<AlertZoneModel*>("App", "AlertZoneModel");
+
+    if (!m_alertZoneModel) {
+        _logger().warn("Failed to initialize AlertZoneModel");
+        return;
+    }
+
+    _logger().info("AlertZoneMapLayerController initialized");
 }
 
 void AlertZoneMapLayerController::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordinate &bottomRight)
 {
+    if (!m_alertZoneModel) {
+        _logger().warn("Cannot select alert zones: model is not initialized");
+        return;
+    }
+
     QVariantList alertZonesList;
     const auto& alertZones = m_alertZoneModel->alertZones();
 
@@ -45,14 +70,19 @@ void AlertZoneMapLayerController::selectInRect(const QGeoCoordinate &topLeft, co
     }
 
     QVariantList selectedAlertZones = GeoSelection::selectInRect(alertZonesList, topLeft, bottomRight);
-    qDebug() << "[AlertZoneMapLayerController] selectedAlertZones: " << selectedAlertZones;
     m_selectedAlertZones = selectedAlertZones;
+
+    _logger().info("Alert zones selected in rectangle", {
+        kv("selectedCount", selectedAlertZones.size())
+    });
+
     emit selectedInRect();
 }
 
 void AlertZoneMapLayerController::clearSelection()
 {
     m_selectedAlertZones.clear();
+    _logger().info("Cleared alert zone selection");
     emit clearedSelection();
 }
 

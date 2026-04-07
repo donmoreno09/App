@@ -63,18 +63,19 @@ MapQuickItem {
         return QtPositioning.coordinate(nextLat, nextLon)
     }
 
-    anchorPoint.x: marker.width / 2
-    anchorPoint.y: icon.height / 2
+    anchorPoint.x: icon.x + (icon.width / 2)
+    anchorPoint.y: icon.y + (icon.height / 2)
 
-    sourceItem: Column {
+    sourceItem: Item {
         id: marker
-        spacing: Theme.spacing.s1
         width: Math.max(icon.width, labelBox.visible ? labelBox.width : 0)
+        height: icon.height + (labelBox.visible ? Theme.spacing.s1 + labelBox.height : 0)
 
         Image {
             id: icon
             width: root.iconWidth
             height: root.iconHeight
+            x: (marker.width - width) / 2
             source: root.iconSource
             smooth: true
             fillMode: Image.PreserveAspectFit
@@ -95,7 +96,8 @@ MapQuickItem {
         Rectangle {
             id: labelBox
             visible: root.showLabel && root.labelText !== ""
-            anchors.horizontalCenter: icon.horizontalCenter
+            x: (marker.width - width) / 2
+            y: icon.height + Theme.spacing.s1
             width: text.width + Theme.spacing.s3
             height: text.height + Theme.spacing.s1
             radius: Theme.radius.sm

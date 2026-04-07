@@ -67,6 +67,7 @@ MapItemGroup {
     signal tapped()
     signal pathEdited(var path)
     signal firstPointTapped()
+    signal editingFinished()
 
     property bool isDraggingHandle: false
     readonly property bool isMovingPolygon: moveDrag.active
@@ -150,6 +151,7 @@ MapItemGroup {
                 root._startCoords = []
                 root._anchorCoord = QtPositioning.coordinate()
                 root._lastScenePos = Qt.point(0, 0)
+                root.editingFinished()
             }
 
             onActiveTranslationChanged: {
@@ -273,7 +275,11 @@ MapItemGroup {
                     root.pathEdited(next)
                 }
 
-                onActiveChanged: root.isDraggingHandle = active
+                onActiveChanged: {
+                    root.isDraggingHandle = active
+                    if (!active)
+                        root.editingFinished()
+                }
             }
         }
     }

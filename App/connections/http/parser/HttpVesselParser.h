@@ -2,75 +2,88 @@
 #define HTTP_VESSEL_PARSER_H
 
 #include "interfaces/IMessageParser.h"
+
+#include <QDateTime>
+#include <QGeoCoordinate>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
-#include <QGeoCoordinate>
-#include <QDateTime>
 #include <QTimeZone>
+
+#include <entities/ClusteredPayload.h>
 #include <entities/Vessel.h>
 
-class HttpVesselParser : public IMessageParser<Vessel>
+class HttpVesselParser : public IMessageParser<ClusteredPayload<Vessel>>
 {
 public:
-    QVector<Vessel> parse(const QByteArray& message) override
+    ClusteredPayload<Vessel> parse(const QByteArray& message) override
     {
         QJsonParseError err;
-        QJsonDocument doc = QJsonDocument::fromJson(message, &err);
-        if (err.error != QJsonParseError::NoError || !doc.isArray())
+        const QJsonDocument doc = QJsonDocument::fromJson(message, &err);
+        if (err.error != QJsonParseError::NoError)
             return {};
 
-        QVector<Vessel> vessels;
-        QJsonArray arr = doc.array();
-        vessels.reserve(arr.size());
-
-        for (const QJsonValue& item : arr) {
-            if (!item.isObject()) continue;
-            QJsonObject wrapper = item.toObject();
-
-            if (!wrapper.contains("AIS") || !wrapper["AIS"].isObject()) continue;
-            QJsonObject ais = wrapper["AIS"].toObject();
-
-            Vessel v;
-
-            // Unique identity
-            v.mmsi          = QString::number(ais.value("MMSI").toVariant().toLongLong());
-            v.uidForHistory = v.mmsi;
-            v.sourceName    = ais.value("SRC").toString();
-
-            // BaseTrack fields
-            v.name  = ais.value("NAME").toString();
-            v.state = QString::number(ais.value("NAVSTAT").toInt());
-            v.time  = parseTimestamp(ais.value("TIMESTAMP").toString());
-            v.cog   = ais.value("COURSE").toDouble();
-            v.pos   = QGeoCoordinate(
-                ais.value("LATITUDE").toDouble(),
-                ais.value("LONGITUDE").toDouble()
-                );
-
-            // Vessel-specific fields
-            v.speed = ais.value("SPEED").toDouble();
-
-            // HEADING: 0–359 = valid, 511 = unavailable (AIS standard).
-            // Fall back to 511 when the key is missing or out of range.
-            int heading = ais.value("HEADING").toInt(511);
-            v.heading = (heading >= 0 && heading <= 359) ? heading : 511;
-
-            // Antenna-to-hull offsets in metres.
-            // A = bow, B = stern, C = port, D = starboard.
-            v.a = ais.value("A").toInt(0);
-            v.b = ais.value("B").toInt(0);
-            v.c = ais.value("C").toInt(0);
-            v.d = ais.value("D").toInt(0);
-
-            vessels.append(v);
-        }
-
-        return vessels;
+        return parseClusteredPayload<Vessel>(doc, [this](const QJsonArray &tracksArray) {
+            return parseTracks(tracksArray);
+        });
     }
 
 private:
-    int parseTimestamp(const QString& ts)
+    QVector<Vessel> parseTracks(const QJsonArray &tracksArray) const
+    {
+        QVector<Vessel> tracks;
+        tracks.reserve(tracksArray.size());
+
+        for (const QJsonValue &value : tracksArray) {
+            if (!value.isObject())
+                continue;
+
+            const QJsonObject wrapper = value.toObject();
+            const QJsonValue aisValue = wrapper.value("AIS");
+            if (!aisValue.isObject())
+                continue;
+
+            const QJsonObject ais = aisValue.toObject();
+
+            Vessel vessel;
+
+            // Unique identity
+            vessel.mmsi = QString::number(ais.value("MMSI").toVariant().toLongLong());
+            vessel.uidForHistory = vessel.mmsi;
+            vessel.sourceName = ais.value("SRC").toString();
+
+            // BaseTrack fields
+            vessel.name = ais.value("NAME").toString();
+            vessel.state = QString::number(ais.value("NAVSTAT").toInt());
+            vessel.time = parseTimestamp(ais.value("TIMESTAMP").toString());
+            vessel.cog = ais.value("COURSE").toDouble();
+            vessel.pos = QGeoCoordinate(
+                ais.value("LATITUDE").toDouble(),
+                ais.value("LONGITUDE").toDouble()
+            );
+
+            // Vessel-specific fields
+            vessel.speed = ais.value("SPEED").toDouble();
+
+            // HEADING: 0–359 = valid, 511 = unavailable (AIS standard).
+            // Fall back to 511 when the key is missing or out of range.
+            const int heading = ais.value("HEADING").toInt(511);
+            vessel.heading = (heading >= 0 && heading <= 359) ? heading : 511;
+
+            // Antenna-to-hull offsets in metres.
+            // A = bow, B = stern, C = port, D = starboard.
+            vessel.a = ais.value("A").toInt(0);
+            vessel.b = ais.value("B").toInt(0);
+            vessel.c = ais.value("C").toInt(0);
+            vessel.d = ais.value("D").toInt(0);
+
+            tracks.append(vessel);
+        }
+
+        return tracks;
+    }
+
+    int parseTimestamp(const QString& ts) const
     {
         QDateTime dt = QDateTime::fromString(ts, "yyyy-MM-dd HH:mm:ss 'UTC'");
         if (!dt.isValid())
@@ -79,7 +92,6 @@ private:
         dt.setTimeZone(QTimeZone::UTC);
         return static_cast<int>(dt.toSecsSinceEpoch());
     }
-
 };
 
 #endif // HTTP_VESSEL_PARSER_H

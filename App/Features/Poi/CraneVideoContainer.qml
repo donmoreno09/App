@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtMultimedia 6.8
+import App.Logger 1.0
 import App.Components 1.0 as UI
 import App.Themes 1.0
 import App.Features.Language 1.0
@@ -40,7 +41,10 @@ UI.FloatingWindow {
                 muted: false
 
                 // Gestisci errori
-                onErrorOccurred: (err, msg) => console.error("Video error:", err, msg)
+                onErrorOccurred: (err, msg) => AppLogger.withService("POI").error("Video error", {
+                    errorCode: err,
+                    errorMessage: msg
+                })
             }
 
             RowLayout {
