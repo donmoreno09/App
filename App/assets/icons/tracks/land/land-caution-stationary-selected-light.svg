@@ -1,0 +1,20 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="20.0002" cy="20.0008" r="18.3569" transform="rotate(-3.5878 20.0002 20.0008)" stroke="#0D27F2"/>
+<g filter="url(#filter0_d_1310_3652)">
+<path d="M14.1208 17H26.1208V30H14.1208V17Z" fill="#D3AE00"/>
+<path d="M16.1208 10H24.1208L25.1208 15H15.1208L16.1208 10Z" fill="#D3AE00"/>
+<path d="M25.6208 17.5V29.5H14.6208V17.5H25.6208ZM23.7107 10.5L24.5115 14.5H15.7302L16.531 10.5H23.7107Z" stroke="white"/>
+</g>
+<defs>
+<filter id="filter0_d_1310_3652" x="-10" y="-10" width="60" height="60" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+<feOffset in="blur" dx="0" dy="0" result="offsetBlur"/>
+<feFlood flood-color="#D3AE00" flood-opacity="1" result="color"/>
+<feComposite in="color" in2="offsetBlur" operator="in" result="shadow"/>
+<feMerge>
+<feMergeNode in="shadow"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+</svg>

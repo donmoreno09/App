@@ -1,0 +1,18 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d_1310_3601)">
+<path d="M26.1211 13.5L26.1211 30L20.1211 25.5L14.1211 30L14.1211 13.5L20.1211 10L26.1211 13.5Z" fill="#C83D3D"/>
+<path d="M25.6211 13.7861V28.999L20.4209 25.0996L20.1211 24.875L19.8213 25.0996L14.6211 28.999V13.7861L20.1211 10.5781L25.6211 13.7861Z" stroke="white"/>
+</g>
+<defs>
+<filter id="filter0_d_1310_3601" x="4.12109" y="0" width="32" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+<feOffset in="blur" dx="0" dy="0" result="offsetBlur"/>
+<feFlood flood-color="#C83D3D" flood-opacity="1" result="color"/>
+<feComposite in="color" in2="offsetBlur" operator="in" result="shadow"/>
+<feMerge>
+<feMergeNode in="shadow"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+</svg>

@@ -1,0 +1,20 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="20.0002" cy="20.0008" r="18.3569" transform="rotate(-3.5878 20.0002 20.0008)" stroke="#0D27F2"/>
+<path opacity="0.3" d="M33.2912 9.34943C31.7008 7.36489 29.6863 5.76167 27.3954 4.65744C25.1045 3.55322 22.5954 2.97604 20.0523 2.96825C17.5092 2.96046 14.9966 3.52227 12.699 4.61244C10.4013 5.70261 8.37701 7.29346 6.77457 9.26822L20.0001 20.0002L33.2912 9.34943Z" fill="#0D27F2"/>
+<g filter="url(#filter0_d_1310_3537)">
+<path d="M20.1208 10L28.1208 30L20.1208 26.7677L12.1208 30L20.1208 10Z" fill="white"/>
+<path d="M27.2214 29.0967L20.3083 26.3037L20.1208 26.2285L19.9333 26.3037L13.0193 29.0967L20.1208 11.3447L27.2214 29.0967Z" stroke="#0D27F2"/>
+</g>
+<defs>
+<filter id="filter0_d_1310_3537" x="-10" y="-10" width="60" height="60" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+<feOffset in="blur" dx="0" dy="0" result="offsetBlur"/>
+<feFlood flood-color="#0D27F2" flood-opacity="1" result="color"/>
+<feComposite in="color" in2="offsetBlur" operator="in" result="shadow"/>
+<feMerge>
+<feMergeNode in="shadow"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+</svg>
