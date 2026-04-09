@@ -29,9 +29,6 @@ Item {
 
 
     readonly property real zoomLevel: MapController.map ? MapController.map.zoomLevel : 8
-
-    readonly property real pinSize: Math.max(48 - (zoomLevel - 8) * 5, 36)
-
     readonly property real zoomScale: Math.pow(2, zoomLevel - 14)
 
     readonly property real rawPxLength: hasDimensions ? Math.min(shipLength, 500) * zoomScale / 10 : 0
@@ -47,7 +44,7 @@ Item {
     readonly property real antX: hasDimensions ? pxWidth  * (c / shipWidth)  : pxWidth  / 2
     readonly property real antY: hasDimensions ? pxLength * (a / shipLength) : pxLength / 2
 
-    readonly property real halfDiag: Math.ceil(Math.max(Math.sqrt(pxLength * pxLength + pxWidth * pxWidth), pinSize / 2 + 2))
+    readonly property real halfDiag: Math.ceil(Math.max(Math.sqrt(pxLength * pxLength + pxWidth * pxWidth), trackIcon._size / 2 + 2))
 
     readonly property real midOffX: pxWidth  / 2 - antX
     readonly property real midOffY: pxLength / 2 - antY
@@ -66,7 +63,7 @@ Item {
         y:      root.halfDiag - root.antY
         width:  root.pxWidth
         height: root.pxLength
-        source: "qrc:/App/assets/vessels/ship-shape.svg"
+        source: `qrc:/App/assets/vessels/ship-shape-${MapController._currentPlugin.isDark ? "dark" : "light"}.svg`
         fillMode: Image.PreserveAspectFit
         smooth: true
         transform: Rotation {
@@ -78,11 +75,9 @@ Item {
 
     TrackIcon {
         id: trackIcon
-        x:      root.shipCenterX - root.pinSize / 2
-        y:      root.shipCenterY - root.pinSize / 2
+        x:      root.shipCenterX - width / 2
+        y:      root.shipCenterY - height / 2
         z: 1
-        width:  root.pinSize
-        height: root.pinSize
 
         domain:           root.domain
         severity:         root.severity

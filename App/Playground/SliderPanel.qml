@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
+import App.Logger 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.Panels 1.0
@@ -332,7 +333,7 @@ PanelTemplate {
                         size: "sm"
                         variant: UI.ButtonStyles.Secondary
                         onClicked: {
-                            console.log("Reset all sliders")
+                            AppLogger.withService("PLAYGROUND-SLIDER").info("Reset all sliders")
                         }
                     }
 
@@ -341,7 +342,7 @@ PanelTemplate {
                         size: "sm"
                         variant: UI.ButtonStyles.Ghost
                         onClicked: {
-                            console.log("Set random values")
+                            AppLogger.withService("PLAYGROUND-SLIDER").info("Set random values")
                         }
                     }
                 }

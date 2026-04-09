@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick 6.8
 
 import App 1.0
+import App.Logger 1.0
 import App.Features.SidePanel 1.0
 
 import "modes"
@@ -63,7 +64,7 @@ QtObject {
             else setActiveMode(MapModeRegistry.editPolygonMode)
             break;
         default:
-            console.error("Editing PoI with unknown shape type")
+            AppLogger.withService("MAP-MODES").error("Editing PoI with unknown shape type", { shapeTypeId: poi.shapeTypeId })
         }
         SidePanelController.openOrRefresh(Routes.Poi)
     }
@@ -81,7 +82,7 @@ QtObject {
             else setActiveMode(MapModeRegistry.editPolygonMode)
             break;
         default:
-            console.error("Editing Alert Zone with unknown shape type")
+            AppLogger.withService("MAP-MODES").error("Editing Alert Zone with unknown shape type", { shapeTypeId: alertZone.shapeTypeId })
         }
         SidePanelController.openOrRefresh(Routes.AlertZone)
     }

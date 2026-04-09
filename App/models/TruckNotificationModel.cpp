@@ -1,6 +1,18 @@
 #include "TruckNotificationModel.h"
-#include <QDebug>
+
 #include <algorithm>
+
+#include "AppLogger.h"
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "TRUCK-NOTIFICATION-MODEL"}
+    });
+    return logger;
+}
+}
 
 TruckNotificationModel::TruckNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
@@ -78,15 +90,11 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
         return;
     }
 
-    // qDebug() << "[TruckNotificationModel] upsert() called with" << notifications.size() << "notifications";
-
     bool countChanged = false;
 
     for (const auto& notif : notifications) {
-        // qDebug() << "[TruckNotificationModel] Processing notification:" << notif.id;
-
         if (m_deletedIds.contains(notif.id)) {
-            qWarning() << "[TruckNotificationModel] Skipping deleted notification:" << notif.id;
+            _logger().warn("Skipping deleted notification", { kv("id", notif.id) });
             continue;
         }
 
@@ -100,9 +108,6 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
-                // qDebug() << "[TruckNotificationModel] Updated notification at row" << row;
-            } else {
-                // qDebug() << "[TruckNotificationModel] No changes for notification at row" << row;
             }
         } else {
             // Prepend new notifications at the top (row 0)
@@ -117,13 +122,10 @@ void TruckNotificationModel::upsert(const QVector<TruckNotification> &notificati
 
             endInsertRows();
             countChanged = true;
-
-            // qDebug() << "[TruckNotificationModel] Inserted new notification at row 0";
         }
     }
 
     if (countChanged) {
-        // qDebug() << "[TruckNotificationModel] Count changed to:" << m_notifications.size();
         emit this->countChanged();
     }
 }
@@ -156,7 +158,7 @@ void TruckNotificationModel::removeNotification(const QString &id)
 
     auto it = m_upsertMap.find(id);
     if (it == m_upsertMap.end()) {
-        qWarning() << "[TruckNotificationModel] Cannot remove notification with id:" << id << "- not found";
+        _logger().warn("Cannot remove notification: not found", { kv("id", id) });
         return;
     }
 
@@ -174,7 +176,6 @@ void TruckNotificationModel::removeNotification(const QString &id)
     }
 
     emit countChanged();
-    // qDebug() << "[TruckNotificationModel] Removed notification:" << id;
 }
 
 void TruckNotificationModel::clearAll()
@@ -191,7 +192,6 @@ void TruckNotificationModel::clearAll()
     endResetModel();
 
     emit countChanged();
-    // qDebug() << "[TruckNotificationModel] Cleared all notifications";
 }
 
 QQmlPropertyMap *TruckNotificationModel::getEditableNotification(int index)
@@ -221,6 +221,5 @@ void TruckNotificationModel::setInitialLoadComplete(bool complete)
         }
 
         emit initialLoadCompleteChanged();
-        // qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
     }
 }

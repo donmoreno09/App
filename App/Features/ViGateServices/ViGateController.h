@@ -6,6 +6,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include "models/TransitModel.h"
+#include "models/TransitProxyModel.h"
 
 class HttpClient;
 class ViGateApi;
@@ -34,8 +35,9 @@ class ViGateController : public QObject
     Q_PROPERTY(QVariantList activeGates READ activeGates NOTIFY activeGatesChanged)
 
     // Model
-    Q_PROPERTY(TransitModel* transitsModel READ transitsModel CONSTANT)
+    Q_PROPERTY(TransitProxyModel* transitsModel READ transitsModel NOTIFY transitsModelChanged)
 
+    // Toggle state
     // State
     Q_PROPERTY(bool isLoading READ isLoading NOTIFY loadingChanged)
     Q_PROPERTY(bool isLoadingPage READ isLoadingPage NOTIFY loadingPageChanged)
@@ -71,7 +73,7 @@ public:
     void setPageSize(int size);
 
     QVariantList activeGates() const { return m_activeGates; }
-    TransitModel* transitsModel() { return m_transitsModel; }
+    TransitProxyModel* transitsModel() { return m_transitProxyModel; }
 
     bool isLoading() const { return m_loading; }
     bool isLoadingPage() const { return m_loadingPage; }
@@ -85,7 +87,8 @@ public slots:
                        const QDateTime& startDate,
                        const QDateTime& endDate,
                        bool includeVehicles,
-                       bool includePedestrians);
+                       bool includePedestrians,
+                       int itemsPerPage);
     void nextPage();
     void previousPage();
     void goToPage(int page);
@@ -102,6 +105,7 @@ signals:
     void hasErrorChanged(bool);
     void loadingGatesChanged(bool);
     void requestFailed(const QString& error);
+    void transitsModelChanged();
 
 private:
     void setLoading(bool loading);
@@ -136,8 +140,9 @@ private:
     // Active Gates
     QVariantList m_activeGates;
 
-    // Model
+    // Models
     TransitModel* m_transitsModel = nullptr;
+    TransitProxyModel* m_transitProxyModel = nullptr;
 
     // State
     bool m_loading = false;

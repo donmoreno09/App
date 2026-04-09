@@ -1,11 +1,24 @@
 #include "BaseMapLayer.h"
-#include <QDebug>
+
 #include <QQmlProperty>
+
+#include "AppLogger.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "BASE-MAP-LAYER"}
+    });
+    return logger;
+}
+}
 
 BaseMapLayer::BaseMapLayer(QObject* parent)
     : BaseLayer(parent)
 {
-    qDebug() << "[BaseMapLayer] Instance created";
+    _logger().info("BaseMapLayer instance created");
 }
 
 double BaseMapLayer::zoomLevel() const {
@@ -15,7 +28,10 @@ double BaseMapLayer::zoomLevel() const {
 void BaseMapLayer::setZoomLevel(double zoom) {
     if (!qFuzzyCompare(zoomLevel(), zoom)) {
         QQmlProperty(m_map, "zoomLevel").write(zoom);
-        qDebug() << "[BaseMapLayer]" << layerName() << "→ zoom level changed to:" << zoom;
+        _logger().info("Zoom level changed", {
+                                                 kv("layer", layerName()),
+                                                 kv("zoom", zoom)
+                                             });
     }
 }
 

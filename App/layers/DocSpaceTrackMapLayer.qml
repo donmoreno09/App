@@ -16,6 +16,12 @@ BaseMapLayer {
     visible: trackMapLayer.active
 
     MapItemView {
+        model: trackMapLayer.clusterModel
+
+        delegate: MapCluster { }
+    }
+
+    MapItemView {
         model: trackMapLayer.trackModel
 
         delegate: Track {

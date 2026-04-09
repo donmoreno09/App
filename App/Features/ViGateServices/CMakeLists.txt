@@ -9,13 +9,19 @@ set(qml_files
     contents/ViGateContent.qml
 
     panels/ViGatePanel.qml
+
+    windows/TransitDetailsWindow.qml
 )
 
 set(cpp_sources
     ViGateController.cpp
     ViGateController.h
+    ViGateServicesLogger.h
+
     models/TransitModel.cpp
     models/TransitModel.h
+    models/TransitProxyModel.cpp
+    models/TransitProxyModel.h
 )
 
 set(qml_singletons
@@ -45,5 +51,8 @@ target_include_directories(app_features_vigateservices
 )
 
 target_link_libraries(app_features_vigateservices
-    PRIVATE app_networking
+    PRIVATE
+        app_networking
+        app_logger
+        app_loggerplugin
 )

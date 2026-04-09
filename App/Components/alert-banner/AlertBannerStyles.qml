@@ -1,6 +1,8 @@
 pragma Singleton
 
 import QtQuick 6.8
+
+import App.Logger 1.0
 import App.Themes 1.0
 
 QtObject {
@@ -53,7 +55,7 @@ QtObject {
         case AlertBannerStyles.Success: return _success
         case AlertBannerStyles.Info:    return _info
         default: {
-            console.warn("Invalid AlertBannerStyles variant:", variant)
+            AppLogger.withService("ALERT-BANNER-STYLES").warn("Invalid AlertBannerStyles variant", { variant: variant })
             return _error
         }
         }

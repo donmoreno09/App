@@ -1,5 +1,16 @@
 #include "PermissionManager.h"
-#include "QDebug"
+
+#include "AppLogger.h"
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "PERMISSION-MANAGER"}
+    });
+    return logger;
+}
+}
 
 PermissionManager::PermissionManager(QObject* parent)
     : QObject(parent) {}
@@ -28,11 +39,10 @@ void PermissionManager::loadFromSession(const QString& role, const QStringList& 
     m_role = role;
     m_permissions = QSet<QString>(permissions.begin(), permissions.end());
 
-    qDebug() << "Role loaded:" << m_role;
-
-    qDebug() << "Permissions loaded:";
-    for (const auto& perm : m_permissions)
-        qDebug() << perm;
+    _logger().info("Permissions loaded from session", {
+        kv("role", m_role),
+        kv("permissions", m_permissions.values())
+    });
 
     ++m_revision;
     emit permissionsChanged();

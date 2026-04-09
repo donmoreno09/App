@@ -8,6 +8,7 @@ const NOTFOUND  = "*";
 const CRANE_VIDEO = "crane-video";
 const CRANE_TELEMETRY = "crane-telemetry";
 const CRANE_LIFTED_LOADS = "crane-lifted-loads";
+const TRANSIT_DETAILS = "transit-details";
 
 var routes = Object.freeze({
     [STOWAGE]: {
@@ -47,6 +48,13 @@ var routes = Object.freeze({
         modal: false,
         resizable: true
     },
+   [TRANSIT_DETAILS]: {
+        url: "qrc:/App/Features/ViGateServices/windows/TransitDetailsWindow.qml",
+        singleton: false,
+        initialGeometry: { x: 120, y: 96, width: 1200, height: 700 },
+        modal: false,
+        resizable: true
+    },
     [NOTFOUND]: {
         url: "qrc:/App/Features/Generic/NotFoundWindow.qml",
         singleton: true,
@@ -62,5 +70,5 @@ function get(name) { return routes[name] || routes[NOTFOUND]; }
 function list()    { return Object.keys(routes); }
 
 var Names = Object.freeze({
-    STOWAGE, REPORTS, ANALYTICS, NOTFOUND
+    STOWAGE, REPORTS, ANALYTICS, NOTFOUND, TRANSIT_DETAILS
 });

@@ -63,18 +63,19 @@ MapQuickItem {
         return QtPositioning.coordinate(nextLat, nextLon)
     }
 
-    anchorPoint.x: marker.width / 2
-    anchorPoint.y: icon.height / 2
+    anchorPoint.x: icon.x + (icon.width / 2)
+    anchorPoint.y: icon.y + (icon.height / 2)
 
-    sourceItem: Column {
+    sourceItem: Item {
         id: marker
-        spacing: Theme.spacing.s1
         width: Math.max(icon.width, labelBox.visible ? labelBox.width : 0)
+        height: icon.height + (labelBox.visible ? Theme.spacing.s1 + labelBox.height : 0)
 
         Image {
             id: icon
             width: root.iconWidth
             height: root.iconHeight
+            x: (marker.width - width) / 2
             source: root.iconSource
             smooth: true
             fillMode: Image.PreserveAspectFit
@@ -92,27 +93,16 @@ MapQuickItem {
             }
         }
 
-        Rectangle {
+        ShapeLabel {
             id: labelBox
-            visible: root.showLabel && root.labelText !== ""
-            anchors.horizontalCenter: icon.horizontalCenter
-            width: text.width + Theme.spacing.s3
-            height: text.height + Theme.spacing.s1
-            radius: Theme.radius.sm
-            color: root.labelFillColor
-            border.color: root.labelBorderColor
-            border.width: root.isEditing ? root.labelBorderWidth : Theme.borders.b0
-
-            Text {
-                id: text
-                anchors.centerIn: parent
-                text: root.labelText
-                font.pixelSize: Theme.typography.fontSize150
-                color: root.labelTextColor
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                wrapMode: Text.Wrap
-            }
+            visible: root.showLabel
+            x: (marker.width - width) / 2
+            y: icon.height + Theme.spacing.s1
+            text: root.labelText
+            textColor: root.labelTextColor
+            rect.color: root.labelFillColor
+            rect.border.color: root.labelBorderColor
+            rect.border.width: root.isEditing ? root.labelBorderWidth : Theme.borders.b0
         }
     }
 

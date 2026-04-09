@@ -1,13 +1,26 @@
 #include "MqttClientService.h"
+
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QDebug>
 #include <QVector>
-#include <layers/TrackMapLayer.h>
-#include <layers/TirMapLayer.h>
+#include "layers/TrackMapLayer.h"
+#include "layers/TirMapLayer.h"
+#include "layers/VesselMapLayer.h"
 #include "parser/TrackParser.h"
 #include "parser/TirParser.h"
+#include "AppLogger.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "MQTT-CLIENT"}
+    });
+    return logger;
+}
+}
 
 MqttClientService::MqttClientService(QObject* parent)
     : QObject(parent), client(new QMqttClient(this)) {
@@ -16,7 +29,8 @@ MqttClientService::MqttClientService(QObject* parent)
     connect(client, &QMqttClient::disconnected, this, &MqttClientService::onDisconnected);
 }
 
-void MqttClientService::initialize(const QString& configPath, const AppConfig& appConfig) {
+void MqttClientService::initialize(const QString& configPath, const AppConfig& appConfig,  AuthManager* authManager) {
+    this->authManager = authManager;
     loadConfiguration(configPath, appConfig);
     connectToBroker();
 }
@@ -24,14 +38,14 @@ void MqttClientService::initialize(const QString& configPath, const AppConfig& a
 void MqttClientService::loadConfiguration(const QString& path, const AppConfig& appConfig) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "[MQTT] Failed to open configuration file:" << path;
+        _logger().warn("Failed to open configuration file: " + path, { kv("path", path) });
         return;
     }
 
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &err);
     if (err.error != QJsonParseError::NoError) {
-        qWarning() << "[MQTT] JSON parsing error in configuration:" << err.errorString();
+        _logger().warn("JSON parsing error in configuration: " + err.errorString(), { kv("error", err.errorString()) });
         return;
     }
 
@@ -60,31 +74,43 @@ void MqttClientService::connectToBroker() {
 }
 
 void MqttClientService::onConnected() {
-    qDebug() << "[MQTT] Connected to broker";
+    _logger().info("Connected to broker");
     for (auto it = topicToLayer.begin(); it != topicToLayer.end(); it++) {
         const QString &topic = it.key();
-        client->subscribe(topic);
-        qDebug() << "[MQTT] Subscribed to topic:" << topic;
+        if (this->authManager == nullptr) {
+            _logger().warn("authManager uninitialized; subscribing without user id", {
+                kv("topic", topic)
+            });
+            client->subscribe(topic);
+            _logger().info("Subscribed to topic: " + topic, { kv("topic", topic) });
+        } else {
+            QString userTopic = this->authManager->userId() + "/" + topic;
+            client->subscribe(userTopic);
+            _logger().info("Subscribed to topic", {
+                kv("topic", userTopic)
+            });
+        }
+
     }
 }
 
 void MqttClientService::onDisconnected() {
-    qDebug() << "[MQTT] Disconnected from broker";
+    _logger().info("Disconnected from broker");
 }
 
 void MqttClientService::registerLayer(const QString& name, QObject* layer) {
     auto* casted = qobject_cast<BaseTrackMapLayer*>(layer);
     if (casted) {
         layerInstances[name] = casted;
-        qDebug() << "[MQTT] Layer registered:" << name;
+        _logger().info("Layer registered: " + name, { kv("layer", name) });
     } else {
-        qWarning() << "[MQTT] Error: provided object is not a valid BaseTrackMapLayer instance";
+        _logger().warn("Provided object is not a valid BaseTrackMapLayer instance");
     }
 }
 
 void MqttClientService::registerParser(const QString& topic, IBaseMessageParser* parser) {
     topicToParser[topic] = parser;
-    qDebug() << "[MQTT] Parser registered for topic:" << topic;
+    _logger().info("Parser registered for topic: " + topic, { kv("topic", topic) });
 }
 
 QString MqttClientService::getTopicFromLayer(const QString &layer)
@@ -93,31 +119,64 @@ QString MqttClientService::getTopicFromLayer(const QString &layer)
 }
 
 void MqttClientService::handleMessage(const QByteArray& message, const QMqttTopicName& topicName) {
-    QString topic = topicName.name();
+    // Extract topic if authenticated from: <user-id>/topic
+    QString topic = topicName.name().section("/", 1, 1);
+    if (topic.isEmpty()) {
+        // If, for whatever reason, the topic's name from MQTT isn't
+        // <user-id>/topic, then just use topic directly.
+        topic = topicName.name();
+    }
+
     if (!topicToParser.contains(topic)) {
-        qWarning() << "[MQTT] No parser available for topic:" << topic;
+        _logger().warn("No parser available for topic: " + topic, { kv("topic", topic) });
         return;
     }
 
     if (!topicToLayer.contains(topic)) {
-        qWarning() << "[MQTT] No layer associated with topic:" << topic;
+        _logger().warn("No layer associated for topic: " + topic, { kv("topic", topic) });
         return;
     }
     QString layerName = topicToLayer.value(topic);
     if (!layerInstances.contains(layerName)) {
-        qWarning() << "[MQTT] Target layer not registered:" << layerName;
+        _logger().warn("Target layer not registered: " + layerName, { kv("layer", layerName) });
+        return;
+    }
+
+    auto* targetLayer = layerInstances.value(layerName);
+    if (!targetLayer || !targetLayer->active()) {
         return;
     }
 
     auto* baseParser = topicToParser.value(topic);
 
     if (auto* trackParser = dynamic_cast<TrackParser*>(baseParser)) {
-        QVector<Track> data = trackParser->parse(message);
-        auto* layer = static_cast<TrackMapLayer*>(layerInstances[layerName]);
-        layer->trackModel()->upsert(data);
+        const ClusteredPayload<Track> payload = trackParser->parse(message);
+        auto* layer = static_cast<TrackMapLayer*>(targetLayer);
+        if (payload.hasTracks) {
+            layer->trackModel()->upsert(payload.tracks);
+        }
+
+        if (payload.hasClusters) {
+            layer->clusterModel()->upsert(payload.clusters);
+        }
     } else if (auto* tirParser = dynamic_cast<TirParser*>(baseParser)) {
-        QVector<Tir> data = tirParser->parse(message);
-        auto* layer = static_cast<TirMapLayer*>(layerInstances[layerName]);
-        layer->tirModel()->upsert(data);
+        const ClusteredPayload<Tir> payload = tirParser->parse(message);
+        auto* layer = static_cast<TirMapLayer*>(targetLayer);
+        if (payload.hasTracks) {
+            layer->tirModel()->upsert(payload.tracks);
+        }
+
+        if (payload.hasClusters) {
+            layer->clusterModel()->upsert(payload.clusters);
+        }
+    } else if (auto* vesselParser = dynamic_cast<IMessageParser<ClusteredPayload<Vessel>>*>(baseParser)) {
+        auto* layer = static_cast<VesselMapLayer*>(targetLayer);
+        const ClusteredPayload<Vessel> payload = vesselParser->parse(message);
+
+        // During the current migration phase, VesselFinder tracks still come
+        // from HTTP polling while MQTT only owns the cluster overlay.
+        if (payload.hasClusters) {
+            layer->clusterModel()->upsert(payload.clusters);
+        }
     }
 }

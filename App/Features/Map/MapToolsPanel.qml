@@ -92,7 +92,7 @@ PanelTemplate {
                     toggle.checked: TrackManager.getLayer("ais").active
                     toggle.enabled: PermissionManager.revision && PermissionManager.hasPermission("track.activate")
                     toggle.onCheckedChanged: {
-                        if (toggle.checked) TrackManager.activate("ais")
+                        if (toggle.checked) TrackManager.activate("ais", MapController.map.zoomLevel)
                         else TrackManager.deactivate("ais")
                     }
                 }
@@ -103,7 +103,7 @@ PanelTemplate {
                     toggle.checked: TrackManager.getLayer("doc-space").active
                     toggle.enabled: PermissionManager.revision && PermissionManager.hasPermission("track.activate")
                     toggle.onCheckedChanged: {
-                        if (toggle.checked) TrackManager.activate("doc-space")
+                        if (toggle.checked) TrackManager.activate("doc-space", MapController.map.zoomLevel)
                         else TrackManager.deactivate("doc-space")
                     }
                 }
@@ -115,7 +115,7 @@ PanelTemplate {
                     toggle.enabled: (VesselFinderHttpService !== null)
                                     && PermissionManager.revision && PermissionManager.hasPermission("track.activate")
                     toggle.onCheckedChanged: {
-                        if (toggle.checked) TrackManager.activate("tir")
+                        if (toggle.checked) TrackManager.activate("tir", MapController.map.zoomLevel)
                         else TrackManager.deactivate("tir")
                     }
                 }

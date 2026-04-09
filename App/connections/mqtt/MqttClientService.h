@@ -6,11 +6,10 @@
 #include <QMap>
 #include <QVariantList>
 #include <QQmlEngine>
-#include <entities/Track.h>
-#include <entities/TruckNotification.h>
-#include <models/TruckNotificationModel.h>
-#include <layers/BaseTrackMapLayer.h>
-#include <App/config.h>
+
+#include "App/config.h"
+#include "AuthManager.h"
+#include "layers/BaseTrackMapLayer.h"
 #include "interfaces/IMessageParser.h"
 
 class MqttClientService : public QObject {
@@ -21,7 +20,7 @@ class MqttClientService : public QObject {
 public:
     explicit MqttClientService(QObject* parent = nullptr);
 
-    void initialize(const QString& configPath, const AppConfig& appConfig);
+    void initialize(const QString& configPath, const AppConfig& appConfig, AuthManager* authManager);
     Q_INVOKABLE void registerLayer(const QString& name, QObject* layer);
 
     void registerParser(const QString& topic, IBaseMessageParser* parser);
@@ -37,7 +36,8 @@ private slots:
 private:
     void loadConfiguration(const QString& path, const AppConfig& appConfig);
 
-    QMqttClient* client;
+    QMqttClient* client = nullptr;
+    AuthManager* authManager = nullptr;
     QMap<QString, QString> topicToLayer;
     QMap<QString, QString> layerToTopic;
     QMap<QString, IBaseMessageParser*> topicToParser;

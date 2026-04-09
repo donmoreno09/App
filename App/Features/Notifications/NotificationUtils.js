@@ -1,4 +1,5 @@
 .pragma library
+.import App.Logger 1.0 as AppLoggerModule
 
 function formatNotificationDate(timestamp, languageCode) {
     if (!timestamp) {
@@ -8,7 +9,7 @@ function formatNotificationDate(timestamp, languageCode) {
     const dt = new Date(timestamp)
 
     if (isNaN(dt.getTime())) {
-        console.warn("[NotificationUtils] Invalid timestamp:", timestamp)
+        AppLoggerModule.AppLogger.withService("NOTIFICATIONS").warn("Invalid timestamp", { timestamp: timestamp })
         return { time: "", date: "" }
     }
 

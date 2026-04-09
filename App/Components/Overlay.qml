@@ -3,11 +3,15 @@ import QtQuick.Controls 6.8
 import QtQuick.Effects
 
 import App.Themes 1.0
+import App.Components 1.0 as UI
 
 Popup {
     id: root
 
     property bool showBackdrop: true
+
+    // Prevent map interactions below this component
+    UI.InputShield { anchors.fill: parent }
 
     modal: true
     focus: true

@@ -1,13 +1,11 @@
 #include "TranslationManager.h"
+
 #include "LanguageController.h"
-#include <QDebug>
 
 TranslationManager::TranslationManager(QObject *parent)
     : QObject(parent)
     , m_retranslateTimer(new QTimer(this))
 {
-    // qDebug() << "TranslationManager: Initializing...";
-
     // Connect to your existing LanguageController
     connect(LanguageController::instance(), &LanguageController::languageChanged,
             this, &TranslationManager::onLanguageChanged);

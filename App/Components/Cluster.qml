@@ -9,6 +9,9 @@ Item {
     property bool selected:     false
     property bool enabled:      true
 
+    // NOTE: Adhoc for now.
+    property bool isDark:       false
+
     signal clicked()
 
     readonly property int _circleSize: Theme.spacing.s8
@@ -27,17 +30,17 @@ Item {
 
     readonly property color _circleFill: {
         switch (_state) {
-        case "disabled": return Theme.colors.whiteA30
-        case "hovered":  return Theme.colors.grey25
-        case "selected": return Theme.colors.grey50
-        default:         return Theme.colors.white
+        case "disabled": return root.isDark ? Theme.colors.whiteA30 : Theme.colors.blackA30
+        case "hovered":  return root.isDark ? Theme.colors.grey25   : Theme.colors.secondary500
+        case "selected": return root.isDark ? Theme.colors.grey50   : Theme.colors.secondary450
+        default:         return root.isDark ? Theme.colors.white    : Theme.colors.secondary400
         }
     }
 
     readonly property color _textColor: {
         switch (_state) {
-        case "disabled": return Theme.colors.whiteA30
-        default:         return Theme.colors.black500
+        case "disabled": return root.isDark ? Theme.colors.whiteA30 : Theme.colors.blackA30
+        default:         return root.isDark ? Theme.colors.black500 : Theme.colors.white500
         }
     }
 
@@ -68,16 +71,17 @@ Item {
         }
     }
 
-    HoverHandler {
-        enabled:          root.enabled
-        cursorShape:      Qt.PointingHandCursor
-        onHoveredChanged: root._hovered = root.enabled && hovered
-    }
+    // Unused for now.
+    // HoverHandler {
+    //     enabled:          root.enabled
+    //     cursorShape:      Qt.PointingHandCursor
+    //     onHoveredChanged: root._hovered = root.enabled && hovered
+    // }
 
-    TapHandler {
-        enabled:         root.enabled
-        acceptedButtons: Qt.LeftButton
-        gesturePolicy:   TapHandler.ReleaseWithinBounds
-        onTapped:        root.clicked()
-    }
+    // TapHandler {
+    //     enabled:         root.enabled
+    //     acceptedButtons: Qt.LeftButton
+    //     gesturePolicy:   TapHandler.ReleaseWithinBounds
+    //     onTapped:        root.clicked()
+    // }
 }

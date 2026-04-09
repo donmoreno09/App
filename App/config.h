@@ -15,6 +15,7 @@ struct AppConfig {
 
     // Used for testing purposes. Expected string if used: {simulationId}/vessels?any-potential-options
     QString vesselsOverrideUri;
+    int vfSimSpeed;
 
     // SignalR settings
     QString signalRBaseUrl;
@@ -47,9 +48,11 @@ static AppConfig loadConfig()
     cfg.vesselFinderBaseUrl = s.value("rest/vesselFinderBaseUrl", "http://localhost:8000").toString();
     cfg.useVesselFinderSim  = s.value("rest/useVesselFinderSim", false).toBool();
     cfg.vesselsOverrideUri  = s.value("rest/vesselsOverrideUri", "").toString(); // Expected string if used: {simulationId}/vessels?any-potential-options
+    cfg.vfSimSpeed          = s.value("rest/vfSimSpeed", 1).toInt();
 
     // Load SignalR settings
     cfg.signalRBaseUrl   = s.value("signalr/baseUrl", "ws://localhost:7000/hubs/notifications").toString();
+
     return cfg;
 }
 

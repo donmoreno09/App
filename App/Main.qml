@@ -6,6 +6,7 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 import App 1.0
+import App.Logger 1.0
 import App.Auth 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
@@ -36,14 +37,45 @@ ApplicationWindow {
     property bool appLoaded: false
 
     Component.onCompleted: {
+        PoiOptions.fetchAll()
         WindowsNcController.attachToWindow(app)
         ShipStowageController.initialize(app)
         appLoaded = true
     }
 
-    Component.onDestruction: {
-        console.log("Main window destroying, cleaning up...")
+    // Adhoc way to let deactivating all tracks first before closing the application
+    // NOTE: An analysis should be done on how to handle asynchronous cleanups
+    property bool shutdownApproved: false
+    property bool shutdownStarted: false
+
+    onClosing: function close(close) {
+        if (shutdownApproved) return
+        close.accepted = false
+        if (shutdownStarted) return
+        shutdownStarted = true
+
+        AppLogger.info("App closing, cleaning up first...")
+        TrackManager.deactivateAll()
         ShipStowageController.cleanup()
+    }
+
+    Connections {
+        target: TrackManager
+
+        function onDeactivateAllFinished() {
+            if (!app.shutdownStarted) return
+
+            app.shutdownApproved = true
+            app.close()
+        }
+
+        function onDeactivateAllFailed() {
+            if (!app.shutdownStarted) return
+
+            // Close app regardless
+            app.shutdownApproved = true
+            app.close()
+        }
     }
 
     UI.GlobalBackground {
@@ -80,7 +112,15 @@ ApplicationWindow {
         target: LayerManager
 
         function onAllLayersReady() {
-            console.log("OK!")
+            AppLogger.info("All layers ready!")
+        }
+    }
+
+    Connections {
+        target: MapController.map
+
+        function onBeZoomLevelChanged() {
+            TrackManager.syncZoomLevel(MapController.map.beZoomLevel)
         }
     }
 

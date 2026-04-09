@@ -177,8 +177,6 @@ PanelTemplate {
             }
         }
 
-        console.log("Sending layers:", JSON.stringify(layersMap))
-
         if (MapModeController.isEditing) {
             data.id = MapModeController.alertZone.id
             AlertZoneModel.update(data)

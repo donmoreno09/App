@@ -1,0 +1,19 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d_1310_3653)">
+<path d="M14.1211 17H26.1211V30H14.1211V17Z" fill="#D3AE00"/>
+<path d="M16.1211 10H24.1211L25.1211 15H15.1211L16.1211 10Z" fill="#D3AE00"/>
+<path d="M25.6211 17.5V29.5H14.6211V17.5H25.6211ZM23.7109 10.5L24.5117 14.5H15.7305L16.5312 10.5H23.7109Z" stroke="white"/>
+</g>
+<defs>
+<filter id="filter0_d_1310_3653" x="4.12109" y="0" width="32" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+<feOffset in="blur" dx="0" dy="0" result="offsetBlur"/>
+<feFlood flood-color="#D3AE00" flood-opacity="1" result="color"/>
+<feComposite in="color" in2="offsetBlur" operator="in" result="shadow"/>
+<feMerge>
+<feMergeNode in="shadow"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+</svg>

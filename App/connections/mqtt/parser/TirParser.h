@@ -8,22 +8,29 @@
 #include <QGeoCoordinate>
 
 #include "interfaces/IMessageParser.h"
+#include "entities/ClusteredPayload.h"
 #include "entities/Tir.h"
 #include "HistoryParser.h"
 
-class TirParser : public IMessageParser<Tir> {
+class TirParser : public IMessageParser<ClusteredPayload<Tir>> {
 public:
-    QVector<Tir> parse(const QByteArray& message) override
+    ClusteredPayload<Tir> parse(const QByteArray& message) override
     {
         QJsonParseError err;
         const QJsonDocument doc = QJsonDocument::fromJson(message, &err);
-        if (err.error != QJsonParseError::NoError || !doc.isArray()) {
+        if (err.error != QJsonParseError::NoError) {
             return {};
         }
 
-        QVector<Tir> tirs;
-        const QJsonArray rawTirs = doc.array();
+        return parseClusteredPayload<Tir>(doc, [this](const QJsonArray &tracksArray) {
+            return parseTracks(tracksArray);
+        });
+    }
 
+private:
+    QVector<Tir> parseTracks(const QJsonArray &rawTirs) const
+    {
+        QVector<Tir> tirs;
         tirs.reserve(rawTirs.size());
 
         for (const QJsonValue& rawTir : std::as_const(rawTirs)) {

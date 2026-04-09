@@ -10,22 +10,19 @@ ColumnLayout {
     spacing: Theme.spacing.s4
 
     readonly property var selectedLayers: {
-       var layers = {}
-       layers["ais"] = aisToggle.checked
-       layers["doc-space"] = docSpaceToggle.checked
-       layers["tir"] = tirToggle.checked
-       layers["poi"] = poiToggle.checked
+        var layers = {}
+        layers["ais"] = aisToggle.checked
+        layers["doc-space"] = docSpaceToggle.checked
+        layers["tir"] = tirToggle.checked
+        layers["poi"] = poiToggle.checked
 
-        console.log("LayerSelection.selectedLayers:", JSON.stringify(layers))
         return layers
-   }
+    }
 
     readonly property bool isValid: {
-            const valid = aisToggle.checked || docSpaceToggle.checked ||
-                         tirToggle.checked || poiToggle.checked
-            console.log("LayerSelection.isValid:", valid)
-            return valid
-        }
+        const valid = aisToggle.checked || docSpaceToggle.checked || tirToggle.checked || poiToggle.checked
+        return valid
+    }
 
     function setLayers(layersMap) {
         aisToggle.checked = layersMap["ais"] === true

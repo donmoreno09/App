@@ -4,6 +4,7 @@ import QtQuick.Effects 6.8
 
 import App.Auth 1.0
 import App.Features.Map 1.0
+import App.Features.Language 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 
@@ -45,7 +46,7 @@ UI.Overlay {
             spacing: Theme.spacing.s2
 
             Text {
-                text: qsTr("Logging out")
+                text: `${TranslationManager.revision}` && qsTr("Logging out")
                 color: root.isDark ? Theme.colors.text : Theme.colors.black500
                 font.family:    Theme.typography.bodySans50Family
                 font.pointSize: Theme.typography.bodySans50Size
@@ -81,7 +82,7 @@ UI.Overlay {
             spacing: Theme.spacing.s4
 
             Text {
-                text: qsTr("Do you want to log out?")
+                text: `${TranslationManager.revision}` && qsTr("Do you want to log out?")
                 color: root.isDark ? Theme.colors.text : Theme.colors.black500
                 font.family:    Theme.typography.bodySans25Family
                 font.pointSize: Theme.typography.bodySans25Size
@@ -94,10 +95,9 @@ UI.Overlay {
                 UI.HorizontalSpacer {}
 
                 UI.Button {
-                    text: qsTr("Yes, log out")
+                    text: `${TranslationManager.revision}` && qsTr("Yes, log out")
                     backgroundRect.color: root.isDark ? "#3C66EF" : "#0D27F2"
                     variant: UI.ButtonStyles.PrimaryDarkMode
-                    Layout.preferredWidth: Theme.layout.logoutButtonWidth
                     radius: Theme.radius.sm
                     onClicked: {
                         root.close()

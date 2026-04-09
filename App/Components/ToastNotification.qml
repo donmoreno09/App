@@ -175,10 +175,7 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                     }
 
-                    onClicked: {
-                        console.log("[Toast] Close button clicked - ID:", root.notificationId)
-                        root.closeRequested()
-                    }
+                    onClicked: root.closeRequested()
                 }
             }
         }

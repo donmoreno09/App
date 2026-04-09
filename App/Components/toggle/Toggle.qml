@@ -45,7 +45,7 @@ Switch {
                 visible: root.leftLabel !== ""
                 text: root.leftLabel
                 font.family: Theme.typography.familySans
-                font.pixelSize: Theme.typography.fontSize150
+                font.pixelSize: Theme.typography.fontSize175
                 color: Theme.colors.text
             }
 
@@ -86,7 +86,7 @@ Switch {
                 visible: root.rightLabel !== ""
                 text: root.rightLabel
                 font.family: Theme.typography.familySans
-                font.pixelSize: Theme.typography.fontSize150
+                font.pixelSize: Theme.typography.fontSize175
                 color: Theme.colors.text
             }
         }

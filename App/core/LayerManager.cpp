@@ -1,12 +1,27 @@
 #include "LayerManager.h"
-#include <QDebug>
+
+#include "AppLogger.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "LAYER-MANAGER"}
+    });
+    return logger;
+}
+}
 
 LayerManager::LayerManager(QObject* parent)
     : QObject(parent)
 {}
 
 void LayerManager::registerLayer(BaseLayer* layer) {
-    if (!layer) return;
+    if (!layer) {
+        _logger().warn("Attempted to register a null layer");
+        return;
+    }
 
     m_layers.insert(layer);
     m_pending.insert(layer);
@@ -15,12 +30,20 @@ void LayerManager::registerLayer(BaseLayer* layer) {
     emit layerListChanged();
     emit layerNamesChanged();
 
-    qDebug() << "[LayerManager] Registered layer:" << layer->layerName();
+    _logger().info("Registered layer", { kv("layer", layer->layerName()) });
 }
 
 void LayerManager::unregisterLayer(BaseLayer* layer) {
+    if (!layer) {
+        _logger().warn("Attempted to unregister a null layer");
+        return;
+    }
+
     if (m_layers.remove(layer)) {
-        qDebug() << "[LayerManager] Unregistered layer:" << layer->layerName();
+        m_pending.remove(layer);
+
+        _logger().info("Unregistered layer", { kv("layer", layer->layerName()) });
+
         emit layerListChanged();
         emit layerNamesChanged();
     }
@@ -29,11 +52,16 @@ void LayerManager::unregisterLayer(BaseLayer* layer) {
 void LayerManager::onLayerReady()
 {
     auto* layer = qobject_cast<BaseLayer*>(sender());
-    if (!layer) return;
+    if (!layer) {
+        _logger().warn("Layer ready signal received from invalid sender");
+        return;
+    }
 
     m_pending.remove(layer);
+    _logger().info("Layer marked as ready", { kv("layer", layer->layerName()) });
+
     if (m_pending.empty()) {
-        qDebug() << "[LayerManager] ALL LAYERS READY!";
+        _logger().info("All layers ready");
         emit allLayersReady();
     }
 }

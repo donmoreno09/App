@@ -4,10 +4,20 @@
 #include "Networking/apis/AuthApi.h"
 #include "JwtUtils.h"
 #include "RolePermissions.h"
-#include <QDebug>
+#include "AppLogger.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDateTime>
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "AUTH-MANAGER"}
+    });
+    return logger;
+}
+}
 
 AuthManager::AuthManager(QObject* parent)
     : QObject(parent)
@@ -16,15 +26,17 @@ AuthManager::AuthManager(QObject* parent)
     connect(&m_refreshTimer, &QTimer::timeout, this, [this]() {
         if (m_state != AuthState::Authenticated || !m_api) return;
 
-        qDebug() << "[AuthManager] Token refresh timer fired";
+        _logger().info("Token refresh timer fired");
 
         m_api->refresh(m_tokens.refreshToken,
                        [this](const LoginResult& result) {
                            handleLoginResult(result);
-                           qDebug() << "[AuthManager] Token refreshed successfully";
+                           _logger().info("Token refreshed successfully");
                        },
                        [this](const ErrorResult& err) {
-                           qWarning() << "[AuthManager] Token refresh failed:" << err.message;
+                           _logger().warn("Token refresh failed", {
+                               kv("error", err.message)
+                           });
                            clearSession();
                            m_sessionExpired = true;
                            emit sessionExpiredFlagChanged();
@@ -48,7 +60,9 @@ void AuthManager::login(const QString& email, const QString& password, bool reme
     m_rememberMe = rememberMe;
 
     if (m_state != AuthState::Unauthenticated && m_state != AuthState::Error) {
-        qWarning() << "[AuthManager] login() called in invalid state:" << static_cast<int>(m_state);
+        _logger().warn("login() called in invalid state", {
+            kv("state", static_cast<int>(m_state))
+        });
         return;
     }
 
@@ -67,13 +81,17 @@ void AuthManager::login(const QString& email, const QString& password, bool reme
                  [this](const LoginResult& result) {
                      handleLoginResult(result);
                      emit loginSucceeded();
-                     qDebug() << "[AuthManager] Login succeeded for" << m_session.displayName();
+                     _logger().info("Login succeeded", {
+                         kv("displayName", m_session.displayName())
+                     });
                  },
                  [this](const ErrorResult& err) {
                      const QByteArray raw = err.reply ? err.reply->readAll() : QByteArray{};
                      const QJsonObject obj = QJsonDocument::fromJson(raw).object();
                      const QString message = !obj["error"].toString().isEmpty() ? obj["error"].toString() : (!raw.isEmpty() ? QString::fromUtf8(raw) : err.message);
-                     qWarning() << "[AuthManager] Login failed:" << message;
+                     _logger().warn("Login failed", {
+                         kv("error", message)
+                     });
                      handleAuthError(message);
                      emit loginFailed(message);
                  });
@@ -88,7 +106,9 @@ void AuthManager::logout()
 {
     if (m_state != AuthState::Authenticated) return;
 
-    qDebug() << "[AuthManager] Logging out" << m_session.displayName();
+    _logger().info("Logging out", {
+        kv("displayName", m_session.displayName())
+    });
 
     if (m_api) {
         m_api->logout([]() {}, [](const ErrorResult&) {});
@@ -121,7 +141,7 @@ void AuthManager::tryAutoLogin()
     const qint64 now       = QDateTime::currentSecsSinceEpoch();
 
     if (expiresAt - now <= 0) {
-        qDebug() << "[AuthManager] Stored access token is expired, session expired";
+        _logger().info("Stored access token is expired; session marked expired");
         m_storage->clearAll();
         m_sessionExpired = true;
         emit sessionExpiredFlagChanged();
@@ -130,7 +150,9 @@ void AuthManager::tryAutoLogin()
         return;
     }
 
-    qDebug() << "[AuthManager] Access token still valid for" << (expiresAt - now) << "seconds";
+    _logger().info("Stored access token still valid", {
+        kv("secondsRemaining", expiresAt - now)
+    });
 
     LoginResult result;
     result.tokens = stored;
@@ -199,7 +221,9 @@ void AuthManager::scheduleTokenRefresh()
     const qint64 marginSecs  = qMin<qint64>(120, ttl / 5);
     const int    refreshInMs = static_cast<int>(qMax<qint64>(5, ttl - marginSecs)) * 1000;
 
-    qDebug() << "[AuthManager] Scheduling token refresh in" << refreshInMs / 1000 << "seconds";
+    _logger().info("Scheduling token refresh", {
+        kv("seconds", refreshInMs / 1000)
+    });
     m_refreshTimer.start(refreshInMs);
 }
 

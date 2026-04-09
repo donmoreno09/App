@@ -7,7 +7,7 @@
 struct AuthTokens {
     QString accessToken;
     QString refreshToken;
-    qint64  expiresAt = 0;  // Unix timestamp sourced from the JWT exp claim
+    qint64  expiresAt = 0;
 
     bool isValid() const { return !accessToken.isEmpty(); }
 

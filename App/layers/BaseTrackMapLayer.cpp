@@ -1,11 +1,11 @@
 #include "BaseTrackMapLayer.h"
-#include <QDebug>
 #include <core/GeoSelectionUtils.h>
 
 BaseTrackMapLayer::BaseTrackMapLayer(QObject* parent)
     : BaseMapLayer(parent)
 {
     setObjectName("BaseTrackMapLayer");
+    m_clusterModel = new ClusterModel(this);
 }
 
 bool BaseTrackMapLayer::active() const
@@ -19,4 +19,9 @@ void BaseTrackMapLayer::setActive(bool newActive)
         return;
     m_active = newActive;
     emit activeChanged();
+}
+
+ClusterModel *BaseTrackMapLayer::clusterModel() const
+{
+    return m_clusterModel;
 }

@@ -82,7 +82,6 @@ PanelTemplate {
                         cardTrackData: trackData ?? {}
 
                         onDeleteRequested: (notifId) => {
-                            console.log("[NotificationsPanel] Confirming read for AlertZone:", notifId)
                             SignalRClientService.invoke("ConfirmRead", [notifId])
                             AlertZoneNotificationModel.removeNotification(notifId)
                         }
@@ -155,7 +154,6 @@ PanelTemplate {
                         cardNote: note ?? ""
 
                         onDeleteRequested: (envId, notifId) => {
-                            console.log("[NotificationsPanel] Confirming read for Truck:", envId)
                             SignalRClientService.invoke("ConfirmRead", [envId])
                             TruckNotificationModel.removeNotification(notifId)
                         }
@@ -175,8 +173,6 @@ PanelTemplate {
 
     footer: NotificationFooter {
         onDeleteAllRequested: {
-            console.log("[NotificationsPanel] Confirming read for all notifications")
-
             let allIds = []
 
             for (let i = 0; i < TruckNotificationModel.count; i++) {

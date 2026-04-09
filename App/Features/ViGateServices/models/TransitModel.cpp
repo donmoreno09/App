@@ -1,7 +1,18 @@
 #include "TransitModel.h"
+#include "../ViGateServicesLogger.h"
+
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QDebug>
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = ViGateServicesLogger::get().child({
+        {"service", "TRANSIT_MODEL"}
+    });
+    return logger;
+}
+}
 
 TransitModel::TransitModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -146,54 +157,23 @@ QHash<int, QByteArray> TransitModel::roleNames() const
     };
 }
 
-void TransitModel::setLaneTypeFilter(const QString& filter)
-{
-    if (m_laneTypeFilter == filter) return;
-
-    m_laneTypeFilter = filter;
-    emit laneTypeFilterChanged();
-    applyFilter();
-}
-
-void TransitModel::applyFilter()
-{
-    beginResetModel();
-    m_entries.clear();
-
-    // Parse filter string (comma-separated list or "ALL")
-    QStringList types = m_laneTypeFilter.split(',', Qt::SkipEmptyParts);
-
-    if (types.isEmpty() || m_laneTypeFilter == "ALL" || m_laneTypeFilter.isEmpty()) {
-        // No filter, show all
-        m_entries = m_allEntries;
-    } else {
-        // Filter by lane types
-        for (const auto& entry : m_allEntries) {
-            if (types.contains(entry.laneTypeId)) {
-                m_entries.append(entry);
-            }
-        }
-    }
-
-    endResetModel();
-}
-
 void TransitModel::clear()
 {
     beginResetModel();
-    m_allEntries.clear();
     m_entries.clear();
-    m_laneTypeFilter = "ALL";
     endResetModel();
+
+    _logger().info("Cleared transit model data");
 }
 
 void TransitModel::setData(const QJsonArray& transitsArray)
 {
-    m_allEntries.clear();
+    beginResetModel();
+    m_entries.clear();
 
     for (const auto& value : transitsArray) {
         if (!value.isObject()) {
-            qWarning() << "TransitModel: Skipping non-object entry";
+            _logger().warn("Skipping non-object transit entry");
             continue;
         }
 
@@ -209,13 +189,17 @@ void TransitModel::setData(const QJsonArray& transitsArray)
         QString startDateStr = obj.value("transitStartDate").toString();
         entry.transitStartDate = QDateTime::fromString(startDateStr, Qt::ISODate);
         if (!entry.transitStartDate.isValid()) {
-            qWarning() << "TransitModel: Invalid start date:" << startDateStr;
+            _logger().warn("Invalid transit start date", {
+                kv("value", startDateStr)
+            });
         }
 
         QString endDateStr = obj.value("transitEndDate").toString();
         entry.transitEndDate = QDateTime::fromString(endDateStr, Qt::ISODate);
         if (!entry.transitEndDate.isValid()) {
-            qWarning() << "TransitModel: Invalid end date:" << endDateStr;
+            _logger().warn("Invalid transit end date", {
+                kv("value", endDateStr)
+            });
         }
 
         // Lane info
@@ -266,9 +250,12 @@ void TransitModel::setData(const QJsonArray& transitsArray)
             entry.hasPermission = false;
         }
 
-        m_allEntries.append(entry);
+        m_entries.append(entry);
     }
 
-    // Apply current filter
-    applyFilter();
+    endResetModel();
+
+    _logger().info("Loaded transits into model buffer", {
+        kv("count", m_entries.size())
+    });
 }

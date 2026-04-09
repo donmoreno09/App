@@ -3,6 +3,7 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 import App 1.0
+import App.Logger 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.MapModes 1.0
@@ -105,7 +106,7 @@ ColumnLayout {
             case AreaForm.Polygon:
                 return "AlertZonePolygonForm.qml"
             default:
-                console.error("Invalid areaType value in AreaForm")
+                AppLogger.withService("ALERT-ZONE").error("Invalid areaType value in AreaForm", { areaType: areaType })
             }
         }
     }

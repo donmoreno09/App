@@ -23,6 +23,19 @@ import App.Features.MapModes 1.0
 Map {
     id: map
 
+    // Since Qt's zoom level can be different depending on the plugin used,
+    // normalize the zoom level to the range supported by the backend which is [2, 20].
+    // More info: https://doc.qt.io/qt-6/qml-qtlocation-map.html#zoomLevel-prop
+    readonly property real normalizedZoomLevel: maximumZoomLevel > minimumZoomLevel ? (zoomLevel - minimumZoomLevel) / (maximumZoomLevel - minimumZoomLevel) : 0.0
+    readonly property int beZoomLevel: {
+        const beMinZoomLevel = 2
+        const beMaxZoomLevel = 20
+
+        if (zoomLevel < beMinZoomLevel) return beMinZoomLevel
+        if (zoomLevel > beMaxZoomLevel) return beMaxZoomLevel
+        return Math.round(beMinZoomLevel + normalizedZoomLevel * (beMaxZoomLevel - beMinZoomLevel))
+    }
+
     Component.onCompleted: {
         MapModeController.setActiveMode(interactionMode)
         resetPinchMinMax()

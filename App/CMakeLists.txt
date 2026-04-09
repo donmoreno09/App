@@ -44,6 +44,7 @@ set(qml_files
     map-objects/CircleMarker.qml
     map-objects/HistoryStartPoint.qml
     map-objects/HistoryPath.qml
+    map-objects/MapCluster.qml
     map-objects/Track.qml
     map-objects/Tir.qml
     map-objects/TriangleHeading.qml
@@ -72,10 +73,10 @@ set(cpp_sources
     connections/interfaces/IMessageParser.h
 
     connections/http/parser/HttpVesselParser.h
-    connections/http/httpvesselfindertrackspoller.cpp
-    connections/http/httpvesselfindertrackspoller.h
-    connections/http/vesselfinderhttpservice.cpp
-    connections/http/vesselfinderhttpservice.h
+    connections/http/HttpVesselFinderTracksPoller.cpp
+    connections/http/HttpVesselFinderTracksPoller.h
+    connections/http/VesselFinderHttpService.cpp
+    connections/http/VesselFinderHttpService.h
 
     connections/mqtt/parser/TrackParser.h
     connections/mqtt/parser/TirParser.h
@@ -134,6 +135,8 @@ set(cpp_sources
     entities/Poi.h
     entities/shape.h
     entities/BaseTrack.h
+    entities/ClusteredPayload.h
+    entities/MapCluster.h
     entities/Track.h
     entities/TruckNotification.h
     entities/Tir.h
@@ -148,6 +151,8 @@ set(cpp_sources
     models/AlertZoneNotificationModel.cpp
     models/ModelHelper.h
     models/ModelHelper.cpp
+    models/ClusterModel.h
+    models/ClusterModel.cpp
     models/CoordinatesModel.h
     models/PoiModel.cpp
     models/PoiModel.h
@@ -171,8 +176,6 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         ${APP_ASSETS}
         config/mqtt_config.json
-        RESOURCES Features/VesselPanel/CMakeLists.txt
-        QML_FILES Features/VesselPanel/VesselPanel.qml
 )
 
 add_subdirectory(Components)
@@ -189,7 +192,9 @@ target_link_libraries(${PROJECT_NAME}
         app_components
         app_componentsplugin
         app_logger
+        app_loggerplugin
         app_networking
+        app_networkingplugin
         app_auth
         app_authplugin
         app_features_vigateservicesplugin
