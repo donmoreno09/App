@@ -242,19 +242,4 @@ QtObject {
         return sum
     }
 
-    // Get column by key
-    function getColumn(key) {
-        for (let i = 0; i < columns.length; i++) {
-            if (columns[i].key === key) {
-                return columns[i]
-            }
-        }
-        return null
-    }
-
-    // Get column width by key
-    function getWidth(key) {
-        const col = getColumn(key)
-        return col ? col.width : 0
-    }
 }

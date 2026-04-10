@@ -62,7 +62,5 @@ public:
     Q_INVOKABLE void setData(const QJsonArray& transitsArray);
 
 private:
-    TransitEntry parseTransitEntry(const QJsonObject& obj) const;
-
     QList<TransitEntry> m_entries;
 };

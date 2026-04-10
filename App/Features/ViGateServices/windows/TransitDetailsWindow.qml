@@ -24,7 +24,6 @@ UI.FloatingWindow {
     required property bool vehiclesToggled
 
     property var parentWindow: null
-    readonly property string title: windowTitle
 
 
     ColumnLayout {
