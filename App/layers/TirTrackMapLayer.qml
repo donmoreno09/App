@@ -16,6 +16,12 @@ BaseMapLayer {
     visible: tirMapLayer.active
 
     MapItemView {
+        model: tirMapLayer.clusterModel
+
+        delegate: MapCluster { }
+    }
+
+    MapItemView {
         model: tirMapLayer.tirModel
 
         delegate: Tir {

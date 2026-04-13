@@ -1,6 +1,9 @@
 pragma Singleton
+
 import QtQuick 6.8
 import QtWebEngine 1.10
+
+import App.Logger 1.0
 
 QtObject {
     id: root
@@ -21,16 +24,12 @@ QtObject {
                 parentWindow: parentWindow,
                 visible: false
             })
-
-            if (webViewContainer) {
-                console.log("[ShipStowageController] WebView preloaded")
-            }
         }
     }
 
     function openStowageWindow(parentWindow) {
         if (!parentWindow) {
-            console.error("[ShipStowageController] No parent window provided")
+            AppLogger.withService("SHIP-STOWAGE-CONTROLLER").error("No parent window provided")
             return
         }
 
@@ -39,7 +38,7 @@ QtObject {
         }
 
         if (hasActiveWindow) {
-            console.warn("[ShipStowageController] A stowage window is already open")
+            AppLogger.withService("SHIP-STOWAGE-CONTROLLER").warn("A stowage window is already open")
             return
         }
 
@@ -52,14 +51,10 @@ QtObject {
 
         hasActiveWindow = true
         windowOpened()
-
-        console.log("[ShipStowageController] Stowage window opened")
     }
 
     function closeStowageWindow() {
         if (!webViewContainer || !hasActiveWindow) return
-
-        console.log("[ShipStowageController] Closing window...")
 
         webViewContainer.visible = false
         hasActiveWindow = false
@@ -71,9 +66,9 @@ QtObject {
                 try {
                     webView.lifecycleState = WebEngineView.LifecycleState.Frozen
                     webView.runJavaScript("if (window.gc) window.gc();")
-                    console.log("[ShipStowageController] Stowage window hidden (frozen)")
+                    AppLogger.withService("SHIP-STOWAGE-CONTROLLER").info("Stowage window hidden (frozen)")
                 } catch (e) {
-                    console.error("[ShipStowageController] Error freezing:", e)
+                    AppLogger.withService("SHIP-STOWAGE-CONTROLLER").error("Error freezing", { error: String(e) })
                 }
             }
 
@@ -82,17 +77,13 @@ QtObject {
     }
 
     function cleanup() {
-        console.log("[ShipStowageController] Cleanup started")
-
         if (!webViewContainer) {
-            console.log("[ShipStowageController] Nothing to clean up")
             return
         }
 
         try {
             if (webViewContainer.visible) {
                 webViewContainer.visible = false
-                console.log("[ShipStowageController] Container hidden")
             }
 
             hasActiveWindow = false
@@ -101,16 +92,12 @@ QtObject {
                 var webView = webViewContainer.webViewItem.webView
 
                 webView.lifecycleState = WebEngineView.LifecycleState.Discarded
-                console.log("[ShipStowageController] WebView discarded")
             }
 
             webViewContainer.destroy()
             webViewContainer = null
-
-            console.log("[ShipStowageController] Cleanup completed")
-
         } catch (e) {
-            console.error("[ShipStowageController] Error during cleanup:", e)
+            AppLogger.withService("SHIP-STOWAGE-CONTROLLER").error("Error during cleanup", { error: String(e) })
         }
     }
 }

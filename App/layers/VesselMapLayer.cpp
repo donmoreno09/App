@@ -1,9 +1,19 @@
 #include "VesselMapLayer.h"
 
-#include <QDebug>
-
+#include "AppLogger.h"
 #include "core/GeoSelectionUtils.h"
 #include "core/TrackManager.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "VESSEL-FINDER-MAP-LAYER"}
+    });
+    return logger;
+}
+}
 
 VesselMapLayer::VesselMapLayer(QObject* parent)
     : BaseTrackMapLayer(parent)
@@ -15,7 +25,7 @@ VesselMapLayer::VesselMapLayer(QObject* parent)
         QObject::connect(m_vesselModel, &VesselModel::historyPayloadArrived,
                          tm, &TrackManager::onHistoryPayloadArrived);
     } else {
-        qWarning() << "[VesselMapLayer] TrackManager singleton not yet constructed.";
+        _logger().warn("TrackManager singleton not yet constructed.");
     }
 
     m_clearVesselsTimer = new QTimer(this);
@@ -23,9 +33,10 @@ VesselMapLayer::VesselMapLayer(QObject* parent)
     m_clearVesselsTimer->setInterval(60 * 1000);
 
     connect(m_clearVesselsTimer, &QTimer::timeout, this, [this]() {
-        if (!m_vesselModel->vessels().isEmpty()) {
-            qDebug() << "[VesselMapLayer] Timeout: clearing vessels due to inactivity";
+        if (!m_vesselModel->vessels().isEmpty() || clusterModel()->rowCount() > 0) {
+            _logger().info("Timeout: clearing vessels and clusters due to inactivity.");
             m_vesselModel->clear();
+            clusterModel()->clear();
         }
     });
 }
@@ -51,7 +62,6 @@ void VesselMapLayer::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoord
     }
 
     m_selectedVessels = GeoSelection::selectInRect(geoVessels, topLeft, bottomRight);
-    qDebug() << "[VesselMapLayer] selectedVessels:" << m_selectedVessels;
     emit selectedInRect();
 }
 

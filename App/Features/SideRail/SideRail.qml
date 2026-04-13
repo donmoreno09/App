@@ -229,7 +229,7 @@ UI.GlobalBackgroundConsumer {
 
             TapHandler {
                 onTapped: {
-                    SidePanelController.close()
+                    SidePanelController.close(true)
                     userMenu.open()
                 }
             }

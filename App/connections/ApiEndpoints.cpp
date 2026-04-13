@@ -28,6 +28,11 @@ namespace ApiEndpoints {
 
     QString TrackSenderStart(const QString& topic) { return BaseTrackSenderUrl() + "/" + topic + "/start"; }
     QString TrackSenderStop(const QString& topic) { return BaseTrackSenderUrl() + "/" + topic + "/stop"; }
+    QString TrackSenderStopAll() { return BaseTrackSenderUrl() + "/stop-all"; }
+
+    QString BaseClustersUrl = "http://localhost:8000/clusters";
+    QString ClustersStart() { return BaseClustersUrl + "/start"; }
+    QString ClustersStop() { return BaseClustersUrl + "/stop"; }
 
     QString TrackHistorySenderStart(const QString& topic,
                                     const QString &track_iridess_uid) {

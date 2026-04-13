@@ -1,8 +1,21 @@
 #include "PoiMapLayerController.h"
-#include <QDebug>
+
+#include "AppLogger.h"
+
 #include <core/GeoSelectionUtils.h>
 #include <entities/Poi.h>
 #include <QQmlEngine>
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "POI-MAP-LAYER-CONTROLLER"}
+    });
+    return logger;
+}
+}
 
 PoiMapLayerController::PoiMapLayerController(QObject* parent)
     : BaseMapLayer(parent)
@@ -36,14 +49,14 @@ void PoiMapLayerController::selectInRect(const QGeoCoordinate &topLeft, const QG
         geometry["shapeTypeId"] = it->geometry.shapeTypeId;
         geometry["coordinate"] = coordinate;
         if (it->geometry.shapeTypeId != static_cast<int>(GeoSelection::ShapeType::Point)) {
-            qDebug() << "[WARNING] Selection other than coordinate is yet to be implemented! Change GeoSelection to use Geometry class instead of QVariant.";
+            _logger().warn("Selection other than coordinate is yet to be implemented! Change GeoSelection to use Geometry class instead of QVariant.");
         }
 
         poi["geometry"] = geometry;
         poisList.append(poi);
     }
     QVariantList selectedPois = GeoSelection::selectInRect(poisList, topLeft, bottomRight);
-    qDebug() << "[PoiMapLayerController] selectedPois: " << selectedPois;
+    _logger().info("selectedPois", { kv("selectedPois", selectedPois) });
     m_selectedPois = selectedPois;
     emit selectedInRect();
 }

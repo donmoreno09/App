@@ -1,5 +1,6 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
+import App.Logger 1.0
 
 QtObject {
     id: root
@@ -33,7 +34,7 @@ QtObject {
 
     function clear() {
         if (!stackView) {
-            console.warn("[PanelRouter] No StackView registered")
+            AppLogger.withService("PANEL-ROUTER").warn("No StackView registered")
             return
         }
 
@@ -45,7 +46,7 @@ QtObject {
 
     function push(path, props) {
         if (!stackView) {
-            console.warn("[PanelRouter] No StackView registered")
+            AppLogger.withService("PANEL-ROUTER").warn("No StackView registered")
             return
         }
 
@@ -66,7 +67,7 @@ QtObject {
 
     function pop() {
         if (!stackView) {
-            console.warn("[PanelRouter] No StackView registered")
+            AppLogger.withService("PANEL-ROUTER").warn("No StackView registered")
             return
         }
 
@@ -83,7 +84,7 @@ QtObject {
 
     function replace(path, props) {
         if (!stackView) {
-            console.warn("[PanelRouter] No StackView registered")
+            AppLogger.withService("PANEL-ROUTER").warn("No StackView registered")
             return
         }
 
@@ -103,7 +104,7 @@ QtObject {
 
     function replaceCurrent(path, props) {
         if (!stackView) {
-            console.warn("[PanelRouter] No StackView registered")
+            AppLogger.withService("PANEL-ROUTER").warn("No StackView registered")
             return
         }
 

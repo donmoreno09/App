@@ -1,9 +1,19 @@
 #include "TrackMapLayer.h"
 
-#include <QDebug>
-
+#include "AppLogger.h"
 #include "core/GeoSelectionUtils.h"
 #include "core/TrackManager.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "TRACK-MAP-LAYER"}
+    });
+    return logger;
+}
+}
 
 TrackMapLayer::TrackMapLayer(QObject* parent)
     : BaseTrackMapLayer(parent)
@@ -15,7 +25,7 @@ TrackMapLayer::TrackMapLayer(QObject* parent)
         QObject::connect(m_trackModel, &TrackModel::historyPayloadArrived,
                          tm, &TrackManager::onHistoryPayloadArrived);
     } else {
-        qWarning() << "[TrackModel] TrackManager singleton not yet constructed.";
+        _logger().warn("TrackManager singleton not yet constructed.");
     }
 
     m_clearTracksTimer = new QTimer(this);
@@ -23,9 +33,10 @@ TrackMapLayer::TrackMapLayer(QObject* parent)
     m_clearTracksTimer->setInterval(60 * 1000); // 60 seconds
 
     connect(m_clearTracksTimer, &QTimer::timeout, this, [this]() {
-        if (!m_trackModel->tracks().isEmpty()) {
-            qDebug() << "[TrackMapLayer] Timeout: clearing tracks due to inactivity";
+        if (!m_trackModel->tracks().isEmpty() || clusterModel()->rowCount() > 0) {
+            _logger().info("Timeout: clearing tracks and clusters due to inactivity");
             m_trackModel->clear();
+            clusterModel()->clear();
         }
     });
 }
@@ -53,7 +64,7 @@ void TrackMapLayer::selectInRect(const QGeoCoordinate &topLeft, const QGeoCoordi
     }
 
     QVariantList selectedTracks = GeoSelection::selectInRect(geoTracks, topLeft, bottomRight);
-    qDebug() << "[TrackMapLayer] selectedTracks: " << selectedTracks;
+    _logger().info("selectedTracks", { kv("selectedTracks", selectedTracks) });
     m_selectedTracks = selectedTracks;
     emit selectedInRect();
 }

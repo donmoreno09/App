@@ -1,8 +1,9 @@
 #ifndef ALERTZONENOTIFICATIONPARSER_H
 #define ALERTZONENOTIFICATIONPARSER_H
 
+#include "AppLogger.h"
 #include "ISignalRMessageParser.h"
-#include <entities/AlertZoneNotification.h>
+#include "entities/AlertZoneNotification.h"
 
 class AlertZoneNotificationParser : public ISignalRMessageParser<AlertZoneNotification> {
 public:
@@ -22,7 +23,8 @@ public:
         QJsonObject payload = QJsonObject::fromVariantMap(payloadVar.toMap());
 
         if (payload.isEmpty()) {
-            qWarning() << "[AlertZoneNotificationParser] Payload is empty or invalid";
+            auto logger = AppLogger::get();
+            logger.withService("AlertZoneNotificationParser").warn("Payload is empty or invalid");
             return {};
         }
 

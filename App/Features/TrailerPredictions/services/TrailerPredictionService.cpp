@@ -1,10 +1,22 @@
 #include "TrailerPredictionService.h"
+
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QScopeGuard>
-#include <QDebug>
+
+#include "../TrailerPredictionsLogger.h"
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = TrailerPredictionsLogger::get().child({
+        {"service", "TRAILER_PREDICTION_SERVICE"}
+    });
+    return logger;
+}
+}
 
 TrailerPredictionService::TrailerPredictionService(QObject* parent)
     : QObject(parent)
@@ -31,74 +43,87 @@ QUrl TrailerPredictionService::makeUrl(const QString& host, int port,
 
 void TrailerPredictionService::performGet(const QUrl& url)
 {
-    qDebug() << "[TrailerPredictionService] Requesting URL:" << url.toString();
+    _logger().info("Sending trailer prediction request", {
+        kv("url", url.toString())
+    });
 
     QNetworkRequest req(url);
     req.setRawHeader("Accept", "application/json");
 
     QNetworkReply* reply = m_manager.get(req);
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        const auto finish = qScopeGuard([&]{ reply->deleteLater(); });
+        const auto finish = qScopeGuard([&] { reply->deleteLater(); });
 
-        qDebug() << "[TrailerPredictionService] Reply received";
-        qDebug() << "[TrailerPredictionService] Error:" << reply->error() << reply->errorString();
+        const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+        if (status == 404) {
+            _logger().info("Trailer prediction not found", {
+                kv("status", status)
+            });
+            emit notFound();
+            return;
+        }
 
         if (reply->error() != QNetworkReply::NoError) {
-            qDebug() << "[TrailerPredictionService] Network error, emitting requestFailed";
+            _logger().warn("Trailer prediction request failed", {
+                kv("status", status),
+                kv("errorCode", static_cast<int>(reply->error())),
+                kv("error", reply->errorString())
+            });
             emit requestFailed(reply->errorString());
             return;
         }
 
-        const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        qDebug() << "[TrailerPredictionService] HTTP Status:" << status;
-
-        if(status < 200 || status >= 300) {
-            if(status == 404){
-                qDebug() << "[TrailerPredictionService] 404 Not Found, emitting notFound()";
-                emit notFound();
-                return;
-            }
-            qDebug() << "[TrailerPredictionService] HTTP error, emitting requestFailed";
+        if (status < 200 || status >= 300) {
+            _logger().warn("Trailer prediction request returned unexpected HTTP status", {
+                kv("status", status)
+            });
             emit requestFailed(QStringLiteral("HTTP %1").arg(status));
             return;
         }
 
-        // Read the raw response
-        QByteArray rawData = reply->readAll();
-        qDebug() << "[TrailerPredictionService] Raw response data:" << rawData;
-        qDebug() << "[TrailerPredictionService] Response size:" << rawData.size();
-
+        const QByteArray rawData = reply->readAll();
         if (rawData.isEmpty()) {
-            qDebug() << "[TrailerPredictionService] Empty response, emitting notFound()";
+            _logger().warn("Trailer prediction response was empty");
             emit notFound();
             return;
         }
 
         QString cleanData = QString::fromUtf8(rawData).trimmed();
-        qDebug() << "[TrailerPredictionService] Cleaned data:" << cleanData;
 
         if (cleanData.startsWith('"') && cleanData.endsWith('"')) {
             cleanData = cleanData.mid(1, cleanData.length() - 2);
-            qDebug() << "[TrailerPredictionService] After removing quotes:" << cleanData;
         }
 
         bool ok = false;
         const int value = cleanData.toInt(&ok);
-        qDebug() << "[TrailerPredictionService] Parsed int:" << value << "ok:" << ok;
 
         if (!ok || cleanData.isEmpty()) {
-            qDebug() << "[TrailerPredictionService] Parse failed or empty, emitting notFound()";
+            _logger().warn("Failed to parse trailer prediction response", {
+                kv("response", cleanData)
+            });
             emit notFound();
             return;
         }
 
-        qDebug() << "[TrailerPredictionService] Success! Emitting predictionReady(" << value << ")";
+        _logger().info("Trailer prediction received successfully", {
+            kv("prediction", value)
+        });
         emit predictionReady(value);
     });
 }
 
 void TrailerPredictionService::getPredictionByTrailerId(int trailerId)
 {
-    auto url = makeUrl(m_host, m_port, QStringLiteral("/TrailersPredictions/GetTrailerPredictionsByTrailerId/%1").arg(trailerId));
+    _logger().info("Fetching prediction by trailer id", {
+        kv("trailerId", trailerId)
+    });
+
+    const auto url = makeUrl(
+        m_host,
+        m_port,
+        QStringLiteral("/TrailersPredictions/GetTrailerPredictionsByTrailerId/%1").arg(trailerId)
+    );
+
     performGet(url);
 }

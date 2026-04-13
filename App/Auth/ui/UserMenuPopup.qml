@@ -3,9 +3,10 @@ import QtQuick.Layouts 6.8
 import QtQuick.Effects 6.8
 
 import App.Auth 1.0
+import App.Features.Language 1.0
+import App.Features.Map 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
-import App.Features.Map 1.0
 
 UI.Overlay {
     id: root
@@ -21,10 +22,10 @@ UI.Overlay {
     padding: 0
 
     background: Rectangle {
-        radius: Theme.radius.lg
-        color: root.isDark ? Theme.colors.whiteA10  : Theme.colors.white500
+        radius: Theme.radius.md
+        color: root.isDark ? Theme.colors.whiteA10 : Theme.colors.white500
         border.width: Theme.borders.b1
-        border.color: root.isDark ? Theme.colors.whiteA10 : Theme.colors.blackA10
+        border.color: root.isDark ? Theme.colors.whiteA10 : Theme.colors.white500
     }
 
     enter: Transition {
@@ -66,7 +67,7 @@ UI.Overlay {
             model: menuModel
             delegate: MenuRow {
                 Layout.fillWidth: true
-                text: root._labelFor(model.action)
+                text: `${TranslationManager.revision}` && root._labelFor(model.action)
                 iconSource: model.icon
                 onClicked: root._handleAction(model.action)
             }

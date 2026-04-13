@@ -1,10 +1,22 @@
 #include "SignalRClientService.h"
-#include "parser/ISignalRMessageParser.h"
-#include <models/TruckNotificationModel.h>
-#include <models/AlertZoneNotificationModel.h>
+
 #include <QUrlQuery>
-#include <QDebug>
-#include <QNetworkRequest>
+
+#include "AppLogger.h"
+#include "parser/ISignalRMessageParser.h"
+#include "models/TruckNotificationModel.h"
+#include "models/AlertZoneNotificationModel.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "SIGNALR-CLIENT"}
+    });
+    return logger;
+}
+}
 
 SignalRClientService::SignalRClientService(QObject* parent)
     : QObject(parent)
@@ -32,7 +44,7 @@ SignalRClientService::SignalRClientService(QObject* parent)
     m_handshakeTimer->setSingleShot(true);
     m_handshakeTimer->setInterval(HANDSHAKE_TIMEOUT_MS);
     connect(m_handshakeTimer, &QTimer::timeout, this, [this]() {
-        qWarning() << "[SignalR] Handshake timeout — closing socket";
+        _logger().warn("Handshake timeout; closing socket");
         m_webSocket->close();
     });
 }
@@ -44,10 +56,10 @@ SignalRClientService::~SignalRClientService()
 
 void SignalRClientService::initialize(const AppConfig& appConfig, const QString& accessToken, const QString& userId)
 {
-    qDebug() << "[SignalR] Initializing...";
+    _logger().info("Initializing SignalR client");
 
-    if (m_connected || m_webSocket->state() != QAbstractSocket::UnconnectedState) {
-        qWarning() << "[SignalR] Already connected or connecting";
+    if (m_connected) {
+        _logger().warn("SignalR client already connected");
         return;
     }
 
@@ -66,26 +78,26 @@ void SignalRClientService::initialize(const AppConfig& appConfig, const QString&
     m_connectionState = "Connecting";
     emit connectionStateChanged();
 
-    qDebug().noquote() << "[SignalR] Connecting to:" << url.toString();
+    _logger().info("Connecting to SignalR hub", {
+        kv("url", url.toString())
+    });
     m_webSocket->open(request);
 }
 
 void SignalRClientService::registerHandler(const QString& methodName, MessageHandler handler)
 {
     m_methodHandlers[methodName] = handler;
-    // qDebug() << "[SignalR] Handler registered for method: " << methodName;
 }
 
 void SignalRClientService::registerParser(int eventType, IBaseSignalRMessageParser* parser)
 {
     m_eventTypeParsers[eventType] = parser;
-    // qDebug() << "[SignalR] Parser registered for EventType: " << eventType;
 }
 
 void SignalRClientService::handleNotification(const QVariantList& args)
 {
     if (args.isEmpty()) {
-        qWarning() << "[SignalR] handleNotification: no arguments received";
+        _logger().warn("handleNotification called with no arguments");
         return;
     }
 
@@ -94,7 +106,7 @@ void SignalRClientService::handleNotification(const QVariantList& args)
         QVariantMap notifObj = arg.toMap();
 
         if (!notifObj.contains("id") || !notifObj.contains("eventType") || !notifObj.contains("payload")) {
-            qWarning() << "[SignalR] Invalid notification format - missing required fields";
+            _logger().warn("Invalid notification format - missing required fields");
             continue;
         }
 
@@ -114,11 +126,6 @@ void SignalRClientService::handleNotification(const QVariantList& args)
 void SignalRClientService::processNotificationInternal(const QString& id, const QVariant& payloadVar,
                                                        const QString& eventTypeName, const QString& timestamp)
 {
-    // qDebug() << "[SignalR] Processing notification:";
-    // qDebug() << "[SignalR]   ID:" << id;
-    // qDebug() << "[SignalR]   EventType:" << eventTypeName;
-    // qDebug() << "[SignalR]   Timestamp:" << timestamp;
-
     int eventType = -1;
     if (eventTypeName == "TirAppIssueCreated") {
         eventType = 0;
@@ -127,14 +134,19 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
     } else if (eventTypeName == "ControlRoomAlertZoneIntrusion") {
         eventType = 2;
     } else {
-        qWarning() << "[SignalR] Unknown EventTypeName:" << eventTypeName;
+        _logger().warn("Unknown EventTypeName", {
+            kv("notificationId", id),
+            kv("eventTypeName", eventTypeName)
+        });
         return;
     }
 
-    // qDebug() << "[SignalR] Mapped EventType:" << eventType;
-
     if (!m_eventTypeParsers.contains(eventType)) {
-        qWarning() << "[SignalR] No parser registered for EventType:" << eventType;
+        _logger().warn("No parser registered for EventType", {
+            kv("notificationId", id),
+            kv("eventType", eventType),
+            kv("eventTypeName", eventTypeName)
+        });
         return;
     }
 
@@ -149,7 +161,10 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
 
     auto* engine = qmlEngine(this);
     if (!engine) {
-        qWarning() << "[SignalR] QML engine not available";
+        _logger().warn("QML engine not available", {
+            kv("notificationId", id),
+            kv("eventType", eventType)
+        });
         return;
     }
 
@@ -157,7 +172,10 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
         // Truck notifications
         auto* parser = dynamic_cast<ISignalRMessageParser<TruckNotification>*>(baseParser);
         if (!parser) {
-            qWarning() << "[SignalR] Invalid parser type for EventType:" << eventType;
+            _logger().warn("Invalid parser type for truck notification", {
+                kv("notificationId", id),
+                kv("eventType", eventType)
+            });
             return;
         }
 
@@ -166,16 +184,21 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
         auto* model = engine->singletonInstance<TruckNotificationModel*>("App", "TruckNotificationModel");
         if (model) {
             model->upsert(notifications);
-            // qDebug() << "[SignalR] Truck notification added to model";
         } else {
-            qWarning() << "[SignalR] TruckNotificationModel singleton not found";
+            _logger().warn("TruckNotificationModel singleton not found", {
+                kv("notificationId", id),
+                kv("eventType", eventType)
+            });
         }
 
     } else if (eventType == 2) {
         // Alert zone notifications
         auto* parser = dynamic_cast<ISignalRMessageParser<AlertZoneNotification>*>(baseParser);
         if (!parser) {
-            qWarning() << "[SignalR] Invalid parser type for EventType:" << eventType;
+            _logger().warn("Invalid parser type for alert zone notification", {
+                kv("notificationId", id),
+                kv("eventType", eventType)
+            });
             return;
         }
 
@@ -184,9 +207,11 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
         auto* model = engine->singletonInstance<AlertZoneNotificationModel*>("App", "AlertZoneNotificationModel");
         if (model) {
             model->upsert(notifications);
-            // qDebug() << "[SignalR] AlertZone notification added to model";
         } else {
-            qWarning() << "[SignalR] AlertZoneNotificationModel singleton not found";
+            _logger().warn("AlertZoneNotificationModel singleton not found", {
+                kv("notificationId", id),
+                kv("eventType", eventType)
+            });
         }
     }
 }
@@ -194,7 +219,9 @@ void SignalRClientService::processNotificationInternal(const QString& id, const 
 void SignalRClientService::invoke(const QString& methodName, const QVariantList& args)
 {
     if (!m_connected) {
-        qWarning() << "[SignalR] Cannot invoke - not connected";
+        _logger().warn("Cannot invoke SignalR method - not connected", {
+            kv("method", methodName)
+        });
         return;
     }
 
@@ -214,8 +241,6 @@ void SignalRClientService::invoke(const QString& methodName, const QVariantList&
     m_pendingInvocations.insert(invocationId, methodName);
 
     sendMessage(message);
-
-    // qDebug() << "[SignalR] Invoked: " << methodName << " with args: " << args;
 }
 
 void SignalRClientService::disconnectFromHub()
@@ -250,7 +275,7 @@ QString SignalRClientService::connectionState() const
 
 void SignalRClientService::onWebSocketConnected()
 {
-    qDebug() << "[SignalR] WebSocket connected";
+    _logger().info("WebSocket connected");
 
     m_connectionState = "Handshaking";
     emit connectionStateChanged();
@@ -261,7 +286,7 @@ void SignalRClientService::onWebSocketConnected()
 
 void SignalRClientService::onWebSocketDisconnected()
 {
-    qDebug() << "[SignalR] Disconnected";
+    _logger().info("WebSocket disconnected");
 
     m_connected = false;
     m_connectionState = "Disconnected";
@@ -272,15 +297,15 @@ void SignalRClientService::onWebSocketDisconnected()
     emit connectionStateChanged();
 
     if (!m_intentionalDisconnect && !m_lastAccessToken.isEmpty()) {
-        qDebug() << "[SignalR] Unexpected disconnect — reconnecting in" << RECONNECT_DELAY_MS << "ms";
+        _logger().info("Unexpected disconnect; scheduling reconnect", {
+            kv("delayMs", RECONNECT_DELAY_MS)
+        });
         m_reconnectTimer->start();
     }
 }
 
 void SignalRClientService::onTextMessageReceived(const QString& message)
 {
-    // qDebug() << "[SignalR] Message received:" << message;
-
     // SignalR messages end with \x1e
     // Can receive multiple messages concatenated
     QStringList messages = message.split(QChar(RECORD_SEPARATOR), Qt::SkipEmptyParts);
@@ -294,7 +319,10 @@ void SignalRClientService::onTextMessageReceived(const QString& message)
 void SignalRClientService::onWebSocketError(QAbstractSocket::SocketError error)
 {
     QString errorString = m_webSocket->errorString();
-    qWarning() << "[SignalR] Error: " << errorString << "Code: " << error;
+    _logger().warn("WebSocket error", {
+        kv("error", errorString),
+        kv("code", static_cast<int>(error))
+    });
 
     m_connectionState = "Error";
     emit connectionStateChanged();
@@ -311,7 +339,6 @@ void SignalRClientService::sendPing()
     ping["type"] = 6;  // Ping
 
     sendMessage(ping);
-    // qDebug() << "[SignalR] Ping sent";
 }
 
 void SignalRClientService::sendHandshake()
@@ -322,13 +349,13 @@ void SignalRClientService::sendHandshake()
 
     sendMessage(handshake);
 
-    qDebug() << "[SignalR] Handshake sent";
+    _logger().info("SignalR handshake sent");
 }
 
 void SignalRClientService::sendMessage(const QJsonObject& message)
 {
     if (m_webSocket->state() != QAbstractSocket::ConnectedState) {
-        qWarning() << "[SignalR] Cannot send - not connected";
+        _logger().warn("Cannot send SignalR message - socket not connected");
         return;
     }
 
@@ -341,24 +368,24 @@ void SignalRClientService::sendMessage(const QJsonObject& message)
     qint64 bytesSent = m_webSocket->sendTextMessage(jsonString);
 
     if (bytesSent == -1) {
-        qWarning() << "[SignalR] Failed to send message";
+        _logger().warn("Failed to send SignalR message");
     }
 }
 
 void SignalRClientService::parseMessage(const QString& message)
 {
-    // qDebug() << "[SignalR] RAW MESSAGE:" << message;
-
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8(), &parseError);
 
     if (parseError.error != QJsonParseError::NoError) {
-        qWarning() << "[SignalR] JSON parse error:" << parseError.errorString();
+        _logger().warn("SignalR JSON parse error", {
+            kv("error", parseError.errorString())
+        });
         return;
     }
 
     if (!doc.isObject()) {
-        qWarning() << "[SignalR] Expected JSON object";
+        _logger().warn("Expected JSON object in SignalR message");
         return;
     }
 
@@ -366,7 +393,7 @@ void SignalRClientService::parseMessage(const QString& message)
 
     // Check if this is handshake response (empty object = success)
     if (obj.isEmpty()) {
-        qDebug() << "[SignalR] Handshake successful";
+        _logger().info("SignalR handshake successful");
         m_handshakeTimer->stop();
         m_connected = true;
         m_connectionState = "Connected";
@@ -392,13 +419,14 @@ void SignalRClientService::parseMessage(const QString& message)
         for (int i = 0; i < argsArray.size(); ++i) {
             args.append(argsArray[i].toVariant());
         }
-        // qDebug() << "[SignalR] Server invoked:" << target;
 
         // Route to registered handler
         if (m_methodHandlers.contains(target)) {
             m_methodHandlers[target](args);
         } else {
-            qWarning() << "[SignalR] No handler registered for method:" << target;
+            _logger().warn("No handler registered for SignalR method", {
+                kv("target", target)
+            });
         }
         break;
     }
@@ -407,11 +435,8 @@ void SignalRClientService::parseMessage(const QString& message)
         QString invocationId = obj["invocationId"].toString();
         QString methodName = m_pendingInvocations.take(invocationId);
 
-        // qDebug() << "[SignalR] Invocation completed:" << methodName;
-
         if (methodName == "GetUnreadNotifications" && obj.contains("result")) {
             QJsonArray resultArray = obj["result"].toArray();
-            // qDebug() << "[SignalR] Received" << resultArray.size() << "unread notifications";
 
             // Process each notification
             for (const QJsonValue& val : resultArray) {
@@ -424,7 +449,10 @@ void SignalRClientService::parseMessage(const QString& message)
                 if (payloadDoc.isObject()) {
                     payloadVariant = payloadDoc.object().toVariantMap();
                 } else {
-                    qWarning() << "[SignalR] Failed to parse payload string as JSON object";
+                    _logger().warn("Failed to parse payload string as JSON object", {
+                        kv("invocationId", invocationId),
+                        kv("method", methodName)
+                    });
                     payloadVariant = payloadStr;  // Fallback to string
                 }
 
@@ -439,8 +467,6 @@ void SignalRClientService::parseMessage(const QString& message)
 
                 handleNotification(args);
             }
-
-            // qDebug() << "[SignalR] Finished loading unread notifications into models";
 
             auto* engine = qmlEngine(this);
             if (engine) {
@@ -459,19 +485,22 @@ void SignalRClientService::parseMessage(const QString& message)
     }
 
     case 6: {  // Ping
-        // qDebug() << "[SignalR] Ping received";
         break;
     }
 
     case 7: {  // Close
         QString error = obj["error"].toString();
-        qDebug() << "[SignalR] Close received:" << error;
+        _logger().info("SignalR close received", {
+            kv("error", error)
+        });
         m_webSocket->close();
         break;
     }
 
     default:
-        qWarning() << "[SignalR] Unknown message type:" << type;
+        _logger().warn("Unknown SignalR message type", {
+            kv("type", type)
+        });
         break;
     }
 }
@@ -480,11 +509,11 @@ void SignalRClientService::fetchUnreadNotifications()
 {
     // Get userId from the connection (we stored it during initialize)
     if (m_userId.isEmpty()) {
-        qWarning() << "[SignalR] Cannot fetch unread notifications - userId not set";
+        _logger().warn("Cannot fetch unread notifications - userId not set");
         return;
     }
 
-    qDebug() << "[SignalR] Fetching unread notifications";
+    _logger().info("[SignalR] Fetching unread notifications");
     invoke("GetUnreadNotifications");
 }
 
@@ -495,6 +524,6 @@ QString SignalRClientService::generateInvocationId()
 
 void SignalRClientService::attemptReconnect()
 {
-    qDebug() << "[SignalR] Attempting reconnect...";
+    _logger().info("Attempting reconnect");
     initialize(m_lastConfig, m_lastAccessToken, m_lastUserId);
 }

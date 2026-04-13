@@ -1,8 +1,11 @@
 qt_add_library(app_networking STATIC)
 
 set(cpp_files
+    Debouncer.h
+    Debouncer.cpp
     HttpClient.h
     HttpClient.cpp
+    NetworkingLogger.h
 
     apis/ApiTypes.h
     apis/BaseApi.h
@@ -26,6 +29,7 @@ qt_add_qml_module(app_networking
     URI App.Networking
     VERSION 1.0
     SOURCES ${cpp_files}
+    RESOURCE_PREFIX "/"
 )
 
 target_include_directories(app_networking
@@ -42,4 +46,8 @@ target_link_libraries(app_networking
     PRIVATE
         Qt6::Core
         Qt6::Gui
+        Qt6::Qml
+
+        app_logger
+        app_loggerplugin
 )

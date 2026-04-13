@@ -1,6 +1,18 @@
 #include "AlertZoneNotificationModel.h"
-#include <QDebug>
+
 #include <algorithm>
+
+#include "AppLogger.h"
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "ALERT-ZONE-NOTIFICATION-MODEL"}
+    });
+    return logger;
+}
+}
 
 AlertZoneNotificationModel::AlertZoneNotificationModel(QObject *parent)
     : QAbstractListModel(parent), m_helper(new ModelHelper(this))
@@ -112,16 +124,12 @@ void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &no
 {
     if (notifications.isEmpty()) { return; }
 
-    // qDebug() << "[AlertZoneNotificationModel] upsert() called with" << notifications.size() << "notifications";
-
     bool countChanged = false;
 
     for (const auto& notif : notifications) {
-        // qDebug() << "[AlertZoneNotificationModel] Processing notification: " << notif.id;
-
         // Skip if already deleted
         if (m_deletedIds.contains(notif.id)) {
-            qWarning() << "[AlertZoneNotificationModel] Skipping deleted notification: " << notif.id;
+            _logger().warn("Skipping deleted notification", { kv("id", notif.id) });
             continue;
         }
 
@@ -135,9 +143,6 @@ void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &no
                 m_notifications[row] = notif;
                 const QModelIndex idx = index(row);
                 emit dataChanged(idx, idx, changed);
-                // qDebug() << "[AlertZoneNotificationModel] Updated notification at row" << row;
-            } else {
-                // qDebug() << "[AlertZoneNotificationModel] No changes for notification at row" << row;
             }
         } else {
             // Prepend new notifications at the top (row 0)
@@ -152,13 +157,10 @@ void AlertZoneNotificationModel::upsert(const QVector<AlertZoneNotification> &no
 
             endInsertRows();
             countChanged = true;
-
-            // qDebug() << "[AlertZoneNotificationModel] Inserted new notification at row 0";
         }
     }
 
     if (countChanged) {
-        // qDebug() << "[AlertZoneNotificationModel] Count changed to:" << m_notifications.size();
         emit this->countChanged();
     }
 }
@@ -192,7 +194,7 @@ void AlertZoneNotificationModel::removeNotification(const QString &id)
 
     auto it = m_upsertMap.find(id);
     if (it == m_upsertMap.end()) {
-        qWarning() << "[AlertZoneNotificationModel] Cannot remove notification with id:" << id << "- not found";
+        _logger().warn("Cannot remove notification: not found", { kv("id", id) });
         return;
     }
 
@@ -210,14 +212,13 @@ void AlertZoneNotificationModel::removeNotification(const QString &id)
     }
 
     emit countChanged();
-    // qDebug() << "[AlertZoneNotificationModel] Removed notification:" << id;
 }
 
 void AlertZoneNotificationModel::clearAll()
 {
     if (m_notifications.isEmpty()) return;
 
-    for (const auto& notif : m_notifications) {
+    for (const auto &notif : std::as_const(m_notifications)) {
         m_deletedIds.insert(notif.id);
     }
 
@@ -227,7 +228,7 @@ void AlertZoneNotificationModel::clearAll()
     endResetModel();
 
     emit countChanged();
-    qDebug() << "[AlertZoneNotificationModel] Cleared all notifications";
+    _logger().info("Cleared all notifications");
 }
 
 QVariantMap AlertZoneNotificationModel::getEditableNotification(int index)
@@ -257,6 +258,5 @@ void AlertZoneNotificationModel::setInitialLoadComplete(bool complete)
         }
 
         emit initialLoadCompleteChanged();
-        // qDebug() << "[TruckNotificationModel] Initial load complete set to:" << complete;
     }
 }

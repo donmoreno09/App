@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
+import App.Logger 1.0
 import App.Themes 1.0
 import App.Components 1.0 as UI
 import App.Features.Panels 1.0
@@ -227,7 +228,10 @@ PanelTemplate {
                         Layout.alignment: Qt.AlignHCenter
                         model: ["Info", "Settings", "Data", "Actions"]
                         onItemClicked: function(index) {
-                            console.log("Switched to tab:", index, "(" + model[index] + ")")
+                            AppLogger.withService("PLAYGROUND-SWITCHER").info("Switched to tab", {
+                                index: index,
+                                tab: model[index]
+                            })
                         }
                     }
 

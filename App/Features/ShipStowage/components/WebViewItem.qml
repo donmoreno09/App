@@ -2,6 +2,8 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import QtWebEngine 1.10
+
+import App.Logger 1.0
 import App.Themes 1.0
 import App.Features.ShipStowage 1.0
 
@@ -92,9 +94,9 @@ Item {
 
         onLoadingChanged: function(loadRequest) {
             if (loadRequest.status === WebEngineView.LoadFailedStatus) {
-                console.error("WebView failed to load:", loadRequest.errorString)
+                AppLogger.withService("SHIP-STOWAGE").error("WebView failed to load", { error: loadRequest.errorString })
             } else if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
-                console.log("WebView loaded successfully")
+                AppLogger.withService("SHIP-STOWAGE").info("WebView loaded successfully")
             }
         }
     }

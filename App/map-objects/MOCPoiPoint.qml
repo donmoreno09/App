@@ -4,6 +4,7 @@ import QtLocation 6.8
 import QtPositioning 6.8
 
 import App 1.0
+import App.Components 1.0 as UI
 import App.Themes 1.0
 import App.Features.SidePanel 1.0
 
@@ -46,27 +47,15 @@ MapQuickItem {
             }
         }
 
-        Rectangle {
+        UI.ShapeLabel {
+            text: "Crane"
+            textColor: Theme.colors.white
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: svgIcon.bottom
             anchors.topMargin: Theme.spacing.s1
-            width: text.width + Theme.spacing.s3
-            height: text.height + Theme.spacing.s1
-            radius: Theme.radius.sm
-            color: Theme.colors.hexWithAlpha(Theme.colors.primary500, 1)
-            border.color: Theme.colors.white
-            border.width: isSelected ? Theme.borders.b1 : Theme.borders.b0
-
-            Text {
-                anchors.centerIn: parent
-                id: text
-                text: "Crane"
-                font.pixelSize: Theme.typography.fontSize150
-                color: Theme.colors.white
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                wrapMode: Text.Wrap
-            }
+            rect.color: Theme.colors.hexWithAlpha(Theme.colors.primary500, 1)
+            rect.border.color: Theme.colors.white
+            rect.border.width: isSelected ? Theme.borders.b1 : Theme.borders.b0
         }
     }
 

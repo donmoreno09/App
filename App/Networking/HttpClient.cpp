@@ -1,28 +1,26 @@
 #include "HttpClient.h"
 
 #include <QHttpHeaders>
-#include <QtGlobal>
 #include <cmath>
 
-HttpClient::HttpClient(const QUrl& baseUrl, QObject *parent)
+HttpClient::HttpClient(const QUrl& baseUrl, QObject* parent)
     : QObject(parent)
     , m_rest(&m_nam, this)
     , m_factory(baseUrl)
 {
-    // Common headers
     QHttpHeaders headers;
     headers.append(QHttpHeaders::WellKnownHeader::Accept, "application/json");
     headers.append(QHttpHeaders::WellKnownHeader::ContentType, "application/json");
     headers.append("ngrok-skip-browser-warning", "true");
     m_factory.setCommonHeaders(headers);
 
-    // Timeout
     m_factory.setTransferTimeout(std::chrono::seconds(15));
 }
 
-HttpClient::HttpClient(QObject *parent)
-    : HttpClient(QUrl(), parent)
-{}
+HttpClient::HttpClient(QObject* parent)
+    : HttpClient(QUrl{}, parent)
+{
+}
 
 void HttpClient::setBaseUrl(const QUrl& baseUrl)
 {
@@ -43,33 +41,20 @@ QNetworkRequest HttpClient::buildRequest(const QString& urlOrPath) const
 {
     const QUrl url(urlOrPath);
 
-    // 1) Relative path -> use factory join (baseUrl + path)
-    if (url.isValid() && url.isRelative()) {
+    if (url.isValid() && url.isRelative())
         return m_factory.createRequest(urlOrPath);
-    }
 
-    // 2) Absolute URL -> create a "configured" request, then override URL
-    //    (keeps common headers, bearer, timeout, etc.)
     QNetworkRequest req = m_factory.createRequest();
-    if (url.isValid())
-        req.setUrl(url);
-    else
-        req.setUrl(QUrl{}); // invalid; caller handles
+    req.setUrl(url.isValid() ? url : QUrl{});
     return req;
 }
 
 int HttpClient::retryDelayMs(const RetryPolicy& policy, int attemptNo)
 {
     const int expIndex = qMax(0, attemptNo - 1);
-    const double raw = policy.baseDelayMs * std::pow(policy.multiplier, expIndex); // baseDelayMs * (multiplier) ^ exponent
-    const int ms = static_cast<int>(raw);
-    return qBound(0, ms, policy.maxDelayMs);
-}
-
-void HttpClient::autoDeleteHandle(RequestHandle *handle)
-{
-    QObject::connect(handle, &RequestHandle::finished, handle, &QObject::deleteLater);
-    QObject::connect(handle, &RequestHandle::failed,   handle, &QObject::deleteLater);
+    const double raw = static_cast<double>(policy.baseDelayMs) * std::pow(policy.multiplier, expIndex);
+    const int delay = static_cast<int>(raw);
+    return qBound(0, delay, policy.maxDelayMs);
 }
 
 bool HttpClient::shouldRetry(const QRestReply& reply, const RetryPolicy& policy, int attemptNo) const
@@ -77,14 +62,28 @@ bool HttpClient::shouldRetry(const QRestReply& reply, const RetryPolicy& policy,
     if (attemptNo >= policy.maxAttempts)
         return false;
 
+    if (reply.error() == QNetworkReply::OperationCanceledError)
+        return false;
+
     if (policy.shouldRetry)
         return policy.shouldRetry(reply);
 
-    const int status = reply.httpStatus();
-
-    // Network/transport error (no valid HTTP status)
-    if (status <= 0)
+    if (reply.hasError())
         return policy.retryOnNetworkError;
 
-    return policy.retryHttpStatus.contains(status);
+    return policy.retryHttpStatus.contains(reply.httpStatus());
+}
+
+QString HttpClient::failureMessage(const QRestReply& reply)
+{
+    if (reply.hasError()) {
+        const QString err = reply.errorString().trimmed();
+        return err.isEmpty() ? QStringLiteral("Network error") : err;
+    }
+
+    const int status = reply.httpStatus();
+    if (status > 0)
+        return QStringLiteral("HTTP %1").arg(status);
+
+    return QStringLiteral("Unknown network error");
 }

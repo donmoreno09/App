@@ -220,26 +220,14 @@ MapItemGroup {
     EdgeHandle { id: southHandle; kind: 2 }
     EdgeHandle { id: westHandle;  kind: 3 }
 
-    Rectangle {
+    ShapeLabel {
         anchors.centerIn: ellipse
-        width: text.width + Theme.spacing.s3
-        height: text.height + Theme.spacing.s1
-        radius: Theme.radius.sm
-        color: root.labelFillColor
-        border.color: root.labelBorderColor
-        border.width: root.isEditing ? root.labelBorderWidth : Theme.borders.b0
-        z: ellipse.z + 2
         visible: root.labelVisible
-
-        Text {
-            id: text
-            anchors.centerIn: parent
-            text: root.labelText
-            font.pixelSize: Theme.typography.fontSize150
-            color: root.labelTextColor
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            wrapMode: Text.Wrap
-        }
+        z: ellipse.z + 2
+        text: root.labelText
+        textColor: root.labelTextColor
+        rect.color: root.labelFillColor
+        rect.border.color: root.labelBorderColor
+        rect.border.width: root.isEditing ? root.labelBorderWidth : Theme.borders.b0
     }
 }

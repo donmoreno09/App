@@ -24,6 +24,7 @@ set(qml_files
     Title.qml
     ToastNotification.qml
     TrackIcon.qml
+    TrackIconLabel.qml
     VerticalDivider.qml
     VerticalPadding.qml
     VerticalSpacer.qml
@@ -70,6 +71,7 @@ set(qml_files
     shapes/EditableEllipse.qml
     shapes/EditablePolygon.qml
     shapes/EditablePoint.qml
+    shapes/ShapeLabel.qml
 )
 
 set(qml_singletons

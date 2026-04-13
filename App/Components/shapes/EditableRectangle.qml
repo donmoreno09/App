@@ -318,26 +318,14 @@ MapItemGroup {
     VertexHandle { id: bottomRightVertex; kind: 2 }
     VertexHandle { id: bottomLeftVertex; kind: 3 }
 
-    Rectangle {
+    ShapeLabel {
         anchors.centerIn: committedRect
         visible: root.labelVisible
-        width: text.width + Theme.spacing.s3
-        height: text.height + Theme.spacing.s1
-        radius: Theme.radius.sm
-        color: root.labelFillColor
-        border.color: root.labelBorderColor
-        border.width: root.isEditing ? root.labelBorderWidth : Theme.borders.b0
         z: committedRect.z + 2
-
-        Text {
-            anchors.centerIn: parent
-            id: text
-            text: root.labelText
-            font.pixelSize: Theme.typography.fontSize150
-            color: root.labelTextColor
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            wrapMode: Text.Wrap
-        }
+        text: root.labelText
+        textColor: root.labelTextColor
+        rect.color: root.labelFillColor
+        rect.border.color: root.labelBorderColor
+        rect.border.width: root.isEditing ? root.labelBorderWidth : Theme.borders.b0
     }
 }

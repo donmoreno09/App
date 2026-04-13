@@ -146,8 +146,7 @@ ColumnLayout {
             Layout.preferredHeight: Theme.spacing.s10
             variant: UI.ButtonStyles.Primary
             text: `${TranslationManager.revision}` && qsTr("Fetch Data")
-            enabled: canFetch && !controller.isLoading
-                     && PermissionManager.revision && PermissionManager.hasPermission("vigate.fetch")
+            enabled: canFetch && !controller.isLoading && PermissionManager.revision && PermissionManager.hasPermission("vigate.fetch")
 
             readonly property bool canFetch: {
                 return gateComboBox.currentIndex >= 0 &&
@@ -172,8 +171,6 @@ ColumnLayout {
                 )
 
                 const selectedGateId = gateComboBox.currentValue
-                console.log("Fetching data for gate ID:", selectedGateId)
-
                 controller.fetchGateData(
                     selectedGateId,
                     startDT,
@@ -219,7 +216,6 @@ ColumnLayout {
             color: Theme.colors.surface
             radius: Theme.radius.sm
             visible: controller.totalPages > 0 && !controller.isLoadingPage
-
 
             RowLayout {
                 anchors.fill: parent
@@ -493,7 +489,6 @@ ColumnLayout {
         target: root.controller
         function onHasDataChanged() {
             if (root.controller.hasData) {
-                console.log("ViGateContent: Data loaded, applying initial filter")
                 updateTransitFilter()
             }
         }

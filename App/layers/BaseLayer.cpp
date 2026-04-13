@@ -1,5 +1,4 @@
 #include "BaseLayer.h"
-#include <QDebug>
 #include <QTimer>
 
 BaseLayer::BaseLayer(QObject* parent)

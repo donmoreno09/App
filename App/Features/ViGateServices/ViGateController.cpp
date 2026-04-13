@@ -1,7 +1,17 @@
 #include "ViGateController.h"
 #include "apis/ViGateApi.h"
 #include "HttpClient.h"
-#include <QDebug>
+#include "ViGateServicesLogger.h"
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = ViGateServicesLogger::get().child({
+        {"service", "VIGATE_CONTROLLER"}
+    });
+    return logger;
+}
+}
 
 ViGateController::ViGateController(QObject* parent)
     : QObject(parent)
@@ -13,7 +23,7 @@ void ViGateController::initialize(HttpClient* http)
     m_api = new ViGateApi(http, this);
 }
 
-// ── State helpers ─────────────────────────────────────────────────────────────
+//  State helpers
 
 void ViGateController::setLoading(bool loading)
 {
@@ -46,18 +56,18 @@ void ViGateController::setPageSize(int size)
     if (m_gateId > 0) fetchCurrentPage();
 }
 
-// ── Public slots ──────────────────────────────────────────────────────────────
+//  Public slots
 
 void ViGateController::loadActiveGates()
 {
-    qDebug().noquote() << "[ViGate] loadActiveGates() called, m_api =" << (m_api ? "valid" : "NULL");
+    _logger().info("loadActiveGates() called", { kv("m_api", m_api ? "valid" : "NULL") });
     if (!m_api) return;
 
     setLoadingGates(true);
 
     m_api->getActiveGates(
         [this](const QJsonArray& gates) {
-            qDebug().noquote() << "[ViGate] getActiveGates success, count =" << gates.size();
+            _logger().info("getActiveGates success", { kv("count", gates.size()) });
             m_activeGates.clear();
             for (const auto& val : gates) {
                 if (!val.isObject()) continue;
@@ -71,12 +81,11 @@ void ViGateController::loadActiveGates()
             setLoadingGates(false);
         },
         [this](const ErrorResult& err) {
-            qWarning().noquote() << "[ViGate] getActiveGates failed: HTTP"
-                                 << err.status << err.message;
+            _logger().warn(QString("getActiveGates failed: HTTP %1 %2").arg(err.status).arg(err.message));
             emit requestFailed(err.message);
             setLoadingGates(false);
         }
-    );
+        );
 }
 
 void ViGateController::fetchGateData(int gateId,
@@ -145,14 +154,18 @@ void ViGateController::clearData()
     }
 }
 
-// ── Private ───────────────────────────────────────────────────────────────────
+//  Private
 
 void ViGateController::fetchCurrentPage()
 {
-    qDebug().noquote() << "[ViGate] fetchCurrentPage() — gateId:" << m_gateId
-                       << "page:" << m_currentPage << "pageSize:" << m_pageSize
-                       << "m_api:" << (m_api ? "valid" : "NULL")
-                       << "loading:" << m_loading << "loadingPage:" << m_loadingPage;
+    _logger().info("Fetching current page", {
+        kv("gateId", m_gateId),
+        kv("currentPage", m_currentPage),
+        kv("pageSize", m_pageSize),
+        kv("m_api", m_api ? "valid" : "NULL"),
+        kv("loading", m_loading),
+        kv("loadingPage", m_loadingPage),
+    });
     if (!m_api || m_loading || m_loadingPage) return;
 
     if (m_hasError) {
@@ -168,9 +181,11 @@ void ViGateController::fetchCurrentPage()
         m_currentPage, m_pageSize,
         QString{}, false,
         [this](const QJsonObject& obj) {
-            qDebug().noquote() << "[ViGate] getFilteredData success — items:" << obj["items"].toArray().size()
-                               << "totalPages:" << obj["totalPages"].toInt()
-                               << "totalCount:" << obj["totalCount"].toInt();
+            _logger().info("getFilteredData success", {
+                kv("itemsCount", obj["items"].toArray().size()),
+                kv("totalPages", obj["totalPages"].toInt()),
+                kv("totalCount", obj["totalCount"].toInt()),
+            });
             processSummary(obj["summary"].toObject());
             m_transitsModel->setData(transformTransitData(obj["items"].toArray()));
 
@@ -185,15 +200,14 @@ void ViGateController::fetchCurrentPage()
             setLoadingPage(false);
         },
         [this](const ErrorResult& err) {
-            qWarning().noquote() << "[ViGate] getFilteredData failed: HTTP"
-                                 << err.status << err.message;
+            _logger().warn(QString("getFilteredData failed: HTTP %1 %2").arg(err.status).arg(err.message));
             emit requestFailed(err.message);
             if (!m_hasError) { m_hasError = true; emit hasErrorChanged(true); }
             if (m_hasData)   { m_hasData = false; emit hasDataChanged(false); }
             setLoading(false);
             setLoadingPage(false);
         }
-    );
+        );
 }
 
 void ViGateController::processSummary(const QJsonObject& summary)
@@ -217,7 +231,7 @@ QJsonArray ViGateController::transformTransitData(const QJsonArray& transits)
         QJsonObject transitObj = transits[i].toObject();
 
         if (!transitObj.contains("transit") || !transitObj["transit"].isObject()) {
-            qWarning() << "ViGateController: Missing 'transit' object at index" << i;
+            _logger().warn(QString("ViGateController: Missing 'transit' object at index %1").arg(i));
             continue;
         }
 

@@ -2,13 +2,17 @@
 #define VESSELFINDERHTTPSERVICE_H
 
 #include <QObject>
+#include <QNetworkAccessManager>
 #include <QQmlEngine>
 #include <QPointer>
-#include <entities/Vessel.h>
-#include <layers/BaseTrackMapLayer.h>
 
-#include "./httpvesselfindertrackspoller.h"
+#include "entities/Track.h"
+#include "entities/ClusteredPayload.h"
+#include "entities/Vessel.h"
+#include "layers/BaseTrackMapLayer.h"
+#include "layers/BaseTrackMapLayer.h"
 #include "interfaces/IMessageParser.h"
+#include "httpvesselfindertrackspoller.h"
 
 class VesselFinderHttpService : public QObject
 {
@@ -22,10 +26,12 @@ class VesselFinderHttpService : public QObject
 public:
     explicit VesselFinderHttpService(QObject* parent = nullptr);
 
+    using VesselPayload = ClusteredPayload<Vessel>;
+
     void initialize(const QString& endpointUrl, int pollMs = 2000);
 
     Q_INVOKABLE void registerLayer(const QString& name, QObject* layer);
-    Q_INVOKABLE void registerParser(IMessageParser<Vessel>* parser);
+    Q_INVOKABLE void registerParser(IMessageParser<VesselPayload>* parser);
 
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
@@ -40,11 +46,13 @@ private slots:
     void onError(const QString& err);
 
 private:
-    void clearVessels();
+    void clearLayerData();
+    void setClusterSimulatorRunning(bool running);
 
     HttpVesselFinderTracksPoller* poller_ = nullptr;
-    IMessageParser<Vessel>* parser_ = nullptr;
+    IMessageParser<VesselPayload>* parser_ = nullptr;
     QPointer<BaseTrackMapLayer> targetLayer_;
+    QNetworkAccessManager m_networkManager;
 
     bool running_ = false;
 };

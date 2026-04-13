@@ -1,6 +1,19 @@
 #include "HttpVesselFinderTracksPoller.h"
+
 #include <QNetworkRequest>
-#include <QDebug>
+
+#include "AppLogger.h"
+
+// Anonymous namespace to make _logger exclusive for this file
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "VF-POLLER"}
+    });
+    return logger;
+}
+}
 
 HttpVesselFinderTracksPoller::HttpVesselFinderTracksPoller(const QString& url,
                                                            int intervalMs,
@@ -27,7 +40,7 @@ void HttpVesselFinderTracksPoller::start()
     timer_.start();
     emit pollingStarted();
 
-    qDebug() << "[HTTP-POLLER] started";
+    _logger().info("Started");
 }
 
 void HttpVesselFinderTracksPoller::stop()
@@ -39,7 +52,7 @@ void HttpVesselFinderTracksPoller::stop()
 
     abortAllReplies();
 
-    qDebug() << "[HTTP-POLLER] stopped and replies aborted";
+    _logger().info("Stopped and replies aborted");
 }
 
 void HttpVesselFinderTracksPoller::doRequest()

@@ -8,23 +8,30 @@
 #include <QGeoCoordinate>
 
 #include "interfaces/IMessageParser.h"
+#include "entities/ClusteredPayload.h"
 #include "entities/Track.h"
 #include "entities/Velocity.h"
 #include "HistoryParser.h"
 
-class TrackParser : public IMessageParser<Track> {
+class TrackParser : public IMessageParser<ClusteredPayload<Track>> {
 public:
-    QVector<Track> parse(const QByteArray& message) override
+    ClusteredPayload<Track> parse(const QByteArray& message) override
     {
         QJsonParseError err;
         const QJsonDocument doc = QJsonDocument::fromJson(message, &err);
-        if (err.error != QJsonParseError::NoError || !doc.isArray()) {
+        if (err.error != QJsonParseError::NoError) {
             return {};
         }
 
-        QVector<Track> tracks;
-        const QJsonArray rawTracks = doc.array();
+        return parseClusteredPayload<Track>(doc, [this](const QJsonArray &tracksArray) {
+            return parseTracks(tracksArray);
+        });
+    }
 
+private:
+    QVector<Track> parseTracks(const QJsonArray &rawTracks) const
+    {
+        QVector<Track> tracks;
         tracks.reserve(rawTracks.size());
 
         for (const QJsonValue& rawTrack : std::as_const(rawTracks)) {

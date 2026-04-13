@@ -1,8 +1,20 @@
 #include "PoiModel.h"
-#include <QDebug>
+
 #include <QMetaType>
 
+#include "AppLogger.h"
+
 Q_DECLARE_METATYPE(QList<QGeoCoordinate>) // declare the list type
+
+namespace {
+Logger& _logger()
+{
+    static Logger logger = AppLogger::get().child({
+        {"service", "POI-MODEL"}
+    });
+    return logger;
+}
+}
 
 PoiModel::PoiModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -12,10 +24,14 @@ PoiModel::PoiModel(QObject *parent)
 
 void PoiModel::initialize(HttpClient* client)
 {
-    if (!client)
-        qFatal("[PoiModel] initialize() called with null client");
-    if (m_api)
-        qFatal("[PoiModel] initialize() called more than once");
+    if (!client) {
+        _logger().error("initialize() called with null client");
+        return;
+    }
+    if (m_api) {
+        _logger().error("initialize() called more than once");
+        return;
+    }
 
     m_httpClient = client;
     m_api = new PoiApi(client, this);
@@ -32,8 +48,8 @@ void PoiModel::fetch()
         for (auto& poi : pois)
             m_pois.push_back(poi);
         endResetModel();
-    }, [](const ErrorResult& er) {
-        qDebug().noquote() << "[PoiModel] Could not load pois:" << er.message;
+    }, [this](const ErrorResult& er) {
+        _logger().warn("Could not load pois", { kv("error", er.message) });
     });
 }
 
@@ -302,33 +318,33 @@ bool PoiModel::setData(const QModelIndex &index, const QVariant &value, int role
 QHash<int, QByteArray> PoiModel::roleNames() const
 {
     return {
-        { IdRole, "id" },
-        { LabelRole, "label" },
-        { LayerIdRole, "layerId" },
-        { LayerNameRole, "layerName" },
-        { TypeIdRole, "typeId" },
-        { TypeNameRole, "typeName" },
-        { CategoryIdRole, "categoryId" },
-        { CategoryNameRole, "categoryName" },
-        { HealthStatusIdRole, "healthStatusId" },
-        { HealthStatusNameRole, "healthStatusName" },
-        { OperationalStateIdRole, "operationalStateId" },
-        { OperationalStateNameRole, "operationalStateName" },
+            { IdRole, "id" },
+            { LabelRole, "label" },
+            { LayerIdRole, "layerId" },
+            { LayerNameRole, "layerName" },
+            { TypeIdRole, "typeId" },
+            { TypeNameRole, "typeName" },
+            { CategoryIdRole, "categoryId" },
+            { CategoryNameRole, "categoryName" },
+            { HealthStatusIdRole, "healthStatusId" },
+            { HealthStatusNameRole, "healthStatusName" },
+            { OperationalStateIdRole, "operationalStateId" },
+            { OperationalStateNameRole, "operationalStateName" },
 
-        { ShapeTypeIdRole, "shapeTypeId" },
-        { SurfaceRole, "surface" },
-        { HeightRole, "height" },
-        { CoordinateRole, "coordinate" },
-        { CoordinatesRole, "coordinates" },
-        { TopLeftRole, "topLeft" },
-        { BottomRightRole, "bottomRight" },
-        { RadiusARole, "radiusA" },
-        { RadiusBRole, "radiusB" },
-        { IsRectangleRole, "isRectangle" },
+            { ShapeTypeIdRole, "shapeTypeId" },
+            { SurfaceRole, "surface" },
+            { HeightRole, "height" },
+            { CoordinateRole, "coordinate" },
+            { CoordinatesRole, "coordinates" },
+            { TopLeftRole, "topLeft" },
+            { BottomRightRole, "bottomRight" },
+            { RadiusARole, "radiusA" },
+            { RadiusBRole, "radiusB" },
+            { IsRectangleRole, "isRectangle" },
 
-        { NoteRole, "note" },
-        { ModelIndexRole, "modelIndex" },
-    };
+            { NoteRole, "note" },
+            { ModelIndexRole, "modelIndex" },
+            };
 }
 
 Qt::ItemFlags PoiModel::flags(const QModelIndex &index) const
@@ -384,7 +400,7 @@ void PoiModel::append(const QVariantMap &data)
         emit appended();
         setLoading(false);
     }, [this](const ErrorResult& er) {
-        qDebug().noquote() << "[PoiModel] Could not save poi:" << er.message;
+        _logger().warn("Could not save poi", { kv("error", er.message) });
         setLoading(false);
     });
 }
@@ -400,7 +416,10 @@ void PoiModel::update(const QVariantMap &data)
         emit updated();
         setLoading(false);
     }, [this](const ErrorResult& er) {
-        qDebug().noquote().nospace() << "[PoiModel] Could not update poi with id " << m_poiSave->id << ": " << er.message;
+        _logger().warn("Could not update poi", {
+            kv("id", m_poiSave->id),
+            kv("error", er.message)
+        });
         setLoading(false);
     });
 }
@@ -431,7 +450,10 @@ void PoiModel::remove(const QString &id)
         emit removed();
         setLoading(false);
     }, [this, id](const ErrorResult& er) {
-        qDebug().noquote().nospace() << "[PoiModel] Could not delete poi with id " << id << ": " << er.message;
+        _logger().warn("Could not delete poi", {
+            kv("id", id),
+            kv("error", er.message)
+        });
         setLoading(false);
     });
 }
@@ -462,7 +484,10 @@ QQmlPropertyMap *PoiModel::getEditablePoi(int index)
             emit fetched(poi.id);
         }
     }, [this](const auto& er) {
-        qDebug().noquote() << "[PoiModel] Could not get poi:" << m_oldPoi->id;
+        _logger().warn("Could not get poi", {
+            kv("id", m_oldPoi->id),
+            kv("error", er.message)
+        });
     });
 
     return m_helper->map(index, 0);
@@ -491,12 +516,19 @@ void PoiModel::discardChanges()
 
 void PoiModel::printData()
 {
-    for (const auto& poi : std::as_const(m_pois)) {
-        qDebug() << "ID: " << poi.id << " -------------------";
-        qDebug() << "Label: " << poi.label;
-        qDebug() << "Latitude: " << poi.geometry.coordinate.y();
-        qDebug() << "Longitude: " << poi.geometry.coordinate.x();
+    QVariantList pois;
+    pois.reserve(m_pois.size());
+
+    for (const auto &poi : std::as_const(m_pois)) {
+        QVariantMap map;
+        map.insert("id", poi.id);
+        map.insert("label", poi.label);
+        map.insert("latitude", poi.geometry.coordinate.y());
+        map.insert("longitude", poi.geometry.coordinate.x());
+        pois.append(map);
     }
+
+    _logger().info("PoIs data", { kv("pois", pois) });
 }
 
 bool PoiModel::loading() const

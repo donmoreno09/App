@@ -13,7 +13,13 @@ BaseMapLayer {
 
     property alias vesselMapLayer: vesselMapLayer
 
-    visible: true
+    visible: vesselMapLayer.active
+
+    MapItemView {
+        model: vesselMapLayer.clusterModel
+
+        delegate: MapCluster { }
+    }
 
     MapItemView {
         model: vesselMapLayer.vesselModel
@@ -30,6 +36,7 @@ BaseMapLayer {
         Component.onCompleted: {
             LayerManager.registerLayer(vesselMapLayer)
             TrackManager.registerLayer("vesselfinder", vesselMapLayer)
+            MqttClientService.registerLayer(Layers.vesselFinderMapLayer(), vesselMapLayer)
             VesselFinderHttpService.registerLayer(Layers.vesselFinderMapLayer(), vesselMapLayer)
             vesselMapLayer.map = MapController.map
         }
