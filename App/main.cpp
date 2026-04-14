@@ -162,8 +162,8 @@ int main(int argc, char *argv[])
     QObject::connect(authManager, &AuthManager::loginSucceeded, signalR, [signalR, appConfig, authManager]() {
         signalR->initialize(appConfig, authManager->accessToken(), authManager->userId());
     });
-    QObject::connect(authManager, &AuthManager::loginSucceeded, mqtt, [mqtt, appConfig, authManager]() {
-        mqtt->initialize(":/App/config/mqtt_config.json", appConfig, authManager);
+    QObject::connect(authManager, &AuthManager::loginSucceeded, mqtt, [mqtt, authManager]() {
+        mqtt->initialize(authManager);
     });
     QObject::connect(authManager, &AuthManager::loginSucceeded, trackManager, &TrackManager::deactivateAll);
 
@@ -208,6 +208,8 @@ int main(int argc, char *argv[])
             vesselHttp->initialize(url, 2000);
         });
     }
+
+    mqtt->loadConfig(":/App/config/mqtt_config.json", appConfig);
 
     engine.loadFromModule("App", "Main");
 

@@ -20,7 +20,8 @@ class MqttClientService : public QObject {
 public:
     explicit MqttClientService(QObject* parent = nullptr);
 
-    void initialize(const QString& configPath, const AppConfig& appConfig, AuthManager* authManager);
+    void loadConfig(const QString& configPath, const AppConfig& appConfig);
+    void initialize(AuthManager* authManager);
     Q_INVOKABLE void registerLayer(const QString& name, QObject* layer);
 
     void registerParser(const QString& topic, IBaseMessageParser* parser);

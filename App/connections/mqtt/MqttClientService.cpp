@@ -29,9 +29,12 @@ MqttClientService::MqttClientService(QObject* parent)
     connect(client, &QMqttClient::disconnected, this, &MqttClientService::onDisconnected);
 }
 
-void MqttClientService::initialize(const QString& configPath, const AppConfig& appConfig,  AuthManager* authManager) {
-    this->authManager = authManager;
+void MqttClientService::loadConfig(const QString& configPath, const AppConfig& appConfig) {
     loadConfiguration(configPath, appConfig);
+}
+
+void MqttClientService::initialize(AuthManager* authManager) {
+    this->authManager = authManager;
     connectToBroker();
 }
 
