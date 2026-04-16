@@ -40,7 +40,7 @@ public:
     int columnCount() const;
     QVariantList roles() const;
 
-    Q_INVOKABLE QQmlPropertyMap* map(int row, int column = 0, const QModelIndex& parent = {});
+    Q_INVOKABLE QQmlPropertyMap* map(int row, int column = 0, const QModelIndex& parent = {}, bool freezeOnRemoval = false);
 
     Q_INVOKABLE int roleForName(const QString& roleName) const;
 

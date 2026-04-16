@@ -31,6 +31,19 @@ MapItemGroup {
     required property string uiName
     readonly property bool isSelected: SelectedTrackState.selectedItem && SelectedTrackState.selectedItem.trackUid === root.trackUid
 
+    // When this delegate is (re-)created and the track was already selected
+    // (e.g. after the track reappears from a cluster), reconnect the panel
+    // to the fresh live mapper so it resumes receiving updates.
+    // Guard: trackUid must be non-empty before evaluating isSelected, because
+    // required properties from MapItemView are not bound yet when
+    // Component.onCompleted first fires on MapItemGroup delegates — at that
+    // moment trackUid is still "" (the default), which would make isSelected
+    // accidentally true for every delegate simultaneously.
+    Component.onCompleted: {
+        if (root.trackUid !== "" && isSelected)
+            SelectedTrackState.select(root.trackModel.getEditableTrack(root.index))
+    }
+
     MapQuickItem {
         id: track
 

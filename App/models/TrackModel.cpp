@@ -172,7 +172,7 @@ QVector<int> TrackModel::diffRoles(const Track& a, const Track& b) const
 
 QQmlPropertyMap *TrackModel::getEditableTrack(int index)
 {
-    return m_helper->map(index);
+    return m_helper->map(index, 0, {}, true);
 }
 
 void TrackModel::clear()

@@ -138,7 +138,7 @@ ApplicationWindow {
         function onRouteChanged(route: string) {
             // Remove selected track in trackpanel when changed to an unrelated panel
             if (!route.startsWith('trackpanel')) {
-                SelectedTrackState.selectedItem = null
+                SelectedTrackState.deselect()
             }
         }
     }

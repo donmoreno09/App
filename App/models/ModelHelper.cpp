@@ -6,7 +6,7 @@
 class ModelHelperPropertyMap : public QQmlPropertyMap
 {
 public:
-    ModelHelperPropertyMap(int row, int column, const QModelIndex& parentIndex, QAbstractItemModel* model, QObject* parent = nullptr);
+    ModelHelperPropertyMap(int row, int column, const QModelIndex& parentIndex, QAbstractItemModel* model, bool freezeOnRemoval = false, QObject* parent = nullptr);
 
 protected:
     QVariant updateValue(const QString& key, const QVariant& input) override;
@@ -25,6 +25,7 @@ private:
     int m_column;
     QPersistentModelIndex m_parent;
     QAbstractItemModel* m_model;
+    bool m_freezeOnRemoval;
 };
 
 QVariant ModelHelperPropertyMap::updateValue(const QString& key, const QVariant& input)
@@ -38,12 +39,13 @@ QVariant ModelHelperPropertyMap::updateValue(const QString& key, const QVariant&
     return m_model->data(index, role);
 }
 
-ModelHelperPropertyMap::ModelHelperPropertyMap(int row, int column, const QModelIndex& parentIndex, QAbstractItemModel* model, QObject* parent) :
+ModelHelperPropertyMap::ModelHelperPropertyMap(int row, int column, const QModelIndex& parentIndex, QAbstractItemModel* model, bool freezeOnRemoval, QObject* parent) :
     QQmlPropertyMap(parent),
     m_row(row),
     m_column(column),
     m_parent(parentIndex),
-    m_model(model)
+    m_model(model),
+    m_freezeOnRemoval(freezeOnRemoval)
 {
     connect(model, &QAbstractItemModel::modelReset, this, &ModelHelperPropertyMap::update);
     connect(model, &QAbstractItemModel::layoutChanged, this, &ModelHelperPropertyMap::update);
@@ -93,8 +95,13 @@ void ModelHelperPropertyMap::onRowsInserted(const QModelIndex& parent, int first
 void ModelHelperPropertyMap::onRowsRemoved(const QModelIndex& parent, int first, int last)
 {
     Q_UNUSED(last)
-    if (parent == m_parent && m_row >= first)
+    if (parent == m_parent && m_row >= first) {
+        if (m_freezeOnRemoval) {
+            disconnect(m_model, nullptr, this, nullptr); // seal as frozen snapshot, prevent future corruption
+            return; // retain last-known values
+        }
         update();
+    }
 }
 
 void ModelHelperPropertyMap::onColumnsInserted(const QModelIndex& parent, int first, int last)
@@ -166,7 +173,7 @@ QVariantList ModelHelper::roles() const
     return roles;
 }
 
-QQmlPropertyMap* ModelHelper::map(int row, int column, const QModelIndex& parent)
+QQmlPropertyMap* ModelHelper::map(int row, int column, const QModelIndex& parent, bool freezeOnRemoval)
 {
     if (!m_model)
         return nullptr;
@@ -174,14 +181,14 @@ QQmlPropertyMap* ModelHelper::map(int row, int column, const QModelIndex& parent
     if (column == 0 && !parent.isValid()) {
         QQmlPropertyMap* mapper = mapperForRow(row);
         if (!mapper) {
-            mapper = new ModelHelperPropertyMap(row, 0, {}, m_model, this);
+            mapper = new ModelHelperPropertyMap(row, 0, {}, m_model, freezeOnRemoval, this);
             m_mappers.append({row, mapper});
             connect(mapper, &QObject::destroyed, this, &ModelHelper::removeMapper);
         }
         return mapper;
     }
 
-    return new ModelHelperPropertyMap(row, column, parent, m_model, this);
+    return new ModelHelperPropertyMap(row, column, parent, m_model, freezeOnRemoval, this);
 }
 
 int ModelHelper::roleForName(const QString &roleName) const
