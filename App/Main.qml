@@ -25,9 +25,11 @@ import App.Features.TrackPanel 1.0
 
 ApplicationWindow {
     id: app
+    width: Theme.layout.appWindowWidth
+    height: Theme.layout.appWindowHeight
     minimumWidth: Theme.layout.appWindowWidth
     minimumHeight: Theme.layout.appWindowHeight
-    visible: true
+    visibility: Window.Maximized
     title: qsTr("IRIDESS FE")
 
     palette: AppPalette { }
