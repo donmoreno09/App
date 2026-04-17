@@ -29,6 +29,9 @@ ColumnLayout {
 
     property var validateFn: null
 
+    property int maxVisibleCoordRows: 4
+    property real _coordDelegateHeight: 0
+
     function validate() {
         if (validateFn)
             return validateFn()
@@ -134,8 +137,26 @@ ColumnLayout {
         }
     }
 
-    Repeater {
+    ListView {
+        id: coordList
+        Layout.fillWidth: true
+        Layout.preferredHeight: {
+            if (polygonForm._coordDelegateHeight <= 0)
+                return contentHeight
+            const rows = Math.min(count, polygonForm.maxVisibleCoordRows)
+            return rows * polygonForm._coordDelegateHeight
+                   + Math.max(0, rows - 1) * spacing
+        }
+        clip: true
+        spacing: Theme.spacing.s4
+        ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
         model: polygonForm.readCount ? polygonForm.readCount() : 0
-        delegate: CoordInputs { }
+        delegate: CoordInputs {
+            width: coordList.width
+            Component.onCompleted: {
+                if (index === 0 && polygonForm._coordDelegateHeight <= 0)
+                    polygonForm._coordDelegateHeight = height
+            }
+        }
     }
 }
