@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QVariantList>
 #include <QQmlEngine>
+#include <QUuid>
 
 #include "App/config.h"
 #include "AuthManager.h"
@@ -39,6 +40,7 @@ private:
 
     QMqttClient* client = nullptr;
     AuthManager* authManager = nullptr;
+    QString m_clientId;
     QMap<QString, QString> topicToLayer;
     QMap<QString, QString> layerToTopic;
     QMap<QString, IBaseMessageParser*> topicToParser;

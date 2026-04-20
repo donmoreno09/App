@@ -9,6 +9,7 @@
 struct AppConfig {
     QString mqttHost;
     int     mqttPort;
+    QString portName;
     QString restBaseUrl;
     QString vesselFinderBaseUrl;
     bool    useVesselFinderSim;
@@ -44,6 +45,7 @@ static AppConfig loadConfig()
     AppConfig cfg;
     cfg.mqttHost            = s.value("mqtt/host", "localhost").toString();
     cfg.mqttPort            = s.value("mqtt/port", 1883).toInt();
+    cfg.portName            = s.value("mqtt/portName", "unknown").toString();
     cfg.restBaseUrl         = s.value("rest/baseUrl", "http://localhost:7000").toString();
     cfg.vesselFinderBaseUrl = s.value("rest/vesselFinderBaseUrl", "http://localhost:8000").toString();
     cfg.useVesselFinderSim  = s.value("rest/useVesselFinderSim", false).toBool();

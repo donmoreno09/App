@@ -55,6 +55,10 @@ void MqttClientService::loadConfiguration(const QString& path, const AppConfig& 
     client->setHostname(appConfig.mqttHost);
     client->setPort(appConfig.mqttPort);
 
+    m_clientId = QString("FE_Qt-%1-%2")
+        .arg(appConfig.portName)
+        .arg(QUuid::createUuid().toString(QUuid::WithoutBraces).left(8));
+
     QJsonObject root = doc.object();
     QJsonObject topics = root["topics"].toObject();
     for (auto it = topics.begin(); it != topics.end(); it++) {
@@ -72,7 +76,8 @@ void MqttClientService::connectToBroker() {
     if (s == QMqttClient::Connected || s == QMqttClient::Connecting)
         return; // already connected / in progress
 
-    client->setClientId("RaiseMqttClient");
+    client->setClientId(m_clientId);
+    _logger().info("Connecting to MQTT broker", { kv("clientId", m_clientId) });
     client->connectToHost();
 }
 
