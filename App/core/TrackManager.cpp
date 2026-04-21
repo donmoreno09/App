@@ -115,6 +115,17 @@ void TrackManager::deactivate(const QString &track)
             _logger().info("Deactivated track", { kv("track", track) });
             emit deactivated(track);
         }
+
+        // Reset history state for any tracks in this topic so the UI switch reflects reality.
+        const QString prefix = track + QLatin1Char('|');
+        for (auto it = m_histState.begin(); it != m_histState.end(); ++it) {
+            if (it.key().startsWith(prefix) && it.value() != Inactive) {
+                const QString uid = it.key().mid(prefix.length());
+                it.value() = Inactive;
+                emit historyStateChanged(track, uid, Inactive);
+                emit requestClearHistory(track, uid);
+            }
+        }
     });
 }
 
@@ -171,6 +182,16 @@ void TrackManager::deactivateAll()
                 _logger().info("Deactivated track", {
                     kv("track", name)
                 });
+            }
+
+            const QString prefix = name + QLatin1Char('|');
+            for (auto hit = m_histState.begin(); hit != m_histState.end(); ++hit) {
+                if (hit.key().startsWith(prefix) && hit.value() != Inactive) {
+                    const QString uid = hit.key().mid(prefix.length());
+                    hit.value() = Inactive;
+                    emit historyStateChanged(name, uid, Inactive);
+                    emit requestClearHistory(name, uid);
+                }
             }
         }
 

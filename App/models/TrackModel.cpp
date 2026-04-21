@@ -182,6 +182,17 @@ void TrackModel::clear()
     endResetModel();
 }
 
+void TrackModel::clearHistory(const QString& uid)
+{
+    for (int row = 0; row < m_tracks.size(); ++row) {
+        if (m_tracks[row].uidForHistory == uid && !m_tracks[row].history.isEmpty()) {
+            m_tracks[row].history.clear();
+            const QModelIndex idx = index(row);
+            emit dataChanged(idx, idx, { HistoryRole });
+        }
+    }
+}
+
 QVariant TrackModel::getRoleData(int idx, int role) const
 {
     return data(index(idx), role);

@@ -52,6 +52,7 @@ public:
     Q_INVOKABLE QQmlPropertyMap* getEditableTrack(int index);
 
     Q_INVOKABLE void clear();
+    Q_INVOKABLE void clearHistory(const QString& uid);
 
     Q_INVOKABLE QVariant getRoleData(int idx, int role) const;
 

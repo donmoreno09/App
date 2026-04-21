@@ -161,7 +161,7 @@ QVector<int> TirModel::diffRoles(const Tir& a, const Tir& b) const
 
 QQmlPropertyMap *TirModel::getEditableTir(int index)
 {
-    return m_helper->map(index);
+    return m_helper->map(index, 0, {}, true);
 }
 
 void TirModel::clear()
@@ -169,6 +169,17 @@ void TirModel::clear()
     beginResetModel();
     m_tirs.clear();
     endResetModel();
+}
+
+void TirModel::clearHistory(const QString& uid)
+{
+    for (int row = 0; row < m_tirs.size(); ++row) {
+        if (m_tirs[row].uidForHistory == uid && !m_tirs[row].history.isEmpty()) {
+            m_tirs[row].history.clear();
+            const QModelIndex idx = index(row);
+            emit dataChanged(idx, idx, { HistoryRole });
+        }
+    }
 }
 
 QVariant TirModel::getRoleData(int idx, int role) const

@@ -24,6 +24,10 @@ TirMapLayer::TirMapLayer(QObject* parent)
     if (auto* tm = TrackManager::instance()) {
         QObject::connect(m_tirModel, &TirModel::historyPayloadArrived,
                          tm, &TrackManager::onHistoryPayloadArrived);
+        QObject::connect(tm, &TrackManager::requestClearHistory,
+                         m_tirModel, [this](const QString& /*topic*/, const QString& uid) {
+                             m_tirModel->clearHistory(uid);
+                         });
     } else {
         _logger().warn("TrackManager singleton not yet constructed.");
     }
@@ -79,3 +83,4 @@ TirModel *TirMapLayer::tirModel() const
 {
     return m_tirModel;
 }
+

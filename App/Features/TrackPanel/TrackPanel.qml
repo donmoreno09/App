@@ -32,6 +32,9 @@ PanelTemplate {
             const speed = isTir ? value : value.speedKnots
             const unit = isTir ? "km/h" : "kn"
 
+            if (speed === undefined || speed === null || isNaN(speed))
+                return "-"
+
             return `${speed.toFixed(1)} ${unit}`
         case `${TranslationManager.revision}` && qsTr("Heading"):
             return value ? value + "°" : "0°"
@@ -207,15 +210,16 @@ PanelTemplate {
                             TrackManager.setHistoryActive(topic, uid, checked); // ON→Loading, OFF→Inactive (+clear)
                         }
 
-                        // Keep local state in sync with manager changes (makes the binding reactive)
+                        // Keep local state in sync with manager changes (makes the binding reactive).
+                        // Always re-read from the manager: the topic/uid on the property map can be
+                        // stale after a model row-shift, so filtering by exact match would miss resets.
                         Connections {
                             target: TrackManager
                             function onHistoryStateChanged(tp, u, state) {
-                                if (tp === toggle.topic && u === toggle.uid) {
-                                    toggle._state  = state;                              // update cached state
-                                    toggle._active = (state === TrackManager.Active);    // update cached boolean
-                                    // 'checked' follows _active via binding; no re-entrant calls
-                                }
+                                const s = TrackManager.historyState(toggle.topic, toggle.uid);
+                                toggle._state   = s;
+                                toggle._active  = (s === TrackManager.Active);
+                                toggle.checked  = toggle._active;
                             }
                         }
                     }

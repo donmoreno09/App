@@ -24,6 +24,10 @@ TrackMapLayer::TrackMapLayer(QObject* parent)
     if (auto* tm = TrackManager::instance()) {
         QObject::connect(m_trackModel, &TrackModel::historyPayloadArrived,
                          tm, &TrackManager::onHistoryPayloadArrived);
+        QObject::connect(tm, &TrackManager::requestClearHistory,
+                         m_trackModel, [this](const QString& /*topic*/, const QString& uid) {
+                             m_trackModel->clearHistory(uid);
+                         });
     } else {
         _logger().warn("TrackManager singleton not yet constructed.");
     }
@@ -79,3 +83,4 @@ TrackModel *TrackMapLayer::trackModel() const
 {
     return m_trackModel;
 }
+

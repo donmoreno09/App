@@ -152,6 +152,7 @@ int main(int argc, char *argv[])
     mqtt->registerParser("doc-space", new TrackParser());
     mqtt->registerParser("tir", new TirParser());
     mqtt->registerParser("vesselfinder", new HttpVesselParser());
+    mqtt->loadConfig(":/App/config/mqtt_config.json", appConfig);
 
     // Wire all loginSucceeded/loggedOut connections BEFORE tryAutoLogin()
     // so auto-login (which fires loginSucceeded synchronously) is caught correctly.
@@ -208,8 +209,6 @@ int main(int argc, char *argv[])
             vesselHttp->initialize(url, 2000);
         });
     }
-
-    mqtt->loadConfig(":/App/config/mqtt_config.json", appConfig);
 
     engine.loadFromModule("App", "Main");
 
